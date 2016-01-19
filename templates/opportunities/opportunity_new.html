@@ -51,7 +51,7 @@
        <a  class="btn red newAccountBtnOnscroll pull-right" ng-click="validateBeforeSave(opportunity)">
          <span ><i class="fa fa-save"></i> Save</span>       
        </a>
-        <button class="btn btn-default newAccountBtn pull-right" ng-click="clearContact()" style="margin-right:5px"><i class="fa fa-trash-o"></i>{{ _(' Clear')}}</button>          
+        <button class="btn btn-default newAccountBtn pull-right" ng-click="clearOpp()" style="margin-right:5px"><i class="fa fa-trash-o"></i>{{ _(' Clear')}}</button>          
       </div>
       <div class="col-md-3">
             <div style=" padding-left: 10px;" class="pull-right">
@@ -255,7 +255,7 @@
                                         <div class="form-group">
                                           <div class="col-md-12" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" >
                                               <div class="input-icon asyncSearch">
-                                             <i class="fa fa-building"></i>
+                                                  <i class="fa fa-building"></i>
                                                   <input type="text" required typeahead-loading="accSearchLoading"
                                                          ng-class="{'spinner':accSearchLoading}"
                                                          ng-model="searchAccountQuery"
@@ -549,8 +549,8 @@
                                                                 <br>        
                                                             </div>
                                                             <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
-                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
-                                                                <label for="<%=option%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
+                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1"id="<%=cusfield.id%>_check_<%=option%>_<%=$index%>">
+                                                                <label for="<%=cusfield.id%>_check_<%=option%>_<%=$index%>"> <%=option%></label>
                                                                 <br>        
                                                             </div>
                                                             <input ng-blur="addCustomField(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">

@@ -226,8 +226,8 @@
                           </div>
                            
                            <a ng-hide="showEdit||(!opportunity.contacts&&!opportunity.contact)" href="/#/contacts/show/<%=opportunity.contacts[0].id%>" style="font-size: 14px;">(  <%=opportunity.contacts[0].firstname%> <%=opportunity.contacts[0].lastname %> ) </a>  
-                          <a ng-hide="showEdit" ng-show="opportunity.lead" href="/#/leads/show/<%=opportunity.lead.id%>" style="font-size: 14px;">(  <%=opportunity.lead.firstname%> <%=opportunity.lead.lastname %> ) </a>  
-                          <div class="input-icon" ng-show="showEdit&&!opportunity.contacts" style="margin-top:10px">
+                          <a ng-hide="showEdit||!opportunity.lead" ng-show="opportunity.lead" href="/#/leads/show/<%=opportunity.lead.id%>" style="font-size: 14px;">(  <%=opportunity.lead.firstname%> <%=opportunity.lead.lastname %> ) </a>  
+                          <div class="input-icon" ng-show="showEdit&&opportunity.lead" style="margin-top:10px">
                               <i class="fa fa-user"></i>
                               <input type="text" required ng-model="searchLeadQuery" typeahead="leadResult as leadResult.firstname + ' '+  leadResult.lastname for leadResult in leadsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectLead()" class="form-control" placeholder="{{_('Lead')}}">
                           </div>
@@ -670,8 +670,8 @@
                                                                 <br>        
                                                             </div>
                                                             <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
-                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
-                                                                <label for="<%=option%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
+                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1" id="<%=cusfield.id%>_check_<%=option%>_<%=$index%>">
+                                                                <label for="<%=cusfield.id%>_check_<%=option%>_<%=$index%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
                                                                 <br>        
                                                             </div>
                                                             <input ng-blur="addCustomField(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">
@@ -1302,10 +1302,10 @@
                                                           <i class="fa fa-user"></i>
                                                          {{ _('Owner:') }}
                                                       </span>
-                                                      <span ng-hide="showEdit">
+                                                      <span ng-hide="(showEdit)&&(opportunity.owner.google_user_id=={{ME}}||{{is_admin}})" >
                                                             <%= opportunity.owner.google_display_name %>
                                                       </span>
-                                                      <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                                      <a ng-show="(showEdit)&&(opportunity.owner.google_user_id=={{ME}}||{{is_admin}})"  style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
                                                          data-toggle="dropdown" style="margin-right:0px">
                                                           
                                                           <span>
@@ -1313,7 +1313,7 @@
                                                           </span>
                                                           <i class="icon-angle-down fa fa-angle-down"></i>
                                                       </a>
-                                                      <ul class="dropdown-menu">
+                                                      <ul class="dropdown-menu" ng-show="(showEdit)&&(opportunity.owner.google_user_id=={{ME}}||{{is_admin}})" >
                                                           <li ng-repeat="user in users">
                                                               <a ng-click="inlinePatch('Opportunity','', 'owner',opportunity.id,user.google_user_id)">
                                                                   <%=user.google_display_name%>
@@ -2468,10 +2468,6 @@
           </div>
           </div>
 <!-- end of event form -->
-<!-- 
-
-new timeline modal 
--->
 <div id="assigneeTagsToOpp" class="modal fade customPopUp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">

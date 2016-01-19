@@ -818,7 +818,7 @@
                                 <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                                     <div class="row slimform">
                                         <div class="col-md-6">
-                                          <div ng-show="listPeople.length > 0" class="news-blocks blank-card blank-card-yellow newsCard"  style="  border-top-color: rgb(25, 133, 188) !important;" ng-class="{'linkedInLoader': linkedLoader}" >
+                                          <div ng-show="listPeople.length > 0 || lead.linkedin_profile" class="news-blocks blank-card blank-card-yellow newsCard"  style="  border-top-color: rgb(25, 133, 188) !important;" ng-class="{'linkedInLoader': linkedLoader}" >
                                           <div ng-show="linkedLoader" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
                                             <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
                                           </div>
@@ -826,7 +826,7 @@
                                           <h3 style="margin-top:0px"> <i  class="fa fa-linkedin-square" style=" font-size: 20px; vertical-align: baseline;color: rgb(25, 133, 188) !important;"></i>{{_(' Linkedin Informations')}} 
                                            <span style="cursor:pointer" ng-hide="isEmpty(linkedProfile)" class="pull-right" ng-click="deleteSocialLink(linkedProfile,'sociallinks')"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span>
                                           </h3>
-                                                <div ng-show="listPeople.length > 0">                                       
+                                                <div ng-show="listPeople.length > 0 && isEmpty(lead.linkedin_profile)">                                       
                                                   <div class="news-block-tags">
                                                         <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{_('We found diffrent possible matches. Click the one you want :')}}</strong>
                                                   </div>
@@ -844,6 +844,111 @@
                                                       </li>
                                                   </ul>                                                
                                                 </div>
+
+                                    <div class="linkedin-details" ng-hide="isEmpty(lead.linkedin_profile)">
+                                        <div class="news-block-tags">
+                                            <!--<strong>{{_('Profession')}}</strong>-->
+                                        </div>
+                                        <div style="margin-bottom:10px">
+                                            <div class="details" style="padding-left: 15px; padding-top: 5px;">
+                                                <div class="past-position-title" style="font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;">
+                                                   <%=lead.linkedin_profile.firstname%> <%=lead.linkedin_profile.lastname%> 
+                                               </div>
+                                                <div class="past-position-company" style="padding-bottom:1px">
+                                                   <%=lead.linkedin_profile.title%> 
+                                                </div>
+                                                <div class="past-position-duration" style="color: gray;">
+                                                  <%=lead.linkedin_profile.locality%>
+                                                </div>  
+                                            </div>
+                                      </div> 
+                                        <div ng-hide="isEmptyArray(lead.linkedin_profile.current_post)" class="news-block-tags" style="margin-bottom:10px;">
+                                            <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-male"></i> {{_('current positions')}}</strong>
+                                        </div>
+                                       
+                                        <ul ng-hide="isEmptyArray(lead.linkedin_profile.current_post)" class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
+                                            <li style="margin-bottom:10px" ng-hide  ="showMoreCurrent">
+                                              <div class="past-position-title">
+                                                 <%=lead.linkedin_profile.current_post[0].title%> 
+                                              </div>
+                                              <div class="past-position-company">
+                                                <%=lead.linkedin_profile.current_post[0].organisation%> 
+                                              </div>
+                                              <div class="past-position-duration">
+                                                <%=lead.linkedin_profile.current_post[0].period%>
+                                              </div> 
+                                            </li>
+                                            <li ng-show="showMoreCurrent" ng-repeat="exp in lead.linkedin_profile.current_post" style="margin-bottom:10px" >
+                                              <div class="past-position-title">
+                                                 <%=exp.title%>
+                                              </div>
+                                              <div class="past-position-company">
+                                                <%=exp.organisation%> 
+                                              </div>
+                                              <div class="past-position-duration">
+                                                <%=exp.period%>
+                                              </div> 
+                                            </li>
+                                            <li ng-show="lead.linkedin_profile.current_post.length > 1" style="text-align: center;" >
+                                              <a href="" ng-click="showMoreCurrent=!showMoreCurrent">
+                                              <span ng-hide="showMoreCurrent">+ Show more...</span>
+                                              <span ng-show="showMoreCurrent">- Show less</span></a>
+                                            </li>
+                                        </ul> 
+                                       <div ng-hide="isEmptyArray(lead.linkedin_profile.formations)" ng-show="" class="news-block-tags" style="margin-bottom:10px;  ">
+                                            <strong style="font-size: 17px;color: rgb(25, 133, 188);"><i class="fa fa-briefcase"></i>{{_(' education')}}</strong>
+                                        </div>
+                                        <ul class="list-unstyled contact-infos" style="padding-left:10px">
+                                        <li ng-repeat="formation in lead.linkedin_profile.formations"style="margin-bottom:10px" >
+                                              <div class="past-position-title">
+                                                 <%=formation.degree%> 
+                                              </div> 
+                                        </li>
+                                        </ul>
+                                        <div ng-show="lead.linkedin_profile.resume" class="news-block-tags" style="margin-bottom:10px;">
+                                            <strong  style="   font-size: 17px;color: rgb(25, 133, 188);"><i class="fa fa-comment"></i>{{_(' Summary')}}
+                                            </strong>
+                                        </div>
+                                        <div class="news-block-tags">
+
+                                            <div class="" >
+                                            <label gototext ng-model="linkedProfileresume" limit="100" lesstext="Less" moretext="More"  style="padding-left:10px;color:gray"><%=linkedProfileresume%>
+                                            </label>
+                                            </div>
+                                        </div>
+                                        <div class="news-block-tags" ng-show="lead.linkedin_profile.past_post" style="margin-bottom:10px;">
+                                            <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-bookmark"></i>{{_(' past positions')}}</strong>
+                                        </div>
+                                        <ul class="list-unstyled contact-infos" style="padding-left:10px;">
+                                            <li style="margin-bottom:10px" ng-show="lead.linkedin_profile.past_post.length > 1 &&!showMore">
+                                              <div class="past-position-title">
+                                                 <%=lead.linkedin_profile.past_post[0].title%> 
+                                              </div>
+                                              <div class="past-position-company">
+                                                <%=lead.linkedin_profile.past_post[0].organisation%> 
+                                              </div>
+                                              <div class="past-position-duration">
+                                                <%=lead.linkedin_profile.past_post[0].period%>
+                                              </div> 
+                                            </li>
+                                            <li ng-show="showMore" ng-repeat="exp in lead.linkedin_profile.past_post" style="margin-bottom:10px" >
+                                              <div class="past-position-title">
+                                                 <%=exp.title%> 
+                                              </div>
+                                              <div class="past-position-company">
+                                                <%=exp.organisation%> 
+                                              </div>
+                                              <div class="past-position-duration">
+                                                <%=exp.period%>
+                                              </div>                                                  
+                                            </li>
+                                            <li ng-show="lead.linkedin_profile.past_post.length > 1" style="text-align: center;" >
+                                              <a href="" ng-click="showMore=!showMore">
+                                              <span ng-hide="showMore">+ Show more...</span>
+                                              <span ng-show="showMore">- Show less</span></a>
+                                            </li>
+                                        </ul>  
+                                    </div> 
                                                 <ul class="list-unstyled contact-infos" style="padding-left:10px margin:0px">
                                                 <li ng-show="noLinkedInResults&& isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
@@ -1365,8 +1470,8 @@
               <form class="form-horizontal ">
                     <div class="row">
                       <div class="col-md-12">
-                        <div class="form-group">
-                          <div class="col-md-12" ng-class="{ 'has-error': oppo_err.name}">
+                        <div class="form-group" ng-class="{ 'has-error': oppo_err.name}">
+                          <div class="col-md-12">
                            <div class="input-icon">
                               <i class="fa fa-pencil"></i>
                               <input autofocus ng-model="opportunity.name" placeholder="{{_('opportunity name...')}}" type="text" class="form-control" required>
@@ -2208,24 +2313,39 @@ margin-top: 20px"/>
                                     </ul>
                                 </div>
                         </li>
+                         <li >
+                            <div class="row">
+                                <div class="col-md-5" style="padding-right:0px">
+                                  <span class="title">
+                                    <i class="fa fa-gear"></i> 
+                                   {{_('Industry :')}}
+                                   </span>  
+                                </div>
+                                <div class="col-md-7" style="padding-left:0px">
+                                  <span ng-hide="showEdit">
+                                      <%= lead.industry %>
+                                  </span> 
+                                  <input ng-show="showEdit" type="text" required ng-model="lead.industry" typeahead-on-select="inlinePatch('Lead','', 'industry',lead.id,lead.industry)" typeahead="industry as industry for industry in industries | filter:$viewValue | limitTo:10" class="form-control relatedExistingInput" placeholder="{{_('Industry')}}" style="padding: 0px;height: 20px;margin-bottom: 0px;"> 
+                                </div>
+                            </div>
+                        </li>
                         <li ng-show="lead.owner|| showEdit">
                             <div class="btn-group">
                                 <span class="title">
                                     <i class="fa fa-user"></i>
                                    {{ _('Owner:') }}
                                 </span>
-                                <span ng-hide="showEdit">
+                                <span ng-hide="showEdit&&(lead.owner.google_user_id=={{ME}}||{{is_admin}})">
                                       <%= lead.owner.google_display_name %>
                                 </span>
-                                <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
-                                   data-toggle="dropdown" style="margin-right:0px">
-                                    
+                                <a ng-show="(showEdit)&&(lead.owner.google_user_id=={{ME}}||{{is_admin}})" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                   data-toggle="dropdown" style="margin-right:0px">           
                                     <span>
                                       <%= lead.owner.google_display_name %>
                                     </span>
                                     <i class="icon-angle-down fa fa-angle-down"></i>
                                 </a>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu" ng-show="(showEdit)&&(lead.owner.google_user_id=={{ME}}||{{is_admin}})">
                                     <li ng-repeat="user in users">
                                         <a ng-click="inlinePatch('Lead','', 'owner',lead.entityKey,user.google_user_id)">
                                             <%=user.google_display_name%>
@@ -3063,6 +3183,14 @@ margin-top: 20px"/>
                                     ng-click="DeleteCollaborator(collaborator.entityKey)">x
                             </button>
                         </div>
+                         <div ng-repeat="collaborator in sharing_with" class="invitation">
+                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
+                            <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
+                            <button class="btn"
+                                    ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ ME }}"
+                                    ng-click="DeleteCollaborator(collaborator.entityKey)">x
+                            </button>
+                        </div>
 
                     </div>
                     <hr/>
@@ -3071,10 +3199,7 @@ margin-top: 20px"/>
                         <p>{{ _("Share with your collaborators:") }}</p>
 
                         <div class="form-group">
-                            <input type="text" ng-model="user"
-                                   typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
-                                   typeahead-on-select="selectMember()" class="form-control"
-                                   placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                            <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
                         </div>
 
                     </div>

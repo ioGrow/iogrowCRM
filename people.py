@@ -171,14 +171,14 @@ class linked_in():
         #print links
         if links: return self.browser.follow_link(links[0]).geturl()
     def open_url_twitter_list(self, keyword):
-        r=self.browser.open('https://www.google.com')
-        self.browser.response().read()
-        self.browser.select_form(nr=0)
-        self.browser.form['q']=keyword+' site:twitter.com'
-        self.browser.submit()
-        html=self.browser.response().read()
+        br=self.browser
+        params = {'q':decode(keyword)+' site:twitter.com'}
+        encoded_url_params = urllib.urlencode(params)
+        url = decode('https://www.google.com/search?'+encoded_url_params)
+        _open_url(br,url)
+        html=br.response().read()
         soup=BeautifulSoup(html)
-        h= soup.find_all("li",{"class":"g"})
+        h= soup.find_all("div",{"class":"g"})
         lien=[]
         for hh in h:
             href=hh.a['href']
@@ -357,9 +357,13 @@ class linked_in():
         _open_url(br,url)
         html=br.response().read()
         soup=BeautifulSoup(html)
-        h= soup.find_all("li",{"class":"g"})
+        h= soup.find_all("div",{"class":"g"})
+        print '-------------------------------'
+        print len(h)
         lien=[]
         for hh in h:
+            print '-------------------------------'
+            print hh
             href=hh.a['href']
             name=hh.a.text.split("|")[0]
             title=hh.find("div",{"class":"f slp"})
@@ -386,7 +390,7 @@ class linked_in():
         html = br.response().read()
     
         soup=BeautifulSoup(html)
-        h= soup.find_all("li",{"class":"g"})
+        h= soup.find_all("div",{"class":"g"})
         lien=[]
         company_name=[]
         for hh in h:

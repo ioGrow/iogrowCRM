@@ -384,16 +384,21 @@ accountservices.factory('Permission', function ($http) {
 
     var Permission = function (data) {
         angular.extend(this, data);
-    };
+    }; 
 
 
     Permission.insert = function ($scope, params) {
+        $scope.isLoading = true;
         gapi.client.crmengine.permissions.insertv2(params).execute(function (resp) {
             console.log('in insert resp');
             console.log(resp);
             if (!resp.code) {
+                $scope.isLoading = false;
+                $scope.apply();
                 $scope.getColaborators()
             } else {
+                $scope.isLoading = false;
+                $scope.apply();
                 console.log(resp.code);
             }
         });
@@ -413,7 +418,9 @@ accountservices.factory('Permission', function ($http) {
         gapi.client.crmengine.permissions.get_colaborators(params).execute(function (resp) {
             if (!resp.code) {
                 $scope.collaborators_list = resp.items;
-                $scope.$apply();
+                console.log("$scope.collaborators_list");
+                console.log($scope.collaborators_list);
+                $scope.apply();
 
             } else {
             }

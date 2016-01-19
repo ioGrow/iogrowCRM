@@ -113,7 +113,7 @@
                   <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
                   <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
               </a>
-              <div class="btn-group hide_sm" ng-class="{'filterSelected': leadsfilter!='all'}" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+              <div class="btn-group hide_sm" ng-class="{'filterSelected': leadsfilter!='all'}" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;padding-left: 0px;padding-right: 0px;">
                   <a class="headerBtn" title="{{_('Filter/Sort options')}}" data-toggle="dropdown"> 
                       <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
                   </a>
@@ -128,7 +128,7 @@
                     </li>
                     <li role="presentation" class="dropdown-header cus-dropdown-header">{{_('Order by')}}</li>
                     <li class="ng-menu">                      
-                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{_('Last modified')}}</a>
+                      <a ng-click="orderBy('updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{_('Last modified')}}</a>
                     </li> 
                     <li class="ng-menu">                     
                       <a ng-click="orderBy('lastname')" href="" > <i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'lastname'}"></i>{{_('Name')}}</a>
@@ -994,7 +994,7 @@
                           {{ _(": you are not the owner")}} </label> <br>
                         <label ng-show="selectedPermisssions">{{ _("The owner is:")}}</label>
                     </div>
-                    <hr ng-show="selectedPermisssions" ng-hide="selected_access=='public'"/>
+                    <hr ng-show="selected_access!='public' && selectedPermisssions"/>
                     <!--<div ng-show="selectedPermisssions" class='' id="collaborators" ng-hide="lead.access=='public'">
                         <p>{{ _("Collaborators:")}}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
@@ -1006,7 +1006,7 @@
                     </div>
                     <hr ng-show="selectedPermisssions"/>-->
 
-                    <div ng-hide="selected_access=='public'">
+                    <div ng-show="selected_access!='public' && selectedPermisssions">
                         <p>{{ _("Invite collaborators:")}}</p>
                         <div class="form-group" style="margin-left: 0px; margin-right: 0px;">
                             <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">

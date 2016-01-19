@@ -4,7 +4,7 @@ from google.appengine.ext import ndb
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.api import search
 from protorpc import messages
-
+import endpoints
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.tags import Tag,TagSchema
@@ -518,6 +518,7 @@ class Opportunity(EndpointsModel):
             current_stage_schema = OpportunitystageSchema(
                                                         name=current_stage.name,
                                                         probability= current_stage.probability,
+                                                        stage_nmber=current_stage.stage_number,
                                                         stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
                                                         )
             if len(opportunity_stage_edges['items'])>1:
@@ -1522,6 +1523,8 @@ class Opportunity(EndpointsModel):
         opportunity = cls.get_by_id(int(request.id))
         if opportunity is None:
             raise endpoints.NotFoundException('Opportunity not found.')
+        if (opportunity.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         EndpointsHelper.share_related_documents_after_patch(
                                                             user_from_email,
                                                             opportunity,

@@ -171,6 +171,9 @@ class LinkedinProfileSchema(messages.Message):
     url=messages.StringField(15)
     profile_picture=messages.StringField(16)
     education=messages.StringField(17)
+    languages=messages.StringField(18,repeated=True)
+    phones=messages.StringField(19,repeated=True)
+    emails=messages.StringField(20,repeated=True)
 
     
 class LinkedinCompanySchema(messages.Message):

@@ -1712,19 +1712,19 @@ class CrmEngineApi(remote.Service):
 
     # custom_fields APIs
     # customfield.insert api
-    @endpoints.method(ContactSynchronizeRequest, message_types.VoidMessage,
-                      path='contacts/synchronize', http_method='POST',
-                      name='contacts.synchronize')
-    def synchronize_google_contact(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        taskqueue.add(
-                url='/workers/sync_contact_with_gontacts',
-                queue_name='iogrow-gontact',
-                params={
-                    'key': user_from_email.key.urlsafe()
-                }
-        )
-        return message_types.VoidMessage()
+    # @endpoints.method(ContactSynchronizeRequest, message_types.VoidMessage,
+    #                   path='contacts/synchronize', http_method='POST',
+    #                   name='contacts.synchronize')
+    # def synchronize_google_contact(self, request):
+    #     user_from_email = EndpointsHelper.require_iogrow_user()
+    #     taskqueue.add(
+    #             url='/workers/sync_contact_with_gontacts',
+    #             queue_name='iogrow-gontact',
+    #             params={
+    #                 'key': user_from_email.key.urlsafe()
+    #             }
+    #     )
+    #     return message_types.VoidMessage()
 
     @endpoints.method(iomessages.CustomFieldInsertRequestSchema, iomessages.CustomFieldSchema,
                       path='customfield/insert', http_method='POST',
@@ -2386,6 +2386,7 @@ class CrmEngineApi(remote.Service):
             http_method='PATCH', path='documents/{id}', name='documents.patch')
     def DocumentPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
+
         # Todo: Check permissions
         my_model.put()
         return my_model
@@ -2607,6 +2608,8 @@ class CrmEngineApi(remote.Service):
 
             if event is None:
                 raise endpoints.NotFoundException('Event not found')
+            if (event.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+                raise endpoints.ForbiddenException('you are not the owner')
             event_patch_keys = ['title', 'starts_at', 'ends_at', 'description', 'where', 'allday', 'access', 'timezone']
             date_props = ['starts_at', 'ends_at']
             patched = False

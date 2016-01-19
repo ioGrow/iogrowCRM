@@ -87,6 +87,8 @@ class AccountSchema(messages.Message):
     lastname = messages.StringField(29)
     personal_account = messages.BooleanField(30)
     cover_image = messages.StringField(31)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinCompanySchema, 32)
+
 
 
 class AccountPatchRequest(messages.Message):
@@ -108,6 +110,7 @@ class AccountPatchRequest(messages.Message):
     emails = messages.MessageField(iomessages.EmailSchema, 16, repeated=True)
     addresses = messages.MessageField(iomessages.AddressSchema, 17, repeated=True)
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema, 18, repeated=True)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinCompanySchema, 32)
     new_contact_key = messages.StringField(19)
 
 
@@ -177,6 +180,7 @@ class AccountInsertRequest(messages.Message):
     lastname = messages.StringField(17)
     personal_account = messages.BooleanField(18)
     cover_image = messages.StringField(19)
+    linkedin_profile=messages.MessageField(iomessages.LinkedinCompanySchema, 20)
 
 
 ATTRIBUTES_MATCHING = {
@@ -233,7 +237,7 @@ class Account(EndpointsModel):
     firstname = ndb.StringProperty()
     lastname = ndb.StringProperty()
     personal_account = ndb.BooleanProperty()
-
+    linkedin_profile=ndb.KeyProperty()
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
         try:
@@ -393,6 +397,26 @@ class Account(EndpointsModel):
                     google_public_profile_url=owner.google_public_profile_url,
                     google_user_id=owner.google_user_id
                 )
+            linkedin_profile_schema={}
+            if account.linkedin_profile :
+                linkedin_profile = account.linkedin_profile.get()
+                linkedin_profile_schema=iomessages.LinkedinCompanySchema(
+                    name = linkedin_profile.name,
+                    website = linkedin_profile.website,
+                    industry = linkedin_profile.industry,
+                    headquarters = linkedin_profile.headquarters,
+                    summary= linkedin_profile.summary,
+                    founded = linkedin_profile.founded,
+                    followers=linkedin_profile.followers,
+                    logo=linkedin_profile.logo,
+                    specialties=linkedin_profile.specialties,
+                    top_image=linkedin_profile.top_image,
+                    type=linkedin_profile.type,
+                    company_size=linkedin_profile.company_size,
+                    url=linkedin_profile.url,
+                    workers=linkedin_profile.workers,
+                    address=linkedin_profile.address,
+                )
             account_schema = AccountSchema(
                 id=str(account.key.id()),
                 entityKey=account.key.urlsafe(),
@@ -420,7 +444,8 @@ class Account(EndpointsModel):
                 updated_at=account.updated_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                 owner=owner_schema,
                 firstname=account.firstname,
-                lastname=account.lastname
+                lastname=account.lastname,
+                linkedin_profile=linkedin_profile_schema
             )
             return account_schema
         else:
@@ -431,6 +456,8 @@ class Account(EndpointsModel):
         account = cls.get_by_id(int(request.id))
         if account is None:
             raise endpoints.NotFoundException('Account not found.')
+        if (account.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         EndpointsHelper.share_related_documents_after_patch(
             user_from_email,
             account,
@@ -441,8 +468,6 @@ class Account(EndpointsModel):
                       'introduction', 'access', 'logo_img_id', 'logo_img_url', 'lastname', 'firstname',
                       'personal_account']
         for p in properties:
-            print p
-            print 'check'
             if hasattr(request, p):
                 print 'ok'
                 if (eval('account.' + p) != eval('request.' + p)) \
@@ -462,6 +487,45 @@ class Account(EndpointsModel):
         info_nodes = Node.list_info_nodes(account_key_async, None)
         info_nodes_structured = Node.to_structured_data(info_nodes)
         emails = None
+        if request.linkedin_profile :
+            if account.linkedin_profile :
+                linkedin_profile = account.linkedin_profile.get()
+                linkedin_profile.name = request.linkedin_profile.name,
+                linkedin_profile.website = request.linkedin_profile.website,
+                linkedin_profile.industry = request.linkedin_profile.industry,
+                linkedin_profile.headquarters = request.linkedin_profile.headquarters,
+                linkedin_profile.summary= request.linkedin_profile.summary,
+                linkedin_profile.founded = request.linkedin_profile.founded,
+                linkedin_profile.followers=request.linkedin_profile.followers,
+                linkedin_profile.logo=request.linkedin_profile.logo,
+                linkedin_profile.specialties=request.linkedin_profile.specialties,
+                linkedin_profile.top_image=request.linkedin_profile.top_image,
+                linkedin_profile.type=request.linkedin_profile.type,
+                linkedin_profile.company_size=request.linkedin_profile.company_size,
+                linkedin_profile.url=request.linkedin_profile.url,
+                linkedin_profile.workers=request.linkedin_profile.workers,
+                linkedin_profile.address=request.linkedin_profile.address,
+                linkedin_profile.put()
+            else:
+                linkedin_profile = model.LinkedinCompany(
+                    name = request.linkedin_profile.name,
+                    website = request.linkedin_profile.website,
+                    industry = request.linkedin_profile.industry,
+                    headquarters = request.linkedin_profile.headquarters,
+                    summary= request.linkedin_profile.summary,
+                    founded = request.linkedin_profile.founded,
+                    followers=request.linkedin_profile.followers,
+                    logo=request.linkedin_profile.logo,
+                    specialties=request.linkedin_profile.specialties,
+                    top_image=request.linkedin_profile.top_image,
+                    type=request.linkedin_profile.type,
+                    company_size=request.linkedin_profile.company_size,
+                    url=request.linkedin_profile.url,
+                    workers=request.linkedin_profile.workers,
+                    address=request.linkedin_profile.address,
+                )
+                linkedin_profile_key= linkedin_profile.put()
+                account.linkedin_profile=linkedin_profile_key
         if 'emails' in info_nodes_structured.keys():
             emails = info_nodes_structured['emails']
         for email in request.emails:
@@ -640,6 +704,26 @@ class Account(EndpointsModel):
         if account_key:
             account_key_async = account_key
         else:
+            linkedin_profile_key = None
+            if request.linkedin_profile :
+                linkedin_profile = model.LinkedinCompany(
+                    name = request.linkedin_profile.name,
+                    website = request.linkedin_profile.website,
+                    industry = request.linkedin_profile.industry,
+                    headquarters = request.linkedin_profile.headquarters,
+                    summary= request.linkedin_profile.summary,
+                    founded = request.linkedin_profile.founded,
+                    followers=request.linkedin_profile.followers,
+                    logo=request.linkedin_profile.logo,
+                    specialties=request.linkedin_profile.specialties,
+                    top_image=request.linkedin_profile.top_image,
+                    type=request.linkedin_profile.type,
+                    company_size=request.linkedin_profile.company_size,
+                    url=request.linkedin_profile.url,
+                    workers=request.linkedin_profile.workers,
+                    address=request.linkedin_profile.address,
+                )
+                linkedin_profile_key= linkedin_profile.put()
             account = cls(
                 name=request.name,
                 account_type=request.account_type,
@@ -654,7 +738,8 @@ class Account(EndpointsModel):
                 logo_img_url=request.logo_img_url,
                 firstname=request.firstname,
                 lastname=request.lastname,
-                personal_account=request.personal_account
+                personal_account=request.personal_account,
+                linkedin_profile=linkedin_profile_key
             )
             account_key = account.put_async()
             account_key_async = account_key.get_result()
@@ -849,13 +934,16 @@ class Account(EndpointsModel):
                     infonodes_structured = Node.to_structured_data(infonodes)
                     emails = None
                     if 'emails' in infonodes_structured.keys():
-                        emails = infonodes_structured['emails']
+                        if hasattr(infonodes_structured['emails'], 'items'):
+                            emails = infonodes_structured['emails']
                     phones = None
                     if 'phones' in infonodes_structured.keys():
-                        phones = infonodes_structured['phones']
+                        if hasattr(infonodes_structured['phones'], 'items'):
+                            phones = infonodes_structured['phones']
                     sociallinks = None
                     if 'sociallinks' in infonodes_structured.keys():
-                        sociallinks = infonodes_structured['sociallinks']
+                        if hasattr(infonodes_structured['sociallinks'], 'items'):
+                            sociallinks = infonodes_structured['sociallinks']
                     owner = model.User.get_by_gid(account.owner)
                     owner_schema = None
                     if owner:

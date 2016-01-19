@@ -1621,6 +1621,9 @@ class LinkedinProfile(ndb.Model) :
     certifications=ndb.TextProperty(indexed=False)
     skills=ndb.StringProperty(repeated=True,indexed=False)
     url=ndb.StringProperty(indexed=False)
+    languages=ndb.StringProperty(repeated=True,indexed=False)
+    phones=ndb.StringProperty(repeated=True,indexed=False)
+    emails=ndb.StringProperty(repeated=True,indexed=False)
 class LinkedinCompany(ndb.Model) :
     name = ndb.StringProperty(indexed=False)
     website =  ndb.StringProperty(indexed=False)
@@ -1635,7 +1638,9 @@ class LinkedinCompany(ndb.Model) :
     type=ndb.StringProperty(indexed=False)
     company_size=ndb.StringProperty(indexed=False)
     url=ndb.StringProperty(indexed=False)
-    workers=ndb.JsonProperty(indexed=False)
+    workers=ndb.TextProperty(indexed=False)
+    address=ndb.StringProperty(indexed=False)
+
 
 class TwitterProfile(ndb.Model):
     id= ndb.IntegerProperty(indexed=False)

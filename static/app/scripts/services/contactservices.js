@@ -12,12 +12,56 @@ accountservices.factory('Contact', function ($http) {
         gapi.client.crmengine.contacts.getv2(params).execute(function (resp) {
             if (!resp.code) {
                 $scope.contact = resp;
-                // $scope.getColaborators();
+                $scope.getColaborators();
                 if (resp.account) {
                     $scope.searchAccountQuery = resp.account.name;
                 }
                 // list infonodes
                 var renderMap = false;
+                var past_pos=[];
+                if (!$scope.contact.linkedin_profile) {
+                        $scope.contact.linkedin_profile={};
+                     };
+                if ($scope.contact.linkedin_profile.past_post) {
+                     angular.forEach($scope.contact.linkedin_profile.past_post, function(position){
+                          past_pos.push(JSON.parse(position));
+                    });
+                     $scope.contact.linkedin_profile.past_post=past_pos;
+                     past_pos=null;
+                }
+                var cur_pos=[];
+                if ($scope.contact.linkedin_profile.current_post) {
+                   angular.forEach($scope.contact.linkedin_profile.current_post, function(position){
+                        cur_pos.push(JSON.parse(position)); 
+                    });
+                   $scope.contact.linkedin_profile.current_post=cur_pos;
+                   cur_pos=null;
+                }
+                var skills=[];
+                if ($scope.contact.linkedin_profile.skills) {
+                   angular.forEach($scope.contact.linkedin_profile.skills, function(position){
+                         skills.push(JSON.parse(position)); 
+                    });
+                   $scope.contact.linkedin_profile.skills=skills;
+                    skills=null;
+                }
+                var formations=[];
+                if ($scope.contact.linkedin_profile.formations) {
+                    angular.forEach($scope.contact.linkedin_profile.formations, function(position){
+                         formations.push(JSON.parse(position));  
+                    });
+                    $scope.contact.linkedin_profile.formations=formations;
+                    forms=null;
+                }
+                var languages=[];
+                if ($scope.contact.linkedin_profile.languages) {
+                    angular.forEach($scope.contact.linkedin_profile.languages, function(language){
+                         languages.push(language);  
+                    });
+                    $scope.contact.linkedin_profile.languages=languages;
+                    languages=null;
+                } 
+                $scope.linkedProfileresume=$scope.contact.linkedin_profile.resume;
                 if (resp.infonodes) {
                     console.log("infonodes");
                     console.log(resp.infonodes);
@@ -49,6 +93,7 @@ accountservices.factory('Contact', function ($http) {
                 }
                 $scope.getCustomFields('contacts');
                 console.log('cus cus');
+                console.log($scope.contact);
                 if (resp.topics) {
                     if (params.topics.pageToken) {
                         angular.forEach(resp.topics.items, function (item) {
@@ -103,6 +148,8 @@ accountservices.factory('Contact', function ($http) {
                         $scope.opppagination.next = false;
                     }
 
+                }else{
+                    $scope.blankStateopportunity = true;
                 }
 
                 if (resp.cases) {
@@ -132,6 +179,8 @@ accountservices.factory('Contact', function ($http) {
                         $scope.casepagination.next = false;
                     }
 
+                }else{
+                     $scope.blankStatecase = true;
                 }
 
                 if (resp.documents) {
@@ -249,6 +298,50 @@ accountservices.factory('Contact', function ($http) {
                         $scope.contact[k] = resp[k];
                     }
                 }
+                   var past_pos=[];
+                     if (!$scope.contact.linkedin_profile) {
+                        $scope.contact.linkedin_profile={};
+                     };
+                    if ($scope.contact.linkedin_profile.past_post) {
+                         angular.forEach($scope.contact.linkedin_profile.past_post, function(position){
+                              past_pos.push(JSON.parse(position));
+                        });
+                         $scope.contact.linkedin_profile.past_post=past_pos;
+                         past_pos=null;
+                    }
+                    var cur_pos=[];
+                    if ($scope.contact.linkedin_profile.current_post) {
+                       angular.forEach($scope.contact.linkedin_profile.current_post, function(position){
+                            cur_pos.push(JSON.parse(position)); 
+                        });
+                       $scope.contact.linkedin_profile.current_post=cur_pos;
+                       cur_pos=null;
+                    }
+                    var skills=[];
+                    if ($scope.contact.linkedin_profile.skills) {
+                       angular.forEach($scope.contact.linkedin_profile.skills, function(position){
+                             skills.push(JSON.parse(position)); 
+                        });
+                       $scope.contact.linkedin_profile.skills=skills;
+                        skills=null;
+                    }
+                    var formations=[];
+                    if ($scope.contact.linkedin_profile.formations) {
+                        angular.forEach($scope.contact.linkedin_profile.formations, function(position){
+                             formations.push(JSON.parse(position));  
+                        });
+                        $scope.contact.linkedin_profile.formations=formations;
+                        formations=null;
+                    }  
+                    var languages=[];
+                    if ($scope.contact.linkedin_profile.languages) {
+                        angular.forEach($scope.contact.linkedin_profile.languages, function(language){
+                             languages.push(JSON.parse(language));  
+                        });
+                        $scope.contact.linkedin_profile.languages=languages;
+                        languages=null;
+                    } 
+                    $scope.linkedProfileresume=$scope.contact.linkedin_profile.resume;
                 $scope.email.to = '';
                 angular.forEach($scope.contact.emails, function (value, key) {
                     $scope.email.to = $scope.email.to + value.email + ',';
@@ -347,9 +440,12 @@ accountservices.factory('Contact', function ($http) {
                     $scope.contactpagination.prev = false;
                 }
                 if (resp.nextPageToken) {
+                    // console.log("resp.nextPageToken");
+                    // console.log(resp.nextPageToken);
                     var nextPage = $scope.contactCurrentPage + 1;
-                    // Store the nextPageToken
                     $scope.contactpages[nextPage] = resp.nextPageToken;
+                    // console.log("$scope.contactpages[nextPage]");
+                    // console.log($scope.contactpages[nextPage]);
                     $scope.contactpagination.next = true;
 
                 } else {
@@ -421,7 +517,11 @@ accountservices.factory('Contact', function ($http) {
                     $scope.contactpagination.prev = false;
                 }
                 if (resp.nextPageToken) {
+                     console.log("resp.nextPageToken");
+                    console.log(resp.nextPageToken);
                     var nextPage = $scope.contactCurrentPage + 1;
+                    console.log("scope.contactCurrentPage");
+                    console.log($scope.contactCurrentPage);
                     // Store the nextPageToken
                     $scope.contactpages[nextPage] = resp.nextPageToken;
                     $scope.contactpagination.next = true;
@@ -563,6 +663,7 @@ accountservices.factory('Contact', function ($http) {
                 $scope.contacts.unshift(resp);
                 console.log($scope.contacts);
                 if ($scope.contactInserted) {
+                    
                     $scope.contactInserted(resp);
                 }
                 //$scope.contact = {};
