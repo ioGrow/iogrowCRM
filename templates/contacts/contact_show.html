@@ -299,7 +299,8 @@
                                           </span>
                                           <span ng-show="contact.account.name">
                                             <a target="_blank" href="/#/accounts/show/<%=contact.account.id%>" class="tag" ng-show="contact.account.name" style="font-size: 13px;font-weight: 400;color: rgb(96, 96, 96);text-decoration: none;">
-                                              <span ng-show="contact.title&&contact.account.name">,</span> <%= contact.account.name | limitTo:25%><%= contact.account.name.length > 25 ? '...' : ''%>
+                                              <span ng-show="contact.title&&contact.account.name">,</span>
+                                                <%= contact.account.name | limitTo:25%><%= contact.account.name.length > 25 ? '...' : ''%>
                                             </a>
                                           </span>
                                        </li> 

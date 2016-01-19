@@ -13,6 +13,7 @@ from datetime import timedelta
 import httplib2
 from django.utils.encoding import smart_str
 # Google libs
+from google.appengine.api.datastore import Key
 from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.api import memcache
@@ -1083,7 +1084,7 @@ class CrmEngineApi(remote.Service):
                 result = index.search(query)
                 # total_matches = results.number_found
                 # Iterate over the documents in the results
-                if len(result.results) == limit + 1:
+                if len(result.results) == limit:
                     next_cursor = result.results[-1].cursor.web_safe_string
                 else:
                     next_cursor = None
