@@ -255,6 +255,16 @@ Task.delete=function($scope,params){
        });
 
 };
+  Task.deleteAll=function($scope){
+            $scope.isLoading=true;  
+             gapi.client. crmengine.tasks.delete_all().execute(function(resp) {
+                $scope.allTasksDeleted();                
+                $scope.isLoading=false;  
+                $scope.apply();
+                    
+             });
+
+      };
    Task.listMore = function($scope,params){
    $scope.inProcess(true);  
     gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {

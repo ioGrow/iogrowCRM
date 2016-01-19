@@ -362,6 +362,14 @@ accountservices.factory('Case', function() {
         $scope.apply();
       }
     )};
+    Case.deleteAll = function($scope){ 
+      $scope.isLoading=true;
+      gapi.client.crmengine.cases.delete_all().execute(function(resp){
+          $scope.allCasesDeleted();
+          $scope.isLoading=false;  
+          $scope.apply();
+        }
+    )};
 
     Case.update_status = function($scope,params){
     trackMixpanelAction('CASE_UPDATE_STATUS');

@@ -684,20 +684,12 @@ accountservices.factory('Contact', function ($http) {
             }
         });
     };
-    Contact.delete = function ($scope, params) {
-        trackMixpanelAction('CONTACT_DELETE');
-        $scope.inProcess(true);
-        gapi.client.crmengine.contacts.delete(params).execute(function (resp) {
-
-            if ($scope.contactDeleted) {
-                $scope.contactDeleted(resp);
-                $scope.inProcess(false);
+    Contact.deleteAll = function ($scope) {
+        $scope.isLoading=true;
+        gapi.client.crmengine.contacts.delete_all().execute(function (resp) {
+                $scope.allContactsDeleted();
+                $scope.isLoading=false;
                 $scope.apply();
-            } else {
-                $scope.inProcess(false);
-                $scope.apply();
-
-            }
         })
     };
 
