@@ -7,7 +7,7 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
               }
               return false;
         }
-     if(localStorage["iogrowSearch"]){
+     if(localStorage["iogrowSearch"]){ 
         $scope.iogrowSearch=localStorage["iogrowSearch"];
         $rootScope.iogrowSearch=$scope.iogrowSearch;
      }else{
