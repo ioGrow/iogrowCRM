@@ -645,6 +645,17 @@ accountservices.factory('Account', function($http) {
             }
         )
     };
+    Account.deleteAll = function($scope) {
+            $scope.isLoading=true;  
+            gapi.client.crmengine.accounts.delete_all().execute(function(resp) {
+                $scope.allAccountsDeleted();
+                $scope.isLoading=false;
+                $scope.apply();
+                
+               
+            }
+        )
+    };
     // arezki lrbdiri 27/08/14
      Account.getCompanyDetails = function($scope, params) {
         $scope.inProcess(true);  
