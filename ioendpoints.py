@@ -1069,6 +1069,7 @@ class CrmEngineApi(remote.Service):
             limit = int(request.limit)
         else:
             limit = 10
+        limit = 5
         next_cursor = None
         if request.pageToken:
             cursor = search.Cursor(web_safe_string=request.pageToken)
@@ -1084,7 +1085,7 @@ class CrmEngineApi(remote.Service):
                 result = index.search(query)
                 # total_matches = results.number_found
                 # Iterate over the documents in the results
-                if len(result.results) == limit + 1:
+                if len(result.results) == limit:
                     next_cursor = result.results[-1].cursor.web_safe_string
                 else:
                     next_cursor = None
