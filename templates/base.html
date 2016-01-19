@@ -460,7 +460,7 @@ var ROOT = '/_ah/api';
         // When the API is loaded start angularJS app
         var $injector = angular.bootstrap(document, ['crmEngine']);
         if (!window.location.hash) {
-            window.location.replace('{{active_app.url}}');
+            window.location.replace('/#/leads');
         }
         ;
     }

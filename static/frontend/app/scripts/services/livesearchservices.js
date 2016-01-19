@@ -34,32 +34,19 @@ livesearchservices.factory('Search', function($http) {
         case 'Customer_Story':
           base_url = '/live/shows/';
           break;
-        
 
         }
 
     return base_url+id+'/';
   };
 
-  
   Search.list = function($scope,params){
       $scope.isLoading = true;
-      console.log('in search api go ahead');
       gapi.client.iogrowlive.search(params).execute(function(resp) {
               if(!resp.code){
-                console.log("params");
-                console.log(params);
-
-                if (params.pageToken==undefined||params.pageToken==1) {
-                  console.log("iiiiiiiiiiiin here to reset searchResults")
-                 $scope.searchResults = []; 
-                }else{
-                   console.log("in moreeeeee search");
-                };
+                 $scope.searchResults = [];
                  for (var i=0,len=resp.items.length; i<len; i++)
                   { 
-                        console.log("resp.item[i]");
-                        console.log(resp.item[i]);
                         var id = resp.items[i].id;
                         var type = resp.items[i].type;
                         var title = resp.items[i].title;
@@ -80,7 +67,6 @@ livesearchservices.factory('Search', function($http) {
                        $scope.pagination.prev = false;
                    }
                  if (resp.nextPageToken){
-                  console.log("next page exist");
                    var nextPage = $scope.currentPage + 1;
                    // Store the nextPageToken
                    $scope.pages[nextPage] = resp.nextPageToken;
