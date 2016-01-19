@@ -111,7 +111,7 @@ class AccountPatchRequest(messages.Message):
     addresses = messages.MessageField(iomessages.AddressSchema, 17, repeated=True)
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema, 18, repeated=True)
     linkedin_profile = messages.MessageField(iomessages.LinkedinCompanySchema, 32)
-    new_contact_key = messages.StringField(19)
+
 
 
 class AccountListRequest(messages.Message):
@@ -453,6 +453,7 @@ class Account(EndpointsModel):
 
     @classmethod
     def patch(cls, user_from_email, request):
+        print 'ok start'
         account = cls.get_by_id(int(request.id))
         if account is None:
             raise endpoints.NotFoundException('Account not found.')
@@ -463,7 +464,6 @@ class Account(EndpointsModel):
             account,
             request
         )
-
         properties = ['owner', 'name', 'account_type', 'industry', 'tagline', 'cover_image',
                       'introduction', 'access', 'logo_img_id', 'logo_img_url', 'lastname', 'firstname',
                       'personal_account']
@@ -528,7 +528,7 @@ class Account(EndpointsModel):
                 account.linkedin_profile=linkedin_profile_key
         if 'emails' in info_nodes_structured.keys():
             emails = info_nodes_structured['emails']
-        for email in request.emails:
+        for email in new_contact.emails:
             is_exist = False
             if emails:
                 for em in emails.items:
@@ -552,7 +552,7 @@ class Account(EndpointsModel):
         if 'addresses' in info_nodes_structured.keys():
             addresses = info_nodes_structured['addresses']
 
-        for address in request.addresses:
+        for address in new_contact.addresses:
             is_exist = False
             if addresses:
                 for em in addresses.items:
@@ -596,7 +596,7 @@ class Account(EndpointsModel):
         phones = None
         if 'phones' in info_nodes_structured.keys():
             phones = info_nodes_structured['phones']
-        for phone in request.phones:
+        for phone in new_contact.phones:
             is_exist = False
             if phones:
                 for em in phones.items:
@@ -621,7 +621,7 @@ class Account(EndpointsModel):
                     )
 
                 )
-        for info_node in request.infonodes:
+        for info_node in new_contact.infonodes:
             is_exist = is_the_same_node(info_node, info_nodes_structured)
             if not is_exist:
                 Node.insert_info_node(
@@ -631,7 +631,7 @@ class Account(EndpointsModel):
                         fields=info_node.fields
                     )
                 )
-        for note in request.notes:
+        for note in new_contact.notes:
             note_author = model.Userinfo()
             note_author.display_name = user_from_email.google_display_name
             note_author.photo = user_from_email.google_public_profile_photo_url
@@ -657,9 +657,8 @@ class Account(EndpointsModel):
             )
         data = EndpointsHelper.get_data_from_index(str(account.key.id()))
         account.put_index(data)
-        get_schema_request = AccountGetRequest(id=int(request.id), contacts=ListRequest(limit=15))
-        schema = cls.get_schema(user_from_email, get_schema_request)
-        return schema
+        get_schema_request = AccountGetRequest(id=int(request.id))
+        return cls.get_schema(user_from_email, get_schema_request)
 
     @classmethod
     def export_csv_data(cls, user_from_email, request):
