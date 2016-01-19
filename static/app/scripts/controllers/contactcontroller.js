@@ -2888,9 +2888,7 @@ $scope.listTags=function(){
 // HKA 19.03.2014 inline update infonode
      $scope.inlinePatch=function(kind,edge,name,entityKey,value){
 
-
    if (kind=='Contact') {
-
       if (name=='firstname')
         {params = {'id':$scope.contact.id,
              firstname:value};
@@ -2898,6 +2896,10 @@ $scope.listTags=function(){
        if (name=='lastname')
         {params = {'id':$scope.contact.id,
              lastname:value};
+         Contact.patch($scope,params);}
+       if (name=='title')
+        {params = {'id':$scope.contact.id,
+             title:value};
          Contact.patch($scope,params);}
         if (name == 'owner') {
                     params = {
