@@ -3,6 +3,7 @@ import logging
 import re
 import time
 import json
+
 from django.utils.encoding import smart_str
 from google.appengine.ext import ndb
 from google.appengine.api import taskqueue
@@ -472,6 +473,20 @@ class Account(EndpointsModel):
                 if (eval('account.' + p) != eval('request.' + p)) \
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('account.' + p + '= request.' + p)
+        account_key_async = account.put_async().get_result()
+        contact_key = ndb.Key(urlsafe=request.new_contact_key)
+        Edge.insert(start_node=account_key_async,
+                    end_node=contact_key,
+                    kind='contacts',
+                    inverse_edge='parents')
+        EndpointsHelper.update_edge_indexes(
+            parent_key=contact_key,
+            kind='contacts',
+            indexed_edge=str(account_key_async.id())
+        )
+        info_nodes = Node.list_info_nodes(account_key_async, None)
+        info_nodes_structured = Node.to_structured_data(info_nodes)
+        emails = None
         if request.linkedin_profile :
             if account.linkedin_profile :
                 linkedin_profile = account.linkedin_profile.get()
@@ -490,7 +505,7 @@ class Account(EndpointsModel):
                 linkedin_profile.url=request.linkedin_profile.url,
                 linkedin_profile.workers=request.linkedin_profile.workers,
                 linkedin_profile.address=request.linkedin_profile.address,
-                print linkedin_profile.put()
+                linkedin_profile.put()
             else:
                 linkedin_profile = model.LinkedinCompany(
                     name = request.linkedin_profile.name,
@@ -511,12 +526,6 @@ class Account(EndpointsModel):
                 )
                 linkedin_profile_key= linkedin_profile.put()
                 account.linkedin_profile=linkedin_profile_key
-        account_key_async = account.put_async().get_result()
-        info_nodes = Node.list_info_nodes(account_key_async, None)
-        info_nodes_structured = Node.to_structured_data(info_nodes)
-        new_contact = request
-        emails = None
-
         if 'emails' in info_nodes_structured.keys():
             emails = info_nodes_structured['emails']
         for email in new_contact.emails:

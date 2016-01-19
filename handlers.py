@@ -3765,7 +3765,7 @@ routes = [
     ('/sfapi/search_photo', SFsearchphoto),
     ('/gogop', GoGoP),
     ('/welcome/', NewWelcomeHandler),
-    ('/welcome', NewWelcomeHandler),
+    # ('/welcome', NewWelcomeHandler),
     ('/new-sign-in/', NewSignInHandler),
     ('/chrome-extension/', ChromeExtensionHandler),
     ('/salesforce', SFExtensionHandler),

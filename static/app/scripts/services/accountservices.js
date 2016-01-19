@@ -792,20 +792,13 @@ accountservices.factory('Search', function($http) {
     };
 
     Search.list = function($scope, params) {
-        console.log("raki hena");
-        $scope.inProcess(true); 
+        $scope.inProcess(true);
         if (params['q'] != undefined) {
             gapi.client.crmengine.search(params).execute(function(resp) {
                 if (!resp.code) {
                     if (resp.items) {
-                         console.log("resp.items");
-                         console.log(resp.items);
-                        if (resp.nextPageToken==undefined||resp.nextPageToken==1) {
-                          
-                         $scope.searchResults = []; 
-                        }else{
-                           
-                        };
+                         if(!$scope.searchResults)
+                             $scope.searchResults = [];
                       angular.forEach(resp.items, function(item) {
                             var id = item.id;
                             var type = item.type;
@@ -818,23 +811,15 @@ accountservices.factory('Search', function($http) {
                             result.url = url;
                             $scope.searchResults.push(result);
                         });
-
-
-                        //$scope.searchResults = resp.items;
                         if ($scope.currentPage > 1) {
                             $scope.pagination.prev = true;
                         } else {
                             $scope.pagination.prev = false;
                         }                       
                         if (resp.nextPageToken) {
-                            console.log("resp.nextPageToken");
-                            console.log(resp.nextPageToken);
                             var nextPage = $scope.currentPage + 1;
-                            // Store the nextPageToken
                             $scope.pages[nextPage] = resp.nextPageToken;
-                                                     
                             $scope.pagination.next = true;
-
                         } else {
                             $scope.pagination.next = false;
                         }
