@@ -1650,15 +1650,17 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     'Company': params['Company'],
 
                 }
-                # if email != '':
-                #     min_params['Email'] = smart_str(email.lower())
-                # if industry != '':
-                #     min_params['Industry'] = smart_str(industry)
-                # if street != '':
-                #     street = smart_str(street)
-                #     address_fields = street.split(',')
-                #     if address_fields[-1].strip() in countries:
-                #         min_params['Country'] = address_fields[-1].strip()
+                if mobile != '':
+                    params['MobilePhone'] = smart_str(mobile)
+                if email != '':
+                    min_params['Email'] = smart_str(email.lower())
+                if industry != '':
+                    min_params['Industry'] = smart_str(industry)
+                if street != '':
+                    street = smart_str(street)
+                    address_fields = street.split(',')
+                    if address_fields[-1].strip() in countries:
+                        min_params['Country'] = address_fields[-1].strip()
                 created_lead = sf.Lead.create(min_params)
 
                 saved_lead = model.SFLead(
@@ -1694,12 +1696,28 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                     print 'error when tracking mixpanel actions'
                 created_lead['id'] = created_lead['id'][0:-3]
             except:
-                type, value, tb = sys.exc_info()
-                sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
-                mail.send_mail(sender_address, 'tedj@iogrow.com', 'error salesforce extension',
-                               linkedin_url + ' ' + str(value.message))
-                created_lead = {}
-                created_lead['error'] = 'error sending the lead to salesforce'
+                try:
+                    min_params = {
+                    'FirstName': params['FirstName'],
+                    'LastName': params['LastName'],
+                    'Title': params['Title'],
+                    'Company': params['Company'],
+                    }
+                    created_lead = sf.Lead.create(min_params)
+                    saved_lead = model.SFLead(
+                        firstname=firstname,
+                        lastname=lastname,
+                        sf_id=created_lead['id'][0:-3],
+                        photo_url=profile_img_url,
+                        linkedin_url=linkedin_url
+                    ).put()
+                except:
+                    type, value, tb = sys.exc_info()
+                    sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
+                    mail.send_mail(sender_address, 'tedj@iogrow.com', 'error salesforce extension',
+                                   linkedin_url + ' ' + str(value.message))
+                    created_lead = {}
+                    created_lead['error'] = 'error sending the lead to salesforce'
         self.response.headers['Access-Control-Allow-Origin'] = "*"
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
