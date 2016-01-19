@@ -13,6 +13,7 @@ from datetime import timedelta
 import httplib2
 from django.utils.encoding import smart_str
 # Google libs
+from google.appengine.api.datastore import Key
 from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.api import memcache
