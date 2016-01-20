@@ -4,6 +4,8 @@
 
 app.controller('DeleteAllRecordsCtrl', ['$scope', 'Auth', 'User','Lead','Account','Contact','Opportunity','Case','Task',
     function ($scope, Auth, User, Lead, Account, Contact, Opportunity, Case, Task) {
+        $("ul.page-sidebar-menu li").removeClass("active");
+        $("#id_DeleteAllRecords").addClass("active");
         $scope.isLoading=false;
         $scope.kindToDelete=null;
         $scope.modalBeforeDelete=function(kind){
