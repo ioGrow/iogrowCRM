@@ -29,4 +29,3 @@ appLive.controller('SearchFormController', ['$scope','Search',
       
      };
 }]);
-

@@ -412,6 +412,15 @@ Opportunity.delete = function($scope,params){
     }
 )};
 
+      Opportunity.deleteAll = function($scope){
+              $scope.isLoading=true;
+              $scope.apply();
+                gapi.client.crmengine.opportunities.delete_all().execute(function(resp){
+                  $scope.allOpportunitiesDeleted();
+                  $scope.isLoading=false;
+                  $scope.apply();
+                 }
+          )};
         Opportunity.export = function ($scope, params) {
           trackMixpanelAction('OPPORTUNITY_EXPORT');
         //$("#load_btn").attr("disabled", "true");

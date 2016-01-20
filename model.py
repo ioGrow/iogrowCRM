@@ -90,6 +90,7 @@ ADMIN_TABS = [
     # {'name': 'Synchronisation','label': 'Synchronisation','url':'/#/admin/synchronisation','icon':'refresh'},
     {'name': 'CustomFields', 'label': 'Custom Fields', 'url': '/#/admin/custom_fields/1', 'icon': 'list-alt'},
     # {'name': 'DataTransfer', 'label': 'Data Transfer', 'url': '/#/admin/data_transfer', 'icon': 'cloud'},
+     {'name': 'DeleteAllRecords', 'label': 'Delete Records', 'url': '/#/admin/delete_all_records', 'icon': 'trash-o'},
             ]
 ADMIN_APP = {'name': 'admin', 'label': 'Settings', 'url': '/#/admin/users'}
 """Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
