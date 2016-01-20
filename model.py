@@ -1,5 +1,6 @@
 import datetime
 # Google libs
+import os
 import httplib2
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
@@ -847,12 +848,30 @@ class User(EndpointsModel):
     country_code = ndb.StringProperty()
     date_time_format = ndb.StringProperty()
 
+    def after_create(self, user_id):
+       if self.status == "active" and not is_locale():
+           mp.track(user_id, 'NEW_USER')
+           mp.people_set(user_id, {
+               "$email": self.email,
+               "$name": self.google_display_name,
+               "$created": self.created_at,
+               "$organization": '' if not self.organization else self.organization.get().name,
+               "$language": self.language
+           })
+
     def put(self, **kwargs):
         existing_user = User.query(User.google_user_id == self.google_user_id).get()
         if existing_user:
             ndb.Model.put(existing_user, **kwargs)
         else:
             ndb.Model.put(self, **kwargs)
+        self.after_create(self.id)
+
+    def put_async(self, **kwargs):
+       async = super(User, self).put_async(**kwargs)
+       # if not self.id and self.status == "active":
+       self.after_create(async.get_result().id())
+       return async
 
 
     def init_user_config(self,org_key,profile_key):
@@ -1753,6 +1772,8 @@ class CopyLeadSfSession(ndb.Model):
             session = response[0]
             return session.user
         return None
+def is_locale():
+   return os.environ['SERVER_SOFTWARE'].startswith('Dev')
 
 
 
