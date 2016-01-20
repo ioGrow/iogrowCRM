@@ -1492,6 +1492,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
         introduction = self.request.get("summary")
         street = self.request.get("locality")
         mobile = self.request.get("phone")
+        mobile = ''.join(re.findall(r'\d+', mobile))
         email = self.request.get("email")
         twitter = self.request.get("twitterUrl")
         linkedin_url = self.request.get("linkedInUrl")
@@ -1597,7 +1598,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
             if introduction != '':
                 params['Description'] = smart_str(introduction)
             if mobile != '':
-                params['MobilePhone'] = smart_str(mobile)
+                params['MobilePhone'] = mobile
             if email != '':
                 params['Email'] = smart_str(email.lower())
             if twitter != '':
@@ -1651,7 +1652,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
 
                 }
                 if mobile != '':
-                    params['MobilePhone'] = smart_str(mobile)
+                    min_params['MobilePhone'] = mobile
                 if email != '':
                     min_params['Email'] = smart_str(email.lower())
                 if industry != '':
