@@ -7,9 +7,47 @@
 <!-- BEGIN HEAD -->
 <head>
 
-   <!-- start Mixpanel --><script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
-for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,e,d])};b.__SV=1.2;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f)}})(document,window.mixpanel||[]);
-mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
+    <!-- start Mixpanel -->
+    <script type="text/javascript">(function (e, b) {
+        if (!b.__SV) {
+            var a, f, i, g;
+            window.mixpanel = b;
+            b._i = [];
+            b.init = function (a, e, d) {
+                function f(b, h) {
+                    var a = h.split(".");
+                    2 == a.length && (b = b[a[0]], h = a[1]);
+                    b[h] = function () {
+                        b.push([h].concat(Array.prototype.slice.call(arguments, 0)))
+                    }
+                }
+
+                var c = b;
+                "undefined" !== typeof d ? c = b[d] = [] : d = "mixpanel";
+                c.people = c.people || [];
+                c.toString = function (b) {
+                    var a = "mixpanel";
+                    "mixpanel" !== d && (a += "." + d);
+                    b || (a += " (stub)");
+                    return a
+                };
+                c.people.toString = function () {
+                    return c.toString(1) + ".people (stub)"
+                };
+                i = "disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+                for (g = 0; g < i.length; g++)f(c, i[g]);
+                b._i.push([a, e, d])
+            };
+            b.__SV = 1.2;
+            a = e.createElement("script");
+            a.type = "text/javascript";
+            a.async = !0;
+            a.src = "undefined" !== typeof MIXPANEL_CUSTOM_LIB_URL ? MIXPANEL_CUSTOM_LIB_URL : "file:" === e.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";
+            f = e.getElementsByTagName("script")[0];
+            f.parentNode.insertBefore(a, f)
+        }
+    })(document, window.mixpanel || []);
+    mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
     <meta charset="utf-8"/>
     <meta http-equiv="content-language" content="en">
     <title>i/oGrow Engine Platform</title>
@@ -45,7 +83,6 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 <body class="page-header-fixed gray-body">
 
 
-
 <!-- BEGIN HEADER -->
 <div class="header navbar navbar-default navbar-fixed-top ">
     <!-- BEGIN TOP NAVIGATION BAR -->
@@ -57,7 +94,7 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
             <a class="navbar-brand" href="/apps/{{ sales_app.key.id() }}">
 
                 {% if logo != None and logo.fileUrl != None %}
-                <img src="{{ logo.fileUrl }}" alt="logo" class="img-responsive"
+                    <img src="{{ logo.fileUrl }}" alt="logo" class="img-responsive"
                          style="height:auto; width:auto; max-width:100px; max-height:32px;"/>
                 {% else %}
                     <img src="/static/build/img/iogrow-logo-app.png" alt="logo" class="img-responsive"/>
@@ -66,7 +103,8 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 
             {% if user.is_admin and logo == None %}
                 <span id="update_logo_pan" class="update-Logo" ng-click="createPickerUploader()" style="display:none;">
-                      <img src="/static/img/upload_logo.png" style="margin-left: -2px;padding: 2px;width: 24px;"> {{ _('UpLoad your Logo') }}
+                      <img src="/static/img/upload_logo.png"
+                           style="margin-left: -2px;padding: 2px;width: 24px;"> {{ _('UpLoad your Logo') }}
                 </span>
             {% endif %}
         </div>
@@ -142,18 +180,18 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
                                 {% if application.key !=active_app.key %}
                                     <li class="gb_a">
                                         <a href="/apps/{{ application.key.id() }}">
-                          <span class="task">
-                            <span class="desc">
-                               {% if application.label =="Relationships" %}
-                                   <img class="platform_icons" height="50" width="50"
-                                        src="/static/img/iogrow-application.png">
-                               {% else %}
-                                   <img class="platform_icons" height="50" width="50"
-                                        src="/static/img/admin_console.png">
-                               {% endif %}
-                                {{ _(application.label) }}
-                            </span>
-                          </span>
+                                          <span class="task">
+                                            <span class="desc">
+                                               {% if application.label =="Relationships" %}
+                                                   <img class="platform_icons" height="50" width="50"
+                                                        src="/static/img/iogrow-application.png">
+                                               {% else %}
+                                                   <img class="platform_icons" height="50" width="50"
+                                                        src="/static/img/admin_console.png">
+                                               {% endif %}
+                                                {{ _(application.label) }}
+                                            </span>
+                                          </span>
                                         </a>
                                     </li>
                                 {% endif %}
@@ -258,7 +296,8 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
-                        <button type="submit" ng-click="updatelanguage(user,{{ uSerid }})" class="btn btn-primary addContactNow">{{ _("Save") }} </button>
+                        <button type="submit" ng-click="updatelanguage(user,{{ uSerid }})"
+                                class="btn btn-primary addContactNow">{{ _("Save") }} </button>
                     </div>
                 </form>
             </div>
@@ -296,8 +335,8 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
             </div>
 
 
-                <form id="editSetting" name="edittag" class="form-horizontal">
-<div class="modal-body">
+            <form id="editSetting" name="edittag" class="form-horizontal">
+                <div class="modal-body">
 
                     <div class="form-group">
                         <label class=" col-md-3 control-label">{{ _("Language") }} </label>
@@ -312,12 +351,12 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 
                         </div>
                     </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
-                <button type="submit" ng-click="updatelanguage(user,{{ uSerid }})"
-                        class="btn btn-primary addContactNow">{{ _("Save") }} </button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
+                    <button type="submit" ng-click="updatelanguage(user,{{ uSerid }})"
+                            class="btn btn-primary addContactNow">{{ _("Save") }} </button>
+                </div>
             </form>
         </div>
     </div>
@@ -351,8 +390,22 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
     <div class="page-sidebar-wrapper">
         <div class="page-sidebar navbar-collapse collapse">
             <!-- BEGIN SIDEBAR MENU -->
-            <ul class="page-sidebar-menu {% if active_app.name == 'admin' %} {{ 'admin-sidebar' }} {% endif %}">
-                {% for tab in tabs %}
+            <ul class="page-sidebar-menu" id="sales_tabs" style="display:none">
+                {% for tab in sales_tabs %}
+                    <li id="id_{{ tab['name'] }}" class="start sidemenuitem">
+                        <i class="fa fa-caret-left maxminButton hidden"
+                           style="position: absolute;color: gray !important;z-index: 9;right: 0;"></i>
+                        <a href="{{ tab['url'] }}" data-toggle="collapse" data-target=".navbar-collapse">
+                            <i class="fa fa-{{ tab['icon'] }}"></i>
+                <span class="title">
+                  {{ _(tab['label']) }}
+                </span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <ul class="page-sidebar-menu  admin-sidebar" id="admin_tabs" style="display:none">
+                {% for tab in admin_tabs %}
                     <li id="id_{{ tab.name }}" class="start sidemenuitem">
                         <i class="fa fa-caret-left maxminButton hidden"
                            style="position: absolute;color: gray !important;z-index: 9;right: 0;"></i>
@@ -396,7 +449,7 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 <input type="hidden" value="{{ user.emailSignature |e }}" id="signature"/>
 <input type="hidden" id="userDisplayname" value="{{ user.google_display_name }}">
 <input type="hidden" id="usercreated_at" value="{{ user.created_at }}">
-<input type="hidden" id="userorganization" value="{{organization_name}}">
+<input type="hidden" id="userorganization" value="{{ organization_name }}">
 <input type="hidden" id="userLanguage" value="{{ user.language }}">
 
 <!--</div>-->
@@ -408,6 +461,19 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 
 <!-- end the stripe code -->
 <script src="/static/build/js/first_sync_scripts.js" type="text/javascript"></script>
+<script>
+    $('document').ready(function () {
+        if (window.location.hash.indexOf('admin') != -1) {
+            $('#sales_tabs').hide()
+            $('#admin_tabs').show()
+        } else {
+            $('#sales_tabs').show()
+            $('#admin_tabs').hide()
+        }
+
+    });
+
+</script>
 <!-- async scripts-->
 <script type="text/javascript">
 
@@ -426,14 +492,8 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
     //  var ROOT = getRoot();
 
 
-
-
-// var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-var ROOT = '/_ah/api';
-
-
-
-
+    // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+    var ROOT = '/_ah/api';
 
 
     var apisToLoad;
@@ -443,7 +503,7 @@ var ROOT = '/_ah/api';
             signin(true, userAuthed);
         }
     };
-    function loadGapi() {   
+    function loadGapi() {
         window.is_signed_in = false;
         window.authResult = undefined;
         var apisToLoad;
@@ -462,7 +522,6 @@ var ROOT = '/_ah/api';
         if (!window.location.hash) {
             window.location.replace('/#/leads');
         }
-        ;
     }
 
     var isMobile = navigator.appVersion.indexOf("Mobile") > -1;
@@ -486,15 +545,15 @@ var ROOT = '/_ah/api';
         read: function (key) {
             var data = {};
             if (typeof(Storage) != "undefined") {
-                if(localStorage.getItem(key)===""){
+                if (localStorage.getItem(key) === "") {
                     data = {};
-                }else{
+                } else {
                     data = JSON.parse(localStorage.getItem(key));
                     if (data == null) {
                         data = {};
                     }
                 }
-                
+
             }
             return data;
         },
@@ -514,9 +573,9 @@ var ROOT = '/_ah/api';
                     callback(newData);
                 }
             }
-            
+
         }
-};
+    };
 </script>
 <script src="https://apis.google.com/js/client.js?onload=loadGapi">
 </script>
@@ -805,26 +864,25 @@ Stripe.setPublishableKey('pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD');
 <!-- <script src="https://checkout.stripe.com/checkout.js"></script> -->
 <!-- END JAVASCRIPTS -->
 <script type="text/javascript">
-    
-
-    
-      mixpanel.people.set({
-     "$email": "{{user.email}}",    // only special properties need the $
-     "$name":"{{user.google_display_name}}",
-    
-     "$created": "{{user.created_at}}",
-     "$created": "{{user.created_at}}",
-     "$updated_at": "{{user.updated_at}}",
-    // //"$organization": "{{user.organization}}",
-     "$language": "{{user.language}}"
 
 
-    //"$last_login": new Date(),         // properties can be dates...
-    
-    //"credits": 150,                    // ...or numbers
-    
-    //"gender": "{{user.google_display_name}}"                    // feel free to define your own properties
-});
+    mixpanel.people.set({
+        "$email": "{{user.email}}",    // only special properties need the $
+        "$name": "{{user.google_display_name}}",
+
+        "$created": "{{user.created_at}}",
+        "$created": "{{user.created_at}}",
+        "$updated_at": "{{user.updated_at}}",
+        // //"$organization": "{{user.organization}}",
+        "$language": "{{user.language}}"
+
+
+        //"$last_login": new Date(),         // properties can be dates...
+
+        //"credits": 150,                    // ...or numbers
+
+        //"gender": "{{user.google_display_name}}"                    // feel free to define your own properties
+    });
 </script>
 
 
