@@ -929,6 +929,17 @@ leadservices.factory('Lead', function ($http) {
         $scope.inProcess(false);
         $scope.apply();
     };
+    Lead.deleteAll = function ($scope) {
+        //trackMixpanelAction('LEAD_DELETE');
+        $scope.isLoading=true;
+        gapi.client.crmengine.leads.delete_all().execute(function (resp) {
+                $scope.allLeadsDeleted();
+                $scope.isLoading=false;
+                     $scope.apply();
+            }
+        )
+        
+    };
 
 
     return Lead;
