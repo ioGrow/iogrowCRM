@@ -49,7 +49,7 @@ edgeservices.factory('Edge', function($http) {
            $scope.inProcess(false);
             if (tag) {
                 if (tag.edgeKey) {
-                    $scope.edgeDeleted(index);
+                    $scope.edgeDeleted(index); 
                 } else {
                     
                 };
