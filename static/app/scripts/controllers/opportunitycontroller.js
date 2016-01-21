@@ -1943,10 +1943,8 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
                         'removed_competitor': $scope.itemToDisassociate.item.entityKey
                     };
                     Opportunity.patch($scope, params)
-                }
-                ;
-            }
-            ;
+                };
+            };
 
             $scope.itemToDisassociate.array.splice($scope.itemToDisassociate.array.indexOf($scope.itemToDisassociate.item), 1);
             $scope.itemToDisassociate = {};
