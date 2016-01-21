@@ -33,18 +33,16 @@ edgeservices.factory('Edge', function($http) {
   Edge.delete = function($scope,params){
     $scope.inProcess(true);
     if ($scope.showPage) {
-      if (!jQuery.isEmptyObject($scope.selectedItem)) {
-        var index=$scope.selectedItem.index;
-      }else{
-          if (params.tag) {
-              var tag = params.tag;
-              var index = params.index;
-              params = {'entityKey': params.tag.edgeKey};
+        if (!jQuery.isEmptyObject($scope.selectedItem)) {
+          var index=$scope.selectedItem.index;
+        }else{
+            if (params.tag) {
+                    var tag = params.tag;
+                    var index = params.index;
+                    params = {'entityKey': params.tag.edgeKey};
+                } 
+            }
           }
-          ;
-        
-      };
-    };
 
       gapi.client.crmengine.edges.delete(params).execute(function (resp) {
         if ($scope.showPage) {
@@ -53,11 +51,13 @@ edgeservices.factory('Edge', function($http) {
                 if (tag.edgeKey) {
                     $scope.edgeDeleted(index);
                 } else {
-                    $scope.itemDisassociated();
-                }
-                ;
+                    
+                };
+            }else{
+              if (!jQuery.isEmptyObject($scope.selectedItem)) {
+                $scope.itemDisassociated();
+              };
             }
-            ;
 
 
         }else{
