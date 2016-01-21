@@ -24,6 +24,7 @@ from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.opportunities import Opportunity
+from model import Application, STANDARD_TABS, ADMIN_TABS
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.appengine import OAuth2Decorator
@@ -245,7 +246,9 @@ class BaseHandler(webapp2.RequestHandler):
                     'length_decimal': currency_format.length_decimal,
                     'length_whole_part': currency_format.length_whole_part,
                     'sections_delimiter': currency_format.sections_delimiter,
-                    'decimal_delimiter': currency_format.decimal_delimiter
+                    'decimal_delimiter': currency_format.decimal_delimiter,
+                    'sales_tabs' : STANDARD_TABS,
+                    'admin_tabs' : ADMIN_TABS
                 }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -489,9 +492,10 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                 license_is_expired = False
                 apps = user.get_user_apps()
                 admin_app = None
-                active_app = user.get_user_active_app()
+                active_app = Application.query(Application.name == "sales").get()
                 print active_app
-                tabs = user.get_user_active_tabs()
+                #tabs = user.get_user_active_tabs()
+                tabs = ndb.get_multi(active_app.tabs)
                 applications = []
                 for app in apps:
                     if app is not None:
@@ -528,7 +532,9 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     'uSerid': uSerid,
                     'uSerlanguage': uSerlanguage,
                     'sales_app': sales_app,
-                    'organization_name': organization.name
+                    'organization_name': organization.name,
+                    'sales_tabs' : STANDARD_TABS,
+                    'admin_tabs' : ADMIN_TABS
                 }
                 if admin_app:
                     template_values['admin_app'] = admin_app
@@ -1471,12 +1477,19 @@ class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/salesforce_callback.html')
         self.response.out.write(template.render(template_values))
 
+class ZohoSignIn(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/zohosingin.html')
+        self.response.out.write(template.render(template_values))
+
 
 class GoGo(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
         template = jinja_environment.get_template('templates/sf.html')
         self.response.out.write(template.render(template_values))
+
 
 
 class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
@@ -1689,6 +1702,31 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
 
+class ZohoSaveLead(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        #access_token = self.request.get("access_token")
+        #instance_url = self.request.get("instance_url")
+        firstname = self.request.get("firstname")
+        lastname = self.request.get("lastname")
+        title = self.request.get("title")
+        zoho_id = self.request.get("zoho_id")
+        company = self.request.get("company")
+        profile_img_url = self.request.get("profile_img_url")
+        introduction = self.request.get("introduction")
+        street = self.request.get("formatted_address")
+        mobile = self.request.get("mobile")
+        email = self.request.get("email")
+
+        saved_lead = model.ZohoLead(
+                firstname=firstname,
+                lastname=lastname,
+                zoho_id=zoho_id,
+                photo_url=profile_img_url
+            ).put()
+        #track_mp_action(COPYLEAD_Zoho_MIXPANEL_ID, )
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(zoho_id))
 
 class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -3759,6 +3797,7 @@ routes = [
     # ioGrow Live
     ('/gogo', GoGo),
     ('/sfapi/markaslead', SFmarkAsLead),
+    ('/zohoapi/markaslead',ZohoSaveLead),
     ('/sfapi/dev/markaslead', SFmarkAsLeadDev),
     ('/sfapi/search', SFsearch),
     ('/sfapi/dev/search', SFsearchDev),
@@ -3785,6 +3824,7 @@ routes = [
     ('/sfconnect', SFconnect),
     ('/sfsubscriber', SFsubscriber),
     ('/sfoauth2callback', SalesforceImporterCallback),
+    ('/zohosignin',ZohoSignIn),
     ('/sf_invite', SFinvite),
     ('/invitation_sent', SFinvite),
     ('/stripe', StripeHandler),

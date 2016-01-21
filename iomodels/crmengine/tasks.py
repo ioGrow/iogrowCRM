@@ -253,7 +253,7 @@ class Task(EndpointsModel):
                 photo=task.author.photo)
         due_date = None
         if task.due:
-            due_date = task.due.isoformat()
+            due_date = task.due.strftime('%Y-%m-%d')
         task_schema = TaskSchema(
             id=str(task.key.id()),
             entityKey=task.key.urlsafe(),

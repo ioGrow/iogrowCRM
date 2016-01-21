@@ -1,5 +1,6 @@
-import datetime 
+import datetime
 # Google libs
+import os
 import httplib2
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
@@ -162,8 +163,8 @@ class SFuser(ndb.Model):
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
 class SFinvitation(ndb.Model):
-    user_email = ndb.StringProperty() 
-    invitee_email = ndb.StringProperty() 
+    user_email = ndb.StringProperty()
+    invitee_email = ndb.StringProperty()
     invitee_name = ndb.StringProperty()
     status = ndb.StringProperty(default='pending')
     invited_at = ndb.DateTimeProperty(auto_now_add=True)
@@ -172,6 +173,15 @@ class SFLead(ndb.Model):
     firstname = ndb.StringProperty()
     lastname = ndb.StringProperty()
     sf_id = ndb.StringProperty(required=True)
+    photo_url = ndb.StringProperty()
+    linkedin_url = ndb.StringProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    created_by = ndb.KeyProperty()
+
+class ZohoLead(ndb.Model):
+    firstname = ndb.StringProperty()
+    lastname = ndb.StringProperty()
+    zoho_id = ndb.StringProperty(required=True)
     photo_url = ndb.StringProperty()
     linkedin_url = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
@@ -291,7 +301,7 @@ class Organization(ndb.Model):
         organization=org_key.get()
         if res:
             license=res[0]
-            
+
         else:
             license=LicenseModel(name='life_time_free',payment_type='online',price=0,is_free=True,duration=30)
             license.put()
@@ -307,7 +317,7 @@ class Organization(ndb.Model):
         res = LicenseModel.query(LicenseModel.name=='freemium').get()
         organization=org_key.get()
         if res:
-            license=res 
+            license=res
         else:
             license=LicenseModel(name='freemium',payment_type='online',price=0,is_free=True,duration=30)
             license.put()
@@ -326,7 +336,7 @@ class Organization(ndb.Model):
                 res = LicenseModel.query(LicenseModel.name=='premium_trial').get()
                 organization=org_key.get()
                 if res:
-                    license=res 
+                    license=res
                 else:
                     license=LicenseModel(name='premium_trial',payment_type='online',price=0,is_free=True,duration=30)
                     license.put()
@@ -440,8 +450,8 @@ class Organization(ndb.Model):
             else:
                 created_profile.put()
         # create reports details
-     
-        
+
+
         # init default stages,status, default values...
         cls.init_default_values(org_key)
         if license_type=='premium_trial':
@@ -472,7 +482,7 @@ class Organization(ndb.Model):
 
 
 
-        
+
     @classmethod
     def create_early_bird_instance(cls,org_name, admin):
         # init google drive folders
@@ -558,7 +568,7 @@ class Organization(ndb.Model):
                     raise endpoints.UnauthorizedException('you need more licenses')
         else:
             raise endpoints.UnauthorizedException('the user is not withing your organization')
-    
+
     @classmethod
     def unassign_license(cls,org_key,user_key):
         organization = org_key.get()
@@ -666,8 +676,8 @@ class Organization(ndb.Model):
             expires_on = organization.licenses_expires_on
         else:
             expires_on = organization.created_at+datetime.timedelta(days=30)
-            days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now    
-    
+            days_before_expiring = organization.created_at+datetime.timedelta(days=30)-now
+
         if organization.nb_licenses:
             nb_licenses=organization.nb_licenses
 
@@ -678,10 +688,10 @@ class Organization(ndb.Model):
                                                     nb_users=nb_users,
                                                     nb_licenses=nb_licenses,
                                                     nb_used_licenses=nb_used_licenses,
-                                                    billing_contact_firstname = organization.billing_contact_firstname, 
-                                                    billing_contact_lastname= organization.billing_contact_lastname, 
-                                                    billing_contact_email = organization.billing_contact_email, 
-                                                    billing_contact_address = organization.billing_contact_address, 
+                                                    billing_contact_firstname = organization.billing_contact_firstname,
+                                                    billing_contact_lastname= organization.billing_contact_lastname,
+                                                    billing_contact_email = organization.billing_contact_email,
+                                                    billing_contact_address = organization.billing_contact_address,
                                                     license=license_schema,
                                                     days_before_expiring=days_before_expiring.days+1,
                                                     expires_on = expires_on.isoformat(),
@@ -701,13 +711,13 @@ class Organization(ndb.Model):
 
         if payment_switch_status=="f_m" or payment_switch_status=="f_y" or payment_switch_status=="m_y":
            now = datetime.datetime.now()
-           now_plus_exp_day=now+datetime.timedelta(days=plan_duration) 
+           now_plus_exp_day=now+datetime.timedelta(days=plan_duration)
            organization.licenses_expires_on=now_plus_exp_day
            organization.nb_licenses=nb_licenses
 
         if payment_switch_status=="m_m" or payment_switch_status=="y_y" :
            organization.nb_licenses=organization.nb_licenses+nb_licenses
-           
+
         organization.put()
 
 
@@ -847,12 +857,30 @@ class User(EndpointsModel):
     country_code = ndb.StringProperty()
     date_time_format = ndb.StringProperty()
 
+    def after_create(self, user_id):
+       if self.status == "active" and not is_locale():
+           mp.track(user_id, 'NEW_USER')
+           mp.people_set(user_id, {
+               "$email": self.email,
+               "$name": self.google_display_name,
+               "$created": self.created_at,
+               "$organization": '' if not self.organization else self.organization.get().name,
+               "$language": self.language
+           })
+
     def put(self, **kwargs):
         existing_user = User.query(User.google_user_id == self.google_user_id).get()
         if existing_user:
             ndb.Model.put(existing_user, **kwargs)
         else:
             ndb.Model.put(self, **kwargs)
+        self.after_create(self.id)
+
+    def put_async(self, **kwargs):
+       async = super(User, self).put_async(**kwargs)
+       # if not self.id and self.status == "active":
+       self.after_create(async.get_result().id())
+       return async
 
 
     def init_user_config(self,org_key,profile_key):
@@ -1011,7 +1039,7 @@ class User(EndpointsModel):
         if user is None:
             raise endpoints.NotFoundException('Lead not found.')
         user_schema = iomessages.UserSchema(
-                            id = str( user.key.id() ),                                  
+                            id = str( user.key.id() ),
                             entityKey = user.key.urlsafe(),
                             email = user.email,
                             google_display_name = user.google_display_name,
@@ -1279,10 +1307,10 @@ class User(EndpointsModel):
                                     'organization': request.organization_name
                                     }
                         )
-        
+
         Organization.create_instance(request.organization_name,user,'freemium')
 
-    
+
     @classmethod
     def check_license(cls,user):
         is_active = True
@@ -1319,7 +1347,7 @@ class User(EndpointsModel):
                 oppstages=Opportunitystage.query(Opportunitystage.organization==user_from_email.organization).fetch()
                 for oppstage in oppstages :
                    oppstage.key.delete()
-                permissions= Permission.query(Permission.value==str(user_from_email.google_user_id)).fetch()  
+                permissions= Permission.query(Permission.value==str(user_from_email.google_user_id)).fetch()
                 for permission in permissions:
                     permission.key.delete()
                 tabs=Tab.query(Tab.organization==user_from_email.organization).fetch()
@@ -1378,7 +1406,7 @@ class User(EndpointsModel):
                 tabs=Tab.query(Tab.organization==user.organization).fetch()
                 for tab in tabs :
                     tab.key.delete()
-              
+
                 from  iomodels.crmengine.accounts import Account
 
                 accounts=Account.query(Account.organization==user.organization).fetch()
@@ -1515,7 +1543,7 @@ class Invitation(ndb.Model) :
                   'invited_mail' :invitee.invited_mail,
                   'invited_by' :invitee.invited_by.get().google_display_name,
                   'updated_at' : invitee.updated_at
-                  
+
             }
             items.append(item)
         return items
@@ -1551,8 +1579,8 @@ class Website(ndb.Model):
 # HKA 19.11.2013 Add Social links
 class Social(ndb.Model):
   sociallink = ndb.StringProperty()
-  
-#HADJI HICHAM 08/028/2015 
+
+#HADJI HICHAM 08/028/2015
 class Logo(ndb.Model):
     fileUrl=ndb.StringProperty()
     custom_logo=ndb.StringProperty()
@@ -1662,7 +1690,7 @@ class TwitterProfile(ndb.Model):
     profile_image_url_https= ndb.StringProperty(indexed=False)
     lang= ndb.StringProperty(indexed=False)
     profile_banner_url=ndb.StringProperty(indexed=False)
-    
+
 class TweetsSchema(ndb.Model):
     id=ndb.StringProperty(indexed=True)
     profile_image_url=ndb.StringProperty(indexed=False)
@@ -1753,8 +1781,10 @@ class CopyLeadSfSession(ndb.Model):
             session = response[0]
             return session.user
         return None
+def is_locale():
+   return os.environ['SERVER_SOFTWARE'].startswith('Dev')
 
 
 
 
-    
+
