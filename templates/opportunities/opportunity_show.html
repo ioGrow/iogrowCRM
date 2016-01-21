@@ -370,7 +370,7 @@
                   <div class="form-body">
                     <ul class="nav nav-pills nav-justified steps" >
                       <li ng-repeat="opps in insideStages" id="wizardstep"
-                      ng-class="{'done' : parseInt(opps.probability)< parseInt(opportunity.current_stage.probability) , 'active' : parseInt(opps.probability) == parseInt(opportunity.current_stage.probability)}">
+                      ng-class="{'done' : opps.stage_number < opportunity.current_stage.stage_number, 'active' : opps.stage_number == opportunity.current_stage.stage_number}">
                         <a ng-click="updateOpportunityStage(opps)" ng-href="#<%='tab'+$index%>" data-toggle="tab" class="step">
                         <span class="number">
                           <%=$index%>                          
