@@ -372,7 +372,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               }
             
           });
-          Opportunitystage.list($scope,{'order':'probability'});
+          Opportunitystage.list($scope,{'order':'stage_number'});
           var paramsTag = {'about_kind':'Opportunity'};
           Tag.list($scope,paramsTag);
           User.list($scope,{});
@@ -1686,7 +1686,7 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
             
         }
        $scope.runStagesList=function(){
-          Opportunitystage.list($scope,{'order':'probability'});
+          Opportunitystage.list($scope,{'order':'stage_number'});
        }
          $scope.getColaborators=function(){
           $scope.collaborators_list=[];
@@ -1943,10 +1943,8 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
                         'removed_competitor': $scope.itemToDisassociate.item.entityKey
                     };
                     Opportunity.patch($scope, params)
-                }
-                ;
-            }
-            ;
+                };
+            };
 
             $scope.itemToDisassociate.array.splice($scope.itemToDisassociate.array.indexOf($scope.itemToDisassociate.item), 1);
             $scope.itemToDisassociate = {};
@@ -3330,7 +3328,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
                 }
       $scope.runTheProcess = function(){
            $scope.getCustomFields("opportunities");
-           Opportunitystage.list($scope,{'order':'probability'});
+           Opportunitystage.list($scope,{'order':'stage_number'});
            ga('send', 'pageview', '/opportunities/new');
            window.Intercom('update');
        };

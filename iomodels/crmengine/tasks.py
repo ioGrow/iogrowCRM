@@ -601,6 +601,8 @@ class Task(EndpointsModel):
         edges = Edge.query().filter(Edge.kind == "assignees", Edge.start_node == task.key)
         if task is None:
             raise endpoints.NotFoundException('Task not found.')
+        if (task.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         if request.title:
             task.title = request.title
         if request.access:

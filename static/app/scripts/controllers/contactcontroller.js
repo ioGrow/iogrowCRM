@@ -2261,8 +2261,45 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
               'title':data.title,
               'account':data.company,
               'cover_image':data.imgCoverUrl,
-              'introduction':data.introduction
+              'introduction':data.introduction,
+              'linkedin_profile': 
+                  { 
+                    'current_post': [],
+                    'emails': [data.email],
+                    'experiences': '',
+                    'past_post': [],
+                    'skills': [],
+                    'formations': [],
+                    'languages': [],
+                    'phones': [data.phone],
+                    'education': data.education,
+                    'firstname': data.firstname,
+                    'industry': data.industry,
+                    'lastname': data.lastname,
+                    'locality': data.locality,
+                    'relation': '',
+                    'profile_picture': data.profile_img_url,
+                    'resume': data.summary,
+                    'url': '',
+                    'websites': [],
+                    'title': data.title
+                  }
             }
+            angular.forEach(data.pastPositions, function(position){
+                params.linkedin_profile.past_post.push(JSON.stringify(position));
+            });
+            angular.forEach(data.currentPositions, function(position){
+                params.linkedin_profile.current_post.push(JSON.stringify(position));
+            });
+            angular.forEach(data.schools, function(position){
+                params.linkedin_profile.formations.push(JSON.stringify(position));
+              });
+            angular.forEach(data.skills, function(position){
+                params.linkedin_profile.skills.push(JSON.stringify(position));
+              });
+            angular.forEach(data.languages, function(language){
+                params.linkedin_profile.languages.push(JSON.stringify(language));
+              });
             Contact.patch($scope,params);
             $scope.imageSrc=data.profile_img_url;
             if (data.phone) $scope.addPhone({'number':data.phone,'type':'work'});
@@ -2851,9 +2888,7 @@ $scope.listTags=function(){
 // HKA 19.03.2014 inline update infonode
      $scope.inlinePatch=function(kind,edge,name,entityKey,value){
 
-
    if (kind=='Contact') {
-
       if (name=='firstname')
         {params = {'id':$scope.contact.id,
              firstname:value};
@@ -2861,6 +2896,10 @@ $scope.listTags=function(){
        if (name=='lastname')
         {params = {'id':$scope.contact.id,
              lastname:value};
+         Contact.patch($scope,params);}
+       if (name=='title')
+        {params = {'id':$scope.contact.id,
+             title:value};
          Contact.patch($scope,params);}
         if (name == 'owner') {
                     params = {
@@ -4590,17 +4629,24 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
               'title':data.title,
               'linkedin_profile': 
                   { 
-                    "current_post": [],
-                    "past_post": [],
-                    "skills": [],
-                    "formations": [],
+                    'current_post': [],
+                    'emails': [data.email],
+                    'experiences': '',
+                    'past_post': [],
+                    'skills': [],
+                    'formations': [],
+                    'languages': [],
+                    'phones': [data.phone],
                     'education': data.education,
                     'firstname': data.firstname,
                     'industry': data.industry,
                     'lastname': data.lastname,
                     'locality': data.locality,
+                    'relation': '',
                     'profile_picture': data.profile_img_url,
                     'resume': data.summary,
+                    'url': '',
+                    'websites': [],
                     'title': data.title
                   }
             }
@@ -4615,6 +4661,9 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
               });
             angular.forEach(data.skills, function(position){
                 params.linkedin_profile.skills.push(JSON.stringify(position));
+              });
+            angular.forEach(data.languages, function(language){
+                params.linkedin_profile.languages.push(JSON.stringify(language));
               });
             $scope.contact=$.extend(true, $scope.contact, params);
             $scope.imageSrc=data.profile_img_url;

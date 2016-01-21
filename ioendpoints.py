@@ -13,6 +13,7 @@ from datetime import timedelta
 import httplib2
 from django.utils.encoding import smart_str
 # Google libs
+from google.appengine.api.datastore import Key
 from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.api import memcache
@@ -1083,7 +1084,7 @@ class CrmEngineApi(remote.Service):
                 result = index.search(query)
                 # total_matches = results.number_found
                 # Iterate over the documents in the results
-                if len(result.results) == limit + 1:
+                if len(result.results) == limit:
                     next_cursor = result.results[-1].cursor.web_safe_string
                 else:
                     next_cursor = None
@@ -2385,6 +2386,7 @@ class CrmEngineApi(remote.Service):
             http_method='PATCH', path='documents/{id}', name='documents.patch')
     def DocumentPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
+
         # Todo: Check permissions
         my_model.put()
         return my_model
@@ -2606,6 +2608,8 @@ class CrmEngineApi(remote.Service):
 
             if event is None:
                 raise endpoints.NotFoundException('Event not found')
+            if (event.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+                raise endpoints.ForbiddenException('you are not the owner')
             event_patch_keys = ['title', 'starts_at', 'ends_at', 'description', 'where', 'allday', 'access', 'timezone']
             date_props = ['starts_at', 'ends_at']
             patched = False
