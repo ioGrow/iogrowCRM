@@ -2417,7 +2417,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
          }
          $scope.disassociateItem=function(){
             var params ={'start_node':$scope.account.entityKey,'end_node':$scope.selectedItem.item.entityKey,'kind':'contacts'};
-            console.log(params);
+            
             Edge.delete($scope,params);            
             $('#beforedelinkContact').modal('hide');
          }
