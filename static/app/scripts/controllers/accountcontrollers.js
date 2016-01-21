@@ -3474,11 +3474,8 @@ $scope.lunchMapsCalendar=function(){
 
         if (typeof($scope.searchRelatedContactQuery)=='object'){
             var params={
-            'id':$scope.account.id,
-              'new_contact':{
-               'contact':$scope.searchRelatedContactQuery.entityKey,
-               'is_decesion_maker':false
-              }
+              'id':$scope.account.id,
+              'new_contact_key':$scope.searchRelatedContactQuery.entityKey
             };  
             Account.patch($scope,params);
         }
