@@ -425,6 +425,32 @@ accountservices.factory('Account', function($http) {
                     $scope.email.to = $scope.email.to + value.email + ',';
 
                 });     
+                if (resp.contacts.items) {
+                    angular.forEach(resp.contacts.items, function(item) {
+                            item.sociallinks=[];
+                            if (item.infonodes==undefined) {
+                                item.infonodes={};
+                                item.infonodes.items=[];    
+                            };
+                            angular.forEach(item.infonodes.items, function(infonode){
+                                    if (infonode.kind=="sociallinks") {
+                                      angular.forEach(infonode.items, function(link){
+                                              if (link.kind=="sociallinks") {
+                                                if ($scope.linkedinUrl(link.fields[0].value)) {
+                                                    item.sociallinks.unshift({url:link.fields[0].value});
+                                                }else{
+                                                    item.sociallinks.push({url:link.fields[0].value});   
+                                                };
+                                                 
+                                              };
+                                        });
+                                    };
+                            });
+                            console.log("item contact");
+                            console.log(item);
+                        });
+                        $scope.contacts = resp.contacts.items;
+                }
                 $scope.inProcess(false);  
                         $scope.apply();          
             } else {

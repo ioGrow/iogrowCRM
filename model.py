@@ -178,6 +178,15 @@ class SFLead(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     created_by = ndb.KeyProperty()
 
+class ZohoLead(ndb.Model):
+    firstname = ndb.StringProperty()
+    lastname = ndb.StringProperty()
+    zoho_id = ndb.StringProperty(required=True)
+    photo_url = ndb.StringProperty()
+    linkedin_url = ndb.StringProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    created_by = ndb.KeyProperty()
+
 
 class Application(ndb.Model):
     name = ndb.StringProperty(required=True)

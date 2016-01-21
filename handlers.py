@@ -1477,12 +1477,19 @@ class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/salesforce_callback.html')
         self.response.out.write(template.render(template_values))
 
+class ZohoSignIn(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/zohosingin.html')
+        self.response.out.write(template.render(template_values))
+
 
 class GoGo(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
         template = jinja_environment.get_template('templates/sf.html')
         self.response.out.write(template.render(template_values))
+
 
 
 class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
@@ -1695,6 +1702,31 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
 
+class ZohoSaveLead(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        #access_token = self.request.get("access_token")
+        #instance_url = self.request.get("instance_url")
+        firstname = self.request.get("firstname")
+        lastname = self.request.get("lastname")
+        title = self.request.get("title")
+        zoho_id = self.request.get("zoho_id")
+        company = self.request.get("company")
+        profile_img_url = self.request.get("profile_img_url")
+        introduction = self.request.get("introduction")
+        street = self.request.get("formatted_address")
+        mobile = self.request.get("mobile")
+        email = self.request.get("email")
+
+        saved_lead = model.ZohoLead(
+                firstname=firstname,
+                lastname=lastname,
+                zoho_id=zoho_id,
+                photo_url=profile_img_url
+            ).put()
+        #track_mp_action(COPYLEAD_Zoho_MIXPANEL_ID, )
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(zoho_id))
 
 class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -3765,6 +3797,7 @@ routes = [
     # ioGrow Live
     ('/gogo', GoGo),
     ('/sfapi/markaslead', SFmarkAsLead),
+    ('/zohoapi/markaslead',ZohoSaveLead),
     ('/sfapi/dev/markaslead', SFmarkAsLeadDev),
     ('/sfapi/search', SFsearch),
     ('/sfapi/dev/search', SFsearchDev),
@@ -3791,6 +3824,7 @@ routes = [
     ('/sfconnect', SFconnect),
     ('/sfsubscriber', SFsubscriber),
     ('/sfoauth2callback', SalesforceImporterCallback),
+    ('/zohosignin',ZohoSignIn),
     ('/sf_invite', SFinvite),
     ('/invitation_sent', SFinvite),
     ('/stripe', StripeHandler),
