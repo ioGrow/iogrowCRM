@@ -1703,7 +1703,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
         self.response.out.write(json.dumps(created_lead))
 
 class ZohoSaveLead(BaseHandler, SessionEnabledHandler):
-    def get(self):
+    def post(self):
         #access_token = self.request.get("access_token")
         #instance_url = self.request.get("instance_url")
         firstname = self.request.get("firstname")
