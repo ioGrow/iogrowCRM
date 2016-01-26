@@ -782,8 +782,9 @@ class Case(EndpointsModel):
             data['id'] = case_key_async.id()
             case.put_index(data)
         current_status_schema=None
-        if status_key.get() :
-            current_status_schema = CaseStatusSchema(
+        if status_key :
+            if status_key.get() :
+                current_status_schema = CaseStatusSchema(
                                             name = status_key.get().status
                                           )
 

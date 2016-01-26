@@ -2388,13 +2388,16 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         }
         $scope.editbeforedelete = function (item, typee, index) {
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
+            console.log($scope.selectedItem);
             $('#BeforedeleteAccount').modal('show');
          };
          $scope.editbeforedisassociate = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
+            console.log($scope.selectedItem);
             $('#beforedelinkContact').modal('show');
          };
          $scope.deleteItem=function(){
+
             var params = {'entityKey':$scope.selectedItem.item.entityKey};
             console.log(params);
             if ($scope.selectedItem.typee=='account') {
@@ -2417,11 +2420,13 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
          }
          $scope.disassociateItem=function(){
             var params ={'start_node':$scope.account.entityKey,'end_node':$scope.selectedItem.item.entityKey,'kind':'contacts'};
-            console.log(params);
+            
             Edge.delete($scope,params);            
             $('#beforedelinkContact').modal('hide');
          }
          $scope.itemDisassociated=function(){
+          console.log("$scope.selectedItem");
+           console.log($scope.selectedItem);
             if ($scope.selectedItem.typee=="contact") {
               console.log("in typpe==contact")
               $scope.contacts.splice($scope.selectedItem.index, 1);
@@ -4270,14 +4275,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                         url='';
                       };
                      if(!url.match(/^[a-zA-Z]+:\/\//)){      
-                        console.log('pattern.test(url)');                                  
-                        console.log('url');                  
-                        console.log(url);                  
-                        console.log(url.length);                  
                          url = 'http://' + url;
-                         console.log('pattern.test(url)');                                  
-                        console.log('url');                  
-                        console.log(url);  
                      }
                      return url;
         }
