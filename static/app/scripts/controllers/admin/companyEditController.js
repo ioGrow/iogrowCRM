@@ -4,7 +4,7 @@
 
 app.controller('CompanyEditCtrl', ['$scope', 'Auth', 'User', 'Map',
     function ($scope, Auth, User, Map) {
-
+        console.log("in the right controller");
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Company").addClass("active");
         $scope.runTheProcess = function () {
