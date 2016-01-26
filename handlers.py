@@ -479,7 +479,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     self.redirect('/welcome/')
                     return
                 if user.google_credentials is None:
-                    self.redirect('/sign-in')
+                     self.redirect('/sign-in')
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/'
                 if user is None or user.type == 'public_user':
                     self.redirect('/welcome/')
@@ -835,6 +835,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         else:
             user.google_credentials = credentials
         user_key = user.put_async()
+
         if memcache.get(user.email):
             memcache.set(user.email, user)
         else:
@@ -871,7 +872,6 @@ class GooglePlusConnect(SessionEnabledHandler):
 
     def post(self):
         # try to get the user credentials from the code
-        credentials = None
         code = self.request.get("code")
         try:
             credentials = GooglePlusConnect.exchange_code(code)
@@ -901,17 +901,18 @@ class GooglePlusConnect(SessionEnabledHandler):
 
         # Store our credentials with in the datastore with our user.
         invitee = None
+        user_email = token_info.get('email')
         if invited_user_id:
-            invitee = model.Invitation.query(model.Invitation.invited_mail == token_info.get('email')).get()
+            invitee = model.Invitation.query(model.Invitation.invited_mail == user_email).get()
         if invitee:
             user = GooglePlusConnect.save_token_for_user(
-                token_info.get('email'),
+                    user_email,
                 credentials,
                 invited_user_id
             )
         else:
             user = GooglePlusConnect.save_token_for_user(
-                token_info.get('email'),
+                    user_email,
                 credentials
             )
         lang = self.get_language().replace('-', '_')
@@ -922,16 +923,14 @@ class GooglePlusConnect(SessionEnabledHandler):
         user.country_code = lang.split('_')[1]
         user.put()
         # if user doesn't have organization redirect him to sign-up
-        isNewUser = False
+        is_new_user = False
         if user.organization is None:
-            isNewUser = True
+            is_new_user = True
             try:
-                intercom_user = Intercom.create_user(email=user.email,
-                                                     name=user.google_display_name,
-                                                     created_at=time.mktime(user.created_at.timetuple())
-                                                     )
+                Intercom.create_user(email=user.email, name=user.google_display_name,
+                                     created_at=time.mktime(user.created_at.timetuple()))
             except:
-                print 'error'
+                pass
             mp.track(user.id, 'SIGNIN_SUCCESS')
             # mp.identify(user.id)
             # mp.people_set(user.id,{
@@ -941,10 +940,17 @@ class GooglePlusConnect(SessionEnabledHandler):
             # "$organization": user.organization,
             # "$language": user.language
             # });
+        # if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+        #     user = self.get_user_from_session()
+        if model.CountryCurrency.get_by_code('US') is None:
+            model.CountryCurrency.init()
+        model.User.set_default_currency(user, self.request.headers.get('X-AppEngine-Country'))
+        organ_name = user_email.partition("@")[2]
+        model.Organization.create_instance(organ_name, user)
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(isNewUser))
+        self.response.out.write(json.dumps(is_new_user))
 
 
 class InstallFromDecorator(SessionEnabledHandler):
