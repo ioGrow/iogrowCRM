@@ -925,6 +925,11 @@ class GooglePlusConnect(SessionEnabledHandler):
         # if user doesn't have organization redirect him to sign-up
         is_new_user = False
         if user.organization is None:
+            if model.CountryCurrency.get_by_code('US') is None:
+                model.CountryCurrency.init()
+            model.User.set_default_currency(user, self.request.headers.get('X-AppEngine-Country'))
+            organ_name = user_email.partition("@")[2]
+            model.Organization.create_instance(organ_name, user)
             is_new_user = True
             try:
                 Intercom.create_user(email=user.email, name=user.google_display_name,
@@ -942,11 +947,6 @@ class GooglePlusConnect(SessionEnabledHandler):
             # });
         # if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
         #     user = self.get_user_from_session()
-        if model.CountryCurrency.get_by_code('US') is None:
-            model.CountryCurrency.init()
-        model.User.set_default_currency(user, self.request.headers.get('X-AppEngine-Country'))
-        organ_name = user_email.partition("@")[2]
-        model.Organization.create_instance(organ_name, user)
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
