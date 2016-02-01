@@ -13,6 +13,12 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
         $scope.pages = [];
         $scope.users = [];
         $scope.billing = {};
+        $scope.beforedeleteOrganization=function(){
+            $("#beforedeleteOrganization").modal('show');
+        }
+        $scope.deleteOrganization = function(){
+             $("#beforedeleteOrganization").modal('hide');
+        };
         $scope.apply = function () {
             if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
                 $scope.$apply();
@@ -325,6 +331,7 @@ app.controller('BillingShowController', ['$scope', '$route', 'Auth', 'Search', '
 
 
         }
+
         // We need to call this to refresh token when user credentials are invalid
         $scope.refreshToken = function () {
             Auth.refreshToken();

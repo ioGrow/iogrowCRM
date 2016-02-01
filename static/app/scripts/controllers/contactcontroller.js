@@ -245,7 +245,13 @@ $scope.SynchronizeWithGoogle=function(){
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
+                     var p=$("#newAccMain");
+                    var offsets = document.getElementById('newAccMain').getBoundingClientRect();
+                    var top = offsets.top + 120;
+                    var left = offsets.left;
+                    var width = document.getElementById('newAccMain').offsetWidth;
+                    var height = document.getElementById('newAccMain').offsetHeight;
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width='+width+',height=500, left='+left+',top='+top);
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -2316,7 +2322,13 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
+                     var p=$("#newAccMain");
+                    var offsets = document.getElementById('newAccMain').getBoundingClientRect();
+                    var top = offsets.top + 120;
+                    var left = offsets.left;
+                    var width = document.getElementById('newAccMain').offsetWidth;
+                    var height = document.getElementById('newAccMain').offsetHeight;
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width='+width+',height=500, left='+left+',top='+top);
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -4694,7 +4706,13 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
+                     var p=$("#newAccMain");
+                    var offsets = document.getElementById('newAccMain').getBoundingClientRect();
+                    var top = offsets.top + 120;
+                    var left = offsets.left;
+                    var width = document.getElementById('newAccMain').offsetWidth;
+                    var height = document.getElementById('newAccMain').offsetHeight;
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width='+width+',height=500, left='+left+',top='+top);
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
