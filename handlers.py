@@ -1364,17 +1364,14 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         print sf.id.request.__dict__['cookies'].__dict__
 
         userinfo = sf.User.get(user_id)
-        print userinfo
-        print userinfo['FirstName']
-        print userinfo['LastName']
         print userinfo['Email']
         user = model.SFuser.query(model.SFuser.email == userinfo['Email']).get()
         signed_up_at = datetime.datetime.now()
         if user is None:
             created_user = model.SFuser(
-                firstname=userinfo['FirstName'],
-                lastname=userinfo['LastName'],
-                email=userinfo['Email']
+                firstname=smart_str(userinfo['FirstName']),
+                lastname=smart_str(userinfo['LastName']),
+                email=smart_str(userinfo['Email'])
             )
             created_user.put()
         else:
@@ -1421,7 +1418,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             print str(value)
 
         response['user_email'] = str(created_user.email)
-        full_name = str(created_user.firstname)  + ' ' + str(created_user.lastname)
+        full_name = "%s %s" % (smart_str(created_user.firstname), smart_str(created_user.firstname))
         response['name'] = str(full_name)
         free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
         now = datetime.datetime.now()
