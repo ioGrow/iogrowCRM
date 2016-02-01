@@ -474,16 +474,17 @@ class Account(EndpointsModel):
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('account.' + p + '= request.' + p)
         account_key_async = account.put_async().get_result()
-        contact_key = ndb.Key(urlsafe=request.new_contact_key)
-        Edge.insert(start_node=account_key_async,
-                    end_node=contact_key,
-                    kind='contacts',
-                    inverse_edge='parents')
-        EndpointsHelper.update_edge_indexes(
-            parent_key=contact_key,
-            kind='contacts',
-            indexed_edge=str(account_key_async.id())
-        )
+        if request.new_contact_key:
+            contact_key = ndb.Key(urlsafe=request.new_contact_key)
+            Edge.insert(start_node=account_key_async,
+                        end_node=contact_key,
+                        kind='contacts',
+                        inverse_edge='parents')
+            EndpointsHelper.update_edge_indexes(
+                parent_key=contact_key,
+                kind='contacts',
+                indexed_edge=str(account_key_async.id())
+            )
         info_nodes = Node.list_info_nodes(account_key_async, None)
         info_nodes_structured = Node.to_structured_data(info_nodes)
         emails = None
