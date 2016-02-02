@@ -7,6 +7,8 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import search
 from google.appengine.api import urlfetch
+
+from iomodels.crmengine.config import ALL_ACTIONS
 from oauth2client.appengine import CredentialsNDBProperty
 from apiclient.discovery import build
 from oauth2client.client import flow_from_clientsecrets
@@ -881,7 +883,6 @@ class User(EndpointsModel):
        # if not self.id and self.status == "active":
        self.after_create(async.get_result().id())
        return async
-
 
     def init_user_config(self,org_key,profile_key):
         profile = profile_key.get()

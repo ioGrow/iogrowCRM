@@ -13,6 +13,8 @@ from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
+
+from iomodels.crmengine.payment import payment_required
 from model import User
 from protorpc import messages
 import iomessages
@@ -860,6 +862,7 @@ class Lead(EndpointsModel):
         return resp
 
     @classmethod
+    @payment_required
     def insert(cls, user_from_email, request):
         first_name = str(request.firstname).lower()
         last_name = str(request.lastname).lower()
