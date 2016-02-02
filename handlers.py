@@ -916,11 +916,14 @@ class GooglePlusConnect(SessionEnabledHandler):
                 credentials
             )
         lang = self.get_language().replace('-', '_')
-        user.currency = "USD"
         user.currency_format = lang
         user.date_time_format = lang
+        code_country_split = lang.split('_')
+        if len(code_country_split) > 1:
+            user.country_code = code_country_split[1]
+        user.currency = "USD"
         user.week_start = "monday"
-        user.country_code = lang.split('_')[1]
+
         user.put()
         # if user doesn't have organization redirect him to sign-up
         is_new_user = False
