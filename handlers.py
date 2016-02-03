@@ -1313,6 +1313,13 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
 
+class ZHconnect(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        print "params value:", self.request.GET
+        new_session = model.CopyLeadZhSession( user=ndb.Key(urlsafe="ahFzfmdjZGMyMDEzLWlvZ3Jvd3ITCxIGU0Z1c2VyGICAgKaKx5kKDA"))
+        new_session.put()
+        
+
 
 class SFconnect(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1703,7 +1710,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
         self.response.out.write(json.dumps(created_lead))
 
 class ZohoSaveLead(BaseHandler, SessionEnabledHandler):
-    def get(self):
+    def post(self):
         #access_token = self.request.get("access_token")
         #instance_url = self.request.get("instance_url")
         firstname = self.request.get("firstname")
@@ -3822,6 +3829,7 @@ routes = [
     (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter', SalesforceImporter),
     ('/sfconnect', SFconnect),
+    ('/zhconnect', ZHconnect),
     ('/sfsubscriber', SFsubscriber),
     ('/sfoauth2callback', SalesforceImporterCallback),
     ('/zohosignin',ZohoSignIn),

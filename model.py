@@ -1770,9 +1770,14 @@ class ProxyServer(ndb.Model):
 
 
 class CopyLeadSfSession(ndb.Model):
-    access_token = ndb.StringProperty()
+    #access_token = ndb.StringProperty()
     user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
+class CopyLeadZhSession(ndb.Model):
+    access_token=ndb.StringProperty
+    user=ndb.KeyProperty()
+    created_at=ndb.DateTimeProperty(auto_now_add=True)
+
 
     @classmethod
     def get_by_access_token(cls, access_token):
