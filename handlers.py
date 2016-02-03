@@ -1322,6 +1322,13 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
 
+class ZHconnect(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        print "params value:", self.request.GET
+        new_session = model.CopyLeadZhSession( user=ndb.Key(urlsafe="ahFzfmdjZGMyMDEzLWlvZ3Jvd3ITCxIGU0Z1c2VyGICAgKaKx5kKDA"))
+        new_session.put()
+        
+
 
 class SFconnect(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -3828,6 +3835,7 @@ routes = [
     (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter', SalesforceImporter),
     ('/sfconnect', SFconnect),
+    ('/zhconnect', ZHconnect),
     ('/sfsubscriber', SFsubscriber),
     ('/sfoauth2callback', SalesforceImporterCallback),
     ('/zohosignin',ZohoSignIn),
