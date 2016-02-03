@@ -1667,7 +1667,13 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
+                    var p=$("#newAccMain");
+                    var offsets = document.getElementById('newAccMain').getBoundingClientRect();
+                    var top = offsets.top + 120;
+                    var left = offsets.left;
+                    var width = document.getElementById('newAccMain').offsetWidth;
+                    var height = document.getElementById('newAccMain').offsetHeight;
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width='+width+',height=500, left='+left+',top='+top);
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -2388,13 +2394,16 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         }
         $scope.editbeforedelete = function (item, typee, index) {
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
+            console.log($scope.selectedItem);
             $('#BeforedeleteAccount').modal('show');
          };
          $scope.editbeforedisassociate = function(item,typee,index){
             $scope.selectedItem={'item':item,'typee':typee,'index':index};
+            console.log($scope.selectedItem);
             $('#beforedelinkContact').modal('show');
          };
          $scope.deleteItem=function(){
+
             var params = {'entityKey':$scope.selectedItem.item.entityKey};
             console.log(params);
             if ($scope.selectedItem.typee=='account') {
@@ -2417,11 +2426,13 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
          }
          $scope.disassociateItem=function(){
             var params ={'start_node':$scope.account.entityKey,'end_node':$scope.selectedItem.item.entityKey,'kind':'contacts'};
-            console.log(params);
+            
             Edge.delete($scope,params);            
             $('#beforedelinkContact').modal('hide');
          }
          $scope.itemDisassociated=function(){
+          console.log("$scope.selectedItem");
+           console.log($scope.selectedItem);
             if ($scope.selectedItem.typee=="contact") {
               console.log("in typpe==contact")
               $scope.contacts.splice($scope.selectedItem.index, 1);
@@ -3474,11 +3485,8 @@ $scope.lunchMapsCalendar=function(){
 
         if (typeof($scope.searchRelatedContactQuery)=='object'){
             var params={
-            'id':$scope.account.id,
-              'new_contact':{
-               'contact':$scope.searchRelatedContactQuery.entityKey,
-               'is_decesion_maker':false
-              }
+              'id':$scope.account.id,
+              'new_contact_key':$scope.searchRelatedContactQuery.entityKey
             };  
             Account.patch($scope,params);
         }
@@ -4273,14 +4281,7 @@ $scope.updateEventRenderAfterAdd= function(){};
                         url='';
                       };
                      if(!url.match(/^[a-zA-Z]+:\/\//)){      
-                        console.log('pattern.test(url)');                                  
-                        console.log('url');                  
-                        console.log(url);                  
-                        console.log(url.length);                  
                          url = 'http://' + url;
-                         console.log('pattern.test(url)');                                  
-                        console.log('url');                  
-                        console.log(url);  
                      }
                      return url;
         }
@@ -5984,7 +5985,13 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
+                    var p=$("#newAccMain");
+                    var offsets = document.getElementById('newAccMain').getBoundingClientRect();
+                    var top = offsets.top + 120;
+                    var left = offsets.left;
+                    var width = document.getElementById('newAccMain').offsetWidth;
+                    var height = document.getElementById('newAccMain').offsetHeight;
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width='+width+',height=500, left='+left+',top='+top);
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{

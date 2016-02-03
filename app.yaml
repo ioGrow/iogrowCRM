@@ -1,5 +1,5 @@
 application: gcdc2013-iogrow
-version: 17
+version: 18
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -25,9 +25,9 @@ handlers:
 - login: admin
   script: pipeline.handlers._APP
   url: /_ah/pipeline.*
-- login: admin
-  script: mapreduce.main.APP
-  url: /mapreduce(/.*)?
+# - login: admin
+#   script: mapreduce.main.APP
+#   url: /mapreduce(/.*)?
 - url: /admin/.*
   script: google.appengine.ext.admin.application
   login: admin

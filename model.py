@@ -103,7 +103,7 @@ Default_Opp_Stages = [
                     {'name':'Incoming','probability':5,'stage_number':1},
                     {'name':'Qualified','probability':10,'stage_number':2},
                     {'name':'Need Analysis','probability':40,'stage_number':3},
-                    {'name':'Negociating','probability':80,'stage_number':4},
+                    {'name':'Negotiating','probability':80,'stage_number':4},
                     {'name':'Close won','probability':100,'stage_number':0},
                     {'name':'Close lost','probability':0,'stage_number':0}
                     ]
