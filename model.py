@@ -86,12 +86,14 @@ ADMIN_TABS = [
     # {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'},
     {'name': 'Regional', 'label': 'Regional', 'url': '/#/admin/regional', 'icon': 'globe'},
     {'name': 'LeadStatus', 'label': 'Lead Status', 'url': '/#/admin/lead_status', 'icon': 'road'},
+    # {'name': 'LeadScoring', 'label': 'Lead Scoring', 'url': '/#/admin/lead_scoring', 'icon': ' fa-dashboard'},
     {'name': 'Opportunity', 'label': 'Opportunity', 'url': '/#/admin/opportunity', 'icon': 'money'},
     {'name': 'CaseStatus', 'label': 'Case Status', 'url': '/#/admin/case_status', 'icon': 'suitcase'},
     # {'name': 'Synchronisation','label': 'Synchronisation','url':'/#/admin/synchronisation','icon':'refresh'},
     {'name': 'CustomFields', 'label': 'Custom Fields', 'url': '/#/admin/custom_fields/1', 'icon': 'list-alt'},
     # {'name': 'DataTransfer', 'label': 'Data Transfer', 'url': '/#/admin/data_transfer', 'icon': 'cloud'},
      {'name': 'DeleteAllRecords', 'label': 'Delete Records', 'url': '/#/admin/delete_all_records', 'icon': 'trash-o'},
+
             ]
 ADMIN_APP = {'name': 'admin', 'label': 'Settings', 'url': '/#/admin/users'}
 """Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}

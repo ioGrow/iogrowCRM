@@ -1440,7 +1440,8 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
     $scope.allCasesSelected=false;
     $scope.selectedCases=[];
     $scope.caseCustomfields=[];
-
+    $scope.lunchMaps=lunchMaps;
+    $scope.lunchMapsLinkedin=lunchMapsLinkedin;
 
        if ($scope.timezone==""){
         $scope.timezone=moment().format("Z");
@@ -4480,6 +4481,8 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       $scope.accountFromLinkedin={};
       $scope.contacts=[];
       $scope.contacts.customfields=[];
+      $scope.lunchMaps=lunchMaps;
+      $scope.lunchMapsLinkedin=lunchMapsLinkedin;
       $scope.inProcess=function(varBool,message){
             if (varBool) {           
               if (message) {

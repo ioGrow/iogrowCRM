@@ -171,6 +171,7 @@ opportunityservices.factory('Opportunity', function($http) {
       callback(resp);
         gapi.client.crmengine.opportunities.listv3().execute(function(resp) {
             // Update the cache
+            console.log(resp);
             iogrow.ioStorageCache.renderIfUpdated('opportunities', resp, callback);
 
         });

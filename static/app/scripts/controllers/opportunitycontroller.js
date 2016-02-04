@@ -172,21 +172,27 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           }
           $scope.opportunityToChage=opportunity;
       };
-     $scope.updateOpportunityStage = function(stage){
+     $scope.updateOpportunityStage = function(stage,opp){
+        console.log("here started");
+        console.log(stage);
+        console.log(opp);
+        console.log("here started");
+
           $scope.stageTo=stage;
-          if (stage.stage.entityKey) {
+          $scope.opportunityToChage=opp;
+          if (stage[0].entityKey) {
               if ($scope.selectedCards.indexOf($scope.opportunityToChage) >= 0) {
                   angular.forEach($scope.selectedCards, function(opportunitCard){
                           var params = {
                           'entityKey':opportunitCard.entityKey,
-                          'stage': stage.stage.entityKey
+                          'stage': stage[0].entityKey
                           };
                           Opportunity.update_stage($scope,params);
                   });
               }else{
                  var params = {
                         'entityKey':$scope.opportunityToChage.entityKey,
-                        'stage': stage.stage.entityKey
+                        'stage': stage[0].entityKey
                   };
                   Opportunity.update_stage($scope,params);
               }
@@ -339,8 +345,13 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                             console.log($scope.closeloststage);
                         };
                       }else{
+                        if (item.items==undefined) {
+                          item.items=[];
+                        };
+                        item.items.unshift({'entityKey':item.stage.entityKey});
+                        console.log(item.items);
                         $scope.opportunitiesbysatges.push(item);
-                          $scope.oppStagesOrigin.push(item);
+                        $scope.oppStagesOrigin.push(item);
                       };
                   });
                  console.log('$scope.opportunitiesbysatges');
@@ -2699,6 +2710,7 @@ $scope.updateEventRenderAfterAdd= function(){};
   $('#EditOpportunityModal').modal('hide');
  };
  $scope.updateOpportunityStage = function(stage){
+  console.log("here started");
    if (stage) {
     var params = {
                   'entityKey':$scope.opportunity.entityKey,

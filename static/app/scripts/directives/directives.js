@@ -14,6 +14,31 @@
         });
   }
 }});*/
+var lunchMapsLinkedin=function(address){
+        var p=$("#newAccMain");
+        var offsets = document.getElementById('newAccMain').getBoundingClientRect();
+        var top = offsets.top + 118;
+        var left = offsets.left;
+        var width = document.getElementById('newAccMain').offsetWidth;
+        var height = document.getElementById('newAccMain').offsetHeight;
+        window.open('http://www.google.com/maps/search/'+address,'winname','width='+width+',height=500, left='+left+',top='+top);
+ }
+ var lunchMaps=function(lat,lng,address){
+                    var p=$("#newAccMain");
+                    var offsets = document.getElementById('newAccMain').getBoundingClientRect();
+                    var top = offsets.top + 118;
+                    var left = offsets.left;
+                    var width = document.getElementById('newAccMain').offsetWidth;
+                    var height = document.getElementById('newAccMain').offsetHeight;
+                    console.log(width,height,top,left);
+              if (lat&&lng) {
+                window.open('http://www.google.com/maps/place/'+lat+','+lng,'winname','width='+width+',height=500, left='+left+',top='+top);
+              }else{
+                 console.log(address);
+                 var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
+                 window.open('http://www.google.com/maps/search/'+locality,'winname','width='+width+',height=500, left='+left+',top='+top);
+              };
+}
 app.directive('edittooltip',  function() {
    return {
     restrict: 'A',

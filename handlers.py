@@ -1201,6 +1201,9 @@ class EditLeadStatusHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/lead_status/lead_status_edit.html')
 
+class LeadScoringHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/lead_scoring/lead_scoring_edit.html')
 
 class EditCustomFieldsHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -3797,6 +3800,7 @@ routes = [
     ('/views/admin/opportunity/edit', EditOpportunityHandler),
     ('/views/admin/case_status/edit', EditCaseStatusHandler),
     ('/views/admin/lead_status/edit', EditLeadStatusHandler),
+    ('/views/admin/lead_scoring/edit', LeadScoringHandler),
     ('/views/admin/data_transfer/edit', EditDataTransferHandler),
     ('/views/admin/synchronisation/edit', EditSynchronisationHandler),
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
