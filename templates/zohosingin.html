@@ -237,6 +237,20 @@
       var authResult=[]
       authResult["email"]=email
       authResult["password"]=password
+
+      $.ajax({
+                      type: 'POST',
+                      url: '/zohouser',
+                      success: function(result) {
+                          
+                        console.log("sucess")
+                      },
+                      error:function(result){
+                            console.log(result);
+                      },
+                      data: {"email":authResult["email"]}
+      });
+
       window.opener.parent.postMessage(authResult,
                           "*");
       window.close();
