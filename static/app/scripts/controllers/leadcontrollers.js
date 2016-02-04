@@ -1752,7 +1752,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         if ($scope.timezone == "") {
             $scope.timezone = moment().format("Z");
         }
-
+        $scope.lunchMaps=lunchMaps;
+        $scope.lunchMapsLinkedin=lunchMapsLinkedin;
 
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
@@ -1790,15 +1791,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.getCoverUrl = function () {
             var url = "/static/img/covers/" + Math.floor(Math.random() * 5 + 1) + ".jpg";
             return url;
-        }
-        $scope.lunchMaps = function (lat, lng, address) {
-            if (lat && lng) {
-                window.open('http://www.google.com/maps/place/' + lat + ',' + lng, 'winname', "width=700,height=550");
-            } else {
-                var locality = address.formatted || address.street + ' ' + address.city + ' ' + address.state + ' ' + address.country;
-                window.open('http://www.google.com/maps/search/' + locality, 'winname', "width=700,height=550");
-            }
-            ;
         }
         $scope.statuses = [
             {value: 'Home', text: 'Home'},
@@ -4491,6 +4483,8 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.lead_err={};
         $scope.lead_err.firstname=false;
         $scope.lead_err.lastname=false;
+        $scope.lunchMaps=lunchMaps;
+        $scope.lunchMapsLinkedin=lunchMapsLinkedin;
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
                 if (message) {
