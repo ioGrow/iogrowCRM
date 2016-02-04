@@ -526,10 +526,13 @@
              </th>
           </tr>
       </thead>
-      <tbody style="background: none !important;">
-        <tr>
-        <td droppable ng-repeat="opportunitystage in opportunitiesbysatges" ng-drop="updateOpportunityStage(opportunitystage)" id="stage_<%=$index%>">
-          <div draggable  ng-repeat="opportunity in opportunitystage.items|filter:{current_stage.name:opportunitystage.name}"  ng-class="{selectedCard: isSelectedCard(opportunity)}" droppable id="card_<%=$index%>" class="cardElement cusCardElement testStage" ng-drop="dropTag(opportunity,-1)" style="  width:100%;margin-right: 0px;position:relative;margin-bottom:5px;" ng-drag="selectedOpp(opportunity,opportunitystage)">
+      <tbody style="background: none !important;" >
+        <tr class="multi-sortable" sv-root sv-on-sort="updateOpportunityStage($partTo, $item)" >
+        <td ng-repeat="opportunitystage in opportunitiesbysatges"  id="stage_<%=$index%>" class="sortable-container" sv-part="opportunitystage.items">
+          <div  sv-element  ng-repeat="opportunity in opportunitystage.items|filter:{current_stage.name:opportunitystage.name}"  ng-class="{selectedCard: isSelectedCard(opportunity),hiddenfirstitem:$index==0}" droppable id="card_<%=$index%>" class="cardElement cusCardElement testStage" ng-drop="dropTag(opportunity,-1)" style="width:100%;margin-right: 0px;position:relative;margin-bottom:5px;" ng-drag="selectedOpp(opportunity,opportunitystage)" >
+            <div sv-placeholder class="placeholder-left">
+              <span></span>
+            </div>
             <div class="btn-group cusOptionsBtn dropup">
               <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                <i class="fa fa-ellipsis-vertical"></i>

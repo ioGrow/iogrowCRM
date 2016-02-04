@@ -60,24 +60,24 @@ VISIBLE_ACTIONS = [
 
 STANDARD_TABS = [
     # {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
-    {'name': 'Leads', 'label': 'Leads', 'url': '/#/leads/', 'icon': 'road'},
-    {'name': 'Opportunities', 'label': 'Opportunities', 'url': '/#/opportunities/', 'icon': 'money'},
-    {'name': 'Contacts', 'label': 'Contacts', 'url': '/#/contacts/', 'icon': 'group'},
-    {'name': 'Accounts', 'label': 'Accounts', 'url': '/#/accounts/', 'icon': 'building'},
-    {'name': 'Cases', 'label': 'Cases', 'url': '/#/cases/', 'icon': 'suitcase'},
-    {'name': 'Tasks', 'label': 'Tasks', 'url': '/#/tasks/', 'icon': 'check'},
-    {'name': 'Calendar', 'label': 'Calendar', 'url': '/#/calendar/', 'icon': 'calendar'}
+                {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
+                {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
+                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
+                {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'building'},
+                {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
+                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
+                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
     # {'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
-]
+                ]
 EARLY_BIRD_TABS = [
-    {'name': 'Contacts', 'label': 'Contacts', 'url': '/#/contacts/', 'icon': 'group'},
-    {'name': 'Leads', 'label': 'Leads', 'url': '/#/leads/', 'icon': 'road'},
-    {'name': 'Tasks', 'label': 'Tasks', 'url': '/#/tasks/', 'icon': 'check'},
-    {'name': 'Calendar', 'label': 'Calendar', 'url': '/#/calendar/', 'icon': 'calendar'}
-]
+                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
+                {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
+                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
+                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
+                ]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url': '/#/leads/'}]
-STANDARD_OBJECTS = ['Account', 'Contact', 'Opportunity', 'Lead', 'Case', 'Campaign']
+STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/leads/'}]
+STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
 ADMIN_TABS = [
     {'name': 'Company', 'label': 'Company', 'url': '/#/admin/company', 'icon': 'building'},
     {'name': 'Users', 'label': 'Users', 'url': '/#/admin/users', 'icon': 'group'},
@@ -87,13 +87,15 @@ ADMIN_TABS = [
     # {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'},
     {'name': 'Regional', 'label': 'Regional', 'url': '/#/admin/regional', 'icon': 'globe'},
     {'name': 'LeadStatus', 'label': 'Lead Status', 'url': '/#/admin/lead_status', 'icon': 'road'},
+    # {'name': 'LeadScoring', 'label': 'Lead Scoring', 'url': '/#/admin/lead_scoring', 'icon': ' fa-dashboard'},
     {'name': 'Opportunity', 'label': 'Opportunity', 'url': '/#/admin/opportunity', 'icon': 'money'},
     {'name': 'CaseStatus', 'label': 'Case Status', 'url': '/#/admin/case_status', 'icon': 'suitcase'},
     # {'name': 'Synchronisation','label': 'Synchronisation','url':'/#/admin/synchronisation','icon':'refresh'},
     {'name': 'CustomFields', 'label': 'Custom Fields', 'url': '/#/admin/custom_fields/1', 'icon': 'list-alt'},
     # {'name': 'DataTransfer', 'label': 'Data Transfer', 'url': '/#/admin/data_transfer', 'icon': 'cloud'},
-    {'name': 'DeleteAllRecords', 'label': 'Delete Records', 'url': '/#/admin/delete_all_records', 'icon': 'trash-o'},
-]
+     {'name': 'DeleteAllRecords', 'label': 'Delete Records', 'url': '/#/admin/delete_all_records', 'icon': 'trash-o'},
+
+            ]
 ADMIN_APP = {'name': 'admin', 'label': 'Settings', 'url': '/#/admin/users'}
 """Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
 
@@ -101,24 +103,24 @@ Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'na
 {'name': 'Product_videos','label': 'Product Videos','url':'/#/live/product_videos'},{'name': 'Customer_Stories','label': 'Customer stories','url':'/#/live/customer_stories'},
 {'name': 'Feedbacks','label': 'Feedbacks','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]"""
 Default_Opp_Stages = [
-    {'name': 'Incoming', 'probability': 5, 'stage_number': 1},
-    {'name': 'Qualified', 'probability': 10, 'stage_number': 2},
-    {'name': 'Need Analysis', 'probability': 40, 'stage_number': 3},
-    {'name': 'Negotiating', 'probability': 80, 'stage_number': 4},
-    {'name': 'Close won', 'probability': 100, 'stage_number': 0},
-    {'name': 'Close lost', 'probability': 0, 'stage_number': 0}
-]
-Default_Case_Status = [
-    {'status': 'pending'},
-    {'status': 'open'},
-    {'status': 'closed'}
-]
-Default_Lead_Status = [
-    {'status': 'New'},
-    {'status': 'Working'},
-    {'status': 'Unqualified'},
-    {'status': 'Closed converted'}
-]
+                    {'name':'Incoming','probability':5,'stage_number':1},
+                    {'name':'Qualified','probability':10,'stage_number':2},
+                    {'name':'Need Analysis','probability':40,'stage_number':3},
+                    {'name':'Negotiating','probability':80,'stage_number':4},
+                    {'name':'Close won','probability':100,'stage_number':0},
+                    {'name':'Close lost','probability':0,'stage_number':0}
+                    ]
+Default_Case_Status =[
+                    {'status':'pending'},
+                    {'status':'open'},
+                    {'status':'closed'}
+                    ]
+Default_Lead_Status =[
+                    {'status':'New'},
+                    {'status':'Working'},
+                    {'status':'Unqualified'},
+                    {'status':'Closed converted'}
+                    ]
 FOLDERS = {
     'Accounts': 'accounts_folder',
     'Contacts': 'contacts_folder',
@@ -129,8 +131,8 @@ FOLDERS = {
 folders = {}
 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
-# stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+#stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 
 
 class Tokens(ndb.Model):
@@ -145,7 +147,6 @@ class Partner(ndb.Model):
     email = ndb.StringProperty()
     iogrow_contact_id = ndb.StringProperty()
 
-
 class Coupon(ndb.Model):
     code = ndb.StringProperty()
     related_to_partner = ndb.KeyProperty()
@@ -153,9 +154,8 @@ class Coupon(ndb.Model):
     is_available = ndb.BooleanProperty(default=True)
 
     @classmethod
-    def get_by_code(cls, code):
-        return cls.query(cls.code == code).get()
-
+    def get_by_code(cls,code):
+        return cls.query(cls.code==code).get()
 
 class SFuser(ndb.Model):
     firstname = ndb.StringProperty()
@@ -166,14 +166,12 @@ class SFuser(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
-
 class SFinvitation(ndb.Model):
     user_email = ndb.StringProperty()
     invitee_email = ndb.StringProperty()
     invitee_name = ndb.StringProperty()
     status = ndb.StringProperty(default='pending')
     invited_at = ndb.DateTimeProperty(auto_now_add=True)
-
 
 class SFLead(ndb.Model):
     firstname = ndb.StringProperty()
@@ -183,7 +181,6 @@ class SFLead(ndb.Model):
     linkedin_url = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     created_by = ndb.KeyProperty()
-
 
 class ZohoLead(ndb.Model):
     firstname = ndb.StringProperty()
@@ -203,7 +200,6 @@ class Application(ndb.Model):
     tabs = ndb.KeyProperty(repeated=True)
     organization = ndb.KeyProperty(required=True)
 
-
 class Tab(ndb.Model):
     name = ndb.StringProperty(required=True)
     label = ndb.StringProperty(required=True)
@@ -212,12 +208,11 @@ class Tab(ndb.Model):
     organization = ndb.KeyProperty(required=True)
     tabs = ndb.KeyProperty(repeated=True)
 
-
 class LicenseModel(ndb.Model):
     name = ndb.StringProperty()
     payment_type = ndb.StringProperty()
-    price = ndb.FloatProperty()
-    is_free = ndb.BooleanProperty()
+    price =  ndb.FloatProperty()
+    is_free =  ndb.BooleanProperty()
     duration = ndb.IntegerProperty()
 
 
@@ -1834,9 +1829,14 @@ class ProxyServer(ndb.Model):
 
 
 class CopyLeadSfSession(ndb.Model):
-    access_token = ndb.StringProperty()
+    #access_token = ndb.StringProperty()
     user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
+class CopyLeadZhSession(ndb.Model):
+    access_token=ndb.StringProperty
+    user=ndb.KeyProperty()
+    created_at=ndb.DateTimeProperty(auto_now_add=True)
+
 
     @classmethod
     def get_by_access_token(cls, access_token):

@@ -245,6 +245,9 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/admin/delete_all_records', {
              controller: 'DeleteAllRecordsCtrl',
              templateUrl: '/views/admin/delete_all_records'
+      }).when('/admin/lead_scoring', { 
+             controller: 'LeadScoringCtrl',
+             templateUrl: '/views/admin/lead_scoring/edit'
       });
 }]);
 

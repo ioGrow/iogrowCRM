@@ -1475,6 +1475,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         $scope.opportunity.competitors=[];
         $scope.opportunities=[];
         $scope.caseCustomfields=[];
+        $scope.lunchMaps=lunchMaps;
+        $scope.lunchMapsLinkedin=lunchMapsLinkedin;
 
    $scope.timezone=document.getElementById('timezone').value;
 
@@ -1732,22 +1734,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                 ]}
             };
             InfoNode.insert($scope, params);
-            $scope.apply();
+            $scope.apply(); 
           }
-           $scope.lunchMaps=function(lat,lng,address){
-              if (lat&&lng) {
-                window.open('http://www.google.com/maps/place/'+lat+','+lng,'winname',"width=700,height=550");
-              }else{
-                 console.log(address);
-                 var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
-                 window.open('http://www.google.com/maps/search/'+locality,'winname',"width=700,height=550");
-              };
-             }
-             $scope.lunchMapsLinkedin=function(address){
-                 window.open('http://www.google.com/maps/search/'+address,'winname',"width=700,height=550");
-             }
-
-
  $scope.getLinkedinByUrl=function(url){
                $scope.inIsLoading=true;
                var par={'url' : url};
@@ -5549,6 +5537,9 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
         $scope.accounts.customfields=[];
         $scope.account_err={};
         $scope.account_err.name=false; 
+        $scope.lunchMaps=lunchMaps;
+        $scope.lunchMapsLinkedin=lunchMapsLinkedin;
+        // $scope.account.personal_account=true;
         $scope.inProcess=function(varBool,message){
           if (varBool) {           
             if (message) {
@@ -5895,19 +5886,6 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                    $scope.apply();
 
                 }
-           $scope.lunchMaps=function(lat,lng,address){
-              if (lat&&lng) {
-                window.open('http://www.google.com/maps/place/'+lat+','+lng,'winname',"width=700,height=550");
-              }else{
-                 console.log(address);
-                 var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
-                 window.open('http://www.google.com/maps/search/'+locality,'winname',"width=700,height=550");
-              };
-             }
-             $scope.lunchMapsLinkedin=function(address){
-                 window.open('http://www.google.com/maps/search/'+address,'winname',"width=700,height=550");
-             }
-
              //new Linkedin 
                 $scope.messageFromSocialLinkCallback = function(event){
                   if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){

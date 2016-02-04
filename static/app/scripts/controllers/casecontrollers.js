@@ -1114,6 +1114,8 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
       $scope.selectedDocs=[];
         $scope.newDoc=true;
         $scope.docInRelatedObject=true;
+    $scope.lunchMaps=lunchMaps;
+    $scope.lunchMapsLinkedin=lunchMapsLinkedin;
 
 
   $scope.timezone=document.getElementById('timezone').value;
@@ -2508,6 +2510,10 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
                       };
       $scope.cases=[];
       $scope.cases.customfields=[];
+      $scope.lunchMaps=lunchMaps;
+      $scope.lunchMapsLinkedin=lunchMapsLinkedin;  
+      $scope.newnote={};
+      $scope.casee.notes=[];
       $scope.clearCase=function(){
               $scope.casee={};
               $scope.status_selected={};
@@ -2659,7 +2665,11 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
        //     Account.search($scope,params_search_account);
 
        //  });
-        $scope.selectAccount = function(){
+      $scope.changeStatus=function(status){
+          console.log("in case status");
+          $scope.status_selected=status;
+      }
+      $scope.selectAccount = function(){
           $scope.contact.account = $scope.searchAccountQuery;
 
        };
@@ -2697,6 +2707,10 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
       $scope.selectAccount = function(){
           $scope.casee.account  = $scope.searchAccountQuery;
       };
+      $scope.addNote = function(){
+       $scope.casee.notes.push($scope.newnote)
+       $scope.newnote={};
+     }
       $scope.prepareInfonodes = function(){
         var infonodes = [];
         angular.forEach($scope.customfields, function(customfield){

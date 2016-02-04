@@ -78,6 +78,7 @@ app.controller('CustomFieldsEditCtrl', ['$scope','$route', 'Auth', 'User', 'Map'
           };
         } 
         $scope.sortCustomField=function($item,$indexTo){
+            console.log("fired");
             var params={
                 id:$item.id,
                 order:$indexTo+1

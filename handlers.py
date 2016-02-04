@@ -916,11 +916,14 @@ class GooglePlusConnect(SessionEnabledHandler):
                 credentials
             )
         lang = self.get_language().replace('-', '_')
-        user.currency = "USD"
         user.currency_format = lang
         user.date_time_format = lang
+        code_country_split = lang.split('_')
+        if len(code_country_split) > 1:
+            user.country_code = code_country_split[1]
+        user.currency = "USD"
         user.week_start = "monday"
-        user.country_code = lang.split('_')[1]
+
         user.put()
         # if user doesn't have organization redirect him to sign-up
         is_new_user = False
@@ -1198,6 +1201,9 @@ class EditLeadStatusHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/lead_status/lead_status_edit.html')
 
+class LeadScoringHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/lead_scoring/lead_scoring_edit.html')
 
 class EditCustomFieldsHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1318,6 +1324,13 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
             user_info.put()
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
+
+class ZHconnect(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        print "params value:", self.request.GET
+        new_session = model.CopyLeadZhSession( user=ndb.Key(urlsafe="ahFzfmdjZGMyMDEzLWlvZ3Jvd3ITCxIGU0Z1c2VyGICAgKaKx5kKDA"))
+        new_session.put()
+        
 
 
 class SFconnect(BaseHandler, SessionEnabledHandler):
@@ -3787,6 +3800,7 @@ routes = [
     ('/views/admin/opportunity/edit', EditOpportunityHandler),
     ('/views/admin/case_status/edit', EditCaseStatusHandler),
     ('/views/admin/lead_status/edit', EditLeadStatusHandler),
+    ('/views/admin/lead_scoring/edit', LeadScoringHandler),
     ('/views/admin/data_transfer/edit', EditDataTransferHandler),
     ('/views/admin/synchronisation/edit', EditSynchronisationHandler),
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
@@ -3825,6 +3839,7 @@ routes = [
     (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter', SalesforceImporter),
     ('/sfconnect', SFconnect),
+    ('/zhconnect', ZHconnect),
     ('/sfsubscriber', SFsubscriber),
     ('/sfoauth2callback', SalesforceImporterCallback),
     ('/zohosignin',ZohoSignIn),
