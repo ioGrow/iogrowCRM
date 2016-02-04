@@ -1,21 +1,10 @@
-CREATE_LEAD = 'create_lead'
-CREATE_CONTACT = 'create_contact'
-CREATE_ACCOUNT = 'create_account'
-CREATE_CASE = 'create_case'
-CREATE_EVENT = 'create_event'
-CREATE_TASK = 'create_task'
-CREATE_OPPORTUNITY = 'create_opportunity'
-ALL = 'ALL'
+E_LEAD = 'e_lead'
+E_CONTACT = 'e_contact'
+E_ACCOUNT = 'e_account'
+E_CASE = 'e_case'
+E_EVENT = 'e_event'
+E_TASK = 'e_task'
+E_OPPORTUNITY = 'e_opportunity'
+ALL = [E_LEAD, E_TASK, E_ACCOUNT, E_EVENT, E_OPPORTUNITY, E_CASE]
 
-ALL_ACTIONS = [CREATE_LEAD, CREATE_TASK, CREATE_ACCOUNT, CREATE_EVENT, CREATE_OPPORTUNITY, CREATE_CASE]
-
-limit_rate = {
-    CREATE_LEAD: 1000,
-    CREATE_CONTACT: 1000,
-    CREATE_ACCOUNT: 1000,
-    CREATE_CASE: 1000,
-    CREATE_EVENT: 1000,
-    CREATE_TASK: 1000,
-    CREATE_OPPORTUNITY: 1000,
-    ALL: 5000
-}
+KINDS = [E_LEAD, E_TASK, E_ACCOUNT, E_EVENT, E_OPPORTUNITY, E_CASE, ALL]

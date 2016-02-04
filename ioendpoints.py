@@ -37,7 +37,6 @@ from iomodels.crmengine.contacts import Contact, ContactGetRequest, ContactInser
     InvitationRequest, ContactMergeRequest
 from iomodels.crmengine.notes import Note, AuthorSchema, DiscussionAboutSchema, \
     NoteSchema
-from iomodels.crmengine.payment import payment_required
 from iomodels.crmengine.tasks import Task, TaskSchema, TaskRequest, TaskListResponse, TaskInsertRequest
 # from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity, OpportunityPatchRequest, UpdateStageRequest, \

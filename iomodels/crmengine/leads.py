@@ -4,6 +4,7 @@ import json
 import logging
 import re
 import time
+
 import endpoints
 import model
 import requests
@@ -13,10 +14,8 @@ from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
-
-from iomodels.crmengine.payment import payment_required
-from model import User
 from protorpc import messages
+
 import iomessages
 import tweepy
 from endpoints_helper import EndpointsHelper
@@ -30,6 +29,7 @@ from iomodels.crmengine.documents import Document, DocumentListResponse
 from iomodels.crmengine.events import Event, EventListResponse
 from iomodels.crmengine.notes import Note, TopicListResponse
 from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
+from iomodels.crmengine.payment import payment_required
 from iomodels.crmengine.tags import Tag, TagSchema
 from iomodels.crmengine.tasks import Task, TaskListResponse
 from profilehooks import timecall

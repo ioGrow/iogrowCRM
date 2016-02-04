@@ -375,6 +375,16 @@ indexes:
 - kind: Lead
   properties:
   - name: organization
+  - name: creadted_at
+
+- kind: Lead
+  properties:
+  - name: organization
+  - name: created_at
+
+- kind: Lead
+  properties:
+  - name: organization
   - name: firstname
 
 - kind: Lead
