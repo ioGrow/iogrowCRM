@@ -1295,6 +1295,31 @@ class SalesforceImporter(BaseHandler, SessionEnabledHandler):
         authorization_url = flow.step1_get_authorize_url()
         self.redirect(authorization_url)
 
+class SFsubscriberTest(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        email = self.request.get("email")
+        token_str = self.request.get("token")
+        token = json.loads(token_str)
+        print 'id'
+        print token['id']
+
+        user = model.SFuser.query(model.SFuser.email == email).get()
+        if user:
+            stripe.api_key = "sk_test_K5CtshToZfaN0yiYaBUGHg0a"
+            customer = stripe.Customer.create(
+                source=token['id'],  # obtained from Stripe.js
+                plan="copylead_test_subscription",
+                email=email
+            )
+            user_info = user
+            user_info.stripe_id = customer['id']
+            now = datetime.datetime.now()
+            now_plus_month = now + datetime.timedelta(days=30)
+            user_info.active_until = now_plus_month
+            user_info.created_at = now_plus_month
+            user_info.put()
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps({}))
 
 class SFsubscriber(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -3829,6 +3854,8 @@ routes = [
     ('/sfimporter', SalesforceImporter),
     ('/sfconnect', SFconnect),
     ('/sfsubscriber', SFsubscriber),
+    ('/sfsubscribertest', SFsubscriberTest),
+
     ('/sfoauth2callback', SalesforceImporterCallback),
     ('/zohosignin',ZohoSignIn),
     ('/sf_invite', SFinvite),
