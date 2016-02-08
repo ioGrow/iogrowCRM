@@ -93,6 +93,11 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           owner: 'all',
           orderBy: 'name'
       };
+      $scope.opportunitystage={
+        items:[]
+      };
+      $scope.opportunitystage.items=[];
+      $scope.opportunitiesbysatges=[];
        $scope.isEmptyArray=function(Array){
                 if (Array!=undefined && Array.length>0) {
                 return false;
@@ -313,47 +318,71 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
        $scope.runTheProcess = function(){
           var params = {};
           Opportunity.list2($scope,params,function(resp){
+                console.log("here check resp");
+                console.log(resp);
                 if(!resp.code){
                   if (!resp.items){
                     if(!$scope.isFiltering){
                         $scope.blankStateopportunity = true;
                     }
                   }
-                 $scope.opportunitiesbysatges = [];
+                 $scope.opportunitystage.items=[];
+                 var refreshOpp=false;
+                 if ($scope.opportunitiesbysatges!=undefined && $scope.opportunitiesbysatges.length >0) {
+                    var refreshOpp=true;
+                     angular.forEach($scope.opportunitiesbysatges, function(stage){
+                        var existsInNewResp=false;
+                        angular.forEach(resp.items, function(stageItem){
+                          if (stage.stage.entityKey==stageItem.stage.entityKey) existsInNewResp=true;
+                        });
+                        existsInNewResp ? stage.items=[]:$scope.opportunitiesbysatges.splice($scope.opportunitiesbysatges.indexOf(stage),1);
+                        stage.items=[];
+                     });
+                 }else{
+                    $scope.opportunitiesbysatges=[];
+                 };
                  $scope.oppStagesOrigin = [];
                  $scope.closestages=[];
                  $scope.closewonstage={};
                  $scope.closeloststage={};
-                 console.log("stages");
-                 console.log(resp.items);
+                  if (refreshOpp) console.log('data updated');
                  angular.forEach(resp.items, function(item){
-                      console.log("check opportunities =========");
-                      console.log(item.items);
                       if (item.items!=undefined) {
                          $scope.opportunities=$scope.opportunities.concat(item.items);
                       };
-                      console.log($scope.opportunities);
                       if (item.stage.probability==0 || item.stage.probability== 100) {
                         $scope.closestages.push(item);
                         if (item.stage.probability==100) {
                             $scope.closewonstage=item;
-                            console.log("$scope.closewonstage");
-                            console.log($scope.closewonstage);
                         }else{
                             $scope.closeloststage=item;
-                            console.log("$scope.closeloststage");
-                            console.log($scope.closeloststage);
                         };
                       }else{
                         if (item.items==undefined) {
                           item.items=[];
                         };
                         item.items.unshift({'entityKey':item.stage.entityKey});
-                        console.log(item.items);
-                        $scope.opportunitiesbysatges.push(item);
+                        // console.log(item.items);
+                        if (refreshOpp) {
+
+                          console.log('in   refreshOpp =true');
+                          var stagexists=false;
+                          angular.forEach($scope.opportunitiesbysatges, function(stage){
+                            if (stage.stage.entityKey==item.stage.entityKey) {
+                               stage.items=item.items;
+                               stagexists=true;
+                            };
+                          });
+                          if (!stagexists) $scope.opportunitiesbysatges.push(item);
+                          console.log($scope.opportunitiesbysatges);
+
+                        }else{
+                            console.log('in else of refreshOpp');
+                            $scope.opportunitiesbysatges.push(item);
+                        }
                         $scope.oppStagesOrigin.push(item);
                       };
-                  });
+                  });     
                  console.log('$scope.opportunitiesbysatges');
                  console.log($scope.opportunitiesbysatges);                 
                  if ($scope.oppCurrentPage>1){
@@ -371,7 +400,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                   $scope.opppagination.next = false;
                  }
                  $scope.inProcess(false);  
-                  $scope.apply();
+                 $scope.apply();
               }else {
 
                 if(resp.code==401){
