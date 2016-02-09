@@ -1325,11 +1325,39 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
 
-class ZHconnect(BaseHandler, SessionEnabledHandler):
+class Paypal_Paying_Users(BaseHandler, SessionEnabledHandler):
     def get(self):
-        print "params value:", self.request.GET
-        new_session = model.CopyLeadZhSession( user=ndb.Key(urlsafe="ahFzfmdjZGMyMDEzLWlvZ3Jvd3ITCxIGU0Z1c2VyGICAgKaKx5kKDA"))
-        new_session.put()
+
+        #PaypalPayedUser
+        #valid until
+        #all models
+        #update licnces models 
+        now = datetime.datetime.now()
+        now_plus_month = now + datetime.timedelta(days=30)
+        active_until = now_plus_month
+        save_payed_user = model.PaypalPayedUser(
+                txn_type=self.request.get("txn_type"),
+                subscr_id=self.request.get("subscr_id"),
+                last_name=self.request.get("last_name"),
+                mc_currency=self.request.get("mc_currency"),
+                item_name=self.request.get("item_name"),
+                business=self.request.get("business"),
+                amount3=self.request.get("amount3"),
+                verify_sign=self.request.get("verify_sign"),
+                payer_status=self.request.get("payer_status"),
+                payer_email=self.request.get("payer_email"),
+                first_name=self.request.get("first_name"),
+                receiver_email=self.request.get("receiver_email"),
+                payer_id=self.request.get("payer_id"),
+                item_number=self.request.get("item_number"),
+                subscr_date=self.request.get("subscr_date"),
+                address_name=self.request.get("address_name"),
+                ipn_track_id=self.request.get("ipn_track_id"),
+                option_selection1=self.request.get("option_selection1"),
+                option_name1=self.request.get("option_name1"),
+                active_until=active_until
+            ).put()
+
         
 
 
@@ -1498,6 +1526,12 @@ class ZohoSignIn(BaseHandler, SessionEnabledHandler):
         template_values = {}
         template = jinja_environment.get_template('templates/zohosingin.html')
         self.response.out.write(template.render(template_values))
+
+class ZohoUser(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        ZohoUser = model.ZohoUser(
+                email=self.request.get("email")
+            ).put()
 
 
 class GoGo(BaseHandler, SessionEnabledHandler):
@@ -3839,10 +3873,11 @@ routes = [
     (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter', SalesforceImporter),
     ('/sfconnect', SFconnect),
-    ('/zhconnect', ZHconnect),
+    ('/paypal_paying_users', Paypal_Paying_Users),
     ('/sfsubscriber', SFsubscriber),
     ('/sfoauth2callback', SalesforceImporterCallback),
     ('/zohosignin',ZohoSignIn),
+    ('/zohouser',ZohoUser),
     ('/sf_invite', SFinvite),
     ('/invitation_sent', SFinvite),
     ('/stripe', StripeHandler),
