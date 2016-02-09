@@ -865,8 +865,8 @@ class Lead(EndpointsModel):
     @classmethod
     @payment_required()
     def insert(cls, user_from_email, request):
-        first_name = str(request.firstname).lower()
-        last_name = str(request.lastname).lower()
+        first_name = smart_str(request.firstname).lower()
+        last_name = smart_str(request.lastname).lower()
         linkedin_profile_key = None
         if request.linkedin_profile :
             linkedin_profile = model.LinkedinProfile(
