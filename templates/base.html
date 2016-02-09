@@ -91,7 +91,7 @@
         <!--  <a class="navbar-brand" > -->
         <div ng-controller="SearchFormController" onmouseover="ShowUpdateLogo()" onmouseout="HideupdateLogo()"
              style="display:inline-block;float:left">
-            <a class="navbar-brand" href="/apps/{{ sales_app.key.id() }}">
+            <a class="navbar-brand" href="/">
 
                 {% if logo != None and logo.fileUrl != None %}
                     <img src="{{ logo.fileUrl }}" alt="logo" class="img-responsive"
@@ -176,26 +176,29 @@
                 <ul id="dropdown-menu-list" class="dropdown-menu extended ">
                     <li>
                         <ul class="dropdown-menu-list scroller">
-                            {% for application in apps %}
-                                {% if application.key !=active_app.key %}
-                                    <li class="gb_a">
-                                        <a href="/apps/{{ application.key.id() }}">
-                                          <span class="task">
-                                            <span class="desc">
-                                               {% if application.label =="Relationships" %}
-                                                   <img class="platform_icons" height="50" width="50"
-                                                        src="/static/img/iogrow-application.png">
-                                               {% else %}
-                                                   <img class="platform_icons" height="50" width="50"
-                                                        src="/static/img/admin_console.png">
-                                               {% endif %}
-                                                {{ _(application.label) }}
-                                            </span>
-                                          </span>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
+                            <li class="gb_a">
+                                <a href="/">
+                                  <span class="task">
+                                    <span class="desc">
+                                           <img class="platform_icons" height="50" width="50"
+                                                src="/static/img/iogrow-application.png">
+
+                                        {{ _('Relationships') }}
+                                    </span>
+                                  </span>
+                                </a>
+                            </li>
+                            <li class="gb_a">
+                                <a href="/#/admin/users">
+                                  <span class="task">
+                                    <span class="desc">
+                                           <img class="platform_icons" height="50" width="50"
+                                                src="/static/img/admin_console.png">
+                                        {{ _('Settings') }}
+                                    </span>
+                                  </span>
+                                </a>
+                            </li>
                             <li class="gb_a">
                                 <a href="https://drive.google.com/?tab=mo&authuser=0" target="new">
                           <span class="task">
@@ -488,8 +491,8 @@
     //  return url + '/_ah/api';
     //  }
     //  var ROOT = getRoot();
-   //var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-       var ROOT = '/_ah/api';
+//var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+          var ROOT = '/_ah/api';
     var apisToLoad;
     var callback = function () {
         console.log('callback');
