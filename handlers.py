@@ -1331,7 +1331,7 @@ class Paypal_Paying_Users(BaseHandler, SessionEnabledHandler):
         #PaypalPayedUser
         #valid until
         #all models
-        
+        #update licnces models 
         now = datetime.datetime.now()
         now_plus_month = now + datetime.timedelta(days=30)
         active_until = now_plus_month
