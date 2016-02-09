@@ -15,6 +15,7 @@ from google.appengine.api import app_identity
 import requests
 
 from endpoints_proto_datastore.ndb import EndpointsModel
+from iomodels.crmengine.payment import payment_required
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 import model
 from iomodels.crmengine.tags import Tag, TagSchema
@@ -693,6 +694,7 @@ class Account(EndpointsModel):
         return AccountExportListResponse(items=accounts_list)
 
     @classmethod
+    @payment_required()
     def insert(cls, user_from_email, request):
         account = None
         account_key = None

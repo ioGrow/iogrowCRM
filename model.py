@@ -208,11 +208,12 @@ class Tab(ndb.Model):
     organization = ndb.KeyProperty(required=True)
     tabs = ndb.KeyProperty(repeated=True)
 
+
 class LicenseModel(ndb.Model):
     name = ndb.StringProperty()
     payment_type = ndb.StringProperty()
-    price =  ndb.FloatProperty()
-    is_free =  ndb.BooleanProperty()
+    price = ndb.FloatProperty()
+    is_free = ndb.BooleanProperty()
     duration = ndb.IntegerProperty()
 
 
@@ -377,31 +378,32 @@ class Organization(ndb.Model):
     # Create a standard instance for this organization
     # assign the right license for this organization
     @classmethod
-    def create_instance(cls, org_name, admin, license_type='freemium', promo_code=None):
+    def create_instance(cls,org_name, admin,license_type='freemium',promo_code=None):
 
         # init google drive folders
         # Add the task to the default queue.
         organization = cls(
-            owner=admin.google_user_id,
-            name=org_name,
-            nb_used_licenses=1,
+                        owner=admin.google_user_id,
+                        name=org_name,
+                        nb_used_licenses=1,
+                        subscription=Subscription.get_freemium_subscription().key
         )
         org_key = organization.put()
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')
-        # mp.identify(admin.id)
-        # mp.people_set(admin.id,{
-        # "$email": admin.email,
-        # "$name":admin.google_display_name,
-        # "$created": admin.created_at,
-        # "$organization": admin.organization,
-        # "$language": admin.language
-        # });
+        #mp.identify(admin.id)
+        #mp.people_set(admin.id,{
+           # "$email": admin.email,
+            #"$name":admin.google_display_name,
+            #"$created": admin.created_at,
+            #"$organization": admin.organization,
+            #"$language": admin.language
+           # });
         from iograph import Edge
-        Edge.insert(start_node=org_key, end_node=admin.key, kind='admins', inverse_edge='parents')
+        Edge.insert(start_node=org_key,end_node=admin.key,kind='admins',inverse_edge='parents')
         # cust=stripe.Customer.create(
         #           email= admin.email,
         #           description=admin.email,
-        #           metadata={"organization_key":org_key.urlsafe(), 
+        #           metadata={"organization_key":org_key.urlsafe(),
         #                     "user_id":admin.id,
         #                     "google_display_name":admin.google_display_name,
         #                     "google_public_profile_photo_url":admin.google_public_profile_photo_url,
@@ -414,49 +416,45 @@ class Organization(ndb.Model):
 
         created_tabs = []
         for tab in STANDARD_TABS:
-            created_tab = Tab(name=tab['name'], label=tab['label'], url=tab['url'], icon=tab['icon'],
-                              organization=org_key)
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
             tab_key = created_tab.put()
             created_tabs.append(tab_key)
         # create admin tabs
         admin_tabs = []
         for tab in ADMIN_TABS:
-            created_tab = Tab(name=tab['name'], label=tab['label'], url=tab['url'], icon=tab['icon'],
-                              organization=org_key)
-            tab_key = created_tab.put()
+            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            tab_key =created_tab.put()
             admin_tabs.append(tab_key)
         # create standard apps
         created_apps = []
         sales_app = None
         for app in STANDARD_APPS:
-            created_app = Application(name=app['name'], label=app['label'], url=app['url'], tabs=created_tabs,
-                                      organization=org_key)
+            created_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=created_tabs,organization=org_key)
             app_key = created_app.put()
-            if app['name'] == 'sales':
+            if app['name']=='sales':
                 sales_app = app_key
             created_apps.append(app_key)
         # create admin app
         app = ADMIN_APP
-        admin_app = Application(name=app['name'], label=app['label'], url=app['url'], tabs=admin_tabs,
-                                organization=org_key)
+        admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
         admin_app_key = admin_app.put()
         # create standard profiles
         for profile in STANDARD_PROFILES:
             default_app = sales_app
-            if profile == 'Super Administrator':
+            if profile=='Super Administrator':
                 created_apps.append(admin_app_key)
                 created_tabs.extend(admin_tabs)
             created_profile = Profile(
-                name=profile,
-                apps=created_apps,
-                default_app=default_app,
-                tabs=created_tabs,
-                organization=org_key
-            )
+                                      name=profile,
+                                      apps=created_apps,
+                                      default_app=default_app,
+                                      tabs=created_tabs,
+                                      organization=org_key
+                                    )
             # init admin config
-            if profile == 'Super Administrator':
+            if profile=='Super Administrator':
                 admin_profile_key = created_profile.put()
-                admin.init_user_config(org_key, admin_profile_key)
+                admin.init_user_config(org_key,admin_profile_key)
             else:
                 created_profile.put()
         # create reports details
@@ -464,22 +462,22 @@ class Organization(ndb.Model):
 
         # init default stages,status, default values...
         cls.init_default_values(org_key)
-        if license_type == 'premium_trial':
+        if license_type=='premium_trial':
             # init with premium trial
             print 'premium_trial'
-            cls.init_preemium_trial_licenses(org_key, promo_code)
-        elif license_type == 'life_time_free':
+            cls.init_preemium_trial_licenses(org_key,promo_code)
+        elif license_type=='life_time_free':
             # init with freemium license
             print 'life_time_free'
             cls.init_life_time_free_licenses(org_key)
         else:
             # now, we can continue with the life_time_free license
             cls.init_freemium_licenses(org_key)
-        admin.license_status = 'active'
+        admin.license_status='active'
         now = datetime.datetime.now()
-        now_plus_month = now + datetime.timedelta(days=30)
+        now_plus_month =now+datetime.timedelta(days=30)
         admin.license_expires_on = now_plus_month
-        admin.is_admin = True
+        admin.is_admin=True
         admin.put()
         # taskqueue.add(
         #             url='/workers/initreport',
@@ -1335,7 +1333,7 @@ class User(EndpointsModel):
             }
         )
 
-        Organization.create_instance(request.organization_name, user, 'freemium')
+        Organization.create_instance(request.organization_name, user)
 
     @classmethod
     def check_license(cls, user):

@@ -15,6 +15,7 @@ from iomodels.crmengine.documents import Document, DocumentListResponse
 from iomodels.crmengine.events import Event, EventListResponse, EventInsertRequest, EventSchema
 from iomodels.crmengine.notes import Note, TopicListResponse
 from iomodels.crmengine.opportunitystage import OpportunitystageSchema, Opportunitystage
+from iomodels.crmengine.payment import payment_required
 from iomodels.crmengine.tags import Tag, TagSchema
 from iomodels.crmengine.tasks import Task, TaskListResponse
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
@@ -1211,6 +1212,7 @@ class Opportunity(EndpointsModel):
         )
 
     @classmethod
+    @payment_required()
     def insert(cls, user_from_email, request):
         if request.opportunity_type == 'fixed_bid':
             amount_total = request.amount_total

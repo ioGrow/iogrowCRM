@@ -24,6 +24,7 @@ from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.opportunities import Opportunity
+from iomodels.crmengine.payment import payment_required
 from model import Application, STANDARD_TABS, ADMIN_TABS
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
@@ -913,7 +914,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         else:
             user = GooglePlusConnect.save_token_for_user(
                     user_email,
-                credentials
+                    credentials
             )
         lang = self.get_language().replace('-', '_')
         user.currency_format = lang
@@ -1299,6 +1300,12 @@ class SalesforceImporter(BaseHandler, SessionEnabledHandler):
         self.redirect(authorization_url)
 
 
+class PaymentHandler(SessionEnabledHandler):
+    def get(self):
+        template = jinja_environment.get_template(name='templates/admin/payment/payment.html')
+        self.response.out.write(template.render({}))
+
+
 class SFsubscriber(BaseHandler, SessionEnabledHandler):
     def post(self):
         email = self.request.get("email")
@@ -1325,12 +1332,12 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
 
+
 class ZHconnect(BaseHandler, SessionEnabledHandler):
     def get(self):
         print "params value:", self.request.GET
         new_session = model.CopyLeadZhSession( user=ndb.Key(urlsafe="ahFzfmdjZGMyMDEzLWlvZ3Jvd3ITCxIGU0Z1c2VyGICAgKaKx5kKDA"))
         new_session.put()
-        
 
 
 class SFconnect(BaseHandler, SessionEnabledHandler):
@@ -3805,6 +3812,7 @@ routes = [
     ('/views/admin/synchronisation/edit', EditSynchronisationHandler),
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
     ('/views/admin/delete_all_records', deleteAllRecordHandler),
+    ('/payment', PaymentHandler),
     # billing stuff. hadji hicham . 07/08/2014
     ('/views/billing/list', BillingListHandler),
     ('/views/billing/show', BillingShowHandler),

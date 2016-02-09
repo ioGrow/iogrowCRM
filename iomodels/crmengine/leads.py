@@ -16,6 +16,7 @@ from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
 from protorpc import messages
 
+import config
 import iomessages
 import tweepy
 from endpoints_helper import EndpointsHelper
@@ -330,7 +331,7 @@ class Lead(EndpointsModel):
     source = ndb.StringProperty()
     status = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
-    updated_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
     created_by = ndb.KeyProperty()
     show = ndb.KeyProperty()
     linkedin_profile = ndb.KeyProperty()
@@ -862,7 +863,7 @@ class Lead(EndpointsModel):
         return resp
 
     @classmethod
-    @payment_required
+    @payment_required()
     def insert(cls, user_from_email, request):
         first_name = str(request.firstname).lower()
         last_name = str(request.lastname).lower()
