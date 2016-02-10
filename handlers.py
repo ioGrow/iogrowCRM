@@ -1318,8 +1318,41 @@ class SFsubscriberTest(BaseHandler, SessionEnabledHandler):
             user_info.active_until = now_plus_month
             user_info.created_at = now_plus_month
             user_info.put()
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
+
+
+class GetSfUser(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        email = self.request.get("email")
+        user = model.SFuser.query(model.SFuser.email == email).get()
+        response = {}
+        if user:
+            free_trial_expiration = user.created_at + datetime.timedelta(days=7)
+            now = datetime.datetime.now()
+            days_before_expiration = -1
+            if user.active_until:
+                if user.active_until > now:
+                    days_before_expiration = (user.active_until - now).days + 1
+            else:
+                if now < free_trial_expiration:
+                    days_before_expiration = (user.free_trial_expiration - now).days + 1
+            is_paying = False
+            if user.stripe_id:
+                is_paying = True
+            response = {
+                'firstname': smart_str(user.firstname),
+                'lastname': smart_str(user.lastname),
+                'email': user.email,
+                'days_before_expiration': days_before_expiration,
+                'is_paying': is_paying
+            }
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(response))
+
+
 
 class SFsubscriber(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -3870,6 +3903,7 @@ routes = [
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),
     ('/sf-users', SFusersCSV),
+    ('/copylead/sf/api/users/get', GetSfUser),
     # ('/gmail-copylead',GmailAnalysisForCopylead),
     # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
 
