@@ -24,7 +24,7 @@ from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.opportunities import Opportunity
-from iomodels.crmengine.payment import payment_required
+from iomodels.crmengine.payment import payment_required, Licence
 from model import Application, STANDARD_TABS, ADMIN_TABS
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
@@ -1303,7 +1303,7 @@ class SalesforceImporter(BaseHandler, SessionEnabledHandler):
 class PaymentHandler(SessionEnabledHandler):
     def get(self):
         template = jinja_environment.get_template(name='templates/admin/payment/payment.html')
-        self.response.out.write(template.render({}))
+        self.response.out.write(template.render({'user': self.get_user_from_session()}))
 
 
 class SFsubscriber(BaseHandler, SessionEnabledHandler):
@@ -1333,11 +1333,69 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
         self.response.out.write(json.dumps({}))
 
 
-class ZHconnect(BaseHandler, SessionEnabledHandler):
+class PayPalPayingUsers(BaseHandler, SessionEnabledHandler):
     def get(self):
-        print "params value:", self.request.GET
-        new_session = model.CopyLeadZhSession( user=ndb.Key(urlsafe="ahFzfmdjZGMyMDEzLWlvZ3Jvd3ITCxIGU0Z1c2VyGICAgKaKx5kKDA"))
-        new_session.put()
+
+        # PayPalPayedUser
+        # valid until
+        # all models
+        # update license models
+        now = datetime.datetime.now()
+        now_plus_month = now + datetime.timedelta(days=30)
+        active_until = now_plus_month
+        save_payed_user = model.PaypalPayedUser(
+                txn_type=self.request.get("txn_type"),
+                subscr_id=self.request.get("subscr_id"),
+                last_name=self.request.get("last_name"),
+                mc_currency=self.request.get("mc_currency"),
+                item_name=self.request.get("item_name"),
+                business=self.request.get("business"),
+                amount3=self.request.get("amount3"),
+                verify_sign=self.request.get("verify_sign"),
+                payer_status=self.request.get("payer_status"),
+                payer_email=self.request.get("payer_email"),
+                first_name=self.request.get("first_name"),
+                receiver_email=self.request.get("receiver_email"),
+                payer_id=self.request.get("payer_id"),
+                item_number=self.request.get("item_number"),
+                subscr_date=self.request.get("subscr_date"),
+                address_name=self.request.get("address_name"),
+                ipn_track_id=self.request.get("ipn_track_id"),
+                option_selection1=self.request.get("option_selection1"),
+                option_name1=self.request.get("option_name1"),
+                active_until=active_until
+            ).put()
+        if 'iogrow' in save_payed_user.item_name:
+            licence = Licence()
+
+
+class StripePaymentHandler(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        organization = self.get_user_from_session().organization.get()
+        # Set your secret key: remember to change this to your live secret key in production
+        # See your keys here https://dashboard.stripe.com/account/apikeys
+        stripe.api_key = "sk_test_9WaLpLhVb0W9tKInz6Bs6x6l"
+
+        # Get the credit card details submitted by the form
+        token = self.request.get('token')
+
+        # Create the charge on Stripe's servers - this will charge the user's card
+        try:
+            if not organization.stripe_customer_id:
+                customer = stripe.Customer.create(
+                    source=token,
+                    description=organization.key.id()
+                )
+                organization.stripe_customer_id = customer.id
+                organization.put()
+            charge = stripe.Charge.create(
+                amount=999,  # amount in cents, again
+                currency="usd",
+                customer=organization.stripe_customer_id
+            )
+        except stripe.error.CardError, e:
+            # The card has been declined
+            pass
 
 
 class SFconnect(BaseHandler, SessionEnabledHandler):
@@ -1505,6 +1563,12 @@ class ZohoSignIn(BaseHandler, SessionEnabledHandler):
         template_values = {}
         template = jinja_environment.get_template('templates/zohosingin.html')
         self.response.out.write(template.render(template_values))
+
+class ZohoUser(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        ZohoUser = model.ZohoUser(
+                email=self.request.get("email")
+            ).put()
 
 
 class GoGo(BaseHandler, SessionEnabledHandler):
@@ -1706,7 +1770,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                         type, value, tb = sys.exc_info()
                         print str(value)
                     params = {
-                        'partial_error': true
+                        'partial_error': True
                     }
                     if source:
                         params['source'] = source
@@ -3813,6 +3877,7 @@ routes = [
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
     ('/views/admin/delete_all_records', deleteAllRecordHandler),
     ('/payment', PaymentHandler),
+    ('/account/stripe_card_token', StripePaymentHandler),
     # billing stuff. hadji hicham . 07/08/2014
     ('/views/billing/list', BillingListHandler),
     ('/views/billing/show', BillingShowHandler),
@@ -3847,10 +3912,11 @@ routes = [
     (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter', SalesforceImporter),
     ('/sfconnect', SFconnect),
-    ('/zhconnect', ZHconnect),
+    ('/paypal_paying_users', PayPalPayingUsers),
     ('/sfsubscriber', SFsubscriber),
     ('/sfoauth2callback', SalesforceImporterCallback),
     ('/zohosignin',ZohoSignIn),
+    ('/zohouser',ZohoUser),
     ('/sf_invite', SFinvite),
     ('/invitation_sent', SFinvite),
     ('/stripe', StripeHandler),

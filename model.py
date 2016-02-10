@@ -190,7 +190,33 @@ class ZohoLead(ndb.Model):
     linkedin_url = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     created_by = ndb.KeyProperty()
+class PaypalPayedUser(ndb.Model):
+    txn_type=ndb.StringProperty()
+    subscr_id=ndb.StringProperty()
+    last_name=ndb.StringProperty()
+    mc_currency=ndb.StringProperty()
+    item_name=ndb.StringProperty()
+    business=ndb.StringProperty()
+    amount3=ndb.StringProperty()
+    verify_sign=ndb.StringProperty()
+    payer_status=ndb.StringProperty()
+    payer_email=ndb.StringProperty()
+    first_name=ndb.StringProperty()
+    receiver_email=ndb.StringProperty()
+    payer_id=ndb.StringProperty()
+    item_number=ndb.StringProperty()
+    subscr_date=ndb.StringProperty()
+    address_name=ndb.StringProperty()
+    ipn_track_id=ndb.StringProperty()
+    option_selection1=ndb.StringProperty()
+    option_name1=ndb.StringProperty()
+    active_until=ndb.DateTimeProperty()
 
+
+
+class ZohoUser(ndb.Model):
+    email=ndb.StringProperty()
+    created_at=ndb.DateTimeProperty(auto_now_add=True)
 
 class Application(ndb.Model):
     name = ndb.StringProperty(required=True)
@@ -297,6 +323,7 @@ class Organization(ndb.Model):
     related_to_partner = ndb.KeyProperty()
     should_upgrade = ndb.BooleanProperty()
     subscription = ndb.KeyProperty(kind=Subscription)
+    stripe_customer_id = ndb.StringProperty()
 
     @classmethod
     def init_life_time_free_licenses(cls, org_key):
