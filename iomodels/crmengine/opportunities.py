@@ -1340,8 +1340,8 @@ class Opportunity(EndpointsModel):
                 if contact_key:
                     contact = contact_key.get()
                 else:
-                    firstname = request.contact.split()[0]
-                    lastname = " ".join(request.contact.split()[1:])
+                    firstname = c.contact.split()[0]
+                    lastname = " ".join(c.contact.split()[1:])
                     contact = Contact(
                             firstname=firstname,
                             lastname=lastname,

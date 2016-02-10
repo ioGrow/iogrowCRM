@@ -1295,6 +1295,64 @@ class SalesforceImporter(BaseHandler, SessionEnabledHandler):
         authorization_url = flow.step1_get_authorize_url()
         self.redirect(authorization_url)
 
+class SFsubscriberTest(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        email = self.request.get("email")
+        token_str = self.request.get("token")
+        token = json.loads(token_str)
+        print 'id'
+        print token['id']
+
+        user = model.SFuser.query(model.SFuser.email == email).get()
+        if user:
+            stripe.api_key = "sk_test_K5CtshToZfaN0yiYaBUGHg0a"
+            customer = stripe.Customer.create(
+                source=token['id'],  # obtained from Stripe.js
+                plan="copylead_test_subscription",
+                email=email
+            )
+            user_info = user
+            user_info.stripe_id = customer['id']
+            now = datetime.datetime.now()
+            now_plus_month = now + datetime.timedelta(days=30)
+            user_info.active_until = now_plus_month
+            user_info.created_at = now_plus_month
+            user_info.put()
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps({}))
+
+
+class GetSfUser(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        email = self.request.get("email")
+        user = model.SFuser.query(model.SFuser.email == email).get()
+        response = {}
+        if user:
+            free_trial_expiration = user.created_at + datetime.timedelta(days=7)
+            now = datetime.datetime.now()
+            days_before_expiration = -1
+            if user.active_until:
+                if user.active_until > now:
+                    days_before_expiration = (user.active_until - now).days + 1
+            else:
+                if now < free_trial_expiration:
+                    days_before_expiration = (user.free_trial_expiration - now).days + 1
+            is_paying = False
+            if user.stripe_id:
+                is_paying = True
+            response = {
+                'firstname': smart_str(user.firstname),
+                'lastname': smart_str(user.lastname),
+                'email': user.email,
+                'days_before_expiration': days_before_expiration,
+                'is_paying': is_paying
+            }
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(response))
+
+
 
 class SFsubscriber(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -3829,6 +3887,8 @@ routes = [
     ('/sfimporter', SalesforceImporter),
     ('/sfconnect', SFconnect),
     ('/sfsubscriber', SFsubscriber),
+    ('/sfsubscribertest', SFsubscriberTest),
+
     ('/sfoauth2callback', SalesforceImporterCallback),
     ('/zohosignin',ZohoSignIn),
     ('/sf_invite', SFinvite),
@@ -3843,6 +3903,7 @@ routes = [
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),
     ('/sf-users', SFusersCSV),
+    ('/copylead/sf/api/users/get', GetSfUser),
     # ('/gmail-copylead',GmailAnalysisForCopylead),
     # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
 
