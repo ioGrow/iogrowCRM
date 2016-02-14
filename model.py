@@ -413,7 +413,7 @@ class Organization(ndb.Model):
                         owner=admin.google_user_id,
                         name=org_name,
                         nb_used_licenses=1,
-                        subscription=Subscription.get_freemium_subscription().key
+                        subscription=Subscription.create_freemium_subscription().key
         )
         org_key = organization.put()
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')

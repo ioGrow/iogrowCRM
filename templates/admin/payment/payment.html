@@ -3,17 +3,23 @@
 <head>
     <link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
     <style>
-        body{
+        body {
             font-family: 'Roboto' !important;
         }
+
         /* Plane selctor Style */
         .checkout-plan-select label:hover {
             background: #cbd7df;
+            -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+            -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+            box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
         }
-        .checkout-plan-select input[type=radio]:checked+label>i.fa-check-circle {
+
+        .checkout-plan-select input[type=radio]:checked + label > i.fa-check-circle {
             opacity: 1;
         }
-        .checkout-plan-select input[type=radio]+label>i.fa-check-circle {
+
+        .checkout-plan-select input[type=radio] + label > i.fa-check-circle {
             background: #76b852;
             border-radius: 15px;
             /* font-size: 11px; */
@@ -48,15 +54,20 @@
             font-size: 12px;
             font-weight: 400;
         }
+
         .plan-option > input[type="radio"] {
             position: absolute;
             z-index: 1;
             margin-top: 31px;
             margin-left: 12px;
         }
-        .checkout-plan-select input[type=radio]:checked+label {
+
+        .checkout-plan-select input[type=radio]:checked + label {
             background-color: #168eea;
             color: #fff;
+            -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+            -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+            box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
         }
 
         /* CSS for Credit Card Payment form */
@@ -201,7 +212,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <button class="btn btn-success btn-lg btn-block" type="submit">Start Subscription
+                                    <button class="btn btn-success btn-lg btn-block" type="submit" style="background:
+                                     #168EEA;border-color: #168EEA;-webkit-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.35);
+            -moz-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.35);
+            box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.35);">Start
+                                        Subscription
                                     </button>
                                 </div>
                             </div>
@@ -220,22 +235,22 @@
                     <div class="card-wrapper"></div>
                     <div class="checkout-plan-select" style="margin-top: 10px">
                         <div class="plan-option">
-                            <input id="monthly" name="cycle" type="radio" value="monthly">
+                            <input id="monthly" name="interval" type="radio" value="monthly">
                             <label for="monthly">
                                 <i class="fa fa-check-circle"></i>
-                                $10/mo
+                                $15/mo
                                 <div class="plan-note">
                                     Cancel or get a refund anytime
                                 </div>
                             </label>
                         </div>
                         <div class="plan-option">
-                            <input id="yearly" name="cycle" type="radio" value="annual" checked="checked">
+                            <input id="yearly" name="interval" type="radio" value="yearly" checked="checked">
                             <label for="yearly">
                                 <i class="fa fa-check-circle"></i>
-                                $102/yr
+                                $150/yr
                                 <div class="plan-note">
-                                    Save 15% vs. paying monthly
+                                    Save 16.66% vs. paying monthly
                                 </div>
                             </label>
                         </div>
@@ -243,7 +258,7 @@
                 </div>
 
             </div>
-            <div class="page-header">
+            <!--<div class="page-header">
                 <h3 style="text-align: center;">Or Pay Using Your PayPal Account.
                 </h3>
             </div>
@@ -253,7 +268,7 @@
                     <input type="image" src="https://www.paypalobjects.com/en_US/FR/i/btn/btn_subscribeCC_LG.gif"
                            border="0"
                            name="submit" alt="PayPal - The safer, easier way to pay online!"></div>
-            </form>
+            </form>-->
 
         </div>
     </div>
@@ -320,11 +335,14 @@
                 var token = response.id;
                 // AJAX - you would send 'token' to your server here.
                 $.post('/account/stripe_card_token', {
-                            token: token
+                            token: token,
+                            interval:  $('input:radio:checked[name=interval]').val(),
+                            plane: 'premium'
                         })
                         // Assign handlers immediately after making the request,
                         .done(function (data, textStatus, jqXHR) {
                             $form.find('[type=submit]').html('Payment successful <i class="fa fa-check"></i>').prop('disabled', true);
+                            window.location.replace('/#/leads/new')
                         })
                         .fail(function (jqXHR, textStatus, errorThrown) {
                             $form.find('[type=submit]').html('There was a problem').removeClass('success').addClass('error');
