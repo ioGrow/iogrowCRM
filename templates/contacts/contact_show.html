@@ -268,7 +268,7 @@
                             <div class="row">
                               <div class="col-md-3 col-sm-3 col-xs-3" ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false" style="padding-right:0px;display: table;vertical-align: middle;width: 25%;">
                                     <div class="pic" style="vertical-align:middle;top: -50px;position: absolute;left: 28%;">
-                                            <img alt="<%= contact.firstname %> <%= contact.lastname %>" class="img-responsive profile-photo-large" ng-src="<%=imageSrc%>" style="width: 105px;height: 105px;border: 2px solid white;">
+                                            <img alt="<%= contact.firstname %> <%= contact.lastname %>" class="img-responsive profile-photo-large" err-src="/static/img/avatar_contact.jpg" ng-src="<%=imageSrc%>" style="width: 105px;height: 105px;border: 2px solid white;">
                                             <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn-on-show btn-upload btn-upload-contact" data-toggle="modal">
                                                 <img src="/static/img/upload_logo.png">
                                             </a>

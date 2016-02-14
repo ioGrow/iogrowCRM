@@ -1,0 +1,52 @@
+        var hasContact = false;
+        var hasAccount = false;
+        casee.status = $scope.status_selected.entityKey;
+        if ($scope.searchAccountQuery==undefined) {
+           $scope.searchAccountQuery="";
+        }else{
+            hasAccount = true;
+        };
+        if ($scope.searchContactQuery==undefined) {
+           $scope.searchContactQuery="";
+        }else{
+            hasContact = true;
+        };
+
+        if (typeof(casee.account)=='object'){
+          console.log("if (typeof(casee.account)=='object')");
+            casee.account = casee.account.entityKey;
+            if (typeof(casee.contact)=='object'){
+                casee.contact = casee.contact.entityKey;
+            }
+            else if($scope.searchContactQuery){
+              if($scope.searchContactQuery.length>0){
+                var firstName = $scope.searchContactQuery.split(' ').slice(0, -1).join(' ') || " ";
+                var lastName = $scope.searchContactQuery.split(' ').slice(-1).join(' ') || " ";
+                var params = {
+                              'firstname':  firstName ,
+                              'lastname': lastName ,
+                              'account': casee.account,
+                              'access': casee.access
+                            };
+                Contact.insert($scope,params);
+              }
+            };
+
+
+        }else if($scope.searchAccountQuery.length>0){
+            console.log("if($scope.searchAccountQuery.length>0)");
+            // create a new account with this account name
+            var params = {
+                          'name': $scope.searchAccountQuery,
+                          'access': casee.access
+                        };
+            $scope.casee = casee;
+            Account.insert($scope,params);
+        };
+        if ((hasContact || hasAccount)&&casee.name){
+            console.log("in case save");
+            casee.infonodes = $scope.prepareInfonodes();
+            Case.insert($scope,casee);
+        }else{
+             // should highlight contact and account
+        }
