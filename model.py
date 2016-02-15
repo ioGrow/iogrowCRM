@@ -325,6 +325,12 @@ class Organization(ndb.Model):
     subscription = ndb.KeyProperty(kind=Subscription)
     stripe_customer_id = ndb.StringProperty()
 
+    def get_subscription(self):
+        if not self.subscription:
+            self.subscription = Subscription.create_freemium_subscription()
+            self.put()
+        return self.subscription.get()
+
     @classmethod
     def init_life_time_free_licenses(cls, org_key):
         res = LicenseModel.query(LicenseModel.name == 'life_time_free').fetch(1)
