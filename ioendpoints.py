@@ -2886,6 +2886,7 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(LeadMergeRequest, LeadSchema,
                       path='leads/merge', http_method='POST',
                       name='leads.merge')
+
     def lead_merge(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Lead.merge(request=request, user_from_email=user_from_email)

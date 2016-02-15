@@ -14,6 +14,7 @@ from iomodels.crmengine.casestatuses import CaseStatusSchema
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.events import Event,EventListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
+from iomodels.crmengine.payment import payment_required
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.tasks import Task, TaskListResponse
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
@@ -701,6 +702,7 @@ class Case(EndpointsModel):
                                     nextPageToken = case_next_curs
                                 )
     @classmethod
+    @payment_required()
     def insert(cls,user_from_email,request):
         case = cls(
                     owner = user_from_email.google_user_id,

@@ -654,7 +654,9 @@ accountservices.factory('Contact', function ($http) {
         trackMixpanelAction('CONTACT_INSERT');
         $scope.inProcess(true);
         gapi.client.crmengine.contacts.insertv2(params).execute(function (resp) {
-
+            if (resp.error && resp.error.code == 412){
+                window.location.replace('/payment');
+            }
             if (!resp.code) {
                 if ($scope.contacts == undefined) {
                     $scope.contacts = [];

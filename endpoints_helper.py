@@ -9,6 +9,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import mimetypes
 import os
+
 from django.utils.encoding import smart_str
 from google.appengine.api import search
 from google.appengine.api import memcache
@@ -322,7 +323,7 @@ class EndpointsHelper():
                % token)
         return urlfetch.fetch(url)
     @classmethod
-    def require_iogrow_user(cls):
+    def require_iogrow_user(cls, action=None):
         token =  endpoints.users_id_token._get_token(None)
         token_stored = Tokens.query(Tokens.token==token).get()
         if token_stored:
@@ -345,6 +346,7 @@ class EndpointsHelper():
             raise endpoints.UnauthorizedException(cls.NO_ACCOUNT)
         store_new_token = Tokens(token=token,user=user_from_email.key,email=user_from_email.email)
         store_new_token.put()
+
         return user_from_email
 
     @classmethod

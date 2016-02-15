@@ -167,7 +167,9 @@ Task.get_docs=function($scope,params){
 
       gapi.client.crmengine.tasks.insertv2(params).execute(function(resp) {
 
-
+          if (resp.error && resp.error.code == 412){
+              window.location.replace('/payment');
+          }
          if(!resp.code){
 
           if ($scope.tasks == undefined){

@@ -13,6 +13,7 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.notes import Topic, AuthorSchema,DiscussionAboutSchema
 from model import Userinfo
 from iograph import Edge
+from iomodels.crmengine.payment import payment_required
 from iomodels.crmengine.tags import Tag,TagSchema
 import pprint
 from protorpc import message_types
@@ -387,7 +388,9 @@ class Event(EndpointsModel):
                                 items = event_list,
                                 nextPageToken = event_next_curs
                                 )
+
     @classmethod
+    @payment_required()
     def insert(cls,user_from_email,request):
         author = Userinfo()
         author.google_user_id = user_from_email.google_user_id

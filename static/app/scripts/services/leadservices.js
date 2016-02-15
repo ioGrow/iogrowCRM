@@ -794,7 +794,9 @@ leadservices.factory('Lead', function ($http) {
             'method': 'POST',
             'body': params,
             'callback': (function (resp) {
-                if (!resp.code && resp.id) {
+                if (resp.error && resp.error.code == 412){
+                    window.location.replace('/payment');
+                } if (!resp.code && resp.id) {
                     $scope.leadInserted(resp.id);
                 } else if (!resp.id) {
                     console.log(resp);

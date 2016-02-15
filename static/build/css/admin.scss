@@ -1,6 +1,12 @@
 $admin-sidebar-blue: #169DF3;
 $separator-grey: #E9E9E9;
 
+@import "../../plugins/font-awesome/scss/mixins";
+
+.test{
+  @include border-radius(15)
+}
+
 .admin-sidebar {
   li a {
     padding-right: 0px;
