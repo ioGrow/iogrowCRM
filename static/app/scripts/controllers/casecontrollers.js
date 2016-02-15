@@ -2734,11 +2734,12 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
     $scope.save = function(casee){
           casee.account = casee.account||$scope.searchAccountQuery;
           casee.contact = casee.contact||$scope.searchContactQuery;
-          if (casee.account&&casee.contact) {
+          if (casee.account||casee.contact) {
             casee.status = $scope.status_selected.entityKey;
             casee.infonodes = $scope.prepareInfonodes();
             Case.insert($scope,casee);
           }
+     
      }
       $scope.$watch('casee', function(newVal, oldVal){
           if (newVal.name)  $scope.case_err.name=false;
@@ -2751,13 +2752,11 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
       });
       
       $scope.validateBeforeSave=function(casee){
-           if (!casee.name) $scope.case_err.name=true;
-            else $scope.case_err.name=false;  
+          $scope.case_err.name=$scope.case_err.account=$scope.case_err.contact=false;
+          if (!casee.name) $scope.case_err.name=true;  
           if (!$scope.searchAccountQuery) $scope.case_err.account=true;
-            else $scope.case_err.account=false;
           if (!$scope.searchContactQuery) $scope.case_err.contact=true;
-            else $scope.case_err.contact=false;
-          if (!($scope.case_err.name && ($scope.case_err.account||$scope.case_err.contact)  )) $scope.save(casee)
+          if (!$scope.case_err.name && (!$scope.case_err.account || !$scope.case_err.contact)) $scope.save(casee);
       }
       $scope.caseInserted = function(resp){
          window.location.replace('#/cases');
