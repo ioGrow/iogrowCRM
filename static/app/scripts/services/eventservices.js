@@ -173,6 +173,9 @@ Event.get_docs=function($scope,params){
       $scope.isLoading = true;
 
       gapi.client.crmengine.events.insertv2(params).execute(function(resp) {
+          if (resp.error && resp.error.code == 412){
+              window.location.replace('/payment');
+          }
           if(!resp.code){
             //$('#calendar').fullCalendar( 'refetchEvents' );
             if ($scope.events == undefined){

@@ -1,17 +1,19 @@
 # Standard libs
+import csv
+import datetime
 import json
 import os
-import datetime
-import time
 import re
 import sys
-import csv
+import time
+
 import httplib2
-from webapp2_extras import sessions
-from webapp2_extras import i18n
-import webapp2
 import jinja2
+import webapp2
 from google.appengine._internal.django.utils.encoding import smart_str
+from webapp2_extras import i18n
+from webapp2_extras import sessions
+
 # Google libs
 import endpoints
 from google.appengine.ext import ndb
@@ -24,12 +26,13 @@ from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.opportunities import Opportunity
+from iomodels.crmengine.payment import Subscription
 from model import Application, STANDARD_TABS, ADMIN_TABS
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.appengine import OAuth2Decorator
 # Our libraries
-from endpoints_helper import EndpointsHelper, OAuth2TokenFromCredentials
+from endpoints_helper import EndpointsHelper
 from people import linked_in
 import model
 from iomodels.crmengine.contacts import Contact
@@ -39,11 +42,10 @@ from iomodels.crmengine.documents import Document
 from iomodels.crmengine.tags import Tag
 import iomessages
 from blog import Article
-from iograph import Node, Edge
+from iograph import Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task, AssignedGoogleId
-from iomodels.crmengine.gcontacts import Gcontact
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
 from discovery import Discovery
@@ -55,15 +57,10 @@ from requests.auth import HTTPBasicAuth
 import config as config_urls
 import people
 from intercom import Intercom
-from intercom import User as IntercomUser
 from simple_salesforce import Salesforce
 from semantic.dates import DateService
-import gdata.data
-import gdata.contacts.client
-import gdata.contacts.data
-from gdata.contacts.client import ContactsClient
 from mixpanel import Mixpanel
-
+from iomodels.crmengine import config as app_config
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'libs'))
@@ -913,7 +910,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         else:
             user = GooglePlusConnect.save_token_for_user(
                     user_email,
-                credentials
+                    credentials
             )
         lang = self.get_language().replace('-', '_')
         user.currency_format = lang
@@ -1298,6 +1295,70 @@ class SalesforceImporter(BaseHandler, SessionEnabledHandler):
         authorization_url = flow.step1_get_authorize_url()
         self.redirect(authorization_url)
 
+class SFsubscriberTest(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        email = self.request.get("email")
+        token_str = self.request.get("token")
+        token = json.loads(token_str)
+        print 'id'
+        print token['id']
+
+        user = model.SFuser.query(model.SFuser.email == email).get()
+        if user:
+            stripe.api_key = "sk_test_K5CtshToZfaN0yiYaBUGHg0a"
+            customer = stripe.Customer.create(
+                source=token['id'],  # obtained from Stripe.js
+                plan="copylead_test_subscription",
+                email=email
+            )
+            user_info = user
+            user_info.stripe_id = customer['id']
+            now = datetime.datetime.now()
+            now_plus_month = now + datetime.timedelta(days=30)
+            user_info.active_until = now_plus_month
+            user_info.created_at = now_plus_month
+            user_info.put()
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps({}))
+
+
+class GetSfUser(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        email = self.request.get("email")
+        user = model.SFuser.query(model.SFuser.email == email).get()
+        response = {}
+        if user:
+            free_trial_expiration = user.created_at + datetime.timedelta(days=7)
+            now = datetime.datetime.now()
+            days_before_expiration = -1
+            if user.active_until:
+                if user.active_until > now:
+                    days_before_expiration = (user.active_until - now).days + 1
+            else:
+                if now < free_trial_expiration:
+                    days_before_expiration = (user.free_trial_expiration - now).days + 1
+            is_paying = False
+            if user.stripe_id:
+                is_paying = True
+            response = {
+                'firstname': smart_str(user.firstname),
+                'lastname': smart_str(user.lastname),
+                'email': user.email,
+                'days_before_expiration': days_before_expiration,
+                'is_paying': is_paying
+            }
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(response))
+
+
+
+class PaymentHandler(SessionEnabledHandler):
+    def get(self):
+        template = jinja_environment.get_template(name='templates/admin/payment/payment.html')
+        self.response.out.write(template.render({'user': self.get_user_from_session()}))
+
 
 class SFsubscriber(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -1325,13 +1386,14 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
 
-class Paypal_Paying_Users(BaseHandler, SessionEnabledHandler):
+
+class PayPalPayingUsers(BaseHandler, SessionEnabledHandler):
     def get(self):
 
-        #PaypalPayedUser
-        #valid until
-        #all models
-        #update licnces models 
+        # PayPalPayedUser
+        # valid until
+        # all models
+        # update license models
         now = datetime.datetime.now()
         now_plus_month = now + datetime.timedelta(days=30)
         active_until = now_plus_month
@@ -1358,7 +1420,37 @@ class Paypal_Paying_Users(BaseHandler, SessionEnabledHandler):
                 active_until=active_until
             ).put()
 
-        
+
+class StripePaymentHandler(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        user = self.get_user_from_session()
+        organization = user.organization.get()
+
+        # Set your secret key: remember to change this to your live secret key in production
+        # See your keys here https://dashboard.stripe.com/account/apikeys
+        stripe.api_key = app_config.STRIPE_API_KEY
+
+        # Get the credit card details submitted by the form
+        token = self.request.get('token')
+        interval = self.request.get('interval')
+        premium_subscription = Subscription.create_premium_subscription(interval)
+        # plane = self.request.get('plane')
+
+        # Create the charge on Stripe's servers - this will charge the user's card
+        try:
+            stripe.Plan.retrieve('{}_{}'.format(app_config.PREMIUM, interval))
+            customer = stripe.Customer.create(
+                source=token,
+                description=organization.key.id(),
+                plan='{}_{}'.format(app_config.PREMIUM, interval),
+                email=user.email
+            )
+            organization.stripe_customer_id = customer.id
+            organization.subscription = premium_subscription.key
+            organization.put()
+        except stripe.error.CardError, e:
+            # The card has been declined
+            pass
 
 
 class SFconnect(BaseHandler, SessionEnabledHandler):
@@ -1733,7 +1825,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                         type, value, tb = sys.exc_info()
                         print str(value)
                     params = {
-                        'partial_error': true
+                        'partial_error': True
                     }
                     if source:
                         params['source'] = source
@@ -3839,6 +3931,8 @@ routes = [
     ('/views/admin/synchronisation/edit', EditSynchronisationHandler),
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
     ('/views/admin/delete_all_records', deleteAllRecordHandler),
+    ('/payment', PaymentHandler),
+    ('/account/stripe_card_token', StripePaymentHandler),
     # billing stuff. hadji hicham . 07/08/2014
     ('/views/billing/list', BillingListHandler),
     ('/views/billing/show', BillingShowHandler),
@@ -3873,8 +3967,10 @@ routes = [
     (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter', SalesforceImporter),
     ('/sfconnect', SFconnect),
-    ('/paypal_paying_users', Paypal_Paying_Users),
+    ('/paypal_paying_users', PayPalPayingUsers),
     ('/sfsubscriber', SFsubscriber),
+    ('/sfsubscribertest', SFsubscriberTest),
+
     ('/sfoauth2callback', SalesforceImporterCallback),
     ('/zohosignin',ZohoSignIn),
     ('/zohouser',ZohoUser),
@@ -3890,6 +3986,7 @@ routes = [
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),
     ('/sf-users', SFusersCSV),
+    ('/copylead/sf/api/users/get', GetSfUser),
     # ('/gmail-copylead',GmailAnalysisForCopylead),
     # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
 

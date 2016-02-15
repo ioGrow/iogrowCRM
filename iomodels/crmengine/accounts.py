@@ -15,6 +15,7 @@ from google.appengine.api import app_identity
 import requests
 
 from endpoints_proto_datastore.ndb import EndpointsModel
+from iomodels.crmengine.payment import payment_required
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 import model
 from iomodels.crmengine.tags import Tag, TagSchema
@@ -474,17 +475,16 @@ class Account(EndpointsModel):
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('account.' + p + '= request.' + p)
         account_key_async = account.put_async().get_result()
-        if request.new_contact_key:
-            contact_key = ndb.Key(urlsafe=request.new_contact_key)
-            Edge.insert(start_node=account_key_async,
-                        end_node=contact_key,
-                        kind='contacts',
-                        inverse_edge='parents')
-            EndpointsHelper.update_edge_indexes(
-                parent_key=contact_key,
-                kind='contacts',
-                indexed_edge=str(account_key_async.id())
-            )
+        contact_key = ndb.Key(urlsafe=request.new_contact_key)
+        Edge.insert(start_node=account_key_async,
+                    end_node=contact_key,
+                    kind='contacts',
+                    inverse_edge='parents')
+        EndpointsHelper.update_edge_indexes(
+            parent_key=contact_key,
+            kind='contacts',
+            indexed_edge=str(account_key_async.id())
+        )
         info_nodes = Node.list_info_nodes(account_key_async, None)
         info_nodes_structured = Node.to_structured_data(info_nodes)
         emails = None
@@ -694,6 +694,7 @@ class Account(EndpointsModel):
         return AccountExportListResponse(items=accounts_list)
 
     @classmethod
+    @payment_required()
     def insert(cls, user_from_email, request):
         account = None
         account_key = None

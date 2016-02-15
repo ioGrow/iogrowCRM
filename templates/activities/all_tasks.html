@@ -1205,7 +1205,7 @@
                                         </label>
                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
                                        ng-class= "{task_closed: task.status=='closed'}">
-                                        <%= task.title %>
+                                        <a href="/#/tasks/show/<%= task.id %>"><%= task.title %></a>  
                                        </h4>
                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
                                        <form ng-submit="done_edit_task(task)">

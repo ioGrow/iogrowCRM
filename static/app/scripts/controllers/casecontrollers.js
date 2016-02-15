@@ -2730,7 +2730,7 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
             infonodes.push(infonode);
         });
         return infonodes;
-    };
+    }; 
     $scope.save = function(casee){
           casee.account = casee.account||$scope.searchAccountQuery;
           casee.contact = casee.contact||$scope.searchContactQuery;

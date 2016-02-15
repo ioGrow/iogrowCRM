@@ -80,12 +80,10 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                     $scope.isLoading = false;
                 }
                 ;
-            }
-            ;
+            };
         };
 
         $scope.apply = function () {
-
             if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
                 $scope.$apply();
             }
