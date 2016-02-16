@@ -1517,22 +1517,22 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
 class SFinvite(BaseHandler, SessionEnabledHandler):
     def post(self):
         user_email = self.request.get('user_email')
-        emails = self.request.get_all('emails[]')
-        names = self.request.get_all('names[]')
+        subject = self.request.get('subject')
+        text = self.request.get('text') + ' https://chrome.google.com/webstore/detail/copylead-for-salesforce/gbenffkgdeokfgjbbjibklflbaeelinh'
+        emails = self.request.get('emails')
         try:
             user = model.SFuser.query(model.SFuser.email == user_email).get()
-            i = 0
-            for invitee in emails:
-                invitation = model.SFinvitation(
-                    user_email=user_email,
-                    invitee_email=emails[i],
-                    invitee_name=names[i]
-                )
-                invitation.put()
-                i = i + 1
+            if user:
+                for email in emails:
+                    invitation = model.SFinvitation(
+                        user_email=user_email,
+                        invitee_email=email
+                    )
+                    invitation.put()
+                    sender_address =" %s %s <copylead@gcdc2013-iogrow.appspotmail.com>" % (user.firstname, user.lastname)
+                    mail.send_mail(sender_address, email, subject, text)
         except:
             print 'the user doesnt exist'
-        self.redirect('http://www.lilead.com/#chat_with_us')
 
 
 class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
