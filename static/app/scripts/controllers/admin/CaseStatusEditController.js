@@ -1,7 +1,3 @@
-/**
- * Created by Ghiboub khalid on 9/29/15.
- */
-
 app.controller('CaseStatusEditCtrl', ['$scope', 'Auth', 'Casestatus', function ($scope, Auth, Casestatus) {
     $("ul.page-sidebar-menu li").removeClass("active");
     $("#id_CaseStatus").addClass("active");

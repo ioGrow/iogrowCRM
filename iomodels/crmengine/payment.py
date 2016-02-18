@@ -6,6 +6,7 @@ from endpoints.api_exceptions import PreconditionFailedException
 from google.appengine.ext import ndb
 
 import stripe
+from iomessages import SubscriptionSchema, PlanSchema
 from iomodels.crmengine import config
 from profilehooks import timecall
 
@@ -103,66 +104,36 @@ class Plan(BaseModel):
             elif name not in config.PLANS_NAMES:
                 raise AttributeError('This name is not supported')
             plan.put()
+
             if plan.name == config.PREMIUM:
-                stripe.Plan.create(
-                    amount=plan.price,
-                    interval=interval[:-2],
-                    name='{} {}'.format(interval.capitalize(), config.PREMIUM),
-                    currency='usd',
-                    id='{}_{}'.format(config.PREMIUM, interval))
+                stripe_plan = stripe.Plan.retrieve('{}_{}'.format(config.PREMIUM, interval))
+                if not stripe_plan:
+                    stripe.Plan.create(
+                        amount=plan.price,
+                        interval=interval,
+                        name='{} {}'.format(interval.capitalize(), config.PREMIUM),
+                        currency='usd',
+                        id='{}_{}'.format(config.PREMIUM, interval))
         return plan
 
     def calculate_price(self):
         if self.name == config.PREMIUM:
-            if self.interval == config.YEARLY:
+            if self.interval == config.YEAR:
                 return config.PREMIUM_YEARLY_PRICE
-            elif self.interval == config.MONTHLY:
+            elif self.interval == config.MONTH:
                 return config.PREMIUM_MONTHLY_PRICE
             else:
                 raise AttributeError('This cycle name is not supported')
         if self.name == config.FREEMIUM or self.name == config.LIFE_FREE:
             return 0
 
-
-# class Licence(BaseModel):
-#     plan = ndb.KeyProperty(kind=Plan, required=True)
-#     cycle = ndb.StringProperty(choices=config.PLANES_CYCLES)
-#     price = ndb.FloatProperty()
-#     description = ndb.StringProperty()
-#
-#     @classmethod
-#     def get_freemium_licence(cls):
-#         return cls.get_by_cycle_and_name(config.FREEMIUM)
-#
-#     @classmethod
-#     def get_premium_licence(cls, cycle):
-#         return cls.get_by_cycle_and_name(config.PREMIUM, cycle)
-#
-#     @classmethod
-#     def get_life_free_licence(cls):
-#         return cls.get_by_cycle_and_name(config.LIFE_FREE)
-#
-#     @classmethod
-#     def get_by_cycle_and_name(cls, name, cycle=None):
-#         plan = Plan.get_by_name(name)
-#         licence = cls.query(cls.cycle == cycle, cls.plan == plan.key).get()
-#         if not licence:
-#             if cycle and cycle not in config.PLANES_CYCLES:
-#                 raise AttributeError('This cycle name is not supported')
-#             licence = cls(plan=plan.key, cycle=cycle)
-#             licence.price = licence.calculate_price()
-#             licence.put()
-#         return licence
-#
-#     def calculate_price(self):
-#         if self.plan.get().name == config.PREMIUM:
-#             if self.cycle == config.ANNUAL:
-#                 return config.PREMIUM_ANNUAL_PRICE
-#             elif self.cycle == config.MONTHLY:
-#                 return config.PREMIUM_MONTHLY_PRICE
-#             else:
-#                 raise AttributeError('This cycle name is not supported')
-#         return 0
+    def get_schema(self):
+        return PlanSchema(name=self.name,
+                          price=self.price,
+                          interval=self.interval,
+                          description=self.description,
+                          kinds_to_limit=self.kinds_to_limit,
+                          limit=self.limit)
 
 
 class Subscription(BaseModel):
@@ -170,6 +141,7 @@ class Subscription(BaseModel):
     start_date = ndb.DateTimeProperty(required=True)
     expiration_date = ndb.DateTimeProperty()
     description = ndb.StringProperty()
+    stripe_subscription_id = ndb.StringProperty()
 
     @classmethod
     def create_freemium_subscription(cls):
@@ -198,10 +170,10 @@ class Subscription(BaseModel):
 
     @classmethod
     def _calculate_expiration_date(cls, interval):
-        if interval == config.MONTHLY:
+        if interval == config.MONTH:
             return datetime.datetime.now() + datetime.timedelta(days=30)
-        elif interval == config.YEARLY:
-            return datetime.datetime.now() + datetime.timedelta(days=356)
+        elif interval == config.YEAR:
+            return datetime.datetime.now() + datetime.timedelta(days=365)
         else:
             raise AttributeError('This cycle name is not supported')
 
@@ -210,3 +182,10 @@ class Subscription(BaseModel):
 
     def get_activated_plan(self):
         return self.plan.get()
+
+    def get_schema(self):
+        return SubscriptionSchema(plan=self.plan.get().get_schema(),
+                                  start_date=self.start_date.strftime('%Y-%m-%d'),
+                                  expiration_date=None if not self.expiration_date
+                                                       else self.expiration_date.strftime('%Y-%m-%d'),
+                                  description=self.description)

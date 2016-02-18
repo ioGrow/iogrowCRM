@@ -1,7 +1,7 @@
 var caseservices = angular.module('crmEngine.caseservices',[]);
 // Base sercice (create, delete, get)
 
-accountservices.factory('Case', function() {
+accountservices.factory('Case', function($rootScope) {
 
   var Case = function(data) {
     angular.extend(this, data);
@@ -296,7 +296,7 @@ accountservices.factory('Case', function() {
      $scope.inProcess(true);
       gapi.client.crmengine.cases.insertv2(casee).execute(function(resp) {
           if (resp.error && resp.error.code == 412){
-              window.location.replace('/payment');
+              window.location.replace($rootScope.subscription_url);
           }
          if(!resp.code){
           if ($scope.cases == undefined){

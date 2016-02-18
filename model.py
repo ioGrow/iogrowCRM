@@ -60,28 +60,28 @@ VISIBLE_ACTIONS = [
 
 STANDARD_TABS = [
     # {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
-                {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
-                {'name': 'Opportunities','label': 'Opportunities','url':'/#/opportunities/','icon':'money'},
-                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
-                {'name': 'Accounts','label': 'Accounts','url':'/#/accounts/','icon':'building'},
-                {'name': 'Cases','label': 'Cases','url':'/#/cases/','icon':'suitcase'},
-                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
-                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
+    {'name': 'Leads', 'label': 'Leads', 'url': '/#/leads/', 'icon': 'road'},
+    {'name': 'Opportunities', 'label': 'Opportunities', 'url': '/#/opportunities/', 'icon': 'money'},
+    {'name': 'Contacts', 'label': 'Contacts', 'url': '/#/contacts/', 'icon': 'group'},
+    {'name': 'Accounts', 'label': 'Accounts', 'url': '/#/accounts/', 'icon': 'building'},
+    {'name': 'Cases', 'label': 'Cases', 'url': '/#/cases/', 'icon': 'suitcase'},
+    {'name': 'Tasks', 'label': 'Tasks', 'url': '/#/tasks/', 'icon': 'check'},
+    {'name': 'Calendar', 'label': 'Calendar', 'url': '/#/calendar/', 'icon': 'calendar'}
     # {'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
-                ]
+]
 EARLY_BIRD_TABS = [
-                {'name': 'Contacts','label': 'Contacts','url':'/#/contacts/','icon':'group'},
-                {'name': 'Leads','label': 'Leads','url':'/#/leads/','icon':'road'},
-                {'name': 'Tasks','label': 'Tasks','url':'/#/tasks/','icon':'check'},
-                {'name': 'Calendar','label': 'Calendar','url':'/#/calendar/','icon':'calendar'}
-                ]
+    {'name': 'Contacts', 'label': 'Contacts', 'url': '/#/contacts/', 'icon': 'group'},
+    {'name': 'Leads', 'label': 'Leads', 'url': '/#/leads/', 'icon': 'road'},
+    {'name': 'Tasks', 'label': 'Tasks', 'url': '/#/tasks/', 'icon': 'check'},
+    {'name': 'Calendar', 'label': 'Calendar', 'url': '/#/calendar/', 'icon': 'calendar'}
+]
 STANDARD_PROFILES = ['Super Administrator', 'Standard User']
-STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url':'/#/leads/'}]
-STANDARD_OBJECTS = ['Account','Contact','Opportunity','Lead','Case','Campaign']
+STANDARD_APPS = [{'name': 'sales', 'label': 'Relationships', 'url': '/#/leads/'}]
+STANDARD_OBJECTS = ['Account', 'Contact', 'Opportunity', 'Lead', 'Case', 'Campaign']
 ADMIN_TABS = [
     {'name': 'Company', 'label': 'Company', 'url': '/#/admin/company', 'icon': 'building'},
     {'name': 'Users', 'label': 'Users', 'url': '/#/admin/users', 'icon': 'group'},
-    # {'name': 'Groups','label': 'Groups','url':'/#/admin/groups','icon':'group'},
+    {'name': 'Billing', 'label': 'Billing', 'url': '/#/admin/billing', 'icon': 'credit-card'},
     {'name': 'EmailSignature', 'label': 'Email Signature', 'url': '/#/admin/email_signature', 'icon': 'envelope'},
 
     # {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'},
@@ -93,9 +93,9 @@ ADMIN_TABS = [
     # {'name': 'Synchronisation','label': 'Synchronisation','url':'/#/admin/synchronisation','icon':'refresh'},
     {'name': 'CustomFields', 'label': 'Custom Fields', 'url': '/#/admin/custom_fields/1', 'icon': 'list-alt'},
     # {'name': 'DataTransfer', 'label': 'Data Transfer', 'url': '/#/admin/data_transfer', 'icon': 'cloud'},
-     {'name': 'DeleteAllRecords', 'label': 'Delete Records', 'url': '/#/admin/delete_all_records', 'icon': 'trash-o'},
+    {'name': 'DeleteAllRecords', 'label': 'Delete Records', 'url': '/#/admin/delete_all_records', 'icon': 'trash-o'},
 
-            ]
+]
 ADMIN_APP = {'name': 'admin', 'label': 'Settings', 'url': '/#/admin/users'}
 """Iogrowlive_APP = {'name':'iogrowLive','label': 'i/oGrow Live','url':'/#/live/shows'}
 
@@ -103,24 +103,24 @@ Iogrowlive_TABS = [{'name': 'Shows','label': 'Shows','url':'/#/live/shows'},{'na
 {'name': 'Product_videos','label': 'Product Videos','url':'/#/live/product_videos'},{'name': 'Customer_Stories','label': 'Customer stories','url':'/#/live/customer_stories'},
 {'name': 'Feedbacks','label': 'Feedbacks','url':'/#/live/feedbacks'},{'name': 'Leads','label': 'Leads','url':'/#/leads/'}]"""
 Default_Opp_Stages = [
-                    {'name':'Incoming','probability':5,'stage_number':1},
-                    {'name':'Qualified','probability':10,'stage_number':2},
-                    {'name':'Need Analysis','probability':40,'stage_number':3},
-                    {'name':'Negotiating','probability':80,'stage_number':4},
-                    {'name':'Close won','probability':100,'stage_number':0},
-                    {'name':'Close lost','probability':0,'stage_number':0}
-                    ]
-Default_Case_Status =[
-                    {'status':'pending'},
-                    {'status':'open'},
-                    {'status':'closed'}
-                    ]
-Default_Lead_Status =[
-                    {'status':'New'},
-                    {'status':'Working'},
-                    {'status':'Unqualified'},
-                    {'status':'Closed converted'}
-                    ]
+    {'name': 'Incoming', 'probability': 5, 'stage_number': 1},
+    {'name': 'Qualified', 'probability': 10, 'stage_number': 2},
+    {'name': 'Need Analysis', 'probability': 40, 'stage_number': 3},
+    {'name': 'Negotiating', 'probability': 80, 'stage_number': 4},
+    {'name': 'Close won', 'probability': 100, 'stage_number': 0},
+    {'name': 'Close lost', 'probability': 0, 'stage_number': 0}
+]
+Default_Case_Status = [
+    {'status': 'pending'},
+    {'status': 'open'},
+    {'status': 'closed'}
+]
+Default_Lead_Status = [
+    {'status': 'New'},
+    {'status': 'Working'},
+    {'status': 'Unqualified'},
+    {'status': 'Closed converted'}
+]
 FOLDERS = {
     'Accounts': 'accounts_folder',
     'Contacts': 'contacts_folder',
@@ -131,8 +131,8 @@ FOLDERS = {
 folders = {}
 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
-#stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-stripe.api_key ="sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+# stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 
 
 class Tokens(ndb.Model):
@@ -147,6 +147,7 @@ class Partner(ndb.Model):
     email = ndb.StringProperty()
     iogrow_contact_id = ndb.StringProperty()
 
+
 class Coupon(ndb.Model):
     code = ndb.StringProperty()
     related_to_partner = ndb.KeyProperty()
@@ -154,8 +155,9 @@ class Coupon(ndb.Model):
     is_available = ndb.BooleanProperty(default=True)
 
     @classmethod
-    def get_by_code(cls,code):
-        return cls.query(cls.code==code).get()
+    def get_by_code(cls, code):
+        return cls.query(cls.code == code).get()
+
 
 class SFuser(ndb.Model):
     firstname = ndb.StringProperty()
@@ -166,12 +168,14 @@ class SFuser(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
+
 class SFinvitation(ndb.Model):
     user_email = ndb.StringProperty()
     invitee_email = ndb.StringProperty()
     invitee_name = ndb.StringProperty()
     status = ndb.StringProperty(default='pending')
     invited_at = ndb.DateTimeProperty(auto_now_add=True)
+
 
 class SFLead(ndb.Model):
     firstname = ndb.StringProperty()
@@ -182,6 +186,7 @@ class SFLead(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     created_by = ndb.KeyProperty()
 
+
 class ZohoLead(ndb.Model):
     firstname = ndb.StringProperty()
     lastname = ndb.StringProperty()
@@ -190,33 +195,35 @@ class ZohoLead(ndb.Model):
     linkedin_url = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     created_by = ndb.KeyProperty()
-class PaypalPayedUser(ndb.Model):
-    txn_type=ndb.StringProperty()
-    subscr_id=ndb.StringProperty()
-    last_name=ndb.StringProperty()
-    mc_currency=ndb.StringProperty()
-    item_name=ndb.StringProperty()
-    business=ndb.StringProperty()
-    amount3=ndb.StringProperty()
-    verify_sign=ndb.StringProperty()
-    payer_status=ndb.StringProperty()
-    payer_email=ndb.StringProperty()
-    first_name=ndb.StringProperty()
-    receiver_email=ndb.StringProperty()
-    payer_id=ndb.StringProperty()
-    item_number=ndb.StringProperty()
-    subscr_date=ndb.StringProperty()
-    address_name=ndb.StringProperty()
-    ipn_track_id=ndb.StringProperty()
-    option_selection1=ndb.StringProperty()
-    option_name1=ndb.StringProperty()
-    active_until=ndb.DateTimeProperty()
 
+
+class PaypalPayedUser(ndb.Model):
+    txn_type = ndb.StringProperty()
+    subscr_id = ndb.StringProperty()
+    last_name = ndb.StringProperty()
+    mc_currency = ndb.StringProperty()
+    item_name = ndb.StringProperty()
+    business = ndb.StringProperty()
+    amount3 = ndb.StringProperty()
+    verify_sign = ndb.StringProperty()
+    payer_status = ndb.StringProperty()
+    payer_email = ndb.StringProperty()
+    first_name = ndb.StringProperty()
+    receiver_email = ndb.StringProperty()
+    payer_id = ndb.StringProperty()
+    item_number = ndb.StringProperty()
+    subscr_date = ndb.StringProperty()
+    address_name = ndb.StringProperty()
+    ipn_track_id = ndb.StringProperty()
+    option_selection1 = ndb.StringProperty()
+    option_name1 = ndb.StringProperty()
+    active_until = ndb.DateTimeProperty()
 
 
 class ZohoUser(ndb.Model):
-    email=ndb.StringProperty()
-    created_at=ndb.DateTimeProperty(auto_now_add=True)
+    email = ndb.StringProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+
 
 class Application(ndb.Model):
     name = ndb.StringProperty(required=True)
@@ -225,6 +232,7 @@ class Application(ndb.Model):
     icon = ndb.StringProperty()
     tabs = ndb.KeyProperty(repeated=True)
     organization = ndb.KeyProperty(required=True)
+
 
 class Tab(ndb.Model):
     name = ndb.StringProperty(required=True)
@@ -331,6 +339,14 @@ class Organization(ndb.Model):
             self.put()
         return self.subscription.get()
 
+    def set_subscription(self, new_subscription):
+        if not isinstance(new_subscription, Subscription):
+            raise ValueError('sub parameter should be of type {} '.format(Subscription.__class__))
+        if self.subscription:
+            self.subscription.delete()
+        self.subscription = new_subscription.key
+        self.put()
+
     @classmethod
     def init_life_time_free_licenses(cls, org_key):
         res = LicenseModel.query(LicenseModel.name == 'life_time_free').fetch(1)
@@ -411,28 +427,28 @@ class Organization(ndb.Model):
     # Create a standard instance for this organization
     # assign the right license for this organization
     @classmethod
-    def create_instance(cls,org_name, admin,license_type='freemium',promo_code=None):
+    def create_instance(cls, org_name, admin, license_type='freemium', promo_code=None):
 
         # init google drive folders
         # Add the task to the default queue.
         organization = cls(
-                        owner=admin.google_user_id,
-                        name=org_name,
-                        nb_used_licenses=1,
-                        subscription=Subscription.create_freemium_subscription().key
+            owner=admin.google_user_id,
+            name=org_name,
+            nb_used_licenses=1,
+            subscription=Subscription.create_freemium_subscription().key
         )
         org_key = organization.put()
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')
-        #mp.identify(admin.id)
-        #mp.people_set(admin.id,{
-           # "$email": admin.email,
-            #"$name":admin.google_display_name,
-            #"$created": admin.created_at,
-            #"$organization": admin.organization,
-            #"$language": admin.language
-           # });
+        # mp.identify(admin.id)
+        # mp.people_set(admin.id,{
+        # "$email": admin.email,
+        # "$name":admin.google_display_name,
+        # "$created": admin.created_at,
+        # "$organization": admin.organization,
+        # "$language": admin.language
+        # });
         from iograph import Edge
-        Edge.insert(start_node=org_key,end_node=admin.key,kind='admins',inverse_edge='parents')
+        Edge.insert(start_node=org_key, end_node=admin.key, kind='admins', inverse_edge='parents')
         # cust=stripe.Customer.create(
         #           email= admin.email,
         #           description=admin.email,
@@ -449,45 +465,49 @@ class Organization(ndb.Model):
 
         created_tabs = []
         for tab in STANDARD_TABS:
-            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
+            created_tab = Tab(name=tab['name'], label=tab['label'], url=tab['url'], icon=tab['icon'],
+                              organization=org_key)
             tab_key = created_tab.put()
             created_tabs.append(tab_key)
         # create admin tabs
         admin_tabs = []
         for tab in ADMIN_TABS:
-            created_tab = Tab(name=tab['name'],label=tab['label'],url=tab['url'],icon=tab['icon'],organization=org_key)
-            tab_key =created_tab.put()
+            created_tab = Tab(name=tab['name'], label=tab['label'], url=tab['url'], icon=tab['icon'],
+                              organization=org_key)
+            tab_key = created_tab.put()
             admin_tabs.append(tab_key)
         # create standard apps
         created_apps = []
         sales_app = None
         for app in STANDARD_APPS:
-            created_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=created_tabs,organization=org_key)
+            created_app = Application(name=app['name'], label=app['label'], url=app['url'], tabs=created_tabs,
+                                      organization=org_key)
             app_key = created_app.put()
-            if app['name']=='sales':
+            if app['name'] == 'sales':
                 sales_app = app_key
             created_apps.append(app_key)
         # create admin app
         app = ADMIN_APP
-        admin_app = Application(name=app['name'],label=app['label'],url=app['url'],tabs=admin_tabs,organization=org_key)
+        admin_app = Application(name=app['name'], label=app['label'], url=app['url'], tabs=admin_tabs,
+                                organization=org_key)
         admin_app_key = admin_app.put()
         # create standard profiles
         for profile in STANDARD_PROFILES:
             default_app = sales_app
-            if profile=='Super Administrator':
+            if profile == 'Super Administrator':
                 created_apps.append(admin_app_key)
                 created_tabs.extend(admin_tabs)
             created_profile = Profile(
-                                      name=profile,
-                                      apps=created_apps,
-                                      default_app=default_app,
-                                      tabs=created_tabs,
-                                      organization=org_key
-                                    )
+                name=profile,
+                apps=created_apps,
+                default_app=default_app,
+                tabs=created_tabs,
+                organization=org_key
+            )
             # init admin config
-            if profile=='Super Administrator':
+            if profile == 'Super Administrator':
                 admin_profile_key = created_profile.put()
-                admin.init_user_config(org_key,admin_profile_key)
+                admin.init_user_config(org_key, admin_profile_key)
             else:
                 created_profile.put()
         # create reports details
@@ -495,22 +515,22 @@ class Organization(ndb.Model):
 
         # init default stages,status, default values...
         cls.init_default_values(org_key)
-        if license_type=='premium_trial':
+        if license_type == 'premium_trial':
             # init with premium trial
             print 'premium_trial'
-            cls.init_preemium_trial_licenses(org_key,promo_code)
-        elif license_type=='life_time_free':
+            cls.init_preemium_trial_licenses(org_key, promo_code)
+        elif license_type == 'life_time_free':
             # init with freemium license
             print 'life_time_free'
             cls.init_life_time_free_licenses(org_key)
         else:
             # now, we can continue with the life_time_free license
             cls.init_freemium_licenses(org_key)
-        admin.license_status='active'
+        admin.license_status = 'active'
         now = datetime.datetime.now()
-        now_plus_month =now+datetime.timedelta(days=30)
+        now_plus_month = now + datetime.timedelta(days=30)
         admin.license_expires_on = now_plus_month
-        admin.is_admin=True
+        admin.is_admin = True
         admin.put()
         # taskqueue.add(
         #             url='/workers/initreport',
@@ -1860,14 +1880,15 @@ class ProxyServer(ndb.Model):
 
 
 class CopyLeadSfSession(ndb.Model):
-    #access_token = ndb.StringProperty()
+    # access_token = ndb.StringProperty()
     user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
-class CopyLeadZhSession(ndb.Model):
-    access_token=ndb.StringProperty
-    user=ndb.KeyProperty()
-    created_at=ndb.DateTimeProperty(auto_now_add=True)
 
+
+class CopyLeadZhSession(ndb.Model):
+    access_token = ndb.StringProperty
+    user = ndb.KeyProperty()
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
 
     @classmethod
     def get_by_access_token(cls, access_token):

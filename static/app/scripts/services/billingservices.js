@@ -1,0 +1,41 @@
+function notFoundHandle(resp, $scope) {
+    if (resp.code === 401) {
+        if (resp.message === "Invalid grant") {
+            $scope.refreshToken();
+        }
+    };
+}
+angular.module('crmEngine.billingservices', []).factory('Billing',
+    function () {
+        var Billing = function (data) {
+            angular.extend(this, data);
+        };
+        Billing.getSubscription = function ($scope) {
+            $scope.isLoading = true;
+            gapi.client.crmengine.subscription.get({}).execute(
+                function (resp) {
+                    if (!resp.code) {
+                        $scope.subscription = resp;
+                    } else {
+                        notFoundHandle(resp, $scope);
+                    }
+                    $scope.isLoading = false;
+                    $scope.apply();
+                });
+        };
+        Billing.disableAutoRenew = function ($scope) {
+            $scope.isLoading = true;
+            $scope.apply();
+            gapi.client.crmengine.subscription.delete({}).execute(
+                function (resp) {
+                    if (!resp.code) {
+                        window.location.reload();
+                    } else {
+                        notFoundHandle(resp, $scope);
+                    }
+                    $scope.isLoading = false;
+                    $scope.apply();
+                })
+        };
+        return Billing;
+    });

@@ -6,7 +6,7 @@
         </a>
         <ul class="dropdown-menu">
             {% for application in apps %}
-                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
+            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
             {% endfor %}
         </ul>
     </div>
@@ -51,7 +51,7 @@
                 <i class="fa fa-building" style="font-size: 21px;"></i>{{ _('Details') }}</h3>
 
             <div class="news-block-tags relatedBlock purchaseLicenses">
-                <form  id="billing-form" >
+                <form id="billing-form">
                     <div id="gmap_canvas" style="width:100%;height:300px; display:none"></div>
                     <div class="form-inline newLeadForm margin-bottom-10" role="form">
                         <div class="input-icon">
@@ -61,11 +61,11 @@
                         </div>
                     </div>
                     <div class="row  margin-bottom-10">
-                        <div class="col-md-6 firstNameLeft" >
+                        <div class="col-md-6 firstNameLeft">
                             <input ng-model="billing.contact_firstname" type="text" id="firstName"
                                    class="form-control sm-margin-bottom-10" placeholder="{{ _('First Name') }}">
                         </div>
-                        <div class="col-md-6 lastNameRight" >
+                        <div class="col-md-6 lastNameRight">
                             <input type="text" id="lastName" ng-model="billing.contact_lastname"
                                    class="form-control" placeholder="{{ _('Last Name') }}">
                         </div>
@@ -85,7 +85,7 @@
                         <div class="input-icon" ng-class="{ 'has-error': billingError.email }">
                             <i class="fa fa-envelope"></i>
                             <input class="form-control" ng-model="billing.email" placeholder="{{ _('Email address') }}"
-                                   pattern="[A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4}" type="email" >
+                                   pattern="[A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4}" type="email">
                         </div>
                     </div>
                     <div class="form-inline newLeadForm  margin-bottom-10" role="form">
@@ -95,20 +95,19 @@
                                    placeholder="{{ _('Phone number') }}" pattern="^([0|\+[0-9]{1,5})?([1-9][0-9]{9})$">
                         </div>
                     </div>
-                    <button type="submit" style="display: none">ok</button>
                 </form>
             </div>
-           <!--  <h3 class="billingTitle">
-                <i class="fa fa-sitemap" style="font-size: 21px;"></i>{{ _('Organization') }}
-            </h3> -->
+            <!--  <h3 class="billingTitle">
+                 <i class="fa fa-sitemap" style="font-size: 21px;"></i>{{ _('Organization') }}
+             </h3> -->
             <div class="news-block-tags relatedBlock purchaseLicenses">
-                   <!--  <a class="btn blue"  ng-click="submit()" style="margin-right: 15px;">
-                        <i class="fa fa-chain"></i> Join new organization
-                    </a> -->
-                    <!-- <a class="btn red  "  ng-click="beforedeleteOrganization()">
-                        <i class="fa fa-trash-o"></i> Delete organization
-                    </a> -->
-                    <div class="clearfix"></div>
+                <!--  <a class="btn blue"  ng-click="submit()" style="margin-right: 15px;">
+                     <i class="fa fa-chain"></i> Join new organization
+                 </a> -->
+                <!-- <a class="btn red  "  ng-click="beforedeleteOrganization()">
+                    <i class="fa fa-trash-o"></i> Delete organization
+                </a> -->
+                <div class="clearfix"></div>
             </div>
         </div>
     </div>
@@ -148,37 +147,40 @@
             <div style="font-size: 12px"><b>{{ _('Upload a custom image') }} </b> <br>
                 {{ _('Your custom logo will be displayed for all services in the header') }}. <br/>
                 {{ _('The image file should be in PNG or GIF format, up to 144 x 32 pixels') }}. <br/>
-                {{ _('Uploading a new logo will replace your current one across all iogrow products and for all users') }}.
+                {{ _('Uploading a new logo will replace your current one across all iogrow products and for all users')
+                }}.
             </div>
             <a class="btn default margin-top-10 col-md-offset-4" ng-click="createPickerUploader()">
                 {{ _('Choose a file') }} </a>
         </div>
     </div>
 </div>
-<div id="beforedeleteOrganization" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel" class="modal-title">Delete Organization </h3>
-          </div>
-          <div class="modal-body">
-             <form id="seletesho" name="deletesho" class="form-horizontal">
-              <fieldset>
+<div id="beforedeleteOrganization" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">Delete Organization </h3>
+            </div>
+            <div class="modal-body">
+                <form id="seletesho" name="deletesho" class="form-horizontal">
+                    <fieldset>
 
-              <p>{{_("By deleting your organization, all your data will be deleted and you will be automaticly logging out !")}}.</p>
+                        <p>{{_("By deleting your organization, all your data will be deleted and you will be automaticly
+                            logging out !")}}.</p>
 
-             </fieldset>
+                    </fieldset>
 
-          </div>
-          <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-            <input  ng-click="deleteOrganization()" type="submit" class="btn red" value="Delete">
-            <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-          </div>
-           </form>
-      </div>
+                <input ng-click="deleteOrganization()" type="submit" class="btn red" value="Delete">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+            </div>
+            </form>
+        </div>
     </div>
-   </div>
+</div>
 <!-- end Main content

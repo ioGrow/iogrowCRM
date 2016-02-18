@@ -25,6 +25,7 @@ module.exports = function (grunt) {
                     'static/app/scripts/services/taskservices.js',
                     'static/app/scripts/services/eventservices.js',
                     'static/app/scripts/services/userservices.js',
+                    'static/app/scripts/services/billingservices.js',
                     'static/app/scripts/services/groupservices.js',
                     'static/app/scripts/services/noteservices.js', 'static/app/scripts/services/commentservices.js',
                     'static/app/scripts/services/settingservices.js', 'static/app/scripts/services/importservices.js',
@@ -36,7 +37,6 @@ module.exports = function (grunt) {
                 dest: 'static/build/js/sync_ctrls_sers_scripts.js',
             }
         },
-
         cssmin: {
             /*css: {
              files: {
@@ -122,6 +122,7 @@ module.exports = function (grunt) {
                     'static/app/scripts/services/taskservices.js',
                     'static/app/scripts/services/eventservices.js',
                     'static/app/scripts/services/userservices.js',
+                    'static/app/scripts/services/billingservices.js',
                     'static/app/scripts/services/groupservices.js',
                     'static/app/scripts/services/noteservices.js',
                     'static/app/scripts/services/commentservices.js',

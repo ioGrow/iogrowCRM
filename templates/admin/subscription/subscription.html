@@ -94,6 +94,7 @@
             color: red;
             padding: 2px 8px;
             margin-top: 2px;
+            text-align: center;
         }
 
         .credit-card-box label {
@@ -133,10 +134,11 @@
         <img src="/static/build/img/iogrow-logo-app.png" alt="logo" class="img-responsive">
     </div>
     <div class="panel panel-default">
-        <div class="page-header">
-            <h3 style="text-align: center;">Pay Now With Your Credit Card.
-            </h3>
-        </div>
+        <!--<div class="page-header">-->
+            <h1 style="text-align: center;margin-bottom: 40px">
+                Pay securely With Your Credit Card
+            </h1>
+        <!--</div>-->
         <div class="panel-body">
             <div class="demo-container row">
                 <!-- CREDIT CARD FORM STARTS HERE -->
@@ -235,8 +237,8 @@
                     <div class="card-wrapper"></div>
                     <div class="checkout-plan-select" style="margin-top: 10px">
                         <div class="plan-option">
-                            <input id="monthly" name="interval" type="radio" value="monthly">
-                            <label for="monthly">
+                            <input id="month" name="interval" type="radio" value="month">
+                            <label for="month">
                                 <i class="fa fa-check-circle"></i>
                                 $15/mo
                                 <div class="plan-note">
@@ -245,8 +247,8 @@
                             </label>
                         </div>
                         <div class="plan-option">
-                            <input id="yearly" name="interval" type="radio" value="yearly" checked="checked">
-                            <label for="yearly">
+                            <input id="year" name="interval" type="radio" value="year" checked="checked">
+                            <label for="year">
                                 <i class="fa fa-check-circle"></i>
                                 $150/yr
                                 <div class="plan-note">
@@ -334,20 +336,23 @@
                 console.log(response.card);
                 var token = response.id;
                 // AJAX - you would send 'token' to your server here.
-                $.post('/account/stripe_card_token', {
+                $.post('/stripe/subscription', {
                             token: token,
                             interval:  $('input:radio:checked[name=interval]').val(),
                             plane: 'premium'
                         })
                         // Assign handlers immediately after making the request,
                         .done(function (data, textStatus, jqXHR) {
+                            console.log(data);
+                            console.log(textStatus);
+                            console.log(jqXHR);
                             $form.find('[type=submit]').html('Payment successful <i class="fa fa-check"></i>').prop('disabled', true);
                             window.location.replace('/#/leads/new')
                         })
                         .fail(function (jqXHR, textStatus, errorThrown) {
                             $form.find('[type=submit]').html('There was a problem').removeClass('success').addClass('error');
                             /* Show Stripe errors on the form */
-                            $form.find('.payment-errors').text('Try refreshing the page and trying again.');
+                            $form.find('.payment-errors').text(jqXHR.responseText);
                             $form.find('.payment-errors').closest('.row').show();
                         });
             }
