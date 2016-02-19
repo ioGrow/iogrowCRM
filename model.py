@@ -167,6 +167,8 @@ class SFinvitation(ndb.Model):
     invitee_email = ndb.StringProperty()
     invitee_name = ndb.StringProperty()
     status = ndb.StringProperty(default='pending')
+    opened = ndb.IntegerProperty(default=0)
+    clicked = ndb.IntegerProperty(default=0)
     invited_at = ndb.DateTimeProperty(auto_now_add=True)
 
 class SFLead(ndb.Model):
