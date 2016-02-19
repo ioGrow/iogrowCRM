@@ -1516,23 +1516,33 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
 
 class SFinvite(BaseHandler, SessionEnabledHandler):
     def post(self):
-        user_email = self.request.get('user_email')
-        subject = self.request.get('subject')
-        text = self.request.get('text') + ' https://chrome.google.com/webstore/detail/copylead-for-salesforce/gbenffkgdeokfgjbbjibklflbaeelinh'
-        emails = self.request.get('emails')
-        try:
-            user = model.SFuser.query(model.SFuser.email == user_email).get()
-            if user:
-                for email in emails:
-                    invitation = model.SFinvitation(
-                        user_email=user_email,
-                        invitee_email=email
-                    )
-                    invitation.put()
-                    sender_address =" %s %s <copylead@gcdc2013-iogrow.appspotmail.com>" % (user.firstname, user.lastname)
-                    mail.send_mail(sender_address, email, subject, text)
-        except:
-            print 'the user doesnt exist'
+        data = json.loads(str(self.request.body))
+        print data
+        user_email = data['user_email']
+        subject = data['subject']
+        text = data['text'] + ' https://chrome.google.com/webstore/detail/copylead-for-salesforce/gbenffkgdeokfgjbbjibklflbaeelinh'
+        emails = data['emails']
+        print user_email
+        print emails
+        print subject
+
+        # try:
+        user = model.SFuser.query(model.SFuser.email == user_email).get()
+        if user:
+            for email in emails:
+                invitation = model.SFinvitation(
+                    user_email=user_email,
+                    invitee_email=email
+                )
+                invitation.put()
+                sender_address =" %s %s <copylead@gcdc2013-iogrow.appspotmail.com>" % (user.firstname, user.lastname)
+                mail.send_mail(sender_address, email, subject, text)
+        # except:
+        #     print 'the user doesnt exist'
+
+        self.response.headers['Access-Control-Allow-Origin'] = "*"
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps({}))
 
 
 class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
