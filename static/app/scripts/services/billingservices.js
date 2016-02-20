@@ -3,7 +3,8 @@ function notFoundHandle(resp, $scope) {
         if (resp.message === "Invalid grant") {
             $scope.refreshToken();
         }
-    };
+    }
+    ;
 }
 angular.module('crmEngine.billingservices', []).factory('Billing',
     function () {
@@ -12,7 +13,23 @@ angular.module('crmEngine.billingservices', []).factory('Billing',
         };
         Billing.getSubscription = function ($scope) {
             $scope.isLoading = true;
-            gapi.client.crmengine.subscription.get({}).execute(
+            gapi.client.request({
+                'root': ROOT,
+                'path': '/crmengine/v1/subscription/get',
+                'method': 'GET',
+                'body': {},
+                'callback': (function (resp) {
+                    if (!resp.code) {
+                        $scope.subscription = resp;
+                    } else {
+                        notFoundHandle(resp, $scope);
+                    }
+                    $scope.isLoading = false;
+                    $scope.apply();
+                })
+            });
+
+/*            gapi.client.crmengine.subscription.get({}).execute(
                 function (resp) {
                     if (!resp.code) {
                         $scope.subscription = resp;
@@ -21,8 +38,9 @@ angular.module('crmEngine.billingservices', []).factory('Billing',
                     }
                     $scope.isLoading = false;
                     $scope.apply();
-                });
+                })*/;
         };
+
         Billing.disableAutoRenew = function ($scope) {
             $scope.isLoading = true;
             $scope.apply();

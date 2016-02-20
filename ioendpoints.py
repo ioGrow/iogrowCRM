@@ -6476,7 +6476,7 @@ class CrmEngineApi(remote.Service):
 
         return message_types.VoidMessage()
 
-    @endpoints.method(response_message=SubscriptionSchema,
+    @endpoints.method(response_message=SubscriptionSchema, http_method='GET',
                       name='subscription.get', path='subscription/get')
     def get_subscription(self, request):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
