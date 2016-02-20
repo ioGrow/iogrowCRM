@@ -61,6 +61,8 @@ from simple_salesforce import Salesforce
 from semantic.dates import DateService
 from mixpanel import Mixpanel
 from iomodels.crmengine import config as app_config
+from stripe.error import CardError
+
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'libs'))
@@ -244,8 +246,8 @@ class BaseHandler(webapp2.RequestHandler):
                     'length_whole_part': currency_format.length_whole_part,
                     'sections_delimiter': currency_format.sections_delimiter,
                     'decimal_delimiter': currency_format.decimal_delimiter,
-                    'sales_tabs' : STANDARD_TABS,
-                    'admin_tabs' : ADMIN_TABS
+                    'sales_tabs': STANDARD_TABS,
+                    'admin_tabs': ADMIN_TABS
                 }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -476,7 +478,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     self.redirect('/welcome/')
                     return
                 if user.google_credentials is None:
-                     self.redirect('/sign-in')
+                    self.redirect('/sign-in')
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/'
                 if user is None or user.type == 'public_user':
                     self.redirect('/welcome/')
@@ -491,7 +493,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                 admin_app = None
                 active_app = Application.query(Application.name == "sales").get()
                 print active_app
-                #tabs = user.get_user_active_tabs()
+                # tabs = user.get_user_active_tabs()
                 tabs = ndb.get_multi(active_app.tabs)
                 applications = []
                 for app in apps:
@@ -530,8 +532,8 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     'uSerlanguage': uSerlanguage,
                     'sales_app': sales_app,
                     'organization_name': organization.name,
-                    'sales_tabs' : STANDARD_TABS,
-                    'admin_tabs' : ADMIN_TABS
+                    'sales_tabs': STANDARD_TABS,
+                    'admin_tabs': ADMIN_TABS
                 }
                 if admin_app:
                     template_values['admin_app'] = admin_app
@@ -903,14 +905,14 @@ class GooglePlusConnect(SessionEnabledHandler):
             invitee = model.Invitation.query(model.Invitation.invited_mail == user_email).get()
         if invitee:
             user = GooglePlusConnect.save_token_for_user(
-                    user_email,
+                user_email,
                 credentials,
                 invited_user_id
             )
         else:
             user = GooglePlusConnect.save_token_for_user(
-                    user_email,
-                    credentials
+                user_email,
+                credentials
             )
         lang = self.get_language().replace('-', '_')
         user.currency_format = lang
@@ -1169,6 +1171,11 @@ class UserListHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/admin/users/user_list.html')
 
 
+class BillingEditHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/billing/billing_edit.html')
+
+
 class EditCompanyHandler(IndexHandler, SessionEnabledHandler):
     def get(self):
         IndexHandler.get(self, 'templates/admin/company/company_edit.html')
@@ -1198,9 +1205,11 @@ class EditLeadStatusHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/lead_status/lead_status_edit.html')
 
+
 class LeadScoringHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/lead_scoring/lead_scoring_edit.html')
+
 
 class EditCustomFieldsHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1295,6 +1304,7 @@ class SalesforceImporter(BaseHandler, SessionEnabledHandler):
         authorization_url = flow.step1_get_authorize_url()
         self.redirect(authorization_url)
 
+
 class SFsubscriberTest(BaseHandler, SessionEnabledHandler):
     def post(self):
         email = self.request.get("email")
@@ -1353,10 +1363,9 @@ class GetSfUser(BaseHandler, SessionEnabledHandler):
         self.response.out.write(json.dumps(response))
 
 
-
-class PaymentHandler(SessionEnabledHandler):
+class SubscriptionHandler(SessionEnabledHandler):
     def get(self):
-        template = jinja_environment.get_template(name='templates/admin/payment/payment.html')
+        template = jinja_environment.get_template(name='templates/admin/subscription/subscription.html')
         self.response.out.write(template.render({'user': self.get_user_from_session()}))
 
 
@@ -1389,7 +1398,6 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
 
 class PayPalPayingUsers(BaseHandler, SessionEnabledHandler):
     def get(self):
-
         # PayPalPayedUser
         # valid until
         # all models
@@ -1398,30 +1406,30 @@ class PayPalPayingUsers(BaseHandler, SessionEnabledHandler):
         now_plus_month = now + datetime.timedelta(days=30)
         active_until = now_plus_month
         save_payed_user = model.PaypalPayedUser(
-                txn_type=self.request.get("txn_type"),
-                subscr_id=self.request.get("subscr_id"),
-                last_name=self.request.get("last_name"),
-                mc_currency=self.request.get("mc_currency"),
-                item_name=self.request.get("item_name"),
-                business=self.request.get("business"),
-                amount3=self.request.get("amount3"),
-                verify_sign=self.request.get("verify_sign"),
-                payer_status=self.request.get("payer_status"),
-                payer_email=self.request.get("payer_email"),
-                first_name=self.request.get("first_name"),
-                receiver_email=self.request.get("receiver_email"),
-                payer_id=self.request.get("payer_id"),
-                item_number=self.request.get("item_number"),
-                subscr_date=self.request.get("subscr_date"),
-                address_name=self.request.get("address_name"),
-                ipn_track_id=self.request.get("ipn_track_id"),
-                option_selection1=self.request.get("option_selection1"),
-                option_name1=self.request.get("option_name1"),
-                active_until=active_until
-            ).put()
+            txn_type=self.request.get("txn_type"),
+            subscr_id=self.request.get("subscr_id"),
+            last_name=self.request.get("last_name"),
+            mc_currency=self.request.get("mc_currency"),
+            item_name=self.request.get("item_name"),
+            business=self.request.get("business"),
+            amount3=self.request.get("amount3"),
+            verify_sign=self.request.get("verify_sign"),
+            payer_status=self.request.get("payer_status"),
+            payer_email=self.request.get("payer_email"),
+            first_name=self.request.get("first_name"),
+            receiver_email=self.request.get("receiver_email"),
+            payer_id=self.request.get("payer_id"),
+            item_number=self.request.get("item_number"),
+            subscr_date=self.request.get("subscr_date"),
+            address_name=self.request.get("address_name"),
+            ipn_track_id=self.request.get("ipn_track_id"),
+            option_selection1=self.request.get("option_selection1"),
+            option_name1=self.request.get("option_name1"),
+            active_until=active_until
+        ).put()
 
 
-class StripePaymentHandler(BaseHandler, SessionEnabledHandler):
+class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
         user = self.get_user_from_session()
         organization = user.organization.get()
@@ -1435,7 +1443,6 @@ class StripePaymentHandler(BaseHandler, SessionEnabledHandler):
         interval = self.request.get('interval')
         premium_subscription = Subscription.create_premium_subscription(interval)
         # plane = self.request.get('plane')
-
         # Create the charge on Stripe's servers - this will charge the user's card
         try:
             stripe.Plan.retrieve('{}_{}'.format(app_config.PREMIUM, interval))
@@ -1445,12 +1452,21 @@ class StripePaymentHandler(BaseHandler, SessionEnabledHandler):
                 plan='{}_{}'.format(app_config.PREMIUM, interval),
                 email=user.email
             )
+
             organization.stripe_customer_id = customer.id
+            premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
+            premium_subscription.put()
             organization.subscription = premium_subscription.key
             organization.put()
         except stripe.error.CardError, e:
-            # The card has been declined
-            pass
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.write(e.message)
+            self.response.set_status(e.http_status)
+
+
+class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        pass
 
 
 class SFconnect(BaseHandler, SessionEnabledHandler):
@@ -1613,17 +1629,19 @@ class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
         template = jinja_environment.get_template('templates/salesforce_callback.html')
         self.response.out.write(template.render(template_values))
 
+
 class ZohoSignIn(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
         template = jinja_environment.get_template('templates/zohosingin.html')
         self.response.out.write(template.render(template_values))
 
+
 class ZohoUser(BaseHandler, SessionEnabledHandler):
     def post(self):
         ZohoUser = model.ZohoUser(
-                email=self.request.get("email")
-            ).put()
+            email=self.request.get("email")
+        ).put()
 
 
 class GoGo(BaseHandler, SessionEnabledHandler):
@@ -1631,7 +1649,6 @@ class GoGo(BaseHandler, SessionEnabledHandler):
         template_values = {}
         template = jinja_environment.get_template('templates/sf.html')
         self.response.out.write(template.render(template_values))
-
 
 
 class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
@@ -1844,10 +1861,11 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
 
+
 class ZohoSaveLead(BaseHandler, SessionEnabledHandler):
     def post(self):
-        #access_token = self.request.get("access_token")
-        #instance_url = self.request.get("instance_url")
+        # access_token = self.request.get("access_token")
+        # instance_url = self.request.get("instance_url")
         firstname = self.request.get("firstname")
         lastname = self.request.get("lastname")
         title = self.request.get("title")
@@ -1860,15 +1878,16 @@ class ZohoSaveLead(BaseHandler, SessionEnabledHandler):
         email = self.request.get("email")
 
         saved_lead = model.ZohoLead(
-                firstname=firstname,
-                lastname=lastname,
-                zoho_id=zoho_id,
-                photo_url=profile_img_url
-            ).put()
-        #track_mp_action(COPYLEAD_Zoho_MIXPANEL_ID, )
+            firstname=firstname,
+            lastname=lastname,
+            zoho_id=zoho_id,
+            photo_url=profile_img_url
+        ).put()
+        # track_mp_action(COPYLEAD_Zoho_MIXPANEL_ID, )
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(zoho_id))
+
 
 class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -3696,7 +3715,8 @@ class SFusersCSV(BaseHandler, SessionEnabledHandler):
             is_paying = False
             if u.stripe_id:
                 is_paying = True
-            writer.writerow(["%s %s" %(u.firstname, u.lastname), u.email, is_paying])
+            writer.writerow(["%s %s" % (u.firstname, u.lastname), u.email, is_paying])
+
 
 # scrapyd UI
 class ScrapydHandler(BaseHandler, SessionEnabledHandler):
@@ -3825,7 +3845,7 @@ routes = [
     # ('/workers/sync_contact_with_gontacts', SyncContactWithGontacts),
     # ('/workers/init_contacts_from_gcontacts', InitContactsFromGcontacts),
     # Contact sync
-    #('/workers/syncNewContact', SyncNewContact),
+    # ('/workers/syncNewContact', SyncNewContact),
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
     ('/workers/synctask', SyncCalendarTask),
@@ -3915,6 +3935,7 @@ routes = [
     ('/views/admin/users/list', UserListHandler),
     ('/views/admin/users/new', UserNewHandler),
     ('/views/admin/users/show', UserShowHandler),
+    ('/views/admin/billing/billing_edit', BillingEditHandler),
     ('/views/admin/groups/list', GroupListHandler),
     ('/views/admin/groups/show', GroupShowHandler),
     ('/views/admin/settings', settingsShowHandler),
@@ -3931,8 +3952,9 @@ routes = [
     ('/views/admin/synchronisation/edit', EditSynchronisationHandler),
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
     ('/views/admin/delete_all_records', deleteAllRecordHandler),
-    ('/payment', PaymentHandler),
-    ('/account/stripe_card_token', StripePaymentHandler),
+    ('/subscribe', SubscriptionHandler),
+    ('/stripe/subscription', StripeSubscriptionHandler),
+    ('/stripe/subscription_web_hook', StripeSubscriptionWebHooksHandler),
     # billing stuff. hadji hicham . 07/08/2014
     ('/views/billing/list', BillingListHandler),
     ('/views/billing/show', BillingShowHandler),
@@ -3942,7 +3964,7 @@ routes = [
     # ioGrow Live
     ('/gogo', GoGo),
     ('/sfapi/markaslead', SFmarkAsLead),
-    ('/zohoapi/markaslead',ZohoSaveLead),
+    ('/zohoapi/markaslead', ZohoSaveLead),
     ('/sfapi/dev/markaslead', SFmarkAsLeadDev),
     ('/sfapi/search', SFsearch),
     ('/sfapi/dev/search', SFsearchDev),
@@ -3972,8 +3994,8 @@ routes = [
     ('/sfsubscribertest', SFsubscriberTest),
 
     ('/sfoauth2callback', SalesforceImporterCallback),
-    ('/zohosignin',ZohoSignIn),
-    ('/zohouser',ZohoUser),
+    ('/zohosignin', ZohoSignIn),
+    ('/zohouser', ZohoUser),
     ('/sf_invite', SFinvite),
     ('/invitation_sent', SFinvite),
     ('/stripe', StripeHandler),
@@ -3998,7 +4020,6 @@ routes = [
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
 ]
-
 
 config = {}
 config['webapp2_extras.sessions'] = {

@@ -24,7 +24,7 @@ accountservices.factory('Conf', function($location) {
         'shows': '/#/shows/show/'
     };
 });
-accountservices.factory('Account', function($http) {
+accountservices.factory('Account', function($rootScope) {
 
     var Account = function(data) {
         angular.extend(this, data);
@@ -639,7 +639,7 @@ accountservices.factory('Account', function($http) {
         $scope.inProcess(true);  
         gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
             if (resp.error && resp.error.code == 412){
-                window.location.replace('/payment');
+                window.location.replace($rootScope.subscription_url);
             }
             if (!resp.code) {
                 $scope.accountInserted(resp);
