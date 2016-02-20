@@ -3,11 +3,11 @@ var opportunityservices = angular.module('crmEngine.opportunityservices',[]);
 //HKA 20.10.2013   Base service (create, delete, get)
 
 
-opportunityservices.factory('Opportunity', function($http) {
+opportunityservices.factory('Opportunity', function($rootScope) {
 
   var Opportunity = function(data) {
     angular.extend(this, data);
-  }
+  };
 
 
 
@@ -358,7 +358,7 @@ Opportunity.insert = function($scope,params){
 
       gapi.client.crmengine.opportunities.insertv2(params).execute(function(resp) {
           if (resp.error && resp.error.code == 412){
-              window.location.replace('/payment');
+              window.location.replace($rootScope.subscription_url);
           }
          if(!resp.code){
           $scope.inProcess(false);

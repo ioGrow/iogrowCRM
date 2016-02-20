@@ -12,8 +12,8 @@ from datetime import timedelta
 
 import httplib2
 from django.utils.encoding import smart_str
+
 # Google libs
-from google.appengine.api.datastore import Key
 from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.api import memcache
@@ -29,6 +29,7 @@ import requests
 
 # Our libraries
 from iograph import Node, Edge, RecordSchema, InfoNodeResponse, InfoNodeListResponse
+from iomodels.crmengine import config
 from iomodels.crmengine.accounts import Account, AccountGetRequest, AccountPatchRequest, AccountSchema, \
     AccountListRequest, AccountListResponse, AccountSearchResults, AccountInsertRequest
 from iomodels.crmengine.contacts import Contact, ContactGetRequest, ContactInsertRequest, ContactPatchSchema, \
@@ -37,6 +38,7 @@ from iomodels.crmengine.contacts import Contact, ContactGetRequest, ContactInser
     InvitationRequest, ContactMergeRequest
 from iomodels.crmengine.notes import Note, AuthorSchema, DiscussionAboutSchema, \
     NoteSchema
+from iomodels.crmengine.payment import Subscription
 from iomodels.crmengine.tasks import Task, TaskSchema, TaskRequest, TaskListResponse, TaskInsertRequest
 # from iomodels.crmengine.tags import Tag
 from iomodels.crmengine.opportunities import Opportunity, OpportunityPatchRequest, UpdateStageRequest, \
@@ -87,7 +89,7 @@ from people import linked_in
 from operator import itemgetter
 import iomessages
 from iomessages import Scoring_Topics_Schema, Topics_Schema, Topic_Comparaison_Schema, TopicsResponse, \
-    TweetResponseSchema
+    TweetResponseSchema, SubscriptionSchema
 from ioreporting import Reports, ReportSchema
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema, KewordsRequest, TwitterRequest, tweetsResponse, \
     LinkedinCompanySchema, \
@@ -164,26 +166,22 @@ ADMIN_EMAILS = ['tedj.meabiou@gmail.com', 'hakim@iogrow.com', 'mezianeh3@gmail.c
 
 def LISTING_QUERY(query, access, organization, owner, collaborators, order):
     return query.filter(
-            ndb.OR(
-                    ndb.AND(
-                            Contact.access == access,
-                            Contact.organization == organization
-                    ),
-                    Contact.owner == owner,
-                    Contact.collaborators_ids == collaborators
-            )
+        ndb.OR(
+            ndb.AND(
+                Contact.access == access,
+                Contact.organization == organization
+            ),
+            Contact.owner == owner,
+            Contact.collaborators_ids == collaborators
+        )
     ).order(order)
 
 
-# the key represent the secret key which represent our company  , server side , we have two keys
-# test "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF", mode dev
-# live "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA" , mode prod
-# hadji hicham  20/08/2014. our secret api key to auth at stripe .
-# stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
 
 # gd_client = gdata.contacts.client.ContactsClient(source='<var>gcdc2013-iogrow</var>')
 
-stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+stripe.api_key = config.STRIPE_API_KEY
+
 
 
 class TwitterProfileRequest(messages.Message):
@@ -857,20 +855,20 @@ class ContactSynchronizeRequest(messages.Message):
 #                             )
 
 @endpoints.api(
-        name='ioadmin',
-        version='v1',
-        scopes=["https://www.googleapis.com/auth/plus.login",
-                "https://www.googleapis.com/auth/plus.profile.emails.read"],
-        description='ioGrow Admin Console apis',
-        allowed_client_ids=[
-            CLIENT_ID,
-            endpoints.API_EXPLORER_CLIENT_ID
-        ]
+    name='ioadmin',
+    version='v1',
+    scopes=["https://www.googleapis.com/auth/plus.login",
+            "https://www.googleapis.com/auth/plus.profile.emails.read"],
+    description='ioGrow Admin Console apis',
+    allowed_client_ids=[
+        CLIENT_ID,
+        endpoints.API_EXPLORER_CLIENT_ID
+    ]
 )
 class IoAdmin(remote.Service):
     ID_RESOURCE = endpoints.ResourceContainer(
-            message_types.VoidMessage,
-            id=messages.StringField(1))
+        message_types.VoidMessage,
+        id=messages.StringField(1))
 
     @endpoints.method(message_types.VoidMessage, iomessages.OrganizationAdminList,
                       path='organizations.list', http_method='POST',
@@ -886,9 +884,9 @@ class IoAdmin(remote.Service):
             owner_schema = None
             if owner:
                 owner_schema = iomessages.UserSchema(
-                        google_display_name=owner.google_display_name,
-                        google_public_profile_photo_url=owner.google_public_profile_photo_url,
-                        email=owner.email
+                    google_display_name=owner.google_display_name,
+                    google_public_profile_photo_url=owner.google_public_profile_photo_url,
+                    email=owner.email
                 )
             nb_users = 0
             users = User.query(User.organization == organization.key).fetch()
@@ -908,9 +906,9 @@ class IoAdmin(remote.Service):
                 license = organization.plan.get()
             if license:
                 license_schema = iomessages.LicenseModelSchema(
-                        id=str(license.key.id()),
-                        entityKey=license.key.urlsafe(),
-                        name=license.name
+                    id=str(license.key.id()),
+                    entityKey=license.key.urlsafe(),
+                    name=license.name
                 )
 
             now = datetime.datetime.now()
@@ -925,16 +923,16 @@ class IoAdmin(remote.Service):
                 nb_licenses = organization.nb_licenses
 
             organizatoin_schema = iomessages.OrganizationAdminSchema(
-                    id=str(organization.key.id()),
-                    entityKey=organization.key.urlsafe(),
-                    name=organization.name,
-                    owner=owner_schema,
-                    nb_users=nb_users,
-                    nb_licenses=nb_licenses,
-                    license=license_schema,
-                    days_before_expiring=days_before_expiring.days + 1,
-                    expires_on=expires_on.isoformat(),
-                    created_at=organization.created_at.isoformat()
+                id=str(organization.key.id()),
+                entityKey=organization.key.urlsafe(),
+                name=organization.name,
+                owner=owner_schema,
+                nb_users=nb_users,
+                nb_licenses=nb_licenses,
+                license=license_schema,
+                days_before_expiring=days_before_expiring.days + 1,
+                expires_on=expires_on.isoformat(),
+                created_at=organization.created_at.isoformat()
             )
             items.append(organizatoin_schema)
         items.sort(key=lambda x: x.nb_users)
@@ -952,12 +950,12 @@ class IoAdmin(remote.Service):
         results = LicenseModel.query().fetch()
         for item in results:
             license_schema = iomessages.LicenseModelSchema(
-                    id=str(item.key.id()),
-                    entityKey=item.key.urlsafe(),
-                    name=item.name,
-                    payment_type=item.payment_type,
-                    is_free=item.is_free,
-                    duration=item.duration
+                id=str(item.key.id()),
+                entityKey=item.key.urlsafe(),
+                name=item.name,
+                payment_type=item.payment_type,
+                is_free=item.is_free,
+                duration=item.duration
             )
             items.append(license_schema)
         return iomessages.LicensesAdminList(items=items)
@@ -988,20 +986,20 @@ class IoAdmin(remote.Service):
 
 
 @endpoints.api(
-        name='crmengine',
-        version='v1',
-        scopes=["https://www.googleapis.com/auth/plus.login",
-                "https://www.googleapis.com/auth/plus.profile.emails.read"],
-        description='I/Ogrow CRM APIs',
-        allowed_client_ids=[
-            CLIENT_ID,
-            endpoints.API_EXPLORER_CLIENT_ID
-        ]
+    name='crmengine',
+    version='v1',
+    scopes=["https://www.googleapis.com/auth/plus.login",
+            "https://www.googleapis.com/auth/plus.profile.emails.read"],
+    description='I/Ogrow CRM APIs',
+    allowed_client_ids=[
+        CLIENT_ID,
+        endpoints.API_EXPLORER_CLIENT_ID
+    ]
 )
 class CrmEngineApi(remote.Service):
     ID_RESOURCE = endpoints.ResourceContainer(
-            message_types.VoidMessage,
-            id=messages.StringField(1))
+        message_types.VoidMessage,
+        id=messages.StringField(1))
 
     # Search API
     @endpoints.method(SearchRequest, inviteResults, path="autocomplete", http_method="POST", name="autocomplete")
@@ -1115,13 +1113,13 @@ class CrmEngineApi(remote.Service):
             logo.custom_logo = None
             logo.put()
         taskqueue.add(
-                url='/workers/sharedocument',
-                queue_name='iogrow-low',
-                params={
-                    'user_email': user_from_email.email,
-                    'access': 'anyone',
-                    'resource_id': request.fileId
-                }
+            url='/workers/sharedocument',
+            queue_name='iogrow-low',
+            params={
+                'user_email': user_from_email.email,
+                'access': 'anyone',
+                'resource_id': request.fileId
+            }
         )
         return uploadlogoresponse(success="yes")
 
@@ -1148,9 +1146,9 @@ class CrmEngineApi(remote.Service):
         # Reports.add_lead(user_from_email,nbr=-1)
         params = {"owner": user_from_email.google_user_id}
         taskqueue.add(
-                url='/workers/delete_user_accounts',
-                queue_name='iogrow-critical',
-                payload=json.dumps(params)
+            url='/workers/delete_user_accounts',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
 
@@ -1161,8 +1159,8 @@ class CrmEngineApi(remote.Service):
     def accounts_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Account.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # accounts.get api v2
@@ -1172,8 +1170,8 @@ class CrmEngineApi(remote.Service):
     def accounts_get_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Account.get_schema(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # accounts.list api v2
@@ -1183,8 +1181,8 @@ class CrmEngineApi(remote.Service):
     def accounts_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Account.list(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # accounts.patch API
@@ -1194,8 +1192,8 @@ class CrmEngineApi(remote.Service):
     def accounts_patch(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Account.patch(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # accounts.search API
@@ -1205,8 +1203,8 @@ class CrmEngineApi(remote.Service):
     def account_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Account.search(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # Accounts import apis
@@ -1216,8 +1214,8 @@ class CrmEngineApi(remote.Service):
     def account_import_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Account.import_from_csv_first_step(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # accounts.import_from_csv_second_step
@@ -1229,11 +1227,11 @@ class CrmEngineApi(remote.Service):
         items = []
         for item in request.items:
             items.append(
-                    {
-                        'key': item.key,
-                        'source_column': item.source_column,
-                        'matched_column': item.matched_column
-                    }
+                {
+                    'key': item.key,
+                    'source_column': item.source_column,
+                    'matched_column': item.matched_column
+                }
             )
         token = endpoints.users_id_token._get_token(None)
         params = {
@@ -1243,9 +1241,9 @@ class CrmEngineApi(remote.Service):
             'email': user_from_email.email
         }
         taskqueue.add(
-                url='/workers/account_import_second_step',
-                queue_name='iogrow-critical',
-                payload=json.dumps(params)
+            url='/workers/account_import_second_step',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
 
@@ -1273,9 +1271,9 @@ class CrmEngineApi(remote.Service):
         print(params)
         print(user_from_email)
         taskqueue.add(
-                url='/workers/delete_user_cases',
-                queue_name='iogrow-critical',
-                payload=json.dumps(params)
+            url='/workers/delete_user_cases',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
 
@@ -1286,8 +1284,8 @@ class CrmEngineApi(remote.Service):
     def case_get_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Case.get_schema(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # cases.insertv2 api
@@ -1297,8 +1295,8 @@ class CrmEngineApi(remote.Service):
     def case_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Case.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # cases.list api v2
@@ -1308,8 +1306,8 @@ class CrmEngineApi(remote.Service):
     def case_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Case.list(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # cases.patch API
@@ -1319,8 +1317,8 @@ class CrmEngineApi(remote.Service):
     def case_patch_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Case.patch(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # cases.search API
@@ -1330,8 +1328,8 @@ class CrmEngineApi(remote.Service):
     def cases_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Case.search(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # cases.update_status
@@ -1341,8 +1339,8 @@ class CrmEngineApi(remote.Service):
     def case_update_status(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         Case.update_status(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
         return message_types.VoidMessage()
 
@@ -1394,10 +1392,10 @@ class CrmEngineApi(remote.Service):
 
     # casestatuses.get api
     @Casestatus.method(
-            request_fields=('id',),
-            path='casestatuses/{id}',
-            http_method='GET',
-            name='casestatuses.get'
+        request_fields=('id',),
+        path='casestatuses/{id}',
+        http_method='GET',
+        name='casestatuses.get'
     )
     def CasestatusGet(self, my_model):
         if not my_model.from_datastore:
@@ -1407,9 +1405,9 @@ class CrmEngineApi(remote.Service):
     # casestatuses.insert api
     @Casestatus.method(
 
-            path='casestatuses',
-            http_method='POST',
-            name='casestatuses.insert'
+        path='casestatuses',
+        http_method='POST',
+        name='casestatuses.insert'
     )
     def CasestatusInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -1421,13 +1419,13 @@ class CrmEngineApi(remote.Service):
     # casestatuses.list api
     @Casestatus.query_method(
 
-            query_fields=(
-                    'limit',
-                    'order',
-                    'pageToken'
-            ),
-            path='casestatuses',
-            name='casestatuses.list'
+        query_fields=(
+                'limit',
+                'order',
+                'pageToken'
+        ),
+        path='casestatuses',
+        name='casestatuses.list'
     )
     def CasestatusList(self, query):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -1436,9 +1434,9 @@ class CrmEngineApi(remote.Service):
     # casestatuses.patch api
     @Casestatus.method(
 
-            http_method='PATCH',
-            path='casestatuses/{id}',
-            name='casestatuses.patch'
+        http_method='PATCH',
+        path='casestatuses/{id}',
+        name='casestatuses.patch'
     )
     def CasestatusPatch(self, my_model):
         # user_from_email = EndpointsHelper.require_iogrow_user()
@@ -1471,16 +1469,16 @@ class CrmEngineApi(remote.Service):
         # insert topics edge if this is the first comment
         if parent_key.kind() != 'Note' and parent.comments == 0:
             edge_list = Edge.list(
-                    start_node=parent_key,
-                    kind='parents'
+                start_node=parent_key,
+                kind='parents'
             )
             for edge in edge_list['items']:
                 topic_parent = edge.end_node
                 Edge.insert(
-                        start_node=topic_parent,
-                        end_node=parent_key,
-                        kind='topics',
-                        inverse_edge='parents'
+                    start_node=topic_parent,
+                    end_node=parent_key,
+                    kind='topics',
+                    inverse_edge='parents'
                 )
         if not parent.comments:
             parent.comments = 1
@@ -1493,26 +1491,26 @@ class CrmEngineApi(remote.Service):
         comment_author.photo = user_from_email.google_public_profile_photo_url
         comment_author.google_user_id = user_from_email.google_user_id
         comment = Comment(
-                owner=user_from_email.google_user_id,
-                organization=user_from_email.organization,
-                author=comment_author,
-                content=request.content,
-                parent_id=str(parent.id),
-                parent_kind=parent_key.kind()
+            owner=user_from_email.google_user_id,
+            organization=user_from_email.organization,
+            author=comment_author,
+            content=request.content,
+            parent_id=str(parent.id),
+            parent_kind=parent_key.kind()
         )
         entityKey_a = comment.put()
         entityKey = entityKey_a
         Edge.insert(
-                start_node=parent_key,
-                end_node=entityKey,
-                kind='comments',
-                inverse_edge='parents'
+            start_node=parent_key,
+            end_node=entityKey,
+            kind='comments',
+            inverse_edge='parents'
         )
         author_schema = AuthorSchema(
-                google_user_id=comment.author.google_user_id,
-                display_name=comment.author.display_name,
-                google_public_profile_url=comment.author.google_public_profile_url,
-                photo=comment.author.photo
+            google_user_id=comment.author.google_user_id,
+            display_name=comment.author.display_name,
+            google_public_profile_url=comment.author.google_public_profile_url,
+            photo=comment.author.photo
         )
         collobarators = Node.list_permissions(parent)
         email_list = []
@@ -1525,22 +1523,22 @@ class CrmEngineApi(remote.Service):
         body += '</a></p>'
         body += '<p>' + request.content + '</p>'
         taskqueue.add(
-                url='/workers/send_email_notification',
-                queue_name='iogrow-low',
-                params={
-                    'user_email': user_from_email.email,
-                    'to': to,
-                    'subject': '[RE]: ' + parent.title,
-                    'body': body
-                }
+            url='/workers/send_email_notification',
+            queue_name='iogrow-low',
+            params={
+                'user_email': user_from_email.email,
+                'to': to,
+                'subject': '[RE]: ' + parent.title,
+                'body': body
+            }
         )
         comment_schema = CommentSchema(
-                id=str(entityKey.id()),
-                entityKey=entityKey.urlsafe(),
-                author=author_schema,
-                content=comment.content,
-                created_at=comment.created_at.isoformat(),
-                updated_at=comment.updated_at.isoformat()
+            id=str(entityKey.id()),
+            entityKey=entityKey.urlsafe(),
+            author=author_schema,
+            content=comment.content,
+            created_at=comment.created_at.isoformat(),
+            updated_at=comment.updated_at.isoformat()
         )
         return comment_schema
 
@@ -1553,27 +1551,27 @@ class CrmEngineApi(remote.Service):
         comment_list = []
         parent_key = ndb.Key(urlsafe=request.about)
         comment_edge_list = Edge.list(
-                start_node=parent_key,
-                kind='comments',
-                limit=request.limit,
-                pageToken=request.pageToken,
-                order='ASC'
+            start_node=parent_key,
+            kind='comments',
+            limit=request.limit,
+            pageToken=request.pageToken,
+            order='ASC'
         )
         for edge in comment_edge_list['items']:
             comment = edge.end_node.get()
             author_schema = AuthorSchema(
-                    google_user_id=comment.author.google_user_id ,
-                    display_name=comment.author.display_name,
-                    google_public_profile_url=comment.author.google_public_profile_url ,
-                    photo=comment.author.photo
+                google_user_id=comment.author.google_user_id,
+                display_name=comment.author.display_name,
+                google_public_profile_url=comment.author.google_public_profile_url,
+                photo=comment.author.photo
             )
             comment_schema = CommentSchema(
-                    id=str(edge.end_node.id()),
-                    entityKey=edge.end_node.urlsafe(),
-                    author=author_schema,
-                    content=comment.content,
-                    created_at=comment.created_at.isoformat(),
-                    updated_at=comment.updated_at.isoformat()
+                id=str(edge.end_node.id()),
+                entityKey=edge.end_node.urlsafe(),
+                author=author_schema,
+                content=comment.content,
+                created_at=comment.created_at.isoformat(),
+                updated_at=comment.updated_at.isoformat()
             )
             comment_list.append(comment_schema)
         if comment_edge_list['next_curs'] and comment_edge_list['more']:
@@ -1581,16 +1579,16 @@ class CrmEngineApi(remote.Service):
         else:
             comment_next_curs = None
         return CommentListResponse(
-                items=comment_list,
-                nextPageToken=comment_next_curs
+            items=comment_list,
+            nextPageToken=comment_next_curs
         )
 
     # comments.patch API
     @Comment.method(
 
-            http_method='PATCH',
-            path='comments/{id}',
-            name='comments.patch'
+        http_method='PATCH',
+        path='comments/{id}',
+        name='comments.patch'
     )
     def CommentPatch(self, my_model):
         # user_from_email = EndpointsHelper.require_iogrow_user()
@@ -1637,21 +1635,21 @@ class CrmEngineApi(remote.Service):
         print(params)
         print(user_from_email)
         taskqueue.add(
-                url='/workers/delete_user_contacts',
-                queue_name='iogrow-critical',
-                payload=json.dumps(params)
+            url='/workers/delete_user_contacts',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
 
     # contacts.insertv2 api
-    @endpoints.method(ContactInsertRequest , ContactSchema,
+    @endpoints.method(ContactInsertRequest, ContactSchema,
                       path='contacts/insertv2', http_method='POST',
                       name='contacts.insertv2')
     def contact_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Contact.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # contact.merge
@@ -1677,8 +1675,8 @@ class CrmEngineApi(remote.Service):
     def contact_import_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Contact.import_from_csv_first_step(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # contacts.import api
@@ -1690,11 +1688,11 @@ class CrmEngineApi(remote.Service):
         items = []
         for item in request.items:
             items.append(
-                    {
-                        'key': item.key,
-                        'source_column': item.source_column,
-                        'matched_column': item.matched_column
-                    }
+                {
+                    'key': item.key,
+                    'source_column': item.source_column,
+                    'matched_column': item.matched_column
+                }
             )
         token = endpoints.users_id_token._get_token(None)
         params = {
@@ -1704,9 +1702,9 @@ class CrmEngineApi(remote.Service):
             'email': user_from_email.email
         }
         taskqueue.add(
-                url='/workers/contact_import_second_step',
-                queue_name='iogrow-critical',
-                payload=json.dumps(params)
+            url='/workers/contact_import_second_step',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
 
@@ -1733,34 +1731,34 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         order = CustomField.last_order_by_object(user_from_email, request.related_object) + 1
         custom_field = CustomField(
-                name=request.name,
-                related_object=request.related_object,
-                field_type=request.field_type,
-                help_text=request.help_text,
-                options=request.options,
-                scale_min=request.scale_min,
-                scale_max=request.scale_max,
-                label_min=request.label_min,
-                label_max=request.label_max,
-                order=order,
-                owner=user_from_email.google_user_id,
-                organization=user_from_email.organization
+            name=request.name,
+            related_object=request.related_object,
+            field_type=request.field_type,
+            help_text=request.help_text,
+            options=request.options,
+            scale_min=request.scale_min,
+            scale_max=request.scale_max,
+            label_min=request.label_min,
+            label_max=request.label_max,
+            order=order,
+            owner=user_from_email.google_user_id,
+            organization=user_from_email.organization
         )
         custom_field.put()
         return iomessages.CustomFieldSchema(
-                id=str(custom_field.key.id()),
-                entityKey=custom_field.key.urlsafe(),
-                name=custom_field.name,
-                related_object=custom_field.related_object,
-                field_type=custom_field.field_type,
-                help_text=custom_field.help_text,
-                options=custom_field.options,
-                scale_min=custom_field.scale_min,
-                scale_max=custom_field.scale_max,
-                label_min=custom_field.label_min,
-                label_max=custom_field.label_max,
-                order=custom_field.order,
-                created_at=custom_field.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
+            id=str(custom_field.key.id()),
+            entityKey=custom_field.key.urlsafe(),
+            name=custom_field.name,
+            related_object=custom_field.related_object,
+            field_type=custom_field.field_type,
+            help_text=custom_field.help_text,
+            options=custom_field.options,
+            scale_min=custom_field.scale_min,
+            scale_max=custom_field.scale_max,
+            label_min=custom_field.label_min,
+            label_max=custom_field.label_max,
+            order=custom_field.order,
+            created_at=custom_field.created_at.strftime("%Y-%m-%dT%H:%M:00.000")
         )
 
     # customfield.list api
@@ -1773,20 +1771,20 @@ class CrmEngineApi(remote.Service):
         items = []
         for custom_field in custom_fields:
             custom_field_schema = iomessages.CustomFieldSchema(
-                    id=str(custom_field.key.id()),
-                    entityKey=custom_field.key.urlsafe(),
-                    name=custom_field.name,
-                    related_object=custom_field.related_object,
-                    field_type=custom_field.field_type,
-                    help_text=custom_field.help_text,
-                    options=custom_field.options,
-                    scale_min=custom_field.scale_min,
-                    scale_max=custom_field.scale_max,
-                    label_min=custom_field.label_min,
-                    label_max=custom_field.label_max,
-                    order=custom_field.order,
-                    created_at=custom_field.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
-                    updated_at=custom_field.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
+                id=str(custom_field.key.id()),
+                entityKey=custom_field.key.urlsafe(),
+                name=custom_field.name,
+                related_object=custom_field.related_object,
+                field_type=custom_field.field_type,
+                help_text=custom_field.help_text,
+                options=custom_field.options,
+                scale_min=custom_field.scale_min,
+                scale_max=custom_field.scale_max,
+                label_min=custom_field.label_min,
+                label_max=custom_field.label_max,
+                order=custom_field.order,
+                created_at=custom_field.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
+                updated_at=custom_field.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
             )
             items.append(custom_field_schema)
         return iomessages.CustomFieldListResponseSchema(items=items)
@@ -1858,35 +1856,35 @@ class CrmEngineApi(remote.Service):
             if len(company_details.contact_data.addresses) != 0:
                 street = company_details.contact_data.addresses[0].street
             infonode = iomessages.InfoNodeRequestSchema(
-                    kind='company',
-                    fields=[
-                        iomessages.RecordSchema(
-                                field='url',
-                                value=url
-                        ),
-                        iomessages.RecordSchema(
-                                field='twitter_account',
-                                value=twitter_account
-                        ),
-                        iomessages.RecordSchema(
-                                field='country',
-                                value=country
-                        ),
-                        iomessages.RecordSchema(
-                                field='street',
-                                value=street
-                        )
+                kind='company',
+                fields=[
+                    iomessages.RecordSchema(
+                        field='url',
+                        value=url
+                    ),
+                    iomessages.RecordSchema(
+                        field='twitter_account',
+                        value=twitter_account
+                    ),
+                    iomessages.RecordSchema(
+                        field='country',
+                        value=country
+                    ),
+                    iomessages.RecordSchema(
+                        field='street',
+                        value=street
+                    )
 
-                    ]
+                ]
             )
             infonodes = list()
             infonodes.append(infonode)
             account_request = AccountInsertRequest(
-                    name=company_details.name,
-                    emails=emails,
-                    logo_img_url=company_details.avatar_url,
-                    infonodes=infonodes,
-                    phones=phones
+                name=company_details.name,
+                emails=emails,
+                logo_img_url=company_details.avatar_url,
+                infonodes=infonodes,
+                phones=phones
             )
 
             account_schema = Account.insert(user, account_request)
@@ -1927,35 +1925,35 @@ class CrmEngineApi(remote.Service):
                 if len(company_details.contact_data.addresses) != 0:
                     street = company_details.contact_data.addresses[0].street
                 infonode = iomessages.InfoNodeRequestSchema(
-                        kind='company',
-                        fields=[
-                            iomessages.RecordSchema(
-                                    field='url',
-                                    value=url
-                            ),
-                            iomessages.RecordSchema(
-                                    field='twitter_account',
-                                    value=twitter_account
-                            ),
-                            iomessages.RecordSchema(
-                                    field='country',
-                                    value=country
-                            ),
-                            iomessages.RecordSchema(
-                                    field='street',
-                                    value=street
-                            )
+                    kind='company',
+                    fields=[
+                        iomessages.RecordSchema(
+                            field='url',
+                            value=url
+                        ),
+                        iomessages.RecordSchema(
+                            field='twitter_account',
+                            value=twitter_account
+                        ),
+                        iomessages.RecordSchema(
+                            field='country',
+                            value=country
+                        ),
+                        iomessages.RecordSchema(
+                            field='street',
+                            value=street
+                        )
 
-                        ]
+                    ]
                 )
                 infonodes = list()
                 infonodes.append(infonode)
                 account_request = AccountInsertRequest(
-                        name=person.company_name,
-                        emails=emails,
-                        logo_img_url=company_details.avatar_url,
-                        infonodes=infonodes,
-                        phones=phones
+                    name=person.company_name,
+                    emails=emails,
+                    logo_img_url=company_details.avatar_url,
+                    infonodes=infonodes,
+                    phones=phones
                 )
                 account_schema = Account.insert(user, account_request)
 
@@ -1976,13 +1974,13 @@ class CrmEngineApi(remote.Service):
             phones = list()
             phones.append(phone)
             contact_request = ContactInsertRequest(
-                    account=key,
-                    firstname=person.first_name,
-                    lastname=person.last_name,
-                    title=person.title,
-                    profile_img_url=person.avatar_url,
-                    infonodes=infonodes,
-                    phones=phones
+                account=key,
+                firstname=person.first_name,
+                lastname=person.last_name,
+                title=person.title,
+                profile_img_url=person.avatar_url,
+                infonodes=infonodes,
+                phones=phones
             )
 
             contact_schema = Contact.insert(user, contact_request)
@@ -2002,7 +2000,7 @@ class CrmEngineApi(remote.Service):
                 tasks_id.append(task.id)
                 from iomodels.crmengine.tasks import EntityKeyRequest
                 assigne = EntityKeyRequest(
-                        entityKey=contact_schema.entityKey
+                    entityKey=contact_schema.entityKey
                 )
                 assignes = list()
                 assignes.append(assigne)
@@ -2010,11 +2008,11 @@ class CrmEngineApi(remote.Service):
                 if task.public == 'true':
                     access = "public"
                 task_request = TaskInsertRequest(
-                        title=task.body,
-                        status=task.frame,
-                        due=task.due_at.strftime("%d/%m/%Y"),
-                        access=access,
-                        assignees=assignes
+                    title=task.body,
+                    status=task.frame,
+                    due=task.due_at.strftime("%d/%m/%Y"),
+                    access=access,
+                    assignees=assignes
                 )
                 task_schema = Task.insert(user, task_request)
 
@@ -2031,24 +2029,24 @@ class CrmEngineApi(remote.Service):
                 note_author.display_name = user.google_display_name
                 note_author.photo = user.google_public_profile_photo_url
                 note = Note(
-                        owner=user.google_user_id,
-                        organization=user.organization,
-                        author=note_author,
-                        title="",
-                        content=note.body
+                    owner=user.google_user_id,
+                    organization=user.organization,
+                    author=note_author,
+                    title="",
+                    content=note.body
                 )
                 entityKey_async = note.put_async()
                 entityKey = entityKey_async.get_result()
                 Edge.insert(
-                        start_node=ndb.Key(urlsafe=contact_schema.entityKey),
-                        end_node=entityKey,
-                        kind='topics',
-                        inverse_edge='parents'
+                    start_node=ndb.Key(urlsafe=contact_schema.entityKey),
+                    end_node=entityKey,
+                    kind='topics',
+                    inverse_edge='parents'
                 )
                 EndpointsHelper.update_edge_indexes(
-                        parent_key=ndb.Key(urlsafe=contact_schema.entityKey),
-                        kind='topics',
-                        indexed_edge=str(entityKey.id())
+                    parent_key=ndb.Key(urlsafe=contact_schema.entityKey),
+                    kind='topics',
+                    indexed_edge=str(entityKey.id())
                 )
 
         #########
@@ -2067,13 +2065,13 @@ class CrmEngineApi(remote.Service):
                     key = accounts_keys[deal.party_id]
 
                     opportunity_request = OpportunityInsertRequest(
-                            name=deal.name,
-                            description=deal.background,
-                            account=key.urlsafe(),
-                            duration=deal.duration,
-                            currency=deal.currency,
-                            amount_total=deal.price,
-                            access=access
+                        name=deal.name,
+                        description=deal.background,
+                        account=key.urlsafe(),
+                        duration=deal.duration,
+                        currency=deal.currency,
+                        amount_total=deal.price,
+                        access=access
                     )
             else:
                 # contact
@@ -2081,13 +2079,13 @@ class CrmEngineApi(remote.Service):
                 if deal.party_id in contacts_keys.keys():
                     key = contacts_keys[deal.party_id]
                     opportunity_request = OpportunityInsertRequest(
-                            name=deal.name,
-                            description=deal.background,
-                            contact=key.urlsafe(),
-                            duration=deal.duration,
-                            currency=deal.currency,
-                            amount_total=deal.price,
-                            access=access
+                        name=deal.name,
+                        description=deal.background,
+                        contact=key.urlsafe(),
+                        duration=deal.duration,
+                        currency=deal.currency,
+                        amount_total=deal.price,
+                        access=access
                     )
 
             opportunity_schema = Opportunity.insert(user, opportunity_request)
@@ -2108,10 +2106,10 @@ class CrmEngineApi(remote.Service):
                 if task.public == 'true':
                     access = "public"
                 task_request = TaskInsertRequest(
-                        title=task.body,
-                        status=task.frame,
-                        due=task.due_at.strftime("%d/%m/%Y"),
-                        access=access
+                    title=task.body,
+                    status=task.frame,
+                    due=task.due_at.strftime("%d/%m/%Y"),
+                    access=access
                 )
                 task_schema = Task.insert(user, task_request)
                 print task_schema, "sehhhhhhhhhh"
@@ -2130,43 +2128,43 @@ class CrmEngineApi(remote.Service):
             print company_details.contact_data.instant_messengers[0].__dict__
             phones = list()
             phone = iomessages.PhoneSchema(
-                    number=company_details.contact_data.phone_numbers[0].number
+                number=company_details.contact_data.phone_numbers[0].number
             )
             phones.append(phone)
             email = iomessages.EmailSchema(
-                    email=company_details.contact_data.email_addresses[0].address
+                email=company_details.contact_data.email_addresses[0].address
             )
             emails = list()
             emails.append(email)
             infonode = iomessages.InfoNodeRequestSchema(
-                    kind='company',
-                    fields=[
-                        iomessages.RecordSchema(
-                                field='url',
-                                value=company_details.contact_data.web_addresses[0].url
-                        ),
-                        iomessages.RecordSchema(
-                                field='twitter_account',
-                                value=company_details.contact_data.twitter_accounts[0].username
-                        ),
-                        iomessages.RecordSchema(
-                                field='country',
-                                value=company_details.contact_data.addresses[0].country
-                        ),
-                        iomessages.RecordSchema(
-                                field='street',
-                                value=company_details.contact_data.addresses[0].street
-                        )
+                kind='company',
+                fields=[
+                    iomessages.RecordSchema(
+                        field='url',
+                        value=company_details.contact_data.web_addresses[0].url
+                    ),
+                    iomessages.RecordSchema(
+                        field='twitter_account',
+                        value=company_details.contact_data.twitter_accounts[0].username
+                    ),
+                    iomessages.RecordSchema(
+                        field='country',
+                        value=company_details.contact_data.addresses[0].country
+                    ),
+                    iomessages.RecordSchema(
+                        field='street',
+                        value=company_details.contact_data.addresses[0].street
+                    )
 
-                    ]
+                ]
             )
             infonodes = list()
             infonodes.append(infonode)
             account_request = AccountInsertRequest(
-                    name=company.name,
-                    emails=emails,
-                    infonodes=infonodes,
-                    phones=phones
+                name=company.name,
+                emails=emails,
+                infonodes=infonodes,
+                phones=phones
             )
             Account.insert(user, account_request)
         return message_types.VoidMessage()
@@ -2258,8 +2256,8 @@ class CrmEngineApi(remote.Service):
     def contact_get_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Contact.get_schema(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # contacts.list api v2
@@ -2269,8 +2267,8 @@ class CrmEngineApi(remote.Service):
     def contact_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Contact.list(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # contacts.patch API
@@ -2280,8 +2278,8 @@ class CrmEngineApi(remote.Service):
     def contact_patch(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Contact.patch(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # contacts.search API
@@ -2291,17 +2289,17 @@ class CrmEngineApi(remote.Service):
     def contact_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Contact.search(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # Contributors APIs
     # contributors.insert API
     @Contributor.method(
 
-            path='contributors',
-            http_method='POST',
-            name='contributors.insert'
+        path='contributors',
+        http_method='POST',
+        name='contributors.insert'
     )
     def insert_contributor(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2313,7 +2311,7 @@ class CrmEngineApi(remote.Service):
         discussion = discussion_key.get()
         my_model.put()
         confirmation_url = "http://gcdc2013-iogrow.appspot.com" + DISCUSSIONS[discussion_kind]['url'] + str(
-                discussion_key.id())
+            discussion_key.id())
         print confirmation_url
         sender_address = my_model.name + " <notifications@gcdc2013-iogrow.appspotmail.com>"
         subject = "You're involved in this " + DISCUSSIONS[discussion_kind]['title'] + ": " + discussion.title
@@ -2335,18 +2333,18 @@ class CrmEngineApi(remote.Service):
     # Documents APIs
     # documents.attachfiles API
     @endpoints.method(
-            MultipleAttachmentRequest,
-            iomessages.FilesAttachedResponse,
-            path='documents/attachfiles',
-            http_method='POST',
-            name='documents.attachfiles'
+        MultipleAttachmentRequest,
+        iomessages.FilesAttachedResponse,
+        path='documents/attachfiles',
+        http_method='POST',
+        name='documents.attachfiles'
     )
     def attach_files(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
         return Document.attach_files(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # documents.get API
@@ -2365,8 +2363,8 @@ class CrmEngineApi(remote.Service):
     def document_get(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Document.get_schema(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # documents.insertv2 api
@@ -2376,14 +2374,14 @@ class CrmEngineApi(remote.Service):
     def document_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Document.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
         # documents.patch API
 
     @Document.method(
-            http_method='PATCH', path='documents/{id}', name='documents.patch')
+        http_method='PATCH', path='documents/{id}', name='documents.patch')
     def DocumentPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
 
@@ -2402,9 +2400,9 @@ class CrmEngineApi(remote.Service):
             Edge.delete(edge_key)
         else:
             results = Edge.query(
-                    Edge.start_node == ndb.Key(urlsafe=request.start_node),
-                    Edge.end_node == ndb.Key(urlsafe=request.end_node),
-                    Edge.kind == request.kind
+                Edge.start_node == ndb.Key(urlsafe=request.start_node),
+                Edge.end_node == ndb.Key(urlsafe=request.end_node),
+                Edge.kind == request.kind
             ).fetch()
             for edge in results:
                 Edge.delete(edge.key)
@@ -2424,22 +2422,22 @@ class CrmEngineApi(remote.Service):
             assigned_to = end_node.get()
             if task.due != None:
                 taskqueue.add(
-                        url='/workers/syncassignedtask',
-                        queue_name='iogrow-low-task',
-                        params={
-                            'email': assigned_to.email,
-                            'task_key': task.id,
-                            'assigned_to': end_node
-                        }
+                    url='/workers/syncassignedtask',
+                    queue_name='iogrow-low-task',
+                    params={
+                        'email': assigned_to.email,
+                        'task_key': task.id,
+                        'assigned_to': end_node
+                    }
                 )
             edge_key = Edge.insert(start_node=start_node,
                                    end_node=end_node,
                                    kind=item.kind,
                                    inverse_edge=item.inverse_edge)
             EndpointsHelper.update_edge_indexes(
-                    parent_key=start_node,
-                    kind=item.kind,
-                    indexed_edge=str(end_node.id())
+                parent_key=start_node,
+                kind=item.kind,
+                indexed_edge=str(end_node.id())
             )
             items.append(EdgeSchema(id=str(edge_key.id()),
                                     entityKey=edge_key.urlsafe(),
@@ -2463,24 +2461,24 @@ class CrmEngineApi(remote.Service):
         if request.files:
             files_ids = [item.id for item in request.files.items]
         taskqueue.add(
-                url='/workers/send_gmail_message',
-                queue_name='iogrow-critical',
-                params={
-                    'email': user.email,
-                    'to': request.to,
-                    'cc': request.cc,
-                    'bcc': request.bcc,
-                    'subject': subject,
-                    'body': request.body,
-                    'files': files_ids
-                }
+            url='/workers/send_gmail_message',
+            queue_name='iogrow-critical',
+            params={
+                'email': user.email,
+                'to': request.to,
+                'cc': request.cc,
+                'bcc': request.bcc,
+                'subject': subject,
+                'body': request.body,
+                'files': files_ids
+            }
         )
         attachments = None
         if request.files:
             attachments_request = request.files
             attachments = Document.attach_files(
-                    user_from_email=user,
-                    request=attachments_request
+                user_from_email=user,
+                request=attachments_request
             )
         attachments_notes = ''
         if attachments:
@@ -2495,24 +2493,24 @@ class CrmEngineApi(remote.Service):
         note_author.display_name = user.google_display_name
         note_author.photo = user.google_public_profile_photo_url
         note = Note(
-                owner=user.google_user_id,
-                organization=user.organization,
-                author=note_author,
-                title='Email: ' + subject,
-                content=request.body + attachments_notes
+            owner=user.google_user_id,
+            organization=user.organization,
+            author=note_author,
+            title='Email: ' + subject,
+            content=request.body + attachments_notes
         )
         entityKey_async = note.put_async()
         entityKey = entityKey_async.get_result()
         Edge.insert(
-                start_node=parent_key,
-                end_node=entityKey,
-                kind='topics',
-                inverse_edge='parents'
+            start_node=parent_key,
+            end_node=entityKey,
+            kind='topics',
+            inverse_edge='parents'
         )
         EndpointsHelper.update_edge_indexes(
-                parent_key=parent_key,
-                kind='topics',
-                indexed_edge=str(entityKey.id())
+            parent_key=parent_key,
+            kind='topics',
+            indexed_edge=str(entityKey.id())
         )
         return message_types.VoidMessage()
 
@@ -2527,12 +2525,12 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         event = entityKey.get()
         taskqueue.add(
-                url='/workers/syncdeleteevent',
-                queue_name='iogrow-low-event',
-                params={
-                    'email': user_from_email.email,
-                    'event_google_id': event.event_google_id
-                }
+            url='/workers/syncdeleteevent',
+            queue_name='iogrow-low-event',
+            params={
+                'email': user_from_email.email,
+                'event_google_id': event.event_google_id
+            }
         )
         Edge.delete_all_cascade(start_node=entityKey)
         return message_types.VoidMessage()
@@ -2544,8 +2542,8 @@ class CrmEngineApi(remote.Service):
     def event_get(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Event.get_schema(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # events.insertv2 api
@@ -2555,8 +2553,8 @@ class CrmEngineApi(remote.Service):
     def event_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Event.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # events.lists api
@@ -2566,8 +2564,8 @@ class CrmEngineApi(remote.Service):
     def event_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Event.list(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # fetch events by start date end end date
@@ -2577,8 +2575,8 @@ class CrmEngineApi(remote.Service):
     def event_list_beta_fetch(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Event.listFetch(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # events.patch api
@@ -2589,17 +2587,17 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         if request.googleEvent == "true":
             taskqueue.add(
-                    url='/workers/syncpatchevent',
-                    queue_name='iogrow-low-event',
-                    params={
-                        'email': user_from_email.email,
-                        'starts_at': request.starts_at,
-                        'ends_at': request.ends_at,
-                        'summary': request.title,
-                        'event_google_id': request.id,
-                        'access': request.access,
-                        'timezone': request.timezone
-                    }
+                url='/workers/syncpatchevent',
+                queue_name='iogrow-low-event',
+                params={
+                    'email': user_from_email.email,
+                    'starts_at': request.starts_at,
+                    'ends_at': request.ends_at,
+                    'summary': request.title,
+                    'event_google_id': request.id,
+                    'access': request.access,
+                    'timezone': request.timezone
+                }
             )
 
         else:
@@ -2622,20 +2620,20 @@ class CrmEngineApi(remote.Service):
                     patched = True
             if patched:
                 taskqueue.add(
-                        url='/workers/syncpatchevent',
-                        queue_name='iogrow-low-event',
-                        params={
-                            'email': user_from_email.email,
-                            'starts_at': request.starts_at,
-                            'ends_at': request.ends_at,
-                            'summary': request.title,
-                            'event_google_id': event.event_google_id,
-                            'access': request.access,
-                            'timezone': request.timezone,
-                            'location': request.where,
-                            'description': request.description
+                    url='/workers/syncpatchevent',
+                    queue_name='iogrow-low-event',
+                    params={
+                        'email': user_from_email.email,
+                        'starts_at': request.starts_at,
+                        'ends_at': request.ends_at,
+                        'summary': request.title,
+                        'event_google_id': event.event_google_id,
+                        'access': request.access,
+                        'timezone': request.timezone,
+                        'location': request.where,
+                        'description': request.description
 
-                        }
+                    }
                 )
 
                 event.put()
@@ -2675,7 +2673,7 @@ class CrmEngineApi(remote.Service):
 
     # groups.patch API
     @Group.method(
-            http_method='PATCH', path='groups/{id}', name='groups.patch')
+        http_method='PATCH', path='groups/{id}', name='groups.patch')
     def GroupPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
@@ -2708,9 +2706,9 @@ class CrmEngineApi(remote.Service):
         print(params)
         print(user_from_email)
         taskqueue.add(
-                url='/workers/delete_user_leads',
-                queue_name='iogrow-critical',
-                payload=json.dumps(params)
+            url='/workers/delete_user_leads',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
 
@@ -2721,8 +2719,8 @@ class CrmEngineApi(remote.Service):
     def lead_convert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Lead.convert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # leads.convert api
@@ -2783,8 +2781,8 @@ class CrmEngineApi(remote.Service):
     def lead_from_twitter(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Lead.from_twitter(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # leads.get api v2
@@ -2794,8 +2792,8 @@ class CrmEngineApi(remote.Service):
     def lead_get_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Lead.get_schema(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
         # leads.import api
@@ -2806,8 +2804,8 @@ class CrmEngineApi(remote.Service):
     def lead_import_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Lead.import_from_csv_first_step(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # leads.import api
@@ -2819,11 +2817,11 @@ class CrmEngineApi(remote.Service):
         items = []
         for item in request.items:
             items.append(
-                    {
-                        'key': item.key,
-                        'source_column': item.source_column,
-                        'matched_column': item.matched_column
-                    }
+                {
+                    'key': item.key,
+                    'source_column': item.source_column,
+                    'matched_column': item.matched_column
+                }
             )
         token = endpoints.users_id_token._get_token(None)
         params = {
@@ -2833,9 +2831,9 @@ class CrmEngineApi(remote.Service):
             'email': user_from_email.email
         }
         taskqueue.add(
-                url='/workers/lead_import_second_step',
-                queue_name='iogrow-critical',
-                payload=json.dumps(params)
+            url='/workers/lead_import_second_step',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
 
@@ -2886,7 +2884,6 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(LeadMergeRequest, LeadSchema,
                       path='leads/merge', http_method='POST',
                       name='leads.merge')
-
     def lead_merge(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Lead.merge(request=request, user_from_email=user_from_email)
@@ -2923,8 +2920,8 @@ class CrmEngineApi(remote.Service):
     def lead_patch_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Lead.patch(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # leads.search API
@@ -2934,8 +2931,8 @@ class CrmEngineApi(remote.Service):
     def leads_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Lead.search(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # Lead status APIs
@@ -2950,10 +2947,10 @@ class CrmEngineApi(remote.Service):
 
     # leadstatuses.get api
     @Leadstatus.method(
-            request_fields=('id',),
-            path='leadstatuses/{id}',
-            http_method='GET',
-            name='leadstatuses.get'
+        request_fields=('id',),
+        path='leadstatuses/{id}',
+        http_method='GET',
+        name='leadstatuses.get'
     )
     def LeadstatusGet(self, my_model):
         if not my_model.from_datastore:
@@ -2963,9 +2960,9 @@ class CrmEngineApi(remote.Service):
     # leadstatuses.insert api
     @Leadstatus.method(
 
-            path='leadstatuses',
-            http_method='POST',
-            name='leadstatuses.insert'
+        path='leadstatuses',
+        http_method='POST',
+        name='leadstatuses.insert'
     )
     def LeadstatusInsert(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2977,13 +2974,13 @@ class CrmEngineApi(remote.Service):
     # leadstatuses.list api
     @Leadstatus.query_method(
 
-            query_fields=(
-                    'limit',
-                    'order',
-                    'pageToken'
-            ),
-            path='leadstatuses',
-            name='leadstatuses.list'
+        query_fields=(
+                'limit',
+                'order',
+                'pageToken'
+        ),
+        path='leadstatuses',
+        name='leadstatuses.list'
     )
     def LeadstatusList(self, query):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -2992,9 +2989,9 @@ class CrmEngineApi(remote.Service):
     # leadstatuses.patch api
     @Leadstatus.method(
 
-            http_method='PATCH',
-            path='leadstatuses/{id}',
-            name='leadstatuses.patch'
+        http_method='PATCH',
+        path='leadstatuses/{id}',
+        name='leadstatuses.patch'
     )
     def LeadstatusPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -3026,7 +3023,7 @@ class CrmEngineApi(remote.Service):
 
     # members.patch API
     @Member.method(
-            http_method='PATCH', path='members/{id}', name='members.patch')
+        http_method='PATCH', path='members/{id}', name='members.patch')
     def MemberPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
@@ -3035,7 +3032,7 @@ class CrmEngineApi(remote.Service):
 
     # members.update API
     @Member.method(
-            http_method='PUT', path='members/{id}', name='members.update')
+        http_method='PUT', path='members/{id}', name='members.update')
     def MemberUpdate(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
@@ -3070,8 +3067,8 @@ class CrmEngineApi(remote.Service):
     def need_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Need.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # needs.insert api
@@ -3089,8 +3086,8 @@ class CrmEngineApi(remote.Service):
     # needs.list api
     @Need.query_method(query_fields=(
             'limit', 'order', 'pageToken', 'about_kind', 'about_item', 'about_name', 'priority', 'need_status'),
-            path='needs',
-            name='needs.list')
+        path='needs',
+        name='needs.list')
     def need_list(self, query):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return query.filter(ndb.OR(ndb.AND(Need.access == 'public', Need.organization == user_from_email.organization),
@@ -3099,7 +3096,7 @@ class CrmEngineApi(remote.Service):
 
     # needs.patch api
     @Need.method(
-            http_method='PATCH', path='needs/{id}', name='needs.patch')
+        http_method='PATCH', path='needs/{id}', name='needs.patch')
     def NeedPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
@@ -3133,8 +3130,8 @@ class CrmEngineApi(remote.Service):
     def NoteGet(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Note.get_schema(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # notes.insert v2 api
@@ -3149,30 +3146,30 @@ class CrmEngineApi(remote.Service):
         note_author.display_name = user_from_email.google_display_name
         note_author.photo = user_from_email.google_public_profile_photo_url
         note = Note(
-                owner=user_from_email.google_user_id,
-                organization=user_from_email.organization,
-                author=note_author,
-                title=request.title,
-                content=request.content
+            owner=user_from_email.google_user_id,
+            organization=user_from_email.organization,
+            author=note_author,
+            title=request.title,
+            content=request.content
         )
         entityKey_async = note.put_async()
         entityKey = entityKey_async.get_result()
         Edge.insert(
-                start_node=parent_key,
-                end_node=entityKey,
-                kind='topics',
-                inverse_edge='parents'
+            start_node=parent_key,
+            end_node=entityKey,
+            kind='topics',
+            inverse_edge='parents'
         )
         EndpointsHelper.update_edge_indexes(
-                parent_key=parent_key,
-                kind='topics',
-                indexed_edge=str(entityKey.id())
+            parent_key=parent_key,
+            kind='topics',
+            indexed_edge=str(entityKey.id())
         )
         return message_types.VoidMessage()
 
     # notes.patch API
     @Note.method(
-            http_method='PATCH', path='notes/{id}', name='notes.patch')
+        http_method='PATCH', path='notes/{id}', name='notes.patch')
     def NotePatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # Todo: Check permissions
@@ -3205,35 +3202,35 @@ class CrmEngineApi(remote.Service):
                 prop._set_value(node, smart_str(record.value))
             else:
                 setattr(
-                        node,
-                        record.field,
-                        record.value
+                    node,
+                    record.field,
+                    record.value
                 )
             node_values.append(record.value)
             if record.property_type:
                 setattr(
-                        node,
-                        'property_type',
-                        record.property_type
+                    node,
+                    'property_type',
+                    record.property_type
                 )
         entityKey_async = node.put_async()
         entityKey = entityKey_async.get_result()
         Edge.insert(
-                start_node=parent_key,
-                end_node=entityKey,
-                kind='infos',
-                inverse_edge='parents'
+            start_node=parent_key,
+            end_node=entityKey,
+            kind='infos',
+            inverse_edge='parents'
         )
         indexed_edge = '_' + request.kind + ' ' + " ".join(node_values)
         EndpointsHelper.update_edge_indexes(
-                parent_key=parent_key,
-                kind='infos',
-                indexed_edge=indexed_edge
+            parent_key=parent_key,
+            kind='infos',
+            indexed_edge=indexed_edge
         )
         return InfoNodeResponse(
-                entityKey=entityKey.urlsafe(),
-                kind=node.kind,
-                fields=request.fields
+            entityKey=entityKey.urlsafe(),
+            kind=node.kind,
+            fields=request.fields
         )
 
     # infonode.delete api
@@ -3247,16 +3244,16 @@ class CrmEngineApi(remote.Service):
 
     # infonode.list API
     @endpoints.method(
-            InfoNodeListRequest,
-            InfoNodeListResponse,
-            path='infonode/list',
-            http_method='POST',
-            name='infonode.list')
+        InfoNodeListRequest,
+        InfoNodeListResponse,
+        path='infonode/list',
+        http_method='POST',
+        name='infonode.list')
     def infonode_list(self, request):
         parent_key = ndb.Key(urlsafe=request.parent)
         return Node.list_info_nodes(
-                parent_key=parent_key,
-                request=request
+            parent_key=parent_key,
+            request=request
         )
 
     # infonode.patch api
@@ -3279,9 +3276,9 @@ class CrmEngineApi(remote.Service):
         node.put()
         indexed_edge = '_' + node.kind + ' ' + " ".join(node_values)
         EndpointsHelper.update_edge_indexes(
-                parent_key=parent_key,
-                kind='infos',
-                indexed_edge=indexed_edge
+            parent_key=parent_key,
+            kind='infos',
+            indexed_edge=indexed_edge
         )
         return message_types.VoidMessage()
 
@@ -3311,9 +3308,9 @@ class CrmEngineApi(remote.Service):
         params = {'owner': user_from_email.google_user_id}
 
         taskqueue.add(
-                url='/workers/delete_user_opportunities',
-                queue_name='iogrow-critical',
-                payload=json.dumps(params)
+            url='/workers/delete_user_opportunities',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
 
@@ -3324,8 +3321,8 @@ class CrmEngineApi(remote.Service):
     def opportunity_get_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Opportunity.get_schema(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # opportunities.decision.insert api
@@ -3337,10 +3334,10 @@ class CrmEngineApi(remote.Service):
         opportunity_key = ndb.Key(urlsafe=request.opportunityKey)
         contact_key = ndb.Key(urlsafe=request.contactKey)
         Edge.insert(
-                start_node=opportunity_key,
-                end_node=contact_key,
-                kind='decision_by',
-                inverse_edge='has_decision_on'
+            start_node=opportunity_key,
+            end_node=contact_key,
+            kind='decision_by',
+            inverse_edge='has_decision_on'
         )
         return message_types.VoidMessage()
 
@@ -3351,8 +3348,8 @@ class CrmEngineApi(remote.Service):
     def opportunity_insert_timeline(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         OppTimeline.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
         return message_types.VoidMessage()
 
@@ -3363,8 +3360,8 @@ class CrmEngineApi(remote.Service):
     def opportunity_delete_timeline(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         OppTimeline.delete(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
         return message_types.VoidMessage()
 
@@ -3376,8 +3373,8 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         print request
         return Opportunity.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # opportunities.list api v2
@@ -3387,8 +3384,8 @@ class CrmEngineApi(remote.Service):
     def opportunity_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Opportunity.list(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # opportunities export
@@ -3434,8 +3431,8 @@ class CrmEngineApi(remote.Service):
     def opportunity_list_by_stage(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Opportunity.aggregate(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # opportunities.patch api
@@ -3445,22 +3442,22 @@ class CrmEngineApi(remote.Service):
     def opportunity_patch_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Opportunity.patch(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # opportunities.search api
     @endpoints.method(
-            SearchRequest, OpportunitySearchResults,
-            path='opportunities/search',
-            http_method='POST',
-            name='opportunities.search'
+        SearchRequest, OpportunitySearchResults,
+        path='opportunities/search',
+        http_method='POST',
+        name='opportunities.search'
     )
     def opportunities_search(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Opportunity.search(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # opportunities.update_stage api
@@ -3473,8 +3470,8 @@ class CrmEngineApi(remote.Service):
         print ndb.Key(urlsafe=request.entityKey).get()
         print ndb.Key(urlsafe=request.stage).get()
         Opportunity.update_stage(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
         return message_types.VoidMessage()
 
@@ -3486,8 +3483,8 @@ class CrmEngineApi(remote.Service):
     def pipeline_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Pipeline.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # pipelines.get api v2
@@ -3497,8 +3494,8 @@ class CrmEngineApi(remote.Service):
     def pipeline_get_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Pipeline.get_schema(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # pipelines.list api v2
@@ -3508,8 +3505,8 @@ class CrmEngineApi(remote.Service):
     def pipeline_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Pipeline.list(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # pipelines.patch api v2
@@ -3519,8 +3516,8 @@ class CrmEngineApi(remote.Service):
     def pipeline_patch_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Pipeline.patch(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
         # pipelines.delete api v2
 
@@ -3530,8 +3527,8 @@ class CrmEngineApi(remote.Service):
     def pipeline_delete_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         Pipeline.delete(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
         return message_types.VoidMessage()
 
@@ -3545,7 +3542,7 @@ class CrmEngineApi(remote.Service):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         oppo = entityKey.get()
         opportunitystage = Opportunitystage.query(Opportunitystage.organization == user_from_email.organization).order(
-                -Opportunitystage.stage_number).fetch()
+            -Opportunitystage.stage_number).fetch()
         for os in opportunitystage:
             if os.stage_number != 0 and os.stage_number > oppo.stage_number:
                 os.stage_number -= 1
@@ -3555,10 +3552,10 @@ class CrmEngineApi(remote.Service):
 
     # opportunitystages.get api
     @Opportunitystage.method(
-            request_fields=('id',),
-            path='opportunitystage/{id}',
-            http_method='GET',
-            name='opportunitystages.get'
+        request_fields=('id',),
+        path='opportunitystage/{id}',
+        http_method='GET',
+        name='opportunitystages.get'
     )
     def OpportunitystageGet(self, my_model):
         if not my_model.from_datastore:
@@ -3568,9 +3565,9 @@ class CrmEngineApi(remote.Service):
     # opportunitystages.insert api
     @Opportunitystage.method(
 
-            path='opportunitystage',
-            http_method='POST',
-            name='opportunitystages.insert'
+        path='opportunitystage',
+        http_method='POST',
+        name='opportunitystages.insert'
     )
     def OpportunitystageInsert(self, my_model):
         print "my_model======================", my_model.from_datastore
@@ -3580,7 +3577,7 @@ class CrmEngineApi(remote.Service):
         my_model.nbr_opportunity = 0
         count = 0;
         opportunitystage = Opportunitystage.query(Opportunitystage.organization == user_from_email.organization).order(
-                -Opportunitystage.stage_number).fetch(1)
+            -Opportunitystage.stage_number).fetch(1)
         if opportunitystage:
             my_model.stage_number = opportunitystage[0].stage_number + 1
 
@@ -3592,13 +3589,13 @@ class CrmEngineApi(remote.Service):
     # opportunitystages.list api
     @Opportunitystage.query_method(
 
-            query_fields=(
-                    'limit',
-                    'order',
-                    'pageToken'
-            ),
-            path='opportunitystage',
-            name='opportunitystages.list'
+        query_fields=(
+                'limit',
+                'order',
+                'pageToken'
+        ),
+        path='opportunitystage',
+        name='opportunitystages.list'
     )
     def OpportunitystageList(self, query):
 
@@ -3608,9 +3605,9 @@ class CrmEngineApi(remote.Service):
     # opportunitystages.patch api
     @Opportunitystage.method(
 
-            http_method='PATCH',
-            path='opportunitystage/{id}',
-            name='opportunitystages.patch'
+        http_method='PATCH',
+        path='opportunitystage/{id}',
+        name='opportunitystages.patch'
     )
     def OpportunitystagePatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
@@ -3649,25 +3646,25 @@ class CrmEngineApi(remote.Service):
                     if shared_with_user.organization == about.organization:
                         # insert the edge
                         taskqueue.add(
-                                url='/workers/shareobjectdocument',
-                                queue_name='iogrow-low',
-                                params={
-                                    'email': shared_with_user.email,
-                                    'obj_key_str': about_key.urlsafe()
-                                }
+                            url='/workers/shareobjectdocument',
+                            queue_name='iogrow-low',
+                            params={
+                                'email': shared_with_user.email,
+                                'obj_key_str': about_key.urlsafe()
+                            }
                         )
                         Edge.insert(
-                                start_node=about_key,
-                                end_node=shared_with_user_key,
-                                kind='permissions',
-                                inverse_edge='has_access_on'
+                            start_node=about_key,
+                            end_node=shared_with_user_key,
+                            kind='permissions',
+                            inverse_edge='has_access_on'
                         )
                         # update indexes on search for collobaorators_id
                         indexed_edge = shared_with_user.google_user_id + ' '
                         EndpointsHelper.update_edge_indexes(
-                                parent_key=about_key,
-                                kind='collaborators',
-                                indexed_edge=indexed_edge
+                            parent_key=about_key,
+                            kind='collaborators',
+                            indexed_edge=indexed_edge
                         )
                         shared_with_user = None
             elif item.type == 'group':
@@ -3703,27 +3700,27 @@ class CrmEngineApi(remote.Service):
                 if shared_with_user.organization == about.organization:
                     # insert the edge
                     taskqueue.add(
-                            url='/workers/shareobjectdocument',
-                            queue_name='iogrow-low',
-                            params={
-                                'email': shared_with_user.email,
-                                'obj_key_str': about_key.urlsafe()
-                            }
+                        url='/workers/shareobjectdocument',
+                        queue_name='iogrow-low',
+                        params={
+                            'email': shared_with_user.email,
+                            'obj_key_str': about_key.urlsafe()
+                        }
                     )
                     print about_key, shared_with_user_key
                     edge = Edge.query(
-                            Edge.start_node == about_key,
-                            Edge.end_node == shared_with_user_key,
-                            Edge.kind == 'permissions'
+                        Edge.start_node == about_key,
+                        Edge.end_node == shared_with_user_key,
+                        Edge.kind == 'permissions'
                     ).fetch(1)
                     print edge
                     Edge.delete(edge[0].key)
                     # update indexes on search for collobaorators_id
                     indexed_edge = shared_with_user.google_user_id + ' '
                     EndpointsHelper.delete_edge_indexes(
-                            parent_key=about_key,
-                            kind='collaborators',
-                            indexed_edge=indexed_edge
+                        parent_key=about_key,
+                        kind='collaborators',
+                        indexed_edge=indexed_edge
                     )
                     shared_with_user = None
 
@@ -3744,8 +3741,8 @@ class CrmEngineApi(remote.Service):
     def attach_tag(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Tag.attach_tag(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # tags patch api . hadji hicham 22-07-2014.
@@ -3808,8 +3805,8 @@ class CrmEngineApi(remote.Service):
     def tag_insert(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Tag.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # tags.list api v2
@@ -3819,8 +3816,8 @@ class CrmEngineApi(remote.Service):
     def tag_list(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Tag.list_by_kind(
-                user_from_email=user_from_email,
-                kind=request.about_kind
+            user_from_email=user_from_email,
+            kind=request.about_kind
         )
 
     # Tasks APIs
@@ -3838,21 +3835,21 @@ class CrmEngineApi(remote.Service):
                 for edge in edges:
                     assigned_to = edge.end_node.get()
                     taskqueue.add(
-                            url='/workers/syncassigneddeletetask',
-                            queue_name='iogrow-low-task',
-                            params={
-                                'email': assigned_to.email,
-                                'task_key': task.id,
-                                'assigned_to': edge.end_node.get()
-                            }
+                        url='/workers/syncassigneddeletetask',
+                        queue_name='iogrow-low-task',
+                        params={
+                            'email': assigned_to.email,
+                            'task_key': task.id,
+                            'assigned_to': edge.end_node.get()
+                        }
                     )
             taskqueue.add(
-                    url='/workers/syncdeletetask',
-                    queue_name='iogrow-low-task',
-                    params={
-                        'email': user_from_email.email,
-                        'task_google_id': task.task_google_id
-                    }
+                url='/workers/syncdeletetask',
+                queue_name='iogrow-low-task',
+                params={
+                    'email': user_from_email.email,
+                    'task_google_id': task.task_google_id
+                }
             )
 
         Edge.delete_all_cascade(start_node=entityKey)
@@ -3868,9 +3865,9 @@ class CrmEngineApi(remote.Service):
         print(params)
         print(user_from_email)
         taskqueue.add(
-                url='/workers/delete_user_tasks',
-                queue_name='iogrow-critical',
-                payload=json.dumps(params)
+            url='/workers/delete_user_tasks',
+            queue_name='iogrow-critical',
+            payload=json.dumps(params)
         )
         return message_types.VoidMessage()
 
@@ -3881,8 +3878,8 @@ class CrmEngineApi(remote.Service):
     def task_get(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Task.get_schema(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # tasks.insertv2 api
@@ -3892,8 +3889,8 @@ class CrmEngineApi(remote.Service):
     def tasks_insert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Task.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # tasks.listv2 api
@@ -3903,8 +3900,8 @@ class CrmEngineApi(remote.Service):
     def tasks_list_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Task.list(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # tasks.patch api
@@ -3914,8 +3911,8 @@ class CrmEngineApi(remote.Service):
     def tasks_patch_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Task.patch(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # tasks export
@@ -3997,12 +3994,12 @@ class CrmEngineApi(remote.Service):
             for email in request.emails:
                 my_model = User()
                 taskqueue.add(
-                        url='/workers/initpeertopeerdrive',
-                        queue_name='iogrow-low',
-                        params={
-                            'invited_by_email': user_from_email.email,
-                            'email': email,
-                        }
+                    url='/workers/initpeertopeerdrive',
+                    queue_name='iogrow-low',
+                    params={
+                        'invited_by_email': user_from_email.email,
+                        'email': email,
+                    }
                 )
                 invited_user = User.get_by_email(email)
                 send_notification_mail = False
@@ -4036,12 +4033,12 @@ class CrmEngineApi(remote.Service):
                     subject = "Invitation from " + user_from_email.google_display_name
                     html = "<html><head></head><body><div ><div style='margin-left:291px'><a href='www.iogrow.com'><img src='cid:user_cid'  style='width:130px;'/></div><div><h2 style='margin-left:130px ;font-family: sans-serif;color: rgba(137, 137, 137, 1);'></a><span style='color:#1C85BB'>" + user_from_email.google_display_name + "</span> has invited you to use ioGrow</h2><p style='margin-left: 30px;font-family: sans-serif;color: #5B5D62;font-size: 17px'>We are using ioGrow to collaborate, discover new customers and grow our business .It is a website where we manage our relationships with the customers .</p></div><div><a href='" + confirmation_url + "' style='margin-left: 259px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>JOIN YOUR TEAM ON IOGROW</a> <br><hr style=' width: 439px;margin-left: 150px;margin-top: 28px;'><p style='margin-left:290px;font-family:sans-serif'><a href='www.iogrow.com' style='text-decoration: none;'><img src='cid:logo_cid'  alt='Logo'/> ioGrow (c)2015</a></p></div></div></body></html>"
                     message = EndpointsHelper.create_message_with_attchments_local_files(
-                            user_from_email.google_display_name,
-                            email,
-                            cc,
-                            bcc,
-                            subject,
-                            html
+                        user_from_email.google_display_name,
+                        email,
+                        cc,
+                        bcc,
+                        subject,
+                        html
                     )
 
                     EndpointsHelper.send_message(service, 'me', message)
@@ -4124,16 +4121,16 @@ class CrmEngineApi(remote.Service):
         users = User.query(User.organization == user_from_email.organization)
         for user in users:
             user_schema = iomessages.UserSchema(
-                    id=str(user.key.id()),
-                    entityKey=user.key.urlsafe(),
-                    email=user.email,
-                    google_display_name=user.google_display_name,
-                    google_public_profile_url=user.google_public_profile_url,
-                    google_public_profile_photo_url=user.google_public_profile_photo_url,
-                    google_user_id=user.google_user_id,
-                    is_admin=user.is_admin,
-                    status=user.status,
-                    stripe_id=user.stripe_id
+                id=str(user.key.id()),
+                entityKey=user.key.urlsafe(),
+                email=user.email,
+                google_display_name=user.google_display_name,
+                google_public_profile_url=user.google_public_profile_url,
+                google_public_profile_photo_url=user.google_public_profile_photo_url,
+                google_user_id=user.google_user_id,
+                is_admin=user.is_admin,
+                status=user.status,
+                stripe_id=user.stripe_id
             )
             items.append(user_schema)
         invitees_list = []
@@ -4148,11 +4145,11 @@ class CrmEngineApi(remote.Service):
             #     else:
             #            inviteLicenseStatus='Not active'
             invited_schema = iomessages.InvitedUserSchema(
-                    invited_mail=invitee['invited_mail'],
-                    invited_by=invitee['invited_by'],
-                    updated_at=invitee['updated_at'].strftime("%Y-%m-%dT%H:%M:00.000"),
-                    # LicenseStatus= inviteLicenseStatus,
-                    stripe_id=invitee['stripe_id']
+                invited_mail=invitee['invited_mail'],
+                invited_by=invitee['invited_by'],
+                updated_at=invitee['updated_at'].strftime("%Y-%m-%dT%H:%M:00.000"),
+                # LicenseStatus= inviteLicenseStatus,
+                stripe_id=invitee['stripe_id']
             )
             invitees_list.append(invited_schema)
         return iomessages.UserListSchema(items=items, invitees=invitees_list)
@@ -4172,7 +4169,7 @@ class CrmEngineApi(remote.Service):
     def user_patch(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return User.patch(
-                user_from_email=user_from_email, request=request
+            user_from_email=user_from_email, request=request
         )
 
         #  if not my_model.from_datastore:
@@ -4212,7 +4209,7 @@ class CrmEngineApi(remote.Service):
 
     # hadji hicham 4/08/2014 -- get user by google user id
     @User.method(
-            http_method='GET', path='users/{google_user_id}', name='users.get_user_by_gid')
+        http_method='GET', path='users/{google_user_id}', name='users.get_user_by_gid')
     def UserGetByGId(self, my_model):
         user = User.query().filter(User.google_user_id == my_model.google_user_id).get()
         if user == None:
@@ -4230,38 +4227,38 @@ class CrmEngineApi(remote.Service):
         #     return my_model
         # hadji hicham 11/08/2014. get user by id
 
-    @endpoints.method(iomessages.customerRequest, iomessages.customerResponse,
-                      http_method='GET', path='users/{id}', name='users.customer')
-    def Customer(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        cust = stripe.Customer.retrieve(request.id)
-        charges_list = stripe.Charge.all(customer=request.id)
-        subscriptions_list = cust.subscriptions.all()
-
-        subscriptions = []
-        for subscription in subscriptions_list.data:
-            kwargsubscription = {
-                "id": subscription.id,
-                "current_period_start": datetime.datetime.fromtimestamp(
-                        int(subscription.current_period_start)).strftime('%Y-%m-%d %H:%M:%S'),
-                "current_period_end": datetime.datetime.fromtimestamp(int(subscription.current_period_end)).strftime(
-                        '%Y-%m-%d %H:%M:%S'),
-                "status": str(subscription.status),
-                "plan": subscription.plan.name
-            }
-            subscriptions.append(kwargsubscription)
-
-        kwargs = {
-            "customer_id": cust.id,
-            "email": cust.email,
-            "google_public_profile_photo_url": cust.metadata.google_public_profile_photo_url,
-            "google_display_name": cust.metadata.google_display_name,
-            "google_user_id": cust.metadata.google_user_id,
-            "subscriptions": subscriptions
-        }
-        # user=User.query().filter(User.id==my_model.id).get()
-
-        return iomessages.customerResponse(**kwargs)
+    # @endpoints.method(iomessages.customerRequest, iomessages.customerResponse,
+    #                   http_method='GET', path='users/{id}', name='users.customer')
+    # def Customer(self, request):
+    #     user_from_email = EndpointsHelper.require_iogrow_user()
+    #     cust = stripe.Customer.retrieve(request.id)
+    #     charges_list = stripe.Charge.all(customer=request.id)
+    #     subscriptions_list = cust.subscriptions.all()
+    #
+    #     subscriptions = []
+    #     for subscription in subscriptions_list.data:
+    #         kwargsubscription = {
+    #             "id": subscription.id,
+    #             "current_period_start": datetime.datetime.fromtimestamp(
+    #                 int(subscription.current_period_start)).strftime('%Y-%m-%d %H:%M:%S'),
+    #             "current_period_end": datetime.datetime.fromtimestamp(int(subscription.current_period_end)).strftime(
+    #                 '%Y-%m-%d %H:%M:%S'),
+    #             "status": str(subscription.status),
+    #             "plan": subscription.plan.name
+    #         }
+    #         subscriptions.append(kwargsubscription)
+    #
+    #     kwargs = {
+    #         "customer_id": cust.id,
+    #         "email": cust.email,
+    #         "google_public_profile_photo_url": cust.metadata.google_public_profile_photo_url,
+    #         "google_display_name": cust.metadata.google_display_name,
+    #         "google_user_id": cust.metadata.google_user_id,
+    #         "subscriptions": subscriptions
+    #     }
+    #     # user=User.query().filter(User.id==my_model.id).get()
+    #
+    #     return iomessages.customerResponse(**kwargs)
 
     # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
     @endpoints.method(CalendarFeedsRequest, CalendarFeedsResults,
@@ -4526,8 +4523,8 @@ class CrmEngineApi(remote.Service):
         params = json.dumps(params)
 
         r = requests.post(
-                "http://104.154.66.240:9200/linkedin/profile/_search?size=" + str(limit) + "&from=" + str(skip),
-                data=params)
+            "http://104.154.66.240:9200/linkedin/profile/_search?size=" + str(limit) + "&from=" + str(skip),
+            data=params)
         # r= requests.post("http://localhost:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
         results = r.json()
         total = results["hits"]["total"]
@@ -4610,20 +4607,20 @@ class CrmEngineApi(remote.Service):
         pro = linkedin.scrape_linkedin_url(request.url)
         if (pro):
             response = LinkedinProfileSchema(
-                    fullname=pro["full-name"],
-                    industry=pro["industry"],
-                    locality=pro["locality"],
-                    title=pro["title"],
-                    current_post=pro["current_post"],
-                    past_post=pro["past_post"],
-                    formations=pro["formations"],
-                    websites=pro["websites"],
-                    relation=pro["relation"],
-                    experiences=json.dumps(pro["experiences"]),
-                    education=json.dumps(pro["education"]),
-                    resume=pro["resume"],
-                    certifications=json.dumps(pro["certifications"]),
-                    profile_picture=pro['profile_picture']
+                fullname=pro["full-name"],
+                industry=pro["industry"],
+                locality=pro["locality"],
+                title=pro["title"],
+                current_post=pro["current_post"],
+                past_post=pro["past_post"],
+                formations=pro["formations"],
+                websites=pro["websites"],
+                relation=pro["relation"],
+                experiences=json.dumps(pro["experiences"]),
+                education=json.dumps(pro["education"]),
+                resume=pro["resume"],
+                certifications=json.dumps(pro["certifications"]),
+                profile_picture=pro['profile_picture']
             )
         return response
 
@@ -4649,26 +4646,26 @@ class CrmEngineApi(remote.Service):
         empty_string = lambda x: x if x else ""
         linkedin = linked_in()
         keyword = empty_string(request.firstname) + " " + empty_string(request.lastname) + " " + empty_string(
-                request.company)
+            request.company)
         pro = linkedin.scrape_linkedin(keyword)
         response = LinkedinProfileSchema()
         if (pro):
             if linkedin.dice_coefficient(keyword, pro["full-name"]) >= 0.5:
                 response = LinkedinProfileSchema(
-                        fullname=pro["full-name"],
-                        industry=pro["industry"],
-                        locality=pro["locality"],
-                        title=pro["title"],
-                        current_post=pro["current_post"],
-                        past_post=pro["past_post"],
-                        formations=pro["formations"],
-                        websites=pro["websites"],
-                        relation=pro["relation"],
-                        experiences=json.dumps(pro["experiences"]),
-                        resume=pro["resume"],
-                        certifications=json.dumps(pro["certifications"]),
-                        skills=pro["skills"],
-                        profile_picture=pro['profile_picture']
+                    fullname=pro["full-name"],
+                    industry=pro["industry"],
+                    locality=pro["locality"],
+                    title=pro["title"],
+                    current_post=pro["current_post"],
+                    past_post=pro["past_post"],
+                    formations=pro["formations"],
+                    websites=pro["websites"],
+                    relation=pro["relation"],
+                    experiences=json.dumps(pro["experiences"]),
+                    resume=pro["resume"],
+                    certifications=json.dumps(pro["certifications"]),
+                    skills=pro["skills"],
+                    profile_picture=pro['profile_picture']
                 )
 
         return response
@@ -4681,7 +4678,7 @@ class CrmEngineApi(remote.Service):
         empty_string = lambda x: x if x else ""
         linkedin = linked_in()
         keyword = empty_string(request.firstname) + " " + empty_string(request.lastname) + " " + empty_string(
-                request.company)
+            request.company)
         pro = linkedin.open_url_list(keyword)
         items = []
         for p in pro:
@@ -4696,7 +4693,7 @@ class CrmEngineApi(remote.Service):
         empty_string = lambda x: x if x else ""
         linkedin = linked_in()
         keyword = empty_string(request.firstname) + " " + empty_string(request.lastname) + " " + empty_string(
-                request.company)
+            request.company)
         pro = linkedin.open_company_list(keyword)
         items = []
         for p in pro:
@@ -4718,7 +4715,7 @@ class CrmEngineApi(remote.Service):
         empty_string = lambda x: x if x else ""
         linkedin = linked_in()
         keyword = empty_string(request.firstname) + " " + empty_string(request.lastname) + " " + empty_string(
-                request.company)
+            request.company)
         pro = linkedin.open_url_twitter_list(keyword)
         items = []
         for p in pro:
@@ -5091,7 +5088,7 @@ class CrmEngineApi(remote.Service):
                                 opportunitie = Opportunity.get_by_id(ndb.Key.id(opportunity_key))
                                 amount += opportunitie.amount_total
                             list_of_reports.append(
-                                    (stage.name, len(edges), str(organization), amount, totalamount, totalopp))
+                                (stage.name, len(edges), str(organization), amount, totalamount, totalopp))
 
             if not group_by:
                 for user in users:
@@ -5123,7 +5120,7 @@ class CrmEngineApi(remote.Service):
                                     opportunities.append(opportunitie)
                                 amount += opportunitie.amount_total
                             list_of_reports.append(
-                                    (gid, gname, len(edges), created_at, str(org_id), amount, totalamount, totalopp))
+                                (gid, gname, len(edges), created_at, str(org_id), amount, totalamount, totalopp))
                         else:
                             amount = 0
                             opportunities = Opportunity.query(Opportunity.owner == gid).fetch()
@@ -5138,7 +5135,7 @@ class CrmEngineApi(remote.Service):
                             amount += opportunity.amount_total
 
                         list_of_reports.append(
-                                (
+                            (
                                 gid, gname, len(opportunities), created_at, str(org_id), amount, totalamount, totalopp))
 
                 list_of_reports.sort(key=itemgetter(2), reverse=True)
@@ -5474,7 +5471,7 @@ class CrmEngineApi(remote.Service):
                 gmail = users[0].email
                 created_at = users[0].created_at
                 list_of_reports.append(
-                        (gid, gname, gmail, len(accounts), len(contacts), len(leads), len(tasks), created_at))
+                    (gid, gname, gmail, len(accounts), len(contacts), len(leads), len(tasks), created_at))
                 item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],
                                                       google_display_name=list_of_reports[0][1],
                                                       email=list_of_reports[0][2], count_account=list_of_reports[0][3],
@@ -5499,7 +5496,7 @@ class CrmEngineApi(remote.Service):
                 gmail = user.email
                 created_at = user.created_at
                 list_of_reports.append(
-                        (gid, gname, gmail, len(accounts), len(contacts), len(leads), len(tasks), created_at))
+                    (gid, gname, gmail, len(accounts), len(contacts), len(leads), len(tasks), created_at))
 
             reporting = []
             for item in list_of_reports:
@@ -5793,8 +5790,8 @@ class CrmEngineApi(remote.Service):
     def license_insert(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return License.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
 
     # hadji hicham 26/08/2014. purchase license for user.
@@ -5807,10 +5804,10 @@ class CrmEngineApi(remote.Service):
         cust.card = token
         cust.save()
         charge = stripe.Charge.create(
-                amount=2000,
-                currency="usd",
-                customer=cust.id,
-                description="Charge for  " + request.token_email)
+            amount=2000,
+            currency="usd",
+            customer=cust.id,
+            description="Charge for  " + request.token_email)
         cust.subscriptions.create(plan="iogrow_plan")
 
         return BillingResponse(response=token)
@@ -5822,13 +5819,13 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         token = request.token_id
         charge = stripe.Charge.create(
-                amount=2000,
-                currency="usd",
-                card=token,
-                description="license for the organization  " + request.organization)
+            amount=2000,
+            currency="usd",
+            card=token,
+            description="license for the organization  " + request.organization)
         return License.insert(
-                user_from_email=user_from_email,
-                request=request
+            user_from_email=user_from_email,
+            request=request
         )
         # hadji hicham 26/08/2014 .
         # sub=cust.subscriptions
@@ -6005,9 +6002,9 @@ class CrmEngineApi(remote.Service):
             topics = request.value
         results = Discovery.list_tweets_from_datastore(topics, request.limit, request.pageToken)
         return tweetsResponse(
-                items=results['items'],
-                nextPageToken=results['next_curs'],
-                is_crawling=results['is_crawling']
+            items=results['items'],
+            nextPageToken=results['next_curs'],
+            is_crawling=results['is_crawling']
         )
 
         return tweetsResponse(items=list)
@@ -6328,10 +6325,10 @@ class CrmEngineApi(remote.Service):
         try:
 
             charge = stripe.Charge.create(
-                    amount=amount_ch,  # amount in cents, again
-                    currency="usd",
-                    card=token,
-                    description=email
+                amount=amount_ch,  # amount in cents, again
+                currency="usd",
+                card=token,
+                description=email
             )
             if charge:
                 transaction = TransactionModel(organization=user_from_email.organization, charge=charge.id,
@@ -6358,30 +6355,30 @@ class CrmEngineApi(remote.Service):
                 list_emails.append(user_from_email.email)
                 list_emails.append(request.billing_contact_email)
                 body = '<h2>Congratulations !</h2><p style="font-size: 15px;">The payment is approved by your bank.You have now ' + request.nb_licenses + ' licences activated.&nbsp;</p><ul style="list-style: none; padding-left: 15px;"><li style="/* padding-top: 10px; */ padding-bottom: 10px;"> <strong>Company name :</strong> ' + organization.name + ' </li><li style=" padding-bottom: 10px;"> <strong>number of licenses :</strong> ' + request.nb_licenses + ' </li><li style=" padding-bottom: 10px;"> <strong>Total amount :</strong> ' + str(
-                        total_amount) + ' $</li><li style="padding-bottom: 10px;"> <strong>Transaction reference : ' + transaction_balance + ' </strong> </li></ul>'
+                    total_amount) + ' $</li><li style="padding-bottom: 10px;"> <strong>Transaction reference : ' + transaction_balance + ' </strong> </li></ul>'
                 if (request.billing_contact_email == None) or (user_from_email.email == request.billing_contact_email):
 
                     taskqueue.add(
-                            url='/workers/send_email_notification',
-                            queue_name='iogrow-low',
-                            params={
-                                'user_email': user_from_email.email,
-                                'to': user_from_email.email,
-                                'subject': '[RE]: Successful Payment operation',
-                                'body': body
-                            }
+                        url='/workers/send_email_notification',
+                        queue_name='iogrow-low',
+                        params={
+                            'user_email': user_from_email.email,
+                            'to': user_from_email.email,
+                            'subject': '[RE]: Successful Payment operation',
+                            'body': body
+                        }
                     )
                 else:
                     for x in xrange(0, 2):
                         taskqueue.add(
-                                url='/workers/send_email_notification',
-                                queue_name='iogrow-low',
-                                params={
-                                    'user_email': user_from_email.email,
-                                    'to': list_emails[x],
-                                    'subject': '[RE]: Successful Payment operation',
-                                    'body': body
-                                }
+                            url='/workers/send_email_notification',
+                            queue_name='iogrow-low',
+                            params={
+                                'user_email': user_from_email.email,
+                                'to': list_emails[x],
+                                'subject': '[RE]: Successful Payment operation',
+                                'body': body
+                            }
                         )
 
         except stripe.CardError, e:
@@ -6400,7 +6397,7 @@ class CrmEngineApi(remote.Service):
     def keyword_list(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Keyword.list_keywords(
-                user_from_email=user_from_email
+            user_from_email=user_from_email
         )
 
     @endpoints.method(ProfileDeleteRequest, KeywordListResponse,
@@ -6410,7 +6407,7 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         Keyword.delete(request)
         return Keyword.list_keywords(
-                user_from_email=user_from_email
+            user_from_email=user_from_email
         )
 
     @endpoints.method(message_types.VoidMessage, MsgSchema,
@@ -6419,7 +6416,7 @@ class CrmEngineApi(remote.Service):
     def desactivate_user(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         msg = User.desactivate(
-                user_from_email=user_from_email
+            user_from_email=user_from_email
         )
         return MsgSchema(msg=msg)
 
@@ -6429,8 +6426,8 @@ class CrmEngineApi(remote.Service):
     def switch_org(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         msg = User.switch_org(
-                user_from_email=user_from_email,
-                entityKey=request.entityKey
+            user_from_email=user_from_email,
+            entityKey=request.entityKey
         )
         return MsgSchema(msg=msg)
 
@@ -6461,7 +6458,8 @@ class CrmEngineApi(remote.Service):
 
         return message_types.VoidMessage()
 
-    @endpoints.method(FullContactRequest, message_types.VoidMessage, path='fullContact/web_hook', http_method='POST',
+    @endpoints.method(FullContactRequest, message_types.VoidMessage,
+                      path='fullContact/web_hook', http_method='POST',
                       name='fullContact.web_hook')
     def handel_web_hook(self, request):
         contact = request.contact
@@ -6477,3 +6475,26 @@ class CrmEngineApi(remote.Service):
         Lead.create_lead_full_contact(contact, user, params.access)
 
         return message_types.VoidMessage()
+
+    @endpoints.method(response_message=SubscriptionSchema, http_method='GET',
+                      name='subscription.get', path='subscription/get')
+    def get_subscription(self, request):
+        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        return organization.get_subscription().get_schema()
+
+    @endpoints.method(name='subscription.delete', path='subscription/delete')
+    def delete_subscription(self, request):
+        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        subscription = organization.subscription
+        if subscription:
+            sub_from_db = subscription.get()
+            if sub_from_db.plan.get().name == config.PREMIUM:
+                organization.set_subscription(Subscription.create_freemium_subscription())
+                try:
+                    customer = stripe.Customer.retrieve(organization.stripe_customer_id)
+                    customer.subscriptions.retrieve(sub_from_db.stripe_subscription_id).delete()
+                except stripe.APIError:
+                    raise endpoints.NotFoundException("")
+                return message_types.VoidMessage()
+        raise endpoints.NotFoundException("")
+
