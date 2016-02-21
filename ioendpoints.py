@@ -204,7 +204,8 @@ class getLinkedinListSchema(messages.Message):
 class LinkedinProfileRequest(messages.Message):
     firstname = messages.StringField(1)
     lastname = messages.StringField(2)
-    company = messages.StringField(3)
+    title = messages.StringField(3)
+    company = messages.StringField(4)
 
 
 class LinkedinProfileRequestSchema(messages.Message):
@@ -4648,7 +4649,7 @@ class CrmEngineApi(remote.Service):
         empty_string = lambda x: x if x else ""
         linkedin = linked_in()
         keyword = empty_string(request.firstname) + " " + empty_string(request.lastname) + " " + empty_string(
-                request.company)
+                request.title)+ " " + empty_string(request.company)
         pro = linkedin.scrape_linkedin(keyword)
         response = LinkedinProfileSchema()
         if (pro):
@@ -4680,7 +4681,7 @@ class CrmEngineApi(remote.Service):
         empty_string = lambda x: x if x else ""
         linkedin = linked_in()
         keyword = empty_string(request.firstname) + " " + empty_string(request.lastname) + " " + empty_string(
-                request.company)
+                request.title) + " " + empty_string(request.company)
         pro = linkedin.open_url_list(keyword)
         items = []
         for p in pro:
