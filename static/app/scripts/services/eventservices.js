@@ -174,7 +174,9 @@ Event.get_docs=function($scope,params){
 
       gapi.client.crmengine.events.insertv2(params).execute(function(resp) {
           if (resp.error && resp.error.code == 412){
-              window.location.replace($rootScope.subscription_url);
+              $('#payment_modal').modal('show');
+              return
+              //window.location.replace($rootScope.subscription_url);
           }
           if(!resp.code){
             //$('#calendar').fullCalendar( 'refetchEvents' );
