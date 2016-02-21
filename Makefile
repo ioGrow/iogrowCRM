@@ -2,11 +2,8 @@
 # This is IOgrow Makefile
 #
 
-VERSION=0.1
-
-default: 
-	@echo "choose a target:"
-	@echo "test_pylint \n\t run the tests of pylint on the code base " 
+js:
+	grunt concat; grunt uglify
 	
 
 test_pylint:
