@@ -296,7 +296,9 @@ accountservices.factory('Case', function($rootScope) {
      $scope.inProcess(true);
       gapi.client.crmengine.cases.insertv2(casee).execute(function(resp) {
           if (resp.error && resp.error.code == 412){
-              window.location.replace($rootScope.subscription_url);
+              $('#payment_modal').modal('show');
+              return
+              //window.location.replace($rootScope.subscription_url);
           }
          if(!resp.code){
           if ($scope.cases == undefined){

@@ -339,11 +339,8 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
                 $scope.show = localStorage['leadShow'];
 
-            }
-            ;
+            };
             window.Intercom('update');
-
-
         };
         $scope.refreshCurrent = function () {
             $scope.runTheProcess();
