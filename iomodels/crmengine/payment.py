@@ -8,7 +8,6 @@ from google.appengine.ext import ndb
 import stripe
 from iomessages import SubscriptionSchema, PlanSchema
 from iomodels.crmengine import config
-from profilehooks import timecall
 
 
 def _created_record_count_after(entity, organization, start_date):
@@ -19,7 +18,7 @@ def _created_record_count_after(entity, organization, start_date):
 stripe.api_key = config.STRIPE_API_KEY
 
 
-@timecall
+
 def created_record_sum(entities, organization, start_date):
     sum1 = sum(
         [_created_record_count_after(entity.partition('_')[2].capitalize(), organization, start_date) for entity in
