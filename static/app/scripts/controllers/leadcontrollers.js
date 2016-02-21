@@ -2476,7 +2476,9 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     $scope.linkedShortProfile = {};
                     var params = {
                         "firstname": $scope.lead.firstname,
-                        "lastname": $scope.lead.lastname
+                        "lastname": $scope.lead.lastname,
+                        "title": $scope.lead.title,
+                        "company": $scope.lead.company
                     }
                     Linkedin.listPeople(params, function (resp) {
                         if (!resp.code) {
@@ -4122,8 +4124,11 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.getLinkedinProfile = function () {
             var params = {
                 "firstname": $scope.lead.firstname,
-                "lastname": $scope.lead.lastname
+                "lastname": $scope.lead.lastname,
+                "title": $scope.lead.title,
+                "company": $scope.lead.company
             }
+
             var linkedurl = null
             if ($scope.infonodes.sociallinks == undefined) {
                 $scope.infonodes.sociallinks = [];
@@ -5380,7 +5385,9 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.getLinkedinProfile = function () {
             var params = {
                 "firstname": $scope.lead.firstname,
-                "lastname": $scope.lead.lastname
+                "lastname": $scope.lead.lastname,
+                "title": $scope.lead.title,
+                "company": $scope.lead.company
             }
             var linkedurl = null;
             $scope.inNoResults = false;

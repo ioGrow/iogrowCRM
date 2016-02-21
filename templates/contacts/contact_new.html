@@ -146,6 +146,7 @@
 
                                                     <div class="col-md-8" >
                                                         <input type="text" required id="id_firstname"
+                                                               ng-blur="getLinkedinProfile();getTwitterProfile()"
                                                                class="form-control" ng-model="contact.firstname">
                                                     </div>
                                                 </div>
@@ -170,6 +171,7 @@
 
                                                     <div class="col-md-8">
                                                         <input type="text" class="form-control"
+                                                               ng-blur="getLinkedinProfile();"
                                                                ng-model="contact.title">
                                                     </div>
                                                 </div>
@@ -179,7 +181,14 @@
                                                     <label class="control-label col-md-4">{{ _('Company')}}</label>
 
                                                     <div class="col-md-8">
-                                                          <input typeahead-loading="accSearchLoading" ng-class="{'spinner':accSearchLoading}" type="text" ng-model="searchAccountQuery" typeahead="result as result.name  for result in getResults($viewValue,'/crmengine/v1/accounts/search') | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control">
+                                                          <input ng-blur="getLinkedinProfile();"
+                                                                 typeahead-loading="accSearchLoading"
+                                                                 ng-class="{'spinner':accSearchLoading}"
+                                                                 type="text"
+                                                                 ng-model="searchAccountQuery"
+                                                                 typeahead="result as result.name  for result in getResults($viewValue,'/crmengine/v1/accounts/search') | filter:$viewValue | limitTo:10"
+                                                                 typeahead-on-select="selectAccount()"
+                                                                 class="form-control">
                                                     </div>
                                                 </div>
                                             </div>
