@@ -6,7 +6,6 @@ accountservices.factory('User', function ($http) {
     var User = function (data) {
         angular.extend(this, data);
     };
-
     User.getOrganizationLicensesStatus = function ($scope, params) {
         $scope.isLoading = true;
         gapi.client.crmengine.organizations.get(params).execute(function (resp) {

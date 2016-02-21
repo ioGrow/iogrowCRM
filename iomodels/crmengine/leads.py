@@ -4,6 +4,7 @@ import json
 import logging
 import re
 import time
+
 import endpoints
 import model
 import requests
@@ -13,8 +14,9 @@ from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
-from model import User
 from protorpc import messages
+
+import config
 import iomessages
 import tweepy
 from endpoints_helper import EndpointsHelper
@@ -28,6 +30,7 @@ from iomodels.crmengine.documents import Document, DocumentListResponse
 from iomodels.crmengine.events import Event, EventListResponse
 from iomodels.crmengine.notes import Note, TopicListResponse
 from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
+from iomodels.crmengine.payment import payment_required
 from iomodels.crmengine.tags import Tag, TagSchema
 from iomodels.crmengine.tasks import Task, TaskListResponse
 from profilehooks import timecall
@@ -328,7 +331,7 @@ class Lead(EndpointsModel):
     source = ndb.StringProperty()
     status = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
-    updated_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
     created_by = ndb.KeyProperty()
     show = ndb.KeyProperty()
     linkedin_profile = ndb.KeyProperty()
@@ -860,6 +863,7 @@ class Lead(EndpointsModel):
         return resp
 
     @classmethod
+    @payment_required()
     def insert(cls, user_from_email, request):
         first_name = smart_str(request.firstname).lower()
         last_name = smart_str(request.lastname).lower()

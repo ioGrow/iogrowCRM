@@ -1,5 +1,5 @@
 var contactservices = angular.module('crmEngine.contactservices', []);
-accountservices.factory('Contact', function ($http) {
+accountservices.factory('Contact', function ($rootScope) {
 
     var Contact = function (data) {
         angular.extend(this, data);
@@ -654,7 +654,9 @@ accountservices.factory('Contact', function ($http) {
         trackMixpanelAction('CONTACT_INSERT');
         $scope.inProcess(true);
         gapi.client.crmengine.contacts.insertv2(params).execute(function (resp) {
-
+            if (resp.error && resp.error.code == 412){
+                window.location.replace($rootScope.subscription_url);
+            }
             if (!resp.code) {
                 if ($scope.contacts == undefined) {
                     $scope.contacts = [];

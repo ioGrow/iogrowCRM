@@ -1,6 +1,6 @@
 var eventservices = angular.module('crmEngine.eventservices',[]);
 
-eventservices.factory('Event', function($http) {
+eventservices.factory('Event', function($rootScope) {
 
   var Event = function(data) {
     angular.extend(this, data);
@@ -173,6 +173,9 @@ Event.get_docs=function($scope,params){
       $scope.isLoading = true;
 
       gapi.client.crmengine.events.insertv2(params).execute(function(resp) {
+          if (resp.error && resp.error.code == 412){
+              window.location.replace($rootScope.subscription_url);
+          }
           if(!resp.code){
             //$('#calendar').fullCalendar( 'refetchEvents' );
             if ($scope.events == undefined){

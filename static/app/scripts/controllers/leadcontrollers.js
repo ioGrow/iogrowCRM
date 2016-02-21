@@ -317,18 +317,13 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 
             }
 
-            // for (var i=0;i<100;i++)
-            //   { 
-            //     var poww= Math.floor((Math.random() * 10) + 1);
-            //     var addon=Math.pow(10, poww);
-            //     console.log(poww);
-            //     console.log(addon);
-            //     var test=addon.toString();
-            //     params={'firstname':'M3amer ',
-            //             'lastname':'tt'+test,
-            //               'access':'public'}
-            //     Lead.insert($scope,params)
-            //   }            
+             /*for (var i=0;i<20;i++)
+               {
+                 params={'firstname':'test' + i,
+                         'lastname':'test'+i,
+                           'access':'public'}
+                 Lead.insert($scope,params)
+               }*/
 
             
             $scope.checkScrollBar();
