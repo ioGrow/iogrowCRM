@@ -31,7 +31,7 @@ def payment_required():
     def payment_r(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            rate_limit_message = "Your free plan rich it's limit."
+            rate_limit_message = "Your free plan reach it's limit."
             organization = _get_organization(kwargs)
             subscription = organization.get().get_subscription()
             if subscription.plan.get().name != config.PREMIUM:
