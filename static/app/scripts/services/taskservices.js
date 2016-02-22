@@ -168,7 +168,9 @@ Task.get_docs=function($scope,params){
       gapi.client.crmengine.tasks.insertv2(params).execute(function(resp) {
 
           if (resp.error && resp.error.code == 412){
-              window.location.replace($rootScope.subscription_url);
+              $('#payment_modal').modal('show');
+              return
+              //window.location.replace($rootScope.subscription_url);
           }
          if(!resp.code){
 
@@ -240,7 +242,7 @@ gapi.client.crmengine.edges.delete(params).execute(function(resp) {
 
     return base_url+id;
 
- }
+ };
 
 Task.delete=function($scope,params){
   trackMixpanelAction('TASK_DELETE');
