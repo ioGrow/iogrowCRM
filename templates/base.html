@@ -266,7 +266,6 @@
 </div>
 <!--navbar inner-->
 <!-- END TOP NAVIGATION BAR ng-controller="SearchFormController"  -->
-</div>
 <div ng-controller="MysettingShowController">
     <!--HKA 11.10.2013 Edit Introduction  -->
     <div id="EditSetting" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -362,6 +361,27 @@
                 </div>
             </form>
         </div>
+    </div>
+</div>
+
+<div id="payment_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h1 style="text-align: center">
+                    {% if plan.name=='freemium' %} You have rich your free limit.
+                    {% elif plan.name=='premium' %} You subscription has expired.{% endif %}
+                    <small>Please buy new license</small>
+                    </h1>
+            </div>
+            <div class="modal-footer" style="border-top-width: 0px;text-align: center">
+                <a href="/subscribe"  class="btn btn-primary">Buy Now</a>
+                <button type="button" class="btn" data-dismiss="modal">Maybe later</button>
+            </div>
+        </div>
+
     </div>
 </div>
 <!--div id="SendFeedbackModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -465,6 +485,7 @@
 <!-- end the stripe code -->
 <script src="/static/build/js/first_sync_scripts.js" type="text/javascript"></script>
 <script>
+
     $('document').ready(function () {
         if (window.location.hash.indexOf('admin') != -1) {
             $('#sales_tabs').hide()

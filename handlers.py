@@ -225,6 +225,7 @@ class BaseHandler(webapp2.RequestHandler):
                 if template_name in template_mapping.keys():
                     custom_fields = model.CustomField.list_by_object(user, template_mapping[template_name])
                 # text=i18n.gettext('Hello, world!')
+                organization = user.organization.get()
                 template_values = {
                     'is_freemium': is_freemium,
                     'is_admin': is_admin,
@@ -247,7 +248,8 @@ class BaseHandler(webapp2.RequestHandler):
                     'sections_delimiter': currency_format.sections_delimiter,
                     'decimal_delimiter': currency_format.decimal_delimiter,
                     'sales_tabs': STANDARD_TABS,
-                    'admin_tabs': ADMIN_TABS
+                    'admin_tabs': ADMIN_TABS,
+                    'plan': organization.get_subscription().plan.get()
                 }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -518,6 +520,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                         license_is_expired = True
                 if user.license_status == "suspended":
                     user_suspended = True
+                organization = user.organization.get()
                 template_values = {
                     'logo': logo,
                     'license_is_expired': False,
@@ -533,7 +536,8 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     'sales_app': sales_app,
                     'organization_name': organization.name,
                     'sales_tabs': STANDARD_TABS,
-                    'admin_tabs': ADMIN_TABS
+                    'admin_tabs': ADMIN_TABS,
+                    'plan': organization.get_subscription().plan.get()
                 }
                 if admin_app:
                     template_values['admin_app'] = admin_app
