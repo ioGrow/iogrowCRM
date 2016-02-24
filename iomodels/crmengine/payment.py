@@ -34,7 +34,10 @@ def payment_required():
             rate_limit_message = "Your free plan rich it's limit."
             organization = _get_organization(kwargs)
             subscription = organization.get().get_subscription()
-            if subscription.plan.get().name != config.PREMIUM:
+            plan = subscription.plan.get()
+            if subscription.expiration_date < datetime.datetime.now():
+                organization.set_subscription(Subscription.create_freemium_subscription())
+            elif plan.name != config.PREMIUM:
                 limit = subscription.get_records_limit()
                 if limit is not None:
                     entities = subscription.get_activated_plan().kinds_to_limit
@@ -82,7 +85,7 @@ class Plan(BaseModel):
 
     @classmethod
     def get_freemium_plan(cls):
-        return cls.get_by_name_and_interval(config.FREEMIUM)
+        return cls.get_by_name_and_interval(config.FREEMIUM, interval=config.MONTH)
 
     @classmethod
     def get_premium_plan(cls, interval):
@@ -105,15 +108,19 @@ class Plan(BaseModel):
                 raise AttributeError('This name is not supported')
             plan.put()
 
-            if plan.name == config.PREMIUM:
+            # if plan.name == config.PREMIUM:
+            stripe_plan = None
+            try:
                 stripe_plan = stripe.Plan.retrieve('{}_{}'.format(config.PREMIUM, interval))
-                if not stripe_plan:
-                    stripe.Plan.create(
-                        amount=plan.price,
-                        interval=interval,
-                        name='{} {}'.format(interval.capitalize(), config.PREMIUM),
-                        currency='usd',
-                        id='{}_{}'.format(config.PREMIUM, interval))
+            except stripe.StripeError:
+                pass
+            if not stripe_plan:
+                stripe.Plan.create(
+                    amount=plan.price,
+                    interval=interval,
+                    name='{} {}'.format(interval.capitalize(), config.PREMIUM),
+                    currency='usd',
+                    id='{}_{}'.format(config.PREMIUM, interval))
         return plan
 
     def calculate_price(self):
@@ -147,6 +154,7 @@ class Subscription(BaseModel):
     def create_freemium_subscription(cls):
         plan = Plan.get_freemium_plan().key
         subscription = Subscription(plan=plan, start_date=datetime.datetime.now(),
+                                    expiration_date=cls._calculate_expiration_date(config.MONTH),
                                     description='Default Subscription')
         subscription.put()
         return subscription
@@ -171,9 +179,9 @@ class Subscription(BaseModel):
     @classmethod
     def _calculate_expiration_date(cls, interval):
         if interval == config.MONTH:
-            return datetime.datetime.now() + datetime.timedelta(days=30)
+            return datetime.datetime.now() + datetime.timedelta(days=31)
         elif interval == config.YEAR:
-            return datetime.datetime.now() + datetime.timedelta(days=365)
+            return datetime.datetime.now() + datetime.timedelta(days=367)
         else:
             raise AttributeError('This cycle name is not supported')
 

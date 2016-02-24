@@ -8,6 +8,7 @@ from google.appengine.api import taskqueue
 from google.appengine.api import search
 from google.appengine.api import urlfetch
 
+from iomodels.crmengine import config
 from iomodels.crmengine.payment import Subscription
 from oauth2client.appengine import CredentialsNDBProperty
 from apiclient.discovery import build
@@ -132,7 +133,7 @@ folders = {}
 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
 # stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+stripe.api_key = config.STRIPE_API_KEY
 
 
 class Tokens(ndb.Model):
@@ -428,9 +429,10 @@ class Organization(ndb.Model):
     # assign the right license for this organization
     @classmethod
     def create_instance(cls, org_name, admin, license_type='freemium', promo_code=None):
-
-        # init google drive folders
-        # Add the task to the default queue.
+        # customer = stripe.Customer.create(
+        #     plan='freemium_month',
+        #     email=admin.email
+        # )
         organization = cls(
             owner=admin.google_user_id,
             name=org_name,
