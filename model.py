@@ -335,7 +335,7 @@ class Organization(ndb.Model):
 
     def get_subscription(self):
         if not self.subscription:
-            self.subscription = Subscription.create_freemium_subscription()
+            self.subscription = Subscription.create_freemium_subscription().key
             self.put()
         return self.subscription.get()
 

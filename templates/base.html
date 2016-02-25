@@ -371,13 +371,16 @@
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h1 style="text-align: center">
-                    {% if plan.name=='freemium' %} You have rich your free limit.
-                    {% elif plan.name=='premium' %} You subscription has expired.{% endif %}
-                    <small>Please buy new license</small>
+                    {% if plan.name=='freemium' %} You have reached your monthly records limit of your freemium Account.
+                   <!--  <small>Upgrade Now</small> -->
+                    {% elif plan.name=='premium' %} You subscription has expired.
+                      <small>Please buy new license</small>
+                    {% endif %}
+                    
                     </h1>
             </div>
             <div class="modal-footer" style="border-top-width: 0px;text-align: center">
-                <a href="/subscribe"  class="btn btn-primary">Buy Now</a>
+                <a href="/subscribe"  class="btn btn-primary">Upgrade</a>
                 <button type="button" class="btn" data-dismiss="modal">Maybe later</button>
             </div>
         </div>
@@ -498,6 +501,9 @@
 </script>
 <!-- async scripts-->
 <script type="text/javascript">
+
+   
+
      function getRoot() {
       var origin = window.location.origin;
       var url = '';
@@ -510,8 +516,9 @@
       return url + '/_ah/api';
       }
       var ROOT = getRoot();
-      // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-     //   var ROOT = '/_ah/api';
+     // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+     // var ROOT = '/_ah/api';
+
     var apisToLoad;
     var callback = function () {
         console.log('callback');
