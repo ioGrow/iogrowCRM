@@ -156,8 +156,6 @@ opportunityservices.factory('Opportunity', function($rootScope) {
           $scope.inProcess(false);  
           $scope.apply();
          };
-
-
       }
     });
 
@@ -358,7 +356,9 @@ Opportunity.insert = function($scope,params){
 
       gapi.client.crmengine.opportunities.insertv2(params).execute(function(resp) {
           if (resp.error && resp.error.code == 412){
-              window.location.replace($rootScope.subscription_url);
+              //window.location.replace($rootScope.subscription_url);
+              $('#payment_modal').modal('show');
+              return
           }
          if(!resp.code){
           $scope.inProcess(false);

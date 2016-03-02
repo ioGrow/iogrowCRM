@@ -225,6 +225,7 @@ class BaseHandler(webapp2.RequestHandler):
                 if template_name in template_mapping.keys():
                     custom_fields = model.CustomField.list_by_object(user, template_mapping[template_name])
                 # text=i18n.gettext('Hello, world!')
+                organization = user.organization.get()
                 template_values = {
                     'is_freemium': is_freemium,
                     'is_admin': is_admin,
@@ -247,7 +248,8 @@ class BaseHandler(webapp2.RequestHandler):
                     'sections_delimiter': currency_format.sections_delimiter,
                     'decimal_delimiter': currency_format.decimal_delimiter,
                     'sales_tabs': STANDARD_TABS,
-                    'admin_tabs': ADMIN_TABS
+                    'admin_tabs': ADMIN_TABS,
+                    'plan': organization.get_subscription().plan.get()
                 }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -518,6 +520,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                         license_is_expired = True
                 if user.license_status == "suspended":
                     user_suspended = True
+                organization = user.organization.get()
                 template_values = {
                     'logo': logo,
                     'license_is_expired': False,
@@ -533,7 +536,8 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     'sales_app': sales_app,
                     'organization_name': organization.name,
                     'sales_tabs': STANDARD_TABS,
-                    'admin_tabs': ADMIN_TABS
+                    'admin_tabs': ADMIN_TABS,
+                    'plan': organization.get_subscription().plan.get()
                 }
                 if admin_app:
                     template_values['admin_app'] = admin_app
@@ -1315,10 +1319,10 @@ class SFsubscriberTest(BaseHandler, SessionEnabledHandler):
 
         user = model.SFuser.query(model.SFuser.email == email).get()
         if user:
-            stripe.api_key = "sk_test_K5CtshToZfaN0yiYaBUGHg0a"
+            stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
             customer = stripe.Customer.create(
                 source=token['id'],  # obtained from Stripe.js
-                plan="copylead_test_subscription",
+                plan="copylead_to_salesforce",
                 email=email
             )
             user_info = user
@@ -1396,6 +1400,7 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
         self.response.out.write(json.dumps({}))
 
 
+
 class PayPalPayingUsers(BaseHandler, SessionEnabledHandler):
     def get(self):
         # PayPalPayedUser
@@ -1469,6 +1474,12 @@ class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
         pass
 
 
+class SFcallback(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        code = self.request.get("code")
+        url = 'http://app.copylead.com/oauth-authorized?code=%s' % code
+        self.redirect(str(url))
+
 class SFconnect(BaseHandler, SessionEnabledHandler):
     def get(self):
         code = self.request.get("code")
@@ -1523,6 +1534,15 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
                 email=smart_str(userinfo['Email'])
             )
             created_user.put()
+            try:
+                existing_invitation = model.SFinvitation.query(model.SFinvitation.invitee_email == smart_str(userinfo['Email'])).get()
+                if existing_invitation:
+                    rewarded_user = existing_invitation.user_key.get()
+                    rewarded_user.active_until += datetime.timedelta(days=30)
+                    rewarded_user.put()
+            except:
+                pass
+
         else:
             created_user = user
             signed_up_at = user.created_at
@@ -1604,23 +1624,36 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
 
 class SFinvite(BaseHandler, SessionEnabledHandler):
     def post(self):
-        user_email = self.request.get('user_email')
-        emails = self.request.get_all('emails[]')
-        names = self.request.get_all('names[]')
-        try:
-            user = model.SFuser.query(model.SFuser.email == user_email).get()
-            i = 0
-            for invitee in emails:
-                invitation = model.SFinvitation(
-                    user_email=user_email,
-                    invitee_email=emails[i],
-                    invitee_name=names[i]
-                )
-                invitation.put()
-                i = i + 1
-        except:
-            print 'the user doesnt exist'
-        self.redirect('http://www.lilead.com/#chat_with_us')
+        data = json.loads(str(self.request.body))
+        print data
+        user_email = data['user_email']
+        subject = data['subject']
+        text = data['text'] + ' https://chrome.google.com/webstore/detail/copylead-for-salesforce/gbenffkgdeokfgjbbjibklflbaeelinh'
+        emails = data['emails']
+        print user_email
+        print emails
+        print subject
+
+        # try:
+        user = model.SFuser.query(model.SFuser.email == user_email).get()
+        if user:
+            for email in emails:
+                existing = model.SFinvitation.query(model.SFinvitation.invitee_email == email).get()
+                if not existing:
+                    invitation = model.SFinvitation(
+                        user_key = user.key,
+                        user_email=user_email,
+                        invitee_email=email
+                    )
+                    invitation.put()
+                    sender_address =" %s %s <copylead@gcdc2013-iogrow.appspotmail.com>" % (user.firstname, user.lastname)
+                    mail.send_mail(sender_address, email, subject, text)
+        # except:
+        #     print 'the user doesnt exist'
+
+        self.response.headers['Access-Control-Allow-Origin'] = "*"
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps({}))
 
 
 class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
@@ -3996,6 +4029,8 @@ routes = [
     ('/sfoauth2callback', SalesforceImporterCallback),
     ('/zohosignin', ZohoSignIn),
     ('/zohouser', ZohoUser),
+    ('/copylead_sf_auth_callback', SFcallback),
+
     ('/sf_invite', SFinvite),
     ('/invitation_sent', SFinvite),
     ('/stripe', StripeHandler),
