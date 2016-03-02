@@ -33,7 +33,6 @@ from iomodels.crmengine.opportunities import Opportunity, OpportunityListRespons
 from iomodels.crmengine.payment import payment_required
 from iomodels.crmengine.tags import Tag, TagSchema
 from iomodels.crmengine.tasks import Task, TaskListResponse
-from profilehooks import timecall
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 Intercom.app_id = 's9iirr8w'
@@ -559,7 +558,6 @@ class Lead(EndpointsModel):
         return lead_schema
 
     @classmethod
-    @timecall
     def list(cls, user_from_email, request):
         if request.tags:
             return cls.filter_by_tag(user_from_email, request)
