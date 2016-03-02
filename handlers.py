@@ -1,17 +1,19 @@
 # Standard libs
+import csv
+import datetime
 import json
 import os
-import datetime
-import time
 import re
 import sys
-import csv
+import time
+
 import httplib2
-from webapp2_extras import sessions
-from webapp2_extras import i18n
-import webapp2
 import jinja2
+import webapp2
 from google.appengine._internal.django.utils.encoding import smart_str
+from webapp2_extras import i18n
+from webapp2_extras import sessions
+
 # Google libs
 import endpoints
 from google.appengine.ext import ndb
@@ -24,11 +26,13 @@ from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.opportunities import Opportunity
+from iomodels.crmengine.payment import Subscription
+from model import Application, STANDARD_TABS, ADMIN_TABS
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.appengine import OAuth2Decorator
 # Our libraries
-from endpoints_helper import EndpointsHelper, OAuth2TokenFromCredentials
+from endpoints_helper import EndpointsHelper
 from people import linked_in
 import model
 from iomodels.crmengine.contacts import Contact
@@ -38,11 +42,10 @@ from iomodels.crmengine.documents import Document
 from iomodels.crmengine.tags import Tag
 import iomessages
 from blog import Article
-from iograph import Node, Edge
+from iograph import Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task, AssignedGoogleId
-from iomodels.crmengine.gcontacts import Gcontact
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
 from discovery import Discovery
@@ -54,14 +57,11 @@ from requests.auth import HTTPBasicAuth
 import config as config_urls
 import people
 from intercom import Intercom
-from intercom import User as IntercomUser
 from simple_salesforce import Salesforce
 from semantic.dates import DateService
-import gdata.data
-import gdata.contacts.client
-import gdata.contacts.data
-from gdata.contacts.client import ContactsClient
 from mixpanel import Mixpanel
+from iomodels.crmengine import config as app_config
+from stripe.error import CardError
 
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
@@ -225,6 +225,7 @@ class BaseHandler(webapp2.RequestHandler):
                 if template_name in template_mapping.keys():
                     custom_fields = model.CustomField.list_by_object(user, template_mapping[template_name])
                 # text=i18n.gettext('Hello, world!')
+                organization = user.organization.get()
                 template_values = {
                     'is_freemium': is_freemium,
                     'is_admin': is_admin,
@@ -245,7 +246,10 @@ class BaseHandler(webapp2.RequestHandler):
                     'length_decimal': currency_format.length_decimal,
                     'length_whole_part': currency_format.length_whole_part,
                     'sections_delimiter': currency_format.sections_delimiter,
-                    'decimal_delimiter': currency_format.decimal_delimiter
+                    'decimal_delimiter': currency_format.decimal_delimiter,
+                    'sales_tabs': STANDARD_TABS,
+                    'admin_tabs': ADMIN_TABS,
+                    'plan': organization.get_subscription().plan.get()
                 }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -489,15 +493,17 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                 license_is_expired = False
                 apps = user.get_user_apps()
                 admin_app = None
-                active_app = user.get_user_active_app()
-                tabs = user.get_user_active_tabs()
+                active_app = Application.query(Application.name == "sales").get()
+                print active_app
+                # tabs = user.get_user_active_tabs()
+                tabs = ndb.get_multi(active_app.tabs)
                 applications = []
                 for app in apps:
                     if app is not None:
                         applications.append(app)
                         if app.name == 'admin':
                             admin_app = app
-                        elif app.name == 'sales':
+                        if app.name == 'sales':
                             sales_app = app
                 logo = model.Logo.query(model.Logo.organization == user.organization).get()
                 organization = user.organization.get()
@@ -514,6 +520,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                         license_is_expired = True
                 if user.license_status == "suspended":
                     user_suspended = True
+                organization = user.organization.get()
                 template_values = {
                     'logo': logo,
                     'license_is_expired': False,
@@ -527,12 +534,16 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     'uSerid': uSerid,
                     'uSerlanguage': uSerlanguage,
                     'sales_app': sales_app,
-                    'organization_name': organization.name
+                    'organization_name': organization.name,
+                    'sales_tabs': STANDARD_TABS,
+                    'admin_tabs': ADMIN_TABS,
+                    'plan': organization.get_subscription().plan.get()
                 }
                 if admin_app:
                     template_values['admin_app'] = admin_app
                 template = jinja_environment.get_template(template)
                 self.response.out.write(template.render(template_values))
+                self.response.headers.add_header("Access-Control-Allow-Origin", "*")
             except UserNotAuthorizedException as e:
                 self.redirect('/welcome/')
         else:
@@ -659,7 +670,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
                 org_key = model.Organization.create_instance(org_name, user, 'premium_trial', promo_code)
             else:
                 org_key = model.Organization.create_instance(org_name, user)
-            if not isLocale():
+            if not model.is_locale():
                 taskqueue.add(
                     url='/workers/add_to_iogrow_leads',
                     queue_name='iogrow-low',
@@ -827,7 +838,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         else:
             user.google_credentials = credentials
         user_key = user.put_async()
-        user_key_async = user_key.get_result()
+
         if memcache.get(user.email):
             memcache.set(user.email, user)
         else:
@@ -864,7 +875,6 @@ class GooglePlusConnect(SessionEnabledHandler):
 
     def post(self):
         # try to get the user credentials from the code
-        credentials = None
         code = self.request.get("code")
         try:
             credentials = GooglePlusConnect.exchange_code(code)
@@ -894,37 +904,44 @@ class GooglePlusConnect(SessionEnabledHandler):
 
         # Store our credentials with in the datastore with our user.
         invitee = None
+        user_email = token_info.get('email')
         if invited_user_id:
-            invitee = model.Invitation.query(model.Invitation.invited_mail == token_info.get('email')).get()
+            invitee = model.Invitation.query(model.Invitation.invited_mail == user_email).get()
         if invitee:
             user = GooglePlusConnect.save_token_for_user(
-                token_info.get('email'),
+                user_email,
                 credentials,
                 invited_user_id
             )
         else:
             user = GooglePlusConnect.save_token_for_user(
-                token_info.get('email'),
+                user_email,
                 credentials
             )
         lang = self.get_language().replace('-', '_')
-        user.currency = "USD"
         user.currency_format = lang
         user.date_time_format = lang
+        code_country_split = lang.split('_')
+        if len(code_country_split) > 1:
+            user.country_code = code_country_split[1]
+        user.currency = "USD"
         user.week_start = "monday"
-        user.country_code = lang.split('_')[1]
+
         user.put()
         # if user doesn't have organization redirect him to sign-up
-        isNewUser = False
+        is_new_user = False
         if user.organization is None:
-            isNewUser = True
+            if model.CountryCurrency.get_by_code('US') is None:
+                model.CountryCurrency.init()
+            model.User.set_default_currency(user, self.request.headers.get('X-AppEngine-Country'))
+            organ_name = user_email.partition("@")[2]
+            model.Organization.create_instance(organ_name, user)
+            is_new_user = True
             try:
-                intercom_user = Intercom.create_user(email=user.email,
-                                                     name=user.google_display_name,
-                                                     created_at=time.mktime(user.created_at.timetuple())
-                                                     )
+                Intercom.create_user(email=user.email, name=user.google_display_name,
+                                     created_at=time.mktime(user.created_at.timetuple()))
             except:
-                print 'error'
+                pass
             mp.track(user.id, 'SIGNIN_SUCCESS')
             # mp.identify(user.id)
             # mp.people_set(user.id,{
@@ -934,10 +951,12 @@ class GooglePlusConnect(SessionEnabledHandler):
             # "$organization": user.organization,
             # "$language": user.language
             # });
+        # if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
+        #     user = self.get_user_from_session()
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(isNewUser))
+        self.response.out.write(json.dumps(is_new_user))
 
 
 class InstallFromDecorator(SessionEnabledHandler):
@@ -1156,6 +1175,11 @@ class UserListHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/admin/users/user_list.html')
 
 
+class BillingEditHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/billing/billing_edit.html')
+
+
 class EditCompanyHandler(IndexHandler, SessionEnabledHandler):
     def get(self):
         IndexHandler.get(self, 'templates/admin/company/company_edit.html')
@@ -1184,6 +1208,11 @@ class EditCaseStatusHandler(BaseHandler, SessionEnabledHandler):
 class EditLeadStatusHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/lead_status/lead_status_edit.html')
+
+
+class LeadScoringHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/lead_scoring/lead_scoring_edit.html')
 
 
 class EditCustomFieldsHandler(BaseHandler, SessionEnabledHandler):
@@ -1280,6 +1309,70 @@ class SalesforceImporter(BaseHandler, SessionEnabledHandler):
         self.redirect(authorization_url)
 
 
+class SFsubscriberTest(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        email = self.request.get("email")
+        token_str = self.request.get("token")
+        token = json.loads(token_str)
+        print 'id'
+        print token['id']
+
+        user = model.SFuser.query(model.SFuser.email == email).get()
+        if user:
+            stripe.api_key = "sk_test_K5CtshToZfaN0yiYaBUGHg0a"
+            customer = stripe.Customer.create(
+                source=token['id'],  # obtained from Stripe.js
+                plan="copylead_test_subscription",
+                email=email
+            )
+            user_info = user
+            user_info.stripe_id = customer['id']
+            now = datetime.datetime.now()
+            now_plus_month = now + datetime.timedelta(days=30)
+            user_info.active_until = now_plus_month
+            user_info.created_at = now_plus_month
+            user_info.put()
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps({}))
+
+
+class GetSfUser(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        email = self.request.get("email")
+        user = model.SFuser.query(model.SFuser.email == email).get()
+        response = {}
+        if user:
+            free_trial_expiration = user.created_at + datetime.timedelta(days=7)
+            now = datetime.datetime.now()
+            days_before_expiration = -1
+            if user.active_until:
+                if user.active_until > now:
+                    days_before_expiration = (user.active_until - now).days + 1
+            else:
+                if now < free_trial_expiration:
+                    days_before_expiration = (user.free_trial_expiration - now).days + 1
+            is_paying = False
+            if user.stripe_id:
+                is_paying = True
+            response = {
+                'firstname': smart_str(user.firstname),
+                'lastname': smart_str(user.lastname),
+                'email': user.email,
+                'days_before_expiration': days_before_expiration,
+                'is_paying': is_paying
+            }
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(response))
+
+
+class SubscriptionHandler(SessionEnabledHandler):
+    def get(self):
+        template = jinja_environment.get_template(name='templates/admin/subscription/subscription.html')
+        self.response.out.write(template.render({'user': self.get_user_from_session()}))
+
+
 class SFsubscriber(BaseHandler, SessionEnabledHandler):
     def post(self):
         email = self.request.get("email")
@@ -1305,6 +1398,79 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
             user_info.put()
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
+
+
+class PayPalPayingUsers(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        # PayPalPayedUser
+        # valid until
+        # all models
+        # update license models
+        now = datetime.datetime.now()
+        now_plus_month = now + datetime.timedelta(days=30)
+        active_until = now_plus_month
+        save_payed_user = model.PaypalPayedUser(
+            txn_type=self.request.get("txn_type"),
+            subscr_id=self.request.get("subscr_id"),
+            last_name=self.request.get("last_name"),
+            mc_currency=self.request.get("mc_currency"),
+            item_name=self.request.get("item_name"),
+            business=self.request.get("business"),
+            amount3=self.request.get("amount3"),
+            verify_sign=self.request.get("verify_sign"),
+            payer_status=self.request.get("payer_status"),
+            payer_email=self.request.get("payer_email"),
+            first_name=self.request.get("first_name"),
+            receiver_email=self.request.get("receiver_email"),
+            payer_id=self.request.get("payer_id"),
+            item_number=self.request.get("item_number"),
+            subscr_date=self.request.get("subscr_date"),
+            address_name=self.request.get("address_name"),
+            ipn_track_id=self.request.get("ipn_track_id"),
+            option_selection1=self.request.get("option_selection1"),
+            option_name1=self.request.get("option_name1"),
+            active_until=active_until
+        ).put()
+
+
+class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        user = self.get_user_from_session()
+        organization = user.organization.get()
+
+        # Set your secret key: remember to change this to your live secret key in production
+        # See your keys here https://dashboard.stripe.com/account/apikeys
+        stripe.api_key = app_config.STRIPE_API_KEY
+
+        # Get the credit card details submitted by the form
+        token = self.request.get('token')
+        interval = self.request.get('interval')
+        premium_subscription = Subscription.create_premium_subscription(interval)
+        # plane = self.request.get('plane')
+        # Create the charge on Stripe's servers - this will charge the user's card
+        try:
+            stripe.Plan.retrieve('{}_{}'.format(app_config.PREMIUM, interval))
+            customer = stripe.Customer.create(
+                source=token,
+                description=organization.key.id(),
+                plan='{}_{}'.format(app_config.PREMIUM, interval),
+                email=user.email
+            )
+
+            organization.stripe_customer_id = customer.id
+            premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
+            premium_subscription.put()
+            organization.subscription = premium_subscription.key
+            organization.put()
+        except stripe.error.CardError, e:
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.write(e.message)
+            self.response.set_status(e.http_status)
+
+
+class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        pass
 
 
 class SFconnect(BaseHandler, SessionEnabledHandler):
@@ -1351,17 +1517,14 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         print sf.id.request.__dict__['cookies'].__dict__
 
         userinfo = sf.User.get(user_id)
-        print userinfo
-        print userinfo['FirstName']
-        print userinfo['LastName']
         print userinfo['Email']
         user = model.SFuser.query(model.SFuser.email == userinfo['Email']).get()
         signed_up_at = datetime.datetime.now()
         if user is None:
             created_user = model.SFuser(
-                firstname=userinfo['FirstName'],
-                lastname=userinfo['LastName'],
-                email=userinfo['Email']
+                firstname=smart_str(userinfo['FirstName']),
+                lastname=smart_str(userinfo['LastName']),
+                email=smart_str(userinfo['Email'])
             )
             created_user.put()
         else:
@@ -1408,7 +1571,8 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
             print str(value)
 
         response['user_email'] = str(created_user.email)
-        response['name'] = created_user.firstname  + ' ' + created_user.lastname
+        full_name = "%s %s" % (smart_str(created_user.firstname), smart_str(created_user.firstname))
+        response['name'] = str(full_name)
         free_trial_expiration = created_user.created_at + datetime.timedelta(days=7)
         now = datetime.datetime.now()
         response['show_checkout'] = "true"
@@ -1468,6 +1632,20 @@ class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
         template_values = {}
         template = jinja_environment.get_template('templates/salesforce_callback.html')
         self.response.out.write(template.render(template_values))
+
+
+class ZohoSignIn(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template('templates/zohosingin.html')
+        self.response.out.write(template.render(template_values))
+
+
+class ZohoUser(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        ZohoUser = model.ZohoUser(
+            email=self.request.get("email")
+        ).put()
 
 
 class GoGo(BaseHandler, SessionEnabledHandler):
@@ -1668,7 +1846,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                         type, value, tb = sys.exc_info()
                         print str(value)
                     params = {
-                        'partial_error': true
+                        'partial_error': True
                     }
                     if source:
                         params['source'] = source
@@ -1686,6 +1864,33 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
         self.response.headers['Access-Control-Allow-Origin'] = "*"
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
+
+
+class ZohoSaveLead(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        # access_token = self.request.get("access_token")
+        # instance_url = self.request.get("instance_url")
+        firstname = self.request.get("firstname")
+        lastname = self.request.get("lastname")
+        title = self.request.get("title")
+        zoho_id = self.request.get("zoho_id")
+        company = self.request.get("company")
+        profile_img_url = self.request.get("profile_img_url")
+        introduction = self.request.get("introduction")
+        street = self.request.get("formatted_address")
+        mobile = self.request.get("mobile")
+        email = self.request.get("email")
+
+        saved_lead = model.ZohoLead(
+            firstname=firstname,
+            lastname=lastname,
+            zoho_id=zoho_id,
+            photo_url=profile_img_url
+        ).put()
+        # track_mp_action(COPYLEAD_Zoho_MIXPANEL_ID, )
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(zoho_id))
 
 
 class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
@@ -3505,6 +3710,18 @@ class StripePayingHandler(BaseHandler, SessionEnabledHandler):
             pass
 
 
+class SFusersCSV(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'application/csv'
+        writer = csv.writer(self.response.out)
+        sfusers = model.SFuser.query().fetch()
+        for u in sfusers:
+            is_paying = False
+            if u.stripe_id:
+                is_paying = True
+            writer.writerow(["%s %s" % (u.firstname, u.lastname), u.email, is_paying])
+
+
 # scrapyd UI
 class ScrapydHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -3632,7 +3849,7 @@ routes = [
     # ('/workers/sync_contact_with_gontacts', SyncContactWithGontacts),
     # ('/workers/init_contacts_from_gcontacts', InitContactsFromGcontacts),
     # Contact sync
-    #('/workers/syncNewContact', SyncNewContact),
+    # ('/workers/syncNewContact', SyncNewContact),
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
     ('/workers/synctask', SyncCalendarTask),
@@ -3722,6 +3939,7 @@ routes = [
     ('/views/admin/users/list', UserListHandler),
     ('/views/admin/users/new', UserNewHandler),
     ('/views/admin/users/show', UserShowHandler),
+    ('/views/admin/billing/billing_edit', BillingEditHandler),
     ('/views/admin/groups/list', GroupListHandler),
     ('/views/admin/groups/show', GroupShowHandler),
     ('/views/admin/settings', settingsShowHandler),
@@ -3733,10 +3951,14 @@ routes = [
     ('/views/admin/opportunity/edit', EditOpportunityHandler),
     ('/views/admin/case_status/edit', EditCaseStatusHandler),
     ('/views/admin/lead_status/edit', EditLeadStatusHandler),
+    ('/views/admin/lead_scoring/edit', LeadScoringHandler),
     ('/views/admin/data_transfer/edit', EditDataTransferHandler),
     ('/views/admin/synchronisation/edit', EditSynchronisationHandler),
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
     ('/views/admin/delete_all_records', deleteAllRecordHandler),
+    ('/subscribe', SubscriptionHandler),
+    ('/stripe/subscription', StripeSubscriptionHandler),
+    ('/stripe/subscription_web_hook', StripeSubscriptionWebHooksHandler),
     # billing stuff. hadji hicham . 07/08/2014
     ('/views/billing/list', BillingListHandler),
     ('/views/billing/show', BillingShowHandler),
@@ -3746,13 +3968,14 @@ routes = [
     # ioGrow Live
     ('/gogo', GoGo),
     ('/sfapi/markaslead', SFmarkAsLead),
+    ('/zohoapi/markaslead', ZohoSaveLead),
     ('/sfapi/dev/markaslead', SFmarkAsLeadDev),
     ('/sfapi/search', SFsearch),
     ('/sfapi/dev/search', SFsearchDev),
     ('/sfapi/search_photo', SFsearchphoto),
     ('/gogop', GoGoP),
     ('/welcome/', NewWelcomeHandler),
-    ('/welcome', NewWelcomeHandler),
+    # ('/welcome', NewWelcomeHandler),
     ('/new-sign-in/', NewSignInHandler),
     ('/chrome-extension/', ChromeExtensionHandler),
     ('/salesforce', SFExtensionHandler),
@@ -3770,8 +3993,13 @@ routes = [
     (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter', SalesforceImporter),
     ('/sfconnect', SFconnect),
+    ('/paypal_paying_users', PayPalPayingUsers),
     ('/sfsubscriber', SFsubscriber),
+    ('/sfsubscribertest', SFsubscriberTest),
+
     ('/sfoauth2callback', SalesforceImporterCallback),
+    ('/zohosignin', ZohoSignIn),
+    ('/zohouser', ZohoUser),
     ('/sf_invite', SFinvite),
     ('/invitation_sent', SFinvite),
     ('/stripe', StripeHandler),
@@ -3783,6 +4011,8 @@ routes = [
     ('/jj', jj),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),
+    ('/sf-users', SFusersCSV),
+    ('/copylead/sf/api/users/get', GetSfUser),
     # ('/gmail-copylead',GmailAnalysisForCopylead),
     # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
 
@@ -3794,11 +4024,6 @@ routes = [
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
 ]
-
-
-def isLocale():
-    return os.environ['SERVER_SOFTWARE'].startswith('Dev')
-
 
 config = {}
 config['webapp2_extras.sessions'] = {

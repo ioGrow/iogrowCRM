@@ -25,6 +25,7 @@ module.exports = function (grunt) {
                     'static/app/scripts/services/taskservices.js',
                     'static/app/scripts/services/eventservices.js',
                     'static/app/scripts/services/userservices.js',
+                    'static/app/scripts/services/billingservices.js',
                     'static/app/scripts/services/groupservices.js',
                     'static/app/scripts/services/noteservices.js', 'static/app/scripts/services/commentservices.js',
                     'static/app/scripts/services/settingservices.js', 'static/app/scripts/services/importservices.js',
@@ -36,7 +37,6 @@ module.exports = function (grunt) {
                 dest: 'static/build/js/sync_ctrls_sers_scripts.js',
             }
         },
-
         cssmin: {
             /*css: {
              files: {
@@ -122,6 +122,7 @@ module.exports = function (grunt) {
                     'static/app/scripts/services/taskservices.js',
                     'static/app/scripts/services/eventservices.js',
                     'static/app/scripts/services/userservices.js',
+                    'static/app/scripts/services/billingservices.js',
                     'static/app/scripts/services/groupservices.js',
                     'static/app/scripts/services/noteservices.js',
                     'static/app/scripts/services/commentservices.js',
@@ -135,7 +136,17 @@ module.exports = function (grunt) {
                     'static/app/scripts/controllers/searchcontrollers.js',
                     'static/app/scripts/controllers/accountcontrollers.js',
                     'static/app/scripts/controllers/admin/**/*.js',
-                    'static/app/scripts/controllers/leadcontrollers.js', 'static/app/scripts/controllers/casecontrollers.js', 'static/app/scripts/controllers/billingController.js', 'static/app/scripts/controllers/contactcontroller.js', 'static/app/scripts/controllers/opportunitycontroller.js', 'static/app/scripts/controllers/documentcontrollers.js', 'static/app/scripts/controllers/notecontrollers.js', 'static/app/scripts/controllers/taskcontrollers.js', 'static/app/scripts/controllers/eventcontrollers.js', 'static/app/scripts/controllers/dashboardController.js', 'static/app/scripts/controllers/usercontrollers.js', 'static/app/scripts/controllers/groupcontrollers.js', 'static/app/scripts/controllers/settingscontrollers.js', 'static/app/scripts/controllers/importcontrollers.js'],
+                    'static/app/scripts/controllers/leadcontrollers.js',
+                    'static/app/scripts/controllers/casecontrollers.js',
+                    'static/app/scripts/controllers/billingController.js',
+                    'static/app/scripts/controllers/contactcontroller.js',
+                    'static/app/scripts/controllers/opportunitycontroller.js',
+                    'static/app/scripts/controllers/documentcontrollers.js',
+                    'static/app/scripts/controllers/notecontrollers.js',
+                    'static/app/scripts/controllers/taskcontrollers.js',
+                    'static/app/scripts/controllers/eventcontrollers.js',
+                    'static/app/scripts/controllers/dashboardController.js',
+                    'static/app/scripts/controllers/usercontrollers.js', 'static/app/scripts/controllers/groupcontrollers.js', 'static/app/scripts/controllers/settingscontrollers.js', 'static/app/scripts/controllers/importcontrollers.js'],
                 tasks: ['concat', 'uglify'],
             },
         },

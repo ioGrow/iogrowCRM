@@ -5,7 +5,7 @@ var app = angular.module('crmEngine', ['googlechart', 'easypiechart', 'xeditable
     'crmEngine.caseservices', 'crmEngine.userservices', 'crmEngine.groupservices', 'crmEngine.noteservices',
     'crmEngine.commentservices', 'crmEngine.settingservices', 'crmEngine.importservices', 'mapServices',
     'crmEngine.infonodeservices', 'crmEngine.edgeservices', 'crmEngine.discoverservices', 'crmEngine.reportservices',
-    'crmEngine.profileservices', 'crmEngine.linkedinservices']);
+    'crmEngine.profileservices', 'crmEngine.linkedinservices', 'crmEngine.billingservices']);
 var public_blog_app = angular.module('publicBlogEngine',['blogEngine.blogservices','ui.bootstrap','ui.select2']);
 //app.js Single page application
 
@@ -26,8 +26,7 @@ app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
 app.run(['$rootScope', function($rootScope){
-    
-
+    $rootScope.subscription_url = '/subscribe';
 }]);
 
 app.config(['$routeProvider', function($routeProvider) {
@@ -142,6 +141,9 @@ app.config(['$routeProvider', function($routeProvider) {
       when('/admin/users', {
         controller: 'UserListCtrl',
         templateUrl:'/views/admin/users/list'
+      }).when('/admin/billing', {
+        controller: 'BillingEditCtrl',
+        templateUrl:'/views/admin/billing/billing_edit'
       }).when('/admin/users/new', {
         controller: 'UserNewCtrl',
         templateUrl:'/views/admin/users/new'
@@ -245,6 +247,9 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/admin/delete_all_records', {
              controller: 'DeleteAllRecordsCtrl',
              templateUrl: '/views/admin/delete_all_records'
+      }).when('/admin/lead_scoring', { 
+             controller: 'LeadScoringCtrl',
+             templateUrl: '/views/admin/lead_scoring/edit'
       });
 }]);
 

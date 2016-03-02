@@ -14,6 +14,7 @@ from iomodels.crmengine.casestatuses import CaseStatusSchema
 from iomodels.crmengine.documents import Document,DocumentListResponse
 from iomodels.crmengine.events import Event,EventListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
+from iomodels.crmengine.payment import payment_required
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.tasks import Task, TaskListResponse
 from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
@@ -701,6 +702,7 @@ class Case(EndpointsModel):
                                     nextPageToken = case_next_curs
                                 )
     @classmethod
+    @payment_required()
     def insert(cls,user_from_email,request):
         case = cls(
                     owner = user_from_email.google_user_id,
@@ -712,17 +714,8 @@ class Case(EndpointsModel):
                     )
         case_key = case.put_async()
         case_key_async = case_key.get_result()
-        # taskqueue.add(
-        #             url='/workers/createobjectfolder',
-        #             queue_name='iogrow-low',
-        #             params={
-        #                     'kind': "Case",
-        #                     'folder_name': request.name,
-        #                     'email': user_from_email.email,
-        #                     'obj_key':case_key_async.urlsafe()
-        #                     }
-        #             )
         indexed = False
+        status_key=None
         if request.status:
             status_key = ndb.Key(urlsafe=request.status)
             # insert edges
@@ -730,32 +723,34 @@ class Case(EndpointsModel):
                       end_node = status_key,
                       kind = 'status',
                       inverse_edge = 'related_cases')
-        if request.contact:
-            contact_key = ndb.Key(urlsafe=request.contact)
-            if contact_key:
-                # insert edges
-                Edge.insert(start_node = contact_key,
-                          end_node = case_key_async,
-                          kind = 'cases',
-                          inverse_edge = 'parents')
-                EndpointsHelper.update_edge_indexes(
-                                                parent_key = case_key_async,
-                                                kind = 'cases',
-                                                indexed_edge = str(contact_key.id())
-                                                )
-                parents_edge_list = Edge.list(
-                                    start_node = contact_key,
-                                    kind = 'parents',
-                                    limit = 1
-                                    )
-                if len(parents_edge_list['items'])>0:
-                    request.account = parents_edge_list['items'][0].end_node.urlsafe()
-                indexed = True
+        account = None
         if request.account:
-            account_key = ndb.Key(urlsafe=request.account)
-            if account_key:
+            try:
+                account_key = ndb.Key(urlsafe=request.account)
+                account = account_key.get()
+            except:
+                from iomodels.crmengine.accounts import Account
+                account_key = Account.get_key_by_name(
+                        user_from_email=user_from_email,
+                        name=request.account
+                )
+                if account_key:
+                    account = account_key.get()
+                else:
+                    is_new_account = True
+                    account = Account(
+                            name=request.account,
+                            owner=user_from_email.google_user_id,
+                            organization=user_from_email.organization,
+                            access=request.access
+                    )
+                    account_key_async = account.put_async()
+                    account_key = account_key_async.get_result()
+                    data = EndpointsHelper.get_data_from_index(str(account.key.id()))
+                    account.put_index(data)
+        if account:
                 # insert edges
-                Edge.insert(start_node = account_key,
+                Edge.insert(start_node = account.key,
                           end_node = case_key_async,
                           kind = 'cases',
                           inverse_edge = 'parents'
@@ -763,9 +758,58 @@ class Case(EndpointsModel):
                 EndpointsHelper.update_edge_indexes(
                                                 parent_key = case_key_async,
                                                 kind = 'cases',
-                                                indexed_edge = str(account_key.id())
+                                                indexed_edge = str(account.key.id())
                                                 )
                 indexed = True
+
+        contact = None
+        if request.contact:
+            try:
+                contact_key = ndb.Key(urlsafe=request.contact)
+                contact = contact_key.get()
+            except:
+                from iomodels.crmengine.contacts import Contact
+                contact_key = Contact.get_key_by_name(
+                        user_from_email=user_from_email,
+                        name=request.contact
+                )
+                if contact_key:
+                    contact = contact_key.get()
+                else:
+                    firstname = request.contact.split()[0]
+                    lastname = " ".join(request.contact.split()[1:])
+                    contact = Contact(
+                            firstname=firstname,
+                            lastname=lastname,
+                            owner=user_from_email.google_user_id,
+                            organization=user_from_email.organization,
+                            access=request.access
+                    )
+                    contact_key_async = contact.put_async()
+                    contact_key = contact_key_async.get_result()
+                    if account:
+                        data = EndpointsHelper.get_data_from_index(str(contact.key.id()))
+                        contact.put_index(data)
+                        Edge.insert(start_node=account.key,
+                                    end_node=contact.key,
+                                    kind='contacts',
+                                    inverse_edge='parents')
+                        EndpointsHelper.update_edge_indexes(
+                                parent_key=contact.key,
+                                kind='contacts',
+                                indexed_edge=str(account.key.id())
+                        )
+            if contact:
+                # insert edges
+                Edge.insert(start_node=contact.key,
+                            end_node=case_key_async,
+                            kind='cases',
+                            inverse_edge='parents')
+                EndpointsHelper.update_edge_indexes(
+                        parent_key=case_key_async,
+                        kind='cases',
+                        indexed_edge=str(contact.key.id())
+                )
         for infonode in request.infonodes:
             Node.insert_info_node(
                             case_key_async,
@@ -774,20 +818,22 @@ class Case(EndpointsModel):
                                                             fields = infonode.fields
                                                         )
                                                     )
-
-
         if not indexed:
             data = {}
             data['id'] = case_key_async.id()
             case.put_index(data)
-        # current_status_schema = CaseStatusSchema(
-        #                                 name = request.status_name
-        #                                 )
+        current_status_schema=None
+        if status_key :
+            if status_key.get() :
+                current_status_schema = CaseStatusSchema(
+                                            name = status_key.get().status
+                                          )
+
         case_schema = CaseSchema(
                                   id = str( case_key_async.id() ),
                                   entityKey = case_key_async.urlsafe(),
                                   name = case.name,
-                                  # current_status = current_status_schema,
+                                  current_status = current_status_schema,
                                   priority = case.priority,
                                   created_at = case.created_at.strftime("%Y-%m-%dT%H:%M:00.000"),
                                   updated_at = case.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
@@ -799,6 +845,8 @@ class Case(EndpointsModel):
         case = cls.get_by_id(int(request.id))
         if case is None:
             raise endpoints.NotFoundException('Case not found.')
+        if (case.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         EndpointsHelper.share_related_documents_after_patch(
                                                             user_from_email,
                                                             case,

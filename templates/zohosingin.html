@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab|Abel:300,400'
+          rel='stylesheet' type='text/css'>
+
+          <script src="/static/plugins/jquery-1.10.1.min.js"  type="text/javascript"></script>
+  <script src="/static/plugins/jquery-migrate-1.2.1.min.js"  type="text/javascript"></script>
+    
+     <!-- <link href="" rel="stylesheet" type="text/css"/> -->
+
+    <style>
+        input[type="text"]:focus{
+            border: 1px solid #4C4B4A;
+            outline: none;
+        }
+        .content{
+              width: 100%;
+              margin-bottom:15px; 
+              min-height: 500px;
+              background-color: #F6F6F6;  
+              -webkit-box-shadow: 0px 2px 5px 2px rgba(222,222,222,1);
+              -moz-box-shadow: 0px 2px 5px 2px rgba(222,222,222,1);
+              box-shadow: 0px 2px 5px 2px rgba(222,222,222,1);
+              border-top: 5px #0A9AD7 solid;
+              padding:25px; margin-bottom:25px;
+              box-sizing: border-box;
+        } 
+        .container{
+          width: 100%;
+          margin: auto; 
+          margin-bottom:40px
+        }
+        .row{
+           display: block;
+           margin: 0 -15px;
+        }
+        .row:after, .row:before {
+            display: table;
+            content: " ";
+            box-sizing: border-box;
+        }
+        .row:after {
+              clear: both;
+          }
+        .col-6, .col-7, .col-5{
+          position: relative;
+          min-height: 1px;
+          padding-right: 15px;
+          padding-left: 15px;
+          float: left;
+          box-sizing: border-box;
+          width: 100%;
+          margin-bottom: 10px;
+        }
+        .form-control{
+            background-color: #fff;
+            -webkit-box-shadow: none;
+            box-sizing: border-box;
+            box-shadow: none;
+            color: #333;
+            border: 1px solid #e5e5e5;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: 400;
+            -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            line-height: 1.428571429;
+            vertical-align: middle;
+         }
+        .label-control{
+          display: block;
+          margin-bottom: 5px;
+          font-size: 12px;
+          font-weight: 300;
+        }
+        .cardsimgscontainer{
+          margin-top: 15px;
+        }
+        .featuresList{
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+        .logoHeader{
+            font-family: Abel;
+            font-weight: 300;
+        }
+        .logoHeader img{
+              width: 60px;
+              height: auto;
+              vertical-align: middle;
+        }
+        .content{
+          font-family: Roboto;
+        }
+        .title{
+            font-size: 14px;
+             font-weight: 500;
+        }
+        .featuresList li{
+          font-size: 12px;
+          font-weight: 300px;
+          margin-bottom: 10px; 
+        }
+        .im-El{
+          font-weight: 600;
+        }
+        .more-infos{
+          margin-bottom: 25px;
+        }
+        #payment-btn{
+              color: white;
+              border: 2px solid #14B45A;
+              background-color: #14B45A;
+              border-radius: 6px;
+              width: 100px;
+              height: 45px;
+              font-size: 20px;
+        }
+        .payment-btn-container{
+            text-align: center;
+        }
+        .cardsimgscontainer:after{
+          content: " ";
+          clear: both;
+          display: table;
+        }
+        .footerStripe:after{
+          content: " ";
+          clear: both;
+          display: table;
+        }
+        .footerStripe .stripe{
+          height: 20px;
+          display: inline-block;
+          padding: 10px;
+          vertical-align: middle;
+          background-color: #323B3F;
+          color: #EAEBEC;
+          font-family: Roboto;
+          font-size: 12px;    border-radius: 5px; float:right !important
+        }
+        @media (min-width: 480px){
+            .content{
+              width:80%;
+              margin-left:10%; 
+            }
+            .col-7{
+               width: 58.333333333333336%
+            }
+            .col-5{
+               width: 41.66666666666667%
+            }
+        }
+        @media (min-width: 678px){
+            .content{
+              width:80%;
+              margin:auto; 
+              margin-bottom: 30px;
+            }
+           .col-6{
+              width: 50%;
+            }
+        }
+        @media (min-width: 992px){
+            .content{
+              width:80%;
+              margin:auto; 
+              margin-bottom: 40px;
+            }
+            .container{
+               width: 85%;
+               margin: auto; 
+            }
+            #payment-btn{
+              width: 320px;
+            }
+        }
+        @media (min-width: 1200px){
+            .content{
+              width:80%;
+              margin:auto; 
+              margin-bottom: 40px;
+            }
+            .container{
+               width: 65%;
+               margin: auto; 
+            }
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+      <h2 class="logoHeader">
+          <img src="static/img/128.png" alt="">
+      <span style="color: #0E7BB6;">Copy</span><span>lead for Zoho CRM</span>
+    </h2>
+    <div class="content">
+        <p>Please provide your informations to store data directly to your CRM.</p>
+         <form onSubmit="return signin()">
+           <div class="contact-infos">
+             <h3 class="title">
+               1. Zoho account: 
+             </h3>
+             <div class="row">
+               <div class="col-6">
+                  <label for="fullname" class="label-control">Email:</label>
+                  <input type="text"  id="email" class="form-control">
+               </div>
+               <div class="col-6">
+                  <label for="email" class="label-control">Password:</label>
+                  <input type="password" id="password" class="form-control">
+               </div>
+             </div>
+           </div>
+           
+           
+           <div class="payment-btn-container"> 
+             <input type="submit" value="Signin" id="payment-btn" >
+           </div>
+
+         </form>
+      </div>
+    
+  </div>  
+
+  <script>
+    function signin(){
+      //make Ajax request to get Access token
+
+      var email=document.getElementById("email").value
+      var password=document.getElementById("password").value
+      
+      var authResult=[]
+      authResult["email"]=email
+      authResult["password"]=password
+
+      $.ajax({
+                      type: 'POST',
+                      url: '/zohouser',
+                      success: function(result) {
+                          
+                        console.log("sucess")
+                      },
+                      error:function(result){
+                            console.log(result);
+                      },
+                      data: {"email":authResult["email"]}
+      });
+
+      window.opener.parent.postMessage(authResult,
+                          "*");
+      window.close();
+       
+    }
+  </script>
+</body>
+</html>

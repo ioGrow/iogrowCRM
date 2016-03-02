@@ -51,7 +51,7 @@
        <a  class="btn red newAccountBtnOnscroll pull-right" ng-click="validateBeforeSave(opportunity)">
          <span ><i class="fa fa-save"></i> Save</span>       
        </a>
-        <button class="btn btn-default newAccountBtn pull-right" ng-click="clearContact()" style="margin-right:5px"><i class="fa fa-trash-o"></i>{{ _(' Clear')}}</button>          
+        <button class="btn btn-default newAccountBtn pull-right" ng-click="clearOpp()" style="margin-right:5px"><i class="fa fa-trash-o"></i>{{ _(' Clear')}}</button>          
       </div>
       <div class="col-md-3">
             <div style=" padding-left: 10px;" class="pull-right">
@@ -255,7 +255,7 @@
                                         <div class="form-group">
                                           <div class="col-md-12" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" >
                                               <div class="input-icon asyncSearch">
-                                             <i class="fa fa-building"></i>
+                                                  <i class="fa fa-building"></i>
                                                   <input type="text" required typeahead-loading="accSearchLoading"
                                                          ng-class="{'spinner':accSearchLoading}"
                                                          ng-model="searchAccountQuery"
@@ -549,8 +549,8 @@
                                                                 <br>        
                                                             </div>
                                                             <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
-                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
-                                                                <label for="<%=option%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
+                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1"id="<%=cusfield.id%>_check_<%=option%>_<%=$index%>">
+                                                                <label for="<%=cusfield.id%>_check_<%=option%>_<%=$index%>"> <%=option%></label>
                                                                 <br>        
                                                             </div>
                                                             <input ng-blur="addCustomField(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">
@@ -694,10 +694,10 @@
                                 </div>
                               </div>
               <div class="news-blocks blank-card blank-card-yellow ">
-                                                    <h3 style="margin-top:0px; margin-bottom: 20px;">
-                                                      <i class="fa fa-edit" style="  font-size: 24px;"></i>{{_(' Notes')}}
-                                                     </h3>
-                                                    <div class="news-block-tags">
+                        <h3 style="margin-top:0px; margin-bottom: 20px;">
+                            <i class="fa fa-edit" style="  font-size: 24px;"></i>{{_(' Notes')}}
+                        </h3>
+                          <div class="news-block-tags">
                            <ul class="chats">
                             <li class="in" ng-repeat="note in opportunity.notes" id="topic_<%=$index%>">
                                 <img class="avatar" alt="" ng-src="{{user.google_public_profile_photo_url}}" />
@@ -717,33 +717,33 @@
                                 </div>
                             </li>
                         </ul>
-                                                        <div class="row">
-                                                        <div class="col-md-12  margin-bottom-10">
-                                                            <!--<p class⁼"lead"="">
-                                                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                                                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                                                </a>
-                                                                <br>
-                                                                {{_('Or just add notes to remember what\'s important.')}}
-                                                                <br>
-                                                            </p>-->
-                                                            <form id="addNote" class="ng-pristine ng-valid">
-                                                                <div class="form-group">
-                                                                    <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Title')}}" id="messageSubject" ng-model="newnote.title">
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="newnote.content" placeholder="{{_('Note ...')}}"></textarea>
-                                                                </div>
-                                                                <div class="pull-right">
-                                                                    <input ng-disabled="isLoading || !newnote.title" ng-click="addNote(newnote)"  type="submit" class="btn blue" value="Add this note">
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>                                                    
-                                                    </div>
+                        <div class="row">
+                        <div class="col-md-12  margin-bottom-10">
+                            <!--<p class⁼"lead"="">
+                               {{_('To add an outside email to this account, forward or BCC to:')}}
+                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
+                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
+                                </a>
+                                <br>
+                                {{_('Or just add notes to remember what\'s important.')}}
+                                <br>
+                            </p>-->
+                        <form id="addNote" class="ng-pristine ng-valid">
+                            <div class="form-group">
+                                <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Title')}}" id="messageSubject" ng-model="newnote.title">
+                            </div>
+                            <div class="form-group">
+                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="newnote.content" placeholder="{{_('Note ...')}}"></textarea>
+                            </div>
+                            <div class="pull-right">
+                                <input ng-disabled="isLoading || !newnote.title" ng-click="addNote(newnote)"  type="submit" class="btn blue" value="Add this note">
+                            </div>
+                        </form>
+                    </div>
+                </div>                                                    
+                </div>
 
-                                                </div> 
+            </div> 
 
               </div>
 

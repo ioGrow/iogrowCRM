@@ -17,6 +17,7 @@ from google.appengine.api import app_identity
 import requests
 from endpoints_proto_datastore.ndb import EndpointsModel
 import gdata.contacts.data
+from iomodels.crmengine.payment import payment_required
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from iomodels.crmengine.tags import Tag, TagSchema
@@ -442,7 +443,7 @@ class Contact(EndpointsModel):
                 request=request
             )
         cases = None
-        if request.cases:
+        if request.cases :
             cases = Case.list_by_parent(
                 user_from_email=user_from_email,
                 parent_key=contact.key,
@@ -484,6 +485,9 @@ class Contact(EndpointsModel):
                 certifications=linkedin_profile.certifications ,
                 skills=linkedin_profile.skills ,
                 url=linkedin_profile.url ,
+                languages=linkedin_profile.languages ,
+                phones=linkedin_profile.phones ,
+                emails=linkedin_profile.emails ,
             )
         contact_schema = ContactSchema(
             id=str(contact.key.id()),
@@ -787,13 +791,16 @@ class Contact(EndpointsModel):
                         infonodes_structured = Node.to_structured_data(infonodes)
                         emails = None
                         if 'emails' in infonodes_structured.keys():
-                            emails = infonodes_structured['emails']
+                            if hasattr(infonodes_structured['emails'], 'items'):
+                                emails = infonodes_structured['emails']
                         phones = None
                         if 'phones' in infonodes_structured.keys():
-                            phones = infonodes_structured['phones']
+                            if hasattr(infonodes_structured['phones'], 'items'):
+                                phones = infonodes_structured['phones']
                         sociallinks = None
                         if 'sociallinks' in infonodes_structured.keys():
-                            sociallinks = infonodes_structured['sociallinks']
+                            if hasattr(infonodes_structured['sociallinks'], 'items'):
+                                sociallinks = infonodes_structured['sociallinks']
                         owner = model.User.get_by_gid(contact.owner)
                         owner_schema = None
                         if owner:
@@ -918,6 +925,8 @@ class Contact(EndpointsModel):
         contact = cls.get_by_id(int(request.id))
         if contact is None:
             raise endpoints.NotFoundException('Contact not found.')
+        if (contact.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         EndpointsHelper.share_related_documents_after_patch(
             user_from_email,
             contact,
@@ -957,6 +966,9 @@ class Contact(EndpointsModel):
                 linkedin_profile.certifications=request.linkedin_profile.certifications
                 linkedin_profile.skills=request.linkedin_profile.skills
                 linkedin_profile.url=request.linkedin_profile.url
+                linkedin_profile.languages=request.linkedin_profile.languages
+                linkedin_profile.phones=request.linkedin_profile.phones
+                linkedin_profile.emails=request.linkedin_profile.emails
                 linkedin_profile.put()
             else:
                 linkedin_profile = model.LinkedinProfile(
@@ -975,6 +987,9 @@ class Contact(EndpointsModel):
                     certifications=request.linkedin_profile.certifications ,
                     skills=request.linkedin_profile.skills ,
                     url=request.linkedin_profile.url ,
+                    languages=request.linkedin_profile.languages ,
+                    phones=request.linkedin_profile.phones ,
+                    emails=request.linkedin_profile.emails ,
                 )
                 linkedin_profile_key= linkedin_profile.put()
                 contact.linkedin_profile=linkedin_profile_key
@@ -1228,9 +1243,10 @@ class Contact(EndpointsModel):
         return contacts
 
     @classmethod
+    @payment_required()
     def insert(cls, user_from_email, request):
-        first_name = str(request.firstname).lower()
-        last_name = str(request.lastname).lower()
+        first_name = smart_str(request.firstname).lower()
+        last_name = smart_str(request.lastname).lower()
         linkedin_profile_key=None
         if request.linkedin_profile :
             linkedin_profile = model.LinkedinProfile(
@@ -1249,6 +1265,9 @@ class Contact(EndpointsModel):
                 certifications=request.linkedin_profile.certifications ,
                 skills=request.linkedin_profile.skills ,
                 url=request.linkedin_profile.url ,
+                languages=request.linkedin_profile.languages ,
+                phones=request.linkedin_profile.phones ,
+                emails=request.linkedin_profile.emails ,
             )
             linkedin_profile_key= linkedin_profile.put()
         contact = cls(

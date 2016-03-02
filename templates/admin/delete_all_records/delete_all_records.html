@@ -10,7 +10,7 @@
             {%endfor%}
         </ul>
     </div>
-    <div class="subHeaderContent" style="border-right-width: 0px;">
+   <!--  <div class="subHeaderContent" style="border-right-width: 0px;">
         <div class="col-md-4 active-app"><i class="fa fa-globe section-icon"></i>
             Regional
         </div>
@@ -22,7 +22,7 @@
             <i class="fa fa-reply"></i> {{_("Default")}}
         </a>
 
-    </div>
+    </div> -->
 </div>
 
 <div class="page-content admin-content">
@@ -40,10 +40,10 @@
           </span>
         </div>
     </div>
-    <div class="col-md-5 panel panel-default"
+    <div class="col-md-offset-3 col-md-5 panel panel-default"
          style="border: 0px;border-top: #8BC54A solid;color: #A2A2A2;font-family: sans-serif;font-weight: 300;">
         <h2 style="color: #5F5D5D;margin-top: 10px;margin-bottom: 20px; font-family: sans-serif;">
-            <i class="glyphicon glyphicon-globe" style="font-size: 24px"></i>Delete All Records</h2>
+            <i class="glyphicon glyphicon-trash" style="font-size: 24px"></i> Delete All Records</h2>
 
         <div class="form-group col-md-12" style="padding: 0px;">
             <i class="glyphicon glyphicon-flag"></i> Delete All Leads
@@ -54,31 +54,31 @@
         <div class="form-group col-md-12" style="padding: 0px;">
             <i class="glyphicon glyphicon-flag"></i> Delete All Contacts
             <div class="col-md-12 margin-top-10 " style="padding: 0px">
-               <button class="btn col-md-12"> Delete All Contacts</button>
+               <button class="btn col-md-12" ng-click="modalBeforeDelete('contact')"> Delete All Contacts</button>
             </div>
         </div>
         <div class="form-group col-md-12" style="padding: 0px;">
             <i class="glyphicon glyphicon-flag"></i> Delete All Accounts
             <div class="col-md-12 margin-top-10 " style="padding: 0px">
-               <button class="btn col-md-12"> Delete All Accounts</button>
+               <button class="btn col-md-12" ng-click="modalBeforeDelete('account')"> Delete All Accounts</button>
             </div>
         </div>
         <div class="form-group col-md-12" style="padding: 0px;">
             <i class="glyphicon glyphicon-flag"></i> Delete All Opportunities
             <div class="col-md-12 margin-top-10 " style="padding: 0px">
-               <button class="btn col-md-12" ng-click=""> Delete All Opportunities</button>
+               <button class="btn col-md-12" ng-click="modalBeforeDelete('opportunity')"> Delete All Opportunities</button>
             </div>
         </div>
         <div class="form-group col-md-12" style="padding: 0px;">
             <i class="glyphicon glyphicon-flag"></i> Delete All Cases
             <div class="col-md-12 margin-top-10 " style="padding: 0px">
-               <button class="btn col-md-12" ng-click=""> Delete All Cases</button>
+               <button class="btn col-md-12" ng-click="modalBeforeDelete('case')"> Delete All Cases</button>
             </div>
         </div>
         <div class="form-group col-md-12" style="padding: 0px;">
             <i class="glyphicon glyphicon-flag"></i> Delete All Tasks
             <div class="col-md-12 margin-top-10 " style="padding: 0px">
-               <button class="btn col-md-12" ng-click=""> Delete All Tasks</button>
+               <button class="btn col-md-12" ng-click="modalBeforeDelete('task')"> Delete All Tasks</button>
             </div>
         </div>
 
@@ -91,80 +91,40 @@
           <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                   <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i> Delete Lead<%= selectedCards.length > 1 ? 's' : ''%></h3>
+                   <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i> Delete All <%= kindToDelete%>s</h3>
               </div>
               <div class="modal-body">
                   <form id="seletesho" name="deletesho" class="form-horizontal">
-                       <p style="font-size: 16px;text-align: center;" ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <span style="color:blue"><%=selectedCards.length %> leads</span> ?</p>
-                      <p style="font-size: 16px;text-align: center;" ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :   <span style="color:blue"><%=selectedContact.firstname||selectedCards[0].firstname%> <%=selectedContact.lastname||selectedCards[0].lastname%></span> ?</p>
-       </form>
-</div>
+                       <p style="font-size: 16px;text-align: center;">{{_("Are you sure you want to delete All")}} :  <span style="color:blue"><%=kindToDelete%>s</span> ?</p>
+                     
+                       </form>
+                </div>
               <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="selectedLead={}">{{_("Cancel")}}</button>
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
-                  <input  ng-click="deleteSelection()" type="submit" class="btn red" value="Delete">
+                  <input  ng-click="delete()" type="submit" class="btn red" value="Delete">
                   <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
 
           </div>
       </div>
   </div>
+    <div id="deleteConfimationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                   <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i> <%= kindToDelete%>s</h3>
+              </div>
+              <div class="modal-body">
+                  <form id="seletesho" name="deletesho" class="form-horizontal">
+                       <p style="font-size: 16px;text-align: center;">{{_("All your")}} :  <span style="color:blue"><%=kindToDelete%>s</span> have been deleted</p>
+                     
+                       </form>
+                </div>
+          </div>
+      </div>
+  </div>
 <script>
-    function format(state) {
-        if (!state.id) return state.text;
-        return "<img class='flag' src='static/img/flags_iso/32/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text;
-    }
-    $("#country_list").select2({
-        placeholder: "Select a Country",
-        allowClear: true,
-        formatResult: format,
-        formatSelection: format,
-        escapeMarkup: function (m) {
-            return m;
-        }
-    });
-
-    $("#timezone_picker").select2({
-        placeholder: "Select a TimeZone",
-        allowClear: true,
-        escapeMarkup: function (m) {
-            return m;
-        }
-    });
-    $("#date_time_format").select2({
-        placeholder: "Select a date format",
-        allowClear: true,
-        escapeMarkup: function (m) {
-            return m;
-        }
-    });
-    $("#language_picker").select2({
-        placeholder: "Select a TimeZone",
-        allowClear: true,
-        escapeMarkup: function (m) {
-            return m;
-        }
-    });
-
-    $("#currency_format").select2({
-        placeholder: "Select a Currency format",
-        allowClear: true,
-        escapeMarkup: function (m) {
-            return m;
-        }
-    });
-    $("#week_start").select2({
-        placeholder: "Select the day the week start on",
-        allowClear: true,
-        escapeMarkup: function (m) {
-            return m;
-        }
-    });
-    $("#currency").select2({
-        placeholder: "Select a Currency",
-        allowClear: true,
-        escapeMarkup: function (m) {
-            return m;
-        }
-    });
+    
 </script>

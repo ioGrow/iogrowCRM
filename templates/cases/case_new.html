@@ -127,36 +127,12 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <div class="col-md-12" ng-class="{ 'has-error': case_err.account && case_err.contact}">
-                        <input type="text" typeahead-loading="conSearchLoading" ng-class="{'spinner':conSearchLoading}" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in getResults($viewValue,'/crmengine/v1/contacts/search') | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="{{ _('Contact')}}">
+                        <input type="text" required  typeahead-loading="accSearchLoading" ng-class="{'spinner':accSearchLoading}" ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in getResults($viewValue,'/crmengine/v1/accounts/search') | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control" placeholder="{{ _('Account')}}">
                       </div>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <div class="col-md-12" ng-class="{ 'has-error': case_err.account && case_err.contact}">
-                        <input type="text" required  typeahead-loading="accSearchLoading" ng-class="{'spinner':accSearchLoading}" ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in getResults($viewValue,'/crmengine/v1/accounts/search') | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control" placeholder="{{ _('Account')}}">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-               </form>
-              </div>
-            </div>
-            <div class="row">
-            <div class="col-md-6">
-              <div class="news-blocks blank-card blank-card-yellow">
-                <h3>{{ _('Case Informations')}}</h3>
-                <div class="row">
-                  <div class="form-group selector-margin">
-                    <label  class="required col-md-3 control-label">{{_("Status")}} </label>
-                    <div class="col-md-9">
-                             <select class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
-                              <option value="">-- {{_("Choose a status")}} --</option>
-                            </select>
-
-                    </div>
-                  </div>
-                  <div class="form-group selector-margin">
                         <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
 
                         <div class="col-md-9">
@@ -177,9 +153,75 @@
                         </div>
 
                     </div>
+                  </div>
+                </div>
+               </form>
+              </div>
+            </div>
+            <div class="row margin-bottom-15" >
+                    <div class="col-md-12">
+                        <div class="custom_wizard" id="form_wizard_1">
+                          <div class="portlet-body form">
+                            <form action="#" class="form-horizontal" id="submit_form" id="form_wizard_1">
+                              <div class="form-wizard">
+                                <div class="form-body">
+                                  <ul class="nav nav-pills nav-justified steps" >
+                                    <li ng-repeat="stat in casesatuses" id="wizardstep">
+                                      <a ng-click="changeStatus(stat)" ng-href="#<%='tab'+$index%>" data-toggle="tab" class="step">
+                                      <span class="number">
+                                        <%=$index%>                          
+                                      </span>
+                                      <span class="desc">
+                                        <i class="fa fa-check"></i> <%=stat.status%>
+                                      </span>
+                                      </a>
+                                    </li>
+                                  </ul>
+                                  <div id="bar" class="progress progress-striped" role="progressbar" style="position:relative !important">
+                                    <div class="progress-bar progress-bar-success" style="height:100%!important;">
+                                    </div>
+                                  </div>
+                                  
+                                </div>
+                                <div class="form-actions fluid" style="display:none">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                      <div class="col-md-offset-3 col-md-9">
+                                        <a href="javascript:;" class="btn default button-previous">
+                                        <i class="m-icon-swapleft"></i> Back </a>
+                                        <a href="javascript:;" class="btn blue button-next">
+                                        Continue <i class="m-icon-swapright m-icon-white"></i>
+                                        </a>
+                                        <a href="javascript:;" class="btn green button-submit">
+                                        Submit <i class="m-icon-swapright m-icon-white"></i>
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+            <div class="row">
+            <div class="col-md-6">
+             <!--  <div class="news-blocks blank-card blank-card-yellow">
+                <h3>{{ _('Case Informations')}}</h3>
+                <div class="row">
+                  <div class="form-group selector-margin">
+                    <label  class="required col-md-3 control-label">{{_("Status")}} </label>
+                    <div class="col-md-9">
+                             <select class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
+                              <option value="">-- {{_("Choose a status")}} --</option>
+                            </select>
+
+                    </div>
+                  </div>
                   <br>
                 </div>
-              </div>
+              </div> -->
               <div class="news-blocks blank-card blank-card-gray relatedBlock">
                                     <span class="page-meta pull-right" ng-show="!isEmptyArray(cases.customfields)">
                                                <a href="/#/admin/custom_fields/5"  class="btn-link addAnotherPhone" data-toggle="modal" style="color:gray;"><i class="fa fa-pencil"></i> {{_('Edit Custom fields')}} </a>
@@ -226,20 +268,69 @@
 
             </div>
             <div class="col-md-6">
-              <div class="news-blocks blank-card blank-card-red">
-                <h3>{{ _('Description')}}</h3>
-
-
+              <div class="news-blocks blank-card blank-card-blue">
+                <h3> <i class="fa fa-user" style="font-size: 20px;"></i> {{_(' Related contacts')}}</h3>
                 <div class="news-block-tags">
 
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="casee.description"></textarea>
-                        </div>
-                  </div>
+                    <div class="form-group">
+                      <div class="" ng-class="{ 'has-error': case_err.account && case_err.contact}">
+                        <input type="text" typeahead-loading="conSearchLoading" ng-class="{'spinner':conSearchLoading}" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in getResults($viewValue,'/crmengine/v1/contacts/search') | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="{{ _('Contact')}}">
+                      </div>
+                    </div>
                 </div>
 
               </div>
+                <div class="news-blocks blank-card blank-card-yellow ">
+                        <h3 style="margin-top:0px; margin-bottom: 20px;">
+                            <i class="fa fa-edit" style="  font-size: 24px;"></i>{{_(' Notes')}}
+                        </h3>
+                          <div class="news-block-tags">
+                           <ul class="chats">
+                            <li class="in" ng-repeat="note in casee.notes" id="topic_<%=$index%>">
+                                <img class="avatar" alt="" ng-src="{{user.google_public_profile_photo_url}}" />
+                                <div class="message">
+                                    <span class="arrow"></span>
+                                    <a href="#" class="name">
+                                        {{user.google_display_name}}
+                                    </a>
+                                    <span class="datetime">
+                                        at <%= CurrentDate | date:'MM-dd-yyyy - HH:mm:ss '  %>
+                                    </span>
+                                    <span class="body">
+                                        <a href="<%=getTopicUrl(note.topic_kind,note.id)%>" class="discussion-content"><strong class="ng-binding">
+                                                <a href="#/notes/show/<%= note.id%>"><%= note.title%></a> </strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="note.excerpt"></span><span class="chat-meta " ng-show="note.content"><i class="icon-comment"></i> <a href="#/notes/show/<%= note.id%>"> <%= note.content%> </a> {{_('content')}}</span>
+                                        </a>
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="row">
+                        <div class="col-md-12  margin-bottom-10">
+                            <!--<p class⁼"lead"="">
+                               {{_('To add an outside email to this account, forward or BCC to:')}}
+                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
+                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
+                                </a>
+                                <br>
+                                {{_('Or just add notes to remember what\'s important.')}}
+                                <br>
+                            </p>-->
+                        <form id="addNote" class="ng-pristine ng-valid">
+                            <div class="form-group">
+                                <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Title')}}" id="messageSubject" ng-model="newnote.title">
+                            </div>
+                            <div class="form-group">
+                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="newnote.content" placeholder="{{_('Note ...')}}"></textarea>
+                            </div>
+                            <div class="pull-right">
+                                <input ng-disabled="isLoading || !newnote.title" ng-click="addNote(newnote)"  type="submit" class="btn blue" value="Add this note">
+                            </div>
+                        </form>
+                    </div>
+                </div>                                                    
+                </div>
+
+            </div> 
 
             </div>
           </div>
@@ -370,12 +461,89 @@
     </div>
   </div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript"> 
   $(function() {
     $('#datetimepicker2').datetimepicker({
       language: 'fr',
       pickTime: false
     });
   });
+  function wizz(){
+  if (!jQuery().bootstrapWizard) {
+                    console.log("hhhhhhhhhhhhhhhhhhhhhhhhherrrrrrrrrrrrre");
+                    return;
+                }
+                var handleTitle = function(tab, navigation, index) {
+                    console.log('index');
+                    console.log(index);
+                    var total = navigation.find('li').length;
+                    console.log("total equal===");
+                    console.log(total);
+                    var current = index + 1;
+                    console.log('index');
+                    console.log(index)
+                    // set wizard title
+                   // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
+                    // set done steps
+                    jQuery('li', $('#form_wizard_1')).removeClass("done");
+                    var li_list = navigation.find('li');
+                    for (var i = 0; i < index; i++) {
+                        jQuery(li_list[i]).addClass("done");
+                    }
+
+                    if (current == 1) {
+                        $('#form_wizard_1').find('.button-previous').hide();
+                    } else {
+                        $('#form_wizard_1').find('.button-previous').show();
+                    }
+
+                    if (current >= total) {
+                        $('#form_wizard_1').find('.button-next').hide();
+                        $('#form_wizard_1').find('.button-submit').show();
+                       // displayConfirm();
+                    } else {
+                        $('#form_wizard_1').find('.button-next').show();
+                        $('#form_wizard_1').find('.button-submit').hide();
+                    }
+                  //  App.scrollTo($('.page-title'));
+                }
+
+                // default form wizard
+                $('#form_wizard_1').bootstrapWizard({
+                    'nextSelector': '.button-next',
+                    'previousSelector': '.button-previous',
+                    onTabClick: function (tab, navigation, index, clickedIndex) {
+                        handleTitle(tab, navigation, clickedIndex);
+                    },
+                    onNext: function (tab, navigation, index) {
+                        handleTitle(tab, navigation, index);
+                    },
+                    onPrevious: function (tab, navigation, index) {
+                        handleTitle(tab, navigation, index);
+                    },
+                    onTabShow: function (tab, navigation, index) {
+                        var total = navigation.find('li').length;
+                        var current = index + 1;
+                        var $percent = (current / total) * 100;
+                        $('#form_wizard_1').find('.progress-bar').css({
+                            width: $percent + '%'
+                        });
+                    }
+                });
+                $('#form_wizard_1').find('.button-previous').hide();
+                $('#form_wizard_1 .button-submit').click(function () {}).hide();
+}
+function waitwizard() {
+      if (jQuery.isEmptyObject(angular.element("#signin").scope().casesatuses)) {
+          setTimeout("waitwizard()", 500);
+          console.log("not yet");
+      }else{
+                console.log("yes it works");
+                console.log(angular.element("#signin").scope().casesatuses);
+                 wizz()// you will need an asynch callback
+    }
+
+}
+ waitwizard();
 </script>
 

@@ -762,7 +762,7 @@ $scope.influencers_V2= function(){
       
         
             };
-$scope.initialize=function() {
+$scope.initialize =function() {
   $scope.no_tweets_map=true
  var myLatlng = new google.maps.LatLng(36.7002068,4.0754879);
   var mapOptions = {
@@ -955,7 +955,6 @@ $scope.adddialgo= function (marker,text,map){
 
           google.maps.event.addListener(marker, 'click', function() {
           
-            console.log("ddddd"+marker.getTitle());
             var location=marker.getTitle();
             $scope.map_tweets=null;
             Discover.get_tweets_map($scope,location);

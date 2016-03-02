@@ -11,6 +11,8 @@ from protorpc import messages
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.notes import AuthorSchema, DiscussionAboutSchema
 from model import Userinfo
+
+from iomodels.crmengine.payment import payment_required
 from iomodels.crmengine.tags import Tag, TagSchema
 from iograph import Edge
 import model
@@ -253,7 +255,7 @@ class Task(EndpointsModel):
                 photo=task.author.photo)
         due_date = None
         if task.due:
-            due_date = task.due.isoformat()
+            due_date = task.due.strftime('%Y-%m-%d')
         task_schema = TaskSchema(
             id=str(task.key.id()),
             entityKey=task.key.urlsafe(),
@@ -494,6 +496,7 @@ class Task(EndpointsModel):
         )
 
     @classmethod
+    @payment_required()
     def insert(cls, user_from_email, request):
         if request.status:
             status = request.status
@@ -601,6 +604,8 @@ class Task(EndpointsModel):
         edges = Edge.query().filter(Edge.kind == "assignees", Edge.start_node == task.key)
         if task is None:
             raise endpoints.NotFoundException('Task not found.')
+        if (task.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         if request.title:
             task.title = request.title
         if request.access:

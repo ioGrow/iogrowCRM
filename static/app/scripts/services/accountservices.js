@@ -24,7 +24,7 @@ accountservices.factory('Conf', function($location) {
         'shows': '/#/shows/show/'
     };
 });
-accountservices.factory('Account', function($http) {
+accountservices.factory('Account', function($rootScope) {
 
     var Account = function(data) {
         angular.extend(this, data);
@@ -425,6 +425,32 @@ accountservices.factory('Account', function($http) {
                     $scope.email.to = $scope.email.to + value.email + ',';
 
                 });     
+                if (resp.contacts.items) {
+                    angular.forEach(resp.contacts.items, function(item) {
+                            item.sociallinks=[];
+                            if (item.infonodes==undefined) {
+                                item.infonodes={};
+                                item.infonodes.items=[];    
+                            };
+                            angular.forEach(item.infonodes.items, function(infonode){
+                                    if (infonode.kind=="sociallinks") {
+                                      angular.forEach(infonode.items, function(link){
+                                              if (link.kind=="sociallinks") {
+                                                if ($scope.linkedinUrl(link.fields[0].value)) {
+                                                    item.sociallinks.unshift({url:link.fields[0].value});
+                                                }else{
+                                                    item.sociallinks.push({url:link.fields[0].value});   
+                                                };
+                                                 
+                                              };
+                                        });
+                                    };
+                            });
+                            console.log("item contact");
+                            console.log(item);
+                        });
+                        $scope.contacts = resp.contacts.items;
+                }
                 $scope.inProcess(false);  
                         $scope.apply();          
             } else {
@@ -612,6 +638,11 @@ accountservices.factory('Account', function($http) {
         trackMixpanelAction('ACCOUNT_INSERT');
         $scope.inProcess(true);  
         gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
+            if (resp.error && resp.error.code == 412){
+                $('#payment_modal').modal('show');
+                return
+                //window.location.replace($rootScope.subscription_url);
+            }
             if (!resp.code) {
                 $scope.accountInserted(resp);
                 $scope.inProcess(false);  
@@ -641,6 +672,17 @@ accountservices.factory('Account', function($http) {
                 }else{
                      window.location.replace('#/accounts');
                 };
+               
+            }
+        )
+    };
+    Account.deleteAll = function($scope) {
+            $scope.isLoading=true;  
+            gapi.client.crmengine.accounts.delete_all().execute(function(resp) {
+                $scope.allAccountsDeleted();
+                $scope.isLoading=false;
+                $scope.apply();
+                
                
             }
         )
@@ -792,18 +834,13 @@ accountservices.factory('Search', function($http) {
     };
 
     Search.list = function($scope, params) {
-        console.log("aqlihe dhagui----------------------------")
-        $scope.inProcess(true); 
+        $scope.inProcess(true);
         if (params['q'] != undefined) {
             gapi.client.crmengine.search(params).execute(function(resp) {
                 if (!resp.code) {
                     if (resp.items) {
-                        if (resp.nextPageToken==undefined||resp.nextPageToken==1) {
-                          
-                         $scope.searchResults = []; 
-                        }else{
-                           
-                        };
+                         if(!$scope.searchResults)
+                             $scope.searchResults = [];
                       angular.forEach(resp.items, function(item) {
                             var id = item.id;
                             var type = item.type;
@@ -816,9 +853,6 @@ accountservices.factory('Search', function($http) {
                             result.url = url;
                             $scope.searchResults.push(result);
                         });
-
-
-                        //$scope.searchResults = resp.items;
                         if ($scope.currentPage > 1) {
                             $scope.pagination.prev = true;
                         } else {
@@ -826,11 +860,8 @@ accountservices.factory('Search', function($http) {
                         }                       
                         if (resp.nextPageToken) {
                             var nextPage = $scope.currentPage + 1;
-                            // Store the nextPageToken
                             $scope.pages[nextPage] = resp.nextPageToken;
-                                                     
                             $scope.pagination.next = true;
-
                         } else {
                             $scope.pagination.next = false;
                         }

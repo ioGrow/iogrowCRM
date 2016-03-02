@@ -4,6 +4,7 @@ import json
 import logging
 import re
 import time
+
 import endpoints
 import model
 import requests
@@ -13,8 +14,9 @@ from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
-from model import User
 from protorpc import messages
+
+import config
 import iomessages
 import tweepy
 from endpoints_helper import EndpointsHelper
@@ -28,6 +30,7 @@ from iomodels.crmengine.documents import Document, DocumentListResponse
 from iomodels.crmengine.events import Event, EventListResponse
 from iomodels.crmengine.notes import Note, TopicListResponse
 from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
+from iomodels.crmengine.payment import payment_required
 from iomodels.crmengine.tags import Tag, TagSchema
 from iomodels.crmengine.tasks import Task, TaskListResponse
 from profilehooks import timecall
@@ -328,7 +331,7 @@ class Lead(EndpointsModel):
     source = ndb.StringProperty()
     status = ndb.StringProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
-    updated_at = ndb.DateTimeProperty(auto_now_add=True)
+    updated_at = ndb.DateTimeProperty(auto_now=True)
     created_by = ndb.KeyProperty()
     show = ndb.KeyProperty()
     linkedin_profile = ndb.KeyProperty()
@@ -519,6 +522,10 @@ class Lead(EndpointsModel):
                 certifications=linkedin_profile.certifications ,
                 skills=linkedin_profile.skills ,
                 url=linkedin_profile.url ,
+                languages=linkedin_profile.languages,
+                phones=linkedin_profile.phones,
+                emails=linkedin_profile.emails,
+
             )
         lead_schema = LeadSchema(
             id=str(lead.key.id()),
@@ -609,10 +616,12 @@ class Lead(EndpointsModel):
                         infonodes_structured = Node.to_structured_data(infonodes)
                         emails = None
                         if 'emails' in infonodes_structured.keys():
-                            emails = infonodes_structured['emails']
+                            if hasattr(infonodes_structured['emails'], 'items'):
+                                emails = infonodes_structured['emails']
                         phones = None
                         if 'phones' in infonodes_structured.keys():
-                            phones = infonodes_structured['phones']
+                            if hasattr(infonodes_structured['phones'], 'items'):
+                                phones = infonodes_structured['phones']
                         sociallinks = None
                         if 'sociallinks' in infonodes_structured.keys():
                             if hasattr(infonodes_structured['sociallinks'], 'items'):
@@ -854,9 +863,10 @@ class Lead(EndpointsModel):
         return resp
 
     @classmethod
+    @payment_required()
     def insert(cls, user_from_email, request):
-        first_name = str(request.firstname).lower()
-        last_name = str(request.lastname).lower()
+        first_name = smart_str(request.firstname).lower()
+        last_name = smart_str(request.lastname).lower()
         linkedin_profile_key = None
         if request.linkedin_profile :
             linkedin_profile = model.LinkedinProfile(
@@ -875,6 +885,9 @@ class Lead(EndpointsModel):
                 certifications=request.linkedin_profile.certifications ,
                 skills=request.linkedin_profile.skills ,
                 url=request.linkedin_profile.url ,
+                languages=request.linkedin_profile.languages,
+                emails=request.linkedin_profile.emails,
+                phones=request.linkedin_profile.phones
             )
             linkedin_profile_key= linkedin_profile.put()
         lead = cls(
@@ -1167,14 +1180,17 @@ class Lead(EndpointsModel):
     @classmethod
     def patch(cls, user_from_email, request):
         lead = cls.get_by_id(int(request.id))
-        if lead is None:
+        print lead
+        print lead.owner == user_from_email.google_user_id , user_from_email.is_admin
+        if lead is None :
             raise endpoints.NotFoundException('Lead not found.')
+        if (lead.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         EndpointsHelper.share_related_documents_after_patch(
             user_from_email,
             lead,
             request
         )
-        print lead
         properties = ['owner', 'firstname', 'lastname', 'company', 'title',
                       'tagline', 'introduction', 'source', 'status', 'access',
                       'profile_img_id', 'profile_img_url', 'industry', 'linkedin_url', 'cover_image']
@@ -1183,6 +1199,7 @@ class Lead(EndpointsModel):
                 if (eval('lead.' + p) != eval('request.' + p)) \
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('lead.' + p + '= request.' + p)
+
         if request.linkedin_profile :
             if lead.linkedin_profile :
                 linkedin_profile = lead.linkedin_profile.get()
@@ -1201,6 +1218,9 @@ class Lead(EndpointsModel):
                 linkedin_profile.certifications=request.linkedin_profile.certifications
                 linkedin_profile.skills=request.linkedin_profile.skills
                 linkedin_profile.url=request.linkedin_profile.url
+                linkedin_profile.languages=request.linkedin_profile.languages
+                linkedin_profile.phones=request.linkedin_profile.phones
+                linkedin_profile.emails=request.linkedin_profile.emails
                 linkedin_profile.put()
             else:
                 linkedin_profile = model.LinkedinProfile(
@@ -1219,6 +1239,9 @@ class Lead(EndpointsModel):
                     certifications=request.linkedin_profile.certifications ,
                     skills=request.linkedin_profile.skills ,
                     url=request.linkedin_profile.url ,
+                    languages=request.linkedin_profile.languages ,
+                    phones=request.linkedin_profile.phones ,
+                    emails=request.linkedin_profile.emails ,
                 )
                 linkedin_profile_key= linkedin_profile.put()
                 lead.linkedin_profile=linkedin_profile_key

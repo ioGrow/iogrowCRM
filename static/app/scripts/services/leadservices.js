@@ -1,6 +1,6 @@
 var leadservices = angular.module('crmEngine.leadservices', []);
 
-leadservices.factory('Lead', function ($http) {
+leadservices.factory('Lead', function ($rootScope) {
 
     var Lead = function (data) {
         angular.extend(this, data);
@@ -103,6 +103,50 @@ leadservices.factory('Lead', function ($http) {
                     }
                     //$scope.renderMaps();
                     var renderMap = false;
+                     var past_pos=[];
+                     if (!$scope.lead.linkedin_profile) {
+                        $scope.lead.linkedin_profile={};
+                     };
+                    if ($scope.lead.linkedin_profile.past_post) {
+                         angular.forEach($scope.lead.linkedin_profile.past_post, function(position){
+                              past_pos.push(JSON.parse(position));
+                        });
+                         $scope.lead.linkedin_profile.past_post=past_pos;
+                         past_pos=null;
+                    }
+                    var cur_pos=[];
+                    if ($scope.lead.linkedin_profile.current_post) {
+                       angular.forEach($scope.lead.linkedin_profile.current_post, function(position){
+                            cur_pos.push(JSON.parse(position)); 
+                        });
+                       $scope.lead.linkedin_profile.current_post=cur_pos;
+                       cur_pos=null;
+                    }
+                    var skills=[];
+                    if ($scope.lead.linkedin_profile.skills) {
+                       angular.forEach($scope.lead.linkedin_profile.skills, function(position){
+                             skills.push(JSON.parse(position)); 
+                        });
+                       $scope.lead.linkedin_profile.skills=skills;
+                        skills=null;
+                    }
+                    var formations=[];
+                    if ($scope.lead.linkedin_profile.formations) {
+                        angular.forEach($scope.lead.linkedin_profile.formations, function(position){
+                             formations.push(JSON.parse(position));  
+                        });
+                        $scope.lead.linkedin_profile.formations=formations;
+                        formations=null;
+                    }  
+                    var languages=[];
+                    if ($scope.lead.linkedin_profile.languages) {
+                        angular.forEach($scope.lead.linkedin_profile.languages, function(language){
+                             languages.push(JSON.parse(language));  
+                        });
+                        $scope.lead.linkedin_profile.languages=languages;
+                        languages=null;
+                    } 
+                    $scope.linkedProfileresume=$scope.lead.linkedin_profile.resume;
                     if (resp.infonodes) {
 
                         if (resp.infonodes.items) {
@@ -397,6 +441,50 @@ leadservices.factory('Lead', function ($http) {
                             $scope.lead[k] = resp[k];
                         }
                     }
+                    var past_pos=[];
+                     if (!$scope.lead.linkedin_profile) {
+                        $scope.lead.linkedin_profile={};
+                     };
+                    if ($scope.lead.linkedin_profile.past_post) {
+                         angular.forEach($scope.lead.linkedin_profile.past_post, function(position){
+                              past_pos.push(JSON.parse(position));
+                        });
+                         $scope.lead.linkedin_profile.past_post=past_pos;
+                         past_pos=null;
+                    }
+                    var cur_pos=[];
+                    if ($scope.lead.linkedin_profile.current_post) {
+                       angular.forEach($scope.lead.linkedin_profile.current_post, function(position){
+                            cur_pos.push(JSON.parse(position)); 
+                        });
+                       $scope.lead.linkedin_profile.current_post=cur_pos;
+                       cur_pos=null;
+                    }
+                    var skills=[];
+                    if ($scope.lead.linkedin_profile.skills) {
+                       angular.forEach($scope.lead.linkedin_profile.skills, function(position){
+                             skills.push(JSON.parse(position)); 
+                        });
+                       $scope.lead.linkedin_profile.skills=skills;
+                        skills=null;
+                    }
+                    var formations=[];
+                    if ($scope.lead.linkedin_profile.formations) {
+                        angular.forEach($scope.lead.linkedin_profile.formations, function(position){
+                             formations.push(JSON.parse(position));  
+                        });
+                        $scope.lead.linkedin_profile.formations=formations;
+                        formations=null;
+                    }  
+                    var languages=[];
+                    if ($scope.lead.linkedin_profile.languages) {
+                        angular.forEach($scope.lead.linkedin_profile.languages, function(language){
+                             languages.push(JSON.parse(language));  
+                        });
+                        $scope.lead.linkedin_profile.languages=languages;
+                        languages=null;
+                    } 
+                    $scope.linkedProfileresume=$scope.lead.linkedin_profile.resume;
                     $scope.email.to = '';
                     angular.forEach($scope.lead.emails, function (value, key) {
                         $scope.email.to = $scope.email.to + value.email + ',';
@@ -706,7 +794,11 @@ leadservices.factory('Lead', function ($http) {
             'method': 'POST',
             'body': params,
             'callback': (function (resp) {
-                if (!resp.code && resp.id) {
+                if (resp.error && resp.error.code == 412){
+                    $('#payment_modal').modal('show');
+                    return
+                    //window.location.replace($rootScope.subscription_url);
+                } if (!resp.code && resp.id) {
                     $scope.leadInserted(resp.id);
                 } else if (!resp.id) {
                     console.log(resp);
@@ -840,6 +932,17 @@ leadservices.factory('Lead', function ($http) {
         )
         $scope.inProcess(false);
         $scope.apply();
+    };
+    Lead.deleteAll = function ($scope) {
+        //trackMixpanelAction('LEAD_DELETE');
+        $scope.isLoading=true;
+        gapi.client.crmengine.leads.delete_all().execute(function (resp) {
+                $scope.allLeadsDeleted();
+                $scope.isLoading=false;
+                     $scope.apply();
+            }
+        )
+        
     };
 
 

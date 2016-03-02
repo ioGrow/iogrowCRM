@@ -31,14 +31,10 @@
                     <ul class="dropdown-menu">
                         {%for application in apps %}
                         {% if application.label =="Relationships" %}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
-                                                                                                src="static/img/sm-iogrow-true.png"
-                                                                                                style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
+                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
                         </li>
                         {% else%}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
-                                                                                                src="static/img/admin_min.png"
-                                                                                                style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
+                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
                         </li>
 
                         {% endif %}
@@ -141,7 +137,7 @@
         <!-- BEGIN PAGE CONTENT-->
         <div class="col-md-9">
             <div class="row">
-                <div class="showPage slimForm col-md-12 margin-bottom-15">
+                <div id="newAccMain" class="showPage slimForm col-md-12 margin-bottom-15">
                     <div class="row">
                         <div class="col-md-12">
                             <!-- BEGIN PORTLET-->
@@ -173,7 +169,7 @@
                                              style="display: table-cell;width: 100%;vertical-align: middle;">
                                             <div class="col-md-12">
 
-                                                <div class="form-group">
+                                                <div class="form-group" ng-class="{ 'has-error': account_err.name}">
                                                     <label class="control-label col-md-2">
                                                         {{_('Name')}}
                                                         <span class="required">*</span>

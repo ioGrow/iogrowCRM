@@ -3,11 +3,11 @@ var opportunityservices = angular.module('crmEngine.opportunityservices',[]);
 //HKA 20.10.2013   Base service (create, delete, get)
 
 
-opportunityservices.factory('Opportunity', function($http) {
+opportunityservices.factory('Opportunity', function($rootScope) {
 
   var Opportunity = function(data) {
     angular.extend(this, data);
-  }
+  };
 
 
 
@@ -156,8 +156,6 @@ opportunityservices.factory('Opportunity', function($http) {
           $scope.inProcess(false);  
           $scope.apply();
          };
-
-
       }
     });
 
@@ -171,6 +169,7 @@ opportunityservices.factory('Opportunity', function($http) {
       callback(resp);
         gapi.client.crmengine.opportunities.listv3().execute(function(resp) {
             // Update the cache
+            console.log(resp);
             iogrow.ioStorageCache.renderIfUpdated('opportunities', resp, callback);
 
         });
@@ -356,7 +355,11 @@ Opportunity.insert = function($scope,params){
       $scope.inProcess(true);
 
       gapi.client.crmengine.opportunities.insertv2(params).execute(function(resp) {
-
+          if (resp.error && resp.error.code == 412){
+              //window.location.replace($rootScope.subscription_url);
+              $('#payment_modal').modal('show');
+              return
+          }
          if(!resp.code){
           $scope.inProcess(false);
 
@@ -412,6 +415,15 @@ Opportunity.delete = function($scope,params){
     }
 )};
 
+      Opportunity.deleteAll = function($scope){
+              $scope.isLoading=true;
+              $scope.apply();
+                gapi.client.crmengine.opportunities.delete_all().execute(function(resp){
+                  $scope.allOpportunitiesDeleted();
+                  $scope.isLoading=false;
+                  $scope.apply();
+                 }
+          )};
         Opportunity.export = function ($scope, params) {
           trackMixpanelAction('OPPORTUNITY_EXPORT');
         //$("#load_btn").attr("disabled", "true");

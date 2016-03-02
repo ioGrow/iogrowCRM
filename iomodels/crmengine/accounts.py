@@ -15,6 +15,7 @@ from google.appengine.api import app_identity
 import requests
 
 from endpoints_proto_datastore.ndb import EndpointsModel
+from iomodels.crmengine.payment import payment_required
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 import model
 from iomodels.crmengine.tags import Tag, TagSchema
@@ -111,7 +112,7 @@ class AccountPatchRequest(messages.Message):
     addresses = messages.MessageField(iomessages.AddressSchema, 17, repeated=True)
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema, 18, repeated=True)
     linkedin_profile = messages.MessageField(iomessages.LinkedinCompanySchema, 32)
-
+    new_contact_key = messages.StringField(19)
 
 
 class AccountListRequest(messages.Message):
@@ -453,15 +454,17 @@ class Account(EndpointsModel):
 
     @classmethod
     def patch(cls, user_from_email, request):
-        print 'ok start'
         account = cls.get_by_id(int(request.id))
         if account is None:
             raise endpoints.NotFoundException('Account not found.')
+        if (account.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
+            raise endpoints.ForbiddenException('you are not the owner')
         EndpointsHelper.share_related_documents_after_patch(
             user_from_email,
             account,
             request
         )
+
         properties = ['owner', 'name', 'account_type', 'industry', 'tagline', 'cover_image',
                       'introduction', 'access', 'logo_img_id', 'logo_img_url', 'lastname', 'firstname',
                       'personal_account']
@@ -472,9 +475,18 @@ class Account(EndpointsModel):
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('account.' + p + '= request.' + p)
         account_key_async = account.put_async().get_result()
+        contact_key = ndb.Key(urlsafe=request.new_contact_key)
+        Edge.insert(start_node=account_key_async,
+                    end_node=contact_key,
+                    kind='contacts',
+                    inverse_edge='parents')
+        EndpointsHelper.update_edge_indexes(
+            parent_key=contact_key,
+            kind='contacts',
+            indexed_edge=str(account_key_async.id())
+        )
         info_nodes = Node.list_info_nodes(account_key_async, None)
         info_nodes_structured = Node.to_structured_data(info_nodes)
-        new_contact = request
         emails = None
         if request.linkedin_profile :
             if account.linkedin_profile :
@@ -517,7 +529,7 @@ class Account(EndpointsModel):
                 account.linkedin_profile=linkedin_profile_key
         if 'emails' in info_nodes_structured.keys():
             emails = info_nodes_structured['emails']
-        for email in new_contact.emails:
+        for email in request.emails:
             is_exist = False
             if emails:
                 for em in emails.items:
@@ -541,7 +553,7 @@ class Account(EndpointsModel):
         if 'addresses' in info_nodes_structured.keys():
             addresses = info_nodes_structured['addresses']
 
-        for address in new_contact.addresses:
+        for address in request.addresses:
             is_exist = False
             if addresses:
                 for em in addresses.items:
@@ -585,7 +597,7 @@ class Account(EndpointsModel):
         phones = None
         if 'phones' in info_nodes_structured.keys():
             phones = info_nodes_structured['phones']
-        for phone in new_contact.phones:
+        for phone in request.phones:
             is_exist = False
             if phones:
                 for em in phones.items:
@@ -610,7 +622,7 @@ class Account(EndpointsModel):
                     )
 
                 )
-        for info_node in new_contact.infonodes:
+        for info_node in request.infonodes:
             is_exist = is_the_same_node(info_node, info_nodes_structured)
             if not is_exist:
                 Node.insert_info_node(
@@ -620,7 +632,7 @@ class Account(EndpointsModel):
                         fields=info_node.fields
                     )
                 )
-        for note in new_contact.notes:
+        for note in request.notes:
             note_author = model.Userinfo()
             note_author.display_name = user_from_email.google_display_name
             note_author.photo = user_from_email.google_public_profile_photo_url
@@ -646,8 +658,9 @@ class Account(EndpointsModel):
             )
         data = EndpointsHelper.get_data_from_index(str(account.key.id()))
         account.put_index(data)
-        get_schema_request = AccountGetRequest(id=int(request.id))
-        return cls.get_schema(user_from_email, get_schema_request)
+        get_schema_request = AccountGetRequest(id=int(request.id), contacts=ListRequest(limit=15))
+        schema = cls.get_schema(user_from_email, get_schema_request)
+        return schema
 
     @classmethod
     def export_csv_data(cls, user_from_email, request):
@@ -681,6 +694,7 @@ class Account(EndpointsModel):
         return AccountExportListResponse(items=accounts_list)
 
     @classmethod
+    @payment_required()
     def insert(cls, user_from_email, request):
         account = None
         account_key = None
@@ -922,13 +936,16 @@ class Account(EndpointsModel):
                     infonodes_structured = Node.to_structured_data(infonodes)
                     emails = None
                     if 'emails' in infonodes_structured.keys():
-                        emails = infonodes_structured['emails']
+                        if hasattr(infonodes_structured['emails'], 'items'):
+                            emails = infonodes_structured['emails']
                     phones = None
                     if 'phones' in infonodes_structured.keys():
-                        phones = infonodes_structured['phones']
+                        if hasattr(infonodes_structured['phones'], 'items'):
+                            phones = infonodes_structured['phones']
                     sociallinks = None
                     if 'sociallinks' in infonodes_structured.keys():
-                        sociallinks = infonodes_structured['sociallinks']
+                        if hasattr(infonodes_structured['sociallinks'], 'items'):
+                            sociallinks = infonodes_structured['sociallinks']
                     owner = model.User.get_by_gid(account.owner)
                     owner_schema = None
                     if owner:

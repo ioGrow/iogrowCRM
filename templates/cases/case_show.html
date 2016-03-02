@@ -180,7 +180,7 @@
   <div class="row">
     <div class="col-md-9">
       <div class="row">
-         <div class="showPage custom-show margin-bottom-15  col-md-12">
+         <div id="newAccMain" class="showPage custom-show margin-bottom-15  col-md-12">
           <div class="row margin-bottom-10">
 
             <div class="col-md-12">
@@ -196,7 +196,7 @@
                     <form ng-show="showEdit" class="form-inline newLeadForm" role="form" style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px;width: calc(100% - 176px);">
                         <div class="input-icon">
                               <i class="fa fa-pencil"></i>
-                             <input class="  form-control" type="text" placeholder="Subject" ng-model="casee.name" ng-blur="inlinePatch('Case','', 'name',account.entityKey,casee.name)" ng-enter="inlinePatch('Case','', 'name',account.entityKey,casee.name)">
+                             <input class="  form-control" type="text" placeholder="Subject" ng-model="casee.name" ng-blur="inlinePatch('Case','', 'name',casee.id,casee.name)" ng-enter="inlinePatch('Case','', 'name',casee.id,casee.name)">
                         </div>
 
                     </form> 
@@ -859,10 +859,10 @@
                                                           <i class="fa fa-user"></i>
                                                          {{ _('Owner:') }}
                                                       </span>
-                                                      <span ng-hide="showEdit">
+                                                      <span ng-hide="(showEdit)&&(casee.owner.google_user_id=={{ME}}||{{is_admin}})" >
                                                             <%= casee.owner.google_display_name %>
                                                       </span>
-                                                      <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
+                                                      <a ng-show="(showEdit)&&(casee.owner.google_user_id=={{ME}}||{{is_admin}})" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
                                                          data-toggle="dropdown" style="margin-right:0px">
                                                           
                                                           <span>
@@ -870,9 +870,9 @@
                                                           </span>
                                                           <i class="icon-angle-down fa fa-angle-down"></i>
                                                       </a>
-                                                      <ul class="dropdown-menu">
+                                                      <ul class="dropdown-menu" ng-show="(showEdit)&&(casee.owner.google_user_id=={{ME}}||{{is_admin}})">
                                                           <li ng-repeat="user in users">
-                                                              <a ng-click="inlinePatch('casee','', 'owner',casee.entityKey,user.google_user_id)">
+                                                              <a ng-click="inlinePatch('Case','', 'owner',casee.id,user.google_user_id)">
                                                                   <%=user.google_display_name%>
                                                               </a>
                                                           </li>

@@ -1,6 +1,6 @@
 var topicservices = angular.module('crmEngine.taskservices',[]);
 
-topicservices.factory('Task', function($http) {
+topicservices.factory('Task', function($rootScope) {
 
   var Task = function(data) {
     angular.extend(this, data);
@@ -167,7 +167,11 @@ Task.get_docs=function($scope,params){
 
       gapi.client.crmengine.tasks.insertv2(params).execute(function(resp) {
 
-
+          if (resp.error && resp.error.code == 412){
+              $('#payment_modal').modal('show');
+              return
+              //window.location.replace($rootScope.subscription_url);
+          }
          if(!resp.code){
 
           if ($scope.tasks == undefined){
@@ -238,7 +242,7 @@ gapi.client.crmengine.edges.delete(params).execute(function(resp) {
 
     return base_url+id;
 
- }
+ };
 
 Task.delete=function($scope,params){
   trackMixpanelAction('TASK_DELETE');
@@ -255,6 +259,16 @@ Task.delete=function($scope,params){
        });
 
 };
+  Task.deleteAll=function($scope){
+            $scope.isLoading=true;  
+             gapi.client. crmengine.tasks.delete_all().execute(function(resp) {
+                $scope.allTasksDeleted();                
+                $scope.isLoading=false;  
+                $scope.apply();
+                    
+             });
+
+      };
    Task.listMore = function($scope,params){
    $scope.inProcess(true);  
     gapi.client.crmengine.tasks.listv2(params).execute(function(resp) {
@@ -353,17 +367,10 @@ topicservices.factory('Tag', function($http) {
 
          if(!resp.code){
              $scope.tagattached(resp,index,tab,params.parent);
-
-             // if (callback && typeof(callback) === "function") {  
-             //    callback(resp);  
-             //   }    
-            
             $( window ).trigger( "resize" );
             
             $scope.inProcess(false,'tag attach');  
             $scope.apply();
-         // $('#addAccountModal').modal('hide');
-         // window.location.replace('#/accounts/show/'+resp.id);
          
          }else{
            

@@ -24,10 +24,11 @@ def _open_url(br,url):
         return br.open(url)
     except:
         return br.open(url)
+
 class linked_in():
     def __init__(self):
         # Browser
-        print "init broweser"
+        print "init browser"
         br = mechanize.Browser()
 
         # Cookie Jar
@@ -101,18 +102,24 @@ class linked_in():
         dice_coeff = overlap * 2.0/(len(a_bigrams) + len(b_bigrams))
         return dice_coeff
     @classmethod
-    def get_linkedin_url(self,url):
+    def get_linkedin_url(self, url):
         a= re.search(r"https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(title/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))",url)
-        if a : 
+        if a :
+            b=a.group(1)
             a=a.group(0)
-            if '&' in a :
+            if '&' in a:
                 url = a.split('&')
                 if url:
-                    return url[0]
+                    new_url= url[0]
+                    if b:
+                        return new_url.replace(b, "")
+                    return new_url
                 else:
                     return None
-            else :return a
+            else:
+                return a
     def open_url(self,keyword):
+        print "#keyword: (people) %s" % keyword
         br=self.browser
         params = {'q':decode(keyword)+' site:linkedin.com'}
         encoded_url_params = urllib.urlencode(params)
@@ -145,7 +152,8 @@ class linked_in():
             text=hh.a['href']
             # print text
             link=self.get_linkedin_url(text)
-            if link:lien.append(link)
+            if link:
+                lien.append(link)
         return ",".join(["%s" %  k for k in lien])
     def start_spider(self,keyword):
         # url=self.start_urls(keyword)
@@ -171,14 +179,14 @@ class linked_in():
         #print links
         if links: return self.browser.follow_link(links[0]).geturl()
     def open_url_twitter_list(self, keyword):
-        r=self.browser.open('https://www.google.com')
-        self.browser.response().read()
-        self.browser.select_form(nr=0)
-        self.browser.form['q']=keyword+' site:twitter.com'
-        self.browser.submit()
-        html=self.browser.response().read()
+        br=self.browser
+        params = {'q':decode(keyword)+' site:twitter.com'}
+        encoded_url_params = urllib.urlencode(params)
+        url = decode('https://www.google.com/search?'+encoded_url_params)
+        _open_url(br,url)
+        html=br.response().read()
         soup=BeautifulSoup(html)
-        h= soup.find_all("li",{"class":"g"})
+        h= soup.find_all("div",{"class":"g"})
         lien=[]
         for hh in h:
             href=hh.a['href']
@@ -350,6 +358,7 @@ class linked_in():
         # print skills_soup
         # print current_exprience
     def open_url_list(self,keyword):
+        print "keyword:(people.open_url_list)", keyword
         br=self.browser
         params = {'q':decode(keyword)+' site:linkedin.com'}
         encoded_url_params = urllib.urlencode(params)
@@ -357,8 +366,8 @@ class linked_in():
         _open_url(br,url)
         html=br.response().read()
         soup=BeautifulSoup(html)
-        h= soup.find_all("li",{"class":"g"})
-        lien=[]
+        h= soup.find_all("div",{"class":"g"})
+        lien={}
         for hh in h:
             href=hh.a['href']
             name=hh.a.text.split("|")[0]
@@ -374,9 +383,10 @@ class linked_in():
             print a
             print self.dice_coefficient(name,keyword)
             
-            if  a and ("/dir/" not in a) and (self.dice_coefficient(name,keyword)>=0.5)  :
-                lien.append({"name":name,"title":title,"url":a})
-        return lien 
+            if a and ("/dir/" not in a) and (self.dice_coefficient(name,keyword)>=0.5) and a not in lien:
+                lien[a]= {"name":name,"title":title,"url":a}
+        return lien.values()
+
     def open_company_list(self,keyword):
         br=self.browser
         params = {'q':decode(keyword)+' site:linkedin.com/company'}
@@ -386,7 +396,7 @@ class linked_in():
         html = br.response().read()
     
         soup=BeautifulSoup(html)
-        h= soup.find_all("li",{"class":"g"})
+        h= soup.find_all("div",{"class":"g"})
         lien=[]
         company_name=[]
         for hh in h:

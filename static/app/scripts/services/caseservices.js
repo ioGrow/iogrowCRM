@@ -1,7 +1,7 @@
 var caseservices = angular.module('crmEngine.caseservices',[]);
 // Base sercice (create, delete, get)
 
-accountservices.factory('Case', function() {
+accountservices.factory('Case', function($rootScope) {
 
   var Case = function(data) {
     angular.extend(this, data);
@@ -295,7 +295,11 @@ accountservices.factory('Case', function() {
     trackMixpanelAction('CASE_INSERT');
      $scope.inProcess(true);
       gapi.client.crmengine.cases.insertv2(casee).execute(function(resp) {
-
+          if (resp.error && resp.error.code == 412){
+              $('#payment_modal').modal('show');
+              return
+              //window.location.replace($rootScope.subscription_url);
+          }
          if(!resp.code){
           if ($scope.cases == undefined){
             $scope.cases = [];
@@ -334,7 +338,6 @@ accountservices.factory('Case', function() {
                    $scope.casee[k] = resp[k];
                  }
                }
-
                $scope.inProcess(false);  
                         $scope.apply();
             }else {
@@ -362,6 +365,14 @@ accountservices.factory('Case', function() {
         $scope.inProcess(false);  
         $scope.apply();
       }
+    )};
+    Case.deleteAll = function($scope){ 
+      $scope.isLoading=true;
+      gapi.client.crmengine.cases.delete_all().execute(function(resp){
+          $scope.allCasesDeleted();
+          $scope.isLoading=false;  
+          $scope.apply();
+        }
     )};
 
     Case.update_status = function($scope,params){

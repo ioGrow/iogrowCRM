@@ -245,7 +245,13 @@ $scope.SynchronizeWithGoogle=function(){
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                     var p=$("#newAccMain");
+                    var offsets = document.getElementById('newAccMain').getBoundingClientRect();
+                    var top = offsets.top + 120;
+                    var left = offsets.left;
+                    var width = document.getElementById('newAccMain').offsetWidth;
+                    var height = document.getElementById('newAccMain').offsetHeight;
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width='+width+',height=500, left='+left+',top='+top);
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -254,7 +260,7 @@ $scope.SynchronizeWithGoogle=function(){
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
        $('#some-textarea').wysihtml5();
@@ -810,12 +816,13 @@ $scope.switchShow=function(){
             $( window ).trigger( 'resize' ); 
           }
         $scope.listMoreItems = function () {
-              var nextPage = $scope.currentPage + 1;
+              var nextPage = $scope.contactCurrentPage + 1;
               var params = $scope.getRequestParams();
-              console.log(nextPage);
+              console.log("nextPage");
+              console.log($scope.contactpages);
               if ($scope.contactpages[nextPage]) {
                   params.pageToken=$scope.contactpages[nextPage];
-                  $scope.currentPage = $scope.currentPage + 1;
+                  $scope.contactCurrentPage = $scope.contactCurrentPage + 1;
                   Contact.listMore($scope,params);
               }
           };
@@ -1295,14 +1302,16 @@ $scope.addTags=function(){
      // Google+ Authentication
      Auth.init($scope);
      $(window).scroll(function() {
-        console.log("$scope.isLoading");
-        console.log($scope.isLoading);
-        console.log("$scope.isFiltering");
-        console.log($scope.isFiltering);
-        console.log("$(window).scrollTop() >  $(document).height() - $(window).height() - 100)");
-        console.log($(window).scrollTop() >  $(document).height() - $(window).height() - 100);
+        // console.log("$scope.isLoading");
+        // console.log($scope.isLoading);
+        // console.log("$scope.isFiltering");
+        // console.log($scope.isFiltering);
+        // console.log("$(window).scrollTop() >  $(document).height() - $(window).height() - 100)");
+        // console.log($(window).scrollTop() >  $(document).height() - $(window).height() - 100);
           if (!$scope.isLoading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
-             console.log("in conditions");
+             // console.log("in conditions");
+             // console.log("$scope.contactpagination.next");
+             // console.log($scope.contactpagination.next);
              if ($scope.contactpagination.next) {
                  $scope.listMoreItems();   
               };
@@ -1326,6 +1335,7 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
      $scope.nextPageToken = undefined;
      $scope.prevPageToken = undefined;
      $scope.currentPage = 01;
+     $scope.contactCurrentPage = 01;
      $scope.pages = [];
      $scope.collaborators_list=[];
      //HKA 10.12.2013 Var topic to manage Next & Prev
@@ -1430,7 +1440,8 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
     $scope.allCasesSelected=false;
     $scope.selectedCases=[];
     $scope.caseCustomfields=[];
-
+    $scope.lunchMaps=lunchMaps;
+    $scope.lunchMapsLinkedin=lunchMapsLinkedin;
 
        if ($scope.timezone==""){
         $scope.timezone=moment().format("Z");
@@ -1661,7 +1672,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
         if ($scope.showNewCase) {
             console.log('in save opp');
             $scope.saveCase($scope.casee);
-            $scope.showNewCase=false;
         }else{
              $scope.showNewCase=true;
         };
@@ -1837,7 +1847,9 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
       $scope.getLinkedinProfile=function(){
           var params={
           "firstname":$scope.contact.firstname,
-          "lastname":$scope.contact.lastname
+          "lastname":$scope.contact.lastname,
+          "title": $scope.contact.title,
+          "company": $scope.searchAccountQuery
           }
           var linkedurl=null
           if ($scope.infonodes.sociallinks==undefined) {
@@ -1999,7 +2011,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
         if ($scope.showNewOpp) {
             console.log('in save opp');
             $scope.saveOpp($scope.opportunity);
-            $scope.showNewOpp=false;
         }else{
              $scope.showNewOpp=true;
         };
@@ -2259,8 +2270,45 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
               'title':data.title,
               'account':data.company,
               'cover_image':data.imgCoverUrl,
-              'introduction':data.introduction
+              'introduction':data.introduction,
+              'linkedin_profile': 
+                  { 
+                    'current_post': [],
+                    'emails': [data.email],
+                    'experiences': '',
+                    'past_post': [],
+                    'skills': [],
+                    'formations': [],
+                    'languages': [],
+                    'phones': [data.phone],
+                    'education': data.education,
+                    'firstname': data.firstname,
+                    'industry': data.industry,
+                    'lastname': data.lastname,
+                    'locality': data.locality,
+                    'relation': '',
+                    'profile_picture': data.profile_img_url,
+                    'resume': data.summary,
+                    'url': '',
+                    'websites': [],
+                    'title': data.title
+                  }
             }
+            angular.forEach(data.pastPositions, function(position){
+                params.linkedin_profile.past_post.push(JSON.stringify(position));
+            });
+            angular.forEach(data.currentPositions, function(position){
+                params.linkedin_profile.current_post.push(JSON.stringify(position));
+            });
+            angular.forEach(data.schools, function(position){
+                params.linkedin_profile.formations.push(JSON.stringify(position));
+              });
+            angular.forEach(data.skills, function(position){
+                params.linkedin_profile.skills.push(JSON.stringify(position));
+              });
+            angular.forEach(data.languages, function(language){
+                params.linkedin_profile.languages.push(JSON.stringify(language));
+              });
             Contact.patch($scope,params);
             $scope.imageSrc=data.profile_img_url;
             if (data.phone) $scope.addPhone({'number':data.phone,'type':'work'});
@@ -2277,7 +2325,13 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                     var p=$("#newAccMain");
+                    var offsets = document.getElementById('newAccMain').getBoundingClientRect();
+                    var top = offsets.top + 120;
+                    var left = offsets.left;
+                    var width = document.getElementById('newAccMain').offsetWidth;
+                    var height = document.getElementById('newAccMain').offsetHeight;
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width='+width+',height=500, left='+left+',top='+top);
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -2286,7 +2340,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
 
@@ -2442,7 +2496,7 @@ $scope.lunchMapsCalendar=function(){
          };
 
       $scope.getColaborators=function(){
-           
+          $scope.collaborators_list = [];
           Permission.getColaborators($scope,{"entityKey":$scope.contact.entityKey});  
         }
 
@@ -2849,9 +2903,7 @@ $scope.listTags=function(){
 // HKA 19.03.2014 inline update infonode
      $scope.inlinePatch=function(kind,edge,name,entityKey,value){
 
-
    if (kind=='Contact') {
-
       if (name=='firstname')
         {params = {'id':$scope.contact.id,
              firstname:value};
@@ -2859,6 +2911,10 @@ $scope.listTags=function(){
        if (name=='lastname')
         {params = {'id':$scope.contact.id,
              lastname:value};
+         Contact.patch($scope,params);}
+       if (name=='title')
+        {params = {'id':$scope.contact.id,
+             title:value};
          Contact.patch($scope,params);}
         if (name == 'owner') {
                     params = {
@@ -3421,25 +3477,33 @@ $scope.prepareInfonodes = function(){
         return infonodes;
     };
        $scope.saveOpp = function(opportunity){
-          opportunity.contact=$scope.contact.entityKey;
+        $scope.oppo_err={};
+           if (!opportunity.name) $scope.oppo_err.name=true;
+            else $scope.oppo_err.name=false;  
+          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
+            else $scope.oppo_err.amount_per_unit=false;
+
+          if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
+              opportunity.contact=$scope.contact.entityKey;
           opportunity.infonodes = $scope.prepareInfonodesOpp();
             
-            if (opportunity.duration_unit=='fixed'){
-              opportunity.amount_total = parseInt(opportunity.amount_per_unit);
-              opportunity.opportunity_type = 'fixed_bid';
-            }else{
-              opportunity.opportunity_type = 'per_' + opportunity.duration_unit;
-              opportunity.amount_total = opportunity.amount_per_unit * opportunity.duration;
-            }
-          var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
-          opportunity.stage=$scope.initialStage.entityKey;
-          opportunity.closed_date=closed_date;
-          Opportunity.insert($scope,opportunity);
-          $scope.showNewOpp = false;
-          $scope.opportunity={};
-          $scope.opportunity.duration_unit='fixed'
-          $scope.opportunity.currency='USD';
-      
+                if (opportunity.duration_unit=='fixed'){
+                  opportunity.amount_total = parseInt(opportunity.amount_per_unit);
+                  opportunity.opportunity_type = 'fixed_bid';
+                }else{
+                  opportunity.opportunity_type = 'per_' + opportunity.duration_unit;
+                  opportunity.amount_total = opportunity.amount_per_unit * opportunity.duration;
+                }
+              var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
+              opportunity.stage=$scope.initialStage.entityKey;
+              opportunity.closed_date=closed_date;
+              Opportunity.insert($scope,opportunity);
+              $scope.showNewOpp = false;
+              $scope.opportunity={};
+              $scope.opportunity.duration_unit='fixed'
+              $scope.opportunity.currency='USD';
+              $scope.apply();
+          }
         };
 
    $scope.priorityColor=function(pri){
@@ -3471,16 +3535,25 @@ $scope.prepareInfonodes = function(){
   // HKA 01.12.2013 Add Case related to Contact
     $scope.saveCase = function(casee){
       //casee.account=$scope.contact.account.entityKey;
-      casee.contact=$scope.contact.entityKey;
-      casee.infonodes = $scope.prepareInfonodesCase();
-      console.log("$scope.prepareInfonodesCase()");
-      console.log($scope.prepareInfonodesCase());
-      casee.access=$scope.contact.access;
-      casee.name=casee.name||"No subject"
-      casee.priority=casee.priority || 4
-            Case.insert($scope,casee);
-            $scope.showNewCase=false;
-            casee.priority=1
+      $scope.case_err={};
+      if (!casee.name) $scope.case_err.name=true;
+            else $scope.case_err.name=false;
+      if (!$scope.case_err.name) {
+
+                casee.contact=$scope.contact.entityKey;
+                casee.infonodes = $scope.prepareInfonodesCase();
+                console.log("$scope.prepareInfonodesCase()");
+                console.log($scope.prepareInfonodesCase());
+                casee.access=$scope.contact.access;
+                casee.name=casee.name||"No subject"
+                casee.priority=casee.priority || 4;
+                casee.status = $scope.status_selected.entityKey;
+                Case.insert($scope,casee);
+                $scope.showNewCase=false;
+                casee.priority=1
+                $scope.apply();
+                
+      }
     };
      $scope.existsInfonode=function(elem,property,kind){
             var exists=false;
@@ -3975,8 +4048,10 @@ $scope.sendEmailSelected=function(){
       $scope.linkedProfile={};
       $scope.linkedShortProfile={};
       var params={
-          "firstname":$scope.lead.firstname,
-          "lastname":$scope.lead.lastname
+          "firstname":$scope.contact.firstname,
+          "lastname":$scope.contact.lastname,
+          "title": $scope.contact.title,
+          "company": $scope.searchAccountQuery
           }
       Linkedin.listPeople(params,function(resp){
              if(!resp.code){
@@ -4410,6 +4485,8 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       $scope.accountFromLinkedin={};
       $scope.contacts=[];
       $scope.contacts.customfields=[];
+      $scope.lunchMaps=lunchMaps;
+      $scope.lunchMapsLinkedin=lunchMapsLinkedin;
       $scope.inProcess=function(varBool,message){
             if (varBool) {           
               if (message) {
@@ -4562,13 +4639,51 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
         $scope.saveLinkedinData=function(data){
           console.log(data);
             $scope.sociallink={};$scope.email={};
-            $scope.clearContact();
+            //  $scope.clearContact();
+            $scope.inList=[];
             var params={
               'firstname':data.firstname,
               'lastname':data.lastname,
               'cover_image':data.imgCoverUrl,
-              'title':data.title
+              'title':data.title,
+              'linkedin_profile': 
+                  { 
+                    'current_post': [],
+                    'emails': [data.email],
+                    'experiences': '',
+                    'past_post': [],
+                    'skills': [],
+                    'formations': [],
+                    'languages': [],
+                    'phones': [data.phone],
+                    'education': data.education,
+                    'firstname': data.firstname,
+                    'industry': data.industry,
+                    'lastname': data.lastname,
+                    'locality': data.locality,
+                    'relation': '',
+                    'profile_picture': data.profile_img_url,
+                    'resume': data.summary,
+                    'url': '',
+                    'websites': [],
+                    'title': data.title
+                  }
             }
+            angular.forEach(data.pastPositions, function(position){
+                params.linkedin_profile.past_post.push(JSON.stringify(position));
+            });
+            angular.forEach(data.currentPositions, function(position){
+                params.linkedin_profile.current_post.push(JSON.stringify(position));
+            });
+            angular.forEach(data.schools, function(position){
+                params.linkedin_profile.formations.push(JSON.stringify(position));
+              });
+            angular.forEach(data.skills, function(position){
+                params.linkedin_profile.skills.push(JSON.stringify(position));
+              });
+            angular.forEach(data.languages, function(language){
+                params.linkedin_profile.languages.push(JSON.stringify(language));
+              });
             $scope.contact=$.extend(true, $scope.contact, params);
             $scope.imageSrc=data.profile_img_url;
             $scope.profile_img.profile_img_url=data.profile_img_url;
@@ -4598,7 +4713,13 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                     $scope.browser='chrome';
                     $('#extensionNotInstalled').modal({backdrop: 'static', keyboard: false});
                 }else{
-                    window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+                     var p=$("#newAccMain");
+                    var offsets = document.getElementById('newAccMain').getBoundingClientRect();
+                    var top = offsets.top + 120;
+                    var left = offsets.left;
+                    var width = document.getElementById('newAccMain').offsetWidth;
+                    var height = document.getElementById('newAccMain').offsetHeight;
+                    window.open($scope.showLinkedinWindown+'#iogrow','winname','width='+width+',height=500, left='+left+',top='+top);
                     window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
                 }
             }else{
@@ -4607,7 +4728,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
             };    
         };
         $scope.lunchWindow=function(){
-            window.open($scope.showLinkedinWindown,'winname','width=700,height=550');
+            window.open($scope.showLinkedinWindown+'#iogrow','winname','width=700,height=550');
             window.addEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
 
@@ -4814,7 +4935,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       // new Contact
      $scope.save = function(contact , force){
         force = force || false;
-            var sameContactModal = angular.element("#sameContactModal");
+          var sameContactModal = angular.element("#sameContactModal");
             if (force && sameContactModal.length) {
                 sameContactModal.modal("hide");
                 $('body').removeClass('modal-open');
@@ -4835,7 +4956,8 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                 'emails':$scope.emails,
                 'infonodes':$scope.prepareInfonodes(),
                 'access': contact.access||'public',
-                'notes':$scope.notes
+                'notes':$scope.notes,
+                'linkedin_profile':contact.linkedin_profile
               };
               var test=$scope.prepareInfonodes();
               console.log("test");
@@ -4895,8 +5017,11 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
               console.log("in linkedin get people");
               var params={
                 "firstname":$scope.contact.firstname,
-                "lastname":$scope.contact.lastname
+                "lastname":$scope.contact.lastname,
+                "Title": $scope.contact.title,
+                "company": $scope.searchAccountQuery
                 }
+                
                 $scope.inNoResults=false;
                 Linkedin.listPeople(params,function(resp){
                      console.log('in list resp');

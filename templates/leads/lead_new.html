@@ -121,7 +121,7 @@
     <div class="row">
         <div class="col-md-9">
             <div class="row">
-                <div class="showPage slimForm col-md-12 margin-bottom-15">
+                <div id="newAccMain" class="showPage slimForm col-md-12 margin-bottom-15">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
@@ -147,17 +147,18 @@
                                     <form class="form-horizontal">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group">
+                                                <div class="form-group" ng-class="{ 'has-error': lead_err.firstname}">
                                                     <label class="control-label col-md-4">{{ _('First Name') }}*</label>
 
                                                     <div class="col-md-8">
                                                         <input type="text" required id="id_firstname"
+                                                               ng-blur="getLinkedinProfile();getTwitterProfile();"
                                                                class="form-control" ng-model="lead.firstname">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group">
+                                                <div class="form-group" ng-class="{ 'has-error': lead_err.lastname}">
                                                     <label class="control-label col-md-4">{{ _('Last Name') }}*</label>
 
                                                     <div class="col-md-8">
@@ -176,6 +177,7 @@
 
                                                     <div class="col-md-8">
                                                         <input type="text" class="form-control"
+                                                               ng-blur="getLinkedinProfile();"
                                                                ng-model="lead.title">
                                                     </div>
                                                 </div>
@@ -185,7 +187,10 @@
                                                     <label class="control-label col-md-4">{{ _('Company') }}</label>
 
                                                     <div class="col-md-8">
-                                                        <input type="text" ng-model="lead.company" class="form-control">
+                                                        <input type="text"
+                                                               ng-blur="getLinkedinProfile();"
+                                                               ng-model="lead.company"
+                                                               class="form-control">
                                                     </div>
                                                 </div>
                                             </div>

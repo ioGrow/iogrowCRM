@@ -198,7 +198,8 @@
                         <div class="col-md-6">
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  ng-show="leads.customfield.field_type"
-                                 style="-webkit-transition: all 0.25s ease-in-out;-moz-transition: all 0.25s ease-in-out;-o-transition: all 0.25s ease-in-out;transition: all 0.25s ease-in-out;">
+                                 style="-webkit-transition: all 0.25s ease-in-out;-moz-transition: all 0.25s ease-in-out;-o-transition: all 0.25s ease-in-out;transition: all 0.25s ease-in-out; margin-bottom:25px !important;position:relative;">
+                                <i class="fa fa-arrow-right" style="display: inline-block;/* float: left; */left: -20px;top: 47%;position: absolute;"></i>
                                 <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-eye"
                                                                              style="font-size:22px"></i>{{ _('Field preview') }}
                                 </h3>
@@ -240,6 +241,7 @@
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>
+                                  <i class="fa fa-arrow-down" style="display: inline-block;/* float: left; */bottom: -20px;left: 50%;position: absolute;"></i>
                             </div>
                             <div class="news-blocks blank-card blank-card-gray newsCard"
                                  ng-class="{'disabledBlock':isEmptyArray(leads.customfields)}">

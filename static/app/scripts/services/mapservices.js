@@ -134,7 +134,7 @@ mapservices.factory('Map', function($http) {
        google.maps.event.addListener(autocomplete, 'place_changed', function() {
         /*infowindow.close();
         marker.setVisible(false);*/
-        if (inputId=="relatedaddress") {
+        if (inputId=="relatedaddressInput") {
           console.log("in related addresses");
           $scope.isRelatedAddress=true;
         };
