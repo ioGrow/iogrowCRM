@@ -1305,10 +1305,10 @@ class SFsubscriberTest(BaseHandler, SessionEnabledHandler):
 
         user = model.SFuser.query(model.SFuser.email == email).get()
         if user:
-            stripe.api_key = "sk_test_K5CtshToZfaN0yiYaBUGHg0a"
+            stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
             customer = stripe.Customer.create(
                 source=token['id'],  # obtained from Stripe.js
-                plan="copylead_test_subscription",
+                plan="copylead_to_salesforce",
                 email=email
             )
             user_info = user
@@ -1381,6 +1381,12 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
         self.response.out.write(json.dumps({}))
 
 
+class SFcallback(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        code = self.request.get("code")
+        url = 'http://app.copylead.com/oauth-authorized?code=%s' % code
+        self.redirect(str(url))
+
 class SFconnect(BaseHandler, SessionEnabledHandler):
     def get(self):
         code = self.request.get("code")
@@ -1435,6 +1441,15 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
                 email=smart_str(userinfo['Email'])
             )
             created_user.put()
+            try:
+                existing_invitation = model.SFinvitation.query(model.SFinvitation.invitee_email == smart_str(userinfo['Email'])).get()
+                if existing_invitation:
+                    rewarded_user = existing_invitation.user_key.get()
+                    rewarded_user.active_until += datetime.timedelta(days=30)
+                    rewarded_user.put()
+            except:
+                pass
+
         else:
             created_user = user
             signed_up_at = user.created_at
@@ -1530,13 +1545,16 @@ class SFinvite(BaseHandler, SessionEnabledHandler):
         user = model.SFuser.query(model.SFuser.email == user_email).get()
         if user:
             for email in emails:
-                invitation = model.SFinvitation(
-                    user_email=user_email,
-                    invitee_email=email
-                )
-                invitation.put()
-                sender_address =" %s %s <copylead@gcdc2013-iogrow.appspotmail.com>" % (user.firstname, user.lastname)
-                mail.send_mail(sender_address, email, subject, text)
+                existing = model.SFinvitation.query(model.SFinvitation.invitee_email == email).get()
+                if not existing:
+                    invitation = model.SFinvitation(
+                        user_key = user.key,
+                        user_email=user_email,
+                        invitee_email=email
+                    )
+                    invitation.put()
+                    sender_address =" %s %s <copylead@gcdc2013-iogrow.appspotmail.com>" % (user.firstname, user.lastname)
+                    mail.send_mail(sender_address, email, subject, text)
         # except:
         #     print 'the user doesnt exist'
 
@@ -3900,6 +3918,8 @@ routes = [
     ('/sfsubscribertest', SFsubscriberTest),
 
     ('/sfoauth2callback', SalesforceImporterCallback),
+    ('/copylead_sf_auth_callback', SFcallback),
+
     ('/zohosignin',ZohoSignIn),
     ('/sf_invite', SFinvite),
     ('/invitation_sent', SFinvite),

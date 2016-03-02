@@ -113,7 +113,11 @@ class UserSignInRequest(messages.Message):
     sign_in_from = messages.StringField(3)
 
 class UserSignUpRequest(messages.Message):
-    organization_name = messages.StringField(1)
+    google_user_id = messages.StringField(1)
+    google_display_name = messages.StringField(2)
+    google_public_profile_url = messages.StringField(3)
+    google_public_profile_photo_url = messages.StringField(4)
+
 
 class UserSignInResponse(messages.Message):
     is_new_user = messages.BooleanField(1)

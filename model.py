@@ -162,14 +162,37 @@ class SFuser(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     updated_at = ndb.DateTimeProperty(auto_now=True)
 
+
 class SFinvitation(ndb.Model):
     user_email = ndb.StringProperty()
+    user_key = ndb.KeyProperty()
+    partner_key = ndb.KeyProperty()
     invitee_email = ndb.StringProperty()
     invitee_name = ndb.StringProperty()
     status = ndb.StringProperty(default='pending')
     opened = ndb.IntegerProperty(default=0)
     clicked = ndb.IntegerProperty(default=0)
     invited_at = ndb.DateTimeProperty(auto_now_add=True)
+    subscription_started_at = ndb.DateTimeProperty()
+    subscription_ended_at = ndb.DateTimeProperty()
+
+class SFpartner(ndb.Model):
+    full_name = ndb.StringProperty()
+    email = ndb.StringProperty()
+    phone = ndb.StringProperty()
+    country = ndb.StringProperty()
+
+    @classmethod
+    def list_by_partner(cls, partner_key):
+        response = {
+            'pending': [],
+            'active': [],
+            'paying': []
+        }
+        # invitees = SFinvitation.query(SFinvitation.)
+
+
+
 
 class SFLead(ndb.Model):
     firstname = ndb.StringProperty()
