@@ -311,7 +311,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 if (localStorage['completedTour'] != 'True') {
                     $scope.wizard();
                 }
-
             }
             else {
                 

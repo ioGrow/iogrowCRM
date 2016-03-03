@@ -16,6 +16,18 @@ def _created_record_count_after(entity, organization, start_date):
                                          ndb.GenericProperty('created_at') > start_date).count()
 
 
+def _create_stripe_plan(name, interval, price):
+    try:
+        stripe.Plan.retrieve('{}_{}'.format(name, interval))
+    except stripe.StripeError:
+        stripe.Plan.create(
+            amount=price,
+            interval=interval,
+            name='{} {}'.format(interval.capitalize(), name),
+            currency='usd',
+            id='{}_{}'.format(name, interval))
+
+
 stripe.api_key = config.STRIPE_API_KEY
 
 
@@ -36,7 +48,7 @@ def payment_required():
             subscription = organization.get().get_subscription()
             plan = subscription.plan.get()
             if subscription.expiration_date < datetime.datetime.now():
-                organization.set_subscription(Subscription.create_freemium_subscription())
+                organization.get().set_subscription(Subscription.create_freemium_subscription())
             elif plan.name != config.PREMIUM:
                 limit = subscription.get_records_limit()
                 if limit is not None:
@@ -97,7 +109,7 @@ class Plan(BaseModel):
 
     @classmethod
     def get_by_name_and_interval(cls, name, interval=None):
-        plan = cls.query(cls.name == name and cls.interval == interval).get()
+        plan = Plan.query(Plan.name == name, Plan.interval == interval).get()
         if plan is None:
             plan = cls(name=name, interval=interval)
             plan.price = plan.calculate_price()
@@ -109,18 +121,6 @@ class Plan(BaseModel):
             plan.put()
 
             # if plan.name == config.PREMIUM:
-            stripe_plan = None
-            try:
-                stripe_plan = stripe.Plan.retrieve('{}_{}'.format(config.PREMIUM, interval))
-            except stripe.StripeError:
-                pass
-            if not stripe_plan:
-                stripe.Plan.create(
-                    amount=plan.price,
-                    interval=interval,
-                    name='{} {}'.format(interval.capitalize(), config.PREMIUM),
-                    currency='usd',
-                    id='{}_{}'.format(config.PREMIUM, interval))
         return plan
 
     def calculate_price(self):
@@ -152,27 +152,31 @@ class Subscription(BaseModel):
 
     @classmethod
     def create_freemium_subscription(cls):
-        plan = Plan.get_freemium_plan().key
-        subscription = Subscription(plan=plan, start_date=datetime.datetime.now(),
+        plan = Plan.get_freemium_plan()
+        subscription = Subscription(plan=plan.key, start_date=datetime.datetime.now(),
                                     expiration_date=cls._calculate_expiration_date(config.MONTH),
                                     description='Default Subscription')
         subscription.put()
+        # _create_stripe_plan(plan.name, plan.interval, plan.price)
         return subscription
 
     @classmethod
     def create_premium_subscription(cls, interval):
-        plan = Plan.get_premium_plan(interval).key
-        subscription = Subscription(plan=plan, start_date=datetime.datetime.now(),
+        plan = Plan.get_premium_plan(interval)
+        plan_key = plan.key
+        subscription = Subscription(plan=plan_key, start_date=datetime.datetime.now(),
                                     expiration_date=cls._calculate_expiration_date(interval),
                                     description='{} Premium Subscription'.format(interval))
+        _create_stripe_plan(plan.name, plan.interval, plan.price)
         subscription.put()
         return subscription
 
     @classmethod
     def create_life_free_subscription(cls):
-        plan = Plan.get_life_free_plan().key
-        subscription = Subscription(plan=plan, start_date=datetime.datetime.now(),
+        plan = Plan.get_life_free_plan()
+        subscription = Subscription(plan=plan.key, start_date=datetime.datetime.now(),
                                     description='Life Free Subscription')
+        _create_stripe_plan(plan.name, plan.interval, plan.price)
         subscription.put()
         return subscription
 
@@ -195,5 +199,5 @@ class Subscription(BaseModel):
         return SubscriptionSchema(plan=self.plan.get().get_schema(),
                                   start_date=self.start_date.strftime('%Y-%m-%d'),
                                   expiration_date=None if not self.expiration_date
-                                                       else self.expiration_date.strftime('%Y-%m-%d'),
+                                  else self.expiration_date.strftime('%Y-%m-%d'),
                                   description=self.description)

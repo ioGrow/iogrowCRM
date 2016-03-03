@@ -1460,7 +1460,7 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
             organization.stripe_customer_id = customer.id
             premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
             premium_subscription.put()
-            organization.subscription = premium_subscription.key
+            organization.set_subscription(premium_subscription)
             organization.put()
         except stripe.error.CardError, e:
             self.response.headers['Content-Type'] = 'application/json'

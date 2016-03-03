@@ -41,11 +41,10 @@ accountservices.factory('User', function ($http) {
                     }
                     $scope.isLoading = false;
                     $scope.$apply();
-                }
-                ;
+                };
             }
             console.log('gapi #end_execute');
-        });
+        });<
     };
 
     User.unAssignLicense = function ($scope, params) {
@@ -215,7 +214,7 @@ accountservices.factory('User', function ($http) {
         });
     }
 
-// hadji hicham 4/08/2014 -- get user by google user id 
+// hadji hicham 4/08/2014 -- get user by google user id
     User.get_user_by_gid = function ($scope, params) {
         gapi.client.crmengine.users.get_user_by_gid(params).execute(function (resp) {
             if (!resp.code) {
@@ -240,7 +239,7 @@ accountservices.factory('User', function ($http) {
     };
 
 
-// hadji hicham 10/08/2014 --  get organization info 
+// hadji hicham 10/08/2014 --  get organization info
     User.get_organization = function ($scope, params) {
         $scope.isLoading = true;
         gapi.client.crmengine.users.get_organization(params).execute(function (resp) {
@@ -344,7 +343,7 @@ accountservices.factory('User', function ($http) {
     };
 
 
-// purchase licenses 
+// purchase licenses
     User.purchase_lisences = function ($scope, params) {
 
         gapi.client.crmengine.users.purchase_lisences(params).execute(function (resp) {
@@ -383,7 +382,7 @@ accountservices.factory('Permission', function ($http) {
 
     var Permission = function (data) {
         angular.extend(this, data);
-    }; 
+    };
 
 
     Permission.insert = function ($scope, params) {

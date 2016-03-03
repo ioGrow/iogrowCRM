@@ -363,25 +363,31 @@
         </div>
     </div>
 </div>
-
-<div id="payment_modal" class="modal fade" role="dialog">
+<div id="payment_modal" class="modal fade in" role="dialog" aria-hidden="false">
     <div class="modal-dialog">
-        <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h1 style="text-align: center">
-                    {% if plan.name=='freemium' %} You have rich your free limit.
-                    {% elif plan.name=='premium' %} You subscription has expired.{% endif %}
-                    <small>Please buy new license</small>
-                    </h1>
+            <a data-dismiss="modal" style="color: #4991FF;font-weight: 500;position: absolute;z-index: 2;right: 0px;"
+               class="btn">CLOSE</a>
+            <div class="modal-body" style="background-color: white;">
+                <img src="/static/img/iogrow_alert.png" alt="alert message"
+                     style="width: 30%;float: left;margin-top: 25px;">
+                <div style="width: 70%;float: left;padding: 6px 5%;font-weight: 300;">
+                    <h3 style="font-family: Ubuntu, sans-serif;font-weight: 400 !important;">
+                        {% if plan.name=='freemium' %} Freemium Limit Reahed
+                        {% elif plan.name=='premium' %} You subscription has expired.{% endif %}
+                    </h3>
+                    <p style="font-size: 18px;">
+                        You have reached your monthly records limit of your freemium account.
+                        Click the button bellow to upgrade and continue using io Grow without interruptions.
+                    </p>
+                </div>
             </div>
             <div class="modal-footer" style="border-top-width: 0px;text-align: center">
-                <a href="/subscribe"  class="btn btn-primary">Buy Now</a>
-                <button type="button" class="btn" data-dismiss="modal">Maybe later</button>
+                <a href="/subscribe" class="btn btn-primary" style="background-color: #0A90EE;color: #E6F1FC;padding: 15px 71px;margin-top: 5px;font-size: 16px;
+                ">Upgrade Now
+                </a>
             </div>
         </div>
-
     </div>
 </div>
 <!--div id="SendFeedbackModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -462,6 +468,7 @@
 ">
          © i/oGrow  2013 - 2015
   </div>-->
+
 <input type="hidden" id="userEmail" value="{{ user.email }}">
 <input type="hidden" id="userId" value="{{ user.id }}">
 <input type="hidden" id="completedTour" value="{{ user.completed_tour }}">
@@ -498,20 +505,20 @@
 </script>
 <!-- async scripts-->
 <script type="text/javascript">
-     function getRoot() {
-      var origin = window.location.origin;
-      var url = '';
-      if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
-      url = origin;
-      } else if (origin.indexOf('.com') != -1) {
-      url = "https://gcdc2013-iogrow.appspot.com";
-      }
-      console.log(url);
-      return url + '/_ah/api';
-      }
-      var ROOT = getRoot();
-      // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-     //   var ROOT = '/_ah/api';
+    function getRoot() {
+        var origin = window.location.origin;
+        var url = '';
+        if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
+            url = origin;
+        } else if (origin.indexOf('.com') != -1) {
+            url = "https://gcdc2013-iogrow.appspot.com";
+        }
+        console.log(url);
+        return url + '/_ah/api';
+    }
+    var ROOT = getRoot();
+    // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
+    //   var ROOT = '/_ah/api';
     var apisToLoad;
     var callback = function () {
         console.log('callback');
