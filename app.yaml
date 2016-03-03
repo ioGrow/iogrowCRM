@@ -20,7 +20,7 @@ builtins:
 - remote_api: on
 - appstats: on #/_ah/stats/
 includes:
-- mapreduce/include.yaml
+- lib/mapreduce/include.yaml
 handlers:
 - login: admin
   script: pipeline.handlers._APP
