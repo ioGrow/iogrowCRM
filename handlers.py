@@ -41,7 +41,6 @@ from iomodels.crmengine.leads import LeadInsertRequest, Lead
 from iomodels.crmengine.documents import Document
 from iomodels.crmengine.tags import Tag
 import iomessages
-from blog import Article
 from iograph import Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
@@ -49,7 +48,7 @@ from iomodels.crmengine.tasks import Task, AssignedGoogleId
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
 from discovery import Discovery
-# under the test .beata !
+# under the test .beta !
 from ioreporting import Reports
 import stripe
 import requests
@@ -61,7 +60,6 @@ from simple_salesforce import Salesforce
 from semantic.dates import DateService
 from mixpanel import Mixpanel
 from iomodels.crmengine import config as app_config
-from stripe.error import CardError
 
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
@@ -549,33 +547,6 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
         else:
             self.redirect('/welcome/')
 
-
-class BlogHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-            user = self.get_user_from_session()
-            template_values = {'user': user}
-        else:
-            template_values = {}
-        template = jinja_environment.get_template('templates/blog/blog_base.html')
-        self.response.out.write(template.render(template_values))
-
-
-class PublicArticlePageHandler(BaseHandler, SessionEnabledHandler):
-    def get(self, id):
-        article = Article.get_schema(id=id)
-        template_values = {'article': article}
-        template = jinja_environment.get_template('templates/blog/public_article_show.html')
-        self.response.out.write(template.render(template_values))
-
-
-class PublicSupport(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        template_values = {}
-        template = jinja_environment.get_template('templates/blog/public_support.html')
-        self.response.out.write(template.render(template_values))
-
-
 # Change the current app for example from sales to customer support
 class ChangeActiveAppHandler(SessionEnabledHandler):
     def get(self, appid):
@@ -1018,27 +989,6 @@ class InstallFromDecorator(SessionEnabledHandler):
                 self.redirect('/')
         except:
             self.redirect('/')
-
-
-class ArticleSearchHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/articles/article_search.html')
-
-
-class ArticleListHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/articles/article_list.html')
-
-
-class ArticleShowHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/articles/article_show.html')
-
-
-class ArticleNewHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/articles/article_new.html')
-
 
 class AccountListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -3913,14 +3863,8 @@ routes = [
     #
     ('/', IndexHandler),
     ('/wiki', WikiHandler),
-    ('/support', PublicSupport),
     ('/ioadmin', ioAdminHandler),
     ('/ioadmin/biz', GBizCompanies),
-    (r'/blog/articles/(\d+)', PublicArticlePageHandler),
-    ('/views/articles/list', ArticleListHandler),
-    ('/views/articles/show', ArticleShowHandler),
-    ('/views/articles/new', ArticleNewHandler),
-    ('/views/articles/search', ArticleSearchHandler),
     ('/partners/', PartnersHandler),
     # Templates Views Routes
     ('/views/discovers/list', DiscoverListHandler),

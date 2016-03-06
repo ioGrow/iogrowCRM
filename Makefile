@@ -2,9 +2,11 @@
 # This is IOgrow Makefile
 #
 
-js:
+build_js:
 	grunt concat; grunt uglify
 	
+clean:
+	git clean -xfd
 
 test_pylint:
 	pylint --ignore=support ./* -f colorized | more

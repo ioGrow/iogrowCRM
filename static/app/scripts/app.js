@@ -6,7 +6,6 @@ var app = angular.module('crmEngine', ['googlechart', 'easypiechart', 'xeditable
     'crmEngine.commentservices', 'crmEngine.settingservices', 'crmEngine.importservices', 'mapServices',
     'crmEngine.infonodeservices', 'crmEngine.edgeservices', 'crmEngine.discoverservices', 'crmEngine.reportservices',
     'crmEngine.profileservices', 'crmEngine.linkedinservices', 'crmEngine.billingservices']);
-var public_blog_app = angular.module('publicBlogEngine',['blogEngine.blogservices','ui.bootstrap','ui.select2']);
 //app.js Single page application
 
 

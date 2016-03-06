@@ -5,7 +5,6 @@
     link: function ($scope, elem, attrs,ngModel) {
      var field=$(elem);
      var position=field.position();
-    console.log("woooooooooooo");
         field.hover(function() {
           console.log('test hover');
           $(this).append('<div class="cusTooltip" id="inlineEditTooltip"><a href=""><i class="fa fa-trash-o"></i></a><a href="">edit</a></div>');   
