@@ -89,7 +89,7 @@ Modifed by keenthemes for Metronic theme integration.
     text-decoration: none;
 
     border: 0;
-    background: url('../../bootstrap3/plugins/select2/select2.png') right top no-repeat;
+    background: url('../../src/img/select2/select2.png') right top no-repeat;
     cursor: pointer;
     outline: 0;
 }
@@ -178,7 +178,7 @@ Modifed by keenthemes for Metronic theme integration.
     display: block;
     width: 100%;
     height: 100%;
-    background: url('../../bootstrap3/plugins/select2/select2.png') no-repeat 0 1px;
+    background: url('../../src/img/select2/select2.png') no-repeat 0 1px;
 }
 
 .select2-search {
@@ -222,7 +222,7 @@ Modifed by keenthemes for Metronic theme integration.
 }
 
 .select2-search input.select2-active {
-    background: #fff url('../../bootstrap3/plugins/select2/select2-spinner.gif') no-repeat 100%;
+    background: #fff url('../../src/img/select2/select2-spinner.gif') no-repeat 100%;
 }
 
 .select2-container-active .select2-choice,
@@ -346,7 +346,7 @@ disabled look for disabled choices in the results dropdown
 }
 
 .select2-more-results.select2-active {
-    background: #f4f4f4 url('../../bootstrap3/plugins/select2/select2-spinner.gif') no-repeat 100%;
+    background: #f4f4f4 url('../../src/img/select2/select2-spinner.gif') no-repeat 100%;
 }
 
 .select2-more-results {
@@ -434,7 +434,7 @@ disabled look for disabled choices in the results dropdown
 }
 
 .select2-container-multi .select2-choices .select2-search-field input.select2-active {
-    background: #fff url('../../bootstrap3/plugins/select2/select2-spinner.gif') no-repeat 100% !important;
+    background: #fff url('../../src/img/select2/select2-spinner.gif') no-repeat 100% !important;
 }
 
 .select2-default {
@@ -479,7 +479,7 @@ disabled look for disabled choices in the results dropdown
     top: 4px;
     font-size: 1px;
     outline: none;
-    background: url('../../bootstrap3/plugins/select2/select2.png') right top no-repeat;
+    background: url('../../src/img/select2/select2.png') right top no-repeat;
 }
 
 .select2-container-multi .select2-search-choice-close {
@@ -549,7 +549,7 @@ disabled look for disabled choices in the results dropdown
 
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi)  {
   .select2-search input, .select2-search-choice-close, .select2-container .select2-choice abbr, .select2-container .select2-choice .select2-arrow b {
-      background-image: url('../../bootstrap3/plugins/select2/select2x2.png') !important;
+      background-image: url('../../src/img/select2/select2x2.png') !important;
       background-repeat: no-repeat !important;
       background-size: 60px 40px !important;
   }
@@ -584,7 +584,7 @@ http://uniformjs.com/
 */
 /* General settings */
 div.selector, div.selector span, div.checker span, div.radio span, div.uploader, div.uploader span.action, div.button, div.button span {
-  background-image: url("../../bootstrap3/plugins/uniform/images/sprite.png");
+  background-image: url("../../src/img/uniform/sprite.png");
   background-repeat: no-repeat;
   -webkit-font-smoothing: antialiased; }
 div.selector, div.checker, div.button, div.radio, div.uploader {
@@ -601,7 +601,7 @@ div.selector, div.selector *, div.radio, div.radio *, div.checker, div.checker *
   padding: 0; }
 
 .highContrastDetect {
-  background: url("../../bootstrap3/plugins/uniform/images/bg-input.png") repeat-x 0 0;
+  background: url("../../src/img/uniform/bg-input.png") repeat-x 0 0;
   width: 0px;
   height: 0px; }
 
@@ -610,12 +610,12 @@ input.uniform-input,
 select.uniform-multiselect,
 textarea.uniform {
   padding: 3px;
-  background: url("../../bootstrap3/plugins/uniform/images/bg-input.png") repeat-x 0 0;
+  background: url("../../src/img/uniform/bg-input.png") repeat-x 0 0;
   outline: 0; }
   input.uniform-input.active,
   select.uniform-multiselect.active,
   textarea.uniform.active {
-    background: url("../../bootstrap3/plugins/uniform/images/bg-input-focus.png") repeat-x 0 0; }
+    background: url("../../src/img/uniform/bg-input-focus.png") repeat-x 0 0; }
 
 /* Remove default webkit and possible mozilla .search styles.
  * Keeping this as :active to remove browser styles */
@@ -1252,17 +1252,6 @@ input.uniform-input, input.uniform-input:focus {
 .datepicker > .datepicker_inner_container > .datepicker_timelist > div.timelist_item.hover {
 	color: #000000;
 	background-color:	#c8c8c8;
-}
-
-.easyPieChart {
-    position: relative;
-    text-align: center;
-}
-
-.easyPieChart canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
 }
 
 /*!
@@ -1952,8 +1941,9 @@ table.fc-border-separate {
 	_overflow: hidden;
 	}
 	
-	
-
+.fc-event-vert .ui-resizable-s{
+	display: block !important;
+}
 /*!
  * FullCalendar v2.0.1 Print Stylesheet
  * Docs & License: http://arshaw.com/fullcalendar/
