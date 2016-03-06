@@ -1,10 +1,30 @@
 module.exports = function (grunt) {
     grunt.initConfig({
         concat: {
-            /*css:{
-             src: ['static/bootstrap3/plugins/select2/select2_metro.css','static/bootstrap3/plugins/uniform/css/uniform.default.css','static/plugins/date-time-picker/jquery.simple-dtpicker.css','static/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.css','static/angular-xeditable-0.1.8/css/xeditable.css','static/plugins/fullcalendar/fullcalendar.css','static/plugins/fullcalendar/fullcalendar.print.css'],
-             dest: 'static/build/css/asyn_styles.css',
-             }*/
+            css:{
+             files: {
+                    'static/build/css/sync_styles.css': [
+                      'static/src/css/font-awesome.min.css',
+                      'static/src/css/bootstrap.min.css',
+                      'static/src/css/wysiwyg-color.css',
+                      'static/src/css/style-metronic.css',
+                      'static/src/css/style.css',
+                      'static/src/css/style-responsive.css',
+                      'static/src/css/plugins.css',
+                      'static/src/css/light.css',
+                      'static/src/css/hopscotch.css',
+                      'static/src/css/datepicker.css'
+                    ],
+                    'static/build/css/asyn_styles.css': [
+                      'static/src/css/select2_metro.css',
+                      'static/src/css/uniform.default.css',
+                      'static/src/css/jquery.simple-dtpicker.css',
+                      'static/src/css/xeditable.css',
+                      'static/src/css/fullcalendar.css',
+                      'static/src/css/fullcalendar.print.css'
+                    ]
+                }
+            },
             js: {
                 src: ['static/app/scripts/services/authservices.js',
                     'static/app/scripts/services/infonodeservices.js',
