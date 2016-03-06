@@ -1,11 +1,5 @@
 module.exports = function (grunt) {
     grunt.initConfig({
-        livereload: {
-            options: {
-                base: 'public'
-            },
-            files: ['src/**/*', 'templates/**/*']
-        },
         concat: {
             /*css:{
              src: ['static/bootstrap3/plugins/select2/select2_metro.css','static/bootstrap3/plugins/uniform/css/uniform.default.css','static/plugins/date-time-picker/jquery.simple-dtpicker.css','static/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.css','static/angular-xeditable-0.1.8/css/xeditable.css','static/plugins/fullcalendar/fullcalendar.css','static/plugins/fullcalendar/fullcalendar.print.css'],
@@ -177,5 +171,4 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
-    grunt.loadNpmTasks('grunt-livereload')
 };

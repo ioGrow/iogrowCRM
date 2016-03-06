@@ -177,17 +177,6 @@
 	}
 	/*END TOPBAR ICONS*/
 
-	/*BEGIN BLOG PAGES*/
-	.blog-posts img,
-	.recent-news img {
-		margin-bottom: 15px;
-	}
-
-	.blog-item .blog-item-img .carousel-control {
-		top: 40%;
-	}		
-	/*BEGIN BLOG PAGES*/
-
 	/*BEGIN SOCIAL-FOOTER*/
 	.front-copyright .social-footer {
 		margin-top: 10px;
