@@ -49,4 +49,5 @@ handlers:
   script: handlers.app
 
 
-
+skip_files:
+- node_modules/.*

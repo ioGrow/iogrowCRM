@@ -61,7 +61,7 @@
     <meta name="MobileOptimized" content="320">
 
     <!-- web fonts -->
-    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab|Ubuntu:300,400,500,700|Exo+2:300,400,500,600,700'
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab|Ubuntu:300,400,500,700|Exo+2:300,400,500,600,700'
           rel='stylesheet' type='text/css'>
     <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eafcehcahfabjibkmffekmcnlnnopkni">
     <!-- end of web fonts-->
@@ -515,9 +515,10 @@
         console.log(url);
         return url + '/_ah/api';
     }
-    var ROOT = getRoot();
+    // var ROOT = getRoot();
     // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-    //   var ROOT = '/_ah/api';
+    var ROOT = '/_ah/api';
+//    var ROOT = 'https://preprod-iogrow.appspot.com/_ah/api'
     var apisToLoad;
     var callback = function () {
         console.log('callback');
@@ -886,8 +887,6 @@ Stripe.setPublishableKey('pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD');
 <!-- <script src="https://checkout.stripe.com/checkout.js"></script> -->
 <!-- END JAVASCRIPTS -->
 <script type="text/javascript">
-
-
     mixpanel.people.set({
         "$email": "{{user.email}}",    // only special properties need the $
         "$name": "{{user.google_display_name}}",

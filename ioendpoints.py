@@ -71,6 +71,7 @@ from iomodels.crmengine.needs import Need, NeedInsertRequest, NeedSchema
 # from iomodels.crmengine.emails import Email
 from iomodels.crmengine.tags import Tag, TagSchema, TagListRequest, TagListResponse, TagInsertRequest
 from iomodels.crmengine.profiles import ProfileDeleteRequest, Keyword, KeywordListResponse
+from lib.stripe.error import InvalidRequestError
 from model import User
 from model import Organization
 from model import Userinfo
@@ -6521,19 +6522,29 @@ class CrmEngineApi(remote.Service):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         return organization.get_subscription().get_schema()
 
-    @endpoints.method(name='subscription.delete', path='subscription/delete')
+    @endpoints.method(name='subscription.delete_from_stripe', path='subscription/delete_from_stripe')
     def delete_subscription(self, request):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
-        subscription = organization.subscription
-        if subscription:
-            sub_from_db = subscription.get()
-            if sub_from_db.plan.get().name == config.PREMIUM:
-                organization.set_subscription(Subscription.create_freemium_subscription())
-                try:
-                    customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-                    customer.subscriptions.retrieve(sub_from_db.stripe_subscription_id).delete()
-                except stripe.APIError:
-                    raise endpoints.NotFoundException("")
-                return message_types.VoidMessage()
-        raise endpoints.NotFoundException("")
+        subscription = organization.subscription.get()
+        try:
+            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
+            customer.subscriptions.retrieve(subscription.stripe_subscription_id).delete()
+            subscription.stripe_subscription_id = None
+            subscription.put()
+        except stripe.APIError:
+            raise endpoints.NotFoundException("")
+
+        # organization = EndpointsHelper.require_iogrow_user().organization.get()
+        # subscription = organization.subscription
+        # if subscription:
+        #     sub_from_db = subscription.get()
+        #     if sub_from_db.plan.get().name == config.PREMIUM:
+        #         organization.set_subscription(Subscription.create_freemium_subscription())
+        #         try:
+        #             customer = stripe.Customer.retrieve(organization.stripe_customer_id)
+        #             customer.subscriptions.retrieve(sub_from_db.stripe_subscription_id).delete()
+        #         except stripe.APIError:
+        #             raise endpoints.NotFoundException("")
+        #         return message_types.VoidMessage()
+        # raise endpoints.NotFoundException("")
 

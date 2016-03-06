@@ -2,10 +2,10 @@ import datetime
 from functools import wraps
 
 import endpoints
+import stripe
 from endpoints.api_exceptions import PreconditionFailedException
 from google.appengine.ext import ndb
 
-import stripe
 from iomessages import SubscriptionSchema, PlanSchema
 from iomodels.crmengine import config
 
@@ -28,7 +28,6 @@ def _create_stripe_plan(name, interval, price):
 
 
 stripe.api_key = config.STRIPE_API_KEY
-
 
 
 def created_record_sum(entities, organization, start_date):
@@ -118,8 +117,6 @@ class Plan(BaseModel):
             elif name not in config.PLANS_NAMES:
                 raise AttributeError('This name is not supported')
             plan.put()
-
-            # if plan.name == config.PREMIUM:
         return plan
 
     def calculate_price(self):
