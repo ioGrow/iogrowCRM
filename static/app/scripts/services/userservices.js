@@ -33,7 +33,6 @@ accountservices.factory('User', function ($http) {
                 $scope.isSelected = false;
                 $scope.selected_users = [];
                 $scope.runTheProcess();
-
             } else {
                 if (resp.code == 401) {
                     if (resp.message == "Invalid grant") {
@@ -43,10 +42,8 @@ accountservices.factory('User', function ($http) {
                     $scope.$apply();
                 };
             }
-            console.log('gapi #end_execute');
-        });<
+        });
     };
-
     User.unAssignLicense = function ($scope, params) {
         $scope.isLoading = true;
         $scope.$apply();

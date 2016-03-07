@@ -86,8 +86,7 @@
                     </div>
                     <button class="btn btn-default"
                             ng-click="changeAutoRenew((subscription && subscription.stripe_subscription_id))">
-                        <%=  (subscription && subscription.stripe_subscription_id)
-                        ? 'Disabled':'Enabled'  %> Auto renew
+                        <%=  subscription.stripe_subscription_id ? 'Disabled':'Enabled'  %> Auto renew
                     </button>
                 </form>
             </div>
