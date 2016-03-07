@@ -361,10 +361,8 @@ class Organization(ndb.Model):
 
     def get_subscription(self):
         if not self.subscription:
-            if self.plan:
-                licence = self.plan.get()
-                if licence.name == "life_time_free":
-                    self.subscription = Subscription.create_life_free_subscription().key
+            if self.plan and self.plan.get().name == "life_time_free":
+                self.subscription = Subscription.create_life_free_subscription().key
             else:
                 self.subscription = Subscription.create_freemium_subscription().key
             self.put()
@@ -978,6 +976,10 @@ class User(EndpointsModel):
         # if not self.id and self.status == "active":
         self.after_create(async.get_result().id())
         return async
+
+    @classmethod
+    def get_users_count_by_organization(cls, org_key):
+        return cls.query(cls.organization == org_key).count()
 
     def init_user_config(self, org_key, profile_key):
         profile = profile_key.get()
