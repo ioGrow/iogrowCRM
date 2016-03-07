@@ -153,7 +153,6 @@ class Subscription(BaseModel):
                                     expiration_date=cls._calculate_expiration_date(config.MONTH),
                                     description='Default Subscription')
         subscription.put()
-        # _create_stripe_plan(plan.name, plan.interval, plan.price)
         return subscription
 
     @classmethod
@@ -172,7 +171,6 @@ class Subscription(BaseModel):
         plan = Plan.get_life_free_plan()
         subscription = Subscription(plan=plan.key, start_date=datetime.datetime.now(),
                                     description='Life Free Subscription')
-        _create_stripe_plan(plan.name, plan.interval, plan.price)
         subscription.put()
         return subscription
 

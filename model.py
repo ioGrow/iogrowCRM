@@ -361,7 +361,12 @@ class Organization(ndb.Model):
 
     def get_subscription(self):
         if not self.subscription:
-            self.subscription = Subscription.create_freemium_subscription().key
+            if self.plan:
+                licence = self.plan.get()
+                if licence.name == "life_time_free":
+                    self.subscription = Subscription.create_life_free_subscription().key
+            else:
+                self.subscription = Subscription.create_freemium_subscription().key
             self.put()
         return self.subscription.get()
 
@@ -390,21 +395,21 @@ class Organization(ndb.Model):
         organization.licenses_expires_on = now_plus_month
         organization.put()
 
-    @classmethod
-    def init_freemium_licenses(cls, org_key):
-        res = LicenseModel.query(LicenseModel.name == 'freemium').get()
-        organization = org_key.get()
-        if res:
-            license = res
-        else:
-            license = LicenseModel(name='freemium', payment_type='online', price=0, is_free=True, duration=30)
-            license.put()
-        organization.plan = license.key
-        organization.nb_licenses = 10
-        now = datetime.datetime.now()
-        now_plus_month = now + datetime.timedelta(days=30)
-        organization.licenses_expires_on = now_plus_month
-        organization.put()
+    # @classmethod
+    # def init_freemium_licenses(cls, org_key):
+    #     res = LicenseModel.query(LicenseModel.name == 'freemium').get()
+    #     organization = org_key.get()
+    #     if res:
+    #         license = res
+    #     else:
+    #         license = LicenseModel(name='freemium', payment_type='online', price=0, is_free=True, duration=30)
+    #         license.put()
+    #     organization.plan = license.key
+    #     organization.nb_licenses = 10
+    #     now = datetime.datetime.now()
+    #     now_plus_month = now + datetime.timedelta(days=30)
+    #     organization.licenses_expires_on = now_plus_month
+    #     organization.put()
 
     @classmethod
     def init_preemium_trial_licenses(cls, org_key, promo_code):
@@ -431,6 +436,10 @@ class Organization(ndb.Model):
                 cls.init_freemium_licenses(org_key)
         else:
             cls.init_freemium_licenses(org_key)
+
+    @classmethod
+    def init_freemium_licenses(cls, org_key):
+        cls.init_life_time_free_licenses(org_key)
 
     @classmethod
     def init_default_values(cls, org_key):
@@ -462,7 +471,6 @@ class Organization(ndb.Model):
             owner=admin.google_user_id,
             name=org_name,
             nb_used_licenses=1,
-            subscription=Subscription.create_freemium_subscription().key
         )
         org_key = organization.put()
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')
@@ -539,7 +547,6 @@ class Organization(ndb.Model):
                 created_profile.put()
         # create reports details
 
-
         # init default stages,status, default values...
         cls.init_default_values(org_key)
         if license_type == 'premium_trial':
@@ -559,13 +566,7 @@ class Organization(ndb.Model):
         admin.license_expires_on = now_plus_month
         admin.is_admin = True
         admin.put()
-        # taskqueue.add(
-        #             url='/workers/initreport',
-        #             queue_name='iogrow-low',
-        #             params={
-        #                     'admin': admin.key.urlsafe()
-        #                     })
-
+        organization.subscription = organization.get_subscription().key
         return org_key
 
     @classmethod
