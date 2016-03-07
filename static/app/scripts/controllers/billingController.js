@@ -331,13 +331,10 @@ app.controller('BillingShowController', ['$scope', '$route', 'Auth', 'Search', '
 
 
         }
-
         // We need to call this to refresh token when user credentials are invalid
         $scope.refreshToken = function () {
             Auth.refreshToken();
         };
-
-
         // Google+ Authentication
         Auth.init($scope);
 

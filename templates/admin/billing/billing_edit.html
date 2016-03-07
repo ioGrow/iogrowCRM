@@ -80,12 +80,14 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label" style="text-align: left">Auto renew:</label>
                         <div class="col-sm-6">
-                            <p class="form-control-static"> <%= (subscription && subscription.plan.name == 'premium')
-                                ? 'Enabled':'Disabled' %></p>
+                            <p class="form-control-static"> <%= (subscription && subscription.stripe_subscription_id)
+                                ? 'Disabled':'Enabled' %></p>
                         </div>
                     </div>
-                    <button class="btn btn-default" data-toggle="modal" data-target="#disable_auto_renew">
-                        <%= (subscription && subscription.plan.name == 'premium')? 'Disabled':'Enabled' %> Auto renew
+                    <button class="btn btn-default"
+                            ng-click="changeAutoRenew((subscription && subscription.stripe_subscription_id))">
+                        <%=  (subscription && subscription.stripe_subscription_id)
+                        ? 'Disabled':'Enabled'  %> Auto renew
                     </button>
                 </form>
             </div>
@@ -96,7 +98,6 @@
 <!-- Modal -->
 <div id="disable_auto_renew" class="modal fade" role="dialog">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -107,8 +108,7 @@
                 <p>Your subscription wont be activated automatically for the next <%= subscription.plan.interval %>.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" ng-click="disableAutoRenew()">Yes
-                </button>
+                <button type="button" class="btn btn-danger" ng-click="disableAutoRenew()">Yes</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
             </div>
         </div>

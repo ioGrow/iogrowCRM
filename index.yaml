@@ -273,6 +273,11 @@ indexes:
 - kind: Contact
   properties:
   - name: organization
+  - name: created_at
+
+- kind: Contact
+  properties:
+  - name: organization
   - name: firstname
 
 - kind: Contact

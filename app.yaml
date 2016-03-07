@@ -1,4 +1,4 @@
-application: gcdc2013-iogrow
+application: preprod-iogrow
 version: 18
 runtime: python27
 api_version: 1
@@ -49,4 +49,5 @@ handlers:
   script: handlers.app
 
 
-
+skip_files:
+- node_modules/.*

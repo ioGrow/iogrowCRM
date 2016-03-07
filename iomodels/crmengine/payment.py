@@ -2,10 +2,10 @@ import datetime
 from functools import wraps
 
 import endpoints
+import stripe
 from endpoints.api_exceptions import PreconditionFailedException
 from google.appengine.ext import ndb
 
-import stripe
 from iomessages import SubscriptionSchema, PlanSchema
 from iomodels.crmengine import config
 
@@ -15,8 +15,19 @@ def _created_record_count_after(entity, organization, start_date):
                                          ndb.GenericProperty('created_at') > start_date).count()
 
 
-stripe.api_key = config.STRIPE_API_KEY
+def _create_stripe_plan(name, interval, price):
+    try:
+        stripe.Plan.retrieve('{}_{}'.format(name, interval))
+    except stripe.StripeError:
+        stripe.Plan.create(
+            amount=price,
+            interval=interval,
+            name='{} {}'.format(interval.capitalize(), name),
+            currency='usd',
+            id='{}_{}'.format(name, interval))
 
+
+stripe.api_key = config.STRIPE_API_KEY
 
 
 def created_record_sum(entities, organization, start_date):
@@ -33,7 +44,10 @@ def payment_required():
             rate_limit_message = "Your free plan reach it's limit."
             organization = _get_organization(kwargs)
             subscription = organization.get().get_subscription()
-            if subscription.plan.get().name != config.PREMIUM:
+            plan = subscription.plan.get()
+            if subscription.expiration_date < datetime.datetime.now():
+                organization.get().set_subscription(Subscription.create_freemium_subscription())
+            elif plan.name != config.PREMIUM:
                 limit = subscription.get_records_limit()
                 if limit is not None:
                     entities = subscription.get_activated_plan().kinds_to_limit
@@ -81,7 +95,7 @@ class Plan(BaseModel):
 
     @classmethod
     def get_freemium_plan(cls):
-        return cls.get_by_name_and_interval(config.FREEMIUM)
+        return cls.get_by_name_and_interval(config.FREEMIUM, interval=config.MONTH)
 
     @classmethod
     def get_premium_plan(cls, interval):
@@ -93,7 +107,7 @@ class Plan(BaseModel):
 
     @classmethod
     def get_by_name_and_interval(cls, name, interval=None):
-        plan = cls.query(cls.name == name and cls.interval == interval).get()
+        plan = Plan.query(Plan.name == name, Plan.interval == interval).get()
         if plan is None:
             plan = cls(name=name, interval=interval)
             plan.price = plan.calculate_price()
@@ -103,16 +117,6 @@ class Plan(BaseModel):
             elif name not in config.PLANS_NAMES:
                 raise AttributeError('This name is not supported')
             plan.put()
-
-            if plan.name == config.PREMIUM:
-                stripe_plan = stripe.Plan.retrieve('{}_{}'.format(config.PREMIUM, interval))
-                if not stripe_plan:
-                    stripe.Plan.create(
-                        amount=plan.price,
-                        interval=interval,
-                        name='{} {}'.format(interval.capitalize(), config.PREMIUM),
-                        currency='usd',
-                        id='{}_{}'.format(config.PREMIUM, interval))
         return plan
 
     def calculate_price(self):
@@ -144,35 +148,40 @@ class Subscription(BaseModel):
 
     @classmethod
     def create_freemium_subscription(cls):
-        plan = Plan.get_freemium_plan().key
-        subscription = Subscription(plan=plan, start_date=datetime.datetime.now(),
+        plan = Plan.get_freemium_plan()
+        subscription = Subscription(plan=plan.key, start_date=datetime.datetime.now(),
+                                    expiration_date=cls._calculate_expiration_date(config.MONTH),
                                     description='Default Subscription')
         subscription.put()
+        # _create_stripe_plan(plan.name, plan.interval, plan.price)
         return subscription
 
     @classmethod
     def create_premium_subscription(cls, interval):
-        plan = Plan.get_premium_plan(interval).key
-        subscription = Subscription(plan=plan, start_date=datetime.datetime.now(),
+        plan = Plan.get_premium_plan(interval)
+        plan_key = plan.key
+        subscription = Subscription(plan=plan_key, start_date=datetime.datetime.now(),
                                     expiration_date=cls._calculate_expiration_date(interval),
                                     description='{} Premium Subscription'.format(interval))
+        _create_stripe_plan(plan.name, plan.interval, plan.price)
         subscription.put()
         return subscription
 
     @classmethod
     def create_life_free_subscription(cls):
-        plan = Plan.get_life_free_plan().key
-        subscription = Subscription(plan=plan, start_date=datetime.datetime.now(),
+        plan = Plan.get_life_free_plan()
+        subscription = Subscription(plan=plan.key, start_date=datetime.datetime.now(),
                                     description='Life Free Subscription')
+        _create_stripe_plan(plan.name, plan.interval, plan.price)
         subscription.put()
         return subscription
 
     @classmethod
     def _calculate_expiration_date(cls, interval):
         if interval == config.MONTH:
-            return datetime.datetime.now() + datetime.timedelta(days=30)
+            return datetime.datetime.now() + datetime.timedelta(days=31)
         elif interval == config.YEAR:
-            return datetime.datetime.now() + datetime.timedelta(days=365)
+            return datetime.datetime.now() + datetime.timedelta(days=367)
         else:
             raise AttributeError('This cycle name is not supported')
 
@@ -186,5 +195,5 @@ class Subscription(BaseModel):
         return SubscriptionSchema(plan=self.plan.get().get_schema(),
                                   start_date=self.start_date.strftime('%Y-%m-%d'),
                                   expiration_date=None if not self.expiration_date
-                                                       else self.expiration_date.strftime('%Y-%m-%d'),
+                                  else self.expiration_date.strftime('%Y-%m-%d'),
                                   description=self.description)

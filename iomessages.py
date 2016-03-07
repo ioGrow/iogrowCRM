@@ -568,3 +568,4 @@ class SubscriptionSchema(messages.Message):
     start_date = messages.StringField(2)
     expiration_date = messages.StringField(3)
     description = messages.StringField(4)
+
