@@ -81,6 +81,7 @@ from model import LicenseModel
 from model import TransactionModel
 from model import Logo
 from model import CustomField
+from model import CountryCurrency
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery
 from people import linked_in
@@ -4109,10 +4110,48 @@ class CrmEngineApi(remote.Service):
                       path='users/sign_up', http_method='POST',
                       name='users.sign_up')
     def user_sing_up(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        User.sign_up(user_from_email, request)
+        token =  endpoints.users_id_token._get_token(None)
+            # will get the token info from network
+        result = EndpointsHelper.get_token_info(token)
+        if result.status_code != 200:
+            raise endpoints.UnauthorizedException('Invalid token')
+        token_info = json.loads(result.content)
+        if 'email' not in token_info:
+            raise endpoints.UnauthorizedException('Invalid token')
+        email = token_info['email']
+        user = User(
+            type = 'public_user',
+            status = 'active',
+            google_user_id = request.google_user_id,
+            google_display_name = request.google_display_name,
+            google_public_profile_url = request.google_public_profile_url,
+            email = email,
+            completed_tour = False,
+            google_public_profile_photo_url = request.google_public_profile_photo_url,
+            currency = 'USD',
+            week_start = 'monday'
+        )
+        user.put()
+
+        if CountryCurrency.get_by_code('US') is None:
+            CountryCurrency.init()
+            User.set_default_currency(user, self.request.headers.get('X-AppEngine-Country'))
+            organ_name = email.partition("@")[2]
+            Organization.create_instance(organ_name, user)
+
         return message_types.VoidMessage()
 
+    # users.me api
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='users/me', http_method='POST',
+                      name='users.me')
+    def user_me(self, request):
+        try:
+            user_from_email = EndpointsHelper.require_iogrow_user()
+            print user_from_email.organization
+        except:
+            raise endpoints.NotFoundException('User not found')
+        return message_types.VoidMessage()
     @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
                       path='users/customers', http_method='POST',
                       name='users.customers')

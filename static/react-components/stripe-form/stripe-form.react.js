@@ -107,3 +107,25 @@ window.StripeForm = React.createClass({
         );
     }
 });
+
+
+window.ActivationNotice = React.createClass({
+    render: function(){
+        return (
+            <div className="container">
+                <div className="content">
+                    <div className="row">
+                        <div className="imgLeft">
+                            <img alt="" src="/static/img/copylead_session_expired.png" />
+                        </div>
+                        <div className="message">
+                            <h3 className="trialh3">Free Trial Expired</h3>
+                            <p className="trialp">Your free trial for Copylead has been expired. Click the button bellow to activate your subscription and continue using Copylead without interruptions.</p>
+                            <a href="http://app.copylead.com" target="_blank" id="payment-btn">Activate now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             );
+    }
+});
