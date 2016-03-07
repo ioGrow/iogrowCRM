@@ -395,21 +395,21 @@ class Organization(ndb.Model):
         organization.licenses_expires_on = now_plus_month
         organization.put()
 
-    # @classmethod
-    # def init_freemium_licenses(cls, org_key):
-    #     res = LicenseModel.query(LicenseModel.name == 'freemium').get()
-    #     organization = org_key.get()
-    #     if res:
-    #         license = res
-    #     else:
-    #         license = LicenseModel(name='freemium', payment_type='online', price=0, is_free=True, duration=30)
-    #         license.put()
-    #     organization.plan = license.key
-    #     organization.nb_licenses = 10
-    #     now = datetime.datetime.now()
-    #     now_plus_month = now + datetime.timedelta(days=30)
-    #     organization.licenses_expires_on = now_plus_month
-    #     organization.put()
+    @classmethod
+    def init_freemium_licenses(cls, org_key):
+        res = LicenseModel.query(LicenseModel.name == 'freemium').get()
+        organization = org_key.get()
+        if res:
+            license = res
+        else:
+            license = LicenseModel(name='freemium', payment_type='online', price=0, is_free=True, duration=30)
+            license.put()
+        organization.plan = license.key
+        organization.nb_licenses = 10
+        now = datetime.datetime.now()
+        now_plus_month = now + datetime.timedelta(days=30)
+        organization.licenses_expires_on = now_plus_month
+        organization.put()
 
     @classmethod
     def init_preemium_trial_licenses(cls, org_key, promo_code):
@@ -437,9 +437,9 @@ class Organization(ndb.Model):
         else:
             cls.init_freemium_licenses(org_key)
 
-    @classmethod
-    def init_freemium_licenses(cls, org_key):
-        cls.init_life_time_free_licenses(org_key)
+    # @classmethod
+    # def init_freemium_licenses(cls, org_key):
+    #     cls.init_life_time_free_licenses(org_key)
 
     @classmethod
     def init_default_values(cls, org_key):
