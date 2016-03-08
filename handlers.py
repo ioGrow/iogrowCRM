@@ -1325,6 +1325,7 @@ class SubscriptionHandler(SessionEnabledHandler):
             'user': user,
             'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
             'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
+            'publishable_key': app_config.PUBLISHABLE_KEY,
             'users_count': model.User.get_users_count_by_organization(user.organization)
         }
         self.response.out.write(template.render(template_values))

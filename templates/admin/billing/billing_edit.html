@@ -84,8 +84,7 @@
                                 ? 'Disabled':'Enabled' %></p>
                         </div>
                     </div>
-                    <button class="btn btn-default"
-                            ng-click="changeAutoRenew((subscription && subscription.stripe_subscription_id))">
+                    <button class="btn btn-default" ng-click="changeAutoRenew(subscription.stripe_subscription_id)">
                         <%=  subscription.stripe_subscription_id ? 'Disabled':'Enabled'  %> Auto renew
                     </button>
                 </form>
@@ -111,6 +110,5 @@
                 <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
             </div>
         </div>
-
     </div>
 </div>

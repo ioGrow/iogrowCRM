@@ -259,7 +259,7 @@
 
             </div>
             <div class="row" style="text-align: center;font-size: 36px;">
-                <p>You have {{ users_count }} user{% if users_count != 1 %}s{% endif %}</p>
+                <p>You have {{ users_count }} user{% if users_count != 1 %}s{% endif %} in your organization</p>
                 <span style="font-weight: 500">Total cost : <span id="total-cost"></span>$</span>
             </div>
             <!--<div class="page-header">
@@ -325,8 +325,7 @@
         /* Visual feedback */
         $form.find('[type=submit]').html('Validating <i class="fa fa-spinner fa-pulse"></i>');
 
-        var PublishableKey = 'pk_test_A8tZ6tBoVb7MHJpTOJLsTEXD';
-        // var PublishableKey = 'pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD';
+        var PublishableKey = '{{ publishable_key }}';
         Stripe.setPublishableKey(PublishableKey);
 
         /* Create token */
