@@ -184,12 +184,6 @@ class SFinvitation(ndb.Model):
     subscription_started_at = ndb.DateTimeProperty()
     subscription_ended_at = ndb.DateTimeProperty()
 
-class SFpartner(ndb.Model):
-    full_name = ndb.StringProperty()
-    email = ndb.StringProperty()
-    phone = ndb.StringProperty()
-    country = ndb.StringProperty()
-
     @classmethod
     def list_by_partner(cls, partner_key):
         response = {
@@ -197,7 +191,24 @@ class SFpartner(ndb.Model):
             'active': [],
             'paying': []
         }
-        # invitees = SFinvitation.query(SFinvitation.)
+        invitees = cls.query(cls.partner_key==partner_key).fetch()
+        for invitee in invitees:
+            if invitee.status =='active':
+                response['active'].append(invitee)
+            elif invitee.status =='paying':
+                response['paying'].append(invitee)
+            else:
+                response['pending'].append(invitee)
+
+        return response
+
+class CopyLeadSfSession(ndb.Model):
+    full_name = ndb.StringProperty()
+    email = ndb.StringProperty()
+    phone = ndb.StringProperty()
+    country = ndb.StringProperty()
+
+
 
 
 
@@ -1908,7 +1919,7 @@ class ProxyServer(ndb.Model):
 
 
 class CopyLeadSfSession(ndb.Model):
-    # access_token = ndb.StringProperty()
+    access_token = ndb.StringProperty()
     user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
 
