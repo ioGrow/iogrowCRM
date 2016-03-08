@@ -194,4 +194,5 @@ class Subscription(BaseModel):
                                   start_date=self.start_date.strftime('%Y-%m-%d'),
                                   expiration_date=None if not self.expiration_date
                                   else self.expiration_date.strftime('%Y-%m-%d'),
-                                  description=self.description)
+                                  description=self.description,
+                                  stripe_subscription_id=self.stripe_subscription_id)
