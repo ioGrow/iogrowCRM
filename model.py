@@ -361,12 +361,7 @@ class Organization(ndb.Model):
 
     def get_subscription(self):
         if not self.subscription:
-            if self.plan:
-                licence = self.plan.get()
-                if licence.name == "life_time_free":
-                    self.subscription = Subscription.create_life_free_subscription().key
-            else:
-                self.subscription = Subscription.create_freemium_subscription().key
+            self.subscription = Subscription.create_freemium_subscription().key
             self.put()
         return self.subscription.get()
 
@@ -437,10 +432,6 @@ class Organization(ndb.Model):
         else:
             cls.init_freemium_licenses(org_key)
 
-    # @classmethod
-    # def init_freemium_licenses(cls, org_key):
-    #     cls.init_life_time_free_licenses(org_key)
-
     @classmethod
     def init_default_values(cls, org_key):
         # HKA 17.12.2013 Add an opportunity stage
@@ -471,6 +462,7 @@ class Organization(ndb.Model):
             owner=admin.google_user_id,
             name=org_name,
             nb_used_licenses=1,
+            subscription=Subscription.create_freemium_subscription().key
         )
         org_key = organization.put()
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')
@@ -547,6 +539,7 @@ class Organization(ndb.Model):
                 created_profile.put()
         # create reports details
 
+
         # init default stages,status, default values...
         cls.init_default_values(org_key)
         if license_type == 'premium_trial':
@@ -566,7 +559,13 @@ class Organization(ndb.Model):
         admin.license_expires_on = now_plus_month
         admin.is_admin = True
         admin.put()
-        organization.subscription = organization.get_subscription().key
+        # taskqueue.add(
+        #             url='/workers/initreport',
+        #             queue_name='iogrow-low',
+        #             params={
+        #                     'admin': admin.key.urlsafe()
+        #                     })
+
         return org_key
 
     @classmethod
