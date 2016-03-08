@@ -1,3 +1,5 @@
+import os
+
 E_LEAD = 'e_lead'
 E_CONTACT = 'e_contact'
 E_ACCOUNT = 'e_account'
@@ -13,11 +15,8 @@ LIFE_FREE = 'life_free'
 MONTH = 'month'
 YEAR = 'year'
 
-PREMIUM_YEARLY_PRICE = 15000
-PREMIUM_MONTHLY_PRICE = 1500
-
-#STRIPE_API_KEY = "sk_test_9WaLpLhVb0W9tKInz6Bs6x6l"
-STRIPE_API_KEY = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+PREMIUM_YEARLY_PRICE = 1
+PREMIUM_MONTHLY_PRICE = 1
 
 # Choices
 PLANS_INTERVALS = (MONTH, YEAR)
@@ -28,3 +27,15 @@ KINDS = (E_LEAD, E_TASK, E_ACCOUNT, E_EVENT, E_OPPORTUNITY, E_CASE, E_CONTACT, A
 
 ALL_KINDS_LIMIT = 10
 
+if 'HTTP_HOST' in os.environ and os.environ['HTTP_HOST'] == "preprod-iogrow.appspot.com":
+    STRIPE_API_KEY = "sk_test_9WaLpLhVb0W9tKInz6Bs6x6l"
+    PUBLISHABLE_KEY = "pk_test_A8tZ6tBoVb7MHJpTOJLsTEXD"
+elif "SERVER_SOFTWARE" in os.environ:
+    if os.environ['SERVER_SOFTWARE'].startswith('Dev'):
+        STRIPE_API_KEY = "sk_test_9WaLpLhVb0W9tKInz6Bs6x6l"
+        PUBLISHABLE_KEY = "pk_test_A8tZ6tBoVb7MHJpTOJLsTEXD"
+    elif os.environ['SERVER_SOFTWARE'].startswith('Google'):
+        STRIPE_API_KEY = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+        PUBLISHABLE_KEY = "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD"
+    else:
+        raise ValueError("Environment undetected")
