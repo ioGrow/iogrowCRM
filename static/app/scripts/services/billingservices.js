@@ -40,11 +40,11 @@ angular.module('crmEngine.billingservices', []).factory('Billing',
                     $scope.apply();
                 })*/;
         };
-
+        
         Billing.disableAutoRenew = function ($scope) {
             $scope.isLoading = true;
             $scope.apply();
-            gapi.client.crmengine.subscription.delete({}).execute(
+            gapi.client.crmengine.subscription.delete_from_stripe({}).execute(
                 function (resp) {
                     if (!resp.code) {
                         window.location.reload();
