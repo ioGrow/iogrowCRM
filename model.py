@@ -1920,13 +1920,10 @@ class ProxyServer(ndb.Model):
             server.put()
 
 
+
+
+
 class CopyLeadSfSession(ndb.Model):
-    access_token = ndb.StringProperty()
-    user = ndb.KeyProperty()
-    created_at = ndb.DateTimeProperty(auto_now_add=True)
-
-
-class CopyLeadZhSession(ndb.Model):
     access_token = ndb.StringProperty
     user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
