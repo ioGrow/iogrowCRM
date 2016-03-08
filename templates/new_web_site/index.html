@@ -21,8 +21,6 @@ if (window.location.host != "localhost")
   });
   $.urlParam = function(name){
       var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-      console.log(window.location.href);
-      console.log(results);
       if (results)
         return results[1] || 0;
       return 0;
@@ -126,7 +124,6 @@ var helper = (function() {
         type: 'POST',
         url: '/gconnect',
         success: function(result) {
-            console.log(window.location.href);
             var urlParam = $.urlParam('continue_url');
 
             if(urlParam) window.location.replace('/#/'+ urlParam);
