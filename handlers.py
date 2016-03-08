@@ -2,6 +2,7 @@
 import csv
 import datetime
 import json
+import logging
 import os
 import re
 import sys
@@ -1417,9 +1418,11 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
                 quantity=User.get_users_count_by_organization(user.organization)
             )
 
-            organization.stripe_customer_id = customer.id
+            premium_subscription.is_auto_renew = not customer.subscriptions['data'][0].cancel_at_period_end
             premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
             premium_subscription.put()
+
+            organization.stripe_customer_id = customer.id
             organization.set_subscription(premium_subscription)
             organization.put()
         except stripe.error.CardError, e:
@@ -1430,8 +1433,7 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
 
 class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
-        pass
-
+        logging.info(self.request)
 
 class SFcallback(BaseHandler, SessionEnabledHandler):
     def get(self):

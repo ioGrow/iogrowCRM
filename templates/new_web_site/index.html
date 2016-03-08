@@ -19,6 +19,12 @@ if (window.location.host != "localhost")
   $( document ).ajaxStart(function() {
        $('#loading').show();
   });
+  $.urlParam = function(name){
+      var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+      if (results)
+        return results[1] || 0;
+      return 0;
+  }
 var helper = (function() {
   var authResult = undefined;
 
@@ -117,21 +123,11 @@ var helper = (function() {
       $.ajax({
         type: 'POST',
         url: '/gconnect',
-
         success: function(result) {
           console.log('i am in connectServer show me result please');
-          console.log(result);
-          /*if (result==true){
-             window.location.reload();
-          }
-          else{*/
-            window.location.replace('/');
-          //}
-         // helper.people();
+          console.log('location ' + window.location);
+            window.location.replace('/#/'+$.urlParam('continue_url'));
         },
-
-
-
         data: {code:this.authResult.code, id: userId}
       });
     },
