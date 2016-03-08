@@ -6394,6 +6394,7 @@ class CrmEngineApi(remote.Service):
             subscription.put()
         except stripe.APIError:
             raise endpoints.NotFoundException("")
+        return message_types.VoidMessage()
 
         # organization = EndpointsHelper.require_iogrow_user().organization.get()
         # subscription = organization.subscription
