@@ -2,6 +2,7 @@
 import csv
 import datetime
 import json
+import logging
 import os
 import re
 import sys
@@ -469,7 +470,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
     def get(self, template=None):
         if not template:
             template = 'templates/base.html'
-        # Check if the user is loged-in, if not redirect him to the sign-in page
+        # Check if the user is logged-in, if not redirect him to the sign-in page
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
@@ -1417,9 +1418,11 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
                 quantity=User.get_users_count_by_organization(user.organization)
             )
 
-            organization.stripe_customer_id = customer.id
+            premium_subscription.is_auto_renew = not customer.subscriptions['data'][0].cancel_at_period_end
             premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
             premium_subscription.put()
+
+            organization.stripe_customer_id = customer.id
             organization.set_subscription(premium_subscription)
             organization.put()
         except stripe.error.CardError, e:
@@ -1430,8 +1433,7 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
 
 class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
-        pass
-
+        logging.info(self.request)
 
 class SFcallback(BaseHandler, SessionEnabledHandler):
     def get(self):

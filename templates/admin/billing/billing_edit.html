@@ -31,7 +31,6 @@
             </div>
         </div>
     </div>
-
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
             <div class="loader-content">
@@ -80,12 +79,11 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label" style="text-align: left">Auto renew:</label>
                         <div class="col-sm-6">
-                            <p class="form-control-static"> <%= (subscription && subscription.stripe_subscription_id)
-                                ? 'Disabled':'Enabled' %></p>
+                            <p class="form-control-static"><%= subscription.is_auto_renew ? 'Disabled':'Enabled' %></p>
                         </div>
                     </div>
-                    <button class="btn btn-default" ng-click="changeAutoRenew(subscription.stripe_subscription_id)">
-                        <%=  subscription.stripe_subscription_id ? 'Disabled':'Enabled'  %> Auto renew
+                    <button class="btn btn-default" ng-click="changeAutoRenew(subscription.is_auto_renew)">
+                        <%=  subscription.is_auto_renew ? 'Disabled':'Enabled'  %> Auto renew
                     </button>
                 </form>
             </div>
