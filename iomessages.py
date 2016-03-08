@@ -568,4 +568,6 @@ class SubscriptionSchema(messages.Message):
     start_date = messages.StringField(2)
     expiration_date = messages.StringField(3)
     description = messages.StringField(4)
+    stripe_subscription_id = messages.StringField(5)
+    is_auto_renew = messages.IntegerField(6)
 

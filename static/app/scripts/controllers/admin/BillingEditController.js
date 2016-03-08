@@ -40,14 +40,13 @@ app.controller('BillingEditCtrl', ['$scope', 'Auth', 'Billing', function ($scope
         Billing.disableAutoRenew($scope);
         $('#disable_auto_renew').modal('hide');
     };
-    $scope.changeAutoRenew = function (is_enable) {
-        if (!is_enable){
-            window.location.replace('/subscribe');
-        }else{
+    $scope.changeAutoRenew = function (stripe_subscription_id) {
+        if (stripe_subscription_id){
             $('#disable_auto_renew').modal('show');
+        }else{
+            window.location.replace('/subscribe');
         }
     };
-
     // What to do after authentication
     $scope.runTheProcess = function () {
         Billing.getSubscription($scope);

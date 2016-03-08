@@ -6383,29 +6383,34 @@ class CrmEngineApi(remote.Service):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         return organization.get_subscription().get_schema()
 
-    @endpoints.method(name='subscription.delete_from_stripe', path='subscription/delete_from_stripe')
-    def delete_subscription(self, request):
+    @endpoints.method(name='subscription.disable_auto_renew', path='subscription/disable_auto_renew')
+    def disable_auto_renew(self, request):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         subscription = organization.subscription.get()
         try:
             customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-            customer.subscriptions.retrieve(subscription.stripe_subscription_id).delete()
-            subscription.stripe_subscription_id = None
+            customer.subscriptions.retrieve(subscription.stripe_subscription_id).delete(at_period_end=True)
+            subscription.is_auto_renew = False
             subscription.put()
         except stripe.APIError:
             raise endpoints.NotFoundException("")
+        return message_types.VoidMessage()
 
-        # organization = EndpointsHelper.require_iogrow_user().organization.get()
-        # subscription = organization.subscription
-        # if subscription:
-        #     sub_from_db = subscription.get()
-        #     if sub_from_db.plan.get().name == config.PREMIUM:
-        #         organization.set_subscription(Subscription.create_freemium_subscription())
-        #         try:
-        #             customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-        #             customer.subscriptions.retrieve(sub_from_db.stripe_subscription_id).delete()
-        #         except stripe.APIError:
-        #             raise endpoints.NotFoundException("")
-        #         return message_types.VoidMessage()
-        # raise endpoints.NotFoundException("")
+    # @endpoints.method(name='subscription.enable_auto_renew', path='subscription/enable_auto_renew')
+    # def enable_auto_renew(self, request):
+    #
+    #     organization = EndpointsHelper.require_iogrow_user().organization.get()
+    #     subscription = organization.subscription.get()
+    #     try:
+    #         customer = stripe.Customer.retrieve(organization.stripe_customer_id)
+    #         customer.source = request.token
+    #         customer.save()
+    #
+    #         customer.subscriptions.create(plan=subscription.plan.get().name)
+    #         customer.subscriptions.create(subscription.stripe_subscription_id).delete()
+    #         subscription.stripe_subscription_id = None
+    #         subscription.put()
+    #     except stripe.APIError:
+    #         raise endpoints.NotFoundException("")
+    #     return message_types.VoidMessage()
 

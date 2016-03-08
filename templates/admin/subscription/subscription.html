@@ -165,8 +165,7 @@
                                                     id="cardNumber"
                                                     placeholder="Valid Card Number"
                                                     autocomplete="cc-number"
-                                                    required autofocus
-                                            />
+                                                    required autofocus />
                                             <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
                                         </div>
                                     </div>
@@ -198,8 +197,7 @@
                                                 id="cardCVC"
                                                 placeholder="CVC"
                                                 autocomplete="cc-csc"
-                                                required
-                                        />
+                                                required />
                                     </div>
                                 </div>
                             </div>
@@ -240,7 +238,7 @@
                             <input id="month" name="interval" type="radio" value="month">
                             <label for="month">
                                 <i class="fa fa-check-circle"></i>
-                                $15/mo
+                                ${{ month_price }}/user/mo
                                 <div class="plan-note">
                                     Cancel or get a refund anytime
                                 </div>
@@ -250,7 +248,7 @@
                             <input id="year" name="interval" type="radio" value="year" checked="checked">
                             <label for="year">
                                 <i class="fa fa-check-circle"></i>
-                                $150/yr
+                                ${{ year_price }}/user/yr
                                 <div class="plan-note">
                                     Save 16.66% vs. paying monthly
                                 </div>
@@ -259,6 +257,10 @@
                     </div>
                 </div>
 
+            </div>
+            <div class="row" style="text-align: center;font-size: 36px;">
+                <p>You have {{ users_count }} user{% if users_count != 1 %}s{% endif %} in your organization</p>
+                <span style="font-weight: 500">Total cost : <span id="total-cost"></span>$</span>
             </div>
             <!--<div class="page-header">
                 <h3 style="text-align: center;">Or Pay Using Your PayPal Account.
@@ -298,16 +300,32 @@
     });
 
     $form.on('submit', payWithStripe);
-
+    var users_count = parseInt({{ users_count }});
+    var month_price = parseInt({{ month_price }});
+    var year_price = parseInt({{ year_price }});
+    function getTotalCost(interval){
+        if (interval === 'month'){
+            return users_count * month_price;
+        } else if (interval === 'year'){
+            return users_count * year_price;
+        }
+    }
+    function changeTotalCostValue(interval){
+        var totalCost = getTotalCost(interval);
+        $('#total-cost').text(totalCost);
+    }
+    changeTotalCostValue($('input:radio:checked[name=interval]').val());
+    $('input:radio[name=interval]').change(function(){
+        var interval = $(this).val();
+        changeTotalCostValue(interval);
+    });
     /* If you're using Stripe for payments */
     function payWithStripe(e) {
         e.preventDefault();
-
         /* Visual feedback */
         $form.find('[type=submit]').html('Validating <i class="fa fa-spinner fa-pulse"></i>');
 
-        //var PublishableKey = 'pk_test_A8tZ6tBoVb7MHJpTOJLsTEXD'; // Replace with your API publishable key
-        var PublishableKey = 'pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD'; // Replace with your API publishable key
+        var PublishableKey = '{{ publishable_key }}';
         Stripe.setPublishableKey(PublishableKey);
 
         /* Create token */
@@ -414,7 +432,6 @@
             return false;
         }
     };
-
     $form.find('[type=submit]').prop('disabled', true);
     var readyInterval = setInterval(function () {
         if (paymentFormReady()) {
@@ -423,6 +440,5 @@
         }
     }, 250);
 </script>
-
 </body>
 </html>
