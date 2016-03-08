@@ -25,7 +25,7 @@ PRICES = (PREMIUM_YEARLY_PRICE, PREMIUM_MONTHLY_PRICE)
 ALL_KINDS = (E_LEAD, E_TASK, E_ACCOUNT, E_EVENT, E_OPPORTUNITY, E_CASE, E_CONTACT)
 KINDS = (E_LEAD, E_TASK, E_ACCOUNT, E_EVENT, E_OPPORTUNITY, E_CASE, E_CONTACT, ALL_KINDS)
 
-ALL_KINDS_LIMIT = 10
+ALL_KINDS_LIMIT = 20
 
 if 'HTTP_HOST' in os.environ and os.environ['HTTP_HOST'] == "preprod-iogrow.appspot.com":
     STRIPE_API_KEY = "sk_test_9WaLpLhVb0W9tKInz6Bs6x6l"
@@ -36,6 +36,6 @@ elif "SERVER_SOFTWARE" in os.environ:
         PUBLISHABLE_KEY = "pk_test_A8tZ6tBoVb7MHJpTOJLsTEXD"
     elif os.environ['SERVER_SOFTWARE'].startswith('Google'):
         STRIPE_API_KEY = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
-        PUBLISHABLE_KEY = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+        PUBLISHABLE_KEY = "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD"
     else:
         raise ValueError("Environment undetected")
