@@ -27,7 +27,7 @@ from apiclient.http import BatchHttpRequest
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.opportunities import Opportunity
 from iomodels.crmengine.payment import Subscription
-from model import Application, STANDARD_TABS, ADMIN_TABS
+from model import Application, STANDARD_TABS, ADMIN_TABS, User
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.appengine import OAuth2Decorator
@@ -1320,7 +1320,14 @@ class GetSfUser(BaseHandler, SessionEnabledHandler):
 class SubscriptionHandler(SessionEnabledHandler):
     def get(self):
         template = jinja_environment.get_template(name='templates/admin/subscription/subscription.html')
-        self.response.out.write(template.render({'user': self.get_user_from_session()}))
+        user = self.get_user_from_session()
+        template_values = {
+            'user': user,
+            'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
+            'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
+            'users_count': model.User.get_users_count_by_organization(user.organization)
+        }
+        self.response.out.write(template.render(template_values))
 
 
 class SFsubscriber(BaseHandler, SessionEnabledHandler):
@@ -1405,7 +1412,8 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
                 source=token,
                 description=organization.key.id(),
                 plan='{}_{}'.format(app_config.PREMIUM, interval),
-                email=user.email
+                email=user.email,
+                quantity=User.get_users_count_by_organization(user.organization)
             )
 
             organization.stripe_customer_id = customer.id
