@@ -470,7 +470,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
     def get(self, template=None):
         if not template:
             template = 'templates/base.html'
-        # Check if the user is loged-in, if not redirect him to the sign-in page
+        # Check if the user is logged-in, if not redirect him to the sign-in page
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
