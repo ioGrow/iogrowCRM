@@ -1322,14 +1322,17 @@ class SubscriptionHandler(SessionEnabledHandler):
     def get(self):
         template = jinja_environment.get_template(name='templates/admin/subscription/subscription.html')
         user = self.get_user_from_session()
-        template_values = {
-            'user': user,
-            'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
-            'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
-            'publishable_key': app_config.PUBLISHABLE_KEY,
-            'users_count': model.User.get_users_count_by_organization(user.organization)
-        }
-        self.response.out.write(template.render(template_values))
+        if user:
+            template_values = {
+                'user': user,
+                'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
+                'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
+                'publishable_key': app_config.PUBLISHABLE_KEY,
+                'users_count': model.User.get_users_count_by_organization(user.organization)
+            }
+            self.response.out.write(template.render(template_values))
+        else:
+            self.redirect('/welcome/')
 
 
 class SFsubscriber(BaseHandler, SessionEnabledHandler):

@@ -6396,21 +6396,21 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException("")
         return message_types.VoidMessage()
 
-    # @endpoints.method(name='subscription.enable_auto_renew', path='subscription/enable_auto_renew')
-    # def enable_auto_renew(self, request):
-    #
-    #     organization = EndpointsHelper.require_iogrow_user().organization.get()
-    #     subscription = organization.subscription.get()
-    #     try:
-    #         customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-    #         customer.source = request.token
-    #         customer.save()
-    #
-    #         customer.subscriptions.create(plan=subscription.plan.get().name)
-    #         customer.subscriptions.create(subscription.stripe_subscription_id).delete()
-    #         subscription.stripe_subscription_id = None
-    #         subscription.put()
-    #     except stripe.APIError:
-    #         raise endpoints.NotFoundException("")
-    #     return message_types.VoidMessage()
+    @endpoints.method(name='subscription.enable_auto_renew', path='subscription/enable_auto_renew')
+    def enable_auto_renew(self, request):
+
+        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        subscription = organization.subscription.get()
+        try:
+            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
+            customer.source = request.token
+            customer.save()
+
+            customer.subscriptions.create(plan=subscription.plan.get().name)
+            customer.subscriptions.create(subscription.stripe_subscription_id).delete()
+            subscription.stripe_subscription_id = None
+            subscription.put()
+        except stripe.APIError:
+            raise endpoints.NotFoundException("")
+        return message_types.VoidMessage()
 
