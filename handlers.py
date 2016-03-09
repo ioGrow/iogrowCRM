@@ -1620,6 +1620,16 @@ class SFinvite(BaseHandler, SessionEnabledHandler):
         self.response.out.write(json.dumps({}))
 
 
+class SFlistInviteesByPartners(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        data = json.loads(str(self.request.body))
+        user_email = data['user_email']
+        partner = model.SFpartner.query(model.SFpartner.email==user_email).get()
+        response = model.SFinvitation().list_by_partner(partner.key)
+        self.response.headers['Access-Control-Allow-Origin'] = "*"
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(response))
+
 class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
@@ -4002,6 +4012,8 @@ routes = [
     ('/sign-with-iogrow', SignInWithioGrow),
     ('/sf-users', SFusersCSV),
     ('/copylead/sf/api/users/get', GetSfUser),
+    ('/copylead/sf/api/invitees/list_by_partners', SFlistInviteesByPartners),
+
     # ('/gmail-copylead',GmailAnalysisForCopylead),
     # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
 
