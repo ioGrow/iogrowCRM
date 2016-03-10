@@ -61,7 +61,7 @@
     <meta name="MobileOptimized" content="320">
 
     <!-- web fonts -->
-    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab|Ubuntu:300,400,500,700|Exo+2:300,400,500,600,700'
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab|Ubuntu:300,400,500,700|Exo+2:300,400,500,600,700'
           rel='stylesheet' type='text/css'>
     <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eafcehcahfabjibkmffekmcnlnnopkni">
     <!-- end of web fonts-->
@@ -182,7 +182,6 @@
                                     <span class="desc">
                                            <img class="platform_icons" height="50" width="50"
                                                 src="/static/img/iogrow-application.png">
-
                                         {{ _('Relationships') }}
                                     </span>
                                   </span>
@@ -363,28 +362,31 @@
         </div>
     </div>
 </div>
-
-<div id="payment_modal" class="modal fade" role="dialog">
+<div id="payment_modal" class="modal fade in" role="dialog" aria-hidden="false">
     <div class="modal-dialog">
-        <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h1 style="text-align: center">
-                    {% if plan.name=='freemium' %} You have reached your monthly records limit of your freemium Account.
-                   <!--  <small>Upgrade Now</small> -->
-                    {% elif plan.name=='premium' %} You subscription has expired.
-                      <small>Please buy new license</small>
-                    {% endif %}
-                    
-                    </h1>
+            <a data-dismiss="modal" style="color: #4991FF;font-weight: 500;position: absolute;z-index: 2;right: 0px;"
+               class="btn">CLOSE</a>
+            <div class="modal-body" style="background-color: white;">
+                <img src="/static/img/iogrow_alert.png" alt="alert message"
+                     style="width: 30%;float: left;margin-top: 25px;">
+                <div style="width: 70%;float: left;padding: 6px 5%;font-weight: 300;">
+                    <h3 style="font-family: Ubuntu, sans-serif;font-weight: 400 !important;">
+                        {% if plan.name=='freemium' %} Freemium Limit Reahed
+                        {% elif plan.name=='premium' %} You subscription has expired.{% endif %}
+                    </h3>
+                    <p style="font-size: 18px;">
+                        You have reached your monthly records limit of your freemium account.
+                        Click the button bellow to upgrade and continue using io Grow without interruptions.
+                    </p>
+                </div>
             </div>
             <div class="modal-footer" style="border-top-width: 0px;text-align: center">
-                <a href="/subscribe"  class="btn btn-primary">Upgrade</a>
-                <button type="button" class="btn" data-dismiss="modal">Maybe later</button>
+                <a href="/subscribe" class="btn btn-primary" style="background-color: #0A90EE;color: #E6F1FC;padding: 15px 71px;margin-top: 5px;font-size: 16px;
+                ">Upgrade Now
+                </a>
             </div>
         </div>
-
     </div>
 </div>
 <!--div id="SendFeedbackModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -501,23 +503,23 @@
 </script>
 <!-- async scripts-->
 <script type="text/javascript">
+    function getRoot() {
+        var origin = window.location.origin;
+        var url = '';
+        if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
+            url = origin;
+        } else if (origin.indexOf('.com') != -1) {
+            url = "https://gcdc2013-iogrow.appspot.com";
+        }
+        console.log(url);
+        return url + '/_ah/api';
+    }
 
-   
+     var ROOT = getRoot();
 
-     function getRoot() {
-      var origin = window.location.origin;
-      var url = '';
-      if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
-      url = origin;
-      } else if (origin.indexOf('.com') != -1) {
-      url = "https://gcdc2013-iogrow.appspot.com";
-      }
-      console.log(url);
-      return url + '/_ah/api';
-      }
-      var ROOT = getRoot();
      // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-     // var ROOT = '/_ah/api';
+    //var ROOT = '/_ah/api';
+//    var ROOT = 'https://preprod-iogrow.appspot.com/_ah/api'
 
     var apisToLoad;
     var callback = function () {
@@ -605,20 +607,15 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 <!-- Keen IO support -->
-
 <script type="text/javascript">
     function ShowUpdateLogo() {
-
         try {
-
             var logoPan = document.getElementById("update_logo_pan");
             logoPan.style.display = "inline";
         }
         catch (e) {
         }
-
     }
-
     function HideupdateLogo() {
 
         try {
@@ -887,8 +884,6 @@ Stripe.setPublishableKey('pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD');
 <!-- <script src="https://checkout.stripe.com/checkout.js"></script> -->
 <!-- END JAVASCRIPTS -->
 <script type="text/javascript">
-
-
     mixpanel.people.set({
         "$email": "{{user.email}}",    // only special properties need the $
         "$name": "{{user.google_display_name}}",

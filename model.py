@@ -1,5 +1,6 @@
 import datetime
 # Google libs
+import logging
 import os
 import httplib2
 from google.appengine.ext import ndb
@@ -8,6 +9,7 @@ from google.appengine.api import taskqueue
 from google.appengine.api import search
 from google.appengine.api import urlfetch
 
+from iomodels.crmengine import config
 from iomodels.crmengine.payment import Subscription
 from oauth2client.appengine import CredentialsNDBProperty
 from apiclient.discovery import build
@@ -132,7 +134,7 @@ folders = {}
 
 # hadji hicham  20/08/2014. our secret api key to auth at stripe .
 # stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+stripe.api_key = config.STRIPE_API_KEY
 
 
 class Tokens(ndb.Model):
@@ -182,15 +184,30 @@ class SFinvitation(ndb.Model):
     subscription_started_at = ndb.DateTimeProperty()
     subscription_ended_at = ndb.DateTimeProperty()
 
-class SFpartner(ndb.Model):
+    @classmethod
+    def list_by_partner(cls, partner_key):
+        response = {
+            'pending': [],
+            'active': [],
+            'paying': []
+        }
+        invitees = cls.query(cls.partner_key==partner_key).fetch()
+        for invitee in invitees:
+            if invitee.status =='active':
+                response['active'].append(invitee)
+            elif invitee.status =='paying':
+                response['paying'].append(invitee)
+            else:
+                response['pending'].append(invitee)
+
+        return response
+
+class CopyLeadSfSession(ndb.Model):
     full_name = ndb.StringProperty()
     email = ndb.StringProperty()
     phone = ndb.StringProperty()
     country = ndb.StringProperty()
 
-    @classmethod
-    def list_by_partner(cls, partner_key):
-        pass
 
 class SFLead(ndb.Model):
     firstname = ndb.StringProperty()
@@ -350,7 +367,10 @@ class Organization(ndb.Model):
 
     def get_subscription(self):
         if not self.subscription:
-            self.subscription = Subscription.create_freemium_subscription().key
+            if self.plan and self.plan.get().name == "life_time_free":
+                self.subscription = Subscription.create_life_free_subscription().key
+            else:
+                self.subscription = Subscription.create_freemium_subscription().key
             self.put()
         return self.subscription.get()
 
@@ -421,6 +441,10 @@ class Organization(ndb.Model):
         else:
             cls.init_freemium_licenses(org_key)
 
+    # @classmethod
+    # def init_freemium_licenses(cls, org_key):
+    #     cls.init_life_time_free_licenses(org_key)
+
     @classmethod
     def init_default_values(cls, org_key):
         # HKA 17.12.2013 Add an opportunity stage
@@ -443,14 +467,14 @@ class Organization(ndb.Model):
     # assign the right license for this organization
     @classmethod
     def create_instance(cls, org_name, admin, license_type='freemium', promo_code=None):
-
-        # init google drive folders
-        # Add the task to the default queue.
+        # customer = stripe.Customer.create(
+        #     plan='freemium_month',
+        #     email=admin.email
+        # )
         organization = cls(
             owner=admin.google_user_id,
             name=org_name,
             nb_used_licenses=1,
-            subscription=Subscription.create_freemium_subscription().key
         )
         org_key = organization.put()
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')
@@ -527,7 +551,6 @@ class Organization(ndb.Model):
                 created_profile.put()
         # create reports details
 
-
         # init default stages,status, default values...
         cls.init_default_values(org_key)
         if license_type == 'premium_trial':
@@ -547,13 +570,7 @@ class Organization(ndb.Model):
         admin.license_expires_on = now_plus_month
         admin.is_admin = True
         admin.put()
-        # taskqueue.add(
-        #             url='/workers/initreport',
-        #             queue_name='iogrow-low',
-        #             params={
-        #                     'admin': admin.key.urlsafe()
-        #                     })
-
+        organization.subscription = organization.get_subscription().key
         return org_key
 
     @classmethod
@@ -965,6 +982,10 @@ class User(EndpointsModel):
         # if not self.id and self.status == "active":
         self.after_create(async.get_result().id())
         return async
+
+    @classmethod
+    def get_users_count_by_organization(cls, org_key):
+        return cls.query(cls.organization == org_key).count()
 
     def init_user_config(self, org_key, profile_key):
         profile = profile_key.get()
@@ -1888,7 +1909,7 @@ class ProxyServer(ndb.Model):
 
 
 class CopyLeadSfSession(ndb.Model):
-    # access_token = ndb.StringProperty()
+    access_token = ndb.StringProperty()
     user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
 

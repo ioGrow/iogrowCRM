@@ -2,6 +2,7 @@
 import csv
 import datetime
 import json
+import logging
 import os
 import re
 import sys
@@ -27,7 +28,7 @@ from apiclient.http import BatchHttpRequest
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.opportunities import Opportunity
 from iomodels.crmengine.payment import Subscription
-from model import Application, STANDARD_TABS, ADMIN_TABS
+from model import Application, STANDARD_TABS, ADMIN_TABS, User
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.appengine import OAuth2Decorator
@@ -469,7 +470,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
     def get(self, template=None):
         if not template:
             template = 'templates/base.html'
-        # Check if the user is loged-in, if not redirect him to the sign-in page
+        # Check if the user is logged-in, if not redirect him to the sign-in page
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
@@ -1320,7 +1321,15 @@ class GetSfUser(BaseHandler, SessionEnabledHandler):
 class SubscriptionHandler(SessionEnabledHandler):
     def get(self):
         template = jinja_environment.get_template(name='templates/admin/subscription/subscription.html')
-        self.response.out.write(template.render({'user': self.get_user_from_session()}))
+        user = self.get_user_from_session()
+        template_values = {
+            'user': user,
+            'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
+            'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
+            'publishable_key': app_config.PUBLISHABLE_KEY,
+            'users_count': model.User.get_users_count_by_organization(user.organization)
+        }
+        self.response.out.write(template.render(template_values))
 
 
 class SFsubscriber(BaseHandler, SessionEnabledHandler):
@@ -1405,13 +1414,16 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
                 source=token,
                 description=organization.key.id(),
                 plan='{}_{}'.format(app_config.PREMIUM, interval),
-                email=user.email
+                email=user.email,
+                quantity=User.get_users_count_by_organization(user.organization)
             )
 
-            organization.stripe_customer_id = customer.id
+            premium_subscription.is_auto_renew = not customer.subscriptions['data'][0].cancel_at_period_end
             premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
             premium_subscription.put()
-            organization.subscription = premium_subscription.key
+
+            organization.stripe_customer_id = customer.id
+            organization.set_subscription(premium_subscription)
             organization.put()
         except stripe.error.CardError, e:
             self.response.headers['Content-Type'] = 'application/json'
@@ -1421,8 +1433,7 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
 
 class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
-        pass
-
+        logging.info(self.request)
 
 class SFcallback(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1606,6 +1617,16 @@ class SFinvite(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
 
+
+class SFlistInviteesByPartners(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        data = json.loads(str(self.request.body))
+        user_email = data['user_email']
+        partner = model.SFpartner.query(model.SFpartner.email==user_email).get()
+        response = model.SFinvitation().list_by_partner(partner.key)
+        self.response.headers['Access-Control-Allow-Origin'] = "*"
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(response))
 
 class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -3986,6 +4007,8 @@ routes = [
     ('/sign-with-iogrow', SignInWithioGrow),
     ('/sf-users', SFusersCSV),
     ('/copylead/sf/api/users/get', GetSfUser),
+    ('/copylead/sf/api/invitees/list_by_partners', SFlistInviteesByPartners),
+
     # ('/gmail-copylead',GmailAnalysisForCopylead),
     # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
 

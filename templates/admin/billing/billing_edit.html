@@ -17,9 +17,9 @@
         <div class="col-md-4 active-app"><i class="fa fa-credit-card section-icon"></i>
             {{ _('Billing & Subscription Settings') }}
         </div>
-        <a class="btn red save-btn pull-right" href="" ng-click="addCasestatustModal()">
+        <!-- <a class="btn red save-btn pull-right" href="" ng-click="addCasestatustModal()">
             <i class="fa fa-plus"></i> {{ _('New') }}
-        </a>
+        </a> -->
     </div>
 </div>
 <!-- Main content -->
@@ -31,7 +31,6 @@
             </div>
         </div>
     </div>
-
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
             <div class="loader-content">
@@ -80,12 +79,11 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label" style="text-align: left">Auto renew:</label>
                         <div class="col-sm-6">
-                            <p class="form-control-static"> <%= (subscription && subscription.plan.name == 'premium')
-                                ? 'Enabled':'Disabled' %></p>
+                            <p class="form-control-static"><%= subscription.is_auto_renew ? 'Disabled':'Enabled' %></p>
                         </div>
                     </div>
-                    <button class="btn btn-default" data-toggle="modal" data-target="#disable_auto_renew">
-                        <%= (subscription && subscription.plan.name == 'premium')? 'Disabled':'Enabled' %> Auto renew
+                    <button class="btn btn-default" ng-click="changeAutoRenew(subscription.is_auto_renew)">
+                        <%=  subscription.is_auto_renew ? 'Disabled':'Enabled'  %> Auto renew
                     </button>
                 </form>
             </div>
@@ -96,7 +94,6 @@
 <!-- Modal -->
 <div id="disable_auto_renew" class="modal fade" role="dialog">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -107,11 +104,9 @@
                 <p>Your subscription wont be activated automatically for the next <%= subscription.plan.interval %>.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" ng-click="disableAutoRenew()">Yes
-                </button>
+                <button type="button" class="btn btn-danger" ng-click="disableAutoRenew()">Yes</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
             </div>
         </div>
-
     </div>
 </div>

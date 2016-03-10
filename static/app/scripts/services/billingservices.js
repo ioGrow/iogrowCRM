@@ -21,6 +21,7 @@ angular.module('crmEngine.billingservices', []).factory('Billing',
                 'callback': (function (resp) {
                     if (!resp.code) {
                         $scope.subscription = resp;
+                        $scope.subscription.is_auto_renew =parseInt(resp.is_auto_renew);
                     } else {
                         notFoundHandle(resp, $scope);
                     }
@@ -38,13 +39,13 @@ angular.module('crmEngine.billingservices', []).factory('Billing',
                     }
                     $scope.isLoading = false;
                     $scope.apply();
-                })*/;
+                });*/
         };
-
+        
         Billing.disableAutoRenew = function ($scope) {
             $scope.isLoading = true;
             $scope.apply();
-            gapi.client.crmengine.subscription.delete({}).execute(
+            gapi.client.crmengine.subscription.disable_auto_renew({}).execute(
                 function (resp) {
                     if (!resp.code) {
                         window.location.reload();

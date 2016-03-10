@@ -66,6 +66,7 @@ from iomodels.crmengine.feedbacks import Feedback
 from iomodels.crmengine.needs import Need, NeedInsertRequest, NeedSchema
 from iomodels.crmengine.tags import Tag, TagSchema, TagListRequest, TagListResponse, TagInsertRequest
 from iomodels.crmengine.profiles import ProfileDeleteRequest, Keyword, KeywordListResponse
+from lib.stripe.error import InvalidRequestError
 from model import User
 from model import Organization
 from model import Userinfo
@@ -3408,7 +3409,6 @@ class CrmEngineApi(remote.Service):
         name='opportunitystages.insert'
     )
     def OpportunitystageInsert(self, my_model):
-        print "my_model======================", my_model.from_datastore
         user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.owner = user_from_email.google_user_id
         my_model.organization = user_from_email.organization
@@ -6260,18 +6260,15 @@ class CrmEngineApi(remote.Service):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         return organization.get_subscription().get_schema()
 
-    @endpoints.method(name='subscription.delete', path='subscription/delete')
-    def delete_subscription(self, request):
+    @endpoints.method(name='subscription.disable_auto_renew', path='subscription/disable_auto_renew')
+    def disable_auto_renew(self, request):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
-        subscription = organization.subscription
-        if subscription:
-            sub_from_db = subscription.get()
-            if sub_from_db.plan.get().name == config.PREMIUM:
-                organization.set_subscription(Subscription.create_freemium_subscription())
-                try:
-                    customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-                    customer.subscriptions.retrieve(sub_from_db.stripe_subscription_id).delete()
-                except stripe.APIError:
-                    raise endpoints.NotFoundException("")
-                return message_types.VoidMessage()
-        raise endpoints.NotFoundException("")
+        subscription = organization.subscription.get()
+        try:
+            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
+            customer.subscriptions.retrieve(subscription.stripe_subscription_id).delete(at_period_end=True)
+            subscription.is_auto_renew = False
+            subscription.put()
+        except stripe.APIError:
+            raise endpoints.NotFoundException("")
+        return message_types.VoidMessage()
