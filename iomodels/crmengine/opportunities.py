@@ -158,13 +158,6 @@ class OpportunityListRequest(messages.Message):
     owner = messages.StringField(5)
     stage = messages.StringField(6)
 
-
-class Opportunity(messages.Message):
-    limit = messages.IntegerField(1)
-    pageToken = messages.StringField(2)
-    order = messages.StringField(3)
-
-
 class NewOpportunityListRequest(messages.Message):
     tags = messages.StringField(1, repeated=True)
     owner = messages.StringField(2)
@@ -916,7 +909,7 @@ class Opportunity(EndpointsModel):
                         )
                 )
                 if opportunity.amount_total:
-                    total_amount_by_stage = total_amount_by_stage + int(opportunity.amount_total)
+                    total_amount_by_stage += int(opportunity.amount_total)
 
             total_value_in_stage = str(total_amount_by_stage)
             grouped_opportunities = OpportunityGroupedByStage(
@@ -983,7 +976,7 @@ class Opportunity(EndpointsModel):
                             if current_stage_key.urlsafe() == request.stage:
                                 is_filtered = True
                     if is_filtered and Node.check_permission(user_from_email, opportunity):
-                        count = count + 1
+                        count += 1
                         # list of tags related to this opportunity
                         tag_list = Tag.list_by_parent(parent_key=opportunity.key)
                         closed_date = None
@@ -1066,7 +1059,7 @@ class Opportunity(EndpointsModel):
                                 need=opportunity.need
                         )
                         items.append(opportunity_schema)
-            if (count == limit):
+            if count == limit:
                 you_can_loop = False
             if more and next_curs:
                 curs = next_curs
@@ -1114,7 +1107,7 @@ class Opportunity(EndpointsModel):
                                     probability=int(current_stage.probability),
                                     stage_changed_at=opportunity_stage_edges['items'][0].created_at.isoformat()
                             )
-                        count = count + 1
+                        count += 1
                         closed_date = None
                         if opportunity.closed_date:
                             closed_date = opportunity.closed_date.strftime("%Y-%m-%dT%H:%M:00.000")
@@ -1148,7 +1141,7 @@ class Opportunity(EndpointsModel):
                 else:
                     you_can_loop = False
                     opportunity_next_curs = None
-            if (count == limit):
+            if count == limit:
                 you_can_loop = False
 
         return OpportunityListResponse(
@@ -1462,8 +1455,7 @@ class Opportunity(EndpointsModel):
                     )
             )
         if not indexed:
-            data = {}
-            data['id'] = opportunity_key_async.id()
+            data = {'id': opportunity_key_async.id()}
             opportunity.put_index(data)
 
         closed_date = None

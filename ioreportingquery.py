@@ -87,15 +87,13 @@ class ReportingListResponse(messages.Message):
 
  
             users=User.query(User.google_user_id==gid).fetch()
-            if users!=[]:
+            if users:
                 gname=users[0].google_display_name
                 gmail=users[0].email
                 created_at=users[0].created_at
                 list_of_reports.append((gid,gname,len(leads),created_at))
                 item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
-            reporting = []
-            reporting.append(item_schema)
-            return ReportingListResponse(items=reporting)
+            return ReportingListResponse(items=[item_schema])
 
 
         #if the user input name of user
@@ -210,8 +208,7 @@ class ReportingListResponse(messages.Message):
                 created_at=users[0].created_at
                 list_of_reports.append((gid,gname,len(opportunities),created_at,amount))
                 item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2],amount=amount)
-            reporting = []
-            reporting.append(item_schema)
+            reporting = [item_schema]
             return ReportingListResponse(items=reporting)
 
 
@@ -281,14 +278,12 @@ class ReportingListResponse(messages.Message):
             list_of_reports=[]
             contacts=Contact.query(Lead.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
-            if users!=[]:
+            if users:
                 gname=users[0].google_display_name
                 created_at=users[0].created_at
                 list_of_reports.append((gid,gname,len(contacts),created_at))
                 item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
-            reporting = []
-            reporting.append(item_schema)
-            return ReportingListResponse(items=reporting)
+            return ReportingListResponse(items=[item_schema])
         
         #if the user input name of user
         elif gname!=None and gname!='':
@@ -341,15 +336,12 @@ class ReportingListResponse(messages.Message):
             list_of_reports=[]
             accounts=Account.query(Account.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
-            if users!=[]:
+            if users:
                 gname=users[0].google_display_name
                 created_at=users[0].created_at
                 list_of_reports.append((gid,gname,len(accounts),created_at))
                 item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
-            
-            reporting = []
-            reporting.append(item_schema)
-            return ReportingListResponse(items=reporting)
+            return ReportingListResponse(items=[item_schema])
 
         #if the user input name of user
         elif gname!=None and gname!='':
@@ -402,14 +394,12 @@ class ReportingListResponse(messages.Message):
             list_of_reports=[]
             tasks=Task.query(Task.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
-            if users!=[]:
+            if users:
                 gname=users[0].google_display_name
                 created_at=users[0].created_at
                 list_of_reports.append((gid,gname,len(tasks),created_at))
                 item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],count=list_of_reports[0][2])
-            reporting = []
-            reporting.append(item_schema)
-            return ReportingListResponse(items=reporting)
+            return ReportingListResponse(items=[item_schema])
 
         #if the user input name of user
         elif gname!=None and gname!='':
@@ -466,15 +456,13 @@ class ReportingListResponse(messages.Message):
             leads=Lead.query(Lead.owner==gid).fetch()
             contacts=Contact.query(Contact.owner==gid).fetch()
             users=User.query(User.google_user_id==gid).fetch()
-            if users!=[]:
+            if users:
                 gname=users[0].google_display_name
                 gmail=users[0].email
                 created_at=users[0].created_at
                 list_of_reports.append((gid,gname,gmail,len(accounts),len(contacts),len(leads),len(tasks),created_at))
                 item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],google_display_name=list_of_reports[0][1],email=list_of_reports[0][2],count_account=list_of_reports[0][3],count_contacts=list_of_reports[0][4],count_leads=list_of_reports[0][5],count_tasks=list_of_reports[0][6])
-            reporting = []
-            reporting.append(item_schema)
-            return ReportingListResponse(items=reporting)
+            return ReportingListResponse(items=[item_schema])
 
         #if the user input name of user
         elif gname!=None and gname!='':

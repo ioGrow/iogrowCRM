@@ -6,13 +6,11 @@ classes add to calling methods.
 """
 # Standard libs
 import datetime
+import httplib2
 import json
 import logging
-from datetime import timedelta
 
-import httplib2
 from django.utils.encoding import smart_str
-
 # Google libs
 from google.appengine.ext import ndb
 from google.appengine.api import search
@@ -58,7 +56,6 @@ from iomodels.crmengine.leads import Lead, LeadPatchRequest, LeadFromTwitterRequ
     FLsourceFilterRequest, FullContactRequest
 from iomodels.crmengine.cases import Case, UpdateStatusRequest, CasePatchRequest, CaseGetRequest, CaseInsertRequest, \
     CaseListRequest, CaseSchema, CaseListResponse, CaseSearchResults
-# from iomodels.crmengine.products import Product
 from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.Licenses import License, LicenseSchema, LicenseInsertRequest
 from iomodels.crmengine.opportunitystage import Opportunitystage, OpportunitystagePatchListRequestSchema, \
@@ -82,6 +79,7 @@ from model import TransactionModel
 from model import Logo
 from model import CustomField
 from model import CountryCurrency
+
 from endpoints_helper import EndpointsHelper
 from discovery import Discovery
 from people import linked_in
@@ -97,12 +95,6 @@ import stripe
 import config as config_urls
 import re
 import ast
-
-# google contacts
-# import atom.data
-# import gdata.data
-# import gdata.contacts.client
-# import gdata.contacts.data
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
@@ -176,11 +168,9 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
     ).order(order)
 
 
-
 # gd_client = gdata.contacts.client.ContactsClient(source='<var>gcdc2013-iogrow</var>')
 
 stripe.api_key = config.STRIPE_API_KEY
-
 
 
 class TwitterProfileRequest(messages.Message):
@@ -245,10 +235,6 @@ class LinkedinListResponseDB(messages.Message):
     results = messages.StringField(1)
     more = messages.BooleanField(2)
     KW_exist = messages.BooleanField(3)
-
-
-class LinkedinInsertResponseKW(messages.Message):
-    message = messages.StringField(1)
 
 
 class LinkedinInsertResponseKW(messages.Message):
@@ -717,6 +703,7 @@ class SignatureRequest(messages.Message):
 class ContactSynchronizeRequest(messages.Message):
     limit = messages.StringField(1)
 
+
 @endpoints.api(
     name='ioadmin',
     version='v1',
@@ -868,12 +855,10 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(SearchRequest, inviteResults, path="autocomplete", http_method="POST", name="autocomplete")
     def autocomplete(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        email = user_from_email.email
         index = search.Index(name="GlobalIndex")
         # Show only objects where you have permissions
         query_string = request.q + 'type:Gcontact AND owner:' + user_from_email.google_user_id
         search_results = []
-        count = 1
         # if request.limit:
         #     limit = int(request.limit)
         # else:
@@ -925,7 +910,6 @@ class CrmEngineApi(remote.Service):
         # Show only objects where you have permissions
         query_string = request.q + ' AND (organization:' + organization + ' AND (access:public OR (owner:' + user_from_email.google_user_id + ' OR collaborators:' + user_from_email.google_user_id + ')))'
         search_results = []
-        count = 1
         if request.limit:
             limit = int(request.limit)
         else:
@@ -1221,8 +1205,8 @@ class CrmEngineApi(remote.Service):
             "email": user_from_email.email
         }
         print params
-        r = requests.post("http://104.154.83.131:8080/api/export_case", data=json.dumps(params),
-                          headers={'content-type': 'application/json'})
+        requests.post("http://104.154.83.131:8080/api/export_case", data=json.dumps(params),
+                      headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
 
     # cases export by key
@@ -1238,9 +1222,8 @@ class CrmEngineApi(remote.Service):
             "fileName": user_from_email.email + "_" + str(user_from_email.id),
             "email": user_from_email.email
         }
-        print params
-        r = requests.post("http://104.154.83.131:8080/api/export_case_by_key", data=json.dumps(params),
-                          headers={'content-type': 'application/json'})
+        requests.post("http://104.154.83.131:8080/api/export_case_by_key", data=json.dumps(params),
+                      headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
 
     # Cases status apis
@@ -1262,7 +1245,7 @@ class CrmEngineApi(remote.Service):
     )
     def CasestatusGet(self, my_model):
         if not my_model.from_datastore:
-            raise ('Case status not found')
+            raise Exception('Case status not found')
         return my_model
 
     # casestatuses.insert api
@@ -1346,7 +1329,7 @@ class CrmEngineApi(remote.Service):
         if not parent.comments:
             parent.comments = 1
         else:
-            parent.comments = parent.comments + 1
+            parent.comments += 1
 
         parent.put()
         comment_author = Userinfo()
@@ -1752,7 +1735,6 @@ class CrmEngineApi(remote.Service):
 
             account_schema = Account.insert(user, account_request)
             accounts_keys[company_details.id] = ndb.Key(urlsafe=account_schema.entityKey)
-        account_schema = ""
         people = EndpointsHelper.highrise_import_peoples(request)
         contacts_keys = {}
         tasks_id = []
@@ -1861,7 +1843,6 @@ class CrmEngineApi(remote.Service):
 
             for task in tasks:
                 tasks_id.append(task.id)
-                from iomodels.crmengine.tasks import EntityKeyRequest
                 assigne = EntityKeyRequest(
                     entityKey=contact_schema.entityKey
                 )
@@ -1918,7 +1899,7 @@ class CrmEngineApi(remote.Service):
         i = 0
         for deal in deals:
             print i
-            i = i + 1
+            i += 1
             access = "private"
             if deal.visible_to == "Everyone":
                 access = "public"
@@ -1951,18 +1932,12 @@ class CrmEngineApi(remote.Service):
                         access=access
                     )
 
-            opportunity_schema = Opportunity.insert(user, opportunity_request)
+            Opportunity.insert(user, opportunity_request)
 
         # store tasks
-        taskss = ""
         taskss = EndpointsHelper.highrise_import_tasks()
         for task in taskss:
-            print "tasssskk", task.__dict__
-            print tasks_id, "iiiiiiiiiiiii", task.owner_id
             if task.id not in tasks_id:
-                print "ineeeeeeeeeeeeee"
-                print task.__dict__
-                from iomodels.crmengine.tasks import EntityKeyRequest
                 assignes = list()
                 assignes.append(assigne)
                 access = "private"
@@ -2283,7 +2258,7 @@ class CrmEngineApi(remote.Service):
             end_node = ndb.Key(urlsafe=item.end_node)
             task = start_node.get()
             assigned_to = end_node.get()
-            if task.due != None:
+            if task.due is not None:
                 taskqueue.add(
                     url='/workers/syncassignedtask',
                     queue_name='iogrow-low-task',
@@ -2317,7 +2292,7 @@ class CrmEngineApi(remote.Service):
     def send_email(self, request):
         user = EndpointsHelper.require_iogrow_user()
         files_ids = []
-        if request.subject != None:
+        if request.subject:
             subject = request.subject
         else:
             subject = ""
@@ -2817,7 +2792,7 @@ class CrmEngineApi(remote.Service):
     )
     def LeadstatusGet(self, my_model):
         if not my_model.from_datastore:
-            raise ('Lead status not found')
+            raise Exception('Lead status not found')
         return my_model
 
     # leadstatuses.insert api
@@ -3422,7 +3397,7 @@ class CrmEngineApi(remote.Service):
     )
     def OpportunitystageGet(self, my_model):
         if not my_model.from_datastore:
-            raise ('Opportunity stage not found')
+            raise Exception('Opportunity stage not found')
         return my_model
 
     # opportunitystages.insert api
@@ -3438,7 +3413,7 @@ class CrmEngineApi(remote.Service):
         my_model.owner = user_from_email.google_user_id
         my_model.organization = user_from_email.organization
         my_model.nbr_opportunity = 0
-        count = 0;
+        count = 0
         opportunitystage = Opportunitystage.query(Opportunitystage.organization == user_from_email.organization).order(
             -Opportunitystage.stage_number).fetch(1)
         if opportunitystage:
@@ -3692,7 +3667,7 @@ class CrmEngineApi(remote.Service):
         entityKey = ndb.Key(urlsafe=request.entityKey)
         task = entityKey.get()
         edges = Edge.query().filter(Edge.kind == "assignees", Edge.start_node == entityKey)
-        if task.due != None:
+        if task.due is not None:
             if edges:
                 for edge in edges:
                     assigned_to = edge.end_node.get()
@@ -3865,7 +3840,7 @@ class CrmEngineApi(remote.Service):
                 )
                 invited_user = User.get_by_email(email)
                 send_notification_mail = False
-                if invited_user is not None:
+                if invited_user:
                     if invited_user.organization == user_from_email.organization or invited_user.organization is None:
                         invited_user.invited_by = user_from_email.key
                         invited_user_key = invited_user.put_async()
@@ -3876,7 +3851,7 @@ class CrmEngineApi(remote.Service):
                         send_notification_mail = True
                     elif invited_user.organization is not None:
                         raise endpoints.UnauthorizedException('User exist within another organization')
-                        return
+
                 else:
                     my_model.invited_by = user_from_email.key
                     my_model.status = 'invited'
@@ -3969,8 +3944,8 @@ class CrmEngineApi(remote.Service):
                       path='users/sign_up', http_method='POST',
                       name='users.sign_up')
     def user_sing_up(self, request):
-        token =  endpoints.users_id_token._get_token(None)
-            # will get the token info from network
+        token = endpoints.users_id_token._get_token(None)
+        # will get the token info from network
         result = EndpointsHelper.get_token_info(token)
         if result.status_code != 200:
             raise endpoints.UnauthorizedException('Invalid token')
@@ -3979,16 +3954,16 @@ class CrmEngineApi(remote.Service):
             raise endpoints.UnauthorizedException('Invalid token')
         email = token_info['email']
         user = User(
-            type = 'public_user',
-            status = 'active',
-            google_user_id = request.google_user_id,
-            google_display_name = request.google_display_name,
-            google_public_profile_url = request.google_public_profile_url,
-            email = email,
-            completed_tour = False,
-            google_public_profile_photo_url = request.google_public_profile_photo_url,
-            currency = 'USD',
-            week_start = 'monday'
+            type='public_user',
+            status='active',
+            google_user_id=request.google_user_id,
+            google_display_name=request.google_display_name,
+            google_public_profile_url=request.google_public_profile_url,
+            email=email,
+            completed_tour=False,
+            google_public_profile_photo_url=request.google_public_profile_photo_url,
+            currency='USD',
+            week_start='monday'
         )
         user.put()
 
@@ -4011,6 +3986,7 @@ class CrmEngineApi(remote.Service):
         except:
             raise endpoints.NotFoundException('User not found')
         return message_types.VoidMessage()
+
     @endpoints.method(message_types.VoidMessage, iomessages.UserListSchema,
                       path='users/customers', http_method='POST',
                       name='users.customers')
@@ -4112,7 +4088,7 @@ class CrmEngineApi(remote.Service):
         http_method='GET', path='users/{google_user_id}', name='users.get_user_by_gid')
     def UserGetByGId(self, my_model):
         user = User.query().filter(User.google_user_id == my_model.google_user_id).get()
-        if user == None:
+        if not user:
             raise endpoints.NotFoundException('User not found')
         return user
         # @User.method(
@@ -4205,7 +4181,7 @@ class CrmEngineApi(remote.Service):
                     if evtG['id'] == str(evt.event_google_id):
                         exists = True
                 desc = ""
-                if exists == False:
+                if not exists:
                     if 'description' in evtG.keys():
                         desc = evtG['description']
                     if 'date' in evtG['start'].keys():
@@ -4222,8 +4198,8 @@ class CrmEngineApi(remote.Service):
                         else:
                             start, timezone = evtG['start']['dateTime'].split('Z')
                             end, timezoon = evtG['end']['dateTime'].split('Z')
-                        start = start + ".000000"
-                        end = end + '.000000'
+                        start += ".000000"
+                        end += '.000000'
                     kwargs0 = {
                         'id': evtG['id'],
                         'entityKey': "",
@@ -4301,8 +4277,8 @@ class CrmEngineApi(remote.Service):
                             start_event, timezone_event = evtG['start']['dateTime'].split('Z')
                             end_event, timezone_event = evtG['end']['dateTime'].split('Z')
 
-                        start_event = start_event + ".000000"
-                        end_event = end_event + '.000000'
+                        start_event += ".000000"
+                        end_event += '.000000'
 
             event_is_filtered = True
             if event.access == 'private' and event.owner != user_from_email.google_user_id:
@@ -4336,7 +4312,7 @@ class CrmEngineApi(remote.Service):
                 if task.due:
                     now = datetime.datetime.now()
                     diff = task.due - now
-                    if diff.days >= 0 and diff.days <= 2:
+                    if 0 <= diff.days <= 2:
                         status_color = 'orange'
                         status_label = 'soon: due in ' + str(diff.days) + ' days'
                     elif diff.days < 0:
@@ -4347,7 +4323,7 @@ class CrmEngineApi(remote.Service):
                     if task.status == 'closed':
                         status_color = 'blue'
                         status_label = 'closed'
-                if task.due != None:
+                if task.due is not None:
                     taskdue = task.due.isoformat()
                 else:
                     taskdue = task.due
@@ -4377,7 +4353,6 @@ class CrmEngineApi(remote.Service):
                       path='company/linkedinCompany', http_method='POST',
                       name='company.getCompanyLinkedin')
     def get_company_linkedin(self, request):
-        print request.entityKey
         response = linked_in.get_company(request.entityKey)
         return response
 
@@ -4428,7 +4403,8 @@ class CrmEngineApi(remote.Service):
         # r= requests.post("http://localhost:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
         results = r.json()
         total = results["hits"]["total"]
-        if ((page + 1) * limit < total): more = True
+        if (page + 1) * limit < total:
+            more = True
         exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/" + request.keyword)
         # exist = requests.get("http://localhost:9200/linkedin/keywords/"+request.keyword)
 
@@ -4439,7 +4415,6 @@ class CrmEngineApi(remote.Service):
                       name='linkedin.insert_kw')
     def linkedin_insert_kw(self, request):
         Bool = False
-        message = ""
         exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/" + request.keyword)
         # exist = requests.get("http://localhost:9200/linkedin/keywords/"+request.keyword)
         results = exist.json()
@@ -4454,7 +4429,7 @@ class CrmEngineApi(remote.Service):
                 "keyword": str(request.keyword)
             }
             data = json.dumps(data)
-            insert = requests.put("http://104.154.66.240:9200/linkedin/keywords/" + request.keyword, data=data)
+            requests.put("http://104.154.66.240:9200/linkedin/keywords/" + request.keyword, data=data)
             # insert= requests.put("http://localhost:9200/linkedin/keywords/"+request.keyword,data=data)
             message = "keyword inserted"
         # print results
@@ -4474,9 +4449,7 @@ class CrmEngineApi(remote.Service):
             "keyword": str(request.keyword)
         }
         data = json.dumps(data)
-        insert = requests.put("http://104.154.66.240:9200/linkedin/keywords/" + request.keyword, data=data)
-        # insert= requests.put("http://localhost:9200/linkedin/keywords/"+request.keyword,data=data)
-        print "############################################################################################"
+        requests.put("http://104.154.66.240:9200/linkedin/keywords/" + request.keyword, data=data)
         return LinkedinInsertResponse(results=r.text)
 
     @endpoints.method(spiderStateRequest, spiderStateResponse,
@@ -4501,11 +4474,10 @@ class CrmEngineApi(remote.Service):
                       path='people/get', http_method='POST',
                       name='people.get')
     def linkedin_get(self, request):
-        empty_string = lambda x: x if x else ""
         linkedin = linked_in()
         response = None
         pro = linkedin.scrape_linkedin_url(request.url)
-        if (pro):
+        if pro:
             response = LinkedinProfileSchema(
                 fullname=pro["full-name"],
                 industry=pro["industry"],
@@ -4528,9 +4500,6 @@ class CrmEngineApi(remote.Service):
                       path='people/get_twitter', http_method='POST',
                       name='people.get_twitter')
     def twitter_get_people(self, request):
-        # linkedin=linked_in()
-        # screen_name=linkedin.scrap_twitter("Meziane","Hadjadj")
-        linkedin = linked_in()
         screen_name = request.url
         print screen_name
         name = screen_name[screen_name.find("twitter.com/") + 12:]
@@ -4546,10 +4515,10 @@ class CrmEngineApi(remote.Service):
         empty_string = lambda x: x if x else ""
         linkedin = linked_in()
         keyword = empty_string(request.firstname) + " " + empty_string(request.lastname) + " " + empty_string(
-                request.title)+ " " + empty_string(request.company)
+            request.title) + " " + empty_string(request.company)
         pro = linkedin.scrape_linkedin(keyword)
         response = LinkedinProfileSchema()
-        if (pro):
+        if pro:
             if linkedin.dice_coefficient(keyword, pro["full-name"]) >= 0.5:
                 response = LinkedinProfileSchema(
                     fullname=pro["full-name"],
@@ -4578,7 +4547,7 @@ class CrmEngineApi(remote.Service):
         empty_string = lambda x: x if x else ""
         linkedin = linked_in()
         keyword = empty_string(request.firstname) + " " + empty_string(request.lastname) + " " + empty_string(
-                request.title) + " " + empty_string(request.company)
+            request.title) + " " + empty_string(request.company)
         pro = linkedin.open_url_list(keyword)
         items = []
         for p in pro:
@@ -4628,7 +4597,6 @@ class CrmEngineApi(remote.Service):
                       name='reporting.leads')
     def lead_reporting(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        list_of_reports = []
         gid = request.user_google_id
         gname = request.google_display_name
         source = request.source
@@ -4642,13 +4610,8 @@ class CrmEngineApi(remote.Service):
         if organization:
             organization_key = ndb.Key(Organization, int(organization))
 
-        item_schema = ReportingResponseSchema()
-
-        # if the user input google_user_id
-
-        item_schema = None
         reporting = []
-        if gid != None and gid != '':
+        if gid:
             list_of_reports = []
             users = User.query(User.google_user_id == gid).fetch(1)
             if users:
@@ -4660,13 +4623,13 @@ class CrmEngineApi(remote.Service):
                 organization_key = User.query(User.google_user_id == gid).fetch(1)[0].organization
                 organization = ndb.Key.id(organization_key)
 
-            if status != None and status != '' and source != None and source != '':
+            if status and source:
                 leads = Lead.query(Lead.owner == gid, Lead.status == status, Lead.source == source).fetch()
 
-            elif source != None and source != '':
+            elif source:
                 leads = Lead.query(Lead.owner == gid, Lead.source == source).fetch()
 
-            elif status != None and status != '':
+            elif status:
                 leads = Lead.query(Lead.owner == gid, Lead.status == status).fetch()
             elif group_by:
                 if group_by == 'status':
@@ -4676,12 +4639,10 @@ class CrmEngineApi(remote.Service):
                         leads = Lead.query(Lead.organization == organization_key, Lead.status == stt.status).fetch()
                         list_of_reports.append((gid, gname, gmail, stt.status, len(leads), str(organization)))
 
-
                 elif group_by == 'source':
                     for src in srcs:
                         leads = Lead.query(Lead.organization == organization_key, Lead.source == src).fetch()
                         list_of_reports.append((gid, gname, gmail, src, len(leads), str(organization)))
-
 
             else:
                 leads = Lead.query(Lead.owner == gid).fetch()
@@ -4711,10 +4672,8 @@ class CrmEngineApi(remote.Service):
                         reporting.append(item_schema)
                     return ReportingListResponse(items=reporting)
 
-
-
         # if the user input name of user
-        elif gname != None and gname != '':
+        elif gname:
             list_of_reports = []
             users = User.query(User.google_display_name == gname).fetch()
             if organization:
@@ -4780,13 +4739,13 @@ class CrmEngineApi(remote.Service):
 
                         total_leads = len(Lead.query(Lead.organization == organization_key).fetch())
 
-                    if status != None and status != '' and source != None and source != '':
+                    if status and source:
                         leads = Lead.query(Lead.owner == gid, Lead.status == status, Lead.source == source).fetch()
 
-                    elif source != None and source != '':
+                    elif source:
                         leads = Lead.query(Lead.owner == gid, Lead.source == source).fetch()
 
-                    elif status != None and status != '':
+                    elif status:
                         leads = Lead.query(Lead.owner == gid, Lead.status == status).fetch()
 
                     else:
@@ -4817,35 +4776,27 @@ class CrmEngineApi(remote.Service):
                         reporting.append(item_schema)
                     return ReportingListResponse(items=reporting)
 
-
-
-
-                    # opportunities reporting api
-
+    # opportunities reporting api
     @endpoints.method(ReportingRequest, ReportingListResponse,
                       path='reporting/opportunities', http_method='POST',
                       name='reporting.opportunities')
     def opportunities_reporting(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        list_of_reports = []
         gid = request.user_google_id
         gname = request.google_display_name
         stage = request.stage
         created_at = ''
         organization = request.organization_id
-        item_schema = ReportingResponseSchema()
         group_by = request.group_by
         if organization:
             organization_key = ndb.Key(Organization, int(organization))
 
         # if the user input google_user_id
         reporting = []
-        if gid != None and gid != '':
+        if gid:
             list_of_reports = []
             users = User.query(User.google_user_id == gid).fetch(1)
             if users:
                 gname = users[0].google_display_name
-                gmail = users[0].email
                 created_at = users[0].created_at
 
             opportunities = []
@@ -4869,8 +4820,7 @@ class CrmEngineApi(remote.Service):
                                 amount += opportunitie.amount_total
                         list_of_reports.append((gname, stage.name, len(opportunities), str(organization), amount))
 
-
-            elif stage != None and stage != '':
+            elif stage:
                 stages = Opportunitystage.query(Opportunitystage.organization == users[0].organization,
                                                 Opportunitystage.name == stage).fetch()
                 if stages:
@@ -4884,8 +4834,6 @@ class CrmEngineApi(remote.Service):
                             opportunities.append(opportunitie)
 
                         amount += opportunitie.amount_total
-
-
                 else:
                     amount = 0
                     opportunities = Opportunity.query(Opportunity.owner == gid).fetch()
@@ -4915,10 +4863,8 @@ class CrmEngineApi(remote.Service):
                         reporting.append(item_schema)
                     return ReportingListResponse(items=reporting)
 
-
-
         # if the user input name of user
-        elif gname != None and gname != '':
+        elif gname:
             list_of_reports = []
             users = User.query(User.google_display_name == gname).fetch()
             if organization:
@@ -4930,7 +4876,6 @@ class CrmEngineApi(remote.Service):
                 opportunities = Opportunity.query(Opportunity.owner == gid).fetch()
                 gname = user.google_display_name
                 gmail = user.email
-                organization_id = user.organization
                 if stage:
                     stages = Opportunitystage.query(Opportunitystage.organization == user.organization,
                                                     Opportunitystage.name == stage).fetch()
@@ -5067,9 +5012,9 @@ class CrmEngineApi(remote.Service):
             "fileName": user_from_email.email + "_" + str(user_from_email.id),
             "email": user_from_email.email
         }
-        r = requests.post("http://104.154.83.131:8080/api/export_contact",
-                          data=json.dumps(params, sort_keys=True, indent=4, separators=(',', ': ')),
-                          headers={'content-type': 'application/json'})
+        requests.post("http://104.154.83.131:8080/api/export_contact",
+                      data=json.dumps(params, sort_keys=True, indent=4, separators=(',', ': ')),
+                      headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
 
     # contacts export by key
@@ -5086,8 +5031,8 @@ class CrmEngineApi(remote.Service):
             "email": user_from_email.email
         }
         print params
-        r = requests.post("http://104.154.83.131:8080/api/export_contact_by_key", data=json.dumps(params),
-                          headers={'content-type': 'application/json'})
+        requests.post("http://104.154.83.131:8080/api/export_contact_by_key", data=json.dumps(params),
+                      headers={'content-type': 'application/json'})
         return message_types.VoidMessage()
 
     # lead contact api
@@ -5096,29 +5041,26 @@ class CrmEngineApi(remote.Service):
                       name='reporting.contacts')
     def contact_reporting(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        list_of_reports = []
         gid = request.user_google_id
         gname = request.google_display_name
-        created_at = ''
         item_schema = ReportingResponseSchema()
         # if the user input google_user_id
-        if gid != None and gid != '':
+        if gid:
             list_of_reports = []
             contacts = Contact.query(Lead.owner == gid).fetch()
             users = User.query(User.google_user_id == gid).fetch()
-            if users != []:
+            if users:
                 gname = users[0].google_display_name
                 created_at = users[0].created_at
                 list_of_reports.append((gid, gname, len(contacts), created_at))
                 item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],
                                                       google_display_name=list_of_reports[0][1],
                                                       count=list_of_reports[0][2])
-            reporting = []
-            reporting.append(item_schema)
+            reporting = [item_schema]
             return ReportingListResponse(items=reporting)
 
         # if the user input name of user
-        elif gname != None and gname != '':
+        elif gname:
             list_of_reports = []
             users = User.query(User.google_display_name == gname).fetch()
             for user in users:
@@ -5168,11 +5110,11 @@ class CrmEngineApi(remote.Service):
         created_at = ''
         item_schema = ReportingResponseSchema()
         # if the user input google_user_id
-        if gid != None and gid != '':
+        if gid:
             list_of_reports = []
             accounts = Account.query(Account.owner == gid).fetch()
             users = User.query(User.google_user_id == gid).fetch()
-            if users != []:
+            if users:
                 gname = users[0].google_display_name
                 created_at = users[0].created_at
                 list_of_reports.append((gid, gname, len(accounts), created_at))
@@ -5180,12 +5122,11 @@ class CrmEngineApi(remote.Service):
                                                       google_display_name=list_of_reports[0][1],
                                                       count=list_of_reports[0][2])
 
-            reporting = []
-            reporting.append(item_schema)
+            reporting = [item_schema]
             return ReportingListResponse(items=reporting)
 
         # if the user input name of user
-        elif gname != None and gname != '':
+        elif gname:
             list_of_reports = []
             users = User.query(User.google_display_name == gname).fetch()
             for user in users:
@@ -5269,23 +5210,22 @@ class CrmEngineApi(remote.Service):
         created_at = ''
         item_schema = ReportingResponseSchema()
         # if the user input google_user_id
-        if gid != None and gid != '':
+        if gid:
             list_of_reports = []
             tasks = Task.query(Task.owner == gid).fetch()
             users = User.query(User.google_user_id == gid).fetch()
-            if users != []:
+            if users:
                 gname = users[0].google_display_name
                 created_at = users[0].created_at
                 list_of_reports.append((gid, gname, len(tasks), created_at))
                 item_schema = ReportingResponseSchema(user_google_id=list_of_reports[0][0],
                                                       google_display_name=list_of_reports[0][1],
                                                       count=list_of_reports[0][2])
-            reporting = []
-            reporting.append(item_schema)
+            reporting = [item_schema]
             return ReportingListResponse(items=reporting)
 
         # if the user input name of user
-        elif gname != None and gname != '':
+        elif gname:
             list_of_reports = []
             users = User.query(User.google_display_name == gname).fetch()
             for user in users:
@@ -5334,8 +5274,9 @@ class CrmEngineApi(remote.Service):
         nbr_users = len(query_user_date2)
         nb_days = request.nb_days
         if nb_days:
-            query_user_date1 = User.query(User.created_at <= datetime.datetime.now() - timedelta(days=nb_days)).fetch()
-        query_user_date1 = User.query(User.created_at <= datetime.datetime.now() - timedelta(days=7)).fetch()
+            query_user_date1 = User.query(
+                User.created_at <= datetime.datetime.now() - datetime.timedelta(days=nb_days)).fetch()
+        query_user_date1 = User.query(User.created_at <= datetime.datetime.now() - datetime.timedelta(days=7)).fetch()
         nb_user_date2 = len(query_user_date2)
         nb_user_date1 = len(query_user_date1)
         Growthnb = nb_user_date2 - nb_user_date1
@@ -5356,17 +5297,16 @@ class CrmEngineApi(remote.Service):
         gid = request.user_google_id
         gname = request.google_display_name
         orgName = request.organizationName
-        created_at = ''
         item_schema = ReportingResponseSchema()
         # if the user input google_user_id
-        if gid != None and gid != '':
+        if gid:
             list_of_reports = []
             tasks = Task.query(Task.owner == gid).fetch()
             accounts = Account.query(Account.owner == gid).fetch()
             leads = Lead.query(Lead.owner == gid).fetch()
             contacts = Contact.query(Contact.owner == gid).fetch()
             users = User.query(User.google_user_id == gid).fetch()
-            if users != []:
+            if users:
                 gname = users[0].google_display_name
                 gmail = users[0].email
                 created_at = users[0].created_at
@@ -5378,12 +5318,11 @@ class CrmEngineApi(remote.Service):
                                                       count_contacts=list_of_reports[0][4],
                                                       count_leads=list_of_reports[0][5],
                                                       count_tasks=list_of_reports[0][6])
-            reporting = []
-            reporting.append(item_schema)
+            reporting = [item_schema]
             return ReportingListResponse(items=reporting)
 
         # if the user input name of user
-        elif gname != None and gname != '':
+        elif gname:
             list_of_reports = []
             users = User.query(User.google_display_name == gname).fetch()
             for user in users:
@@ -5407,7 +5346,7 @@ class CrmEngineApi(remote.Service):
             return ReportingListResponse(items=reporting)
 
             # show all users and their activity of an organization with the inpute of the name of the organization
-        elif orgName != None and orgName != '':
+        elif orgName:
             list_of_reports = []
             organzation = Organization.query(Organization.name == orgName).fetch()
             if organzation:
@@ -5421,9 +5360,7 @@ class CrmEngineApi(remote.Service):
                     leads = Lead.query(Lead.owner == gid).fetch()
                     contacts = Contact.query(Contact.owner == gid).fetch()
                     gname = user.google_display_name
-                    created_at = user.created_at
                     updated_at = user.updated_at
-                    organization = user.organization
                     opportunities = Opportunity.query(Opportunity.owner == gid).fetch()
                     gmail = user.email
                     created_at = user.created_at
@@ -5439,10 +5376,9 @@ class CrmEngineApi(remote.Service):
                                                       updated_at=str(item[10]))
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
-
 
             # show all users and their activity of an organization with the inpute of the name of the organization
-        elif orgName != None and orgName != '':
+        elif orgName:
             list_of_reports = []
             organzation = Organization.query(Organization.name == orgName).fetch()
             if organzation:
@@ -5474,8 +5410,6 @@ class CrmEngineApi(remote.Service):
                                                       updated_at=str(item[10]))
                 reporting.append(item_schema)
             return ReportingListResponse(items=reporting)
-
-
             # if the user input google_user_id
         else:
             sorted_by = request.sorted_by
@@ -5623,15 +5557,13 @@ class CrmEngineApi(remote.Service):
     def twitter_get_recent_tweets(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
 
-        print "tagggggglist22"
-        print request, "reqqqqqqqqqqq"
         if len(request.value) == 0:
             tagss = Tag.list_by_kind(user_from_email, "topics")
             val = []
             for tag in tagss.items:
                 val.append(tag.name)
             request.value = val
-            print request, "iffffffff"
+
         list_of_tweets = EndpointsHelper.get_tweets(request.value, "recent")
         return tweetsResponse(items=list_of_tweets)
 
@@ -5738,7 +5670,6 @@ class CrmEngineApi(remote.Service):
                       name='twitter.get_best_tweets')
     def get_best_tweets(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        loca = []
         if len(request.value) == 0:
             tags = Tag.list_by_kind(user_from_email, "topics")
             request.value = [tag.name for tag in tags.items]
@@ -5747,7 +5678,7 @@ class CrmEngineApi(remote.Service):
             results = Discovery.get_best_tweets(request.value)
         else:
             results = "null"
-        print results, "iooo"
+
         return iomessages.DiscoverResponseSchema(results=results, more=False)
 
     @endpoints.method(iomessages.DiscoverRequestSchema, iomessages.DiscoverResponseSchema,
@@ -5755,7 +5686,6 @@ class CrmEngineApi(remote.Service):
                       name='twitter.get_map')
     def get_map(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        loca = []
         if len(request.keywords) == 0:
             tags = Tag.list_by_kind(user_from_email, "topics")
             request.keywords = [tag.name for tag in tags.items]
@@ -5766,29 +5696,6 @@ class CrmEngineApi(remote.Service):
             results = json.dumps(r.json()["results"])
         else:
             results = "null"
-            # print results,'rtrrrrr'
-            # print request.items.location,"rrrrrrrrrrrrrr"
-            # liste=Counter(request.items[0].location).items()
-
-            # location= TwitterMapsSchema()
-            # geolocator = GoogleV3()
-            # for result in results:
-            #     #try:
-            #     location= TwitterMapsSchema()
-            #     print "vvv",result["key"].encode('utf-8'),"valll"
-            #     result["key"] = result["key"].replace('_', ' ')
-            #     print "vvv2",str(result["key"]).encode('utf-8'),"valll2"
-            #     latlong=geolocator.geocode(str(result["key"]).encode('utf-8'))
-
-            #     #latlong=geolocator.geocode(str(val[0]).encode('utf-8'))
-            #     location.latitude=str(latlong[1][0]).encode('utf-8')
-            #     location.longitude=str(latlong[1][1]).encode('utf-8')
-            #     location.location=str(result["key"]).encode('utf-8')
-            #     location.number=str(result["doc_count"]).encode('utf-8')
-            #     loca.append(location)
-            # except:
-            #     print "error codec"
-        # return TwitterMapsResponse(items=loca)
         return iomessages.DiscoverResponseSchema(results=results, more=False)
 
     # get_tweets_details
@@ -5797,7 +5704,6 @@ class CrmEngineApi(remote.Service):
                       name='twitter.get_tweets_details')
     def get_tweets_details(self, request):
         idp = request.tweet_id
-        print idp, "idp"
         payload = {'tweet_id': idp}
 
         r = requests.get(config_urls.nodeio_server + "/twitter/posts/tweet_details", params=payload)
@@ -5816,7 +5722,6 @@ class CrmEngineApi(remote.Service):
                       path='twitter/get_tweets_map', http_method='POST',
                       name='twitter.get_tweets_map')
     def get_tweets_map(self, request):
-        print request.language
         user_from_email = EndpointsHelper.require_iogrow_user()
         if len(request.keywords) == 0:
             tags = Tag.list_by_kind(user_from_email, "topics")
@@ -5881,7 +5786,6 @@ class CrmEngineApi(remote.Service):
             tagss = Tag.list_by_kind(user_from_email, "topics")
             val = []
             for tag in tagss.items:
-                print tag.name, "equalll", request.value
                 if tag.name == request.value[0]:
                     val.append(tag)
                     # val=request.value
@@ -5906,8 +5810,6 @@ class CrmEngineApi(remote.Service):
             nextPageToken=results['next_curs'],
             is_crawling=results['is_crawling']
         )
-
-        return tweetsResponse(items=list)
 
     @endpoints.method(KewordsRequest, ReportSchema,
                       path='reports/get', http_method='POST',
@@ -5944,7 +5846,6 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         # something wrong here meziane
         if len(request.value) == 0:
-            print "yesss"
             tagss = Tag.list_by_kind(user_from_email, "topics")
             val = []
             for tag in tagss.items:
@@ -5953,11 +5854,9 @@ class CrmEngineApi(remote.Service):
             tagss = Tag.list_by_kind(user_from_email, "topics")
             val = []
             for tag in tagss.items:
-                print tag.name, "equalll", request.value
                 if tag.name == request.value[0]:
                     val.append(tag)
                     # val=request.value
-        print val, "valllll"
         Discovery.get_tweets(val, "popular")
 
         return message_types.VoidMessage()
@@ -5977,8 +5876,6 @@ class CrmEngineApi(remote.Service):
                       name='twitter.get_last_tweets')
     def get_last_tweets(self, request):
         result = Discovery.get_lasts_tweets(request.value)
-        print result, "rrrrrrr"
-
         return message_types.VoidMessage()
 
     # get_topics_of_person_tweets
@@ -5998,7 +5895,7 @@ class CrmEngineApi(remote.Service):
             qry = TopicScoring.query(TopicScoring.topic == ele.topic, TopicScoring.screen_name == request.value[0])
             results = qry.fetch()
             if len(results) != 0:
-                results[0].value = results[0].value + 40.0
+                results[0].value += 40.0
                 results[0].put()
                 topics_schema = Scoring_Topics_Schema()
                 topics_schema.topic = results[0].topic
@@ -6023,8 +5920,7 @@ class CrmEngineApi(remote.Service):
                 qry = TopicScoring.query(TopicScoring.topic == ele.topic, TopicScoring.screen_name == request.value[0])
                 results = qry.fetch()
                 if len(results) != 0:
-                    # print results,"rrrrrrrrrreeeee"
-                    results[0].value = results[0].value + 30.0
+                    results[0].value += 30.0
                     results[0].put()
                     topics_schema = Scoring_Topics_Schema()
                     topics_schema.topic = results[0].topic
@@ -6034,7 +5930,6 @@ class CrmEngineApi(remote.Service):
                         if ele.topic == results[0].topic:
                             ele.score = results[0].score
                             ele.value = results[0].value
-                    results = []
                 else:
                     ele.value = 10.0
                     ele.screen_name = request.value[0]
@@ -6054,9 +5949,8 @@ class CrmEngineApi(remote.Service):
             for ele in result:
                 qry = TopicScoring.query(TopicScoring.topic == ele.topic, TopicScoring.screen_name == request.value[0])
                 results = qry.fetch()
-                if len(results) != 0:
-                    print results, "they existtttttt"
-                    results[0].value = results[0].value + 30.0
+                if len(results):
+                    results[0].value += 30.0
                     results[0].put()
                     topics_schema = Scoring_Topics_Schema()
                     topics_schema.topic = results[0].topic
@@ -6067,19 +5961,9 @@ class CrmEngineApi(remote.Service):
                             ele.score = results[0].score
                             ele.value = results[0].value
                     results = []
-                """else:
-                    ele.value=10.0
-                    ele.screen_name=request.value[0]
-                    topics_schema=Scoring_Topics_Schema()
-                    topics_schema.topic=ele.topic
-                    topics_schema.score=ele.score
-                    topics_schema.value=ele.value
-                    ele.put()
-                    list_of_topics.append(topics_schema)"""
 
             score_total = score_total + topics["score_total"]
         list_of_topics.sort(key=lambda x: x.value, reverse=True)
-        print "lengthhhhhhhhhhhhhhhhh", len(list_of_topics)
         return Topics_Schema(items=list_of_topics, score_total=score_total)
 
     # init the reports for all users
@@ -6114,13 +5998,10 @@ class CrmEngineApi(remote.Service):
         language = request.language
         if request.language == 'all':
             language = ""
-        print language
         user_from_email = EndpointsHelper.require_iogrow_user()
-        print user_from_email.language + "lan"
         if len(request.keywords) == 0:
             tags = Tag.list_by_kind(user_from_email, "topics")
             request.keywords = [tag.name for tag in tags.items]
-        print language, "lazzz"
         if len(request.keywords) != 0:
             results, more = Discovery.list_tweets_from_nodeio(request, language)
 
@@ -6147,7 +6028,6 @@ class CrmEngineApi(remote.Service):
     def delete_users(self, request):
         # not complete yet 
         user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = user_from_email.organization.get()
         if user_from_email.is_admin:
             for x in xrange(0, len(request.entityKeys)):
                 userToDelete = ndb.Key(urlsafe=request.entityKeys[x]).get()
@@ -6251,12 +6131,10 @@ class CrmEngineApi(remote.Service):
                 # organization.billing_contact_phone_number=request.billing_contact_phone_number
                 # organization.put()
                 total_amount = amount_ch / 100
-                list_emails = []
-                list_emails.append(user_from_email.email)
-                list_emails.append(request.billing_contact_email)
+                list_emails = [user_from_email.email, request.billing_contact_email]
                 body = '<h2>Congratulations !</h2><p style="font-size: 15px;">The payment is approved by your bank.You have now ' + request.nb_licenses + ' licences activated.&nbsp;</p><ul style="list-style: none; padding-left: 15px;"><li style="/* padding-top: 10px; */ padding-bottom: 10px;"> <strong>Company name :</strong> ' + organization.name + ' </li><li style=" padding-bottom: 10px;"> <strong>number of licenses :</strong> ' + request.nb_licenses + ' </li><li style=" padding-bottom: 10px;"> <strong>Total amount :</strong> ' + str(
                     total_amount) + ' $</li><li style="padding-bottom: 10px;"> <strong>Transaction reference : ' + transaction_balance + ' </strong> </li></ul>'
-                if (request.billing_contact_email == None) or (user_from_email.email == request.billing_contact_email):
+                if (request.billing_contact_email is None) or (user_from_email.email == request.billing_contact_email):
 
                     taskqueue.add(
                         url='/workers/send_email_notification',
@@ -6281,10 +6159,10 @@ class CrmEngineApi(remote.Service):
                             }
                         )
 
-        except stripe.CardError, e:
+        except stripe.CardError:
             transaction_message = "charge failed!"
             transaction_failed = True
-            print "error"
+            print "ERROR"
 
         return purchaseResponse(transaction_balance=transaction_balance, transaction_message=transaction_message
                                 , transaction_failed=transaction_failed, nb_licenses=int(request.nb_licenses),
@@ -6397,4 +6275,3 @@ class CrmEngineApi(remote.Service):
                     raise endpoints.NotFoundException("")
                 return message_types.VoidMessage()
         raise endpoints.NotFoundException("")
-

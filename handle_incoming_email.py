@@ -24,7 +24,6 @@ class GetEmailsHandler(InboundMailHandler):
         user = User.get_by_gid(user_id)
         if user:
             sender_email=re.findall(r'[\w\.-]+@[\w\.-]+', mail_message.sender)
-            print sender_email
             if user.email==sender_email[0]:
                 print 'authorized'
                 html_bodies = mail_message.bodies('text/html')

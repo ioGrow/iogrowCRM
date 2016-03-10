@@ -352,7 +352,7 @@ class Task(EndpointsModel):
                             is_filtered = False
 
                     if is_filtered:
-                        count = count + 1
+                        count += 1
                         # list of tags related to this task
                         tag_list = Tag.list_by_parent(parent_key=task.key)
                         about = None
@@ -384,7 +384,7 @@ class Task(EndpointsModel):
                         if task.due:
                             now = datetime.datetime.now()
                             diff = task.due - now
-                            if diff.days >= 0 and diff.days <= 2:
+                            if 0 <= diff.days <= 2:
                                 status_color = 'orange'
                                 status_label = 'soon: due in ' + str(diff.days) + ' days'
                             elif diff.days < 0:
@@ -420,7 +420,7 @@ class Task(EndpointsModel):
                         if task.due:
                             task_schema.due = date_to_string(task.due)
                         items.append(task_schema)
-            if (len(items) >= limit):
+            if len(items) >= limit:
                 you_can_loop = False
             if next_curs:
                 if count >= limit:
@@ -452,7 +452,7 @@ class Task(EndpointsModel):
                 if task.due:
                     now = datetime.datetime.now()
                     diff = task.due - now
-                    if diff.days >= 0 and diff.days <= 2:
+                    if 0 <= diff.days <= 2:
                         status_color = 'orange'
                         status_label = 'soon: due in ' + str(diff.days) + ' days'
                     elif diff.days < 0:
@@ -551,8 +551,7 @@ class Task(EndpointsModel):
                 indexed_edge=str(parent_key.id())
             )
         else:
-            data = {}
-            data['id'] = task_key_async.id()
+            data = {'id': task_key_async.id()}
             task.put_index(data)
         if request.assignees:
             # insert edges

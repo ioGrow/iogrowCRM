@@ -5,7 +5,7 @@ from google.appengine.api import search
 import model
 
 class Phone (EndpointsModel):
-    _message_fields_schema =('id')
+    _message_fields_schema = 'id'
     owner = ndb.StringProperty()
     organization = ndb.KeyProperty()
     number = ndb.StringProperty()
@@ -20,7 +20,6 @@ class Phone (EndpointsModel):
     def put_index():
     	""" index the element at each"""
         empty_string = lambda x: x if x else ""
-        organization = str(self.organization.id())
         my_document = search.Document(
         	doc_id=str(self.key.id()),
         	fields=[

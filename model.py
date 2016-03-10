@@ -190,16 +190,7 @@ class SFpartner(ndb.Model):
 
     @classmethod
     def list_by_partner(cls, partner_key):
-        response = {
-            'pending': [],
-            'active': [],
-            'paying': []
-        }
-        # invitees = SFinvitation.query(SFinvitation.)
-
-
-
-
+        pass
 
 class SFLead(ndb.Model):
     firstname = ndb.StringProperty()
@@ -325,7 +316,7 @@ class CustomField(ndb.Model):
                             c.put()
                 else:
                     if c.key != custom_field.key:
-                        if c.order <= new_order and c.order > custom_field.order:
+                        if new_order >= c.order > custom_field.order:
                             c.order -= 1
                             c.put()
             custom_field.order = new_order
@@ -738,7 +729,7 @@ class Organization(ndb.Model):
         if users:
             for user in users:
                 if user.license_status == 'active':
-                    nb_used_licenses = nb_used_licenses + 1
+                    nb_used_licenses += 1
             nb_users = len(users)
         license_schema = None
         if organization.plan is None:
@@ -1096,7 +1087,6 @@ class User(EndpointsModel):
             self.active_app = app_key
             self.app_changed = True
             active_app = app_key.get()
-            active_tabs = active_app.tabs
             mem_key = '%s_tabs' % self.google_user_id
             if memcache.get(mem_key):
                 memcache.set(mem_key, ndb.get_multi(active_app.tabs))
@@ -1322,7 +1312,6 @@ class User(EndpointsModel):
             user.google_public_profile_photo_url = profile_image['url']
         user.google_credentials = credentials
         user_key = user.put_async()
-        user_key_async = user_key.get_result()
         if memcache.get(user.email):
             memcache.set(user.email, user)
         else:
@@ -1339,7 +1328,6 @@ class User(EndpointsModel):
 
     @classmethod
     def sign_in(cls, request):
-        isNewUser = True
         user = endpoints.get_current_user()
         if user:
             email = user.email().lower()
@@ -1347,7 +1335,6 @@ class User(EndpointsModel):
             if user_from_email:
                 isNewUser = False
                 return iomessages.UserSignInResponse(is_new_user=isNewUser)
-        credentials = None
         code = request.code
         try:
             credentials = User.exchange_code(code)
@@ -1428,7 +1415,6 @@ class User(EndpointsModel):
         print user_from_email
         if user_from_email:
             organization = user_from_email.organization.get()
-            msg = ""
             users = cls.query(cls.organization == user_from_email.organization).fetch()
             if len(users) > 1:
                 msg = "you are not illegible to delete this organization"
@@ -1483,7 +1469,6 @@ class User(EndpointsModel):
             print organization
             print "********************************"
             print cls.organization
-            msg = ""
             users = cls.query(cls.organization == user_from_email.organization).fetch()
             if len(users) > 1:
                 msg = "you are not illegible to delete this organization"
@@ -1730,7 +1715,6 @@ class Companyprofile(EndpointsModel):
 
     def put_index(self):
         empty_string = lambda x: x if x else ""
-        empty_date = lambda x: x if x else date(2999, 12, 31)
         title_autocomplete = ','.join(tokenize_autocomplete(self.name))
         show_document_for_live = search.Document(
             doc_id=str(self.organizationid),

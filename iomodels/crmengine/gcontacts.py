@@ -18,7 +18,7 @@ from endpoints_helper import EndpointsHelper
 from iomodels.crmengine.tags import Tag,TagSchema
 from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
 from iomodels.crmengine.events import Event,EventListResponse
-from iograph import Node,Edge,InfoNodeListResponse
+from iograph import Node, Edge,InfoNodeListResponse
 from iomodels.crmengine.notes import Note,TopicListResponse
 from iomodels.crmengine.opportunities import Opportunity,OpportunityListResponse
 from iomodels.crmengine.cases import Case,CaseListResponse

@@ -91,7 +91,6 @@ class AccountSchema(messages.Message):
     linkedin_profile = messages.MessageField(iomessages.LinkedinCompanySchema, 32)
 
 
-
 class AccountPatchRequest(messages.Message):
     id = messages.StringField(1)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 2, repeated=True)
@@ -181,7 +180,7 @@ class AccountInsertRequest(messages.Message):
     lastname = messages.StringField(17)
     personal_account = messages.BooleanField(18)
     cover_image = messages.StringField(19)
-    linkedin_profile=messages.MessageField(iomessages.LinkedinCompanySchema, 20)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinCompanySchema, 20)
 
 
 ATTRIBUTES_MATCHING = {
@@ -238,7 +237,8 @@ class Account(EndpointsModel):
     firstname = ndb.StringProperty()
     lastname = ndb.StringProperty()
     personal_account = ndb.BooleanProperty()
-    linkedin_profile=ndb.KeyProperty()
+    linkedin_profile = ndb.KeyProperty()
+
     def put(self, **kwargs):
         ndb.Model.put(self, **kwargs)
         try:
@@ -325,7 +325,6 @@ class Account(EndpointsModel):
         account = Account.get_by_id(int(request.id))
         if account is None:
             raise endpoints.NotFoundException('Account not found.')
-        account_schema = None
         if Node.check_permission(user_from_email, account):
             # list of tags related to this account
             tag_list = Tag.list_by_parent(account.key)
@@ -398,16 +397,16 @@ class Account(EndpointsModel):
                     google_public_profile_url=owner.google_public_profile_url,
                     google_user_id=owner.google_user_id
                 )
-            linkedin_profile_schema={}
-            if account.linkedin_profile :
+            linkedin_profile_schema = {}
+            if account.linkedin_profile:
                 linkedin_profile = account.linkedin_profile.get()
-                linkedin_profile_schema=iomessages.LinkedinCompanySchema(
-                    name = linkedin_profile.name,
-                    website = linkedin_profile.website,
-                    industry = linkedin_profile.industry,
-                    headquarters = linkedin_profile.headquarters,
-                    summary= linkedin_profile.summary,
-                    founded = linkedin_profile.founded,
+                linkedin_profile_schema = iomessages.LinkedinCompanySchema(
+                    name=linkedin_profile.name,
+                    website=linkedin_profile.website,
+                    industry=linkedin_profile.industry,
+                    headquarters=linkedin_profile.headquarters,
+                    summary=linkedin_profile.summary,
+                    founded=linkedin_profile.founded,
                     followers=linkedin_profile.followers,
                     logo=linkedin_profile.logo,
                     specialties=linkedin_profile.specialties,
@@ -488,33 +487,33 @@ class Account(EndpointsModel):
         info_nodes = Node.list_info_nodes(account_key_async, None)
         info_nodes_structured = Node.to_structured_data(info_nodes)
         emails = None
-        if request.linkedin_profile :
-            if account.linkedin_profile :
+        if request.linkedin_profile:
+            if account.linkedin_profile:
                 linkedin_profile = account.linkedin_profile.get()
                 linkedin_profile.name = request.linkedin_profile.name,
                 linkedin_profile.website = request.linkedin_profile.website,
                 linkedin_profile.industry = request.linkedin_profile.industry,
                 linkedin_profile.headquarters = request.linkedin_profile.headquarters,
-                linkedin_profile.summary= request.linkedin_profile.summary,
+                linkedin_profile.summary = request.linkedin_profile.summary,
                 linkedin_profile.founded = request.linkedin_profile.founded,
-                linkedin_profile.followers=request.linkedin_profile.followers,
-                linkedin_profile.logo=request.linkedin_profile.logo,
-                linkedin_profile.specialties=request.linkedin_profile.specialties,
-                linkedin_profile.top_image=request.linkedin_profile.top_image,
-                linkedin_profile.type=request.linkedin_profile.type,
-                linkedin_profile.company_size=request.linkedin_profile.company_size,
-                linkedin_profile.url=request.linkedin_profile.url,
-                linkedin_profile.workers=request.linkedin_profile.workers,
-                linkedin_profile.address=request.linkedin_profile.address,
+                linkedin_profile.followers = request.linkedin_profile.followers,
+                linkedin_profile.logo = request.linkedin_profile.logo,
+                linkedin_profile.specialties = request.linkedin_profile.specialties,
+                linkedin_profile.top_image = request.linkedin_profile.top_image,
+                linkedin_profile.type = request.linkedin_profile.type,
+                linkedin_profile.company_size = request.linkedin_profile.company_size,
+                linkedin_profile.url = request.linkedin_profile.url,
+                linkedin_profile.workers = request.linkedin_profile.workers,
+                linkedin_profile.address = request.linkedin_profile.address,
                 linkedin_profile.put()
             else:
                 linkedin_profile = model.LinkedinCompany(
-                    name = request.linkedin_profile.name,
-                    website = request.linkedin_profile.website,
-                    industry = request.linkedin_profile.industry,
-                    headquarters = request.linkedin_profile.headquarters,
-                    summary= request.linkedin_profile.summary,
-                    founded = request.linkedin_profile.founded,
+                    name=request.linkedin_profile.name,
+                    website=request.linkedin_profile.website,
+                    industry=request.linkedin_profile.industry,
+                    headquarters=request.linkedin_profile.headquarters,
+                    summary=request.linkedin_profile.summary,
+                    founded=request.linkedin_profile.founded,
                     followers=request.linkedin_profile.followers,
                     logo=request.linkedin_profile.logo,
                     specialties=request.linkedin_profile.specialties,
@@ -525,8 +524,8 @@ class Account(EndpointsModel):
                     workers=request.linkedin_profile.workers,
                     address=request.linkedin_profile.address,
                 )
-                linkedin_profile_key= linkedin_profile.put()
-                account.linkedin_profile=linkedin_profile_key
+                linkedin_profile_key = linkedin_profile.put()
+                account.linkedin_profile = linkedin_profile_key
         if 'emails' in info_nodes_structured.keys():
             emails = info_nodes_structured['emails']
         for email in request.emails:
@@ -696,7 +695,6 @@ class Account(EndpointsModel):
     @classmethod
     @payment_required()
     def insert(cls, user_from_email, request):
-        account = None
         account_key = None
         if not request.personal_account:
             account_key = cls.get_key_by_name(
@@ -707,14 +705,14 @@ class Account(EndpointsModel):
             account_key_async = account_key
         else:
             linkedin_profile_key = None
-            if request.linkedin_profile :
+            if request.linkedin_profile:
                 linkedin_profile = model.LinkedinCompany(
-                    name = request.linkedin_profile.name,
-                    website = request.linkedin_profile.website,
-                    industry = request.linkedin_profile.industry,
-                    headquarters = request.linkedin_profile.headquarters,
-                    summary= request.linkedin_profile.summary,
-                    founded = request.linkedin_profile.founded,
+                    name=request.linkedin_profile.name,
+                    website=request.linkedin_profile.website,
+                    industry=request.linkedin_profile.industry,
+                    headquarters=request.linkedin_profile.headquarters,
+                    summary=request.linkedin_profile.summary,
+                    founded=request.linkedin_profile.founded,
                     followers=request.linkedin_profile.followers,
                     logo=request.linkedin_profile.logo,
                     specialties=request.linkedin_profile.specialties,
@@ -725,7 +723,7 @@ class Account(EndpointsModel):
                     workers=request.linkedin_profile.workers,
                     address=request.linkedin_profile.address,
                 )
-                linkedin_profile_key= linkedin_profile.put()
+                linkedin_profile_key = linkedin_profile.put()
             account = cls(
                 name=request.name,
                 account_type=request.account_type,
@@ -1025,7 +1023,7 @@ class Account(EndpointsModel):
                     if request.owner and account.owner != request.owner and is_filtered:
                         is_filtered = False
                     if is_filtered and Node.check_permission(user_from_email, account):
-                        count = count + 1
+                        count += 1
                         # list of tags related to this account
                         tag_list = Tag.list_by_parent(parent_key=account.key)
                         infonodes = Node.list_info_nodes(
@@ -1074,7 +1072,7 @@ class Account(EndpointsModel):
                             personal_account=account.personal_account
                         )
                         items.append(account_schema)
-            if (len(items) >= limit):
+            if len(items) >= limit:
                 you_can_loop = False
             if next_curs:
                 if count >= limit:
@@ -1183,7 +1181,6 @@ class Account(EndpointsModel):
         file_name = user_from_email.email + '_' + str(ts) + '.csv'
         EndpointsHelper.create_gs_file(file_name, csv_file)
         bucket_name = app_identity.get_default_gcs_bucket_name()
-        objects = [file_name]
         file_path = '/' + bucket_name + '/' + file_name
         csvreader = csv.reader(csv_file.splitlines())
         headings = csvreader.next()
@@ -1202,10 +1199,9 @@ class Account(EndpointsModel):
                     if match:
                         matched_columns[i] = key
                         matched = True
-            if matched == False:
+            if not matched:
                 customfields_columns[i] = column.decode('cp1252')
-            i = i + 1
-        imported_accounts = {}
+            i += 1
         items = []
         row = csvreader.next()
         for k in range(0, i):
@@ -1220,7 +1216,7 @@ class Account(EndpointsModel):
                 example_record=row[k].decode('cp1252')
             )
             items.append(mapping_column)
-        number_of_records = sum(1 for r in csvreader) + 1
+        number_of_records = sum(1 for _ in csvreader) + 1 # TODO: try to avoid this
         # create a job that contains the following informations
         import_job = model.ImportJob(
             file_path=file_path,
@@ -1255,7 +1251,8 @@ class Account(EndpointsModel):
             'matched_columns': matched_columns,
             'customfields_columns': customfields_columns
         }
-        r = requests.post("http://104.154.83.131:8080/api/import_accounts", data=json.dumps(params))
+        requests.post("http://104.154.83.131:8080/api/import_accounts", data=json.dumps(params))
+
     @classmethod
     def import_from_csv(cls, user_from_email, request):
         # read the csv file from Google Drive
@@ -1278,11 +1275,10 @@ class Account(EndpointsModel):
                     match = regex.search(column)
                     if match:
                         matched_columns[i] = key
-            i = i + 1
+            i += 1
         # if is there some columns that match our mapping rules
         if len(matched_columns) > 0:
             # parse each row in the csv
-            i = 0
             for row in csvreader:
                 try:
                     account = {}
@@ -1379,5 +1375,5 @@ class Account(EndpointsModel):
                                             kind='infos',
                                             indexed_edge=smart_str(indexed_edge)
                                         )
-                except Exception, e:
+                except Exception:
                     print 'an error has occurred'

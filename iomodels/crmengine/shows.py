@@ -63,7 +63,6 @@ class Show(EndpointsModel):
     def put_index(self):
         """ index the element at each"""
         empty_string = lambda x: x if x else ""
-        empty_date = lambda x: x if x else date(2999, 12, 31)
         collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
         

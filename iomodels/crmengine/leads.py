@@ -165,8 +165,7 @@ class LeadSchema(messages.Message):
     linkedin_url = messages.StringField(28)
     sociallinks = messages.MessageField(iomessages.SocialLinkListSchema, 29)
     cover_image = messages.StringField(30)
-    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,31)
-
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema, 31)
 
 
 class LeadInsertRequest(messages.Message):
@@ -191,7 +190,7 @@ class LeadInsertRequest(messages.Message):
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 19, repeated=True)
     force = messages.BooleanField(20, default=False)
     cover_image = messages.StringField(21)
-    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,22)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema, 22)
 
     # The message class that defines the ListRequest schema
 
@@ -204,7 +203,6 @@ class LeadMergeRequest(messages.Message):
 
 
 class FLNameFilterRequest(messages.Message):
-    # TODO: slkdjcfldkjslkjds
     firstname = messages.StringField(1)
     lastname = messages.StringField(2)
     # Add other fields here
@@ -245,13 +243,12 @@ class LeadPatchRequest(messages.Message):
     owner = messages.StringField(14)
     linkedin_url = messages.StringField(16)
     cover_image = messages.StringField(17)
-    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema ,18)
+    linkedin_profile = messages.MessageField(iomessages.LinkedinProfileSchema, 18)
     phones = messages.MessageField(iomessages.PhoneSchema, 15, repeated=True)
     emails = messages.MessageField(iomessages.EmailSchema, 19, repeated=True)
     addresses = messages.MessageField(iomessages.AddressSchema, 20, repeated=True)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 21, repeated=True)
     infonodes = messages.MessageField(iomessages.InfoNodeRequestSchema, 22, repeated=True)
-
 
 
 class LeadListRequest(messages.Message):
@@ -345,7 +342,6 @@ class Lead(EndpointsModel):
     profile_img_url = ndb.StringProperty()
     linkedin_url = ndb.StringProperty()
     cover_image = ndb.StringProperty()
-
 
     def put(self, **kwargs):
         if hasattr(self, 'updated_at'):
@@ -502,25 +498,25 @@ class Lead(EndpointsModel):
                 google_public_profile_url=owner.google_public_profile_url,
                 google_user_id=owner.google_user_id
             )
-        linkedin_profile_schema={}
-        if lead.linkedin_profile :
+        linkedin_profile_schema = {}
+        if lead.linkedin_profile:
             linkedin_profile = lead.linkedin_profile.get()
-            linkedin_profile_schema=iomessages.LinkedinProfileSchema(
-                lastname = linkedin_profile.lastname ,
-                firstname = linkedin_profile.firstname ,
-                industry =  linkedin_profile.industry ,
-                locality =  linkedin_profile.locality ,
-                title = linkedin_profile.headline ,
-                current_post =  linkedin_profile.current_post ,
-                past_post=linkedin_profile.past_post  ,
-                formations=linkedin_profile.formations ,
-                websites=linkedin_profile.websites ,
-                relation=linkedin_profile.relation ,
-                experiences=linkedin_profile.experiences ,
-                resume=linkedin_profile.resume ,
-                certifications=linkedin_profile.certifications ,
-                skills=linkedin_profile.skills ,
-                url=linkedin_profile.url ,
+            linkedin_profile_schema = iomessages.LinkedinProfileSchema(
+                lastname=linkedin_profile.lastname,
+                firstname=linkedin_profile.firstname,
+                industry=linkedin_profile.industry,
+                locality=linkedin_profile.locality,
+                title=linkedin_profile.headline,
+                current_post=linkedin_profile.current_post,
+                past_post=linkedin_profile.past_post,
+                formations=linkedin_profile.formations,
+                websites=linkedin_profile.websites,
+                relation=linkedin_profile.relation,
+                experiences=linkedin_profile.experiences,
+                resume=linkedin_profile.resume,
+                certifications=linkedin_profile.certifications,
+                skills=linkedin_profile.skills,
+                url=linkedin_profile.url,
                 languages=linkedin_profile.languages,
                 phones=linkedin_profile.phones,
                 emails=linkedin_profile.emails,
@@ -604,7 +600,7 @@ class Lead(EndpointsModel):
                     if request.source and lead.source != request.source and is_filtered:
                         is_filtered = False
                     if is_filtered and Node.check_permission(user_from_email, lead):
-                        count = count + 1
+                        count += 1
                         # list of tags related to this lead
                         tag_list = Tag.list_by_parent(parent_key=lead.key)
                         infonodes = Node.list_info_nodes(
@@ -657,7 +653,7 @@ class Lead(EndpointsModel):
                             updated_at=lead.updated_at.strftime("%Y-%m-%dT%H:%M:00.000")
                         )
                         items.append(lead_schema)
-            if (len(items) >= limit):
+            if len(items) >= limit:
                 you_can_loop = False
             if next_curs:
                 if count >= limit:
@@ -866,28 +862,28 @@ class Lead(EndpointsModel):
         first_name = smart_str(request.firstname).lower()
         last_name = smart_str(request.lastname).lower()
         linkedin_profile_key = None
-        if request.linkedin_profile :
+        if request.linkedin_profile:
             linkedin_profile = model.LinkedinProfile(
-                lastname = request.linkedin_profile.lastname ,
-                firstname = request.linkedin_profile.firstname ,
-                industry =  request.linkedin_profile.industry ,
-                locality =  request.linkedin_profile.locality ,
-                headline =  request.linkedin_profile.title ,
-                current_post =  request.linkedin_profile.current_post or [] ,
-                past_post=request.linkedin_profile.past_post or [] ,
-                formations=request.linkedin_profile.formations ,
-                websites=request.linkedin_profile.websites ,
-                relation=request.linkedin_profile.relation ,
-                experiences=request.linkedin_profile.experiences ,
-                resume=request.linkedin_profile.resume ,
-                certifications=request.linkedin_profile.certifications ,
-                skills=request.linkedin_profile.skills ,
-                url=request.linkedin_profile.url ,
+                lastname=request.linkedin_profile.lastname,
+                firstname=request.linkedin_profile.firstname,
+                industry=request.linkedin_profile.industry,
+                locality=request.linkedin_profile.locality,
+                headline=request.linkedin_profile.title,
+                current_post=request.linkedin_profile.current_post or [],
+                past_post=request.linkedin_profile.past_post or [],
+                formations=request.linkedin_profile.formations,
+                websites=request.linkedin_profile.websites,
+                relation=request.linkedin_profile.relation,
+                experiences=request.linkedin_profile.experiences,
+                resume=request.linkedin_profile.resume,
+                certifications=request.linkedin_profile.certifications,
+                skills=request.linkedin_profile.skills,
+                url=request.linkedin_profile.url,
                 languages=request.linkedin_profile.languages,
                 emails=request.linkedin_profile.emails,
                 phones=request.linkedin_profile.phones
             )
-            linkedin_profile_key= linkedin_profile.put()
+            linkedin_profile_key = linkedin_profile.put()
         lead = cls(
             firstname=first_name,
             lastname=last_name,
@@ -1179,8 +1175,8 @@ class Lead(EndpointsModel):
     def patch(cls, user_from_email, request):
         lead = cls.get_by_id(int(request.id))
         print lead
-        print lead.owner == user_from_email.google_user_id , user_from_email.is_admin
-        if lead is None :
+        print lead.owner == user_from_email.google_user_id, user_from_email.is_admin
+        if lead is None:
             raise endpoints.NotFoundException('Lead not found.')
         if (lead.owner != user_from_email.google_user_id) and not user_from_email.is_admin:
             raise endpoints.ForbiddenException('you are not the owner')
@@ -1198,51 +1194,51 @@ class Lead(EndpointsModel):
                         and (eval('request.' + p) and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('lead.' + p + '= request.' + p)
 
-        if request.linkedin_profile :
-            if lead.linkedin_profile :
+        if request.linkedin_profile:
+            if lead.linkedin_profile:
                 linkedin_profile = lead.linkedin_profile.get()
                 linkedin_profile.lastname = request.linkedin_profile.lastname
                 linkedin_profile.firstname = request.linkedin_profile.firstname
-                linkedin_profile.industry =  request.linkedin_profile.industry
-                linkedin_profile.locality =  request.linkedin_profile.locality
-                linkedin_profile.headline =  request.linkedin_profile.title
-                linkedin_profile.current_post =  request.linkedin_profile.current_post or []
-                linkedin_profile.past_post=request.linkedin_profile.past_post or []
-                linkedin_profile.formations=request.linkedin_profile.formations
-                linkedin_profile.websites=request.linkedin_profile.websites
-                linkedin_profile.relation=request.linkedin_profile.relation
-                linkedin_profile.experiences=request.linkedin_profile.experiences
-                linkedin_profile.resume=request.linkedin_profile.resume
-                linkedin_profile.certifications=request.linkedin_profile.certifications
-                linkedin_profile.skills=request.linkedin_profile.skills
-                linkedin_profile.url=request.linkedin_profile.url
-                linkedin_profile.languages=request.linkedin_profile.languages
-                linkedin_profile.phones=request.linkedin_profile.phones
-                linkedin_profile.emails=request.linkedin_profile.emails
+                linkedin_profile.industry = request.linkedin_profile.industry
+                linkedin_profile.locality = request.linkedin_profile.locality
+                linkedin_profile.headline = request.linkedin_profile.title
+                linkedin_profile.current_post = request.linkedin_profile.current_post or []
+                linkedin_profile.past_post = request.linkedin_profile.past_post or []
+                linkedin_profile.formations = request.linkedin_profile.formations
+                linkedin_profile.websites = request.linkedin_profile.websites
+                linkedin_profile.relation = request.linkedin_profile.relation
+                linkedin_profile.experiences = request.linkedin_profile.experiences
+                linkedin_profile.resume = request.linkedin_profile.resume
+                linkedin_profile.certifications = request.linkedin_profile.certifications
+                linkedin_profile.skills = request.linkedin_profile.skills
+                linkedin_profile.url = request.linkedin_profile.url
+                linkedin_profile.languages = request.linkedin_profile.languages
+                linkedin_profile.phones = request.linkedin_profile.phones
+                linkedin_profile.emails = request.linkedin_profile.emails
                 linkedin_profile.put()
             else:
                 linkedin_profile = model.LinkedinProfile(
-                    lastname = request.linkedin_profile.lastname ,
-                    firstname = request.linkedin_profile.firstname ,
-                    industry =  request.linkedin_profile.industry ,
-                    locality =  request.linkedin_profile.locality ,
-                    headline =  request.linkedin_profile.title ,
-                    current_post =  request.linkedin_profile.current_post or [] ,
-                    past_post=request.linkedin_profile.past_post or [] ,
-                    formations=request.linkedin_profile.formations ,
-                    websites=request.linkedin_profile.websites ,
-                    relation=request.linkedin_profile.relation ,
-                    experiences=request.linkedin_profile.experiences ,
-                    resume=request.linkedin_profile.resume ,
-                    certifications=request.linkedin_profile.certifications ,
-                    skills=request.linkedin_profile.skills ,
-                    url=request.linkedin_profile.url ,
-                    languages=request.linkedin_profile.languages ,
-                    phones=request.linkedin_profile.phones ,
-                    emails=request.linkedin_profile.emails ,
+                    lastname=request.linkedin_profile.lastname,
+                    firstname=request.linkedin_profile.firstname,
+                    industry=request.linkedin_profile.industry,
+                    locality=request.linkedin_profile.locality,
+                    headline=request.linkedin_profile.title,
+                    current_post=request.linkedin_profile.current_post or [],
+                    past_post=request.linkedin_profile.past_post or [],
+                    formations=request.linkedin_profile.formations,
+                    websites=request.linkedin_profile.websites,
+                    relation=request.linkedin_profile.relation,
+                    experiences=request.linkedin_profile.experiences,
+                    resume=request.linkedin_profile.resume,
+                    certifications=request.linkedin_profile.certifications,
+                    skills=request.linkedin_profile.skills,
+                    url=request.linkedin_profile.url,
+                    languages=request.linkedin_profile.languages,
+                    phones=request.linkedin_profile.phones,
+                    emails=request.linkedin_profile.emails,
                 )
-                linkedin_profile_key= linkedin_profile.put()
-                lead.linkedin_profile=linkedin_profile_key
+                linkedin_profile_key = linkedin_profile.put()
+                lead.linkedin_profile = linkedin_profile_key
 
         lead_key_async = lead.put_async().get_result()
         new_lead = request
@@ -1538,7 +1534,7 @@ class Lead(EndpointsModel):
                         match = regex.search(column)
                         if match:
                             matched_columns[i] = key
-                i = i + 1
+                i += 1
             # if is there some columns that match our mapping rules
             if len(matched_columns) > 0:
                 # parse each row in the csv
@@ -1569,9 +1565,9 @@ class Lead(EndpointsModel):
                                     if matched_columns[index] not in contact.keys():
                                         contact[matched_columns[index]] = None
 
-                                if (hasattr(contact, 'title')) == False:
+                                if not (hasattr(contact, 'title')):
                                     contact['title'] = ""
-                                if (hasattr(contact, 'company')) == False:
+                                if not (hasattr(contact, 'company')):
                                     contact['company'] = ""
                                 imported_contact = cls(
                                     firstname=contact['firstname'],
@@ -1640,7 +1636,7 @@ class Lead(EndpointsModel):
                     except Exception, e:
                         print 'an error has occured'
                         print e
-                    i = i + 1
+                    i += 1
 
     @classmethod
     def import_row(cls, user_from_email, row, matched_columns, customfields_columns):
@@ -1799,9 +1795,9 @@ class Lead(EndpointsModel):
                     if match:
                         matched_columns[i] = key
                         matched = True
-            if matched == False:
+            if not matched:
                 customfields_columns[i] = column.decode('cp1252')
-            i = i + 1
+            i += 1
         imported_accounts = {}
         items = []
         row = csvreader.next()

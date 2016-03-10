@@ -24,6 +24,9 @@ name = messages.StringField(1)
 
 class SfImporterHelper():
     # accounts
+    def __init__(self):
+        pass
+
     @classmethod
     def import_accounts(cls, user, http, sf_objects):
         print 'i will get the list of available accounts'
@@ -303,6 +306,6 @@ class SfImporterHelper():
     @classmethod
     def sf_mark_as_lead(cls, access_token, url):
         print access_token
-        headers = headers = {'Authorization': 'Bearer %s' % access_token}
+        headers = {'Authorization': 'Bearer %s' % access_token}
         r = requests.get(url, headers=headers)
         return r

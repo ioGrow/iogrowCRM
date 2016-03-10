@@ -543,7 +543,7 @@ class Contact(EndpointsModel):
                 for edge in contact_edge_list['items']:
                     contact = edge.end_node.get()
                     if Node.check_permission(user_from_email, contact):
-                        count = count + 1
+                        count += 1
                         # list of infonodes
                         infonodes = Node.list_info_nodes(
                             parent_key=contact.key,
@@ -587,17 +587,9 @@ class Contact(EndpointsModel):
                     you_can_loop = False
                     contact_next_curs = None
 
-            if (count == limit):
+            if count == limit:
                 you_can_loop = False
 
-        return ContactListResponse(
-            items=contact_list,
-            nextPageToken=contact_next_curs
-        )
-        if contact_edge_list['next_curs'] and contact_edge_list['more']:
-            contact_next_curs = contact_edge_list['next_curs'].urlsafe()
-        else:
-            contact_next_curs = None
         return ContactListResponse(
             items=contact_list,
             nextPageToken=contact_next_curs
@@ -756,7 +748,7 @@ class Contact(EndpointsModel):
                     if request.owner and contact.owner != request.owner and is_filtered:
                         is_filtered = False
                     if is_filtered and Node.check_permission(user_from_email, contact):
-                        count = count + 1
+                        count += 1
                         parents_edge_list = Edge.list(
                             start_node=contact.key,
                             kind='parents'
@@ -833,7 +825,7 @@ class Contact(EndpointsModel):
                             accounts=list_account_schema
                         )
                         items.append(contact_schema)
-            if (len(items) >= limit):
+            if len(items) >= limit:
                 you_can_loop = False
             if next_curs:
                 if count >= limit:
@@ -1678,8 +1670,7 @@ class Contact(EndpointsModel):
                         )
                         account_key = account.put_async()
                         account_key_async = account_key.get_result()
-                        data = {}
-                        data['id'] = account_key_async.id()
+                        data = {'id': account_key_async.id()}
                         account.put_index(data)
                 # prepare the extracted contact info in a dictionary
                 # if has multiple value with for the same field
@@ -1742,8 +1733,7 @@ class Contact(EndpointsModel):
                         indexed_edge=str(account_key_async.id())
                     )
                 else:
-                    data = {}
-                    data['id'] = contact_key_async.id()
+                    data = {'id': contact_key_async.id()}
                     imported_contact.put_index(data)
             # insert info nodes
             for attribute in contact.keys():
@@ -1902,9 +1892,9 @@ class Contact(EndpointsModel):
                     if match:
                         matched_columns[i] = key
                         matched = True
-            if matched == False:
+            if not matched:
                 customfields_columns[i] = column.decode('cp1252')
-            i = i + 1
+            i += 1
         imported_accounts = {}
         items = []
         row = csvreader.next()

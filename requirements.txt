@@ -1,3 +1,17 @@
+apiclient
+google
+oauth2client
+intercom
+semantic
+mixpanel
+jinja2
+webapp2
+gdata
+requests
+intercom
+tweepy
+stripe
+httplib2
 django
 GoogleAppEngineCloudStorageClient
 GoogleAppEnginePipeline

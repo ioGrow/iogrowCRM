@@ -190,10 +190,7 @@ class Edge(ndb.Expando):
                 limit, start_cursor=curs
             )
 
-        results = {}
-        results['items'] = edges
-        results['next_curs'] = next_curs
-        results['more'] = more
+        results = {'items': edges, 'next_curs': next_curs, 'more': more}
         mem_key = start_node.urlsafe() + '_' + kind
         memcache.set(mem_key, results)
         return results

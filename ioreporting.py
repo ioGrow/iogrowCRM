@@ -140,7 +140,7 @@ class Reports(ndb.Expando):
     def add_lead(cls,user_from_email,nbr=1):
         try:
             report=cls.get(user_from_email)
-            report.nbr_lead= report.nbr_lead+nbr
+            report.nbr_lead += nbr
             report.put()
         except :
             print"###########################################################"
@@ -150,7 +150,7 @@ class Reports(ndb.Expando):
     def add_account(cls,user_from_email,nbr=1):
         try:
             report=cls.get(user_from_email)
-            report.nbr_account= report.nbr_account+nbr
+            report.nbr_account += nbr
             report.put()
         except :
             print"###########################################################"
@@ -160,7 +160,7 @@ class Reports(ndb.Expando):
     def add_contact(cls,user_from_email,nbr=1):
         try:
             report=cls.get(user_from_email)
-            report.nbr_contact= report.nbr_contact+nbr
+            report.nbr_contact += nbr
             report.put()
         except :
             print"###########################################################"
@@ -171,8 +171,8 @@ class Reports(ndb.Expando):
     @classmethod
     def add_opportunity(cls,stage_key,amount=0):
         stage=stage_key.get()
-        stage.nbr_opportunity=stage.nbr_opportunity+1
-        stage.amount_opportunity=stage.amount_opportunity+amount
+        stage.nbr_opportunity += 1
+        stage.amount_opportunity += amount
         stage.put()
     @classmethod
     def remove_opportunity(cls,opp):
@@ -180,7 +180,7 @@ class Reports(ndb.Expando):
         query=Edge.list(start_node=opp.key, kind="stages",limit=1)
         if query["items"] :
             stage=query["items"][0].end_node.get()
-            stage.nbr_opportunity=stage.nbr_opportunity-1
+            stage.nbr_opportunity -= 1
             stage.amount_opportunity=stage.amount_opportunity-opp.amount_total
             stage.put()
     def update_opportunity(cls):
@@ -334,10 +334,10 @@ class Reports(ndb.Expando):
             result= Edge.list(start_node=oppo.key,kind="stages")["items"]
             
             total_amount=total_amount+None_Zero(oppo.amount_total)
-            total_nbr=total_nbr+1
+            total_nbr += 1
             if result: 
                 stage=result[0].end_node.get()
-                stage.nbr_opportunity=stage.nbr_opportunity+1
+                stage.nbr_opportunity += 1
                 
                 stage.amount_opportunity=None_Zero(stage.amount_opportunity)+None_Zero(oppo.amount_total)
                 stage.put()

@@ -62,7 +62,7 @@ class License(EndpointsModel):
         for key in q.iter(keys_only=True):
             license=key.get()
             if license.day_nbr<30:
-                license.day_nbr= license.day_nbr+1
+                license.day_nbr += 1
             else:
                 license.actif=False
             license.put()

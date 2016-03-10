@@ -1460,9 +1460,10 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         print org_user_id.split('/')
         user_id = str(org_user_id.split('/')[5])
         responseJ = r.json()
-        response = {}
-        response['access_token'] = str(responseJ['access_token'])
-        response['instance_url'] = str(responseJ['instance_url'])
+        response = {
+            'access_token': str(responseJ['access_token']),
+            'instance_url': str(responseJ['instance_url'])
+        }
         # print response
         sf = Salesforce(instance_url=response['instance_url'], session_id=response['access_token'], version='33.0')
         print sf
@@ -1838,8 +1839,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                 sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
                 mail.send_mail(sender_address, 'tedj@iogrow.com', 'error salesforce extension',
                                linkedin_url + ' ' + str(value.message))
-                created_lead = {}
-                created_lead['error'] = 'error sending the lead to salesforce'
+                created_lead = {'error': 'error sending the lead to salesforce'}
         self.response.headers['Access-Control-Allow-Origin'] = "*"
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
@@ -2026,8 +2026,7 @@ class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
                 sender_address = "Error SF <error@gcdc2013-iogrow.appspotmail.com>"
                 mail.send_mail(sender_address, 'tedj@iogrow.com', 'error salesforce extension',
                                linkedin_url + ' ' + str(value.message))
-                created_lead = {}
-                created_lead['error'] = 'error sending the lead to salesforce'
+                created_lead = {'error': 'error sending the lead to salesforce'}
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
@@ -2050,9 +2049,10 @@ class SFsearchDev(BaseHandler, SessionEnabledHandler):
             results = []
             if search_results:
                 for p in search_results:
-                    r = {}
-                    r['type'] = str(p['attributes']['type'])
-                    r['id'] = str(p['Id'])[0:-3]
+                    r = {
+                        'type': str(p['attributes']['type']),
+                        'id': str(p['Id'])[0:-3]
+                    }
                     if r['type'] == 'Lead' or r['type'] == 'Contact':
                         results.append(r)
             found = {}
@@ -2080,9 +2080,10 @@ class SFsearch(BaseHandler, SessionEnabledHandler):
             results = []
             if search_results:
                 for p in search_results:
-                    r = {}
-                    r['type'] = str(p['attributes']['type'])
-                    r['id'] = str(p['Id'])
+                    r = {
+                        'type': str(p['attributes']['type']),
+                        'id': str(p['Id'])
+                    }
                     if r['type'] == 'Lead' or r['type'] == 'Contact':
                         results.append(r)
             found = {}
@@ -2952,7 +2953,7 @@ class GetCompanyFromTwitterToIoGrow(webapp2.RequestHandler):
         profile_schema = EndpointsHelper.twitter_import_people(name)
         print profile_schema, "prooooooooo"
         if profile_schema:
-            d = (profile_schema.name).lower()
+            d = profile_schema.name.lower()
             if account.name in d:
                 profile = model.TwitterProfile()
                 profile.id = profile_schema.id
@@ -2989,7 +2990,7 @@ class GetFromTwitterToIoGrow(webapp2.RequestHandler):
         name = screen_name[screen_name.find("twitter.com/") + 12:]
         profile_schema = EndpointsHelper.twitter_import_people(name)
         if profile_schema:
-            d = (profile_schema.name).lower()
+            d = profile_schema.name.lower()
             if lead.firstname.lower() in d and lead.lastname.lower() in d:
                 profile = model.TwitterProfile()
                 profile.id = profile_schema.id
@@ -3190,7 +3191,6 @@ class SendGmailEmail(webapp2.RequestHandler):
 
 class InitReport(webapp2.RequestHandler):
     def post(self):
-        print "##########################################################################################################"
         admin = ndb.Key(urlsafe=self.request.get("admin")).get()
         Reports.create(user_from_email=admin)
 
@@ -3222,7 +3222,6 @@ def extract_leads_from_message(gmail_service, user, thread_id):
                     match = re.search('([\w.-]+)@([\w.-]+)', field['value'])
                     if match:
                         if match.group() != user.email:
-                            email = match.group()
                             firstname = name.split()[0]
                             lastname = " ".join(name.split()[1:])
 
@@ -3260,7 +3259,6 @@ class InitLeadsFromGmail(webapp2.RequestHandler):
         try:
             while you_can_loop:
                 # prepare params to insert
-                leads = {}
                 threads = gmail_service.users().threads().list(userId='me', q='category:primary',
                                                                pageToken=nextPageToken).execute()
                 for thread in threads['threads']:
@@ -3630,9 +3628,9 @@ class CheckJobStatus(webapp2.RequestHandler):
         failed_jobs = 0
         for sub_job in sub_jobs:
             if sub_job.status == 'completed':
-                completed_jobs = completed_jobs + 1
+                completed_jobs += 1
             if sub_job.status == 'failed':
-                failed_jobs = failed_jobs + 1
+                failed_jobs += 1
         if job.sub_jobs == completed_jobs + failed_jobs:
             job.status = 'completed'
             job.completed_jobs = completed_jobs
@@ -4000,10 +3998,9 @@ routes = [
 
 ]
 
-config = {}
-config['webapp2_extras.sessions'] = {
+config = {'webapp2_extras.sessions': {
     'secret_key': 'YOUR_SESSION_SECRET'
-}
+}}
 # to config the local directory the way we want .
 # config['webapp2_extras.i18n'] = {
 #     'translations_path': 'path/to/my/locale/directory',
