@@ -1080,12 +1080,6 @@ class CaseShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/cases/case_show.html')
 
-
-class NeedShowHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/needs/show.html')
-
-
 class NoteShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/accounts/note_show.html')
@@ -3914,9 +3908,6 @@ routes = [
     ('/views/cases/list', CaseListHandler),
     ('/views/cases/show', CaseShowHandler),
     ('/views/cases/new', CaseNewHandler),
-
-    # Needs Views
-    ('/views/needs/show', NeedShowHandler),
 
     # Notes, Documents, Taks, Events, Search Views
     ('/views/notes/show', NoteShowHandler),

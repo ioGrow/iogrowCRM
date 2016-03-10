@@ -187,28 +187,6 @@ accountservices.factory('Account', function($rootScope) {
                     }
                 }
 
-
-                if (resp.needs) {
-                    if (!resp.needs.items) {
-                        $scope.blankStateneeds = true;
-                    }
-                    $scope.needs = resp.needs.items;
-                    if ($scope.needsCurrentPage > 1) {
-                        $scope.needspagination.prev = true;
-                    } else {
-                        $scope.needspagination.prev = false;
-                    }
-                    if (resp.needs.nextPageToken) {
-                        var nextPage = $scope.needsCurrentPage + 1;
-                        // Store the nextPageToken
-                        $scope.needspages[nextPage] = resp.needs.nextPageToken;
-                        $scope.needspagination.next = true;
-
-                    } else {
-                        $scope.needspagination.next = false;
-                    }
-                }
-
                 if (resp.opportunities) {
                     if (!resp.opportunities.items) {
                         $scope.blankStateopportunity = true;
@@ -783,15 +761,7 @@ accountservices.factory('Search', function($http) {
                 break;
             case 'Show':
                 base_url = '/#/live/shows/show/';
-                break;
-            case 'Product_Video':
-                base_url = '/#/live/product_videos/product_video/';
-                break;
-            case 'Customer_Story':
                 base_url = '/#/live/customer_stories/customer_story/';
-                break;
-            case 'Need':
-                base_url = '/#/needs/show/';
                 break;
             case 'Document' :
                 base_url = '#/documents/show/';

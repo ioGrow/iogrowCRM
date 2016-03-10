@@ -134,7 +134,6 @@
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab ==8}"><a ng-click="selectedTab = 8;">{{ _('Send an Email')}}</a></li>
                       <!-- <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;">{{ _('Contacts')}}</a></li> -->
                       <li class="ng-tab sm-menu-inv" ng-class="{active: selectedTab == 7}"><a ng-click="selectedTab = 7;">{{ _('Attach Documents')}}</a>
-                      <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 4}"><a ng-click="selectedTab = 4;">{{ _('Needs')}}</a></li>
                       {% if is_business_user %}
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 5}"><a ng-click="waterfallTrigger(); selectedTab = 5;">{{ _('Opportunities')}}</a></li>
                       <li class="ng-tab md-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="waterfallTrigger(); selectedTab = 6;">{{ _('Cases')}}</a></li>  
@@ -422,43 +421,6 @@ margin-top: 20px" />
 
 
                       </div>
-                <!-- $ needs tab -->
-                <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4" style="display: none;">
-                  <div class="row cards-container">
-                    <div class="btn-group relbutton">
-                                <button ng-click="addNeedModal()" id="sample_editable_1_new" class="btn red">
-                               {{ _('Add Need')}}
-                                </button>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="row">
-                        <div ng-show="blankStateneeds" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
-                          <div class="dashboard-stat cards">
-                            <div class="blank_slate_arrow"></div>
-                            <div class=" thumbnail blank_slate_body">
-                              <img class="img-responsive" src="/static/img/cases_blank.png">
-                              <p class="lead">{{ _('Let your customers explain their needs, and after you can validate or reject those needs (Lean Development).')}}</p>
-                            </div>
-                          </div>
-                        </div>
-                        <br>
-                        <div class="clearfix"></div>
-                      </div><!--/inner-cards-container-->
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="pagination pull-right" ng-hide="isLoading">
-                        <button ng-click="NeedPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="needspagination.prev" style="display: none;">
-                          {{ _('Prev')}}
-                        </button>
-                        <button ng-click="NeedlistNextPageItems()" class="btn" ng-show="needspagination.next" style="display: none;">
-                          {{ _('Next')}}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
                 <!-- $ opportunities tab -->
                 <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5" style="display: none;">
 

@@ -1363,9 +1363,6 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         $scope.casepagination = {};
         $scope.caseCurrentPage = 01;
         $scope.casepages = [];
-        $scope.needspagination = {};
-        $scope.needsCurrentPage = 1;
-        $scope.needspages = [];
         $scope.documentpagination = {};
         $scope.documentCurrentPage = 1;
         $scope.documentpages = [];
@@ -1382,9 +1379,6 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         $scope.infonodes = {};
         $scope.phone = {};
         $scope.phone.type = 'work';
-        $scope.need = {};
-        $scope.need.need_status = 'pending';
-        $scope.need.priority = 'Medium';
         $scope.casee = {};
         $scope.casee.priority = 4;
         $scope.casee.status = 'pending';
@@ -3377,54 +3371,7 @@ $scope.lunchMapsCalendar=function(){
             $scope.caseCurrentPage = $scope.caseCurrentPage - 1;
             Account.get($scope, params);
         };
-        $scope.NeedlistNextPageItems = function() {
 
-
-            var nextPage = $scope.needsCurrentPage + 1;
-            var params = {};
-            if ($scope.needspages[nextPage]) {
-                params = {
-                    'id': $scope.account.id,
-                    'needs': {
-                        'limit': '6',
-                        'pageToken': $scope.needspages[nextPage]
-                    }
-                }
-
-            } else {
-                params = {
-                    'id': $scope.account.id,
-                    'needs': {
-                        'limit': '6'
-                    }
-                }
-            }
-            $scope.needsCurrentPage = $scope.needsCurrentPage + 1;
-            Account.get($scope, params);
-        }
-        $scope.NeedPrevPageItems = function() {
-
-            var prevPage = $scope.needsCurrentPage - 1;
-            var params = {};
-            if ($scope.needspages[prevPage]) {
-                params = {
-                    'id': $scope.account.id,
-                    'needs': {
-                        'limit': '6',
-                        'pageToken': $scope.needspages[prevPage]
-                    }
-                }
-            } else {
-                params = {
-                    'id': $scope.account.id,
-                    'needs': {
-                        'limit': '6'
-                    }
-                }
-            }
-            $scope.needsCurrentPage = $scope.needsCurrentPage - 1;
-            Account.get($scope, params);
-        };
         // HKA 09.02.2014 Manage Next Prev page on ducument list
         $scope.DocumentlistNextPageItems = function() {
 
@@ -4107,9 +4054,6 @@ $scope.updateEventRenderAfterAdd= function(){};
         $scope.addCaseModal = function() {
             $('#addCaseModal').modal('show');
         };
-        $scope.addNeedModal = function() {
-            $('#addNeedModal').modal('show');
-        };
 
         //HKA 22.11.2013 List of Contacts related to account
         $scope.listContacts = function() {
@@ -4145,41 +4089,13 @@ $scope.updateEventRenderAfterAdd= function(){};
             Account.get($scope, params);
 
         };
-        $scope.listNeeds = function() {
 
-            var params = {
-                'id': $scope.account.id,
-                'needs': {
-                    'limit': '6'
-                }
-            };
-            Account.get($scope, params);
-
-        };
-
-  
         // HKA 19.11.2013 Add Opportunty related to account
  $scope.opportunityInserted = function(resp){
           window.location.replace('#/accounts');
       };
         // HKA 19.11.2013 Add Case related to account
 
-        $scope.saveNeed = function(need) {
-
-
-            var params = {'name': need.name,
-                'description': need.description,
-                'priority': need.priority,
-                'need_status': need.need_status,
-                'folder': $scope.account.folder,
-                'parent': $scope.account.entityKey,
-                'access': $scope.account.access
-            };
-
-            Need.insert($scope, params);
-            $('#addNeedModal').modal('hide');
-
-        };
         $scope.listInfonodes = function(kind) {
 
             if (!$scope.isEmpty($scope.relatedInfonode)) {

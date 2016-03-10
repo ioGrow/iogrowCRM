@@ -27,7 +27,6 @@ from iograph import Node, Edge, InfoNodeListResponse
 from iomodels.crmengine.notes import Note, TopicListResponse
 from iomodels.crmengine.cases import Case, CaseListResponse
 from iomodels.crmengine.documents import Document, DocumentListResponse
-from iomodels.crmengine.needs import Need, NeedListResponse
 from endpoints_helper import EndpointsHelper
 import iomessages
 
@@ -53,7 +52,6 @@ class AccountGetRequest(messages.Message):
     opportunities = messages.MessageField(ListRequest, 6)
     cases = messages.MessageField(ListRequest, 7)
     documents = messages.MessageField(ListRequest, 8)
-    needs = messages.MessageField(ListRequest, 9)
 
 
 class AccountSchema(messages.Message):
@@ -73,7 +71,6 @@ class AccountSchema(messages.Message):
     opportunities = messages.MessageField(OpportunityListResponse, 14)
     cases = messages.MessageField(CaseListResponse, 15)
     documents = messages.MessageField(DocumentListResponse, 16)
-    needs = messages.MessageField(NeedListResponse, 17)
     created_at = messages.StringField(18)
     updated_at = messages.StringField(19)
     access = messages.StringField(20)
@@ -360,12 +357,6 @@ class Account(EndpointsModel):
                     parent_key=account.key,
                     request=request
                 )
-            needs = None
-            if request.needs:
-                needs = Need.list_by_parent(
-                    parent_key=account.key,
-                    request=request
-                )
             opportunities = None
             if request.opportunities:
                 opportunities = Opportunity.list_by_parent(
@@ -435,7 +426,6 @@ class Account(EndpointsModel):
                 topics=topics,
                 tasks=tasks,
                 events=events,
-                needs=needs,
                 opportunities=opportunities,
                 cases=cases,
                 documents=documents,

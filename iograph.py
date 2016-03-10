@@ -6,7 +6,7 @@ from google.appengine.datastore.datastore_query import Cursor
 from protorpc import messages
 import iomessages
 from model import User
-from django.utils.encoding import smart_str
+
 # TODO: complte later
 INVERSED_EDGES = {
     'admins': ['parents'],
@@ -25,7 +25,6 @@ INVERSED_EDGES = {
     'gcontacts': ['synced_with'],
     'has_access_on': ['permissions'],
     'infos': ['parents'],
-    'needs': ['parents'],
     'opportunities': ['parents'],
     'parents': ['cases',
                 'comments',
@@ -33,7 +32,6 @@ INVERSED_EDGES = {
                 'documents',
                 'events',
                 'infos',
-                'needs',
                 'opportunities',
                 'tasks',
                 'topics',
@@ -55,7 +53,7 @@ DELETED_ON_CASCADE = {
     'Event': ['comments'],
     'Note': ['comments'],
     'Document': ['comments'],
-    'Account': ['tasks', 'topics', 'documents', 'events', 'needs'],
+    'Account': ['tasks', 'topics', 'documents', 'events'],
     'Contact': ['tasks', 'topics', 'documents', 'events', 'gcontacts'],
     'Opportunity': ['tasks', 'topics', 'documents', 'events'],
     'Case': ['tasks', 'topics', 'documents', 'events'],

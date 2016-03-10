@@ -62,8 +62,6 @@ from iomodels.crmengine.opportunitystage import Opportunitystage, Opportunitysta
     OpportunitystageListSchema
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
-
-from iomodels.crmengine.needs import Need, NeedInsertRequest, NeedSchema
 from iomodels.crmengine.tags import Tag, TagSchema, TagListRequest, TagListResponse, TagInsertRequest
 from iomodels.crmengine.profiles import ProfileDeleteRequest, Keyword, KeywordListResponse
 from lib.stripe.error import InvalidRequestError
@@ -2850,78 +2848,6 @@ class CrmEngineApi(remote.Service):
         # my_model.organization =  user_from_email.organization
         my_model.put()
         return my_model
-
-    # Needs APIs
-
-    # needs.delete api
-    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
-                      path='needs', http_method='DELETE',
-                      name='needs.delete')
-    def need_delete(self, request):
-        entityKey = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all_cascade(start_node=entityKey)
-        return message_types.VoidMessage()
-
-    # needs.get api
-    @Need.method(request_fields=('id',), path='needs/{id}', http_method='GET', name='needs.get')
-    def need_get(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Need not found')
-        return my_model
-
-    # needs.insert v2 api
-    @endpoints.method(NeedInsertRequest, NeedSchema,
-                      path='needs/insertv2', http_method='POST',
-                      name='needs.insertv2')
-    def need_insert_beta(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        return Need.insert(
-            user_from_email=user_from_email,
-            request=request
-        )
-
-    # needs.insert api
-    @Need.method(path='needs', http_method='POST', name='needs.insert')
-    def need_insert(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        my_model.owner = user_from_email.google_user_id
-        my_model.organization = user_from_email.organization
-        # get the account or lead folder
-        # my_model.folder = created_folder['id']
-        my_model.put()
-        return my_model
-
-    # needs.list api
-    @Need.query_method(query_fields=(
-            'limit', 'order', 'pageToken', 'about_kind', 'about_item', 'about_name', 'priority', 'need_status'),
-        path='needs',
-        name='needs.list')
-    def need_list(self, query):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        return query.filter(ndb.OR(ndb.AND(Need.access == 'public', Need.organization == user_from_email.organization),
-                                   Need.owner == user_from_email.google_user_id,
-                                   Need.collaborators_ids == user_from_email.google_user_id)).order(Need._key)
-
-    # needs.patch api
-    @Need.method(
-        http_method='PATCH', path='needs/{id}', name='needs.patch')
-    def NeedPatch(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Need not found.')
-        patched_model_key = my_model.entityKey
-        patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        print patched_model
-        print my_model
-        properties = Need().__class__.__dict__
-        for p in properties.keys():
-            if (eval('patched_model.' + p) != eval('my_model.' + p)) and (eval('my_model.' + p)):
-                exec ('patched_model.' + p + '= my_model.' + p)
-        patched_model.put()
-        return patched_model
 
     # Notes APIs
     # notes.delete api

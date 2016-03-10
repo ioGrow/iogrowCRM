@@ -99,11 +99,6 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'CaseNewCtrl',
         templateUrl:'/views/cases/new'
       }).
-      // Needs
-      when('/needs/show/:needId', {
-        controller: 'NeedShowCtrl',
-        templateUrl:'/views/needs/show'
-      }).
       // Notes
       when('/notes/show/:noteId',{
       controller : 'NoteShowController',

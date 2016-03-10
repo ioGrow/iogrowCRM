@@ -70,7 +70,6 @@ class OpportunityInsertRequest(messages.Message):
     decission_maker = messages.StringField(20)
     decission_process = messages.StringField(21)
     time_scale = messages.StringField(22)
-    need = messages.StringField(23)
     contacts = messages.MessageField(iomessages.OppContactRequest, 24, repeated=True)
     notes = messages.MessageField(iomessages.NoteInsertRequestSchema, 25, repeated=True)
     timeline = messages.MessageField(iomessages.OppTimelineInsertRequest, 26, repeated=True)
@@ -98,7 +97,6 @@ class OpportunityPatchRequest(messages.Message):
     decission_maker = messages.StringField(18)
     decission_process = messages.StringField(19)
     time_scale = messages.StringField(20)
-    need = messages.StringField(21)
     contact = messages.MessageField(iomessages.OppPatchContactRequest, 22)
     new_contact = messages.MessageField(iomessages.OppContactRequest, 23)
     removed_competitor = messages.StringField(24)
@@ -144,7 +142,6 @@ class OpportunitySchema(messages.Message):
     decission_maker = messages.StringField(36)
     decission_process = messages.StringField(37)
     time_scale = messages.StringField(38)
-    need = messages.StringField(39)
     last_stage = messages.MessageField(OpportunitystageSchema, 40)
     timeline = messages.MessageField(EventListResponse, 41)
     competitors = messages.MessageField(iomessages.AccountSchema, 42, repeated=True)
@@ -296,7 +293,6 @@ class Opportunity(EndpointsModel):
     decission_maker = ndb.StringProperty()
     decission_process = ndb.StringProperty()
     time_scale = ndb.StringProperty()
-    need = ndb.StringProperty()
     competitors = ndb.KeyProperty(repeated=True)
 
     def put(self, **kwargs):
@@ -339,7 +335,6 @@ class Opportunity(EndpointsModel):
                         search.TextField(name='decission_maker', value=empty_string(self.decission_maker)),
                         search.TextField(name='decission_process', value=empty_string(self.decission_process)),
                         search.TextField(name='time_scale', value=empty_string(self.time_scale)),
-                        search.TextField(name='need', value=empty_string(self.need)),
                         search.TextField(name='stagename', value=empty_string(self.stagename)),
                         search.TextField(name='description', value=empty_string(self.description)),
                         search.TextField(name='account_name', value=empty_string(self.account_name)),
@@ -601,7 +596,6 @@ class Opportunity(EndpointsModel):
                 decission_maker=opportunity.decission_maker,
                 decission_process=opportunity.decission_process,
                 time_scale=opportunity.time_scale,
-                need=opportunity.need,
                 timeline=timeline
         )
         return opportunity_schema
@@ -710,7 +704,6 @@ class Opportunity(EndpointsModel):
                             decission_maker=opportunity.decission_maker,
                             decission_process=opportunity.decission_process,
                             time_scale=opportunity.time_scale,
-                            need=opportunity.need
                     )
                     items.append(opportunity_schema)
         return OpportunityListResponse(items=items)
@@ -904,7 +897,6 @@ class Opportunity(EndpointsModel):
                                 decission_maker=opportunity.decission_maker,
                                 decission_process=opportunity.decission_process,
                                 time_scale=opportunity.time_scale,
-                                need=opportunity.need,
                                 last_stage=last_stage_schema
                         )
                 )
@@ -1056,7 +1048,6 @@ class Opportunity(EndpointsModel):
                                 decission_maker=opportunity.decission_maker,
                                 decission_process=opportunity.decission_process,
                                 time_scale=opportunity.time_scale,
-                                need=opportunity.need
                         )
                         items.append(opportunity_schema)
             if count == limit:
@@ -1132,7 +1123,6 @@ class Opportunity(EndpointsModel):
                                 decission_maker=opportunity.decission_maker,
                                 decission_process=opportunity.decission_process,
                                 time_scale=opportunity.time_scale,
-                                need=opportunity.need
                         )
                         opportunity_list.append(opportunity_schema)
 
@@ -1236,7 +1226,6 @@ class Opportunity(EndpointsModel):
                 decission_maker=request.decission_maker,
                 decission_process=request.decission_process,
                 time_scale=request.time_scale,
-                need=request.need
         )
         if request.amount_total:
             opportunity.amount_total = float(request.amount_total)
@@ -1512,7 +1501,6 @@ class Opportunity(EndpointsModel):
                 decission_maker=opportunity.decission_maker,
                 decission_process=opportunity.decission_process,
                 time_scale=opportunity.time_scale,
-                need=opportunity.need
         )
         return opportunity_schema
 
@@ -1543,7 +1531,7 @@ class Opportunity(EndpointsModel):
         )
         properties = ['owner', 'name', 'access', 'reason_lost', 'opportunity_type', 'duration', 'duration_unit',
                       'currency', 'amount_per_unit', 'amount_total', 'competitor', 'description', 'has_budget',
-                      'budget', 'has_decission_maker', 'decission_maker', 'decission_process', 'time_scale', 'need']
+                      'budget', 'has_decission_maker', 'decission_maker', 'decission_process', 'time_scale']
         for p in properties:
             if hasattr(request, p):
                 if (eval('opportunity.' + p) != eval('request.' + p)) \
