@@ -36,21 +36,21 @@ from iomodels.crmengine.contacts import Contact, ContactGetRequest, ContactInser
     InvitationRequest, ContactMergeRequest
 from iomodels.crmengine.notes import Note, AuthorSchema, DiscussionAboutSchema, \
     NoteSchema
-from iomodels.crmengine.payment import Subscription
+
 from iomodels.crmengine.tasks import Task, TaskSchema, TaskRequest, TaskListResponse, TaskInsertRequest
-# from iomodels.crmengine.tags import Tag
+
 from iomodels.crmengine.opportunities import Opportunity, OpportunityPatchRequest, UpdateStageRequest, \
     OpportunitySchema, OpportunityInsertRequest, OpportunityListRequest, OpportunityListResponse, \
     OpportunitySearchResults, OpportunityGetRequest, NewOpportunityListRequest, AggregatedOpportunitiesResponse, \
     OppTimeline
 from iomodels.crmengine.pipelines import Pipeline, PipelineInsertRequest, PipelineSchema, PipelineGetRequest, \
     PipelineListRequest, PipelineListResponse, \
-    PipelinePatchRequest  # ,PipelinePatchRequest,UpdateStageRequest,PipelineListRequest,PipelineListResponse,PipelineSearchResults,PipelineGetRequest,NewPipelineListRequest,AggregatedOpportunitiesResponse
+    PipelinePatchRequest
 from iomodels.crmengine.events import Event, EventInsertRequest, EventSchema, EventPatchRequest, EventListRequest, \
     EventListResponse, EventFetchListRequest, EventFetchResults
 from iomodels.crmengine.documents import Document, DocumentInsertRequest, DocumentSchema, MultipleAttachmentRequest, \
     DocumentListResponse
-from iomodels.crmengine.shows import Show
+
 from iomodels.crmengine.leads import Lead, LeadPatchRequest, LeadFromTwitterRequest, LeadInsertRequest, LeadListRequest, \
     LeadListResponse, LeadSearchResults, LeadGetRequest, LeadSchema, FLNameFilterRequest, LeadMergeRequest, \
     FLsourceFilterRequest, FullContactRequest
@@ -62,11 +62,12 @@ from iomodels.crmengine.opportunitystage import Opportunitystage, Opportunitysta
     OpportunitystageListSchema
 from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
-from iomodels.crmengine.feedbacks import Feedback
+
 from iomodels.crmengine.needs import Need, NeedInsertRequest, NeedSchema
 from iomodels.crmengine.tags import Tag, TagSchema, TagListRequest, TagListResponse, TagInsertRequest
 from iomodels.crmengine.profiles import ProfileDeleteRequest, Keyword, KeywordListResponse
 from lib.stripe.error import InvalidRequestError
+
 from model import User
 from model import Organization
 from model import Userinfo
@@ -101,31 +102,6 @@ import ast
 # This client_id could be generated on the Google API console
 # **************Client_id---------------
 CLIENT_ID = '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com'
-# *************** Email address misleading from Google
-# CLIENT_ID = '935370948155-j01mm81b35mb4pqt38sfigi7t6ivl1m4@developer.gserviceaccount.com'
-SCOPES = [
-    'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/drive',
-    'https://www.googleapis.com/auth/calendar'
-]
-OBJECTS = {
-    'Account': Account,
-    'Contact': Contact,
-    'Case': Case,
-    'Lead': Lead,
-    'Opportunity': Opportunity,
-    'Show': Show,
-    'Feedback': Feedback
-}
-FOLDERS = {
-    'Account': 'accounts_folder',
-    'Contact': 'contacts_folder',
-    'Lead': 'leads_folder',
-    'Opportunity': 'opportunities_folder',
-    'Case': 'cases_folder',
-    'Show': 'shows_folder',
-    'Feedback': 'feedbacks_folder'
-}
 
 DISCUSSIONS = {
     'Task': {
@@ -147,11 +123,6 @@ DISCUSSIONS = {
     }
 }
 
-INVERSED_EDGES = {
-    'tags': 'tagged_on',
-    'tagged_on': 'tags'
-
-}
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com', 'hakim@iogrow.com', 'mezianeh3@gmail.com', 'ilyes@iogrow.com',
                 'osidsoft@gmail.com']
 
