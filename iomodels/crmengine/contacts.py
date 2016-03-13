@@ -17,6 +17,7 @@ from google.appengine.api import app_identity
 import requests
 from endpoints_proto_datastore.ndb import EndpointsModel
 import gdata.contacts.data
+from iomodels.crmengine.payment import payment_required
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 from endpoints_helper import EndpointsHelper
 from iomodels.crmengine.tags import Tag, TagSchema
@@ -1242,6 +1243,7 @@ class Contact(EndpointsModel):
         return contacts
 
     @classmethod
+    @payment_required()
     def insert(cls, user_from_email, request):
         first_name = smart_str(request.firstname).lower()
         last_name = smart_str(request.lastname).lower()

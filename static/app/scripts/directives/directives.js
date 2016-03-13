@@ -5,7 +5,6 @@
     link: function ($scope, elem, attrs,ngModel) {
      var field=$(elem);
      var position=field.position();
-    console.log("woooooooooooo");
         field.hover(function() {
           console.log('test hover');
           $(this).append('<div class="cusTooltip" id="inlineEditTooltip"><a href=""><i class="fa fa-trash-o"></i></a><a href="">edit</a></div>');   
@@ -14,6 +13,31 @@
         });
   }
 }});*/
+var lunchMapsLinkedin=function(address){
+        var p=$("#newAccMain");
+        var offsets = document.getElementById('newAccMain').getBoundingClientRect();
+        var top = offsets.top + 118;
+        var left = offsets.left;
+        var width = document.getElementById('newAccMain').offsetWidth;
+        var height = document.getElementById('newAccMain').offsetHeight;
+        window.open('http://www.google.com/maps/search/'+address,'winname','width='+width+',height=500, left='+left+',top='+top);
+ }
+ var lunchMaps=function(lat,lng,address){
+                    var p=$("#newAccMain");
+                    var offsets = document.getElementById('newAccMain').getBoundingClientRect();
+                    var top = offsets.top + 118;
+                    var left = offsets.left;
+                    var width = document.getElementById('newAccMain').offsetWidth;
+                    var height = document.getElementById('newAccMain').offsetHeight;
+                    console.log(width,height,top,left);
+              if (lat&&lng) {
+                window.open('http://www.google.com/maps/place/'+lat+','+lng,'winname','width='+width+',height=500, left='+left+',top='+top);
+              }else{
+                 console.log(address);
+                 var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
+                 window.open('http://www.google.com/maps/search/'+locality,'winname','width='+width+',height=500, left='+left+',top='+top);
+              };
+}
 app.directive('edittooltip',  function() {
    return {
     restrict: 'A',
@@ -86,6 +110,17 @@ app.directive("checkboxGroup", function() {
             }
         }
     });
+app.directive('errSrc', function() {
+  return {
+    link: function(scope, element, attrs) {
+      element.bind('error', function() {
+        if (attrs.src != attrs.errSrc) {
+          attrs.$set('src', attrs.errSrc);
+        }
+      });
+    }
+  }
+});
 /*app.directive('cuscheckbox', function () {
   return {
     restrict: 'A',

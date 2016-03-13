@@ -70,10 +70,10 @@
                       <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
                 <div class="btn-group show_md" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
-                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
-                     <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
+                 <!--  <a class="headerBtn" title="More" data-toggle="dropdown"> 
+                      <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
                      More
-                  </a>
+                  </a> -->
                   <ul class="dropdown-menu drp-dwn-right">
                     <li>
                       <a class="hide_md" title="Upload" ng-click="showImportModal()"> 
@@ -290,7 +290,7 @@
                             <a href="/#/leads/show/<%= lead.id %>" class="startup-link"
                                title="<%= lead.firstname %> <%= lead.lastname %>">
                              <img ng-hide="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo profile-photoOnList" src="/static/img/avatar_contact.jpg" >
-                             <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo profile-photoOnList" src="<%=lead.profile_img_url%>">
+                             <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo profile-photoOnList" err-src="/static/img/avatar_contact.jpg" src="<%=lead.profile_img_url%>">
                           </a>
                         </td>
                         <td>
@@ -434,7 +434,7 @@
                     <div class="pic">                      
                       <a href="/#/leads/show/<%= lead.id %>" class="startup-link" title="account.name">
                       <img ng-hide="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
-                      <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo" ng-src="<%=lead.profile_img_url%>">
+                      <img  ng-show="lead.profile_img_url" alt="<%= lead.firstname %> <%= lead.lastname %>" class="img-responsive profile-photo" ng-src="<%=lead.profile_img_url%>" err-src="/static/img/avatar_contact.jpg">
                       </a>
                     </div>
                     <div class="text">

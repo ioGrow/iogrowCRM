@@ -1440,7 +1440,8 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
     $scope.allCasesSelected=false;
     $scope.selectedCases=[];
     $scope.caseCustomfields=[];
-
+    $scope.lunchMaps=lunchMaps;
+    $scope.lunchMapsLinkedin=lunchMapsLinkedin;
 
        if ($scope.timezone==""){
         $scope.timezone=moment().format("Z");
@@ -1846,7 +1847,9 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
       $scope.getLinkedinProfile=function(){
           var params={
           "firstname":$scope.contact.firstname,
-          "lastname":$scope.contact.lastname
+          "lastname":$scope.contact.lastname,
+          "title": $scope.contact.title,
+          "company": $scope.searchAccountQuery
           }
           var linkedurl=null
           if ($scope.infonodes.sociallinks==undefined) {
@@ -4045,8 +4048,10 @@ $scope.sendEmailSelected=function(){
       $scope.linkedProfile={};
       $scope.linkedShortProfile={};
       var params={
-          "firstname":$scope.lead.firstname,
-          "lastname":$scope.lead.lastname
+          "firstname":$scope.contact.firstname,
+          "lastname":$scope.contact.lastname,
+          "title": $scope.contact.title,
+          "company": $scope.searchAccountQuery
           }
       Linkedin.listPeople(params,function(resp){
              if(!resp.code){
@@ -4480,6 +4485,8 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       $scope.accountFromLinkedin={};
       $scope.contacts=[];
       $scope.contacts.customfields=[];
+      $scope.lunchMaps=lunchMaps;
+      $scope.lunchMapsLinkedin=lunchMapsLinkedin;
       $scope.inProcess=function(varBool,message){
             if (varBool) {           
               if (message) {
@@ -5010,8 +5017,11 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
               console.log("in linkedin get people");
               var params={
                 "firstname":$scope.contact.firstname,
-                "lastname":$scope.contact.lastname
+                "lastname":$scope.contact.lastname,
+                "Title": $scope.contact.title,
+                "company": $scope.searchAccountQuery
                 }
+                
                 $scope.inNoResults=false;
                 Linkedin.listPeople(params,function(resp){
                      console.log('in list resp');

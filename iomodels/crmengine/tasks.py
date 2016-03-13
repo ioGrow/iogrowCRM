@@ -11,6 +11,8 @@ from protorpc import messages
 from endpoints_proto_datastore.ndb import EndpointsModel
 from iomodels.crmengine.notes import AuthorSchema, DiscussionAboutSchema
 from model import Userinfo
+
+from iomodels.crmengine.payment import payment_required
 from iomodels.crmengine.tags import Tag, TagSchema
 from iograph import Edge
 import model
@@ -494,6 +496,7 @@ class Task(EndpointsModel):
         )
 
     @classmethod
+    @payment_required()
     def insert(cls, user_from_email, request):
         if request.status:
             status = request.status

@@ -1,11 +1,5 @@
 module.exports = function (grunt) {
     grunt.initConfig({
-        livereload: {
-            options: {
-                base: 'public'
-            },
-            files: ['src/**/*', 'templates/**/*']
-        },
         concat: {
             /*css:{
              src: ['static/bootstrap3/plugins/select2/select2_metro.css','static/bootstrap3/plugins/uniform/css/uniform.default.css','static/plugins/date-time-picker/jquery.simple-dtpicker.css','static/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.css','static/angular-xeditable-0.1.8/css/xeditable.css','static/plugins/fullcalendar/fullcalendar.css','static/plugins/fullcalendar/fullcalendar.print.css'],
@@ -25,6 +19,7 @@ module.exports = function (grunt) {
                     'static/app/scripts/services/taskservices.js',
                     'static/app/scripts/services/eventservices.js',
                     'static/app/scripts/services/userservices.js',
+                    'static/app/scripts/services/billingservices.js',
                     'static/app/scripts/services/groupservices.js',
                     'static/app/scripts/services/noteservices.js', 'static/app/scripts/services/commentservices.js',
                     'static/app/scripts/services/settingservices.js', 'static/app/scripts/services/importservices.js',
@@ -36,7 +31,6 @@ module.exports = function (grunt) {
                 dest: 'static/build/js/sync_ctrls_sers_scripts.js',
             }
         },
-
         cssmin: {
             /*css: {
              files: {
@@ -122,6 +116,7 @@ module.exports = function (grunt) {
                     'static/app/scripts/services/taskservices.js',
                     'static/app/scripts/services/eventservices.js',
                     'static/app/scripts/services/userservices.js',
+                    'static/app/scripts/services/billingservices.js',
                     'static/app/scripts/services/groupservices.js',
                     'static/app/scripts/services/noteservices.js',
                     'static/app/scripts/services/commentservices.js',
@@ -176,5 +171,4 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
-    grunt.loadNpmTasks('grunt-livereload')
 };

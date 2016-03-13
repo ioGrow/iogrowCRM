@@ -50,6 +50,11 @@ indexes:
 - kind: Account
   properties:
   - name: organization
+  - name: created_at
+
+- kind: Account
+  properties:
+  - name: organization
   - name: name
 
 - kind: Account
@@ -131,6 +136,11 @@ indexes:
   properties:
   - name: organization
   - name: contact_name
+
+- kind: Case
+  properties:
+  - name: organization
+  - name: created_at
 
 - kind: Case
   properties:
@@ -263,6 +273,11 @@ indexes:
 - kind: Contact
   properties:
   - name: organization
+  - name: created_at
+
+- kind: Contact
+  properties:
+  - name: organization
   - name: firstname
 
 - kind: Contact
@@ -357,7 +372,17 @@ indexes:
 - kind: Event
   properties:
   - name: organization
+  - name: created_at
+
+- kind: Event
+  properties:
+  - name: organization
   - name: starts_at
+
+- kind: L
+  properties:
+  - name: organization
+  - name: created_at
 
 - kind: Lead
   properties:
@@ -371,6 +396,16 @@ indexes:
   - name: collaborators_ids
   - name: updated_at
     direction: desc
+
+- kind: Lead
+  properties:
+  - name: organization
+  - name: creadted_at
+
+- kind: Lead
+  properties:
+  - name: organization
+  - name: created_at
 
 - kind: Lead
   properties:
@@ -504,6 +539,11 @@ indexes:
   - name: organization
   - name: amount
     direction: desc
+
+- kind: Opportunity
+  properties:
+  - name: organization
+  - name: created_at
 
 - kind: Opportunity
   properties:
@@ -690,3 +730,48 @@ indexes:
   - name: is_root_pipeline
   - name: start_time
     direction: desc
+
+- kind: a
+  properties:
+  - name: organization
+  - name: created_at
+
+- kind: d
+  properties:
+  - name: organization
+  - name: created_at
+
+- kind: e
+  properties:
+  - name: organization
+  - name: created_at
+
+- kind: e_account
+  properties:
+  - name: organization
+  - name: created_at
+
+- kind: e_case
+  properties:
+  - name: organization
+  - name: created_at
+
+- kind: e_event
+  properties:
+  - name: organization
+  - name: created_at
+
+- kind: e_lead
+  properties:
+  - name: organization
+  - name: created_at
+
+- kind: e_opportunity
+  properties:
+  - name: organization
+  - name: created_at
+
+- kind: e_task
+  properties:
+  - name: organization
+  - name: created_at

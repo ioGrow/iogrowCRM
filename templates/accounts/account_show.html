@@ -220,7 +220,7 @@
                           <div class="row">
                             <div class="col-md-3 col-sm-3 col-xs-3" ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false" style="padding-right:0px;display: table;vertical-align: middle;width: 25%;">
                                   <div class="pic" style="vertical-align:middle;top: -50px;position: absolute;left: 28%;">
-                                          <img alt="<%= account.name %>" class=" img-responsive img-thumbnail" ng-src="<%=imageSrc%>" style="width: 105px;height: auto;">
+                                          <img alt="<%= account.name %>" class=" img-responsive img-thumbnail" ng-src="<%=imageSrc%>" err-src="/static/img/default_company.png" style="width: 105px;height: auto;">
                                           <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn-on-show btn-upload btn-upload-contact" data-toggle="modal">
                                               <img src="/static/img/upload_logo.png">
                                           </a>
@@ -619,7 +619,7 @@
                                                   <div id="contactScroll" class="scroll-list">
                                                   <div ng-repeat="worker in account.linkedin_profile.workers" style="margin-bottom:10px" ng-hide="isEmpty(worker)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=worker.img || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
+                                                              <img src="<%=worker.img || '/static/img/avatar_contact.jpg'%>" err-src="/static/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
@@ -721,7 +721,7 @@
                                                 <ul  ng-hide="isEmptyArray(contacts)" id="slimRelated" class="list-unstyled contact-infos showList">   
                                                   <div  class="relatedContactsonAccount" ng-repeat="contact in contacts" style="margin-bottom: 5px;position: relative;border-bottom: 1px solid rgb(216, 216, 216);padding-bottom: 3px;" ng-hide="isEmpty(contact)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=contact.profile_img_url || '/static/img/avatar_contact.jpg'%>" style="width: 73px !important;height: auto !important;">
+                                                              <img src="<%=contact.profile_img_url || '/static/img/avatar_contact.jpg'%>" err-src="/static/img/avatar_contact.jpg" style="width: 73px !important;height: auto !important;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px;"  ng-mouseenter="showDelete = true" ng-mouseleave="showDelete = false">
@@ -861,7 +861,7 @@
                                                 </ul> 
                                                 <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(twShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
+                                                              <img src="<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>" err-src="/static/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
@@ -1278,7 +1278,7 @@
                 <div class="pic">
                   <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
                     <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
-                    <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= contact.profile_img_url %>" data-hasqtip="2" >
+                    <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= contact.profile_img_url %>" err-src="/static/img/avatar_contact.jpg" data-hasqtip="2" >
                   </a>
                 </div>
                 <div class="text">
@@ -2935,7 +2935,7 @@
                                                 </ul> 
                                                 <div ng-repeat="inRelatedShortProfile in inRelatedShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(inRelatedShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=inRelatedShortProfile.profile_picture || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
+                                                              <img src="<%=inRelatedShortProfile.profile_picture || '/static/img/avatar_contact.jpg'%>" err-src="/static/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
@@ -3116,7 +3116,7 @@
                                                 </ul> 
                                                 <div ng-repeat="twShortProfile in twRelatedShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(twShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
+                                                              <img src="<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>" err-src="/static/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">

@@ -43,12 +43,8 @@
                 + <i class="fa fa-user"></i> {{ _('New') }}
             </a>
         </span>
-        <!--  <button type="button" class="btn default" data-dismiss="modal" ng-click="showPurchase()">{{_("Purchase Licenses")}}</button> -->
-
-    <!--<span class="action-btns"></span>-->
     </div>
 </div>
-
 <div class="page-content admin-content">
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -127,7 +123,6 @@
                         <td class="table-box">
                             <input title='{{ _("Select all Users") }}' type="checkbox" ng-checked="user.is_admin"
                                    ng-click="setAdmin(user,$index,$event)" ng-hide="user.is_super_admin">
-
                             <p ng-show="user.is_super_admin"> super admin </p>
                         </td>
                         {% endif %}
@@ -135,51 +130,6 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-        <div class="showPage margin-bottom-15 col-md-3 user-resume">
-            <div class="col-items">
-                <i class="fa  fa-key"></i>
-                {{ _('License type') }}: <span class="pull-right"><%=organization.license.name%></span>
-                <!-- licenses type>-->
-            </div>
-            <div class="col-items">
-                <i class="fa  fa-check "></i>
-                {{ _('licenses bought') }} <span class="pull-right"><%=organization.nb_licenses%></span>
-            </div>
-            <div class="col-items">
-                <i class="fa  fa-group "></i>
-                {{ _('Users') }} <span class="pull-right"><%=organization.nb_users%> <!--nb users>--></span>
-            </div>
-
-            <div class="col-items">
-                <i class="fa  fa-user"></i>
-                {{ _('assigned licenses') }}
-                <span class="pull-right"><%=organization.nb_used_licenses%> </span>
-                <!--nb licenses>-->
-            </div>
-            <div class="col-items last-item">
-                <i class="fa  fa-ticket "></i>
-                {{ _('available licenses') }}
-                <span class="pull-right"><%=organization.nb_licenses - organization.nb_used_licenses%></span>
-                <!--nb active licenses>-->
-            </div>
-
-            {% if is_not_a_life_time %}
-            {% if is_freemium ==False %}
-            <div class="col-lg">
-                <i class="fa  fa-calendar "></i>
-                {{ _('Expire') }} : <%=organization.expires_on | date:'yyyy-MM-dd'%> <!--ex date>-->
-            </div>
-            <button title='{{ _("Purchase") }}' class="btn btn-sm blue task_action pull-right"
-                    ng-click="showPurchase()">
-                <i class="fa fa-shopping-cart"></i>
-       <span class="btn-text">
-          {{ _('Purchase') }}
-       </span>
-            </button>
-            {% endif %}
-            {% endif %}
-            <div class="clearfix"></div>
         </div>
         <div class="showPage custom-show margin-bottom-15 col-md-12" ng-show="invitees">
             {% if is_admin %}

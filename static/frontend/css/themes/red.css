@@ -196,40 +196,6 @@ Copyright
 	background: #db3a1b;
 }
 
-/***
-Blog Page
-***/
-/*Blog Posts*/
-.blog-info li i {
-	color: #db3a1b;
-}
-
-/*Blog Sidebar*/
-.blog-photo-stream li img:hover {
-	border-color: #db3a1b;
-}
-
-.blog-tags li a:hover {
-	background: #db3a1b;
-}
-
-.blog-tags li i {
-	color: #db3a1b;
-}
-
-.blog-tags li a:hover:after { 
-	border-left-color: #db3a1b;
-}
-
-/* Blog Item */
-.blog-item blockquote {
-	border-color: #db3a1b;
-}
-
-.blog-item h4.media-heading span a {
-    color: #db3a1b;
-}
-
 /* Portfolio */
 .filter-v1 .filter-category li:hover,
 .filter-v1 .filter-category li.active {

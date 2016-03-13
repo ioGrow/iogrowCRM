@@ -422,7 +422,7 @@
                         <td>
                           <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
                             <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo profile-photoOnList" src="/static/img/avatar_contact.jpg" >
-                            <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo profile-photoOnList" ng-src="<%= contact.profile_img_url %>" data-hasqtip="2">
+                            <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo profile-photoOnList" err-src="/static/img/avatar_contact.jpg" ng-src="<%= contact.profile_img_url %>" data-hasqtip="2">
                           </a>
                         </td>
                         <td>
@@ -549,8 +549,8 @@
               <div class="head">
                 <div class="pic">
                   <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
-                    <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
-                    <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= contact.profile_img_url %>" data-hasqtip="2" >
+                    <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg">
+                    <img ng-show="contact.profile_img_url"  err-src="/static/img/avatar_contact.jpg" class="img-responsive profile-photo" src="<%= contact.profile_img_url %>" data-hasqtip="2" >
                   </a>
                 </div>
                 <div class="text">
@@ -639,7 +639,7 @@
         <div class="portlet showCard customPortlet">
           <div class="portlet-title">
             <div class="caption">
-                <!-- class="fa fa-reorder"--><i class="fa fa-tag" style="font-size: 16px;"></i>{{_('Tags')}}
+                <!-- class="fa fa-reorder"--><i class="fa fa-tags" style="font-size: 16px;"></i>{{_('Tags')}}
             </div>
           </div>
           <div class="portlet-body">
@@ -705,7 +705,7 @@
         <div class="portlet showCard customPortlet">
           <div class="portlet-title">
             <div class="caption">
-                    <!-- class="fa fa-reorder"--><i></i>{{ _('Tags')}}
+                    <!-- class="fa fa-reorder"--><i class="fa fa-tags"></i>{{ _('Tags')}}
             </div>
           </div>
           <div class="portlet-body">

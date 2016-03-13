@@ -1,5 +1,5 @@
 application: gcdc2013-iogrow
-version: 18
+version: 19
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -20,7 +20,7 @@ builtins:
 - remote_api: on
 - appstats: on #/_ah/stats/
 includes:
-- mapreduce/include.yaml
+- lib/mapreduce/include.yaml
 handlers:
 - login: admin
   script: pipeline.handlers._APP
@@ -49,4 +49,5 @@ handlers:
   script: handlers.app
 
 
-
+skip_files:
+- node_modules/.*

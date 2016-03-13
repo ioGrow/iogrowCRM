@@ -1,5 +1,4 @@
 import re
-import math
 
 def getwords(doc):
 	splitter=re.compile('\\W*')

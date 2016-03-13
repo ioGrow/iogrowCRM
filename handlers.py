@@ -1,17 +1,20 @@
 # Standard libs
-import json
-import os
+import csv
 import datetime
-import time
+import json
+import logging
+import os
 import re
 import sys
-import csv
+import time
+
 import httplib2
-from webapp2_extras import sessions
-from webapp2_extras import i18n
-import webapp2
 import jinja2
+import webapp2
 from google.appengine._internal.django.utils.encoding import smart_str
+from webapp2_extras import i18n
+from webapp2_extras import sessions
+
 # Google libs
 import endpoints
 from google.appengine.ext import ndb
@@ -24,12 +27,13 @@ from apiclient.discovery import build
 from apiclient.http import BatchHttpRequest
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.opportunities import Opportunity
-from model import Application, STANDARD_TABS, ADMIN_TABS
+from iomodels.crmengine.payment import Subscription
+from model import Application, STANDARD_TABS, ADMIN_TABS, User
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.appengine import OAuth2Decorator
 # Our libraries
-from endpoints_helper import EndpointsHelper, OAuth2TokenFromCredentials
+from endpoints_helper import EndpointsHelper
 from people import linked_in
 import model
 from iomodels.crmengine.contacts import Contact
@@ -38,16 +42,14 @@ from iomodels.crmengine.leads import LeadInsertRequest, Lead
 from iomodels.crmengine.documents import Document
 from iomodels.crmengine.tags import Tag
 import iomessages
-from blog import Article
-from iograph import Node, Edge
+from iograph import Edge
 # import event . hadji hicham 09-07-2014
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task, AssignedGoogleId
-from iomodels.crmengine.gcontacts import Gcontact
 import sfoauth2
 from sf_importer_helper import SfImporterHelper
 from discovery import Discovery
-# under the test .beata !
+# under the test .beta !
 from ioreporting import Reports
 import stripe
 import requests
@@ -55,14 +57,10 @@ from requests.auth import HTTPBasicAuth
 import config as config_urls
 import people
 from intercom import Intercom
-from intercom import User as IntercomUser
 from simple_salesforce import Salesforce
 from semantic.dates import DateService
-import gdata.data
-import gdata.contacts.client
-import gdata.contacts.data
-from gdata.contacts.client import ContactsClient
 from mixpanel import Mixpanel
+from iomodels.crmengine import config as app_config
 
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
@@ -226,6 +224,7 @@ class BaseHandler(webapp2.RequestHandler):
                 if template_name in template_mapping.keys():
                     custom_fields = model.CustomField.list_by_object(user, template_mapping[template_name])
                 # text=i18n.gettext('Hello, world!')
+                organization = user.organization.get()
                 template_values = {
                     'is_freemium': is_freemium,
                     'is_admin': is_admin,
@@ -247,8 +246,9 @@ class BaseHandler(webapp2.RequestHandler):
                     'length_whole_part': currency_format.length_whole_part,
                     'sections_delimiter': currency_format.sections_delimiter,
                     'decimal_delimiter': currency_format.decimal_delimiter,
-                    'sales_tabs' : STANDARD_TABS,
-                    'admin_tabs' : ADMIN_TABS
+                    'sales_tabs': STANDARD_TABS,
+                    'admin_tabs': ADMIN_TABS,
+                    'plan': organization.get_subscription().plan.get()
                 }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -470,7 +470,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
     def get(self, template=None):
         if not template:
             template = 'templates/base.html'
-        # Check if the user is loged-in, if not redirect him to the sign-in page
+        # Check if the user is logged-in, if not redirect him to the sign-in page
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
                 user = self.get_user_from_session()
@@ -479,7 +479,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     self.redirect('/welcome/')
                     return
                 if user.google_credentials is None:
-                     self.redirect('/sign-in')
+                    self.redirect('/sign-in')
                 logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/'
                 if user is None or user.type == 'public_user':
                     self.redirect('/welcome/')
@@ -494,7 +494,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                 admin_app = None
                 active_app = Application.query(Application.name == "sales").get()
                 print active_app
-                #tabs = user.get_user_active_tabs()
+                # tabs = user.get_user_active_tabs()
                 tabs = ndb.get_multi(active_app.tabs)
                 applications = []
                 for app in apps:
@@ -519,6 +519,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                         license_is_expired = True
                 if user.license_status == "suspended":
                     user_suspended = True
+                organization = user.organization.get()
                 template_values = {
                     'logo': logo,
                     'license_is_expired': False,
@@ -533,8 +534,9 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     'uSerlanguage': uSerlanguage,
                     'sales_app': sales_app,
                     'organization_name': organization.name,
-                    'sales_tabs' : STANDARD_TABS,
-                    'admin_tabs' : ADMIN_TABS
+                    'sales_tabs': STANDARD_TABS,
+                    'admin_tabs': ADMIN_TABS,
+                    'plan': organization.get_subscription().plan.get()
                 }
                 if admin_app:
                     template_values['admin_app'] = admin_app
@@ -545,33 +547,6 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                 self.redirect('/welcome/')
         else:
             self.redirect('/welcome/')
-
-
-class BlogHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-            user = self.get_user_from_session()
-            template_values = {'user': user}
-        else:
-            template_values = {}
-        template = jinja_environment.get_template('templates/blog/blog_base.html')
-        self.response.out.write(template.render(template_values))
-
-
-class PublicArticlePageHandler(BaseHandler, SessionEnabledHandler):
-    def get(self, id):
-        article = Article.get_schema(id=id)
-        template_values = {'article': article}
-        template = jinja_environment.get_template('templates/blog/public_article_show.html')
-        self.response.out.write(template.render(template_values))
-
-
-class PublicSupport(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        template_values = {}
-        template = jinja_environment.get_template('templates/blog/public_support.html')
-        self.response.out.write(template.render(template_values))
-
 
 # Change the current app for example from sales to customer support
 class ChangeActiveAppHandler(SessionEnabledHandler):
@@ -906,13 +881,13 @@ class GooglePlusConnect(SessionEnabledHandler):
             invitee = model.Invitation.query(model.Invitation.invited_mail == user_email).get()
         if invitee:
             user = GooglePlusConnect.save_token_for_user(
-                    user_email,
+                user_email,
                 credentials,
                 invited_user_id
             )
         else:
             user = GooglePlusConnect.save_token_for_user(
-                    user_email,
+                user_email,
                 credentials
             )
         lang = self.get_language().replace('-', '_')
@@ -1015,27 +990,6 @@ class InstallFromDecorator(SessionEnabledHandler):
                 self.redirect('/')
         except:
             self.redirect('/')
-
-
-class ArticleSearchHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/articles/article_search.html')
-
-
-class ArticleListHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/articles/article_list.html')
-
-
-class ArticleShowHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/articles/article_show.html')
-
-
-class ArticleNewHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/articles/article_new.html')
-
 
 class AccountListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1172,6 +1126,11 @@ class UserListHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/admin/users/user_list.html')
 
 
+class BillingEditHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/billing/billing_edit.html')
+
+
 class EditCompanyHandler(IndexHandler, SessionEnabledHandler):
     def get(self):
         IndexHandler.get(self, 'templates/admin/company/company_edit.html')
@@ -1200,6 +1159,11 @@ class EditCaseStatusHandler(BaseHandler, SessionEnabledHandler):
 class EditLeadStatusHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/lead_status/lead_status_edit.html')
+
+
+class LeadScoringHandler(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        self.prepare_template('templates/admin/lead_scoring/lead_scoring_edit.html')
 
 
 class EditCustomFieldsHandler(BaseHandler, SessionEnabledHandler):
@@ -1295,6 +1259,7 @@ class SalesforceImporter(BaseHandler, SessionEnabledHandler):
         authorization_url = flow.step1_get_authorize_url()
         self.redirect(authorization_url)
 
+
 class SFsubscriberTest(BaseHandler, SessionEnabledHandler):
     def post(self):
         email = self.request.get("email")
@@ -1353,6 +1318,19 @@ class GetSfUser(BaseHandler, SessionEnabledHandler):
         self.response.out.write(json.dumps(response))
 
 
+class SubscriptionHandler(SessionEnabledHandler):
+    def get(self):
+        template = jinja_environment.get_template(name='templates/admin/subscription/subscription.html')
+        user = self.get_user_from_session()
+        template_values = {
+            'user': user,
+            'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
+            'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
+            'publishable_key': app_config.PUBLISHABLE_KEY,
+            'users_count': model.User.get_users_count_by_organization(user.organization)
+        }
+        self.response.out.write(template.render(template_values))
+
 
 class SFsubscriber(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -1381,10 +1359,92 @@ class SFsubscriber(BaseHandler, SessionEnabledHandler):
         self.response.out.write(json.dumps({}))
 
 
+
+class PayPalPayingUsers(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        # PayPalPayedUser
+        # valid until
+        # all models
+        # update license models
+        now = datetime.datetime.now()
+        now_plus_month = now + datetime.timedelta(days=30)
+        active_until = now_plus_month
+        save_payed_user = model.PaypalPayedUser(
+            txn_type=self.request.get("txn_type"),
+            subscr_id=self.request.get("subscr_id"),
+            last_name=self.request.get("last_name"),
+            mc_currency=self.request.get("mc_currency"),
+            item_name=self.request.get("item_name"),
+            business=self.request.get("business"),
+            amount3=self.request.get("amount3"),
+            verify_sign=self.request.get("verify_sign"),
+            payer_status=self.request.get("payer_status"),
+            payer_email=self.request.get("payer_email"),
+            first_name=self.request.get("first_name"),
+            receiver_email=self.request.get("receiver_email"),
+            payer_id=self.request.get("payer_id"),
+            item_number=self.request.get("item_number"),
+            subscr_date=self.request.get("subscr_date"),
+            address_name=self.request.get("address_name"),
+            ipn_track_id=self.request.get("ipn_track_id"),
+            option_selection1=self.request.get("option_selection1"),
+            option_name1=self.request.get("option_name1"),
+            active_until=active_until
+        ).put()
+
+
+class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        user = self.get_user_from_session()
+        organization = user.organization.get()
+
+        # Set your secret key: remember to change this to your live secret key in production
+        # See your keys here https://dashboard.stripe.com/account/apikeys
+        stripe.api_key = app_config.STRIPE_API_KEY
+
+        # Get the credit card details submitted by the form
+        token = self.request.get('token')
+        interval = self.request.get('interval')
+        premium_subscription = Subscription.create_premium_subscription(interval)
+        # plane = self.request.get('plane')
+        # Create the charge on Stripe's servers - this will charge the user's card
+        try:
+            stripe.Plan.retrieve('{}_{}'.format(app_config.PREMIUM, interval))
+            customer = stripe.Customer.create(
+                source=token,
+                description=organization.key.id(),
+                plan='{}_{}'.format(app_config.PREMIUM, interval),
+                email=user.email,
+                quantity=User.get_users_count_by_organization(user.organization)
+            )
+
+            premium_subscription.is_auto_renew = not customer.subscriptions['data'][0].cancel_at_period_end
+            premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
+            premium_subscription.put()
+
+            organization.stripe_customer_id = customer.id
+            organization.set_subscription(premium_subscription)
+            organization.put()
+        except stripe.error.CardError, e:
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.write(e.message)
+            self.response.set_status(e.http_status)
+
+
+class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        logging.info(self.request)
+
 class SFcallback(BaseHandler, SessionEnabledHandler):
     def get(self):
         code = self.request.get("code")
         url = 'http://app.copylead.com/oauth-authorized?code=%s' % code
+        self.redirect(str(url))
+
+class SFRMcallback(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        code = self.request.get("code")
+        url = 'http://referral.copylead.com/oauth-authorized?code=%s' % code
         self.redirect(str(url))
 
 class SFconnect(BaseHandler, SessionEnabledHandler):
@@ -1532,16 +1592,15 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
 class SFinvite(BaseHandler, SessionEnabledHandler):
     def post(self):
         data = json.loads(str(self.request.body))
-        print data
-        user_email = data['user_email']
+        user_email = ''
+        partner_email = ''
+        if 'user_email' in data.keys():
+            user_email = data['user_email']
+        if 'partner_email' in data.keys():
+            partner_email = data['partner_email']
         subject = data['subject']
         text = data['text'] + ' https://chrome.google.com/webstore/detail/copylead-for-salesforce/gbenffkgdeokfgjbbjibklflbaeelinh'
         emails = data['emails']
-        print user_email
-        print emails
-        print subject
-
-        # try:
         user = model.SFuser.query(model.SFuser.email == user_email).get()
         if user:
             for email in emails:
@@ -1555,19 +1614,40 @@ class SFinvite(BaseHandler, SessionEnabledHandler):
                     invitation.put()
                     sender_address =" %s %s <copylead@gcdc2013-iogrow.appspotmail.com>" % (user.firstname, user.lastname)
                     mail.send_mail(sender_address, email, subject, text)
-        # except:
-        #     print 'the user doesnt exist'
-
+        partner = model.SFpartner.query(model.SFpartner.email == partner_email).get()
+        if partner:
+            for email in emails:
+                existing = model.SFinvitation.query(model.SFinvitation.invitee_email == email).get()
+                if not existing:
+                    invitation = model.SFinvitation(
+                        partner_key = partner.key,
+                        partner_email=partner_email,
+                        invitee_email=email
+                    )
+                    invitation.put()
+                    sender_address =" %s %s <copylead@gcdc2013-iogrow.appspotmail.com>" % (partner.firstname, partner.lastname)
+                    mail.send_mail(sender_address, email, subject, text)
         self.response.headers['Access-Control-Allow-Origin'] = "*"
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
 
+
+class SFlistInviteesByPartners(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        data = json.loads(str(self.request.body))
+        user_email = data['user_email']
+        partner = model.SFpartner.query(model.SFpartner.email==user_email).get()
+        response = model.SFinvitation().list_by_partner(partner.key)
+        self.response.headers['Access-Control-Allow-Origin'] = "*"
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(response))
 
 class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
         template = jinja_environment.get_template('templates/salesforce_callback.html')
         self.response.out.write(template.render(template_values))
+
 
 class ZohoSignIn(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1576,12 +1656,18 @@ class ZohoSignIn(BaseHandler, SessionEnabledHandler):
         self.response.out.write(template.render(template_values))
 
 
+class ZohoUser(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        ZohoUser = model.ZohoUser(
+            email=self.request.get("email")
+        ).put()
+
+
 class GoGo(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
         template = jinja_environment.get_template('templates/sf.html')
         self.response.out.write(template.render(template_values))
-
 
 
 class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
@@ -1775,7 +1861,7 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
                         type, value, tb = sys.exc_info()
                         print str(value)
                     params = {
-                        'partial_error': true
+                        'partial_error': True
                     }
                     if source:
                         params['source'] = source
@@ -1794,10 +1880,11 @@ class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(created_lead))
 
+
 class ZohoSaveLead(BaseHandler, SessionEnabledHandler):
     def post(self):
-        #access_token = self.request.get("access_token")
-        #instance_url = self.request.get("instance_url")
+        # access_token = self.request.get("access_token")
+        # instance_url = self.request.get("instance_url")
         firstname = self.request.get("firstname")
         lastname = self.request.get("lastname")
         title = self.request.get("title")
@@ -1810,15 +1897,16 @@ class ZohoSaveLead(BaseHandler, SessionEnabledHandler):
         email = self.request.get("email")
 
         saved_lead = model.ZohoLead(
-                firstname=firstname,
-                lastname=lastname,
-                zoho_id=zoho_id,
-                photo_url=profile_img_url
-            ).put()
-        #track_mp_action(COPYLEAD_Zoho_MIXPANEL_ID, )
+            firstname=firstname,
+            lastname=lastname,
+            zoho_id=zoho_id,
+            photo_url=profile_img_url
+        ).put()
+        # track_mp_action(COPYLEAD_Zoho_MIXPANEL_ID, )
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(zoho_id))
+
 
 class SFmarkAsLead(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -3646,7 +3734,8 @@ class SFusersCSV(BaseHandler, SessionEnabledHandler):
             is_paying = False
             if u.stripe_id:
                 is_paying = True
-            writer.writerow(["%s %s" %(u.firstname, u.lastname), u.email, is_paying])
+            writer.writerow(["%s %s" % (u.firstname, u.lastname), u.email, is_paying])
+
 
 # scrapyd UI
 class ScrapydHandler(BaseHandler, SessionEnabledHandler):
@@ -3775,7 +3864,7 @@ routes = [
     # ('/workers/sync_contact_with_gontacts', SyncContactWithGontacts),
     # ('/workers/init_contacts_from_gcontacts', InitContactsFromGcontacts),
     # Contact sync
-    #('/workers/syncNewContact', SyncNewContact),
+    # ('/workers/syncNewContact', SyncNewContact),
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
     ('/workers/synctask', SyncCalendarTask),
@@ -3810,14 +3899,8 @@ routes = [
     #
     ('/', IndexHandler),
     ('/wiki', WikiHandler),
-    ('/support', PublicSupport),
     ('/ioadmin', ioAdminHandler),
     ('/ioadmin/biz', GBizCompanies),
-    (r'/blog/articles/(\d+)', PublicArticlePageHandler),
-    ('/views/articles/list', ArticleListHandler),
-    ('/views/articles/show', ArticleShowHandler),
-    ('/views/articles/new', ArticleNewHandler),
-    ('/views/articles/search', ArticleSearchHandler),
     ('/partners/', PartnersHandler),
     # Templates Views Routes
     ('/views/discovers/list', DiscoverListHandler),
@@ -3865,6 +3948,7 @@ routes = [
     ('/views/admin/users/list', UserListHandler),
     ('/views/admin/users/new', UserNewHandler),
     ('/views/admin/users/show', UserShowHandler),
+    ('/views/admin/billing/billing_edit', BillingEditHandler),
     ('/views/admin/groups/list', GroupListHandler),
     ('/views/admin/groups/show', GroupShowHandler),
     ('/views/admin/settings', settingsShowHandler),
@@ -3876,10 +3960,14 @@ routes = [
     ('/views/admin/opportunity/edit', EditOpportunityHandler),
     ('/views/admin/case_status/edit', EditCaseStatusHandler),
     ('/views/admin/lead_status/edit', EditLeadStatusHandler),
+    ('/views/admin/lead_scoring/edit', LeadScoringHandler),
     ('/views/admin/data_transfer/edit', EditDataTransferHandler),
     ('/views/admin/synchronisation/edit', EditSynchronisationHandler),
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
     ('/views/admin/delete_all_records', deleteAllRecordHandler),
+    ('/subscribe', SubscriptionHandler),
+    ('/stripe/subscription', StripeSubscriptionHandler),
+    ('/stripe/subscription_web_hook', StripeSubscriptionWebHooksHandler),
     # billing stuff. hadji hicham . 07/08/2014
     ('/views/billing/list', BillingListHandler),
     ('/views/billing/show', BillingShowHandler),
@@ -3889,7 +3977,7 @@ routes = [
     # ioGrow Live
     ('/gogo', GoGo),
     ('/sfapi/markaslead', SFmarkAsLead),
-    ('/zohoapi/markaslead',ZohoSaveLead),
+    ('/zohoapi/markaslead', ZohoSaveLead),
     ('/sfapi/dev/markaslead', SFmarkAsLeadDev),
     ('/sfapi/search', SFsearch),
     ('/sfapi/dev/search', SFsearchDev),
@@ -3914,13 +4002,16 @@ routes = [
     (decorator.callback_path, decorator.callback_handler()),
     ('/sfimporter', SalesforceImporter),
     ('/sfconnect', SFconnect),
+    ('/paypal_paying_users', PayPalPayingUsers),
     ('/sfsubscriber', SFsubscriber),
     ('/sfsubscribertest', SFsubscriberTest),
 
     ('/sfoauth2callback', SalesforceImporterCallback),
+    ('/zohosignin', ZohoSignIn),
+    ('/zohouser', ZohoUser),
     ('/copylead_sf_auth_callback', SFcallback),
+    ('/copylead_sf_rm_auth_callback', SFRMcallback),
 
-    ('/zohosignin',ZohoSignIn),
     ('/sf_invite', SFinvite),
     ('/invitation_sent', SFinvite),
     ('/stripe', StripeHandler),
@@ -3934,6 +4025,8 @@ routes = [
     ('/sign-with-iogrow', SignInWithioGrow),
     ('/sf-users', SFusersCSV),
     ('/copylead/sf/api/users/get', GetSfUser),
+    ('/copylead/sf/api/invitees/list_by_partners', SFlistInviteesByPartners),
+
     # ('/gmail-copylead',GmailAnalysisForCopylead),
     # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
 
@@ -3945,7 +4038,6 @@ routes = [
     # ('/path/to/cron/get_popular_posts', cron_get_popular_posts)
 
 ]
-
 
 config = {}
 config['webapp2_extras.sessions'] = {

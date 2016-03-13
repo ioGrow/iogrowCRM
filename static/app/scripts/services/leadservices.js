@@ -1,6 +1,6 @@
 var leadservices = angular.module('crmEngine.leadservices', []);
 
-leadservices.factory('Lead', function ($http) {
+leadservices.factory('Lead', function ($rootScope) {
 
     var Lead = function (data) {
         angular.extend(this, data);
@@ -794,7 +794,11 @@ leadservices.factory('Lead', function ($http) {
             'method': 'POST',
             'body': params,
             'callback': (function (resp) {
-                if (!resp.code && resp.id) {
+                if (resp.error && resp.error.code == 412){
+                    $('#payment_modal').modal('show');
+                    return
+                    //window.location.replace($rootScope.subscription_url);
+                } if (!resp.code && resp.id) {
                     $scope.leadInserted(resp.id);
                 } else if (!resp.id) {
                     console.log(resp);

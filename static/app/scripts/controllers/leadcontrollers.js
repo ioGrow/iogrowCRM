@@ -311,24 +311,18 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 if (localStorage['completedTour'] != 'True') {
                     $scope.wizard();
                 }
-
             }
             else {
                 
             }
 
-            // for (var i=0;i<100;i++)
-            //   { 
-            //     var poww= Math.floor((Math.random() * 10) + 1);
-            //     var addon=Math.pow(10, poww);
-            //     console.log(poww);
-            //     console.log(addon);
-            //     var test=addon.toString();
-            //     params={'firstname':'M3amer ',
-            //             'lastname':'tt'+test,
-            //               'access':'public'}
-            //     Lead.insert($scope,params)
-            //   }            
+             /*for (var i=0;i<20;i++)
+               {
+                 params={'firstname':'test' + i,
+                         'lastname':'test'+i,
+                           'access':'public'}
+                 Lead.insert($scope,params)
+               }*/
 
             
             $scope.checkScrollBar();
@@ -344,11 +338,8 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
                 $scope.show = localStorage['leadShow'];
 
-            }
-            ;
+            };
             window.Intercom('update');
-
-
         };
         $scope.refreshCurrent = function () {
             $scope.runTheProcess();
@@ -1752,7 +1743,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         if ($scope.timezone == "") {
             $scope.timezone = moment().format("Z");
         }
-
+        $scope.lunchMaps=lunchMaps;
+        $scope.lunchMapsLinkedin=lunchMapsLinkedin;
 
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
@@ -1790,15 +1782,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.getCoverUrl = function () {
             var url = "/static/img/covers/" + Math.floor(Math.random() * 5 + 1) + ".jpg";
             return url;
-        }
-        $scope.lunchMaps = function (lat, lng, address) {
-            if (lat && lng) {
-                window.open('http://www.google.com/maps/place/' + lat + ',' + lng, 'winname', "width=700,height=550");
-            } else {
-                var locality = address.formatted || address.street + ' ' + address.city + ' ' + address.state + ' ' + address.country;
-                window.open('http://www.google.com/maps/search/' + locality, 'winname', "width=700,height=550");
-            }
-            ;
         }
         $scope.statuses = [
             {value: 'Home', text: 'Home'},
@@ -2489,7 +2472,9 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     $scope.linkedShortProfile = {};
                     var params = {
                         "firstname": $scope.lead.firstname,
-                        "lastname": $scope.lead.lastname
+                        "lastname": $scope.lead.lastname,
+                        "title": $scope.lead.title,
+                        "company": $scope.lead.company
                     }
                     Linkedin.listPeople(params, function (resp) {
                         if (!resp.code) {
@@ -4135,8 +4120,11 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.getLinkedinProfile = function () {
             var params = {
                 "firstname": $scope.lead.firstname,
-                "lastname": $scope.lead.lastname
+                "lastname": $scope.lead.lastname,
+                "title": $scope.lead.title,
+                "company": $scope.lead.company
             }
+
             var linkedurl = null
             if ($scope.infonodes.sociallinks == undefined) {
                 $scope.infonodes.sociallinks = [];
@@ -4491,6 +4479,8 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.lead_err={};
         $scope.lead_err.firstname=false;
         $scope.lead_err.lastname=false;
+        $scope.lunchMaps=lunchMaps;
+        $scope.lunchMapsLinkedin=lunchMapsLinkedin;
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
                 if (message) {
@@ -5391,7 +5381,9 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.getLinkedinProfile = function () {
             var params = {
                 "firstname": $scope.lead.firstname,
-                "lastname": $scope.lead.lastname
+                "lastname": $scope.lead.lastname,
+                "title": $scope.lead.title,
+                "company": $scope.lead.company
             }
             var linkedurl = null;
             $scope.inNoResults = false;

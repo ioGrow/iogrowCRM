@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
+    <style>
+        body {
+            font-family: 'Roboto' !important;
+        }
+
+        /* Plane selctor Style */
+        .checkout-plan-select label:hover {
+            background: #cbd7df;
+            -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+            -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+            box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+        }
+
+        .checkout-plan-select input[type=radio]:checked + label > i.fa-check-circle {
+            opacity: 1;
+        }
+
+        .checkout-plan-select input[type=radio] + label > i.fa-check-circle {
+            background: #76b852;
+            border-radius: 15px;
+            /* font-size: 11px; */
+            height: 18px;
+            left: 11px;
+            line-height: 21px;
+            opacity: 0;
+            pointer-events: none;
+            position: absolute;
+            text-align: center;
+            top: 22px;
+            width: 18px;
+            z-index: 1;
+        }
+
+        .checkout-plan-select label {
+            position: relative;
+            padding: 4px 15px 8px 45px;
+            margin: 6px 0px;
+            cursor: pointer;
+            background: #eaeff2;
+            border-radius: 3px;
+            color: #323b43;
+            font-size: 24px;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            width: 100%;
+        }
+
+        .checkout-plan-select .plan-note {
+            display: block;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .plan-option > input[type="radio"] {
+            position: absolute;
+            z-index: 1;
+            margin-top: 31px;
+            margin-left: 12px;
+        }
+
+        .checkout-plan-select input[type=radio]:checked + label {
+            background-color: #168eea;
+            color: #fff;
+            -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+            -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+            box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+        }
+
+        /* CSS for Credit Card Payment form */
+        .credit-card-box .panel-title {
+            display: inline;
+            font-weight: bold;
+        }
+
+        .credit-card-box .form-control.error {
+            border-color: red;
+            outline: 0;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
+        }
+
+        .credit-card-box label.error {
+            font-weight: bold;
+            color: red;
+            padding: 2px 8px;
+            margin-top: 2px;
+        }
+
+        .credit-card-box .payment-errors {
+            font-weight: bold;
+            color: red;
+            padding: 2px 8px;
+            margin-top: 2px;
+            text-align: center;
+        }
+
+        .credit-card-box label {
+            display: block;
+        }
+
+        /* The old "center div vertically" hack */
+        .credit-card-box .display-table {
+            display: table;
+        }
+
+        .credit-card-box .display-tr {
+            display: table-row;
+        }
+
+        .credit-card-box .display-td {
+            display: table-cell;
+            vertical-align: middle;
+            width: 50%;
+        }
+
+        /* Just looks nicer */
+        .credit-card-box .panel-heading img {
+            min-width: 180px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>Payment</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <img src="/static/build/img/iogrow-logo-app.png" alt="logo" class="img-responsive">
+    </div>
+    <div class="panel panel-default">
+        <!--<div class="page-header">-->
+            <h1 style="text-align: center;margin-bottom: 40px">
+                Pay securely With Your Credit Card
+            </h1>
+        <!--</div>-->
+        <div class="panel-body">
+            <div class="demo-container row">
+                <!-- CREDIT CARD FORM STARTS HERE -->
+                <div class="panel panel-default col-md-4 col-md-offset-1 credit-card-box " style="padding: 0px">
+                    <div class="panel-heading display-table">
+                        <div class="row display-tr">
+                            <h3 class="panel-title display-td">Payment Details</h3>
+                            <div class="display-td">
+                                <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" id="payment-form">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="cardNumber">CARD NUMBER</label>
+                                        <div class="input-group">
+                                            <input
+                                                    type="tel"
+                                                    class="form-control"
+                                                    name="cardNumber"
+                                                    id="cardNumber"
+                                                    placeholder="Valid Card Number"
+                                                    autocomplete="cc-number"
+                                                    required autofocus />
+                                            <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-7 col-md-7">
+                                    <div class="form-group">
+                                        <label for="cardExpiry"><span class="hidden-xs">EXPIRATION</span><span
+                                                class="visible-xs-inline">EXP</span> DATE</label>
+                                        <input
+                                                type="tel"
+                                                class="form-control"
+                                                name="cardExpiry"
+                                                id="cardExpiry"
+                                                placeholder="MM / YY"
+                                                autocomplete="cc-exp"
+                                                required
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-xs-5 col-md-5 pull-right">
+                                    <div class="form-group">
+                                        <label for="cardCVC">CV CODE</label>
+                                        <input
+                                                type="tel"
+                                                class="form-control"
+                                                name="cardCVC"
+                                                id="cardCVC"
+                                                placeholder="CVC"
+                                                autocomplete="cc-csc"
+                                                required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="name">Full name</label>
+                                        <input type="text" class="form-control" name="name" id="name"
+                                               placeholder="First & Last name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-success btn-lg btn-block" type="submit" style="background:
+                                     #168EEA;border-color: #168EEA;-webkit-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.35);
+            -moz-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.35);
+            box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.35);">Start
+                                        Subscription
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="hidden" value="{{ user.id}}" id="user-id">
+
+                            <div class="row" style="display:none;">
+                                <div class="col-xs-12">
+                                    <p class="payment-errors"></p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- CREDIT CARD FORM ENDS HERE -->
+                <div class="col-md-4 col-md-offset-2">
+                    <div class="card-wrapper"></div>
+                    <div class="checkout-plan-select" style="margin-top: 10px">
+                        <div class="plan-option">
+                            <input id="month" name="interval" type="radio" value="month">
+                            <label for="month">
+                                <i class="fa fa-check-circle"></i>
+                                ${{ month_price }}/user/mo
+                                <div class="plan-note">
+                                    Cancel or get a refund anytime
+                                </div>
+                            </label>
+                        </div>
+                        <div class="plan-option">
+                            <input id="year" name="interval" type="radio" value="year" checked="checked">
+                            <label for="year">
+                                <i class="fa fa-check-circle"></i>
+                                ${{ year_price }}/user/yr
+                                <div class="plan-note">
+                                    Save 16.66% vs. paying monthly
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row" style="text-align: center;font-size: 36px;">
+                <p>You have {{ users_count }} user{% if users_count != 1 %}s{% endif %} in your organization</p>
+                <span style="font-weight: 500">Total cost : <span id="total-cost"></span>$</span>
+            </div>
+            <!--<div class="page-header">
+                <h3 style="text-align: center;">Or Pay Using Your PayPal Account.
+                </h3>
+            </div>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                <div style="text-align: center;"><input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="2M6ZKGY85V4PY">
+                    <input type="image" src="https://www.paypalobjects.com/en_US/FR/i/btn/btn_subscribeCC_LG.gif"
+                           border="0"
+                           name="submit" alt="PayPal - The safer, easier way to pay online!"></div>
+            </form>-->
+
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/card/1.2.2/js/card.min.js"></script>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.payment/1.3.2/jquery.payment.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.js"></script>
+<script>
+    var $form = $('#payment-form');
+    new Card({
+        form: '#payment-form',
+        container: '.card-wrapper', // *required*
+
+        formSelectors: {
+            numberInput: 'input#cardNumber', // optional — default input[name="number"]
+            expiryInput: 'input#cardExpiry', // optional — default input[name="expiry"]
+            cvcInput: 'input#cardCVC', // optional — default input[name="cvc"]
+            nameInput: 'input#name' // optional - defaults input[name="name"]
+        }
+    });
+
+    $form.on('submit', payWithStripe);
+    var users_count = parseInt({{ users_count }});
+    var month_price = parseInt({{ month_price }});
+    var year_price = parseInt({{ year_price }});
+    function getTotalCost(interval){
+        if (interval === 'month'){
+            return users_count * month_price;
+        } else if (interval === 'year'){
+            return users_count * year_price;
+        }
+    }
+    function changeTotalCostValue(interval){
+        var totalCost = getTotalCost(interval);
+        $('#total-cost').text(totalCost);
+    }
+    changeTotalCostValue($('input:radio:checked[name=interval]').val());
+    $('input:radio[name=interval]').change(function(){
+        var interval = $(this).val();
+        changeTotalCostValue(interval);
+    });
+    /* If you're using Stripe for payments */
+    function payWithStripe(e) {
+        e.preventDefault();
+        /* Visual feedback */
+        $form.find('[type=submit]').html('Validating <i class="fa fa-spinner fa-pulse"></i>');
+
+        var PublishableKey = '{{ publishable_key }}';
+        Stripe.setPublishableKey(PublishableKey);
+
+        /* Create token */
+        var expiry = $form.find('[name=cardExpiry]').payment('cardExpiryVal');
+        var ccData = {
+            number: $form.find('[name=cardNumber]').val().replace(/\s/g, ''),
+            cvc: $form.find('[name=cardCVC]').val(),
+            exp_month: expiry.month,
+            exp_year: expiry.year
+        };
+
+        Stripe.card.createToken(ccData, function stripeResponseHandler(status, response) {
+            if (response.error) {
+                /* Visual feedback */
+                $form.find('[type=submit]').html('Try again');
+                /* Show Stripe errors on the form */
+                $form.find('.payment-errors').text(response.error.message);
+                $form.find('.payment-errors').closest('.row').show();
+            } else {
+                /* Visual feedback */
+                $form.find('[type=submit]').html('Processing <i class="fa fa-spinner fa-pulse"></i>');
+                /* Hide Stripe errors on the form */
+                $form.find('.payment-errors').closest('.row').hide();
+                $form.find('.payment-errors').text("");
+                // response contains id and card, which contains additional card details
+                console.log(response.id);
+                console.log(response.card);
+                var token = response.id;
+                // AJAX - you would send 'token' to your server here.
+                $.post('/stripe/subscription', {
+                            token: token,
+                            interval:  $('input:radio:checked[name=interval]').val(),
+                            plane: 'premium'
+                        })
+                        // Assign handlers immediately after making the request,
+                        .done(function (data, textStatus, jqXHR) {
+                            console.log(data);
+                            console.log(textStatus);
+                            console.log(jqXHR);
+                            $form.find('[type=submit]').html('Payment successful <i class="fa fa-check"></i>').prop('disabled', true);
+                            window.location.replace('/#/leads/new')
+                        })
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            $form.find('[type=submit]').html('There was a problem').removeClass('success').addClass('error');
+                            /* Show Stripe errors on the form */
+                            $form.find('.payment-errors').text(jqXHR.responseText);
+                            $form.find('.payment-errors').closest('.row').show();
+                        });
+            }
+        });
+    }
+    /* Fancy restrictive input formatting via jQuery.payment library*/
+    /*$('input[name=cardNumber]').payment('formatCardNumber');
+     $('input[name=cardCVC]').payment('formatCardCVC');
+     $('input[name=cardExpiry]').payment('formatCardExpiry');*/
+
+    /* Form validation using Stripe client-side validation helpers */
+    jQuery.validator.addMethod("cardNumber", function (value, element) {
+        return this.optional(element) || Stripe.card.validateCardNumber(value);
+    }, "Please specify a valid credit card number.");
+
+    jQuery.validator.addMethod("cardExpiry", function (value, element) {
+        /* Parsing month/year uses jQuery.payment library */
+        value = $.payment.cardExpiryVal(value);
+        return this.optional(element) || Stripe.card.validateExpiry(value.month, value.year);
+    }, "Invalid expiration date.");
+
+    jQuery.validator.addMethod("cardCVC", function (value, element) {
+        return this.optional(element) || Stripe.card.validateCVC(value);
+    }, "Invalid CVC.");
+
+    validator = $form.validate({
+        rules: {
+            cardNumber: {
+                required: true,
+                cardNumber: true
+            },
+            cardExpiry: {
+                required: true,
+                cardExpiry: true
+            },
+            cardCVC: {
+                required: true,
+                cardCVC: true
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.form-control').removeClass('success').addClass('error');
+        },
+        unhighlight: function (element) {
+            $(element).closest('.form-control').removeClass('error').addClass('success');
+        },
+        errorPlacement: function (error, element) {
+            $(element).closest('.form-group').append(error);
+        }
+    });
+
+    paymentFormReady = function () {
+        if ($form.find('[name=cardNumber]').hasClass("success") &&
+                $form.find('[name=cardExpiry]').hasClass("success") &&
+                $form.find('[name=cardCVC]').val().length > 1) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+    $form.find('[type=submit]').prop('disabled', true);
+    var readyInterval = setInterval(function () {
+        if (paymentFormReady()) {
+            $form.find('[type=submit]').prop('disabled', false);
+            clearInterval(readyInterval);
+        }
+    }, 250);
+</script>
+</body>
+</html>

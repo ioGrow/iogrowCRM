@@ -436,7 +436,7 @@
                             <a href="/#/accounts/show/<%= account.id %>" class="startup-link"
                                title="<%= account.name %>">
                             <img width="40" ng-hide="account.logo_img_id" alt="account.name" class="img-resonsive img-thumbnail" src="/static/img/default_company.png" >
-                            <img  width="40" ng-show="account.logo_img_id" alt="account.name" class="img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
+                            <img  width="40" ng-show="account.logo_img_id" alt="account.name" class="img-thumbnail" err-src="/static/img/default_company.png" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
                           </a>
                         </td>
                         <td>
@@ -566,7 +566,7 @@
                 <div class="pic">
                  <!-- <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="account.name">-->
                  <img ng-hide="account.logo_img_id||account.logo_img_url" alt="account.name" class="img-resonsive img-thumbnail" src="/static/img/default_company.png">
-                  <img  ng-show="account.logo_img_id||account.logo_img_url" alt="account.name" class="img-resonsive img-thumbnail" ng-src="<%=(account.logo_img_id) ? 'https://docs.google.com/uc?id='+account.logo_img_id : account.logo_img_url%>" data-hasqtip="2" >
+                  <img  ng-show="account.logo_img_id||account.logo_img_url" alt="account.name" class="img-resonsive img-thumbnail" err-src="/static/img/default_company.png" ng-src="<%=(account.logo_img_id) ? 'https://docs.google.com/uc?id='+account.logo_img_id : account.logo_img_url%>" data-hasqtip="2" >
 
                   <!--</a>-->
                 </div>

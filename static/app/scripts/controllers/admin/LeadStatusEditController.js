@@ -1,7 +1,3 @@
-/**
- * Created by Ghiboub khalid on 9/29/15.
- */
-
 app.controller('LeadStatusEditCtrl', ['$scope', 'Auth', 'Leadstatus', function ($scope, Auth, Leadstatus) {
     $("ul.page-sidebar-menu li").removeClass("active");
     $("#id_LeadStatus").addClass("active");

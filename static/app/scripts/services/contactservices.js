@@ -1,5 +1,5 @@
 var contactservices = angular.module('crmEngine.contactservices', []);
-accountservices.factory('Contact', function ($http) {
+accountservices.factory('Contact', function ($rootScope) {
 
     var Contact = function (data) {
         angular.extend(this, data);
@@ -628,13 +628,13 @@ accountservices.factory('Contact', function ($http) {
         gapi.client.crmengine.contacts.export(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
-                console.log("request ssent")
+                console.log("request sent")
 
             } else {
 
             }
         });
-    }
+    };
     Contact.export_key = function ($scope, params) {
         //$("#load_btn").attr("disabled", "true");
         //$("#close_btn").attr("disabled", "true");
@@ -648,12 +648,17 @@ accountservices.factory('Contact', function ($http) {
 
             }
         });
-    }
+    };
 
     Contact.insert = function ($scope, params) {
         trackMixpanelAction('CONTACT_INSERT');
         $scope.inProcess(true);
         gapi.client.crmengine.contacts.insertv2(params).execute(function (resp) {
+            if (resp.error && resp.error.code == 412){
+                //window.location.replace($rootScope.subscription_url);
+                $('#payment_modal').modal('show');
+                return
+            }
 
             if (!resp.code) {
                 if ($scope.contacts == undefined) {

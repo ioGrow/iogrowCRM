@@ -1,3 +1,7 @@
+from google.appengine.ext import vendor
+vendor.add('lib')
+
+
 from google.appengine.ext.appstats import recording
 
 appstats_CALC_RPC_COSTS = True
