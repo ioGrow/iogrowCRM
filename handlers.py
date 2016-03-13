@@ -1441,6 +1441,12 @@ class SFcallback(BaseHandler, SessionEnabledHandler):
         url = 'http://app.copylead.com/oauth-authorized?code=%s' % code
         self.redirect(str(url))
 
+class SFRMcallback(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        code = self.request.get("code")
+        url = 'http://referral.copylead.com/oauth-authorized?code=%s' % code
+        self.redirect(str(url))
+
 class SFconnect(BaseHandler, SessionEnabledHandler):
     def get(self):
         code = self.request.get("code")
@@ -1586,16 +1592,15 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
 class SFinvite(BaseHandler, SessionEnabledHandler):
     def post(self):
         data = json.loads(str(self.request.body))
-        print data
-        user_email = data['user_email']
+        user_email = ''
+        partner_email = ''
+        if 'user_email' in data.keys():
+            user_email = data['user_email']
+        if 'partner_email' in data.keys():
+            partner_email = data['partner_email']
         subject = data['subject']
         text = data['text'] + ' https://chrome.google.com/webstore/detail/copylead-for-salesforce/gbenffkgdeokfgjbbjibklflbaeelinh'
         emails = data['emails']
-        print user_email
-        print emails
-        print subject
-
-        # try:
         user = model.SFuser.query(model.SFuser.email == user_email).get()
         if user:
             for email in emails:
@@ -1609,9 +1614,19 @@ class SFinvite(BaseHandler, SessionEnabledHandler):
                     invitation.put()
                     sender_address =" %s %s <copylead@gcdc2013-iogrow.appspotmail.com>" % (user.firstname, user.lastname)
                     mail.send_mail(sender_address, email, subject, text)
-        # except:
-        #     print 'the user doesnt exist'
-
+        partner = model.SFpartner.query(model.SFpartner.email == partner_email).get()
+        if partner:
+            for email in emails:
+                existing = model.SFinvitation.query(model.SFinvitation.invitee_email == email).get()
+                if not existing:
+                    invitation = model.SFinvitation(
+                        partner_key = partner.key,
+                        partner_email=partner_email,
+                        invitee_email=email
+                    )
+                    invitation.put()
+                    sender_address =" %s %s <copylead@gcdc2013-iogrow.appspotmail.com>" % (partner.firstname, partner.lastname)
+                    mail.send_mail(sender_address, email, subject, text)
         self.response.headers['Access-Control-Allow-Origin'] = "*"
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
@@ -3995,6 +4010,7 @@ routes = [
     ('/zohosignin', ZohoSignIn),
     ('/zohouser', ZohoUser),
     ('/copylead_sf_auth_callback', SFcallback),
+    ('/copylead_sf_rm_auth_callback', SFRMcallback),
 
     ('/sf_invite', SFinvite),
     ('/invitation_sent', SFinvite),
