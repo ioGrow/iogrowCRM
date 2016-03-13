@@ -86,8 +86,6 @@ class GetEmailsHandler(InboundMailHandler):
                           # We should create a lead related to this email
                           # and attach this email with this lead
             else:
-                print user
-                print mail_message.sender
                 print 'not authorized'
 
         else:

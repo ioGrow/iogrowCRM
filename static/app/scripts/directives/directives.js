@@ -1,18 +1,4 @@
-/*app.directive('editTooltip', function() {
-  return {
-    restrict: 'A',
-    require:'?ngModel',
-    link: function ($scope, elem, attrs,ngModel) {
-     var field=$(elem);
-     var position=field.position();
-        field.hover(function() {
-          console.log('test hover');
-          $(this).append('<div class="cusTooltip" id="inlineEditTooltip"><a href=""><i class="fa fa-trash-o"></i></a><a href="">edit</a></div>');   
-          $('#inlineEditTooltip').css('top', position.top);
-          $('#inlineEditTooltip').css('left', position.left - 59 );
-        });
-  }
-}});*/
+
 var lunchMapsLinkedin=function(address){
         var p=$("#newAccMain");
         var offsets = document.getElementById('newAccMain').getBoundingClientRect();

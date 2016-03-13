@@ -35,9 +35,6 @@ import iomessages
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)
 
-    # The message class that defines the ListRequest schema
-
-
 class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
     pageToken = messages.StringField(2)

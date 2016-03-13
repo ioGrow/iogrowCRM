@@ -1164,17 +1164,6 @@ class EditCustomFieldsHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/custom_fields/custom_fields_edit.html')
 
-
-class EditDataTransferHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/admin/data_transfer/data_transfer_edit.html')
-
-
-class EditSynchronisationHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/admin/synchronisation/synchronisation_edit.html')
-
-
 class UserNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/users/user_new.html')
@@ -1183,17 +1172,6 @@ class UserNewHandler(BaseHandler, SessionEnabledHandler):
 class UserShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/users/user_show.html')
-
-
-class GroupListHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/admin/groups/list.html')
-
-
-class GroupShowHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/admin/groups/show.html')
-
 
 class settingsShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -3923,8 +3901,6 @@ routes = [
     ('/views/admin/users/new', UserNewHandler),
     ('/views/admin/users/show', UserShowHandler),
     ('/views/admin/billing/billing_edit', BillingEditHandler),
-    ('/views/admin/groups/list', GroupListHandler),
-    ('/views/admin/groups/show', GroupShowHandler),
     ('/views/admin/settings', settingsShowHandler),
     ('/views/admin/imports/list', ImportListHandler),
     ('/views/admin/imports/new', ImportNewHandler),
@@ -3935,8 +3911,6 @@ routes = [
     ('/views/admin/case_status/edit', EditCaseStatusHandler),
     ('/views/admin/lead_status/edit', EditLeadStatusHandler),
     ('/views/admin/lead_scoring/edit', LeadScoringHandler),
-    ('/views/admin/data_transfer/edit', EditDataTransferHandler),
-    ('/views/admin/synchronisation/edit', EditSynchronisationHandler),
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
     ('/views/admin/delete_all_records', deleteAllRecordHandler),
     ('/subscribe', SubscriptionHandler),
