@@ -174,6 +174,7 @@ class SFuser(ndb.Model):
 class SFinvitation(ndb.Model):
     user_email = ndb.StringProperty()
     user_key = ndb.KeyProperty()
+    partner_email = ndb.StringProperty()
     partner_key = ndb.KeyProperty()
     invitee_email = ndb.StringProperty()
     invitee_name = ndb.StringProperty()
@@ -202,12 +203,14 @@ class SFinvitation(ndb.Model):
 
         return response
 
-class CopyLeadSfSession(ndb.Model):
-    full_name = ndb.StringProperty()
+
+
+class SFpartner(ndb.Model):
+    firstname = ndb.StringProperty()
+    lastname = ndb.StringProperty()
     email = ndb.StringProperty()
     phone = ndb.StringProperty()
     country = ndb.StringProperty()
-
 
 
 
@@ -1920,14 +1923,11 @@ class ProxyServer(ndb.Model):
             server.put()
 
 
+
+
+
 class CopyLeadSfSession(ndb.Model):
     access_token = ndb.StringProperty()
-    user = ndb.KeyProperty()
-    created_at = ndb.DateTimeProperty(auto_now_add=True)
-
-
-class CopyLeadZhSession(ndb.Model):
-    access_token = ndb.StringProperty
     user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
 
