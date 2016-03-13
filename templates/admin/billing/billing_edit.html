@@ -1,26 +1,3 @@
-<style>
-    modal-action-btn {
-        padding: 10px 30px
-    }
-
-    .credit-card-box .display-td {
-        display: table-cell;
-        vertical-align: middle;
-        width: 50%;
-    }
-
-    .credit-card-box .display-tr {
-        display: table-row;
-    }
-
-    .credit-card-box label {
-        display: block;
-    }
-
-    .blue-btn {
-        background: #168EEA;
-    }
-</style>
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
@@ -93,7 +70,7 @@
             </div>
             <div class="row" style="padding: 0px 7%;margin-bottom: 40px;" ng-show="subscription.plan.name == 'premium'">
                 <h3 class="billingTitle">
-                    <i class="fa fa-building" style="font-size: 21px;"></i>{{ _('Payment information.') }}</h3>
+                    <i class="fa fa-building" style="font-size: 21px;"></i>{{ _('Payment information') }}</h3>
                 <hr>
                 <form class="form-horizontal">
                     <div class="form-group">
@@ -102,6 +79,9 @@
                             <p class="form-control-static"><%= subscription.is_auto_renew ? 'Disabled':'Enabled' %></p>
                         </div>
                     </div>
+                    <button class="btn btn-default" ng-click="editCardInfo()">
+                        Edit
+                    </button>
                     <button class="btn btn-default" ng-click="changeAutoRenew(subscription.is_auto_renew)">
                         <%= subscription.is_auto_renew ? 'Disabled':'Enabled' %> Auto renew
                     </button>
@@ -110,14 +90,14 @@
         </div>
     </div>
 </div>
-<div id="enable_auto_renew" class="modal fade in"
+<div id="edit_card_info" class="modal fade in"
      tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal">×</button>
                 <h4 class="modal-title" style="text-align: center;margin-bottom: 30px;">
-                    Enable Auto renew for your subscription
+                    Change your credit card information
                 </h4>
                 <div class="container-fluid">
                     <div class="panel">
@@ -172,7 +152,7 @@
                                         <div class="row">
                                             <div class="col-xs-12">
                                                 <button class="btn btn-success btn-lg btn-block blue-btn" type="submit">
-                                                    Enable auto renew
+                                                    Change your card information
                                                 </button>
                                             </div>
                                         </div>
@@ -216,7 +196,7 @@
     $form.on('submit', payWithStripe);
     function payWithStripe(e) {
         e.preventDefault();
-        $form.find('[type=submit]').html('Validating <i class="fa fa-spinner fa-pulse"></i>');
+        $form.find('[type=submit]').html('Validating <span class="fa fa-spinner fa-pulse" style="font-size: 20px"></span>');
         var PublishableKey = '{{ publishable_key }}';
         Stripe.setPublishableKey(PublishableKey);
         var expiry = $form.find('[name=cardExpiry]').payment('cardExpiryVal');
@@ -232,17 +212,17 @@
                 $form.find('.payment-errors').text(response.error.message);
                 $form.find('.payment-errors').closest('.row').show();
             } else {
-                $form.find('[type=submit]').html('Processing <i class="fa fa-spinner fa-pulse"></i>');
+                $form.find('[type=submit]').html('Processing <span class="fa fa-spinner fa-pulse" style="font-size: 20px"></span>');
                 $form.find('.payment-errors').closest('.row').hide();
                 $form.find('.payment-errors').text("");
                 var token = response.id;
-                $.post('/stripe/enable_auto_renew', {
+                $.post('/stripe/change_card', {
                             token: token,
                             interval: $('input:radio:checked[name=interval]').val(),
                             plane: 'premium'
                         })
                         .done(function (data, textStatus, jqXHR) {
-                            $form.find('[type=submit]').html('Auto renew enabled <i class="fa fa-check"></i>').prop('disabled',
+                            $form.find('[type=submit]').html('Card changed succefully <i class="fa fa-check"></i>').prop('disabled',
                                     true);
                             window.location.reload()
                         })

@@ -42,5 +42,19 @@ angular.module('crmEngine.billingservices', []).factory('Billing', function () {
                 $scope.apply();
             })
     };
+    Billing.enableAutoRenew = function ($scope) {
+        $scope.isLoading = true;
+        $scope.apply();
+        gapi.client.crmengine.subscription.enable_auto_renew({}).execute(
+            function (resp) {
+                if (!resp.code) {
+                    window.location.reload();
+                } else {
+                    notFoundHandle(resp, $scope);
+                }
+                $scope.isLoading = false;
+                $scope.apply();
+            })
+    };
     return Billing;
 });
