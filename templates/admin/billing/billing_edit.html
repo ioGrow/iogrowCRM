@@ -1,7 +1,30 @@
+<style>
+    modal-action-btn {
+        padding: 10px 30px
+    }
+
+    .credit-card-box .display-td {
+        display: table-cell;
+        vertical-align: middle;
+        width: 50%;
+    }
+
+    .credit-card-box .display-tr {
+        display: table-row;
+    }
+
+    .credit-card-box label {
+        display: block;
+    }
+
+    .blue-btn {
+        background: #168EEA;
+    }
+</style>
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}}</span>
+            <span class="active-app"><i class="fa fa-cog"></i> {{ _(active_app.label) }}</span>
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
@@ -80,15 +103,95 @@
                         </div>
                     </div>
                     <button class="btn btn-default" ng-click="changeAutoRenew(subscription.is_auto_renew)">
-                        <%=  subscription.is_auto_renew ? 'Disabled':'Enabled'  %> Auto renew
+                        <%= subscription.is_auto_renew ? 'Disabled':'Enabled' %> Auto renew
                     </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Modal -->
+<div id="enable_auto_renew" class="modal fade in"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" style="text-align: center;margin-bottom: 30px;">
+                    Enable Auto renew for your subscription
+                </h4>
+                <div class="container-fluid">
+                    <div class="panel">
+                        <div class="demo-container row">
+                            <div class="panel panel-default col-md-10 col-md-offset-1 credit-card-box "
+                                 style="padding: 0px">
+                                <div class="panel-heading display-table">
+                                    <div class="row display-tr">
+                                        <h3 class="panel-title display-td">Payment Details</h3>
+                                        <div class="display-td">
+                                            <img class="img-responsive pull-right"
+                                                 src="http://i76.imgup.net/accepted_c22e0.png">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <form role="form" id="payment-form" class="ng-pristine ng-valid">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="form-group">
+                                                    <label for="cardNumber">CARD NUMBER</label>
+                                                    <div class="input-group">
+                                                        <input type="tel" class="form-control" name="cardNumber"
+                                                               required="" id="cardNumber"
+                                                               placeholder="Valid Card Number" autofocus=""
+                                                               autocomplete="cc-number">
+                                                        <span class="input-group-addon"><i
+                                                                class="fa fa-credit-card"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-7 col-md-7">
+                                                <div class="form-group">
+                                                    <label for="cardExpiry">
+                                                        <span>EXPIRATION</span> DATE
+                                                    </label>
+                                                    <input type="tel" class="form-control" name="cardExpiry"
+                                                           id="cardExpiry" placeholder="MM / YY" autocomplete="cc-exp"
+                                                           required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-5 col-md-5 pull-right">
+                                                <div class="form-group">
+                                                    <label for="cardCVC">CV CODE</label>
+                                                    <input type="tel" class="form-control" name="cardCVC" id="cardCVC"
+                                                           placeholder="CVC" autocomplete="cc-csc" required="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <button class="btn btn-success btn-lg btn-block blue-btn" type="submit">
+                                                    Enable auto renew
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" value="5629499534213120" id="user-id">
+                                        <div class="row" style="display:none;">
+                                            <div class="col-xs-12">
+                                                <p class="payment-errors"></p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="disable_auto_renew" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -107,3 +210,103 @@
         </div>
     </div>
 </div>
+
+<script>
+    var $form = $('#payment-form');
+    $form.on('submit', payWithStripe);
+    function payWithStripe(e) {
+        e.preventDefault();
+        $form.find('[type=submit]').html('Validating <i class="fa fa-spinner fa-pulse"></i>');
+        var PublishableKey = '{{ publishable_key }}';
+        Stripe.setPublishableKey(PublishableKey);
+        var expiry = $form.find('[name=cardExpiry]').payment('cardExpiryVal');
+        var ccData = {
+            number: $form.find('[name=cardNumber]').val().replace(/\s/g, ''),
+            cvc: $form.find('[name=cardCVC]').val(),
+            exp_month: expiry.month,
+            exp_year: expiry.year
+        };
+        Stripe.card.createToken(ccData, function stripeResponseHandler(status, response) {
+            if (response.error) {
+                $form.find('[type=submit]').html('Try again');
+                $form.find('.payment-errors').text(response.error.message);
+                $form.find('.payment-errors').closest('.row').show();
+            } else {
+                $form.find('[type=submit]').html('Processing <i class="fa fa-spinner fa-pulse"></i>');
+                $form.find('.payment-errors').closest('.row').hide();
+                $form.find('.payment-errors').text("");
+                var token = response.id;
+                $.post('/stripe/enable_auto_renew', {
+                            token: token,
+                            interval: $('input:radio:checked[name=interval]').val(),
+                            plane: 'premium'
+                        })
+                        .done(function (data, textStatus, jqXHR) {
+                            $form.find('[type=submit]').html('Auto renew enabled <i class="fa fa-check"></i>').prop('disabled',
+                                    true);
+                            window.location.reload()
+                        })
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            $form.find('[type=submit]').html('There was a problem').removeClass('success').addClass('error');
+                            $form.find('.payment-errors').text(jqXHR.responseText);
+                            $form.find('.payment-errors').closest('.row').show();
+                        });
+            }
+        });
+    }
+    jQuery.validator.addMethod("cardNumber", function (value, element) {
+        return this.optional(element) || Stripe.card.validateCardNumber(value);
+    }, "Please specify a valid credit card number.");
+
+    jQuery.validator.addMethod("cardExpiry", function (value, element) {
+        value = $.payment.cardExpiryVal(value);
+        return this.optional(element) || Stripe.card.validateExpiry(value.month, value.year);
+    }, "Invalid expiration date.");
+
+    jQuery.validator.addMethod("cardCVC", function (value, element) {
+        return this.optional(element) || Stripe.card.validateCVC(value);
+    }, "Invalid CVC.");
+
+    validator = $form.validate({
+        rules: {
+            cardNumber: {
+                required: true,
+                cardNumber: true
+            },
+            cardExpiry: {
+                required: true,
+                cardExpiry: true
+            },
+            cardCVC: {
+                required: true,
+                cardCVC: true
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.form-control').removeClass('success').addClass('error');
+        },
+        unhighlight: function (element) {
+            $(element).closest('.form-control').removeClass('error').addClass('success');
+        },
+        errorPlacement: function (error, element) {
+            $(element).closest('.form-group').append(error);
+        }
+    });
+
+    paymentFormReady = function () {
+        if ($form.find('[name=cardNumber]').hasClass("success") &&
+                $form.find('[name=cardExpiry]').hasClass("success") &&
+                $form.find('[name=cardCVC]').val().length > 1) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+    $form.find('[type=submit]').prop('disabled', true);
+    var readyInterval = setInterval(function () {
+        if (paymentFormReady()) {
+            $form.find('[type=submit]').prop('disabled', false);
+            clearInterval(readyInterval);
+        }
+    }, 250);
+</script>

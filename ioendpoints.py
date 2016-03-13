@@ -6388,7 +6388,7 @@ class CrmEngineApi(remote.Service):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         subscription = organization.subscription.get()
         try:
-            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
+            customer = stripe.Customer.retrieve(subscription.stripe_customer_id)
             customer.subscriptions.retrieve(subscription.stripe_subscription_id).delete(at_period_end=True)
             subscription.is_auto_renew = False
             subscription.put()
@@ -6402,7 +6402,7 @@ class CrmEngineApi(remote.Service):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         subscription = organization.subscription.get()
         try:
-            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
+            customer = stripe.Customer.retrieve(subscription.stripe_customer_id)
             customer.source = request.token
             customer.save()
 

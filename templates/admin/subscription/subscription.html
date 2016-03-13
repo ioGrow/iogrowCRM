@@ -151,7 +151,7 @@
     <div class="panel panel-default">
         <!--<div class="page-header">-->
         <h1 style="text-align: center;margin-bottom: 40px">
-            Pay securely With Your Credit Card
+                Pay securely With Your Credit Card
         </h1>
         <!--</div>-->
         <div class="panel-body">
@@ -173,14 +173,9 @@
                                     <div class="form-group">
                                         <label for="cardNumber">CARD NUMBER</label>
                                         <div class="input-group">
-                                            <input
-                                                    type="tel"
-                                                    class="form-control"
-                                                    name="cardNumber"
-                                                    id="cardNumber"
-                                                    placeholder="Valid Card Number"
-                                                    autocomplete="cc-number"
-                                                    required autofocus/>
+                                            <input type="tel" class="form-control" name="cardNumber" required
+                                                    id="cardNumber" placeholder="Valid Card Number" autofocus
+                                                    autocomplete="cc-number" />
                                             <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
                                         </div>
                                     </div>
@@ -367,8 +362,6 @@
                 $form.find('.payment-errors').closest('.row').hide();
                 $form.find('.payment-errors').text("");
                 // response contains id and card, which contains additional card details
-                console.log(response.id);
-                console.log(response.card);
                 var token = response.id;
                 // AJAX - you would send 'token' to your server here.
                 $.post('/stripe/subscription', {
@@ -378,9 +371,6 @@
                         })
                         // Assign handlers immediately after making the request,
                         .done(function (data, textStatus, jqXHR) {
-                            console.log(data);
-                            console.log(textStatus);
-                            console.log(jqXHR);
                             $form.find('[type=submit]').html('Payment successful <i class="fa fa-check"></i>').prop('disabled', true);
                             window.location.replace('/#/leads/new')
                         })
