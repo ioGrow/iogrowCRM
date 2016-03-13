@@ -1457,7 +1457,9 @@ class EnableAutoRenewHandler(BaseHandler, SessionEnabledHandler):
 
 class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
-        logging.info(self.request)
+        eve = json.loads(self.request.body)
+        if eve['type'] == "invoice.payment_succeeded":
+            logging.info(eve)
 
 
 class SFcallback(BaseHandler, SessionEnabledHandler):
