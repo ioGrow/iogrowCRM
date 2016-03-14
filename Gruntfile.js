@@ -31,7 +31,45 @@ module.exports = function (grunt) {
                     ]
                 }
             },
-            js: {
+            js_libs:{
+                     files: {
+                          'static/build/js/async_scripts.js': [
+                          'static/src/js/select2.min.js',
+                          'static/src/js/ui-select2.js',
+                          'static/src/js/angular.easypiechart.js',
+                          'static/src/js/xeditable.min.js',
+                          'static/src/js/wysihtml5-0.3.0.min.js',
+                          'static/src/js/bootstrap-wysihtml5.js',
+                          'static/src/js/jquery.slimscroll.min.js',
+                          'static/src/js/jquery.uniform.min.js',
+                          'static/src/js/jquery.textfill.min.js',
+                          'static/src/js/jquery.simple-dtpicker.js',
+                          'static/src/js/bootstrap-datetimepicker.min.js',
+                          'static/src/js/jquery.caret.js',
+                          'static/src/js/twitter-bootstrap-hover-dropdown.min.js'
+                        ],
+                        'static/build/js/sync_scripts.js': [
+                          'static/src/js/bootstrap.min.js',
+                          'static/src/js/ui-bootstrap-0.5.0.min.js',
+                          'static/src/js/ui-bootstrap-tpls-0.5.0.js',
+                          'static/src/js/angular.moment.js',
+                          'static/src/js/zepto.js',
+                          'static/src/js/jquery.waterfall.js',
+                          'static/src/js/jquery.ui.map.min.js',
+                          'static/src/js/jquery.ui.map.services.js'
+                        ],
+                        'static/build/js/first_sync_scripts.js': [
+                          'static/src/js/jquery.min.js',
+                          'static/src/js/jquery-ui-1.10.3.custom.min.js',
+                          'static/src/js/moment.min.js',
+                          'static/src/js/angular.min.js',
+                          'static/src/js/socket.io.js',
+                          'static/src/js/ng-google-chart.js'
+                        ]
+                     }
+                    
+            },
+            js_servs_ctrls: {
                 src: ['static/app/scripts/services/authservices.js',
                     'static/app/scripts/services/infonodeservices.js',
                     'static/app/scripts/services/mapservices.js',
@@ -100,6 +138,9 @@ module.exports = function (grunt) {
              }*/
             sync_ctrls_sers_js: {
                 files: {
+                    'static/build/js/sync_scripts.min.js': ['static/build/js/sync_scripts.js'],
+                    'static/build/js/async_scripts.min.js': ['static/build/js/async_scripts.js'],
+                    'static/build/js/first_sync_scripts.min.js': ['static/build/js/first_sync_scripts.js'],
                     'static/build/js/sync_ctrls_sers_scripts.min.js': ['static/build/js/sync_ctrls_sers_scripts.js']
                 }
             },
