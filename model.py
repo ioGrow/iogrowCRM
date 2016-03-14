@@ -371,6 +371,7 @@ class Organization(ndb.Model):
     related_to_partner = ndb.KeyProperty()
     should_upgrade = ndb.BooleanProperty()
     subscription = ndb.KeyProperty(kind=Subscription)
+    stripe_customer_id = ndb.StringProperty()
 
     def get_subscription(self):
         if not self.subscription:

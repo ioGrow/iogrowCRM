@@ -89,7 +89,7 @@ from people import linked_in
 from operator import itemgetter
 import iomessages
 from iomessages import Scoring_Topics_Schema, Topics_Schema, Topic_Comparaison_Schema, TopicsResponse, \
-    TweetResponseSchema, SubscriptionSchema
+    TweetResponseSchema, SubscriptionSchema, LicencesQuantityMessage
 from ioreporting import Reports, ReportSchema
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema, KewordsRequest, TwitterRequest, tweetsResponse, \
     LinkedinCompanySchema, \
@@ -6388,7 +6388,7 @@ class CrmEngineApi(remote.Service):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         subscription = organization.subscription.get()
         try:
-            customer = stripe.Customer.retrieve(subscription.stripe_customer_id)
+            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
             customer.subscriptions.retrieve(subscription.stripe_subscription_id).delete(at_period_end=True)
             subscription.is_auto_renew = False
             subscription.put()
@@ -6398,12 +6398,11 @@ class CrmEngineApi(remote.Service):
 
     @endpoints.method(name='subscription.enable_auto_renew', path='subscription/enable_auto_renew')
     def enable_auto_renew(self, request):
-
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         subscription = organization.subscription.get()
         interval = subscription.plan.get().interval
         try:
-            customer = stripe.Customer.retrieve(subscription.stripe_customer_id)
+            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
             sub = customer.subscriptions.retrieve(subscription.stripe_subscription_id)
             sub.plan = '{}_{}'.format(config.PREMIUM, interval)
             sub.save()
@@ -6411,5 +6410,22 @@ class CrmEngineApi(remote.Service):
             subscription.put()
         except stripe.APIError:
             raise endpoints.NotFoundException("")
+        return message_types.VoidMessage()
+
+    @endpoints.method(name='subscription.by_new_licences', path='subscription/by_new_licences',
+                      request_message=LicencesQuantityMessage)
+    def by_new_licences(self, request):
+        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        subscription = organization.get_subscription()
+        quantity = request.quantity
+        try:
+            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
+            sub = customer.subscriptions.retrieve(subscription.stripe_subscription_id)
+            sub.quantity += quantity
+            sub.save()
+        except stripe.error.CardError, e:
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.write(e.message)
+            self.response.set_status(e.http_status)
         return message_types.VoidMessage()
 

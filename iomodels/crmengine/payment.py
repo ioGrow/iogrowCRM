@@ -145,7 +145,6 @@ class Subscription(BaseModel):
     expiration_date = ndb.DateTimeProperty()
     description = ndb.StringProperty()
     is_auto_renew = ndb.BooleanProperty()
-    stripe_customer_id = ndb.StringProperty()
     stripe_subscription_id = ndb.StringProperty()
 
     @classmethod

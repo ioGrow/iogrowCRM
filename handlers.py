@@ -1419,9 +1419,9 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
             )
             premium_subscription.is_auto_renew = not customer.subscriptions['data'][0].cancel_at_period_end
             premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
-            premium_subscription.stripe_customer_id = customer.id
             premium_subscription.put()
 
+            organization.stripe_customer_id = customer.id
             organization.set_subscription(premium_subscription)
             organization.put()
         except stripe.error.CardError, e:
@@ -1436,9 +1436,8 @@ class EditCreditCardHandler(BaseHandler, SessionEnabledHandler):
         organization = user.organization.get()
         stripe.api_key = app_config.STRIPE_API_KEY
         token = self.request.get('token')
-        subscription = organization.get_subscription()
         try:
-            customer = stripe.Customer.retrieve(subscription.stripe_customer_id)
+            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
             customer.source = token
             customer.save()
         except stripe.error.CardError, e:

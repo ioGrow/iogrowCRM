@@ -571,3 +571,6 @@ class SubscriptionSchema(messages.Message):
     stripe_subscription_id = messages.StringField(5)
     is_auto_renew = messages.IntegerField(6)
 
+
+class LicencesQuantityMessage(messages.Message):
+    quantity = messages.IntegerField(1, required=True)
