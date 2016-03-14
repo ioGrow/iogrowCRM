@@ -1430,24 +1430,17 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
             self.response.set_status(e.http_status)
 
 
-class EnableAutoRenewHandler(BaseHandler, SessionEnabledHandler):
+class EditCreditCardHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
         user = self.get_user_from_session()
         organization = user.organization.get()
         stripe.api_key = app_config.STRIPE_API_KEY
         token = self.request.get('token')
         subscription = organization.get_subscription()
-        interval = subscription.plan.get().interval
         try:
             customer = stripe.Customer.retrieve(subscription.stripe_customer_id)
             customer.source = token
             customer.save()
-
-            sub = customer.subscriptions.retrieve(subscription.stripe_subscription_id)
-            sub.plan = '{}_{}'.format(app_config.PREMIUM, interval)
-            sub.save()
-            subscription.is_auto_renew = True
-            subscription.put()
         except stripe.error.CardError, e:
             self.response.headers['Content-Type'] = 'application/json'
             self.response.write(e.message)
@@ -3994,7 +3987,7 @@ routes = [
     ('/subscribe', SubscriptionHandler),
     ('/stripe/subscription', StripeSubscriptionHandler),
     ('/stripe/subscription_web_hook', StripeSubscriptionWebHooksHandler),
-    # billing stuff. hadji hicham . 07/08/2014
+    ('/stripe/change_card', EditCreditCardHandler),
     ('/views/billing/list', BillingListHandler),
     ('/views/billing/show', BillingShowHandler),
 
