@@ -50,14 +50,14 @@
                 <hr>
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" style="text-align: left">Subscription type:</label>
+                        <label class="col-sm-4 control-label" style="text-align: left">{{ _('Subscription type') }}:</label>
                         <div class="col-sm-6">
                             <p class="form-control-static"> <%= subscription.plan.name
                                 || 'Freemium' %></p>
                         </div>
                     </div>
                     <div class="form-group" ng-show="subscription.expiration_date">
-                        <label class="col-sm-4 control-label" style="text-align: left">Expiration date:</label>
+                        <label class="col-sm-4 control-label" style="text-align: left">{{ _('Expiration date') }}:</label>
                         <div class="col-sm-6">
                             <p class="form-control-static"> <%= subscription.expiration_date| date:'MMM dd, yyyy'%></p>
                         </div>
@@ -74,16 +74,16 @@
                 <hr>
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" style="text-align: left">Auto renew:</label>
+                        <label class="col-sm-4 control-label" style="text-align: left">{{ _('Auto renew') }}:</label>
                         <div class="col-sm-6">
                             <p class="form-control-static"><%= subscription.is_auto_renew ? 'Disabled':'Enabled' %></p>
                         </div>
                     </div>
                     <button class="btn btn-success" ng-click="editCardInfo()">
-                        Edit
+                        {{ _('Edit') }}
                     </button>
                     <button class="btn btn-danger" ng-click="changeAutoRenew(subscription.is_auto_renew)">
-                        <%= subscription.is_auto_renew ? 'Disabled':'Enabled' %> Auto renew
+                        <%= subscription.is_auto_renew ? '{{ _("Disabled") }}':'{{ _("Enabled") }}' %> {{ _('Auto renew') }}
                     </button>
                 </form>
             </div>
@@ -208,26 +208,27 @@
         };
         Stripe.card.createToken(ccData, function stripeResponseHandler(status, response) {
             if (response.error) {
-                $form.find('[type=submit]').html('Try again');
+                $form.find('[type=submit]').html('{{ _("Try again")}}');
                 $form.find('.payment-errors').text(response.error.message);
                 $form.find('.payment-errors').closest('.row').show();
             } else {
-                $form.find('[type=submit]').html('Processing <span class="fa fa-spinner fa-pulse" style="font-size: 20px"></span>');
+                $form.find('[type=submit]').html('{{ _("Processing") }} <span class="fa fa-spinner fa-pulse"
+                style="font-size: 20px"></span>');
                 $form.find('.payment-errors').closest('.row').hide();
                 $form.find('.payment-errors').text("");
                 var token = response.id;
                 $.post('/stripe/change_card', {
                             token: token,
                             interval: $('input:radio:checked[name=interval]').val(),
-                            plane: 'premium'
-                        })
+                            plane:
                         .done(function (data, textStatus, jqXHR) {
-                            $form.find('[type=submit]').html('Card changed succefully <i class="fa fa-check"></i>').prop('disabled',
-                                    true);
+                            $form.find('[type=submit]').html('{{ _("Card changed successfully") }}
+                                    <i class="fa fa-check"></i>').prop('disabled', true);
                             window.location.reload()
                         })
                         .fail(function (jqXHR, textStatus, errorThrown) {
-                            $form.find('[type=submit]').html('There was a problem').removeClass('success').addClass('error');
+                            $form.find('[type=submit]').html('{{ _("There was a problem") }}').removeClass('success')
+                            .addClass('error');
                             $form.find('.payment-errors').text(jqXHR.responseText);
                             $form.find('.payment-errors').closest('.row').show();
                         });
@@ -236,16 +237,16 @@
     }
     jQuery.validator.addMethod("cardNumber", function (value, element) {
         return this.optional(element) || Stripe.card.validateCardNumber(value);
-    }, "Please specify a valid credit card number.");
+    }, "{{ _('Please specify a valid credit card number') }}.");
 
     jQuery.validator.addMethod("cardExpiry", function (value, element) {
         value = $.payment.cardExpiryVal(value);
         return this.optional(element) || Stripe.card.validateExpiry(value.month, value.year);
-    }, "Invalid expiration date.");
+    }, "{{ _('Invalid expiration date') }}.");
 
     jQuery.validator.addMethod("cardCVC", function (value, element) {
         return this.optional(element) || Stripe.card.validateCVC(value);
-    }, "Invalid CVC.");
+    }, "{{ _('Invalid CVC') }}.");
 
     validator = $form.validate({
         rules: {
