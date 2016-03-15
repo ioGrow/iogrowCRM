@@ -6,7 +6,7 @@
         </a>
         <ul class="dropdown-menu">
             {% for application in apps %}
-                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
+            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
             {% endfor %}
         </ul>
     </div>
@@ -63,6 +63,13 @@
                             <p class="form-control-static"> <%= subscription.expiration_date| date:'MMM dd, yyyy'%></p>
                         </div>
                     </div>
+                    <div class="form-group" ng-show="subscription.quantity">
+                        <label class="col-sm-4 control-label"
+                               style="text-align: left">{{ _('Puchased Licences') }}:</label>
+                        <div class="col-sm-6">
+                            <p class="form-control-static"> <%= subscription.quantity%></p>
+                        </div>
+                    </div>
                     <a ng-show="subscription.plan.name == 'freemium'" class="btn btn-danger"
                        ng-href="<%= subscription_url %>"> Upgrade
                     </a>
@@ -91,13 +98,12 @@
                     <i class="fa fa-building" style="font-size: 21px;"></i>{{ _('Buy new licences') }}</h3>
                 <hr>
                 <div class="form-group">
-                    <label for="nbr_licences" class="col-sm-2 control-label">Number of licences: </label>
-                    <div class="col-sm-10">
-                        <input type="number" class="form-control" name="nbr_licences" id="nbr_licences"
-                               placeholder="Number of licences" ng-model="quantity">
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control" placeholder="Number of licences"
+                               ng-model="quantity" style="text-align: center; font-size: 16px">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary" ng-click="byNewLicences(quantity)">Buy</button>
+                <button type="submit" class="btn btn-primary" ng-click="byNewLicences(quantity)">Buy now</button>
             </div>
         </div>
     </div>
@@ -163,7 +169,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-xs-12">
-                                                <button class="btn btn-success btn-lg btn-block blue-btn" type="submit">
+                                                <button class="subscribe-btn btn btn-lg btn-block" type="submit">
                                                     Change your card information
                                                 </button>
                                             </div>

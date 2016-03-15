@@ -1420,6 +1420,7 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
             )
             premium_subscription.is_auto_renew = not customer.subscriptions['data'][0].cancel_at_period_end
             premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
+            premium_subscription.quantity = quantity
             premium_subscription.put()
 
             organization.stripe_customer_id = customer.id

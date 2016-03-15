@@ -8,6 +8,7 @@ classes add to calling methods.
 import datetime
 import json
 import logging
+from aetypes import end
 from datetime import timedelta
 
 import httplib2
@@ -6374,7 +6375,6 @@ class CrmEngineApi(remote.Service):
         if not user:
             raise endpoints.NotFoundException("no google id provided")
         Lead.create_lead_full_contact(contact, user, params.access)
-
         return message_types.VoidMessage()
 
     @endpoints.method(response_message=SubscriptionSchema, http_method='GET',
@@ -6418,11 +6418,17 @@ class CrmEngineApi(remote.Service):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         subscription = organization.get_subscription()
         quantity = request.quantity
+        if quantity <= 0:
+            raise endpoints.BadRequestException("Quantity should be a positive number")
         try:
             customer = stripe.Customer.retrieve(organization.stripe_customer_id)
             sub = customer.subscriptions.retrieve(subscription.stripe_subscription_id)
             sub.quantity += quantity
+            sub.prorate = False
             sub.save()
+
+            subscription.quantity = sub.quantity
+            subscription.put()
         except stripe.error.CardError, e:
             self.response.headers['Content-Type'] = 'application/json'
             self.response.write(e.message)
