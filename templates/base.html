@@ -505,21 +505,18 @@
 <script type="text/javascript">
     function getRoot() {
         var origin = window.location.origin;
-        var url = '';
+        /*var url = '';
         if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
             url = origin;
         } else if (origin.indexOf('.com') != -1) {
             url = "https://gcdc2013-iogrow.appspot.com";
-        }
-        console.log(url);
-        return url + '/_ah/api';
+        }*/
+        return origin + '/_ah/api';
     }
-
      var ROOT = getRoot();
-
      // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
-    //var ROOT = '/_ah/api';
-//    var ROOT = 'https://preprod-iogrow.appspot.com/_ah/api'
+     //var ROOT = '/_ah/api';
+     // var ROOT = 'https://preprod-iogrow.appspot.com/_ah/api';
 
     var apisToLoad;
     var callback = function () {
@@ -902,8 +899,14 @@ Stripe.setPublishableKey('pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD');
         //"gender": "{{user.google_display_name}}"                    // feel free to define your own properties
     });
 </script>
+<!-- start payment dependecies -->
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.payment/1.3.2/jquery.payment.js"></script>
 
-
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<!-- end payment dependecies -->
 </body>
 
 

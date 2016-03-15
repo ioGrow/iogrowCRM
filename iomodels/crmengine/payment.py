@@ -144,8 +144,9 @@ class Subscription(BaseModel):
     start_date = ndb.DateTimeProperty(required=True)
     expiration_date = ndb.DateTimeProperty()
     description = ndb.StringProperty()
-    stripe_subscription_id = ndb.StringProperty()
     is_auto_renew = ndb.BooleanProperty()
+    stripe_customer_id = ndb.StringProperty()
+    stripe_subscription_id = ndb.StringProperty()
 
     @classmethod
     def create_freemium_subscription(cls):

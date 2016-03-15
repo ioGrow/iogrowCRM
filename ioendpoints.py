@@ -6388,7 +6388,7 @@ class CrmEngineApi(remote.Service):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         subscription = organization.subscription.get()
         try:
-            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
+            customer = stripe.Customer.retrieve(subscription.stripe_customer_id)
             customer.subscriptions.retrieve(subscription.stripe_subscription_id).delete(at_period_end=True)
             subscription.is_auto_renew = False
             subscription.put()
@@ -6396,21 +6396,20 @@ class CrmEngineApi(remote.Service):
             raise endpoints.NotFoundException("")
         return message_types.VoidMessage()
 
-    # @endpoints.method(name='subscription.enable_auto_renew', path='subscription/enable_auto_renew')
-    # def enable_auto_renew(self, request):
-    #
-    #     organization = EndpointsHelper.require_iogrow_user().organization.get()
-    #     subscription = organization.subscription.get()
-    #     try:
-    #         customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-    #         customer.source = request.token
-    #         customer.save()
-    #
-    #         customer.subscriptions.create(plan=subscription.plan.get().name)
-    #         customer.subscriptions.create(subscription.stripe_subscription_id).delete()
-    #         subscription.stripe_subscription_id = None
-    #         subscription.put()
-    #     except stripe.APIError:
-    #         raise endpoints.NotFoundException("")
-    #     return message_types.VoidMessage()
+    @endpoints.method(name='subscription.enable_auto_renew', path='subscription/enable_auto_renew')
+    def enable_auto_renew(self, request):
+
+        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        subscription = organization.subscription.get()
+        interval = subscription.plan.get().interval
+        try:
+            customer = stripe.Customer.retrieve(subscription.stripe_customer_id)
+            sub = customer.subscriptions.retrieve(subscription.stripe_subscription_id)
+            sub.plan = '{}_{}'.format(config.PREMIUM, interval)
+            sub.save()
+            subscription.is_auto_renew = True
+            subscription.put()
+        except stripe.APIError:
+            raise endpoints.NotFoundException("")
+        return message_types.VoidMessage()
 
