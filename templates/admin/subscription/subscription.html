@@ -120,18 +120,21 @@
         .credit-card-box .panel-heading img {
             min-width: 180px;
         }
+
         .cost-box {
             text-align: center;
             font-size: 26px;
             margin-top: 40px;
             margin-bottom: 10px;
         }
-        .cost-box > hr{
+
+        .cost-box > hr {
             width: 500px;
             border-color: #d3d3d3;
             padding-bottom: 5px;
         }
-        .cost-message{
+
+        .cost-message {
             font-weight: 800;
             font-size: 32px;
         }
@@ -151,7 +154,7 @@
     <div class="panel panel-default">
         <!--<div class="page-header">-->
         <h1 style="text-align: center;margin-bottom: 40px">
-                Pay securely With Your Credit Card
+            Pay securely With Your Credit Card
         </h1>
         <!--</div>-->
         <div class="panel-body">
@@ -174,8 +177,8 @@
                                         <label for="cardNumber">CARD NUMBER</label>
                                         <div class="input-group">
                                             <input type="tel" class="form-control" name="cardNumber" required
-                                                    id="cardNumber" placeholder="Valid Card Number" autofocus
-                                                    autocomplete="cc-number" />
+                                                   id="cardNumber" placeholder="Valid Card Number" autofocus
+                                                   autocomplete="cc-number"/>
                                             <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
                                         </div>
                                     </div>
@@ -266,10 +269,17 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="row cost-box">
-                <p>You have {{ users_count }} user{% if users_count != 1 %}s{% endif %} in your organization</p>
+                <div class="row">
+                    <!--<p>You have {{ users_count }} user{% if users_count != 1 %}s{% endif %} in your organization</p>-->
+                    <p>How match of licences you want to buy </p>
+                    <div class="col-sm-4 col-sm-offset-4">
+                        <input type="number" class="form-control" name="quantity" id="quantity"
+                               placeholder="How match of licences you want to buy" value="{{ users_count }}"
+                               style="text-align: center;font-size: 18px">
+                    </div>
+                </div>
                 <hr>
                 <span class="cost-message">Total cost : <span id="total-cost"></span>$</span>
             </div>
@@ -314,32 +324,29 @@
     var users_count = parseInt({{ users_count }});
     var month_price = parseInt({{ month_price }});
     var year_price = parseInt({{ year_price }});
-    function getTotalCost(interval) {
+
+    function getTotalCost(interval, quantity) {
         if (interval === 'month') {
-            return users_count * month_price;
+            return quantity * month_price;
         } else if (interval === 'year') {
-            return users_count * year_price;
+            return quantity * year_price;
         }
     }
-    function changeTotalCostValue(interval) {
-        var totalCost = getTotalCost(interval);
+    function changeTotalCostValue(interval, quantity) {
+        var totalCost = getTotalCost(interval, quantity);
         $('#total-cost').text(totalCost);
     }
-    changeTotalCostValue($('input:radio:checked[name=interval]').val());
-    $('input:radio[name=interval]').change(function () {
-        var interval = $(this).val();
-        changeTotalCostValue(interval);
-    });
-    /* If you're using Stripe for payments */
+    function writeNewTotalCost() {
+        changeTotalCostValue($('input:radio:checked[name=interval]').val(), parseInt($('#quantity').val()));
+    }
+    writeNewTotalCost();
+    $('input:radio[name=interval]').change(writeNewTotalCost);
+    $('#quantity').change(writeNewTotalCost);
     function payWithStripe(e) {
         e.preventDefault();
-        /* Visual feedback */
         $form.find('[type=submit]').html('Validating <i class="fa fa-spinner fa-pulse"></i>');
-
         var PublishableKey = '{{ publishable_key }}';
         Stripe.setPublishableKey(PublishableKey);
-
-        /* Create token */
         var expiry = $form.find('[name=cardExpiry]').payment('cardExpiryVal');
         var ccData = {
             number: $form.find('[name=cardNumber]').val().replace(/\s/g, ''),
@@ -350,26 +357,20 @@
 
         Stripe.card.createToken(ccData, function stripeResponseHandler(status, response) {
             if (response.error) {
-                /* Visual feedback */
                 $form.find('[type=submit]').html('Try again');
-                /* Show Stripe errors on the form */
                 $form.find('.payment-errors').text(response.error.message);
                 $form.find('.payment-errors').closest('.row').show();
             } else {
-                /* Visual feedback */
                 $form.find('[type=submit]').html('Processing <i class="fa fa-spinner fa-pulse"></i>');
-                /* Hide Stripe errors on the form */
                 $form.find('.payment-errors').closest('.row').hide();
                 $form.find('.payment-errors').text("");
-                // response contains id and card, which contains additional card details
                 var token = response.id;
-                // AJAX - you would send 'token' to your server here.
                 $.post('/stripe/subscription', {
                             token: token,
                             interval: $('input:radio:checked[name=interval]').val(),
-                            plane: 'premium'
+                            plane: 'premium',
+                            quantity: parseInt($('#quantity').val())
                         })
-                        // Assign handlers immediately after making the request,
                         .done(function (data, textStatus, jqXHR) {
                             $form.find('[type=submit]').html('Payment successful <i class="fa fa-check"></i>').prop('disabled', true);
                             window.location.replace('/#/leads/new')
@@ -383,22 +384,16 @@
             }
         });
     }
-
-    /* Form validation using Stripe client-side validation helpers */
     jQuery.validator.addMethod("cardNumber", function (value, element) {
         return this.optional(element) || Stripe.card.validateCardNumber(value);
     }, "Please specify a valid credit card number.");
-
     jQuery.validator.addMethod("cardExpiry", function (value, element) {
-        /* Parsing month/year uses jQuery.payment library */
         value = $.payment.cardExpiryVal(value);
         return this.optional(element) || Stripe.card.validateExpiry(value.month, value.year);
     }, "Invalid expiration date.");
-
     jQuery.validator.addMethod("cardCVC", function (value, element) {
         return this.optional(element) || Stripe.card.validateCVC(value);
     }, "Invalid CVC.");
-
     validator = $form.validate({
         rules: {
             cardNumber: {
@@ -424,7 +419,6 @@
             $(element).closest('.form-group').append(error);
         }
     });
-
     paymentFormReady = function () {
         if ($form.find('[name=cardNumber]').hasClass("success") &&
                 $form.find('[name=cardExpiry]').hasClass("success") &&

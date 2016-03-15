@@ -1408,6 +1408,7 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
         stripe.api_key = app_config.STRIPE_API_KEY
         token = self.request.get('token')
         interval = self.request.get('interval')
+        quantity = int(self.request.get('quantity'))
         premium_subscription = Subscription.create_premium_subscription(interval)
         try:
             customer = stripe.Customer.create(
@@ -1415,7 +1416,7 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
                 description=organization.key.id(),
                 plan='{}_{}'.format(app_config.PREMIUM, interval),
                 email=user.email,
-                quantity=User.get_users_count_by_organization(user.organization)
+                quantity=quantity
             )
             premium_subscription.is_auto_renew = not customer.subscriptions['data'][0].cancel_at_period_end
             premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
