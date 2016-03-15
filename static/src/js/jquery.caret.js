@@ -66,5 +66,5 @@
     if (!isContentEditable)
       target.focus();
     return pos;
-  }
-})(jQuery)
+  };
+})(jQuery);
