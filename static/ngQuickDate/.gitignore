@@ -1,6 +1,0 @@
-*.swp
-bower_components
-.DS_Store
-node_modules
-build
-spec/build
