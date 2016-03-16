@@ -8,7 +8,6 @@ classes add to calling methods.
 import datetime
 import json
 import logging
-from aetypes import end
 from datetime import timedelta
 
 import httplib2
@@ -6424,7 +6423,6 @@ class CrmEngineApi(remote.Service):
             customer = stripe.Customer.retrieve(organization.stripe_customer_id)
             sub = customer.subscriptions.retrieve(subscription.stripe_subscription_id)
             sub.quantity += quantity
-            sub.prorate = False
             sub.save()
 
             subscription.quantity = sub.quantity
@@ -6434,4 +6432,3 @@ class CrmEngineApi(remote.Service):
             self.response.write(e.message)
             self.response.set_status(e.http_status)
         return message_types.VoidMessage()
-
