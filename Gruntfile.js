@@ -109,11 +109,6 @@ module.exports = function (grunt) {
             options: {
                 mangle: false
             },
-            /*sync_js: {
-             files: {
-             'static/build/js/hopscotch.min.js': ['static/hopscotch/js/hopscotch.js']
-             }
-             }*/
             /* sync_js: {
              files: {
              'static/build/js/sync_scripts.min.js': ['static/build/js/sync_scripts.js']
