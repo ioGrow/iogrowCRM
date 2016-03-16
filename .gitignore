@@ -5,6 +5,7 @@ node_modules/*
 # C extensions
 *.so
 *.DS_Store
+Thumbs.db
 
 # Packages
 *.egg
