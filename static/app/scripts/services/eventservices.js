@@ -179,7 +179,6 @@ Event.get_docs=function($scope,params){
               //window.location.replace($rootScope.subscription_url);
           }
           if(!resp.code){
-            //$('#calendar').fullCalendar( 'refetchEvents' );
             if ($scope.events == undefined){
             $scope.events = [];
           }
