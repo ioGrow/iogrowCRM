@@ -1,7 +1,7 @@
 $admin-sidebar-blue: #169DF3;
 $separator-grey: #E9E9E9;
 
-@import "../../plugins/font-awesome/scss/mixins";
+@import "./mixins";
 
 .test{
   @include border-radius(15)

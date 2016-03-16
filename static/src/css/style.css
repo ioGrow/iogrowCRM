@@ -217,7 +217,7 @@ Close icon used for modal dialog and other UI element close buttons
   background-repeat: no-repeat !important;
   text-indent: -10000px;
   outline: none;
-  background-image: url("../img/remove-icon-small.png") !important;
+  background-image: url("../../src/img/remove-icon-small.png") !important;
 }
 
 /***

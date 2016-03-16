@@ -89,16 +89,18 @@ module.exports = function (grunt) {
             }
         },
         cssmin: {
-            /*css: {
-             files: {
-             'static/build/css/asyn_styles.min.css': ['static/build/css/asyn_styles.css']
-             }
-             },*/
             sync_css: {
                 files: {
                     'static/build/css/sync_styles.min.css': ['static/build/css/sync_styles.css']
                 }
             },
+             async_css: {
+                files: {
+                    'static/build/css/asyn_styles.min.css': ['static/build/css/asyn_styles.css']
+                }
+            },
+
+
         },
         uglify: {
             options: {
@@ -114,11 +116,11 @@ module.exports = function (grunt) {
              'static/build/js/async_scripts.min.js': ['static/build/js/async_scripts.js']
              }
              },*/
-            /* first_sync_js: {
+            first_sync_js: {
              files: {
              'static/build/js/first_sync_scripts.min.js': ['static/build/js/first_sync_scripts.js']
              }
-             }*/
+             },
             sync_ctrls_sers_js: {
                 files: {
                     'static/build/js/sync_scripts.min.js': ['static/build/js/sync_scripts.js'],

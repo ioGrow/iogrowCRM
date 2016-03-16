@@ -94,7 +94,7 @@ font-weight: 300;
   font-size: 1px;
   outline: 0;
   /* margin-top: 2px; */
-  background: url(../../bootstrap3/plugins/select2/select2.png)right top no-repeat;
+  background: url('../../src/img/select2/select2.png')right top no-repeat;
 }
 .chromeCastLoader{
   width: 100px;
