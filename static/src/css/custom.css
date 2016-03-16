@@ -421,7 +421,7 @@ sm Search
   border: 0px;
   padding: 0px;
   outline: none !important;
-  background-image: url(../../src/img/search-icon.png);
+  background-image: url(src/img/search-icon.png);
 }
 .sm-search .form-container input[type="text"] {
   margin: 0px;
@@ -1328,7 +1328,7 @@ transition-timing-function: ease-in;
   border-color: #B5C5C5 !important;
 }
 .colorChecked{
-  background-image: url('../../img/checked.png');
+  background-image: url('img/checked.png');
   border-color: black !important;
 }
 .newTagForm .close{
