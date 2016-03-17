@@ -5,9 +5,9 @@
             <div class="btn-group">
                  <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
                   {% if active_app.label =="Relationships" %}
-                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                       {% else%}
-                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                      <img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                   {% endif %}
                   <span class="hide_sm">{{_(active_app.label)}}</span>   
                   <i class="icon-angle-down fa fa-angle-down"></i>
@@ -15,9 +15,9 @@
                  <ul class="dropdown-menu">
                   {%for application in apps %}
                         {% if application.label =="Relationships" %}
-                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                           {% else%}
-                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                         
                           {% endif %}
                        
@@ -100,17 +100,17 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
-                                        <img src="/static/img/google_drive/text/plain.png" class="">
+                                        <img src="/static/src/img/google_drive/text/plain.png" class="">
                                         {{ _('Document') }}
                                     </a>
                                     </li>
                                     <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
-                                        <img src="/static/img/google_drive/presentation.png" class="">
+                                        <img src="/static/src/img/google_drive/presentation.png" class="">
                                         {{ _('Presentation') }}
                                     </a>
                                     </li>
                                     <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
-                                        <img src="/static/img/google_drive/spreadsheet.png" class="">
+                                        <img src="/static/src/img/google_drive/spreadsheet.png" class="">
                                         {{ _('Spreadsheet') }}
                                     </a>
                                     </li>
@@ -187,7 +187,7 @@
             <div class="row">
               <div class="col-md-3 col-sm-3 col-xs-3" ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false" style="padding-right:0px;display: table;vertical-align: middle;text-align: center;">
                   <div class="pic" style="vertical-align:middle;display: table-cell;">
-                      <img alt="<%= casee.account.name %>" class="yemyem img-responsive img-thumbnail" ng-src="<%= casee.account.logo_img_id ? 'https://docs.google.com/uc?id='+ casee.account.logo_img_id : '/static/img/default_company.png' %>" style="width: 140px;height: auto;">
+                      <img alt="<%= casee.account.name %>" class="yemyem img-responsive img-thumbnail" ng-src="<%= casee.account.logo_img_id ? 'https://docs.google.com/uc?id='+ casee.account.logo_img_id : '/static/src/img/default_company.png' %>" style="width: 140px;height: auto;">
                   </div>
               </div>
               <div class="col-md-9 col-sm-9 col-xs-9" style="min-height: 113px;display: table; padding-left:0px;">
@@ -370,7 +370,7 @@
                                       <ul ng-hide="isEmptyArray(casee.account.sociallinks.items)" class="socialLinks" style="list-style: none;padding-left: 0px;bottom: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;" ng-class="{socialLiknsAbsolute: !showEdit}">
                                         <li ng-repeat="sociallink in casee.account.sociallinks.items" class="socialItem" style="padding-bottom: 5px;">
                                           <div class="cont">
-                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="24" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="24" src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                             <input ng-show="showEdit" ng-blur="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-enter="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-model="sociallink.url"  id="exampleInputEmail2" placeholder="Add a Website" style="padding-top: 0px;padding-bottom: 0px;height: 24px;border: none;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 38px);" class="form-control">                                            
                                             <button  ng-show="showEdit" type="button" class="close" data-dismiss="modal" aria-hidden="true" style=" opacity:1;top: 14px;display: inline-block;float: left;margin-top: 7px;" ng-click="deleteSocialLink(sociallink,'sociallinks')"></button>
                                             <div class="clearfix"></div>
@@ -602,7 +602,7 @@
                                     <div style="margin-bottom: 5px;position: relative;border-bottom: 1px solid rgb(216, 216, 216);padding-bottom: 3px;" ng-hide="isEmpty(casee.contact)">
                                         <div style="display: inline-block;float: left;"
                                              class="profile-photo-linkedin">
-                                        <img src="<%=casee.contact.profile_img_url || '/static/img/avatar_contact.jpg'%>"
+                                        <img src="<%=casee.contact.profile_img_url || '/static/src/img/avatar_contact.jpg'%>"
                                                  style="width: 73px !important;height: auto !important;">
 
                                         </div>
@@ -655,7 +655,7 @@
                                                            onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                            style="display: inline-block;   float: left;"><img
                                                                 width="16"
-                                                                src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                                src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
 
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -745,7 +745,7 @@
                                                              class="startup-link" title="attachment.title">
                                                               <img alt="attachment.title"
                                                                    class="google-drive-icon img-responsive img-thumbnail"
-                                                                   ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" ng-class="{ 'documentimgsize': attachment.mimeType=='image/jpeg'||attachment.mimeType=='image/png'||attachment.mimeType=='image/x-icon'}">
+                                                                   ng-src="/static/src/img/google_drive/<%=attachment.mimeType%>.png" ng-class="{ 'documentimgsize': attachment.mimeType=='image/jpeg'||attachment.mimeType=='image/png'||attachment.mimeType=='image/x-icon'}">
                                                           </a>
                                                       </div>
                                                       <div class="text">
@@ -768,7 +768,7 @@
                                              <div class="dashboard-stat cards">
                                                  <div class="blank_slate_arrow"></div>
                                                  <div class=" thumbnail blank_slate_body">
-                                                    <img src="/static/img/documents_blanks.png" class="img-responsive">
+                                                    <img src="/static/src/img/documents_blanks.png" class="img-responsive">
                                                       <p class="lead">{{ _('Manage easily your documments using Google drive')}}</p>
                                                  </div>
                                              </div>
@@ -1395,7 +1395,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel" class="modal-title">
-                  <img ng-src="/static/img/google_drive/<%=mimeType%>.png" class="" style="width: 27px;margin-top: -10px;">
+                  <img ng-src="/static/src/img/google_drive/<%=mimeType%>.png" class="" style="width: 27px;margin-top: -10px;">
                   {{ _("Create a new") }} <%=mimeType%>
                 </h3>
             </div>

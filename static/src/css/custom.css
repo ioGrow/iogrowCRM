@@ -1328,7 +1328,7 @@ transition-timing-function: ease-in;
   border-color: #B5C5C5 !important;
 }
 .colorChecked{
-  background-image: url('img/checked.png');
+  background-image: url('/static/src/img/checked.png');
   border-color: black !important;
 }
 .newTagForm .close{

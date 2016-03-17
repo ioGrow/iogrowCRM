@@ -5,9 +5,9 @@
             <div class="btn-group">
                  <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
                   {% if active_app.label =="Relationships" %}
-                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                       {% else%}
-                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                      <img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                   {% endif %}
                   <span class="hide_sm">{{_(active_app.label)}}</span>   
                   <i class="icon-angle-down fa fa-angle-down"></i>
@@ -15,9 +15,9 @@
                  <ul class="dropdown-menu">
                   {%for application in apps %}
                         {% if application.label =="Relationships" %}
-                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                           {% else%}
-                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                         
                           {% endif %}
                        
@@ -339,7 +339,7 @@
   </div>
   <div class="dropOut"  ng-show="showUntag" >
     <div class="trash">
-      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png" >
     </div>
   </div>
   <div class="otherStages" ng-hide="inFinalStages">
@@ -348,7 +348,7 @@
           <div class="col-md-4" style="text-align:center"><span droppable class="btn red btn-lg" ng-click="updateStageOpps(closeloststage)" ng-drop="updateOpportunityStage(closeloststage)" style="line-height: 30px;
   opacity: 0.8;"><i class="fa  fa-thumbs-down" style="font-size: 19px;"></i> Lost</span></div>
           <div class="col-md-4 trashDiv" style="text-align:center">
-              <img  class="img-responsive" droppable ng-drop="editbeforedeleteselection()" src="/static/img/iotrash.png" style="margin: auto;height: 60px;width: 60px;margin-top: -6px;">
+              <img class="img-responsive" droppable ng-drop="editbeforedeleteselection()" src="/static/src/img/iotrash.png" style="margin: auto;height: 60px;width: 60px;margin-top: -6px;">
           </div>
           <div class="col-md-4" style="text-align:center" ><span style="line-height: 30px;
   opacity: 0.8;  background: #28b779 !important;" droppable ng-click="updateStageOpps(closewonstage)" ng-drop="updateOpportunityStage(closewonstage)" class="btn green btn-lg"><i class="fa fa-trophy" style="font-size: 19px;"></i> Won</span></div>
@@ -505,7 +505,7 @@
                 </table>
                 <div class="loaderList" ng-show="isMoreItemLoading">
                       <div class="loaderCardContent">
-                         <img class="img-responsive " src="/static/img/gloader.gif">
+                         <img class="img-responsive " src="/static/src/img/gloader.gif">
                          <span> {{ _('Loading...')}}</span>
                       </div>
                 </div>
@@ -561,7 +561,7 @@
               <div class="head">
                 <div class="pic">
                   <a href="/#/opportunities/show/<%= opportunity.id %>" class="startup-link" title="<%=opportunity.firstname%> <%=opportunity.lastname%>">
-                    <img ng-hide="opportunity.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" style="max-width: 40px;max-height: 40px;" >
+                    <img ng-hide="opportunity.profile_img_url" class="img-responsive profile-photo" src="/static/src/img/avatar_contact.jpg" style="max-width: 40px;max-height: 40px;" >
                     <img ng-show="opportunity.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= opportunity.profile_img_url %>" data-hasqtip="2" style="max-width: 40px;max-height: 40px;">
                   </a>
                 </div>
@@ -698,7 +698,7 @@
               <div class="head">
                 <div class="pic">
                   <a href="/#/opportunities/show/<%= opportunity.id %>" class="startup-link" title="<%=opportunity.firstname%> <%=opportunity.lastname%>">
-                    <img ng-hide="opportunity.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
+                    <img ng-hide="opportunity.profile_img_url"  class="img-responsive profile-photo" src="/static/src/img/avatar_contact.jpg" >
                     <img ng-show="opportunity.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= opportunity.profile_img_url %>" data-hasqtip="2" >
                   </a>
                 </div>
@@ -747,7 +747,7 @@
           </div>
           <div class="loaderCard" ng-show="isMoreItemLoading" data-span="all">
             <div class="loaderCardContent">
-               <img class="img-responsive " src="/static/img/gloader.gif">
+               <img class="img-responsive " src="/static/src/img/gloader.gif">
                <span>  {{ _('Loading...')}}</span>
             </div>
         </div>
@@ -758,7 +758,7 @@
           <div class="">
             <div class="blank_slate_arrow"></div>
             <div class="thumbnail blank_slate_body">
-              <img class="img-responsive" src="/static/img/opportunities_blank.png">
+              <img class="img-responsive" src="/static/src/img/opportunities_blank.png">
               <p class="lead">
                 {{ _('Know which proposals/bids are pending, which you’ve won, and which you’ve lost. Enter notes about the opportunities, attach proposals or contracts to the opportunities, and keep a log of any changes.') }}
               </p>

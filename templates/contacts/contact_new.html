@@ -16,10 +16,10 @@
                 <div class="btn-group">
                     <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
                         {% if active_app.label =="Relationships" %}
-                        <img class="app_icon" src="static/img/sm-iogrow-true.png"
+                        <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png"
                              style="display:inline-block;height: 20px;margin-right: 3px;">
                         {% else%}
-                        <img class="app_icon" src="static/img/admin_min.png"
+                        <img class="app_icon" src="../../static/src/img/admin_min.png"
                              style="display:inline-block;height: 20px;margin-right: 3px;">
                         {% endif %}
                         <span class="hide_sm">{{_(active_app.label)}}</span>
@@ -28,10 +28,10 @@
                     <ul class="dropdown-menu">
                         {%for application in apps %}
                         {% if application.label =="Relationships" %}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="static/img/sm-iogrow-true.png"  style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
+                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
                         </li>
                         {% else%}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
+                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
                         </li>
 
                         {% endif %}
@@ -129,7 +129,7 @@
                                                      ng-src="<%=imageSrc%>" class="img-responsive  profile-photo-large">
                                                 <a ng-show="showUpload" ng-click="createPickerUploader()" href=""
                                                    class="btn-upload btn-upload-contact" data-toggle="modal">
-                                                    <img src="/static/img/upload_logo.png" class="">
+                                                    <img src="/static/src/img/upload_logo.png" class="">
                                                 </a>
 
                                                 <div class="responsivePhotoIcon"></div>
@@ -379,7 +379,7 @@
                                                 <div class="cont">
                                                     <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                        style="display: inline-block;   float: left;"><img width="28"
-                                                                                                          ng-src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                                                                          ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                             <span onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                   title="<%= sociallink.url%>"
                                                   style="line-height: 25px;font-size: 15px;padding-left: 20px; display: inline-block; float: left; cursor:pointer">
@@ -396,7 +396,7 @@
                                             <div class="cont">
                                                 <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                    style="display: inline-block;   float: left;"><img width="28"
-                                                                                                      ng-src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                                                                      ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                 <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"
                                                        ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"
                                                        ng-model="sociallink.url" placeholder="Add a social link"
@@ -495,7 +495,7 @@
 
                             <div ng-show="inIsSearching"
                                  style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                <img src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">
+                                <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                             </div>
 
 
@@ -555,7 +555,7 @@
 
                             <div ng-show="inCIsLoading"
                                  style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                <img src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">
+                                <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                             </div>
 
 
@@ -608,7 +608,7 @@
                             <div ng-repeat="inCShortProfile in inCShortProfiles" style="margin-bottom:10px"
                                  ng-show="!isEmpty(inCShortProfile)&&isEmpty(inCProfile)">
                                 <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                    <img ng-src="<%=inCShortProfile.logo || '/static/img/avatar_contact.jpg'%>"
+                                    <img ng-src="<%=inCShortProfile.logo || '/static/src/img/avatar_contact.jpg'%>"
                                          style="width: 90px;height: 90px;">
 
                                 </div>
@@ -655,7 +655,7 @@
 
                             <div ng-show="twIsSearching"
                                  style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                <img src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">
+                                <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                             </div>
 
 
@@ -707,7 +707,7 @@
                             <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px"
                                  ng-hide="isEmpty(twShortProfile)">
                                 <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                    <img ng-src="<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>"
+                                    <img ng-src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
                                          style="width: 90px;height: 90px;">
 
                                 </div>
@@ -1029,7 +1029,7 @@
             <div class="modal-body">
                 <div ng-repeat="sContact in similarContacts" class="row">
                     <div class="col-sm-8 col-sm-offset-2">
-                        <img ng-src="<%= sContact.profile_img_url || '/static/img/avatar_contact.jpg'%>"
+                        <img ng-src="<%= sContact.profile_img_url || '/static/src/img/avatar_contact.jpg'%>"
                              class="img-responsive  profile-photo-large">
                         <h3 class="text-center"><%= sContact.firstname %> <%= sContact.lastname %></h3>
 

@@ -1528,8 +1528,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
               return false;
         }
         $scope.contact_img={};
-        $scope.imageSrcContact= '/static/img/avatar_contact.jpg';
-        $scope.imageSrcnewContact= '/static/img/avatar_contact.jpg';
+        $scope.imageSrcContact= '/static/src/img/avatar_contact.jpg';
+        $scope.imageSrcnewContact= '/static/src/img/avatar_contact.jpg';
         // What to do after authentication
         $scope.endError = function() {
             //alert("okkkkkkkkkkkkkkk");
@@ -2175,8 +2175,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                         $scope.relatedtwList=[];
                         $scope.relatedinList=[];
                         $scope.twRelatedShortProfiles=[];
-                        $scope.imageSrcnewContact= '/static/img/avatar_contact.jpg';
-                        $scope.imageSrc = '/static/img/default_company.png';
+                        $scope.imageSrcnewContact= '/static/src/img/avatar_contact.jpg';
+                        $scope.imageSrc = '/static/src/img/default_company.png';
                         $scope.apply();
               }
             
@@ -5056,7 +5056,7 @@ $scope.updateEventRenderAfterAdd= function(){};
               $scope.savedSociallink=$scope.relatedtwProfile.url;
               $scope.newcontact.sociallinks.push($scope.newcontact.sociallink);
 
-              if ($scope.imageSrc=='/static/img/avatar_contact.jpg'||$scope.imageSrc=='') {
+              if ($scope.imageSrc=='/static/src/img/avatar_contact.jpg'||$scope.imageSrc=='') {
                 console.log("innnnnn no imageSrc");
                 $scope.imageSrc=$scope.relatedtwProfile.profile_image_url_https;
                 $scope.profile_img.profile_img_url = $scope.relatedtwProfile.profile_image_url_https;
@@ -5084,8 +5084,8 @@ $scope.updateEventRenderAfterAdd= function(){};
               $scope.relatedinProfile={};
               $scope.relatedAddressModel=null;
               $scope.inRelatedShortProfiles=[];
-              $scope.imageSrcnewContact= '/static/img/avatar_contact.jpg';
-              $scope.imageSrc = '/static/img/default_company.png';
+              $scope.imageSrcnewContact= '/static/src/img/avatar_contact.jpg';
+              $scope.imageSrc = '/static/src/img/default_company.png';
               $scope.apply();
             }
             $scope.prepareRelated = function() {
@@ -5349,7 +5349,7 @@ $scope.updateEventRenderAfterAdd= function(){};
               var link={'url':shortProfile.url}
               $scope.addSocial(link);
               var params ={'id':$scope.account.id};
-              if ($scope.imageSrc=='/static/img/avatar_contact.jpg'||$scope.imageSrc=='') {            
+              if ($scope.imageSrc=='/static/src/img/avatar_contact.jpg'||$scope.imageSrc=='') {
                 $scope.imageSrc=$scope.twProfile.profile_image_url_https;
                  params['profile_img_url'] = $scope.twProfile.profile_image_url_https;
               };              
@@ -5435,7 +5435,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
             'logo_img_id': null,
             'logo_img_url': null
         };
-        $scope.imageSrc = '/static/img/default_company.png';
+        $scope.imageSrc = '/static/src/img/default_company.png';
         $scope.industries=["Accounting ","Airlines/Aviation ","Alternative Dispute Resolution ","Alternative Medicine ","Animation ","Apparel &amp; Fashion ","Architecture &amp; Planning ","Arts &amp; Crafts ","Automotive ","Aviation &amp; Aerospace ","Banking ","Biotechnology ","Broadcast Media ","Building Materials ","Business Supplies &amp; Equipment ","Capital Markets ","Chemicals ","Civic &amp; Social Organization ","Civil Engineering ","Commercial Real Estate ","Computer &amp; Network Security ","Computer Games ","Computer Hardware ","Computer Networking ","Computer Software ","Construction ","Consumer Electronics ","Consumer Goods ","Consumer Services ","Cosmetics ","Dairy ","Defense &amp; Space ","Design ","Education Management ","E-learning ","Electrical &amp; Electronic Manufacturing ","Entertainment ","Environmental Services ","Events Services ","Executive Office ","Facilities Services ","Farming ","Financial Services ","Fine Art ","Fishery ","Food &amp; Beverages ","Food Production ","Fundraising ","Furniture ","Gambling &amp; Casinos ","Glass, Ceramics &amp; Concrete ","Government Administration ","Government Relations ","Graphic Design ","Health, Wellness &amp; Fitness ","Higher Education ","Hospital &amp; Health Care ","Hospitality ","Human Resources ","Import &amp; Export ","Individual &amp; Family Services ","Industrial Automation ","Information Services ","Information Technology &amp; Services ","Insurance ","International Affairs ","International Trade &amp; Development ","Internet ","Investment Banking/Venture ","Investment Management ","Judiciary ","Law Enforcement ","Law Practice ","Legal Services ","Legislative Office ","Leisure &amp; Travel ","Libraries ","Logistics &amp; Supply Chain ","Luxury Goods &amp; Jewelry ","Machinery ","Management Consulting ","Maritime ","Marketing &amp; Advertising ","Market Research ","Mechanical or Industrial Engineering ","Media Production ","Medical Device ","Medical Practice ","Mental Health Care ","Military ","Mining &amp; Metals ","Motion Pictures &amp; Film ","Museums &amp; Institutions ","Music ","Nanotechnology ","Newspapers ","Nonprofit Organization Management ","Oil &amp; Energy ","Online Publishing ","Outsourcing/Offshoring ","Package/Freight Delivery ","Packaging &amp; Containers ","Paper &amp; Forest Products ","Performing Arts ","Pharmaceuticals ","Philanthropy ","Photography ","Plastics ","Political Organization ","Primary/Secondary ","Printing ","Professional Training ","Program Development ","Public Policy ","Public Relations ","Public Safety ","Publishing ","Railroad Manufacture ","Ranching ","Real Estate ","Recreational Facilities &amp; Services ","Religious Institutions ","Renewables &amp; Environment ","Research ","Restaurants ","Retail ","Security &amp; Investigations ","Semiconductors ","Shipbuilding ","Sporting Goods ","Sports ","Staffing &amp; Recruiting ","Supermarkets ","Telecommunications ","Textiles ","Think Tanks ","Tobacco ","Translation &amp; Localization ","Transportation/Trucking/Railroad ","Utilities ","Venture Capital ","Veterinary ","Warehousing ","Wholesale ","Wine &amp; Spirits ","Wireless ","Writing &amp; Editing"];
         $scope.account.notes=[];
         $scope.note={};
@@ -5764,7 +5764,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                 $scope.savedSociallink=$scope.twProfile.url;
                 console.log("in saveTwitterUrl");
                 console.log('cosole imageSrc:'+$scope.imageSrc);
-                if ($scope.imageSrc=='/static/img/default_company.png'||$scope.imageSrc=='') {
+                if ($scope.imageSrc=='/static/src/img/default_company.png'||$scope.imageSrc=='') {
                   console.log("innnnnn no imageSrc");
                   $scope.imageSrc=$scope.twProfile.profile_image_url_https;
                   $scope.profile_img.profile_img_url = $scope.twProfile.profile_image_url_https;
@@ -6080,7 +6080,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
         $scope.addresses=[];
         $scope.inProfile={};
         $scope.inShortProfiles=[];
-        $scope.imageSrc = '/static/img/default_company.png';
+        $scope.imageSrc = '/static/src/img/default_company.png';
         $scope.apply();
       }
       $scope.saveRelatedinUrl=function(shortProfile){
@@ -6194,8 +6194,8 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
               $scope.relatedinProfile={};
               $scope.relatedAddressModel=null;
               $scope.inRelatedShortProfiles=[];
-              $scope.imageSrcnewContact= '/static/img/avatar_contact.jpg';
-              $scope.imageSrc = '/static/img/default_company.png';
+              $scope.imageSrcnewContact= '/static/src/img/avatar_contact.jpg';
+              $scope.imageSrc = '/static/src/img/default_company.png';
               $scope.apply();
 
             }

@@ -99,7 +99,7 @@ leadservices.factory('Lead', function ($rootScope) {
                     if (resp.profile_img_url) {
                         $scope.imageSrc = resp.profile_img_url;
                     } else {
-                        $scope.imageSrc = '/static/img/avatar_contact.jpg';
+                        $scope.imageSrc = '/static/src/img/avatar_contact.jpg';
                     }
                     //$scope.renderMaps();
                     var renderMap = false;

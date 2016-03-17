@@ -100,7 +100,7 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             var handler = StripeCheckout.configure({
 
                 key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
-                image: "/static/img/IO_Grow.png",
+                image: "/static/src/img/IO_Grow.png",
                 token: function (token) {
 
                     $scope.isLoading = true;

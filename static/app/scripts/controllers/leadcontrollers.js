@@ -1696,7 +1696,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.smallModal = false;
         $scope.showPsychometrics = true;
         $scope.opportunity = {access: 'public', currency: 'USD', duration_unit: 'fixed', closed_date: new Date()};
-        $scope.imageSrc = '/static/img/avatar_contact.jpg';
+        $scope.imageSrc = '/static/src/img/avatar_contact.jpg';
         $scope.showEdit = false;
         $scope.linkedLoader = false;
         $scope.linkedProfileresume = null;
@@ -1780,7 +1780,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             return false;
         }
         $scope.getCoverUrl = function () {
-            var url = "/static/img/covers/" + Math.floor(Math.random() * 5 + 1) + ".jpg";
+            var url = "/static/src/img/covers/" + Math.floor(Math.random() * 5 + 1) + ".jpg";
             return url;
         }
         $scope.statuses = [
@@ -4339,7 +4339,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             var link = {'url': shortProfile.url}
             $scope.addSocial(link);
             var params = {'id': $scope.lead.id};
-            if ($scope.imageSrc == '/static/img/avatar_contact.jpg' || $scope.imageSrc == '') {
+            if ($scope.imageSrc == '/static/src/img/avatar_contact.jpg' || $scope.imageSrc == '') {
                 
                 $scope.imageSrc = $scope.twProfile.profile_image_url_https;
                 params['profile_img_url'] = $scope.twProfile.profile_image_url_https;
@@ -4464,7 +4464,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         $scope.phone = {};
         $scope.phone.type = 'work';
         $scope.lead.source="";
-        $scope.imageSrc = '/static/img/avatar_contact.jpg';
+        $scope.imageSrc = '/static/src/img/avatar_contact.jpg';
         $scope.profile_img = {
             'profile_img_id': null,
             'profile_img_url': null
@@ -5651,7 +5651,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             $scope.pushElement($scope.sociallink, $scope.sociallinks, 'sociallinks');
             
             
-            if ($scope.imageSrc == '/static/img/avatar_contact.jpg' || $scope.imageSrc == '') {
+            if ($scope.imageSrc == '/static/src/img/avatar_contact.jpg' || $scope.imageSrc == '') {
                 
                 $scope.imageSrc = $scope.twProfile.profile_image_url_https;
                 $scope.profile_img.profile_img_url = $scope.twProfile.profile_image_url_https;
@@ -5815,7 +5815,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         }
         $scope.clearLead = function () {
             $scope.lead = {};
-            $scope.imageSrc = '/static/img/avatar_contact.jpg';
+            $scope.imageSrc = '/static/src/img/avatar_contact.jpg';
             $scope.searchAccountQuery = null;
             $scope.addresses = [];
             $scope.addressModel = null;

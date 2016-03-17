@@ -99,7 +99,7 @@
 
             {% if user.is_admin and logo == None %}
                 <span id="update_logo_pan" class="update-Logo" ng-click="createPickerUploader()" style="display:none;">
-                      <img src="/static/img/upload_logo.png"
+                      <img src="/static/src/img/upload_logo.png"
                            style="margin-left: -2px;padding: 2px;width: 24px;"> {{ _('UpLoad your Logo') }}
                 </span>
             {% endif %}
@@ -108,7 +108,7 @@
         <!-- END LOGO -->
         <!-- BEGIN RESPONSIVE MENU TOGGLER -->
         <a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <img src="/static/img/sidebar-toggler-light.jpg" alt=""/>
+            <img src="/static/src/img/sidebar-toggler-light.jpg" alt=""/>
         </a>
         <!-- END RESPONSIVE MENU TOGGLER -->
         <!-- BEGIN TOP NAVIGATION MENU -->
@@ -177,7 +177,7 @@
                                   <span class="task">
                                     <span class="desc">
                                            <img class="platform_icons" height="50" width="50"
-                                                src="/static/img/iogrow-application.png">
+                                                src="/static/src/img/iogrow-application.png">
                                         {{ _('Relationships') }}
                                     </span>
                                   </span>
@@ -188,7 +188,7 @@
                                   <span class="task">
                                     <span class="desc">
                                            <img class="platform_icons" height="50" width="50"
-                                                src="/static/img/admin_console.png">
+                                                src="/static/src/img/admin_console.png">
                                         {{ _('Settings') }}
                                     </span>
                                   </span>
@@ -198,7 +198,7 @@
                                 <a href="https://drive.google.com/?tab=mo&authuser=0" target="new">
                           <span class="task">
                             <span class="desc">
-                              <img class="platform_icons" src="/static/img/google_drive.png">
+                              <img class="platform_icons" src="/static/src/img/google_drive.png">
                              {{ _('Drive') }}
                             </span>
                           </span>
@@ -208,7 +208,7 @@
                                 <a href="https://www.google.com/calendar?tab=oc" target="new">
                           <span class="task">
                             <span class="desc">
-                            <img class="platform_icons" src="/static/img/google_calendar.png">
+                            <img class="platform_icons" src="/static/src/img/google_calendar.png">
                            {{ _('Calendar') }}
                             </span>
                           </span>
@@ -218,7 +218,7 @@
                                 <a href="https://mail.google.com/mail/?tab=om" target="new">
                           <span class="task">
                             <span class="desc">
-                            <img class="platform_icons" src="/static/img/google_gmail.png">
+                            <img class="platform_icons" src="/static/src/img/google_gmail.png">
                            {{ _('Gmail') }}
                             </span>
                           </span>
@@ -364,7 +364,7 @@
             <a data-dismiss="modal" style="color: #4991FF;font-weight: 500;position: absolute;z-index: 2;right: 0px;"
                class="btn">CLOSE</a>
             <div class="modal-body" style="background-color: white;">
-                <img src="/static/img/iogrow_alert.png" alt="alert message"
+                <img src="/static/src/img/iogrow_alert.png" alt="alert message"
                      style="width: 30%;float: left;margin-top: 25px;">
                 <div style="width: 70%;float: left;padding: 6px 5%;font-weight: 300;">
                     <h3 style="font-family: Ubuntu, sans-serif;font-weight: 400 !important;">
@@ -446,7 +446,7 @@
         </div>
     </div>
     <div class="ng-view-container page-content-wrapper" ng-view>
-        <center><img src="/static/img/google_loading.gif" ng-show="isLoading"
+        <center><img src="/static/src/img/google_loading.gif" ng-show="isLoading"
                      style="height:30px; width:30px; margin-top:200px;">
         </center>
     </div>

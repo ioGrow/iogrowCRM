@@ -5,9 +5,9 @@
             <div class="btn-group">
                  <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
                   {% if active_app.label =="Relationships" %}
-                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                       {% else%}
-                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                      <img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                   {% endif %}
                   <span class="hide_sm">{{_(active_app.label)}}</span>   
                   <i class="icon-angle-down fa fa-angle-down"></i>
@@ -15,9 +15,9 @@
                  <ul class="dropdown-menu">
                   {%for application in apps %}
                         {% if application.label =="Relationships" %}
-                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                           {% else%}
-                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                         
                           {% endif %}
                        
@@ -305,7 +305,7 @@
 </div>
   <div class="dropOut"  ng-show="showUntag" >
     <div class="trash">
-      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png" >
     </div>
 </div>
   <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
@@ -421,8 +421,8 @@
                         </td>
                         <td>
                           <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
-                            <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo profile-photoOnList" src="/static/img/avatar_contact.jpg" >
-                            <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo profile-photoOnList" err-src="/static/img/avatar_contact.jpg" ng-src="<%= contact.profile_img_url %>" data-hasqtip="2">
+                            <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo profile-photoOnList" src="/static/src/img/avatar_contact.jpg" >
+                            <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo profile-photoOnList" err-src="/static/src/img/avatar_contact.jpg" ng-src="<%= contact.profile_img_url %>" data-hasqtip="2">
                           </a>
                         </td>
                         <td>
@@ -470,7 +470,7 @@
                 </table>
                 <div class="loaderList" ng-show="isMoreItemLoading">
                       <div class="loaderCardContent">
-                         <img class="img-responsive " src="/static/img/gloader.gif">
+                         <img class="img-responsive " src="/static/src/img/gloader.gif">
                          <span> {{ _('Loading...')}}</span>
                       </div>
                 </div>
@@ -549,8 +549,8 @@
               <div class="head">
                 <div class="pic">
                   <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
-                    <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg">
-                    <img ng-show="contact.profile_img_url"  err-src="/static/img/avatar_contact.jpg" class="img-responsive profile-photo" src="<%= contact.profile_img_url %>" data-hasqtip="2" >
+                    <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/src/img/avatar_contact.jpg">
+                    <img ng-show="contact.profile_img_url"  err-src="/static/src/img/avatar_contact.jpg" class="img-responsive profile-photo" src="<%= contact.profile_img_url %>" data-hasqtip="2" >
                   </a>
                 </div>
                 <div class="text">
@@ -595,7 +595,7 @@
           </div>
           <div class="loaderCard" ng-show="isMoreItemLoading" data-span="all">
             <div class="loaderCardContent">
-               <img class="img-responsive " src="/static/img/gloader.gif">
+               <img class="img-responsive " src="/static/src/img/gloader.gif">
                <span>  {{ _('Loading...')}}</span>
             </div>
         </div>
@@ -606,7 +606,7 @@
             <div class="">
               <div class="blank_slate_arrow"></div>
               <div class="thumbnail blank_slate_body">
-                <img class="img-responsive" src="/static/img/contacts_blank.png">
+                <img class="img-responsive" src="/static/src/img/contacts_blank.png">
                 <p class="lead">
                   {{_('Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.')}}
                 </p>

@@ -17,7 +17,7 @@
   <div class=" subHeaderContent">
     <h2 class="page-title">
       <a href="/#/discovers/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="{{ _("Back to discovers") }}">
-        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
+        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/src/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
       </a>
       {{ _("Discovers") }} >
       <a  >
@@ -283,7 +283,7 @@
                    
                         <iframe src="http://iocontext.eu-gb.mybluemix.net/api/v1/vizualize/<%=tweet_details._source.user.screen_name%>" frameborder="0" style="height: 800px;overflow:hidden;width: 800px;"  onload="iframeLoaded()" id="iframePan" seamless="seamless" scrolling="no"><br /> <p>Your browser does not support iframes.</p><br /></iframe>
                    
-                      <img src="/static/img/gloader.gif" id="loadingPan" style="margin-left: 395px;
+                      <img src="/static/src/img/gloader.gif" id="loadingPan" style="margin-left: 395px;
 margin-top: 20px" />
              
                   
@@ -371,7 +371,7 @@ margin-top: 20px" />
                                     <div class="detailsSection">
                                       <div class="head">
                                         <div class="pic">
-                                            <a href="/#/contact/show/<%= contact.id %>" class="startup-link" title="contact.firstname"><img ng-hide="account.logo_img_id" alt="contact.firstname" class="img-responsive img-thumbnail" src="/static/img/default_company.png" >
+                                            <a href="/#/contact/show/<%= contact.id %>" class="startup-link" title="contact.firstname"><img ng-hide="account.logo_img_id" alt="contact.firstname" class="img-responsive img-thumbnail" src="/static/src/img/default_company.png" >
                                             <img ng-show="account.logo_img_id" alt="account.name" class="img-responsive img-thumbnail" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
                                             </a>
                                         </div>
@@ -398,7 +398,7 @@ margin-top: 20px" />
                               <div class="dashboard-stat cards">
                                 <div class="blank_slate_arrow"></div>
                                 <div class="thumbnail blank_slate_body">
-                                    <img class="img-responsive" src="/static/img/accounts_blank.png">
+                                    <img class="img-responsive" src="/static/src/img/accounts_blank.png">
                                     <p class="lead">{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}</p>
                                 </div>
                               </div>
@@ -733,7 +733,7 @@ margin-top: 20px" />
 
                                     <div class="blank_slate_arrow"></div>
                                   <div class="thumbnail blank_slate_body">
-                                        <img src="/static/img/opportunities_blank.png" class="img-responsive">
+                                        <img src="/static/src/img/opportunities_blank.png" class="img-responsive">
                                           <p class="lead">{{ _('Know which proposals/bids are pending, which you’ve won, and which you’ve lost. Enter notes about the opportunities, attach proposals or contracts to the opportunities, and keep a log of any changes.')}}</p>
                                    </div>
                                  </div>
@@ -947,7 +947,7 @@ margin-top: 20px" />
 
                                               <div class="blank_slate_arrow"></div>
                                             <div class="thumbnail blank_slate_body">
-                                                <img src="/static/img/cases_blank.png" class="img-responsive">
+                                                <img src="/static/src/img/cases_blank.png" class="img-responsive">
                                               <p class="lead">The main goal of cases is to assist collaboration and focus of teams on delivering amazing customer experience.</p>
                                                  </div>
 
@@ -991,17 +991,17 @@ margin-top: 20px" />
                                     </a>
                                     <ul class="dropdown-menu">
                                       <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
-                                           <img src="/static/img/google_drive/text/plain.png" class="">
+                                           <img src="/static/src/img/google_drive/text/plain.png" class="">
                                           {{ _('Document')}}
                                           </a>
                                       </li>
                                       <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
-                                           <img src="/static/img/google_drive/presentation.png" class="">
+                                           <img src="/static/src/img/google_drive/presentation.png" class="">
                                           {{ _('Presentation')}}
                                           </a>
                                       </li>
                                       <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
-                                           <img src="/static/img/google_drive/spreadsheet.png" class="">
+                                           <img src="/static/src/img/google_drive/spreadsheet.png" class="">
                                           {{ _('Spreadsheet')}}
                                           </a>
                                       </li>
@@ -1024,7 +1024,7 @@ margin-top: 20px" />
                                             <div class="head">
                                               <div class="pic">
                                                   <a href="/#/documents/show/<%= attachment.id %>" class="startup-link" title="attachment.title">
-                                                  <img  alt="attachment.title" class="google-drive-icon img-responsive img-thumbnail" ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" >
+                                                  <img  alt="attachment.title" class="google-drive-icon img-responsive img-thumbnail" ng-src="/static/src/img/google_drive/<%=attachment.mimeType%>.png" >
                                                   </a>
                                               </div>
                                               <div class="text">
@@ -1046,7 +1046,7 @@ margin-top: 20px" />
                                        <div class="dashboard-stat cards">
                                            <div class="blank_slate_arrow"></div>
                                            <div class=" thumbnail blank_slate_body">
-                                              <img src="/static/img/documents_blanks.png" class="img-responsive">
+                                              <img src="/static/src/img/documents_blanks.png" class="img-responsive">
                                                 <p class="lead">{{ _('Manage easily your documments using Google drive')}}</p>
                                            </div>
                                        </div>

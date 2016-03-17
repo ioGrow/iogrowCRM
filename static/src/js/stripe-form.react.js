@@ -28,7 +28,7 @@ window.StripeForm = React.createClass({
         return (
                   <div className="container">
                       <h2 className="logoHeader">
-                          <img src="/static/img/128.png" alt="" />
+                          <img src="/static/src/img/128.png" alt="" />
                       <span className="logo-copylead">Copy</span><span>lead for Salesforce</span>
                     </h2>
                     <div className="content">
@@ -43,15 +43,15 @@ window.StripeForm = React.createClass({
                                     <label for="cardnumber" className="label-control">Credit Card Number</label>
                                     <input type="text" id="cardnumber" className="form-control" data-stripe="number"/>
                                     <div className="cardsimgscontainer">
-                                          <img src="/static/img/visa.png"
+                                          <img src="/static/src/img/visa.png"
                                                className="img-card" alt=""/>
-                                          <img src="/static/img/mastercard.png" alt=""
+                                          <img src="/static/src/img/mastercard.png" alt=""
                                               className="img-card"/>
-                                          <img src="/static/img/american-express.png" alt=""
+                                          <img src="/static/src/img/american-express.png" alt=""
                                                className="img-card"/>
-                                          <img src="/static/img/discover.png" alt=""
+                                          <img src="/static/src/img/discover.png" alt=""
                                                className="img-card"/>
-                                          <img src="/static/img/JCB.png" alt=""
+                                          <img src="/static/src/img/JCB.png" alt=""
                                                className="img-card"/>
                                      </div>
                                  </div>
@@ -74,7 +74,7 @@ window.StripeForm = React.createClass({
                                           <label for="scode" className="label-control">Security code</label>
                                           <input type="text" id="scode" className="form-control" data-stripe="cvc"/>
                                           <div className="cardsimgscontainer">
-                                              <img src="/static/img/cvc.png"
+                                              <img src="/static/src/img/cvc.png"
                                                    className="cvc-input" alt=""/>
                                          </div>
                                        </div>
@@ -116,7 +116,7 @@ window.ActivationNotice = React.createClass({
                 <div className="content">
                     <div className="row">
                         <div className="imgLeft">
-                            <img alt="" src="/static/img/copylead_session_expired.png" />
+                            <img alt="" src="/static/src/img/copylead_session_expired.png" />
                         </div>
                         <div className="message">
                             <h3 className="trialh3">Free Trial Expired</h3>

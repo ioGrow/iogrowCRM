@@ -3194,7 +3194,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
       $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
       $scope.users=[];
       $scope.opportunity.estimated=null;
-      $scope.imageSrc = '/static/img/default_company.png';
+      $scope.imageSrc = '/static/src/img/default_company.png';
       $scope.opportunity.contacts=[];
       $scope.contacts=[];
       $scope.competitors=[];
@@ -4015,7 +4015,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
               /*$scope.currentContact.sociallinks.push($scope.sociallink);
               $scope.pushElement($scope.sociallink,$scope.currentContact.sociallinks,'sociallinks');
               $scope.pushElement($scope.website,$scope.currentContact.websites,'websites');*/
-              if ($scope.imageSrc=='/static/img/avatar_contact.jpg'||$scope.imageSrc=='') {
+              if ($scope.imageSrc=='/static/src/img/avatar_contact.jpg'||$scope.imageSrc=='') {
                 console.log("innnnnn no imageSrc");
                 $scope.imageSrc=$scope.twProfile.profile_image_url_https;
                 $scope.profile_img.profile_img_url = $scope.twProfile.profile_image_url_https;

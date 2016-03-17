@@ -2498,7 +2498,7 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
       $scope.sociallinks=[];
       $scope.customfields=[];
       $scope.results=[];
-      $scope.imageSrc = '/static/img/default_company.png';
+      $scope.imageSrc = '/static/src/img/default_company.png';
       $scope.casee = {
                       'access': 'public',
                       'priority':4

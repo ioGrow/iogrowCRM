@@ -2076,7 +2076,7 @@ Zoom icon overlay on images
 }
 
 .zoom .zoom-icon {
-  background-image:url("../img/overlay-icon.png");
+  background-image:url("../../src/img/overlay-icon.png");
   background-color: #222;
   background-repeat: no-repeat;
   background-position: 50%;

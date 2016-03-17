@@ -122,7 +122,7 @@ accountservices.factory('Account', function($rootScope) {
                     if (resp.logo_img_url) {
                          $scope.imageSrc = resp.logo_img_url;
                     }else{
-                         $scope.imageSrc = '/static/img/default_company.png';
+                         $scope.imageSrc = '/static/src/img/default_company.png';
                     }
                 }
                 // list infonodes

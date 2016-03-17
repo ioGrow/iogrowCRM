@@ -1421,7 +1421,7 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
     $scope.linkedLoader=false;
     $scope.linkedProfileresume=null;
     $scope.tab='about';
-    $scope.imageSrc = '/static/img/avatar_contact.jpg';
+    $scope.imageSrc = '/static/src/img/avatar_contact.jpg';
     $scope.watsonUrl=null;
     $scope.showPage=true;
     $scope.timezone=document.getElementById('timezone').value;
@@ -4373,7 +4373,7 @@ $scope.sendEmailSelected=function(){
               var link={'url':shortProfile.url}
               $scope.addSocial(link);
               var params ={'id':$scope.contact.id};
-              if ($scope.imageSrc=='/static/img/avatar_contact.jpg'||$scope.imageSrc=='') {            
+              if ($scope.imageSrc=='/static/src/img/avatar_contact.jpg'||$scope.imageSrc=='') {
                 $scope.imageSrc=$scope.twProfile.profile_image_url_https;
                  params['profile_img_url'] = $scope.twProfile.profile_image_url_https;
               };              
@@ -4463,7 +4463,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
         $scope.accountsResults = [];
       $scope.currentContact = {};
       $scope.phone.type= 'work';
-      $scope.imageSrc = '/static/img/avatar_contact.jpg';
+      $scope.imageSrc = '/static/src/img/avatar_contact.jpg';
       $scope.profile_img = {
                             'profile_img_id':null,
                             'profile_img_url':null
@@ -5253,7 +5253,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
               $scope.savedSociallink=$scope.twProfile.url;
               $scope.pushElement($scope.sociallink,$scope.sociallinks,'sociallinks');
               $scope.pushElement($scope.website,$scope.websites,'websites');
-              if ($scope.imageSrc=='/static/img/avatar_contact.jpg'||$scope.imageSrc=='') {
+              if ($scope.imageSrc=='/static/src/img/avatar_contact.jpg'||$scope.imageSrc=='') {
                 console.log("innnnnn no imageSrc");
                 $scope.imageSrc=$scope.twProfile.profile_image_url_https;
                 $scope.profile_img.profile_img_url = $scope.twProfile.profile_image_url_https;
@@ -5367,7 +5367,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
         $scope.twList=[];
         $scope.inCList=[];
         $scope.contact={};
-        $scope.imageSrc='/static/img/avatar_contact.jpg';
+        $scope.imageSrc='/static/src/img/avatar_contact.jpg';
         $scope.searchAccountQuery=null;
         $scope.addresses=[];
         $scope.websites=[];
