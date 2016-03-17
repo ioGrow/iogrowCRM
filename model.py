@@ -195,11 +195,11 @@ class SFinvitation(ndb.Model):
         invitees = cls.query(cls.partner_key==partner_key).fetch()
         for invitee in invitees:
             if invitee.status =='active':
-                response['active'].append(invitee)
+                response['active'].append(invitee.to_dict())
             elif invitee.status =='paying':
-                response['paying'].append(invitee)
+                response['paying'].append(invitee.to_dict())
             else:
-                response['pending'].append(invitee)
+                response['pending'].append(invitee.to_dict())
 
         return response
 
