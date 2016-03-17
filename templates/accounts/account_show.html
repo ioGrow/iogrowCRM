@@ -214,7 +214,7 @@
             <div id="newAccMain" ng-hide="selectedTab == 3" class="showPage custom-show margin-bottom-15  col-md-12" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
               <div class="row margin-bottom-10" style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;">
                   <div class="col-md-12 showCover" style="height: 128px; overflow: hidden;padding-left: 0px;padding-right: 0px;">
-                      <img src="<%=account.cover_image||twProfile.profile_banner_url||'/static/img/covers/11.jpg'%>" style="width: 100%;">
+                      <img src="<%=account.cover_image||twProfile.profile_banner_url||'/static/src/img/covers/11.jpg'%>" style="width: 100%;">
                   </div>
                 <div class="col-md-12" style="background: white;">
                           <div class="row">
@@ -2710,7 +2710,7 @@
                                             <div id="assigeeList" class="list-group" ng-hide="selected_members == []">
                                                 <div ng-show="true" class="invitation list-group-item" ng-repeat="selected_us in selected_members">
                                                     <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
-                                                    <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                                                    <img class="google-avatar" ng-src="selected_us.google_public_profile_photo_url"/>
                                                     <strong> <%= selected_us.google_display_name %></strong>
                                                 </div>
                                             </div>

@@ -1113,7 +1113,7 @@
                         <div  class="taskAssigneList invitation list-group-item" ng-repeat="selected_us in sharing_with" style="padding: 5px;">
                           <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
                           <div class="photo">
-                            <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                            <img class="google-avatar" ng-src="selected_us.google_public_profile_photo_url"/>
                           </div>
                           <div class="details">
                             <p>

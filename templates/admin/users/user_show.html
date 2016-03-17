@@ -260,7 +260,6 @@
                                        <form ng-submit="done_edit_task(task)">
                                           <input ng-type="text" class="form-control inlineEditTask" ng-blur="done_edit_task(task)" ng-model="task.title">
                                        </form>
-
                                        </div>
                                         <div class="col-md-5 col-xs-12">
                                             <span draggable  ng-drag="dragTagItem(task_tag.edgeKey)"  ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
@@ -268,7 +267,7 @@
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
                                                <a href="/#/admin/users/show/<%= assignee.google_user_id %>"> <%= assignee.display_name %></a>
-                                               <img alt="" src="<%= assignee.photo%>" class="user-photo" />
+                                               <img alt="" src="<%= assignee.photo %>" class="user-photo" />
                                             </span>
                                         </div>
                                     </div>
@@ -1037,7 +1036,7 @@
                       <div id="assigeeList" class="list-group">
                         <div class="invitation list-group-item" ng-repeat="selected_us in slected_members">
                           <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
-                          <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                          <img class="google-avatar" ng-src="selected_us.google_public_profile_photo_url"/>
                             <strong> <%= selected_us.google_display_name %> < <%=selected_us.email%> ></strong>
                         </div>
                       </div>
