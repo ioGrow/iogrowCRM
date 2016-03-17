@@ -133,12 +133,12 @@ module.exports = function (grunt) {
              files: {
              'static/build/js/async_scripts_2.min.js': ['static/build/js/async_scripts_2.js']
              }
-             },
+             },   */
              sync_ctrls_sers_js: {
              files: {
              'static/build/js/first_sync_scripts.min.js': ['static/build/js/first_sync_scripts.js']
              }
-             },    */
+             },
             /*async_ctrls_sers_js: {
              files: {
              'static/build/js/async_ctrls_sers_scripts.min.js': ['static/app/scripts/services/mapservices.js','static/app/scripts/services/caseservices.js','static/app/scripts/services/discoverservices.js','static/app/scripts/services/topicservices.js','static/app/scripts/services/eventservices.js','static/app/scripts/services/noteservices.js','static/app/scripts/services/commentservices.js','static/app/scripts/services/reportservices.js','static/app/scripts/controllers/discovercontrollers.js','static/app/scripts/controllers/casecontrollers.js','static/app/scripts/controllers/documentcontrollers.js','static/app/scripts/controllers/notecontrollers.js','static/app/scripts/controllers/eventcontrollers.js','static/app/scripts/controllers/dashboardController.js']
