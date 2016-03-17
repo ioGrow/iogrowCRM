@@ -248,7 +248,8 @@ class BaseHandler(webapp2.RequestHandler):
                     'decimal_delimiter': currency_format.decimal_delimiter,
                     'sales_tabs': STANDARD_TABS,
                     'admin_tabs': ADMIN_TABS,
-                    'plan': organization.get_subscription().plan.get()
+                    'plan': organization.get_subscription().plan.get(),
+                    'publishable_key': app_config.PUBLISHABLE_KEY
                 }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -1322,14 +1323,21 @@ class SubscriptionHandler(SessionEnabledHandler):
     def get(self):
         template = jinja_environment.get_template(name='templates/admin/subscription/subscription.html')
         user = self.get_user_from_session()
-        template_values = {
-            'user': user,
-            'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
-            'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
-            'publishable_key': app_config.PUBLISHABLE_KEY,
-            'users_count': model.User.get_users_count_by_organization(user.organization)
-        }
-        self.response.out.write(template.render(template_values))
+        if user:
+            org_key = user.organization
+            organization = org_key.get()
+            subscription = organization.get_subscription()
+            template_values = {
+                'user': user,
+                'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
+                'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
+                'publishable_key': app_config.PUBLISHABLE_KEY,
+                'users_count': model.User.get_users_count_by_organization(org_key),
+                'subscription': subscription
+            }
+            self.response.out.write(template.render(template_values))
+        else:
+            self.redirect('/welcome/')
 
 
 class SFsubscriber(BaseHandler, SessionEnabledHandler):
@@ -1397,29 +1405,22 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
         user = self.get_user_from_session()
         organization = user.organization.get()
-
-        # Set your secret key: remember to change this to your live secret key in production
-        # See your keys here https://dashboard.stripe.com/account/apikeys
         stripe.api_key = app_config.STRIPE_API_KEY
-
-        # Get the credit card details submitted by the form
         token = self.request.get('token')
         interval = self.request.get('interval')
+        quantity = int(self.request.get('quantity'))
         premium_subscription = Subscription.create_premium_subscription(interval)
-        # plane = self.request.get('plane')
-        # Create the charge on Stripe's servers - this will charge the user's card
         try:
-            stripe.Plan.retrieve('{}_{}'.format(app_config.PREMIUM, interval))
             customer = stripe.Customer.create(
                 source=token,
                 description=organization.key.id(),
                 plan='{}_{}'.format(app_config.PREMIUM, interval),
                 email=user.email,
-                quantity=User.get_users_count_by_organization(user.organization)
+                quantity=quantity
             )
-
             premium_subscription.is_auto_renew = not customer.subscriptions['data'][0].cancel_at_period_end
             premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
+            premium_subscription.quantity = quantity
             premium_subscription.put()
 
             organization.stripe_customer_id = customer.id
@@ -1431,9 +1432,28 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
             self.response.set_status(e.http_status)
 
 
+class EditCreditCardHandler(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        user = self.get_user_from_session()
+        organization = user.organization.get()
+        stripe.api_key = app_config.STRIPE_API_KEY
+        token = self.request.get('token')
+        try:
+            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
+            customer.source = token
+            customer.save()
+        except stripe.error.CardError, e:
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.write(e.message)
+            self.response.set_status(e.http_status)
+
+
 class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
-        logging.info(self.request)
+        eve = json.loads(self.request.body)
+        if eve['type'] == "invoice.payment_succeeded":
+            logging.info(eve)
+
 
 class SFcallback(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -3968,7 +3988,7 @@ routes = [
     ('/subscribe', SubscriptionHandler),
     ('/stripe/subscription', StripeSubscriptionHandler),
     ('/stripe/subscription_web_hook', StripeSubscriptionWebHooksHandler),
-    # billing stuff. hadji hicham . 07/08/2014
+    ('/stripe/change_card', EditCreditCardHandler),
     ('/views/billing/list', BillingListHandler),
     ('/views/billing/show', BillingShowHandler),
 
@@ -4010,7 +4030,6 @@ routes = [
     ('/zohosignin', ZohoSignIn),
     ('/zohouser', ZohoUser),
     ('/copylead_sf_auth_callback', SFcallback),
-    ('/copylead_sf_rm_auth_callback', SFRMcallback),
 
     ('/sf_invite', SFinvite),
     ('/invitation_sent', SFinvite),

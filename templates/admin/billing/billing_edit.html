@@ -1,7 +1,7 @@
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}}</span>
+            <span class="active-app"><i class="fa fa-cog"></i> {{ _(active_app.label) }}</span>
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
@@ -17,12 +17,8 @@
         <div class="col-md-4 active-app"><i class="fa fa-credit-card section-icon"></i>
             {{ _('Billing & Subscription Settings') }}
         </div>
-        <!-- <a class="btn red save-btn pull-right" href="" ng-click="addCasestatustModal()">
-            <i class="fa fa-plus"></i> {{ _('New') }}
-        </a> -->
     </div>
 </div>
-<!-- Main content -->
 <div class="page-content admin-content">
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -53,45 +49,147 @@
                 <hr>
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" style="text-align: left">Subscription type:</label>
+                        <label class="col-sm-4 control-label"
+                               style="text-align: left">{{ _('Subscription type') }}:</label>
                         <div class="col-sm-6">
                             <p class="form-control-static"> <%= subscription.plan.name
                                 || 'Freemium' %></p>
                         </div>
                     </div>
                     <div class="form-group" ng-show="subscription.expiration_date">
-                        <label class="col-sm-4 control-label" style="text-align: left">Expiration date:</label>
+                        <label class="col-sm-4 control-label"
+                               style="text-align: left">{{ _('Expiration date') }}:</label>
                         <div class="col-sm-6">
                             <p class="form-control-static"> <%= subscription.expiration_date| date:'MMM dd, yyyy'%></p>
                         </div>
                     </div>
-                    <a ng-show="subscription.plan.name == 'freemium'" class="btn btn-default"
-                       ng-href="<%= subscription_url %>">
-                        Upgrade
+                    <div class="form-group" ng-show="subscription.quantity">
+                        <label class="col-sm-4 control-label"
+                               style="text-align: left">{{ _('Puchased Licences') }}:</label>
+                        <div class="col-sm-6">
+                            <p class="form-control-static"> <%= subscription.quantity%></p>
+                        </div>
+                    </div>
+                    <a ng-show="subscription.plan.name == 'freemium'" class="btn btn-danger"
+                       ng-href="<%= subscription_url %>"> Upgrade
                     </a>
                 </form>
             </div>
             <div class="row" style="padding: 0px 7%;margin-bottom: 40px;" ng-show="subscription.plan.name == 'premium'">
                 <h3 class="billingTitle">
-                    <i class="fa fa-building" style="font-size: 21px;"></i>{{ _('Payment information.') }}</h3>
+                    <i class="fa fa-building" style="font-size: 21px;"></i>{{ _('Payment information') }}</h3>
                 <hr>
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" style="text-align: left">Auto renew:</label>
+                        <label class="col-sm-4 control-label" style="text-align: left">{{ _('Auto renew') }}:</label>
                         <div class="col-sm-6">
                             <p class="form-control-static"><%= subscription.is_auto_renew ? 'Disabled':'Enabled' %></p>
                         </div>
                     </div>
-                    <button class="btn btn-default" ng-click="changeAutoRenew(subscription.is_auto_renew)">
-                        <%=  subscription.is_auto_renew ? 'Disabled':'Enabled'  %> Auto renew
+                    <button class="btn btn-success" ng-click="editCardInfo()">{{ _('Edit') }}</button>
+                    <button class="btn btn-danger" ng-click="changeAutoRenew(subscription.is_auto_renew)">
+                        <%= subscription.is_auto_renew ? '{{ _("Disabled") }}':'{{ _("Enabled") }}'
+                        %> {{ _('Auto renew') }}
                     </button>
                 </form>
+            </div>
+            <div class="row" style="padding: 0px 7%;margin-bottom: 40px;" ng-show="subscription.plan.name == 'premium'">
+                <h3 class="billingTitle">
+                    <i class="fa fa-building" style="font-size: 21px;"></i>{{ _('Buy new licences') }}</h3>
+                <hr>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control" placeholder="Number of licences"
+                               ng-model="quantity" style="text-align: center; font-size: 16px">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" ng-click="byNewLicences(quantity)">Buy now</button>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Modal -->
+<div id="edit_card_info" class="modal fade in"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" style="text-align: center;margin-bottom: 30px;">
+                    Change your credit card information
+                </h4>
+                <div class="container-fluid">
+                    <div class="panel">
+                        <div class="demo-container row">
+                            <div class="panel panel-default col-md-10 col-md-offset-1 credit-card-box "
+                                 style="padding: 0px">
+                                <div class="panel-heading display-table">
+                                    <div class="row display-tr">
+                                        <h3 class="panel-title display-td">Payment Details</h3>
+                                        <div class="display-td">
+                                            <img class="img-responsive pull-right"
+                                                 src="http://i76.imgup.net/accepted_c22e0.png">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <form role="form" id="payment-form" class="ng-pristine ng-valid">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="form-group">
+                                                    <label for="cardNumber">CARD NUMBER</label>
+                                                    <div class="input-group">
+                                                        <input type="tel" class="form-control" name="cardNumber"
+                                                               required="" id="cardNumber"
+                                                               placeholder="Valid Card Number" autofocus=""
+                                                               autocomplete="cc-number">
+                                                        <span class="input-group-addon"><i
+                                                                class="fa fa-credit-card"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-7 col-md-7">
+                                                <div class="form-group">
+                                                    <label for="cardExpiry">
+                                                        <span>EXPIRATION</span> DATE
+                                                    </label>
+                                                    <input type="tel" class="form-control" name="cardExpiry"
+                                                           id="cardExpiry" placeholder="MM / YY" autocomplete="cc-exp"
+                                                           required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-5 col-md-5 pull-right">
+                                                <div class="form-group">
+                                                    <label for="cardCVC">CV CODE</label>
+                                                    <input type="tel" class="form-control" name="cardCVC" id="cardCVC"
+                                                           placeholder="CVC" autocomplete="cc-csc" required="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <button class="subscribe-btn btn btn-lg btn-block" type="submit">
+                                                    Change your card information
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" value="5629499534213120" id="user-id">
+                                        <div class="row" style="display:none;">
+                                            <div class="col-xs-12">
+                                                <p class="payment-errors"></p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="disable_auto_renew" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -110,3 +208,102 @@
         </div>
     </div>
 </div>
+
+<script>
+    var $form = $('#payment-form');
+    $form.on('submit', payWithStripe);
+    function payWithStripe(e) {
+        e.preventDefault();
+        $form.find('[type=submit]').html('Validating <span class="fa fa-spinner fa-pulse" style="font-size: 20px"></span>');
+        var PublishableKey = '{{ publishable_key }}';
+        Stripe.setPublishableKey(PublishableKey);
+        var expiry = $form.find('[name=cardExpiry]').payment('cardExpiryVal');
+        var ccData = {
+            number: $form.find('[name=cardNumber]').val().replace(/\s/g, ''),
+            cvc: $form.find('[name=cardCVC]').val(),
+            exp_month: expiry.month,
+            exp_year: expiry.year
+        };
+        Stripe.card.createToken(ccData, function stripeResponseHandler(status, response) {
+            if (response.error) {
+                $form.find('[type=submit]').html('{{ _("Try again")}}');
+                $form.find('.payment-errors').text(response.error.message);
+                $form.find('.payment-errors').closest('.row').show();
+            } else {
+                $form.find('[type=submit]').html('{{ _("Processing") }} <span class="fa fa-spinner fa-pulse"  style="font-size: 20px"></span>');
+                $form.find('.payment-errors').closest('.row').hide();
+                $form.find('.payment-errors').text("");
+                var token = response.id;
+                $.post('/stripe/change_card', {
+                            token: token,
+                            interval: $('input:radio:checked[name=interval]').val(),
+                            plane: 'premium'
+                        })
+                        .done(function (data, textStatus, jqXHR) {
+                            $form.find('[type=submit]').html('{{ _("Card changed successfully") }}<i class="fa fa-check"></i>').prop('disabled', true);
+                            window.location.reload()
+                        })
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            $form.find('[type=submit]').html('{{ _("There was a problem") }}').removeClass('success')
+                                    .addClass('error');
+                            $form.find('.payment-errors').text(jqXHR.responseText);
+                            $form.find('.payment-errors').closest('.row').show();
+                        });
+            }
+        });
+    }
+    jQuery.validator.addMethod("cardNumber", function (value, element) {
+        return this.optional(element) || Stripe.card.validateCardNumber(value);
+    }, "{{ _('Please specify a valid credit card number') }}.");
+
+    jQuery.validator.addMethod("cardExpiry", function (value, element) {
+        value = $.payment.cardExpiryVal(value);
+        return this.optional(element) || Stripe.card.validateExpiry(value.month, value.year);
+    }, "{{ _('Invalid expiration date') }}.");
+
+    jQuery.validator.addMethod("cardCVC", function (value, element) {
+        return this.optional(element) || Stripe.card.validateCVC(value);
+    }, "{{ _('Invalid CVC') }}.");
+
+    validator = $form.validate({
+        rules: {
+            cardNumber: {
+                required: true,
+                cardNumber: true
+            },
+            cardExpiry: {
+                required: true,
+                cardExpiry: true
+            },
+            cardCVC: {
+                required: true,
+                cardCVC: true
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.form-control').removeClass('success').addClass('error');
+        },
+        unhighlight: function (element) {
+            $(element).closest('.form-control').removeClass('error').addClass('success');
+        },
+        errorPlacement: function (error, element) {
+            $(element).closest('.form-group').append(error);
+        }
+    });
+    paymentFormReady = function () {
+        if ($form.find('[name=cardNumber]').hasClass("success") &&
+                $form.find('[name=cardExpiry]').hasClass("success") &&
+                $form.find('[name=cardCVC]').val().length > 1) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+    $form.find('[type=submit]').prop('disabled', true);
+    var readyInterval = setInterval(function () {
+        if (paymentFormReady()) {
+            $form.find('[type=submit]').prop('disabled', false);
+            clearInterval(readyInterval);
+        }
+    }, 250);
+</script>

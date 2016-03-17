@@ -44,8 +44,14 @@ app.controller('BillingEditCtrl', ['$scope', 'Auth', 'Billing', function ($scope
         if (stripe_subscription_id){
             $('#disable_auto_renew').modal('show');
         }else{
-            window.location.replace('/subscribe');
+            Billing.enableAutoRenew($scope);
         }
+    };
+    $scope.byNewLicences = function (quantity) {
+        Billing.byNewLicences($scope, {'quantity': quantity});
+    };
+    $scope.editCardInfo = function () {
+        $('#edit_card_info').modal('show');
     };
     // What to do after authentication
     $scope.runTheProcess = function () {
@@ -56,5 +62,4 @@ app.controller('BillingEditCtrl', ['$scope', 'Auth', 'Billing', function ($scope
         Auth.refreshToken();
     };
     Auth.init($scope);
-
 }]);
