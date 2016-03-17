@@ -1655,12 +1655,12 @@ class SFinvite(BaseHandler, SessionEnabledHandler):
 class SFlistInviteesByPartners(BaseHandler, SessionEnabledHandler):
     def post(self):
         data = json.loads(str(self.request.body))
-        user_email = data['user_email']
-        partner = model.SFpartner.query(model.SFpartner.email==user_email).get()
-        response = model.SFinvitation().list_by_partner(partner.key)
+        partner_email = data['partner_email']
+        partner = model.SFpartner.query(model.SFpartner.email==partner_email).get()
+        resp = model.SFinvitation().list_by_partner(partner.key)
         self.response.headers['Access-Control-Allow-Origin'] = "*"
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(response))
+        self.response.out.write(json.dumps(resp))
 
 class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
     def get(self):
