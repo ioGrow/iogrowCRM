@@ -1,5 +1,5 @@
-app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
-    function ($scope, Auth, User, Map) {
+app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
+    function ($scope, Auth, User, Map, Billing) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Users").addClass("active");
         trackMixpanelAction('USER_LIST_VIEW');
@@ -38,6 +38,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             var params = {};
             User.getOrganizationLicensesStatus($scope, {});
             User.list($scope, params);
+            Billing.getSubscription($scope)
             $scope.mapAutocomplete();
             ga('send', 'pageview', '/admin/users');
         };
@@ -98,10 +99,8 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                 $scope.predicate = '-google_display_name';
                 $scope.reverse = false;
             }
-            ;
         }
         $scope.listPrevPageItems = function () {
-
             var prevPage = $scope.currentPage - 1;
             var params = {};
             if ($scope.pages[prevPage]) {

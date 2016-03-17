@@ -5632,7 +5632,7 @@ class CrmEngineApi(remote.Service):
             for tag in tagss.items:
                 val.append(tag.name)
             request.value = val
-            print request, "iffffffff"
+            print request,
         list_of_tweets = EndpointsHelper.get_tweets(request.value, "recent")
         return tweetsResponse(items=list_of_tweets)
 

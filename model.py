@@ -965,6 +965,21 @@ class User(EndpointsModel):
     default_currency = ndb.StringProperty()
     country_code = ndb.StringProperty()
     date_time_format = ndb.StringProperty()
+    subscription = ndb.KeyProperty(kind=Subscription)
+
+    def get_subscription(self):
+        if not self.subscription and self.organization.get().subscription:
+            self.subscription = Subscription.create_freemium_subscription().key
+            self.put()
+        return self.subscription.get()
+
+    def set_subscription(self, new_subscription):
+        if not isinstance(new_subscription, Subscription):
+            raise ValueError('sub parameter should be of type {} '.format(Subscription.__class__))
+        if self.subscription:
+            self.subscription.delete()
+        self.subscription = new_subscription.key
+        self.put()
 
     def after_create(self, user_id):
         if self.status == "active" and not is_locale():

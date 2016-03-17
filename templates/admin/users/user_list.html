@@ -20,22 +20,21 @@
         <a class="headerBtn" title="{{ _('Delete') }}" ng-show="selected_users.length" ng-click="deleteUser()">
             <i class="fa fa-trash-o"></i>
         </a>
-        <a ng-class="{disabled: selected_users.length==0}" class="headerBtn" ng-show="selected_users.length"
-           ng-click="assignLicenses()">
+        <a ng-class="{disabled: selected_users.length==0}" class="headerBtn"
+           ng-show="selected_users.length && subscription.quantity" ng-click="assignLicenses()">
             <i class="fa fa-plus"></i> <i class="fa fa-key"></i>
         </a>
-        <a ng-class="{disabled: selected_users.length==0}" class="headerBtn" ng-show="selected_users.length"
-           ng-click="unassignLicenses()">
+        <a ng-class="{disabled: selected_users.length==0}" class="headerBtn"
+           ng-show="selected_users.length && subscription.quantity" ng-click="unassignLicenses()">
             <i class="fa fa-minus"></i> <i class="fa fa-key"></i>
         </a>
-        <form class="form-inline newLeadForm inline" role="form" ng-show="showInviteForm">
-            <div class="form-group sm-group" ng-class="{ 'has-error':email_empty}">
-                <label class="sr-only">Email</label>
-                <input type="email" ng-model="email.email" placeholder="Enter a email" class="form-control">
-            </div>
+        <div class="col-sm-6 pull-right" ng-show="showInviteForm" ng-class="{ 'has-error':email_empty}">
+            <label class="sr-only">Email</label>
+            <input type="email" ng-model="email.email" placeholder="Enter a email" class="form-control"
+                   style="width: 58%;display: inline;">
             <button class="btn red" ng-click="inviteNewUser(email)">Invite</button>
             <button ng-click="showInviteForm = false" class="btn btn-default">X</button>
-        </form>
+        </div>
         <span ng-hide="showInviteForm">
             <a title="New user" class="btn red newAccountBtnOnscroll pull-right save-btn"
                ng-click="showInviteForm=true">
@@ -135,6 +134,49 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div class="showPage margin-bottom-15 col-md-3 user-resume">
+            <div class="col-items">
+                <i class="fa  fa-key"></i>
+                {{ _('License type') }}: <span class="pull-right"><%=subscription.plan.name%></span>
+            </div>
+            <div class="col-items">
+                <i class="fa  fa-check "></i>
+                {{ _('licenses bought') }} <span class="pull-right"><%=subscription.quantity || 0 %></span>
+            </div>
+            <div class="col-items">
+                <i class="fa  fa-group "></i>
+                {{ _('Users') }} <span class="pull-right"><%=organization.nb_users%></span>
+            </div>
+            <div class="col-items">
+                <i class="fa  fa-user"></i>
+                {{ _('assigned licenses') }}
+                <span class="pull-right"><%=organization.nb_used_licenses%> </span>
+                <!--nb licenses>-->
+            </div>
+            <div class="col-items last-item">
+                <i class="fa  fa-ticket "></i>
+                {{ _('available licenses') }}
+                <span class="pull-right"><%=organization.nb_licenses - organization.nb_used_licenses%></span>
+                <!--nb active licenses>-->
+            </div>
+
+            {% if is_not_a_life_time %}
+            {% if is_freemium ==False %}
+            <div class="col-lg">
+                <i class="fa  fa-calendar "></i>
+                {{ _('Expire') }} : <%=organization.expires_on | date:'yyyy-MM-dd'%> <!--ex date>-->
+            </div>
+            <button title='{{ _("Purchase") }}' class="btn btn-sm blue task_action pull-right"
+                    ng-click="showPurchase()">
+                <i class="fa fa-shopping-cart"></i>
+       <span class="btn-text">
+          {{ _('Purchase') }}
+       </span>
+            </button>
+            {% endif %}
+            {% endif %}
+            <div class="clearfix"></div>
         </div>
         <div class="showPage custom-show margin-bottom-15 col-md-12" ng-show="invitees">
             {% if is_admin %}
