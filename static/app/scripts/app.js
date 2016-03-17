@@ -148,33 +148,6 @@ app.config(['$routeProvider', function($routeProvider) {
         controller:'SettingsShowCtrl',
         templateUrl:'/views/admin/settings'
       }).
-      //Shows
-      when('/live/shows', {
-        controller: 'ShowListCtrl',
-        templateUrl:'/views/shows/list'
-      }).when('/live/shows/show/:showId', {
-        controller: 'ShowShowCtrl',
-        templateUrl:'/views/shows/show'
-
-      }).when('/live/company_profile/:organizationId',{
-        controller:'CompanyProfileShowCtrl',
-        templateUrl:'/views/live/company_profile'
-
-      }).when('/live/customer_stories',{
-        controller:'CustomerStoriesListCtrl',
-        templateUrl:'/views/live/customer_stories'
-
-      }).when('/live/customer_stories/customer_story/:customerstoryId',{
-        controller:'CustomerStoriesShowCtrl',
-        templateUrl:'/views/live/customer_stories/show'
-
-      }).when('/live/feedbacks',{
-        controller:'FeedBacksListCtrl',
-        templateUrl:'/views/live/feedbacks'
-      }).when('/live/feedbacks/feedback/:feedbackId',{
-        controller:'FeedBacksShowCtrl',
-        templateUrl:'/views/live/feedbacks/show'
-      }).
        //Calendar
        when('/calendar/', {
         controller: 'EventListController',

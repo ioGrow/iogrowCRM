@@ -1105,16 +1105,6 @@ class EventShowHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/activities/event_show.html')
 
 
-class ShowListHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/live/shows/list_show.html')
-
-
-class ShowShowHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/live/shows/show.html')
-
-
 class UserListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/users/user_list.html')
@@ -3869,9 +3859,6 @@ routes = [
     ('/views/contacts/list', ContactListHandler),
     ('/views/contacts/show', ContactShowHandler),
     ('/views/contacts/new', ContactNewHandler),
-    # Shows Views
-    ('/views/shows/list', ShowListHandler),
-    ('/views/shows/show', ShowShowHandler),
 
     # Opportunities Views
     ('/views/opportunities/list', OpportunityListHandler),
