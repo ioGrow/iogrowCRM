@@ -674,13 +674,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
         $scope.runTheProcess = function () {
             var eventid = {'id': $route.current.params.eventId};
             var userGId = {'google_user_id': $scope.user_id};
-
-            $("head").append('<link rel="stylesheet" type="text/css" href="/static/src/css/jquery.datetimepicker.css"/>');
-
-            $("head").append('<script type="text/javascript" src="/static/src/js/fullcalendar.min.js"></script>');
-            $("head").append('<script type="text/javascript" src="/static/src/js/lang-all.js"></script>');
-            $("head").append('<script type="text/javascript" src="/static/src/js/gcal.js"></script>');
-            $("head").append('<script src="/static/src/js/jquery.datetimepicker.js"></script>');
             User.get_user_by_gid($scope, userGId);
             // Event.list($scope);
             User.list($scope, {});

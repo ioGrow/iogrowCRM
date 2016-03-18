@@ -21,7 +21,8 @@ module.exports = function (grunt) {
                       'static/src/css/jquery.simple-dtpicker.css',
                       'static/src/css/xeditable.css',
                       'static/src/css/fullcalendar.css',
-                      'static/src/css/fullcalendar.print.css'
+                      'static/src/css/fullcalendar.print.css',
+                        'static/src/css/jquery.datetimepicker.css'
                     ]
                 }
             },
@@ -38,9 +39,13 @@ module.exports = function (grunt) {
                           'static/src/js/jquery.uniform.min.js',
                           'static/src/js/jquery.textfill.min.js',
                           'static/src/js/jquery.simple-dtpicker.js',
+                              'static/src/js/jquery.datetimepicker.js',
                           'static/src/js/bootstrap-datetimepicker.min.js',
                           'static/src/js/jquery.caret.js',
-                          'static/src/js/twitter-bootstrap-hover-dropdown.min.js'
+                          'static/src/js/twitter-bootstrap-hover-dropdown.min.js',
+                              'static/src/js/fullcalendar.min.js',
+                              'static/src/js/lang-all.js',
+                              'static/src/js/gcal.js',
                         ],
                         'static/build/js/sync_scripts.js': [
                           'static/src/js/bootstrap.min.js',
