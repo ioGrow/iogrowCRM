@@ -36,7 +36,7 @@ Import fonts
 */
 
 /* load Open Sans Font from local */
-@import url(../../src/fonts/font.css);
+@import url(../../src/css/font.css);
 
 /***
 Reset and overrides  
