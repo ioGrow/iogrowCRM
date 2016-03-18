@@ -1294,7 +1294,7 @@
                     <div ng-show="casee.owner.google_user_id=={{ME}}">
                         <p>{{ _("Invited user:")}}</p>
                         <div class="invitation" ng-repeat="invited in sharing_with">
-                            <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
+                            <img class="google-avatar" ng-src="invited.google_public_profile_photo_url"/>
                             <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
                             <hr/>
                         </div>
