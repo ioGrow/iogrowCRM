@@ -152,11 +152,9 @@ app.controller('dashboardCtrl', ['$scope','Auth','Import','Reports','Edge',
      };
     $scope.dataForLeadsSource=[["Source","Number"]];
     $scope.dataForLeadsSource=$scope.dataForLeadsSource.concat($scope.leadsBySource);
-    console.log($scope.dataForLeadsSource)
     $scope.dataForLeadsOwner=[['Owner', 'leads']];
     $scope.dataForLeadsOwner=$scope.dataForLeadsOwner.concat($scope.leadsByOwner);
-    console.log($scope.dataForLeadsSource)
- 
+
         $scope.testredy=function(){
             if (!$scope.chartIsReady) {
                 $(window).trigger("resize");
@@ -178,8 +176,6 @@ app.controller('dashboardCtrl', ['$scope','Auth','Import','Reports','Edge',
                 ctx.drawImage(canvas2, 0, 0);
                 ctx.drawImage(canvas3, 0, 0);
             var dataUrl=canvas.toDataURL();
-            console.log('dataUrl ');
-            console.log(dataUrl);
             window.open(dataUrl,'_blank');
         }
     

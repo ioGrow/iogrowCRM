@@ -215,8 +215,6 @@ var helper = (function() {
      */
     onSignInCallback: function(authResult) {
       $('#authResult').html('Auth Result:<br/>');
-      console.log('*******************');
-      console.log(authResult);
       if (typeof(Storage) != "undefined") {
           localStorage['is_signed_in'] = true;
           localStorage['access_token']=authResult.access_token;
@@ -238,7 +236,6 @@ var helper = (function() {
         $('#authOps').hide('slow');
         $('#gConnect').show();
       }
-      console.log('authResult', authResult);
     },
     /**
      * Retrieves and renders the authenticated user's Google+ profile.
@@ -274,7 +271,6 @@ var helper = (function() {
         url: window.location.href + '/disconnect',
         async: false,
         success: function(result) {
-          console.log('revoke response: ' + result);
           $('#authOps').hide();
           $('#profile').empty();
           $('#visiblePeople').empty();
@@ -294,15 +290,12 @@ var helper = (function() {
      *   https://developers.google.com/+/web/signin/server-side-flow
      */
     connectServer: function() {
-      console.log(this.authResult.code);
       var userId = '{{ID}}';
       $.ajax({
         type: 'POST',
         url: '/gconnect',
 
         success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
           if (result==true){
              window.location.replace('/sign-up');
           }
@@ -396,11 +389,9 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 if (window.location.host != "localhost")
 {
   {% if user %}
-    console.log('1');
     ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
     ga('send', 'pageview');
   {% else %}
-        console.log('2');
         ga('create', 'UA-52188380-1', 'auto');
         ga('send', 'pageview');
   {% endif %}
@@ -409,7 +400,6 @@ if (window.location.host != "localhost")
 
 function playIlyesVideo(){
    var ilyesVideo = $('.video-webm');
-   console.log(ilyesVideo);
    if($('.video-webm').get(0).paused){
        $('.video-webm').get(0).play();
    }

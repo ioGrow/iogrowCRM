@@ -10,24 +10,16 @@ accountservices.factory('InfoNode', function($http) {
 
 
   InfoNode.list = function($scope,params){
-      console.log('params');
-      console.log(params);
       gapi.client.crmengine.infonode.list(params).execute(function(resp) {
-            console.log("params");
-            console.log(params);
             if(!resp.code){
               var renderMap = false;
               $scope.infonodes=[];
               if(resp.items!=undefined){
-                  console.log('test1111');
-                  console.log(resp.items);
                   for (var i=0;i<resp.items.length;i++)
                   {
                     if (resp.items[i].kind == 'addresses'){
                       renderMap = true;
                     }
-                      console.log('resp.items[i].items');
-                      console.log(resp.items[i].items);
                       $scope.infonodes[resp.items[i].kind] = resp.items[i].items;
                       for (var j=0;j<$scope.infonodes[resp.items[i].kind].length;j++)
                         {
@@ -39,7 +31,6 @@ accountservices.factory('InfoNode', function($http) {
                   }
               }
               else{
-                  console.log('test2222');
                   $scope.infonodes[params.connections] = [];
                  
               }
@@ -49,10 +40,8 @@ accountservices.factory('InfoNode', function($http) {
               // Call the method $apply to make the update on the scope
                  $scope.$apply();
                  //$scope.responseCustomFields();
-                 console.log($scope.infonodes.customfields);
 
               } else {
-                console.log('test3333');
                  if(resp.message=="Invalid token"){
                 $scope.refreshToken();
                 $scope.isLoading = false;
@@ -103,8 +92,6 @@ accountservices.factory('InfoNode', function($http) {
       });
   };
   InfoNode.insert = function($scope,params){
-      console.log("params in infonodes service");
-      console.log(params);
       $scope.inProcess(true);
       gapi.client.request({
                            'root':ROOT,
@@ -112,8 +99,6 @@ accountservices.factory('InfoNode', function($http) {
                            'method':'POST',
                            'body':params,
                            'callback':(function(resp) {
-                            console.log("insert resp");
-                            console.log(resp);
           if(!resp.code){
            var tw = new RegExp("twitter");
            var isTwitter = tw.test(resp.fields[0].value);
@@ -135,7 +120,6 @@ accountservices.factory('InfoNode', function($http) {
           $scope.apply();
          $scope.listInfonodes(params.kind);
         }else{
-            console.log(resp.message);
             $scope.relatedInfonode=null;
              $('#errorModal').modal('show');
              if(resp.message=="Invalid grant"){
@@ -161,7 +145,6 @@ accountservices.factory('InfoNode', function($http) {
                               $scope.isLoading = false;
                               $scope.listInfonodes(params.kind);
                             }else{
-                                console.log(resp.message);
 
                                  $('#errorModal').modal('show');
                                  if(resp.message=="Invalid grant"){
@@ -180,7 +163,6 @@ accountservices.factory('InfoNode', function($http) {
           if(!resp.code){
           $scope.isLoading = false;
           $scope.listInfonodes(params.kind);
-          console.log($scope.infonodes.customfields);
           $scope.$apply();
         }else{
              if(resp.message=="Invalid grant"){

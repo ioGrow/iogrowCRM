@@ -35,7 +35,6 @@ topicservices.factory('Topic', function($http) {
                  $scope.topics = resp.items;
                  
                   if ($scope.topicCurrentPage >1){
-                      console.log('Should show PREV');
                     $scope.topicpagination.prev = true;
                   }else{
                       $scope.topicpagination.prev= false;
@@ -83,7 +82,6 @@ topicservices.factory('Topic', function($http) {
                 $scope.$apply();
                };
             }
-            console.log('gapi #end_execute');
           });
   };
   

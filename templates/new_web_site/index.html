@@ -7,11 +7,9 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 if (window.location.host != "localhost")
 {
   {%if user %}
-    console.log('1');
     ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
     ga('send', 'pageview');
   {% else %}
-        console.log('2');
         ga('create', 'UA-52188380-1', 'auto');
         ga('send', 'pageview');
   {% endif %}
@@ -21,8 +19,6 @@ if (window.location.host != "localhost")
   });
   $.urlParam = function(name){
       var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-      console.log(window.location.href);
-      console.log(results);
       if (results)
         return results[1] || 0;
       return 0;
@@ -40,9 +36,7 @@ var helper = (function() {
      */
     onSignInCallback: function(authResult) {
       $('#authResult').html('Auth Result:<br/>');
-      console.log('*******************');
-      console.log(authResult);
-      
+
       if (authResult['access_token']) {
         // The user is signed in
         this.authResult = authResult;
@@ -59,12 +53,10 @@ var helper = (function() {
       } else if (authResult['error']) {
         // There was an error, which means the user is not signed in.
         // As an example, you can troubleshoot by writing to the console:
-        console.log('There was an error: ' + authResult['error']);
         $('#authResult').append('Logged out');
         $('#authOps').hide('slow');
         $('#gConnect').show();
       }
-      console.log('authResult', authResult);
     },
     /**
      * Retrieves and renders the authenticated user's Google+ profile.
@@ -100,7 +92,6 @@ var helper = (function() {
         url: window.location.href + '/disconnect',
         async: false,
         success: function(result) {
-          console.log('revoke response: ' + result);
           $('#authOps').hide();
           $('#profile').empty();
           $('#visiblePeople').empty();
@@ -120,13 +111,11 @@ var helper = (function() {
      *   https://developers.google.com/+/web/signin/server-side-flow
      */
     connectServer: function() {
-      console.log(this.authResult.code);
       var userId = '{{ID}}';
       $.ajax({
         type: 'POST',
         url: '/gconnect',
         success: function(result) {
-            console.log(window.location.href);
             var urlParam = $.urlParam('continue_url');
 
             if(urlParam) window.location.replace('/#/'+ urlParam);
@@ -187,7 +176,6 @@ function onSignInCallback(authResult) {
 
 function playIlyesVideo(){
    var ilyesVideo = $('.video-webm');
-   console.log(ilyesVideo);
    if($('.video-webm').get(0).paused){
        $('.video-webm').get(0).play();
    }

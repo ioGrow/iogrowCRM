@@ -38,7 +38,6 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
 
 
         var nextPage = $scope.currentPagecomment + 1;
-        console.log(nextPage);
         var params = {};
           if ($scope.pagescomment[nextPage]){
             params = {'limit':5,
@@ -46,13 +45,11 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
                       'order':'-updated_at',
                       'pageToken':$scope.pagescomment[nextPage]
                      }
-            console.log($scope.pagescomment[nextPage]);
           }else{
             params = {'limit':5,
                       'order':'-updated_at',
                       'discussion':$scope.note.entityKey}
           }
-          console.log('in listNextPageItems');
           $scope.currentPagecomment = $scope.currentPagecomment + 1 ;
           Comment.list($scope,params);
      }
@@ -77,7 +74,6 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
 
 
      $scope.showModal = function(){
-        console.log('button clicked');
         $('#addAccountModal').modal('show');
 
       };
@@ -106,19 +102,12 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
     // HKA 08.05.2014 inprocess
 
    $scope.inProcess=function(varBool,message){
-          if (varBool) {   
-            if (message) {
-              console.log("starts of :"+message);
-             
-            };
+          if (varBool) {
             $scope.nbLoads=$scope.nbLoads+1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
@@ -145,7 +134,6 @@ $scope.commentDelete=function(commentId){
 }     
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
-        console.log('Should higll');
        $('#comment_0').effect( "bounce", "slow" );
        $('#comment_0 .message').effect("highlight","slow");
      };
@@ -157,9 +145,6 @@ $scope.commentDelete=function(commentId){
 
      };
      $scope.addNewContributor = function(selected_user,role){
-      console.log('*************** selected user ***********************');
-      console.log(selected_user);
-
       var params = {
                       'discussionKey': $scope.note.entityKey,
 
@@ -176,8 +161,6 @@ $scope.commentDelete=function(commentId){
 
 
         }
-        console.log('selected member');
-        console.log(params);
         Contributor.insert($scope,params);
      $('#addContributor').modal('hide');
      };
@@ -218,7 +201,6 @@ if(kind=="Note"){
 
      };
   $scope.NoteUpdatedFromModal=function(kind,edge,name,id,value){
-    console.log(value);
     var params={
       'id':id,
       'title':value

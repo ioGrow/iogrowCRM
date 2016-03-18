@@ -31,20 +31,12 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
-                if (message) {
-                    console.log("starts of :" + message);
-                }
-                ;
                 $scope.nbLoads = $scope.nbLoads + 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
                 ;
             } else {
-                if (message) {
-                    console.log("ends of :" + message);
-                }
-                ;
                 $scope.nbLoads = $scope.nbLoads - 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
@@ -90,7 +82,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         // HKA 10.12.2015 new function to create docume
    $scope.docCreated=function(url){
-            console.log('here docCreated');
             window.open($scope.prepareEmbedLink(url),'_blank');
         }
    $scope.prepareEmbedLink=function(link){
@@ -196,7 +187,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
         $scope.listNextPageItemscomment = function () {
 
-            console.log('i am in list next comment page')
             var nextPage = $scope.currentPagecomment + 1;
 
             var params = {};
@@ -214,7 +204,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
                     'order': '-updated_at',
                 }
             }
-            console.log('in listNextPageItems');
             $scope.currentPagecomment = $scope.currentPagecomment + 1;
             Comment.list($scope, params);
         }
@@ -261,14 +250,12 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
         };
         // LBA le 21-10-2014
         $scope.DeleteCollaborator = function (entityKey) {
-            console.log("delete collaborators")
             var item = {
                 'type': "user",
                 'value': entityKey,
                 'about': $scope.event.entityKey
             };
             Permission.delete($scope, item)
-            console.log(item)
         };
         $scope.refreshToken = function () {
             Auth.refreshToken();
@@ -321,7 +308,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
         };
 
         $scope.showModal = function () {
-            console.log('button clicked');
             $('#addAccountModal').modal('show');
 
         };
@@ -358,7 +344,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
 //HKA 18.11.2013 highlight the comment
         $scope.hilightComment = function () {
-            console.log('Should higll');
             $('#comment_0').effect("bounce", "slow");
             $('#comment_0 .message').effect("highlight", "slow");
         };
@@ -366,8 +351,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
         //HKA 02.12.2013 Add Contributor
 
         $scope.addNewContributor = function (selected_user, role) {
-            console.log('*************** selected user ***********************');
-            console.log(selected_user);
 
             var params = {
                 'discussionKey': $scope.eventt.entityKey,
@@ -385,7 +368,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
 
 
             }
-            console.log('selected member');
 
             $('#addContributor').modal('hide');
         };
@@ -475,7 +457,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
                 params.items = new Array();
 
                 $.each(data.docs, function (index) {
-                    console.log(data.docs);
 
                     var item = {
                         'id': data.docs[index].id,
@@ -603,30 +584,17 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
 
 
-// console.log("Timezone of browser:");
-// console.log(moment().format("Z"));
 // var language = window.navigator.userLanguage || window.navigator.language;
-// console.log("language:")
-// console.log(language)
-//
 
 
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
-                if (message) {
-                    console.log("starts of :" + message);
-                }
-                ;
                 $scope.nbLoads = $scope.nbLoads + 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
                 ;
             } else {
-                if (message) {
-                    console.log("ends of :" + message);
-                }
-                ;
                 $scope.nbLoads = $scope.nbLoads - 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
@@ -766,7 +734,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
             };
             // Start the tour!
-            console.log("beginstr");
             hopscotch.startTour(tour);
         };
 
@@ -885,8 +852,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                                 $scope.$apply();
                             }
                             else {
-                                console.log(resp.message);
-                                console.log("Ooops!");
                                 if (resp.code == 401) {
                                     $scope.refreshToken();
                                     $scope.isLoading = false;
@@ -1653,7 +1618,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
         $scope.listNextPageItemscomment = function () {
 
-            console.log('i am in list next comment page')
             var nextPage = $scope.currentPagecomment + 1;
 
             var params = {};
@@ -1671,7 +1635,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                     'order': '-updated_at',
                 }
             }
-            console.log('in listNextPageItems');
             $scope.currentPagecomment = $scope.currentPagecomment + 1;
             Comment.list($scope, params);
         }
@@ -1699,14 +1662,12 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
         };
 
         $scope.renderMaps = function () {
-            console.log("hhhhhhhhhhhhh");
             Map.render($scope);
             //Map.searchLocation($scope,$scope.event.where);
         };
 
 
         $scope.showModal = function () {
-            console.log('button clicked');
             $('#addAccountModal').modal('show');
 
         };
@@ -1725,7 +1686,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         //HKA 18.11.2013 highlight the comment
         $scope.hilightComment = function () {
-            console.log('Should higll');
             $('#comment_0').effect("bounce", "slow");
             $('#comment_0 .message').effect("highlight", "slow");
         };
@@ -1749,8 +1709,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                 // Create contributors.list api
                 //list all contributors after getting the task.
             }
-            console.log('selected member');
-            console.log(params);
             Contributor.insert($scope, params);
             $('#addContributor').modal('hide');
         };

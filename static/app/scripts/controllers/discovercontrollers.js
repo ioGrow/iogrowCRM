@@ -80,7 +80,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         $scope.selected_tags=[];
         //$scope.influencersshow=false;
         $scope.tweets=[];
-        console.log("start check");
         Discover.check();
 
         //var kind = 'topics';
@@ -96,7 +95,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
         if ($scope.influencersshow){
           Discover.get_influencers_v2($scope);
          }else{
-          console.log("run the processs")
             Discover.get_tweetsV2($scope);
          }
         
@@ -114,25 +112,14 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
               return false;
     }
     $scope.inProcess=function(varBool,message){
-          if (varBool) {  
-            console.log("inProcess starts");      
-            if (message) {
-              console.log("starts of :"+message);
-             
-            };
+          if (varBool) {
             $scope.nbLoads=$scope.nbLoads+1;
              var d = new Date();
-             console.log(d.getTime());
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            console.log("inProcess ends");
             var d = new Date();
-            console.log(d.getTime());
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
@@ -146,19 +133,13 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
             Auth.refreshToken();
      };
       $scope.inProcess=function(varBool,message){
-          if (varBool) {   
-            if (message) {
-              console.log("starts of :"+message);
-             
-            };
+          if (varBool) {
             $scope.nbLoads=$scope.nbLoads+1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
+
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
@@ -180,16 +161,12 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
                   tags.push(tag.name);
             });
             
-            console.log('==================list more items with filtering =============');
-            
+
             Discover.get_tweetsV2($scope,tags);
         }else{
             if($scope.pageToken){
                 $scope.isLoadingtweets = true;
                 $scope.$apply();
-                
-                console.log('==================list more items=============');
-                
                 Discover.get_tweetsV2($scope);
             }
         }
@@ -197,15 +174,12 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
 
      $scope.listNewItems = function(){
        
-        console.log("list ne wtiems");
         if ($scope.influencersshow){
           Discover.get_influencers_v2($scope);
          }else{
           if($scope.mapshow){
-            console.log("mapshow")
             Discover.get_map($scope);
           }else{
-            console.log("get_tweetsV2")
            Discover.get_tweetsV2($scope);
           }
          }
@@ -262,12 +236,10 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
                     var params = {'id':parseInt(userId),'completed_tour':true};
                     User.completedTour($scope,params);
                 }
-                console.log("dddezz");
                 $('#installChromeExtension').modal("show");
             }
           };
           // Start the tour!
-          console.log("beginstr");
           hopscotch.startTour(tour);
       };
 
@@ -290,7 +262,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
           //$scope.apply();
           $scope.tweets=[];
       Discover.get_tweetsV2($scope,tags);
-    console.log("ddeend"+$scope.tweetsshow);
 
 
     }
@@ -298,10 +269,8 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
 
      
     $scope.changeLanguage=function(discovery_language){
-      console.log("change"+discovery_language);
       $scope.discovery_language=discovery_language;
       var tags = [];
-      console.log($scope.selected_tags);
       angular.forEach($scope.selected_tags, function(tag){
             tags.push(tag.name);
       });
@@ -310,7 +279,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
           Discover.get_influencers_v2($scope);
          }else{
           $scope.apply();
-          console.log("filterrrr");
       Discover.get_tweetsV2($scope,tags);
     }
     }
@@ -436,7 +404,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
       Tag.patch($scope,params);
   };
   $scope.deleteTag=function(tag){
-        console.log(JSON.stringify(tag)+"deletetag");
         //$scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
           params = {
             'entityKey': tag.entityKey
@@ -451,7 +418,6 @@ app.controller('DiscoverListCtrl', ['$scope','Auth','Discover','Tag','Lead','$ht
 
 $scope.selectTag= function(tag,index,$event){
 
-          console.log(JSON.stringify(tag)+"tagg");
           if(!$scope.manage_tags){
          var element=$($event.target);
          if(element.prop("tagName")!='LI'){
@@ -461,20 +427,13 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            console.log("$scope.selected_tags");
-            console.log($scope.selected_tags);
             /*element.css('background-color', tag.color+'!important');
             text.css('color',$scope.idealTextColor(tag.color));*/
 
          }else{
           /*  element.css('background-color','#ffffff !important');*/
           
-            console.log("unselect tag");
-            console.log($scope.selected_tags);
-            console.log('$scope.selected_tags.indexOf(tag)');
-            console.log($scope.selected_tags.indexOf(tag));
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-            console.log($scope.selected_tags);
              /*text.css('color','#000000');*/
          }
           
@@ -503,7 +462,6 @@ $scope.selectTag= function(tag,index,$event){
           }else{
 
           $scope.apply();
-          console.log("filterrrr");
       Discover.get_tweetsV2($scope,tags);
     }
     }
@@ -671,8 +629,7 @@ $scope.addTags=function(){
           }else{
             params = {'limit':7}
           }
-          console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ; 
+          $scope.currentPage = $scope.currentPage + 1 ;
           User.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
@@ -693,14 +650,11 @@ $scope.addTags=function(){
 
      
      $scope.showModal = function(){
-        console.log('button clicked');
         $('#addAccountModal').modal('show');
 
       };
       
     $scope.addNewUser = function(user){
-      console.log('add a new user');
-      console.log(user);
       $('#addAccountModal').modal('hide');
       User.insert($scope,user);
     };
@@ -745,13 +699,9 @@ $scope.influencers_V2= function(){
 
 
      $scope.showMaps= function(){
-      console.log("ff"+ $scope.map_tweets);
       $scope.map_tweets=null;
       //$scope.influencers_list=null;
-      console.log( $scope.map_tweets);
 
-      console.log("mapp");
-      console.log($scope.selectedOption );
       $scope.selectedOption = 'map';
              
            $scope.tweetsshow=false;
@@ -812,7 +762,6 @@ var marker = new google.maps.Marker({
           position: new google.maps.LatLng(item[i]["latitude"] , item[i]["longitude"]),
       });
 
-      console.log("ddd"+JSON.stringify(element)+results[0].geometry.location);
       marker.setTitle(element["key"]);
 //             $scope.adddialgo(marker,item[i]["number"],item[i]["location"],item[i]["topic"])
 
@@ -827,7 +776,6 @@ var marker = new google.maps.Marker({
 }
 
 function nextten() {
-  console.log("tenn")
  for (var i = 10; i < $scope.map_results.length; i++) {
 codeAddress($scope.map_results[i]);
 }
@@ -837,11 +785,8 @@ function codeAddress(element) {
   //var address = document.getElementById('address').value;
   var j=0;
   //for (var i = 0; i < $scope.map_results.length; i++) {
-    //console.log($scope.map_results[i]["key"]+"keee");
-    console.log("ee"+JSON.stringify(element));
   geocoder.geocode( { 'address': element["key"]}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
-      //console.log(JSON.stringify(results)+"results");
       map.setCenter(results[0].geometry.location);
       
       var marker = new google.maps.Marker({
@@ -849,7 +794,6 @@ function codeAddress(element) {
           position: results[0].geometry.location
       });
 
-      console.log("ddd"+JSON.stringify(element)+results[0].geometry.location);
       marker.setTitle(element["key"]);
 //             $scope.adddialgo(marker,item[i]["number"],item[i]["location"],item[i]["topic"])
 
@@ -915,7 +859,6 @@ function codeAddress(element) {
 //               item.push(objects[ele]);
 //             }
 //           }
-//           console.log(item);
 //         }
           
 //           var map = new google.maps.Map(document.getElementById('map-canvas'),
@@ -982,7 +925,6 @@ $scope.adddialgo= function (marker,text,map){
                   tags.push(tag.name);
               });
               
-                console.log("more");
                 if ($scope.influencersshow){
                   Discover.get_influencers_v2($scope);
                  }else{
@@ -1045,19 +987,12 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag','Edge',
          $scope.showNewTag=false;
          $scope.topic="";
       $scope.inProcess=function(varBool,message){
-          if (varBool) {   
-            if (message) {
-              console.log("starts of :"+message);
-             
-            };
+          if (varBool) {
             $scope.nbLoads=$scope.nbLoads+1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
@@ -1077,16 +1012,13 @@ app.controller('DiscoverNewCtrl', ['$scope','Auth','Discover','Tag','Edge',
           window.Intercom('update');
      };
      $scope.addNewTopic=function(){
-      console.log($scope.topic);
       var params = {
                           'name': $scope.topic,
                           'about_kind':'topics',
                           'color':$scope.tag.color.color
                       };
-      console.log(params);
       $scope.fromnewtab=true;
        Tag.insert($scope,params);
-       console.log("inserts");
       var paramsTag = {'about_kind':'topics'};
         Tag.list($scope,paramsTag);
         
@@ -1152,19 +1084,12 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead','Edg
          $scope.tweet_details={};
          $scope.tweet_id="";
          $scope.inProcess=function(varBool,message){
-          if (varBool) {   
-            if (message) {
-              console.log("starts of :"+message);
-             
-            };
+          if (varBool) {
             $scope.nbLoads=$scope.nbLoads+1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
@@ -1189,8 +1114,7 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead','Edg
         $scope.selectedTab=2;
       }
       var tweet_id=url.substring(url.indexOf("show")+5);
-      console.log(tweet_id);
-      
+
       $scope.tweet_id=tweet_id;
       Discover.get_tweets_details($scope);
 
@@ -1201,7 +1125,6 @@ app.controller('DiscoverShowCtrl', ['$scope','Auth','Discover','Tag','Lead','Edg
      };
      $scope.popitup =  function(url) {
       
-      console.log(url);
         newwindow=window.open(url,'name','height=400,width=300');
         if (window.focus) {newwindow.focus()}
         return false;

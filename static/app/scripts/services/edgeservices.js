@@ -12,7 +12,6 @@ edgeservices.factory('Edge', function($http) {
  
    Edge.insert = function($scope,params){
       $scope.isLoading = true;
-      console.log(params);
       gapi.client.crmengine.edges.insert(params).execute(function(resp) {
          if(!resp.code){
             $scope.edgeInserted();

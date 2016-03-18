@@ -179,7 +179,6 @@
   <script src="/static/src/js/angular.min.js" ></script>
   
   <script type="text/javascript">
-  console.log('wach bi jedek');
   var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
   function loadGapi() {
 
@@ -190,7 +189,6 @@
     .controller('OrganizationsController', ['$scope', function($scope) {
         $scope.selected_organization={};
         $scope.launchUpdateLicenses= function(organization){
-          console.log(organization);
           $scope.selected_organization=organization;
                  
           $('#BeforeUpdateLicense').modal('show');
@@ -207,23 +205,16 @@
                                  'path':'/ioadmin/v1/organizations.update_license',
                                  'method':'POST',
                                  'body':params,
-                                 'callback':(function(resp) {
-            $('#BeforeUpdateLicense').modal('hide');
-            if(!resp){
-                console.log('ok');
-
-
-            }else {
-               console.log('error');
-            }
-          })
+                                 'callback':function (resp) {
+                                     $('#BeforeUpdateLicense').modal('hide');
+                                     if (resp) {
+                                         console.log('error');
+                                     }
+                                 }
         });
 
         }
-        console.log(gapi);
-        console.log('in org controller');
         var params={};
-        console.log(gapi.client);
         var access_token = localStorage.getItem("access_token");
         gapi.auth.setToken({'access_token':access_token});
         gapi.client.request({

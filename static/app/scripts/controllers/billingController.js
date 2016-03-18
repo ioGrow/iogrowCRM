@@ -165,7 +165,6 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             } else {
                 params = {'limit': 7}
             }
-            console.log('in listNextPageItems');
             $scope.currentPage = $scope.currentPage + 1;
             User.list($scope, params);
         };
@@ -187,14 +186,11 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
 
 
         $scope.showModal = function () {
-            console.log('button clicked');
             $('#addAccountModal').modal('show');
 
         };
 
         $scope.addNewUser = function (user) {
-            console.log('add a new user');
-            console.log(user);
             $('#addAccountModal').modal('hide');
             User.insert($scope, user);
         };

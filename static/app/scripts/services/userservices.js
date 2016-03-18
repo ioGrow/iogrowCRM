@@ -64,7 +64,6 @@ accountservices.factory('User', function ($http) {
                 }
                 ;
             }
-            console.log('gapi #end_execute');
         });
     };
 
@@ -166,7 +165,6 @@ accountservices.factory('User', function ($http) {
             'body': params,
             'callback': (function (resp) {
 
-                console.log(resp);
             })
         })
     }
@@ -219,7 +217,6 @@ accountservices.factory('User', function ($http) {
                 $scope.renderCalendar(resp);
                 $scope.isLoading = false;
             } else {
-                console.log(resp.message);
                 $('#addAccountModal').modal('hide');
                 $('#errorModal').modal('show');
                 if (resp.message == "Invalid grant") {
@@ -245,7 +242,6 @@ accountservices.factory('User', function ($http) {
                 $scope.organizationInfo = resp;
                 $scope.purchaseLiseneces(resp);
             } else {
-                console.log(resp.message);
                 $('#addAccountModal').modal('hide');
                 $('#errorModal').modal('show');
                 if (resp.message == "Invalid grant") {
@@ -315,7 +311,6 @@ accountservices.factory('User', function ($http) {
 
 
         //            }else{
-        //            console.log(resp.message);
 
         //              $('#errorModal').modal('show');
         //            if(resp.message=="Invalid grant"){
@@ -385,8 +380,6 @@ accountservices.factory('Permission', function ($http) {
     Permission.insert = function ($scope, params) {
         $scope.isLoading = true;
         gapi.client.crmengine.permissions.insertv2(params).execute(function (resp) {
-            console.log('in insert resp');
-            console.log(resp);
             if (!resp.code) {
                 $scope.isLoading = false;
                 $scope.apply();
@@ -394,14 +387,11 @@ accountservices.factory('Permission', function ($http) {
             } else {
                 $scope.isLoading = false;
                 $scope.apply();
-                console.log(resp.code);
             }
         });
     };
     Permission.delete = function ($scope, params) {
         gapi.client.crmengine.permissions.delete(params).execute(function (resp) {
-            console.log('in insert resp');
-            console.log(resp);
             if (!resp.code) {
                 $scope.getColaborators()
             } else {
@@ -413,8 +403,6 @@ accountservices.factory('Permission', function ($http) {
         gapi.client.crmengine.permissions.get_colaborators(params).execute(function (resp) {
             if (!resp.code) {
                 $scope.collaborators_list = resp.items;
-                console.log("$scope.collaborators_list");
-                console.log($scope.collaborators_list);
                 $scope.apply();
 
             } else {

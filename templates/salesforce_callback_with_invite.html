@@ -67,15 +67,11 @@ $(document).ready(function() {
         // You can access the token ID with `token.id`
         // send the token to stripe
         //sfsubscriber
-        console.log('token');
-        console.log(token);
-
         $.ajax({
             type: 'POST',
             url: '/sfsubscriber',
 
             success: function(result) {
-              console.log(result);
               try {
                   parentWindow.postMessage(OAuthHelper,
                   "https://www.linkedin.com");
@@ -86,8 +82,8 @@ $(document).ready(function() {
               
             },
             error:function(result){
-              console.log(result);  
-                
+              console.log(result);
+
             },
             data: {token:JSON.stringify(token),email:OAuthHelper.user_email}
         });
@@ -99,21 +95,16 @@ $(document).ready(function() {
         handler.close();
       });
       var match = window.location.href.match(/code=([^&]+)/) ; 
-      console.log(match);
       $.ajax({
             type: 'GET',
             url: '/sfconnect',
             datatype:'json',
 
             success: function(result) {
-              console.log('i am in connectServer show me result please');
-              console.log(result);
             },
             error:function(result){
                 var response = result.responseText;
                 var rr= response.replace(/'/g,"\"");
-                console.log('yyyyy');
-                console.log(JSON.parse(rr));
                 var oauthResult = JSON.parse(rr);
                 OAuthHelper=oauthResult;
                 if(oauthResult.show_checkout=="true"){
@@ -148,14 +139,10 @@ $(document).ready(function() {
 
 app.controller('MyCtrl', function ($scope) {
   $scope.peoples=[];
-  console.log("iii");
 
     
    $scope.add=function(){
-        console.log("hhh");
-        
         $scope.peoples.push($scope.user);
-        console.log($scope.peoples);
         var email=" <div  class='col-xs-4  invite-mobile' >  <label >Email</label>  <input  class='form-control' ng-model='user.email' id='inputEmail' placeholder='Email' name='emails[]'></div>";
         var lastname=" <div  class='col-xs-4  invite-mobile'>  <label >Full Name</label>  <input  class='form-control' ng-model='user.fullname' id='inputEmail' placeholder='Optional' name='names[]'></div>";
             var html="<br></br><br></br>"+email+lastname

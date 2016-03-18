@@ -507,7 +507,6 @@
         } else if (origin.indexOf('.com') != -1) {
             url = "https://gcdc2013-iogrow.appspot.com";
         }
-        console.log(url);
         return url + '/_ah/api';
     }
 
@@ -519,7 +518,6 @@
 
     var apisToLoad;
     var callback = function () {
-        console.log('callback');
         if (--apisToLoad == 0) {
             signin(true, userAuthed);
         }
@@ -620,9 +618,10 @@
 
         } catch (e) {
         }
-
-
     }
+    </script>
+<script type="text/javascript">
+
     var created_at = new Date("{{user.created_at}}");
     $(document).ready(function () {
         window.Intercom('boot', {
@@ -678,7 +677,6 @@
     ga('require', 'displayfeatures');
     ga('send', 'pageview');
 
-    console.log({{user.google_user_id}});
 
 
 </script>
@@ -732,14 +730,12 @@
     loadCSS("/static/build/css/asyn_styles.min.css");
     $(".maxminButton").click(function () {
         if ($('.page-sidebar-menu .title').hasClass('sideWithoutText')) {
-            console.log("in hass class");
             $('.page-sidebar-menu .title').removeClass('sideWithoutText');
             $(".page-sidebar-menu").css('width', '160px');
             $(".page-content").css('marginLeft', '190px');
             $('.maxminButton').removeClass('fa-caret-right');
             $('.maxminButton').addClass('fa-caret-left');
         } else {
-            console.log("in remove class");
             $('.page-sidebar-menu .title').addClass('sideWithoutText');
             $('.maxminButton').removeClass('fa-caret-left');
             $('.maxminButton').addClass('fa-caret-right');

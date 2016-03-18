@@ -28,20 +28,12 @@ app.controller('CaseStatusEditCtrl', ['$scope', 'Auth', 'Casestatus', function (
     };
     $scope.inProcess = function (varBool, message) {
         if (varBool) {
-            if (message) {
-                console.log("starts of :" + message);
-            }
-            ;
             $scope.nbLoads = $scope.nbLoads + 1;
             if ($scope.nbLoads == 1) {
                 $scope.isLoading = true;
             }
             ;
         } else {
-            if (message) {
-                console.log("ends of :" + message);
-            }
-            ;
             $scope.nbLoads = $scope.nbLoads - 1;
             if ($scope.nbLoads == 0) {
                 $scope.isLoading = false;
@@ -86,7 +78,6 @@ app.controller('CaseStatusEditCtrl', ['$scope', 'Auth', 'Casestatus', function (
     };
     //18.12.2013 HKA  Update case status
     $scope.updateCasestatus = function (casestat) {
-        console.log('I am on update  case status');
         var params = {
             'id': $scope.casestatusedit.id,
             'status': casestat.status

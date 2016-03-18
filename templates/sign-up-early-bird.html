@@ -920,8 +920,6 @@ var helper = (function() {
      */
     onSignInCallback: function(authResult) {
       $('#authResult').html('Auth Result:<br/>');
-      console.log('*******************');
-      console.log(authResult);
       if (authResult['access_token']) {
         // The user is signed in
         this.authResult = authResult;
@@ -938,7 +936,6 @@ var helper = (function() {
         $('#authOps').hide('slow');
         $('#gConnect').show();
       }
-      console.log('authResult', authResult);
     },
     /**
      * Retrieves and renders the authenticated user's Google+ profile.
@@ -974,7 +971,6 @@ var helper = (function() {
         url: window.location.href + '/disconnect',
         async: false,
         success: function(result) {
-          console.log('revoke response: ' + result);
           $('#authOps').hide();
           $('#profile').empty();
           $('#visiblePeople').empty();
@@ -994,15 +990,12 @@ var helper = (function() {
      *   https://developers.google.com/+/web/signin/server-side-flow
      */
     connectServer: function() {
-      console.log(this.authResult.code);
       var userId = '{{ID}}';
       $.ajax({
         type: 'POST',
         url: '/gconnect',
 
         success: function(result) {
-          console.log('i am in connectServer show me result please');
-          console.log(result);
           if (result==true){
              window.location.replace('/sign-up');
           }

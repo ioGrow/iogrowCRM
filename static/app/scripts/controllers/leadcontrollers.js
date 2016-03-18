@@ -261,7 +261,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                                     'about': selected_lead.entityKey,
                                     'items': items
                                 };
-                                console.log(params);
                                 Permission.insert($scope, params);
                         }
                     }
@@ -357,9 +356,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 });
                 $scope.selectedCards.splice($scope.selectedCards.indexOf(indx),1);
                 if ($scope.isEmptyArray($scope.selectedCards)) {
-                    console.log("selection array is empty");
                     var params=$scope.getRequestParams();
-                    console.log(params);
                     Lead.list($scope,params);
                 }
                 $scope.apply();
@@ -379,7 +376,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         //$('#some-textarea').wysihtml5();
          $('#some-textarea').wysihtml5();
         // $scope.switchwysihtml = function () {
-        //     console.log("rendred wysiwyg");
         //     if ($(".wysihtml5-toolbar").is(":visible")) {
 
         //         $(".wysihtml5-toolbar").hide();
@@ -779,8 +775,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         $scope.listNextPageItems = function () {
             var nextPage = $scope.currentPage + 1;
             var params = {};
-            console.log('*******$scope.pages[nextPage]******')
-            console.log($scope.pages[nextPage])
             if ($scope.pages[nextPage]) {
                 params = {
                     'order': $scope.order, 'limit': 6,
@@ -960,10 +954,8 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             $scope.apply();
         };
         $scope.leadFilterBy = function (filter, assignee) {
-            console.log("filter triggered");
             if ($scope.leadsfilter != filter) {
-                console.log("filter triggered");
-                switch (filter) { 
+                switch (filter) {
                     case 'all':
                         $scope.owner=null;
                         var params=$scope.getRequestParams();
@@ -1614,8 +1606,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                     return;
                 };
                 $scope.leadsSourceFilter=filter;
-                // console.log(filter);
-                // console.log($scope.leadsSourceFilter);
                 $scope.apply();
                 params=$scope.getRequestParams();
                 $scope.isFiltering = true;
@@ -1819,14 +1809,12 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             $('#assigneeTagsToLead').modal('show');
         };
         $scope.getScreen_name = function (infonodes) {
-            console.log("infonodes__________________", infonodes)
             var sn = ''
             var result = $.grep(infonodes.items, function (e) {
                 return e.kind == 'sociallinks';
             })
 
             $scope.screen_name = result[0].items[0].screen_name
-            console.log(sn)
         }
         $scope.addNoteOpp = function () {
             $scope.opportunity.notes.push($scope.newOppNote)
@@ -1924,9 +1912,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         }
                 //HKA 10.11.2013 Add event
         $scope.addTimeScale = function (timescale) {
-            console.log("in time scale function");
             if (timescale.title != null && timescale.title != "") {
-                console.log("in condition");
                 var params = {}
                 $scope.allday = true;
                 var ends_at = moment(moment(timescale.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
@@ -1942,7 +1928,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     'timezone': $scope.timezoneChosen
                 }
                 $scope.opportunity.timeline.push(params);
-                console.log($scope.opportunity.timeline);
                 $('#newTimeModalForm').modal('hide');
 
                 $scope.timescale = {};
@@ -2023,8 +2008,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                if(checkbox.checked){
                   if ($scope.selectedDocs.indexOf(doc) == -1) {             
                     $scope.selectedDocs.push(doc);
-                    console.log("opp pushed");
-                    console.log($scope.selectedDocs);
                   }
                }else{       
 
@@ -2042,8 +2025,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                if(checkbox.checked){
                   if ($scope.selectedOpps.indexOf(opportunity) == -1) {             
                     $scope.selectedOpps.push(opportunity);
-                    console.log("opp pushed");
-                    console.log($scope.selectedOpps);
                   }
                }else{       
 
@@ -2070,28 +2051,19 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.docDeleted=function(entityKey){
             var ind=null;
             var listIndex=null;
-            console.log("in docDeleted");
-            console.log("entityKey");
-            console.log(entityKey);
             angular.forEach($scope.selectedDocs, function (doc) {
                 if (doc.entityKey==entityKey) {
                     ind=$scope.selectedDocs.indexOf(doc);
                     listIndex=$scope.documents.indexOf(doc);
-                    console.log("doc index found");
-                    console.log("listIndex",ind);
-                    console.log("listIndex",listIndex);
                 };
             });
             if (ind!=-1) {
-                console.log("in if ind");
                 $scope.documents.splice(listIndex,1);
                 $scope.selectedDocs.splice(ind,1);
                 $scope.apply(); 
                 if ($scope.documents.length==0) {
                     $scope.blankStatdocuments=true;
                 };
-                console.log($scope.documents);
-                console.log($scope.selectedDocs);
             };
         };
         $scope.unselectAllOpp = function ($event) {
@@ -2135,7 +2107,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                 }
             };
             Lead.get($scope, params);
-            console.log($scope.lead)
             User.list($scope, {});
             Leadstatus.list($scope, {});
             Opportunitystage.list($scope, {'order': 'probability'});
@@ -2150,13 +2121,11 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         // new linkedin
         $scope.messageFromSocialLinkCallback = function(event){
         if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){   
-            console.log(event.origin);
             $scope.saveLinkedinData(event.data);
             window.removeEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
         };
         $scope.saveLinkedinData=function(data){
-            console.log(data);
             var params={
               'id':$scope.lead.id,
               'firstname':data.firstname,
@@ -2258,15 +2227,11 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                         infonode.value=infonode.fields[0].value;
                         infonode.field=infonode.fields[0].field;
                     if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
-                        console.log('in stringtype______________________________________ ');
-                        console.log(infonode);
                         additionalCustomFields.push(infonode);
                     }else{
                             var schemaExists=false;
                             angular.forEach($scope[related_object].customfields, function (customfield) {
                             if (customfield.id==infonode.property_type) {
-                                console.log('in not stringprope ______________________________');
-                                console.log(infonode);
                                 schemaExists=true;
                                 var info_value=null;
                                 if (infonode.fields[0].field=="property_type") {
@@ -2301,7 +2266,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             $scope.apply();
         }
         $scope.docCreated=function(url){
-            console.log('here docCreated');
             window.open($scope.prepareEmbedLink(url),'_blank');
         }
         $scope.mapAutocompleteCalendar = function () {
@@ -2434,7 +2398,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.getColaborators = function () {
             $scope.collaborators_list = [];
             Permission.getColaborators($scope, {"entityKey": $scope.lead.entityKey});
-            console.log($scope.lead)
 
 
         }
@@ -2446,14 +2409,12 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
         // LBA le 21-10-2014
         $scope.DeleteCollaborator = function (entityKey) {
-            console.log("delete collaborators")
             var item = {
                 'type': "user",
                 'value': entityKey,
                 'about': $scope.lead.entityKey
             };
             Permission.delete($scope, item)
-            console.log(item)
         };
         $scope.refreshToken = function () {
             Auth.refreshToken();
@@ -2596,8 +2557,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             var tags = [];
             var items = [];
             tags = $('#select2_sample2').select2("val");
-            console.log("tagstags");
-            console.log(tags);
             angular.forEach(tags, function (tag) {
                 var params = {
                     'parent': $scope.lead.entityKey,
@@ -2612,7 +2571,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.showAssigneeTagToTab = function (index) {
             $scope.currentIndex = index;
             $('#assigneeTagsToTab').modal('show');
-            console.log($scope.currentIndex)
         };
         $scope.addTagsToTab = function () {
             var tags = [];
@@ -2640,12 +2598,10 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                 case 'case':
                     paramsTag = {'about_kind': 'Case'};
                     Tag.list_v2($scope, paramsTag);
-                    console.log("i'm here in case tab")
                     break;
                 case 'opportunity':
                     paramsTag = {'about_kind': 'Opportunity'};
                     Tag.list_v2($scope, paramsTag);
-                    console.log("i'm here in opportunity tab")
                     break;
             }
         }
@@ -2656,8 +2612,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     if ($scope.lead.tags == undefined) {
                         $scope.lead.tags = [];
                     }
-                    console.log("taggg ");
-                    console.log(tag);
                     var ind = $filter('exists')(tag, $scope.lead.tags);
                     if (ind == -1) {
                         $scope.lead.tags.push(tag);
@@ -2773,14 +2727,11 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     };
                     if (item.google_user_id != $scope.lead.owner.google_user_id) items.push(item);
                 });
-                console.log("##################################################################")
-                console.log($scope.sharing_with)
                 if (items.length > 0) {
                     var params = {
                         'about': $scope.lead.entityKey,
                         'items': items
                     }
-                    console.log(params)
                     Permission.insert($scope, params);
                 }
 
@@ -3257,11 +3208,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.existsInfonode=function(elem,property,kind){
             var exists=false;
             angular.forEach($scope.infonodes[kind], function (infonode) {
-                console.log(infonode[property]);
-                console.log(elem[property]);
                 if (infonode[property]==elem[property]) {
                     exists= true;
-                    console.log('exists');
                 };
             });
             return exists;
@@ -3312,7 +3260,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             }
             $scope.email = {};
             $scope.email.email = ''
-            console.log($scope.email)
             $scope.showEmailForm = false;
 
 
@@ -3365,14 +3312,10 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.addCustomField = function (customField,option) {
                   
             if (customField) {
-                console.log("check infonode_key before update or create");
-                console.log(customField);
                 if (customField.infonode_key) {
-                    console.log("in update customfield");
                     $scope.inlinePatch('Infonode','customfields', customField.name,customField.infonode_key,customField.value)
                 }else{
-                    console.log("in create new customfield");
-                    
+
                     if (!customField.field) {
                         customField.field=customField.name;
                     };
@@ -3441,7 +3384,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             Lead.convert($scope, leadid);
         };
         $scope.leadConverted = function (oldId, newId) {
-            console.log("before replace");
             window.location.replace('#/contacts/');
         }
         // $('#some-textarea').wysihtml5();
@@ -3804,10 +3746,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         }
         /* $111 staring opp new code*/
          $scope.selectCompetitor = function(){
-        console.log("enter fired");
-        console.log($scope.searchCompetitorQuery);
         if (typeof($scope.searchCompetitorQuery)=='object') {
-           console.log("enter object");
            $scope.competitors.push($scope.searchCompetitorQuery);
            if ($scope.opportunity.competitors==undefined) {
                 $scope.opportunity.competitors=[];
@@ -3815,7 +3754,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
            $scope.opportunity.competitors.push($scope.searchCompetitorQuery.entityKey);
         }else{
            if ($scope.searchCompetitorQuery!="") {
-             console.log("enter string");
             $scope.competitors.push({name:$scope.searchCompetitorQuery});
             if ($scope.opportunity.competitors==undefined) {
                 $scope.opportunity.competitors=[];
@@ -3827,7 +3765,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.apply();        
       };
         $scope.getResults = function (val, location) {
-            console.log('here executed');
             var url = ROOT + location + '?alt=json'
             var config = {
                 headers: {
@@ -3880,7 +3817,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                                     "value": custom_value
                                 };
                         $scope.oppCustomfields.push(params);
-                        console.log($scope.customfields);
 
                     }
             }
@@ -3910,7 +3846,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
     };
         $scope.changeInitialStage=function(stage){
             $scope.initialStage=stage;
-            console.log($scope.initialStage.probability);
           }
         $scope.validateBeforeSaveOpp=function(opportunity){
            if (!opportunity.name) $scope.oppo_err.name=true;
@@ -3945,8 +3880,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
               var closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
               opportunity.stage=$scope.initialStage.entityKey;
               opportunity.closed_date=closed_date;
-              console.log('hereeeeeeeeeeeeeee opportunity before save');
-              console.log(opportunity);
               Opportunity.insert($scope,opportunity);
               $scope.showNewOpp = false;
               $scope.topOppButton='new';
@@ -4322,10 +4255,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             });
         }
         $scope.cancelSelection = function (arrayname) {
-            console.log(arrayname)
             $scope[arrayname] = [];
             
-            console.log(arrayname)
             $scope.apply();
 
         }
@@ -4349,7 +4280,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                 $scope.addGeo({'formatted': $scope.linkedProfile.locality});
             }
             ;
-            console.log("------------------------>", params)
             Lead.patch($scope, params);
             $scope.apply();
         }
@@ -4604,7 +4534,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                                   $scope.customfield.field = '';
                                   $scope.customfield.value = '';
                             };
-                            console.log($scope.customfields);
                             $scope.showCustomFieldForm = false;
                             break;
                         case 'addresses' :
@@ -4639,15 +4568,11 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         };
         $scope.messageFromSocialLinkCallback = function(event){
         if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
-            console.log(event.origin);
-            console.log('------Data----');
-            console.log(event.data);
             $scope.saveLinkedinData(event.data);
             window.removeEventListener("message", $scope.messageFromSocialLinkCallback, false);
         }
         };
         $scope.saveLinkedinData=function(data){
-          console.log(data);
             //$scope.clearLead();
             $scope.inList=[];
             var params={
@@ -4754,15 +4679,11 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     infonode.value=infonode.fields[0].value;
                     infonode.field=infonode.fields[0].field;
                 if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
-                    console.log('in stringtype______________________________________ ');
-                    console.log(infonode);
                     additionalCustomFields.push(infonode);
                 }else{
                         var schemaExists=false;
                         angular.forEach($scope[related_object].customfields, function (customfield) {
                         if (customfield.id==infonode.property_type) {
-                            console.log('in not stringprope ______________________________');
-                            console.log(infonode);
                             schemaExists=true;
                             var info_value=null;
                             if (infonode.fields[0].field=="property_type") {
@@ -4822,7 +4743,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                                     "value": custom_value
                                 };
                         $scope.customfields.push(params);
-                        console.log($scope.customfields);
 
                     }
             }
@@ -4940,8 +4860,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 infonodes.push(infonode);
             });
             angular.forEach($scope.customfields, function (customfield) {
-                console.log("infonodes.customfield");
-                console.log(customfield);
                 var infonode = {
                     'kind': 'customfields',
                     'fields': [
@@ -5124,7 +5042,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             }
             ;
             
-            console.log(params)
             $scope.isFiltering = true;
             Lead.list($scope, params);
         };
@@ -5587,7 +5504,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                             $scope.$apply();
                         }
                         if (resp.code >= 500) {
-                            console.log("503 error")
                             $scope.twNoResults = true;
                             $scope.twIsSearching = false;
                             $scope.apply();
@@ -5685,10 +5601,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             $scope.apply();
         }
         $scope.cancelSelection = function (arrayname) {
-            console.log(arrayname)
             $scope[arrayname] = [];
-            
-            console.log(arrayname)
             $scope.apply();
 
         }
@@ -5759,11 +5672,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             }
             ;
             if ($scope.inProfile.current_post) {
-                
-                
-                console.log($scope.extractCompanyName($scope.inProfile.current_post[0]))
                 if ($scope.inProfile.current_post[0]) {
-
                     $scope.lead.company = $scope.extractCompanyName($scope.inProfile.current_post[0]);
                 }
             }

@@ -26,11 +26,6 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
      };    
     $scope.inProcess=function(varBool,message){
           if (varBool) {  
-            console.log("inProcess starts");      
-            if (message) {
-              console.log("starts of :"+message);
-             
-            };
             $scope.nbLoads=$scope.nbLoads+1;
              var d = new Date();
              console.log(d.getTime());
@@ -38,12 +33,7 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            console.log("inProcess ends");
             var d = new Date();
-            console.log(d.getTime());
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
@@ -210,7 +200,6 @@ $scope.uploaderCallback=function(data) {
 $scope.updatelanguage = function(user){
    //var params = {'id':$scope.user.id,
    // 'language':user.language};
-    console.log('-----------hello user language--------');
    //User.patch($scope,params);
    $('#EditSetting').modal('hide');
 }
@@ -256,9 +245,6 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
@@ -278,7 +264,6 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
       if(params.keyword){
           $scope.isLoadingLinkedin=true;
           Linkedin.listDb(params,function(resp){
-            console.log($route.current.params.q)
             var result=JSON.parse(resp.results)
             $scope.profiles=result.hits.hits;
             if(!resp.KW_exist){
@@ -303,10 +288,8 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
                 if(params.keyword){
                     $scope.isLoadingLinkedin=true;
                     Linkedin.listDb(params,function(resp){
-                    console.log($route.current.params.q)
                     var result=JSON.parse(resp.results)
                     $scope.profiles=$scope.profiles.concat(result.hits.hits);
-                    console.log($scope.profiles);
                     if (resp.more) {
                       $scope.linkedinNextPage=$scope.linkedinNextPage+1;                      
                     };
@@ -323,22 +306,16 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
             if (result.status=='ok'){
                 $scope.isRunning=true;
                 $scope.socket.on(params.keyword, function (data) {
-                  console.log("data");
-                  console.log(data);
                   var result1 = $.grep($scope.profiles, function(e){ return e._source.id == data._source.id; })
                   var result2 = $.grep($scope.profilesRT, function(e){ return e._source.id == data._source.id; })
-                  console.log(result)
                   if( data._score!=0 && result1.length==0 && result2.length==0) {
                     $scope.profilesRT.push(data);
-                    console.log("inserted")
                   }
                 $scope.apply();
                });      
                 $scope.socket.on('stop:'+params.keyword, function (data) {
                 $scope.socket.disconnect();
                 $scope.isRunning=false;
-                console.log("stooooooooooooooooooooooooooooooooooooooooooooooooooooooooope")
-                console.log($scope.socket)
                 $scope.apply();
                });
           }
@@ -402,11 +379,9 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
      }
      $scope.runTheProcess = function(){
           var params = {'q':$route.current.params.q,'limit':20};
-          console.log(params)
         /*  if ($rootScope.linkedSearch) {
             $scope.linkedinSearch({"keyword":$route.current.params.q});
           };*/
-          console.log("run the process ---------------------------------------->")         
           Search.list($scope,params);
           ga('send', 'pageview', '/search');
           window.Intercom('update');
@@ -416,18 +391,15 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
           Auth.refreshToken();
      };
      $scope.listNextPageItems = function(){
-      console.log("ttttttttttttttttttttttttttttttttttt");
         var nextPage = $scope.currentPage + 1;
         var params = {};
           if ($scope.pages[nextPage]){
-            console.log('moooooooooooooooooore items');
             params = {'q':$route.current.params.q,
                       'limit':20,
 
                       'pageToken':$scope.pages[nextPage]
                      }
           }else{
-             console.log('nooooooooooo more items');
             params = {'q':$route.current.params.q,
                       'limit':20}
           }
@@ -455,13 +427,8 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
 
 //HKA 25.03.2014 update user language
 $scope.updatelanguage = function(user,idUser){
-  console.log(user.language);
-  console.log('i am here');
-
   var params = {'id':idUser,
      'language':user.language};
-   console.log('-----------hello user language--------');
-   console.log(params);
    User.patch($scope,params);
    $('#EditSetting').modal('hide');
 }
@@ -497,24 +464,13 @@ app.controller('SearchFormController', ['$scope', '$http', 'Search', 'User', '$r
      };    
     $scope.inProcess=function(varBool,message){
           if (varBool) {  
-            console.log("inProcess starts");      
-            if (message) {
-              console.log("starts of :"+message);
-             
-            };
             $scope.nbLoads=$scope.nbLoads+1;
              var d = new Date();
-             console.log(d.getTime());
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            console.log("inProcess ends");
             var d = new Date();
-            console.log(d.getTime());
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
@@ -657,7 +613,6 @@ $scope.uploaderCallback=function(data) {
         }
          });*/
         $scope.getResults = function (val) {
-            console.log('here executed');
             var url = ROOT + '/crmengine/v1/search?alt=json'
             var config = {
                 headers: {
@@ -690,12 +645,10 @@ $scope.uploaderCallback=function(data) {
       console.log("test");
       if (typeof(searchQuery)=='string'){
          window.location.replace('#/search/'+searchQuery);
-         console.log("########################################################")
       }else{
         var url = Search.getUrl($scope.searchQuery.type,$scope.searchQuery.id);
         $scope.searchQuery=' ';
         window.location.replace(url);
-         console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 
       }
 
@@ -704,7 +657,6 @@ $scope.uploaderCallback=function(data) {
 $scope.updatelanguage = function(user){
    //var params = {'id':$scope.user.id,
    // 'language':user.language};
-    console.log('-----------hello user language--------');
    //User.patch($scope,params);
    $('#EditSetting').modal('hide');
 }

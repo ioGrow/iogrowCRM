@@ -73,12 +73,10 @@ leadservices.factory('Lead', function ($rootScope) {
                     var params = {'id': parseInt(userId), 'completed_tour': true};
                     User.completedTour(Lead.$scope, params);
                 }
-                console.log("dddezz");
                 $('#installChromeExtension').modal("show");
             }
         };
         // Start the tour!
-        console.log("beginstr");
         hopscotch.startTour(tour);
     };
 
@@ -190,8 +188,6 @@ leadservices.factory('Lead', function ($rootScope) {
                         }
                         // $scope.renderMaps();
                     }
-                    console.log('before customfield');
-                    console.log($scope.infonodes.customfields);
                     $scope.getCustomFields('leads');
                     if (resp.topics) {
                         if (params.topics.pageToken) {
@@ -204,7 +200,6 @@ leadservices.factory('Lead', function ($rootScope) {
                         }
 
                         if ($scope.topicCurrentPage > 1) {
-                            console.log('Should show PREV');
                             $scope.topicpagination.prev = true;
                         } else {
                             $scope.topicpagination.prev = false;
@@ -333,7 +328,6 @@ leadservices.factory('Lead', function ($rootScope) {
                 } else {
                     if (resp.code == 401) {
                         // $scope.refreshToken();
-                        console.log(resp);
                         $scope.inProcess(false);
                         $scope.apply();
                     }
@@ -421,7 +415,6 @@ leadservices.factory('Lead', function ($rootScope) {
                     ;
                 }
 
-                console.log('gapi #end_execute');
             })
         });
     };
@@ -501,7 +494,6 @@ leadservices.factory('Lead', function ($rootScope) {
                 }
                 }
                 $scope.getColaborators();
-                console.log(resp);
             })
 
         });
@@ -563,7 +555,6 @@ leadservices.factory('Lead', function ($rootScope) {
                     ;
                 }
         };
-        console.log(params);
         gapi.client.request({
             'root': ROOT,
             'path': '/crmengine/v1/leads/listv2',
@@ -577,8 +568,6 @@ leadservices.factory('Lead', function ($rootScope) {
         var callback = function (resp) {
             if (!resp.code) {
                 if (!resp.items) {
-                    console.log("resp.items");
-                    console.log(resp.items);
                     if (!$scope.isFiltering) {
                         $scope.blankStatelead = true;
                          $scope.filterNoResult=false;
@@ -591,8 +580,6 @@ leadservices.factory('Lead', function ($rootScope) {
                          $scope.filterNoResult=false;
                     }
                 $scope.leads = resp.items;
-                console.log('***************resp.items');
-                console.log(resp.items)
                 if ($scope.currentPage > 1) {
                     $scope.leadpagination.prev = true;
                 } else {
@@ -634,13 +621,9 @@ leadservices.factory('Lead', function ($rootScope) {
         };
         if ((params.tags) || (params.owner) ||(params.source)  || (params.order != '-updated_at')) {
             var updateCache = callback;
-            console.log("in normal callback");
         } else {
-            console.log("FROM THE CACHE FIRT");
             var updateCache = function (resp) {
                 // Update the cache
-                console.log("the resp object form source");
-                console.log(resp);
                 iogrow.ioStorageCache.renderIfUpdated('leads', resp, callback);
             };
             var resp = iogrow.ioStorageCache.read('leads');
@@ -825,7 +808,6 @@ leadservices.factory('Lead', function ($rootScope) {
         gapi.client.crmengine.leads.convertv2(params).execute(function (resp) {
             if (!resp.code) {
                 $('#convertLeadModal').modal('hide');
-                console.log("here rasp id");
                 console.log(resp);
                 $scope.inProcess(false);
                 $scope.apply();
@@ -845,8 +827,6 @@ leadservices.factory('Lead', function ($rootScope) {
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.leads.import(params).execute(function (resp) {
-            console.log(params);
-            console.log(resp);
             if (!resp.code) {
                 $scope.isContentLoaded = true;
                 $scope.numberOfRecords = resp.number_of_records;
@@ -872,8 +852,6 @@ leadservices.factory('Lead', function ($rootScope) {
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.leads.import_from_csv_second_step(params).execute(function (resp) {
-            console.log(params);
-            console.log(resp);
             if (!resp.code) {
                 console.log(resp);
                 $scope.showImportMessages();

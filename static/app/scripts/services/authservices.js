@@ -18,16 +18,11 @@ accountservices.factory('Auth', function($http) {
   }
   Auth.initWithLocalStorage = function(){
       var timeNow = new Date().getTime()/1000;
-      // console.log('init with localStorage');
       if (localStorage.getItem("access_token")){
-          // console.log('access token retreived from localStorage');
-          // console.log(localStorage.getItem("access_token"));
           var access_token = localStorage.getItem("access_token");
           var authResultexpiration = localStorage.getItem("authResultexpiration");
           var diff = authResultexpiration - timeNow;
           if (diff>0 && access_token!="null"){
-            //  console.log('the token is still valid it will expire in');
-            //  console.log(diff);
              Auth.$scope.immediateFailed = false;
              Auth.$scope.isSignedIn = true;
              if(window.countInitExec==2){
@@ -38,8 +33,6 @@ accountservices.factory('Auth', function($http) {
              if (access_token!="null"){
                  gapi.auth.setToken({'access_token':access_token});
              }
-            //  console.log('after setting gapi token');
-            //  console.log(gapi.auth.getToken());
              window.authResult = {'access_token':access_token};
              
       if(Auth.license_is_expired =="True" &&  window.location.hash !="#/admin/users")
@@ -64,14 +57,11 @@ accountservices.factory('Auth', function($http) {
             
           }
           else{
-              // console.log('the token is expired');
-              // console.log(diff);
               // refresh token
               Auth.refreshToken();
           }
       // render Google+ sign-in
       }else{
-              // console.log('there is no access token on localStorage i will render signin');
               Auth.$scope.immediateFailed = true;
                Auth.$scope.apply();  
              /* if (typeof  Auth.$scope.apply() == 'function') { 
@@ -211,8 +201,6 @@ accountservices.factory('Auth', function($http) {
       }
   };
   Auth.signIn = function(authResult){
-      // console.log('now signedin i will show you th new authResult');
-      // console.log(authResult);
       localStorage.removeItem('access_token');
       if (authResult.status.google_logged_in){
         gapi.auth.setToken(authResult);
@@ -224,7 +212,6 @@ accountservices.factory('Auth', function($http) {
   };
   Auth.processAuth = function(authResult) {
       //Auth.$scope.immediateFailed = true;
-      // console.log(authResult);
       window.isRefreshing = false;
       if (authResult) {
         if (authResult['access_token']){

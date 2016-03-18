@@ -13,20 +13,13 @@ eventservices.factory('Event', function($rootScope) {
           gapi.client.crmengine.events.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.event = resp;
-               console.log("***********what the what*********");
-               console.log($scope.event)
-               console.log("**********************************");
-
-               
-             
                $scope.isContentLoaded=true;
                $scope.renderMaps();
                // Call the method $apply to make the update on the scope
                 $scope.$apply();
                 $scope.ListComments();
                 $scope.getColaborators();
-                console.log($scope.event);
-                
+
 
             }else {
                if(resp.code==401){
@@ -35,7 +28,6 @@ eventservices.factory('Event', function($rootScope) {
                 $scope.$apply();
                };
             }
-            console.log('gapi #end_execute');
             $scope.isLoading = false;
           });
   };
@@ -65,8 +57,7 @@ Event.get_docs=function($scope,params){
       gapi.client.crmengine.events.patch(params).execute(function(resp) {
 
           if(!resp.code){
-            console.log(resp)
-            
+
             // for (var k in params){
             //      if (k!='id'&&k!='entityKey'){
             //        $scope.event[k] = resp[k];
@@ -76,7 +67,6 @@ Event.get_docs=function($scope,params){
           
             //$scope.renderMaps();
             $scope.runTheProcess()
-            //console.log("working");
             /*$scope.ListComments();
             $scope.listContributors();*/
             $scope.isLoading = false;
@@ -86,10 +76,7 @@ Event.get_docs=function($scope,params){
 
 
          }else{
-            console.log("not working");
-            console.log(resp.message);
              if(resp.message=="Invalid grant"){
-              console.log("Invalid grant");
                 $scope.refreshToken();
                 $scope.isLoading = false;
                 $scope.listTags();
@@ -138,7 +125,6 @@ Event.get_docs=function($scope,params){
                  });
                  //$scope.renderCalendar(calendarEventList);
                  /*if ($scope.currentPage>1){
-                      console.log('Should show PREV');
                       $scope.pagination.prev = true;
                    }else{
                        $scope.pagination.prev = false;
@@ -197,7 +183,6 @@ Event.get_docs=function($scope,params){
 
              $('#newEventModal').modal('hide');
              $('#errorModal').modal('show');
-             console.log(resp.message)
              if(resp.message=="Invalid grant"){
                 $scope.refreshToken();
                 $scope.isLoading = false;

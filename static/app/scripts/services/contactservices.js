@@ -63,8 +63,6 @@ accountservices.factory('Contact', function ($rootScope) {
                 } 
                 $scope.linkedProfileresume=$scope.contact.linkedin_profile.resume;
                 if (resp.infonodes) {
-                    console.log("infonodes");
-                    console.log(resp.infonodes);
                     if (resp.infonodes.items) {
                         for (var i = 0; i < resp.infonodes.items.length; i++) {
                             if (resp.infonodes.items[i].kind == 'addresses') {
@@ -92,8 +90,6 @@ accountservices.factory('Contact', function ($rootScope) {
                     }
                 }
                 $scope.getCustomFields('contacts');
-                console.log('cus cus');
-                console.log($scope.contact);
                 if (resp.topics) {
                     if (params.topics.pageToken) {
                         angular.forEach(resp.topics.items, function (item) {
@@ -105,7 +101,6 @@ accountservices.factory('Contact', function ($rootScope) {
                     }
 
                     if ($scope.topicCurrentPage > 1) {
-                        console.log('Should show PREV');
                         $scope.topicpagination.prev = true;
                     } else {
                         $scope.topicpagination.prev = false;
@@ -274,8 +269,6 @@ accountservices.factory('Contact', function ($rootScope) {
                 $scope.getLinkedinProfile();
                 $scope.getTwitterProfile();
 
-                console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhere contact');
-                console.log($scope.contact);
 
             } else {
                 if (resp.code == 401) {
@@ -367,8 +360,6 @@ accountservices.factory('Contact', function ($rootScope) {
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.contacts.import(params).execute(function (resp) {
-            console.log(params);
-            console.log(resp);
             if (!resp.code) {
                 $scope.isContentLoaded = true;
                 $scope.numberOfRecords = resp.number_of_records;
@@ -394,10 +385,7 @@ accountservices.factory('Contact', function ($rootScope) {
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.contacts.import_from_csv_second_step(params).execute(function (resp) {
-            console.log(params);
-            console.log(resp);
             if (!resp.code) {
-                console.log(resp);
                 $scope.showImportMessages();
                 $scope.inProcess(false);
                 $scope.apply();
@@ -440,12 +428,8 @@ accountservices.factory('Contact', function ($rootScope) {
                     $scope.contactpagination.prev = false;
                 }
                 if (resp.nextPageToken) {
-                    // console.log("resp.nextPageToken");
-                    // console.log(resp.nextPageToken);
                     var nextPage = $scope.contactCurrentPage + 1;
                     $scope.contactpages[nextPage] = resp.nextPageToken;
-                    // console.log("$scope.contactpages[nextPage]");
-                    // console.log($scope.contactpages[nextPage]);
                     $scope.contactpagination.next = true;
 
                 } else {
@@ -487,8 +471,6 @@ accountservices.factory('Contact', function ($rootScope) {
     Contact.search = function ($scope, params) {
         gapi.client.crmengine.contacts.search(params).execute(function (resp) {
             if (resp.items) {
-                console.log("resp.items from contact search");
-                console.log(resp.items);
                 $scope.results = resp.items;
                 $scope.apply();
             }
@@ -517,11 +499,7 @@ accountservices.factory('Contact', function ($rootScope) {
                     $scope.contactpagination.prev = false;
                 }
                 if (resp.nextPageToken) {
-                     console.log("resp.nextPageToken");
-                    console.log(resp.nextPageToken);
                     var nextPage = $scope.contactCurrentPage + 1;
-                    console.log("scope.contactCurrentPage");
-                    console.log($scope.contactCurrentPage);
                     // Store the nextPageToken
                     $scope.contactpages[nextPage] = resp.nextPageToken;
                     $scope.contactpagination.next = true;
@@ -628,7 +606,6 @@ accountservices.factory('Contact', function ($rootScope) {
         gapi.client.crmengine.contacts.export(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
-                console.log("request sent")
 
             } else {
 
@@ -642,7 +619,6 @@ accountservices.factory('Contact', function ($rootScope) {
         gapi.client.crmengine.contacts.export_keys(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
-                console.log("request ssent")
 
             } else {
 
@@ -666,7 +642,6 @@ accountservices.factory('Contact', function ($rootScope) {
                     $scope.blankStatecontact = false;
                 }
                 $scope.contacts.unshift(resp);
-                console.log($scope.contacts);
                 if ($scope.contactInserted) {
                     
                     $scope.contactInserted(resp);
@@ -677,7 +652,6 @@ accountservices.factory('Contact', function ($rootScope) {
                 $scope.apply();
 
             } else {
-                console.log(resp.message);
                 $('#addAContactModal').modal('hide');
                 $('#errorModal').modal('show');
                 if (resp.message == "Invalid grant") {

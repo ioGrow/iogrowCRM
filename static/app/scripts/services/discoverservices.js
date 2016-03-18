@@ -48,7 +48,6 @@ var params={
                 "more":$scope.more,
                 "language": $scope.discovery_language
               }
-console.log("ddd"+keywords);
     gapi.client.crmengine.twitter.get_map(params).execute(function(resp) {
             if(!resp.code){
               if (resp.results=="null"){
@@ -70,15 +69,13 @@ console.log("ddd"+keywords);
                 $scope.apply();
                };
             }
-            console.log('gapi #end_execute');
           });
 };
 
 
 Discover.delete_topic=function(topic){
   var val={"value":topic};
-  console.log(topic+"toooo");
-  
+
     gapi.client.crmengine.twitter.delete_topic(val).execute(function(resp) {
             if(!resp.code){
                
@@ -93,22 +90,18 @@ Discover.delete_topic=function(topic){
                 $scope.apply();
                };
             }
-            console.log('gapi #end_execute');
           });
 };
 
 
 
  Discover.get_tweets_details=function($scope){
-  console.log("helo");
-  console.log($scope.tweet_id);
     var idp={"tweet_id": String($scope.tweet_id)};
 
     gapi.client.crmengine.twitter.get_tweets_details(idp).execute(function(resp) {
             if(!resp.code){
               $scope.tweet_details=(JSON.parse(resp.results))[0];
 
-              console.log( $scope.tweet_details);
 
                // Call the method apply to make the update on the scope
                $scope.apply();
@@ -119,7 +112,6 @@ Discover.delete_topic=function(topic){
                 $scope.apply();
                };
             }
-            console.log('gapi #end_execute');
           });
  }; 
 
@@ -143,8 +135,7 @@ if($scope.selected_tags!=""){
     gapi.client.crmengine.twitter.get_tweets_map(params).execute(function(resp) {
             if(!resp.code){
             
-               console.log("serviceend:"+$scope.tweetsshow);
-              
+
                data=JSON.parse(resp.results)
                $scope.map_tweets=data;
              
@@ -158,13 +149,11 @@ if($scope.selected_tags!=""){
                 $scope.apply();
                };
             }
-            console.log('gapi #end_execute');
           });
    
  }; 
 
  Discover.get_best_tweets=function($scope){
-  console.log("iiii");
 $scope.isLoadingtweets = true;
 $scope.apply();
 var keywords=[];
@@ -179,11 +168,6 @@ if($scope.selected_tags!=""){
               }
     gapi.client.crmengine.twitter.get_best_tweets(params).execute(function(resp) {
             if(!resp.code){
-            
-              
-              
-              console.log(resp.results.length);
-               console.log("zzzz"+resp.results+"eiii");
                $scope.best_tweets=data;
              
               $scope.isLoadingtweets = false;
@@ -197,7 +181,6 @@ if($scope.selected_tags!=""){
                 $scope.apply();
                };
             }
-            console.log('gapi #end_execute');
           });
    
  }; 
@@ -206,7 +189,6 @@ if($scope.selected_tags!=""){
 
 
  Discover.get_influencers_v2=function($scope){
-  console.log("eeeee"+JSON.stringify($scope.selected_tags)+"dddd");
 $scope.noresults=false;
 $scope.isLoadingtweets = true;
 $scope.apply();
@@ -287,7 +269,6 @@ if($scope.selected_tags!=""){
                 $scope.apply();
                };
             }
-            console.log('gapi #end_execute');
           });
    
  }; 
@@ -333,7 +314,6 @@ $http.jsonp(url)
               
 
                data=JSON.parse(resp.results)
-               console.log(params.page+"paramss")
                if (params.page>1) {
                     $scope.tweets=$scope.tweets.concat(data);
                     if (typeof $scope.tags=="undefined"){
@@ -343,8 +323,6 @@ $http.jsonp(url)
                 }else {
 
                     $scope.tweets = data;
-                    console.log("twzss"+$scope.tweets);
-                    console.log("endisco:"+$scope.tweetsshow);
                     if ($scope.tweets==""){
                       $scope.noresults=true;
                     }
@@ -366,7 +344,6 @@ $http.jsonp(url)
                };
             }
 
-            console.log('gapi #end_execute');
           });
  };
 

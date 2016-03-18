@@ -61,7 +61,6 @@
                 // Get spiders list
                 $.getJSON(scrapyd_url + 'listspiders.json?project=' + project_name, function(data) {
                     var items = [];
-                    //console.log(data);
                     $.each(data.spiders, function(key, val) {
                         items.push('<li id="' + val + '">' + val + '&nbsp;&nbsp;<a href="#" class="start_spider" rel="'+ val + '">Start</a></li>');
                     });

@@ -470,18 +470,11 @@
   });
   function wizz(){
   if (!jQuery().bootstrapWizard) {
-                    console.log("hhhhhhhhhhhhhhhhhhhhhhhhherrrrrrrrrrrrre");
                     return;
                 }
                 var handleTitle = function(tab, navigation, index) {
-                    console.log('index');
-                    console.log(index);
                     var total = navigation.find('li').length;
-                    console.log("total equal===");
-                    console.log(total);
                     var current = index + 1;
-                    console.log('index');
-                    console.log(index)
                     // set wizard title
                    // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
                     // set done steps
@@ -536,10 +529,7 @@
 function waitwizard() {
       if (jQuery.isEmptyObject(angular.element("#signin").scope().casesatuses)) {
           setTimeout("waitwizard()", 500);
-          console.log("not yet");
       }else{
-                console.log("yes it works");
-                console.log(angular.element("#signin").scope().casesatuses);
                  wizz()// you will need an asynch callback
     }
 

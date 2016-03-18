@@ -25,11 +25,9 @@
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 {%if user %}
-    console.log('1');
     ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
     ga('send', 'pageview');
 {% else %}
-    console.log('2');
     ga('create', 'UA-52188380-1', 'auto');
     ga('send', 'pageview');
 {% endif %}

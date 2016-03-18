@@ -2022,18 +2022,11 @@ new timeline modal
 <script type="text/javascript">
 function wizz(){
   if (!jQuery().bootstrapWizard) {
-                    console.log("hhhhhhhhhhhhhhhhhhhhhhhhherrrrrrrrrrrrre");
                     return;
                 }
       var handleTitle = function(tab, navigation, index) {
-          console.log('index');
-          console.log(index);
           var total = navigation.find('li').length;
-          console.log("total equal===");
-          console.log(total);
           var current = index + 1;
-          console.log('index');
-          console.log(index)
           // set wizard title
          // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
           // set done steps
@@ -2090,11 +2083,8 @@ function waitwizard() {
           setTimeout("waitwizard()", 500);
       }else{
           if(angular.element("#signin").scope().casee.id!=undefined&&!jQuery.isEmptyObject(angular.element("#signin").scope().casesatuses)) {
-                  console.log('herrrre');
-                  console.log(angular.element("#signin").scope().casesatuses);
                  wizz()// you will need an asynch callback
           } else {
-            console.log("not yet")
             setTimeout("waitwizard()", 500); // poll in a half second
           }
     }

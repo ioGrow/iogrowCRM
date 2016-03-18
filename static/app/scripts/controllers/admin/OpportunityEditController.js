@@ -15,20 +15,12 @@ app.controller('OpportunityEditCtrl', ['$scope', 'Auth', 'User', 'Opportunitysta
         $scope.isLoading = false;
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
-                if (message) {
-                    console.log("starts of :" + message);
-                }
-                ;
                 $scope.nbLoads = $scope.nbLoads + 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
                 ;
             } else {
-                if (message) {
-                    console.log("ends of :" + message);
-                }
-                ;
                 $scope.nbLoads = $scope.nbLoads - 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
@@ -170,7 +162,6 @@ app.controller('OpportunityEditCtrl', ['$scope', 'Auth', 'User', 'Opportunitysta
         };
 
         $scope.editopportunitystage = function (stage) {
-            console.log(stage);
             $scope.oppstageedit.name = stage.name;
             $scope.oppstageedit.stage_number = stage.stage_number;
             $scope.oppstageedit.probability = stage.probability;

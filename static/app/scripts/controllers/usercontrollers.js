@@ -59,22 +59,12 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
 
             if (varBool) {
 
-                if (message) {
-                    console.log("starts of :" + message);
-
-                }
-                ;
-                console.log('true');
                 $scope.nbLoads = $scope.nbLoads + 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
                 ;
             } else {
-                if (message) {
-                    console.log("ends of :" + message);
-                }
-                ;
                 $scope.nbLoads = $scope.nbLoads - 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
@@ -251,7 +241,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             } else {
                 params = {'limit': 7}
             }
-            console.log('in listNextPageItems');
             $scope.currentPage = $scope.currentPage + 1;
             User.list($scope, params);
         }
@@ -259,11 +248,9 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
 
         $scope.filterByName = function () {
             if ($scope.predicate != 'google_display_name') {
-                console.log($scope.predicate);
                 $scope.predicate = 'google_display_name';
                 $scope.reverse = false
             } else {
-                console.log($scope.predicate);
                 $scope.predicate = '-google_display_name';
                 $scope.reverse = false;
             }
@@ -647,9 +634,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             if (checkbox.checked) {
                 $scope.selected_users = [];
 
-                console.log("----------------------------------------------------");
-                console.log($scope.selected_users.concat($scope.users));
-                console.log("----------------------------------------------------");
 
                 $scope.selected_users = $scope.selected_users.concat($scope.users);
                 $scope.isSelectedAll = true;
@@ -659,8 +643,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             }
         };
         $scope.select_user = function (user, index, $event) {
-            console.log('fffff');
-            console.log(user + index + $event);
             var checkbox = $event.target;
             if (checkbox.checked) {
                 if ($scope.selected_users.indexOf(user) == -1) {
@@ -689,7 +671,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
 
                 User.setAdmin($scope, params);
             } else {
-                // console.log("*****حمادة بالزنجبيل**************")
             }
 
         };
@@ -718,14 +699,11 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
         };
 
         $scope.showModal = function () {
-            console.log('button clicked');
             $('#addAccountModal').modal('show');
 
         };
 
         $scope.addNewUser = function (user) {
-            console.log('add a new user');
-            console.log(user);
             $('#addAccountModal').modal('hide');
             User.insert($scope, user);
         };
@@ -739,7 +717,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
         };
 
         $scope.assignLicenses = function () {
-            console.log($scope.selected_users);
             var params = {};
             angular.forEach($scope.selected_users, function (user) {
                 if (!user.is_super_admin) {
@@ -922,7 +899,6 @@ app.controller('UserNewCtrl', ['$scope', 'Auth', 'User',
 
 
         $scope.addNewUser = function (message) {
-            console.log('add a new user');
             emailss = [];
             for (i = 0; i < ($scope.emails).length; i++) {
                 emailss[i] = $scope.emails[i].email;
@@ -1052,8 +1028,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
         var handleColorPicker = function () {
             if (!jQuery().colorpicker) {
                 return;
-                console.log('errooooooooooooooor');
-                console.log("working******************************");
             }
             $('.colorpicker-default').colorpicker({
                 format: 'hex'
@@ -1141,9 +1115,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
              return 260;
              }
              }*/
-            console.log(width);
-            console.log(due);
-            console.log(reminder);
         }
         $scope.dragTag = function (tag) {
             $scope.draggedTag = tag;
@@ -1181,20 +1152,13 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
         };
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
-                if (message) {
-                    console.log("starts of :" + message);
-                }
-                ;
                 $scope.nbLoads = $scope.nbLoads + 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
                 ;
             } else {
-                if (message) {
-                    console.log("ends of :" + message);
-                }
-                ;
+
                 $scope.nbLoads = $scope.nbLoads - 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
@@ -1348,7 +1312,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
             } else {
                 $scope.selected_tasks = [];
                 $scope.isSelectedAll = false;
-                console.log($scope.selected_tasks);
             }
         };
         $scope.addNewTask = function () {
@@ -1368,7 +1331,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
                         'due': dueDate,
                         'about': $scope.account.entityKey
                     }
-                    console.log(dueDate);
 
                 } else {
 
@@ -1380,7 +1342,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
 
                         params.assignees = option.selected;
                         option.selected = [];
-                        console.log(params.assignees);
                     }
                     if (option.data.name == 'tags' && option.selected != []) {
                         params.tags = option.selected;
@@ -1393,7 +1354,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
             }
             $scope.tagInfo.selected = [];
 
-            console.log($scope.newTask.title);
             $scope.newTask.title = '';
             $scope.newTask.due = null;
             $scope.newTask.reminder = null;
@@ -1437,15 +1397,11 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
             var checkbox = $event.target;
             if (checkbox.checked) {
                 if ($scope.selected_tasks.indexOf(task) == -1) {
-                    console.log("checked");
                     $scope.selected_tasks.push(task);
-                    console.log($scope.selected_tasks);
 
                 }
             } else {
                 $scope.selected_tasks.splice(index, 1);
-                console.log("unchecked");
-                console.log($scope.selected_tasks);
             }
         };
         /**********************************************************
@@ -1465,7 +1421,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
 
             angular.forEach($scope.selected_tasks, function (selected_task) {
                 if (selected_task.status == 'open' || selected_task.status == 'pending') {
-                    console.log("woooork");
                     params = {
                         'id': selected_task.id,
                         'status': 'closed'
@@ -1476,7 +1431,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
             $('#beforecloseTask').modal('hide');
         };
         $scope.deleteTask = function () {
-            console.log($scope.selected_tasks);
             angular.forEach($scope.selected_tasks, function (selected_task) {
                 var params = {'entityKey': selected_task.entityKey};
                 Task.delete($scope, params);
@@ -1507,7 +1461,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
 
         $scope.unselectMember = function (index) {
             $scope.slected_members.splice(index, 1);
-            console.log($scope.slected_members);
         };
         $scope.addNewContributors = function () {
             items = [];
@@ -1622,8 +1575,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
                 }
             }
             ;
-            console.log('Filtering by');
-            console.log(params);
             $scope.filter = filter;
             Task.list($scope, params);
         };
@@ -1652,7 +1603,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
          ***************************************************************************************/
         $scope.listTags = function () {
             var varTagname = {'about_kind': 'Task'};
-            console.log('testtesttag');
             Tag.list($scope, varTagname);
         }
         $scope.addNewtag = function (tag) {
@@ -1725,9 +1675,7 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
         $scope.listMoreItems = function () {
             var nextPage = $scope.currentPage + 1;
             var params = {};
-            console.log($scope.pages)
             if ($scope.pages[nextPage]) {
-                console.log('wooooooooooooork2');
                 params = {
                     'limit': 20,
                     'order': $scope.order,
@@ -1783,8 +1731,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
                 'assignee': $route.current.params.userGID,
                 'status': 'closed'
             }
-            console.log('***');
-            console.log(tasks_params);
             Task.list($scope, tasks_params, true);
 
         }
@@ -1796,8 +1742,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
                 'assignee': $route.current.params.userGID,
                 'status': 'open'
             }
-            console.log('***');
-            console.log(tasks_params);
             Task.list($scope, tasks_params, true);
 
         }
@@ -1845,7 +1789,6 @@ app.controller('UserShowCtrl', ['$scope', '$route', '$filter', 'Auth', 'Task', '
         $scope.tag_save = function (tag) {
             if (tag.name) {
                 Tag.insert($scope, tag);
-                console.log("tag saved");
             }
             ;
         };

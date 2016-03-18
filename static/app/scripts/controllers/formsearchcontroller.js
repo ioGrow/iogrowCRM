@@ -25,29 +25,18 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
        $rootScope.iogrowSearch=true;
      };    
     $scope.inProcess=function(varBool,message){
-          if (varBool) {  
-            console.log("inProcess starts");      
-            if (message) {
-              console.log("starts of :"+message);
-             
-            };
+          if (varBool) {
             $scope.nbLoads=$scope.nbLoads+1;
              var d = new Date();
-             console.log(d.getTime());
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            console.log("inProcess ends");
             var d = new Date();
-            console.log(d.getTime());
             $scope.nbLoads=$scope.nbLoads-1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
- 
+
             };
 
           };
@@ -198,12 +187,10 @@ $scope.uploaderCallback=function(data) {
      $scope.executeSearch = function(searchQuery){
       if (typeof(searchQuery)=='string'){
          window.location.replace('#/search/'+searchQuery);
-         console.log("########################################################")
       }else{
         var url = Search.getUrl($scope.searchQuery.type,$scope.searchQuery.id);
         $scope.searchQuery=' ';
         window.location.replace(url);
-         console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 
       }
 
@@ -212,7 +199,6 @@ $scope.uploaderCallback=function(data) {
 $scope.updatelanguage = function(user){
    //var params = {'id':$scope.user.id,
    // 'language':user.language};
-    console.log('-----------hello user language--------');
    //User.patch($scope,params);
    $('#EditSetting').modal('hide');
 }

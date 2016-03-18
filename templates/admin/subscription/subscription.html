@@ -351,8 +351,6 @@
                 $form.find('.payment-errors').closest('.row').hide();
                 $form.find('.payment-errors').text("");
                 // response contains id and card, which contains additional card details
-                console.log(response.id);
-                console.log(response.card);
                 var token = response.id;
                 // AJAX - you would send 'token' to your server here.
                 $.post('/stripe/subscription', {
@@ -362,9 +360,6 @@
                         })
                         // Assign handlers immediately after making the request,
                         .done(function (data, textStatus, jqXHR) {
-                            console.log(data);
-                            console.log(textStatus);
-                            console.log(jqXHR);
                             $form.find('[type=submit]').html('Payment successful <i class="fa fa-check"></i>').prop('disabled', true);
                             window.location.replace('/#/leads/new')
                         })

@@ -12,7 +12,6 @@ accountservices.factory('Case', function($rootScope) {
             if(!resp.code){
             
                $scope.casee = resp;
-               console.log(resp);
                //$scope.casee.current_status.status = resp.current_status.name;
                
                $scope.isContentLoaded = true;
@@ -174,8 +173,7 @@ accountservices.factory('Case', function($rootScope) {
 
                };
             }
-            console.log('gapi get #end_execute');
-            $scope.getColaborators();     
+            $scope.getColaborators();
           });
          
 
@@ -392,7 +390,6 @@ accountservices.factory('Case', function($rootScope) {
         gapi.client.crmengine.cases.export(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
-                console.log("request ssent")
 
             } else {
 
@@ -406,7 +403,6 @@ accountservices.factory('Case', function($rootScope) {
         gapi.client.crmengine.cases.export_keys(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
-                console.log("request ssent")
 
             } else {
 

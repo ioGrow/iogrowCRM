@@ -35,7 +35,6 @@ settingservices.factory('Opportunitystage', function ($http) {
                 $scope.opportunitystages = resp.items;
                 $scope.insideStages = [];
                  angular.forEach($scope.opportunitystages, function (stage) {
-                 console.log("insideStage...s");
                      if (stage.probability != 0 && stage.probability != 100) {
                         $scope.insideStages.push(stage);
                      } else {
@@ -306,13 +305,10 @@ settingservices.factory('Customfield', function ($http) {
         )
     };
     Customfield.list = function ($scope, params) {
-        console.log("in customfield get list");
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.customfield.list(params).execute(function (resp) {
                 if (!resp.code) {
-                    console.log('resp customfield');
-                    console.log(resp);
                     if (resp.items) {
                          $scope.listResponse(resp.items,params.related_object);
                     }
