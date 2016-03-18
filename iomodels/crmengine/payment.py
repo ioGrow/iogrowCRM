@@ -45,6 +45,8 @@ def payment_required():
             organization = _get_organization(kwargs)
             subscription = organization.get().get_subscription()
             plan = subscription.plan.get()
+            if not subscription.expiration_date:
+                    return f(*args, **kwargs)
             if subscription.expiration_date < datetime.datetime.now():
                 organization.get().set_subscription(Subscription.create_freemium_subscription())
             elif plan.name != config.PREMIUM:
