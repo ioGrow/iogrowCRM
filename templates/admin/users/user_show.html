@@ -267,7 +267,7 @@
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
                                                <a href="/#/admin/users/show/<%= assignee.google_user_id %>"> <%= assignee.display_name %></a>
-                                               <img alt="" src="<%= assignee.photo %>" class="user-photo" />
+                                               <img alt="" ng-src="assignee.photo" class="user-photo" />
                                             </span>
                                         </div>
                                     </div>
