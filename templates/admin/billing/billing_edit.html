@@ -19,6 +19,7 @@
         </div>
     </div>
 </div>
+<!-- Main content -->
 <div class="page-content admin-content">
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -49,29 +50,21 @@
                 <hr>
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"
-                               style="text-align: left">{{ _('Subscription type') }}:</label>
+                        <label class="col-sm-4 control-label" style="text-align: left">Subscription type:</label>
                         <div class="col-sm-6">
                             <p class="form-control-static"> <%= subscription.plan.name
                                 || 'Freemium' %></p>
                         </div>
                     </div>
                     <div class="form-group" ng-show="subscription.expiration_date">
-                        <label class="col-sm-4 control-label"
-                               style="text-align: left">{{ _('Expiration date') }}:</label>
+                        <label class="col-sm-4 control-label" style="text-align: left">Expiration date:</label>
                         <div class="col-sm-6">
                             <p class="form-control-static"> <%= subscription.expiration_date| date:'MMM dd, yyyy'%></p>
                         </div>
                     </div>
-                    <div class="form-group" ng-show="subscription.quantity">
-                        <label class="col-sm-4 control-label"
-                               style="text-align: left">{{ _('Puchased Licences') }}:</label>
-                        <div class="col-sm-6">
-                            <p class="form-control-static"> <%= subscription.quantity%></p>
-                        </div>
-                    </div>
                     <a ng-show="subscription.plan.name == 'freemium'" class="btn btn-danger"
-                       ng-href="<%= subscription_url %>"> Upgrade
+                       ng-href="<%= subscription_url %>">
+                        Upgrade
                     </a>
                 </form>
             </div>
@@ -81,29 +74,18 @@
                 <hr>
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" style="text-align: left">{{ _('Auto renew') }}:</label>
+                        <label class="col-sm-4 control-label" style="text-align: left">Auto renew:</label>
                         <div class="col-sm-6">
                             <p class="form-control-static"><%= subscription.is_auto_renew ? 'Disabled':'Enabled' %></p>
                         </div>
                     </div>
-                    <button class="btn btn-success" ng-click="editCardInfo()">{{ _('Edit') }}</button>
+                    <button class="btn btn-success" ng-click="editCardInfo()">
+                        Edit
+                    </button>
                     <button class="btn btn-danger" ng-click="changeAutoRenew(subscription.is_auto_renew)">
-                        <%= subscription.is_auto_renew ? '{{ _("Disabled") }}':'{{ _("Enabled") }}'
-                        %> {{ _('Auto renew') }}
+                        <%= subscription.is_auto_renew ? 'Disabled':'Enabled' %> Auto renew
                     </button>
                 </form>
-            </div>
-            <div class="row" style="padding: 0px 7%;margin-bottom: 40px;" ng-show="subscription.plan.name == 'premium'">
-                <h3 class="billingTitle">
-                    <i class="fa fa-building" style="font-size: 21px;"></i>{{ _('Buy new licences') }}</h3>
-                <hr>
-                <div class="form-group">
-                    <div class="col-sm-6">
-                        <input type="number" class="form-control" placeholder="Number of licences"
-                               ng-model="quantity" style="text-align: center; font-size: 16px">
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary" ng-click="byNewLicences(quantity)">Buy now</button>
             </div>
         </div>
     </div>
@@ -169,7 +151,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-xs-12">
-                                                <button class="subscribe-btn btn btn-lg btn-block" type="submit">
+                                                <button class="btn btn-success btn-lg btn-block blue-btn" type="submit">
                                                     Change your card information
                                                 </button>
                                             </div>
@@ -226,11 +208,11 @@
         };
         Stripe.card.createToken(ccData, function stripeResponseHandler(status, response) {
             if (response.error) {
-                $form.find('[type=submit]').html('{{ _("Try again")}}');
+                $form.find('[type=submit]').html('Try again');
                 $form.find('.payment-errors').text(response.error.message);
                 $form.find('.payment-errors').closest('.row').show();
             } else {
-                $form.find('[type=submit]').html('{{ _("Processing") }} <span class="fa fa-spinner fa-pulse"  style="font-size: 20px"></span>');
+                $form.find('[type=submit]').html('Processing <span class="fa fa-spinner fa-pulse" style="font-size: 20px"></span>');
                 $form.find('.payment-errors').closest('.row').hide();
                 $form.find('.payment-errors').text("");
                 var token = response.id;
@@ -240,12 +222,12 @@
                             plane: 'premium'
                         })
                         .done(function (data, textStatus, jqXHR) {
-                            $form.find('[type=submit]').html('{{ _("Card changed successfully") }}<i class="fa fa-check"></i>').prop('disabled', true);
+                            $form.find('[type=submit]').html('Card changed succefully <i class="fa fa-check"></i>').prop('disabled',
+                                    true);
                             window.location.reload()
                         })
                         .fail(function (jqXHR, textStatus, errorThrown) {
-                            $form.find('[type=submit]').html('{{ _("There was a problem") }}').removeClass('success')
-                                    .addClass('error');
+                            $form.find('[type=submit]').html('There was a problem').removeClass('success').addClass('error');
                             $form.find('.payment-errors').text(jqXHR.responseText);
                             $form.find('.payment-errors').closest('.row').show();
                         });
@@ -254,16 +236,16 @@
     }
     jQuery.validator.addMethod("cardNumber", function (value, element) {
         return this.optional(element) || Stripe.card.validateCardNumber(value);
-    }, "{{ _('Please specify a valid credit card number') }}.");
+    }, "Please specify a valid credit card number.");
 
     jQuery.validator.addMethod("cardExpiry", function (value, element) {
         value = $.payment.cardExpiryVal(value);
         return this.optional(element) || Stripe.card.validateExpiry(value.month, value.year);
-    }, "{{ _('Invalid expiration date') }}.");
+    }, "Invalid expiration date.");
 
     jQuery.validator.addMethod("cardCVC", function (value, element) {
         return this.optional(element) || Stripe.card.validateCVC(value);
-    }, "{{ _('Invalid CVC') }}.");
+    }, "Invalid CVC.");
 
     validator = $form.validate({
         rules: {
@@ -290,6 +272,7 @@
             $(element).closest('.form-group').append(error);
         }
     });
+
     paymentFormReady = function () {
         if ($form.find('[name=cardNumber]').hasClass("success") &&
                 $form.find('[name=cardExpiry]').hasClass("success") &&

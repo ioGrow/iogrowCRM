@@ -2,38 +2,39 @@
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
             <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}} </span>
+            <!--{{_(active_app.label) }}-->
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
             {% for application in apps %}
-            <li>
-                <a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a>
+            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a>
             </li>
             {% endfor %}
         </ul>
     </div>
     <div class="subHeaderContent">
-        <div class="col-sm-2 active-app"><i class="fa fa-group section-icon"></i> {{ _('Users') }}</div>
+        <div class="col-sm-2 active-app"><i class="fa fa-group section-icon"></i> {{ _('Users') }} </div>
         <a class="headerBtn" title="{{ _('Refresh') }}" ng-click="refreshCurrent();">
             <i class="fa fa-repeat"></i>
         </a>
         <a class="headerBtn" title="{{ _('Delete') }}" ng-show="selected_users.length" ng-click="deleteUser()">
             <i class="fa fa-trash-o"></i>
         </a>
-        <a ng-class="{disabled: selected_users.length==0}" class="headerBtn" ng-show="selected_users.length"
-           ng-click="assignLicenses()">
-            <i class="fa fa-plus"></i> <i class="fa fa-key"></i>
-        </a>
-        <a ng-class="{disabled: selected_users.length==0}" class="headerBtn" ng-show="selected_users.length"
-           ng-click="unassignLicenses()">
-            <i class="fa fa-minus"></i> <i class="fa fa-key"></i>
-        </a>
+         <a  ng-class="{disabled: selected_users.length==0}" class="headerBtn" ng-show="selected_users.length"
+             ng-click="assignLicenses()">
+             <i class="fa fa-plus"></i> <i class="fa fa-key"></i>
+         </a>
+         <a ng-class="{disabled: selected_users.length==0}" class="headerBtn" ng-show="selected_users.length"
+            ng-click="unassignLicenses()">
+             <i class="fa fa-minus"></i> <i class="fa fa-key"></i>
+         </a>
         <form class="form-inline newLeadForm inline" role="form" ng-show="showInviteForm">
             <div class="form-group sm-group" ng-class="{ 'has-error':email_empty}">
                 <label class="sr-only">Email</label>
-                <input type="email" ng-model="email.email" placeholder="Enter a email" class="form-control">
+                <input type="email" ng-model="email.email" placeholder="Enter a email"
+                       class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-email">
             </div>
-            <button class="btn red" ng-click="inviteNewUser(email)">Invite</button>
+            <button class="btn red jfk-button jfk-button-action" ng-click="inviteNewUser(email)">Invite</button>
             <button ng-click="showInviteForm = false" class="btn btn-default">X</button>
         </form>
         <span ng-hide="showInviteForm">
@@ -65,40 +66,34 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        {% if is_admin %}
+                    {% if is_admin %}
                         <th>
                             <input title='{{ _("Select all Users") }}' type="checkbox" ng-checked="isSelectedAll"
                                    ng-click="select_all_users($event)">
                         </th>
-                        {% endif %}
+                    {% endif %}
                         <th>
                             <a href="" ng-click="userSortType='google_display_name';userSortReverse=!userSortReverse">
                                 {{_('Name') }}</a>
-                            <span ng-show="userSortType == 'google_display_name' && !userSortReverse"
-                                  class="fa fa-caret-down"></span>
-                            <span ng-show="userSortType == 'google_display_name' && userSortReverse"
-                                  class="fa fa-caret-up"></span>
+                            <span ng-show="userSortType == 'google_display_name' && !userSortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="userSortType == 'google_display_name' && userSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="userSortType='email';userSortReverse=!userSortReverse"> {{ _('Email')
-                                }}</a>
+                            <a href="" ng-click="userSortType='email';userSortReverse=!userSortReverse"> {{ _('Email') }}</a>
                             <span ng-show="userSortType == 'email' && !userSortReverse" class="fa fa-caret-down"></span>
                             <span ng-show="userSortType == 'email' && userSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         <th>
                             <a href="" ng-click="userSortType='license_status';userSortReverse=!userSortReverse">
                                 {{_('License status') }}</a>
-                            <span ng-show="userSortType == 'license_status' && !userSortReverse"
-                                  class="fa fa-caret-down"></span>
-                            <span ng-show="userSortType == 'license_status' && userSortReverse"
-                                  class="fa fa-caret-up"></span>
+                            <span ng-show="userSortType == 'license_status' && !userSortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="userSortType == 'license_status' && userSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         {% if is_admin %}
                         <th>
                             <a href="" ng-click="userSortType='is_admin';userSortReverse=!userSortReverse">
                                 {{_('Administrator')}}</a>
-                            <span ng-show="userSortType == 'is_admin' && !userSortReverse"
-                                  class="fa fa-caret-down"></span>
+                            <span ng-show="userSortType == 'is_admin' && !userSortReverse" class="fa fa-caret-down"></span>
                             <span ng-show="userSortType == 'is_admin' && userSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         {% endif %}
@@ -112,7 +107,7 @@
                                    ng-checked="isSelected()"
                                    ng-hide="user.is_super_admin||user.is_admin">
                         </td>
-                        {% endif %}
+                    {% endif %}
                         <td>
                             <img ng-src="<%= user.google_public_profile_photo_url %>" alt="profile img"
                                  class="profile-img">
@@ -159,27 +154,19 @@
                         </th>
                         <th>
                             <a href="" ng-click="inviteeSortType='invited_mail';inviteeSortReverse=!inviteeSortReverse">{{_('Email')
-                                }}</a>
-                            <span ng-show="inviteeSortType == 'invited_mail' && !inviteeSortReverse"
-                                  class="fa fa-caret-down"></span>
-                            <span ng-show="inviteeSortType == 'invited_mail' && inviteeSortReverse"
-                                  class="fa fa-caret-up"></span>
+                                    }}</a>
+                            <span ng-show="inviteeSortType == 'invited_mail' && !inviteeSortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="inviteeSortType == 'invited_mail' && inviteeSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="inviteeSortType='invited_by';inviteeSortReverse=!inviteeSortReverse">{{_('Invited
-                                by')}}</a>
-                            <span ng-show="inviteeSortType == 'invited_by' && !inviteeSortReverse"
-                                  class="fa fa-caret-down"></span>
-                            <span ng-show="inviteeSortType == 'invited_by' && inviteeSortReverse"
-                                  class="fa fa-caret-up"></span>
+                            <a href="" ng-click="inviteeSortType='invited_by';inviteeSortReverse=!inviteeSortReverse">{{_('Invited by')}}</a>
+                            <span ng-show="inviteeSortType == 'invited_by' && !inviteeSortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="inviteeSortType == 'invited_by' && inviteeSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="inviteeSortType='updated_at';inviteeSortReverse=!inviteeSortReverse">{{_('Invited
-                                at')}}</a>
-                            <span ng-show="inviteeSortType == 'updated_at' && !inviteeSortReverse"
-                                  class="fa fa-caret-down"></span>
-                            <span ng-show="inviteeSortType == 'updated_at' && inviteeSortReverse"
-                                  class="fa fa-caret-up"></span>
+                            <a href="" ng-click="inviteeSortType='updated_at';inviteeSortReverse=!inviteeSortReverse">{{_('Invited at')}}</a>
+                            <span ng-show="inviteeSortType == 'updated_at' && !inviteeSortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="inviteeSortType == 'updated_at' && inviteeSortReverse" class="fa fa-caret-up"></span>
                         </th>
                     </tr>
                     </thead>
@@ -204,5 +191,613 @@
                 </table>
             </div>
         </div>
+        <div id="purchaseModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" ng-click="closePayment()" class="close" data-dismiss="modal"
+                                aria-hidden="true">×
+                        </button>
+                        <h3 class="modal-title">
+                            <!-- <a href="" ng-show="step=='payment'&&!paymentOperation" ng-click="step='billing'" style=""><i class="fa fa-arrow-left" style="font-size: 20px;color: #1d943b !important;"></i>  </a> --><span>Subscribe now</span>
+                            <img src="/static/img/step1.png" class="stepIndicator" ng-show="step=='billing'">
+                            <img src="/static/img/step21.png" class="stepIndicator" ng-show="step=='payment'"
+                                 ng-click="step='billing'">
+                            <img src="/static/img/step31.png" class="stepIndicator" ng-show="step=='confirmation'">
+                            <img class="secureImage pull-right" src="/static/img/savePayment.png" alt="">
+                        </h3>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="firststep" ng-show="step=='billing'">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="news-blocks blank-card blank-card-blue margin-bottom-15 purchaseLicenses">
+                                        <h3 class="billingTitle"><i class="fa  fa-user"></i>{{ _('Users') }}</h3>
+
+                                        <div class="news-block-tags relatedBlock">
+                                            <div class="form-group row">
+                                                <div class="col-md-12">
+                                                    <div class="licensesContainer"
+                                                         ng-class="{'has-error': billingError.nb_licenses }">
+                              <span class="plusIcon">
+                                <i class="fa fa-plus"></i>
+                              </span>
+                                                        <input id="numberUsersInput" ng-model="billing.nb_licenses"
+                                                               autofocus="" placeholder="1" type="text"
+                                                               class="form-control licensesInput" required>
+                                                        <label class=" control-label licensesLabel">
+                                                            &nbsp;licence(s)</label>
+
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="news-blocks blank-card blank-card-green margin-bottom-15 purchasePlan">
+                                        <h3 class="billingTitle"><i class="fa fa-pencil-square-o"></i>{{ _('Subscription
+                                            plan') }}</h3>
+
+                                        <div class="news-block-tags relatedBlock ">
+                                            <form action="">
+                                                <div class="col-md-6"
+                                                     style="text-align:center; padding-top: 5px; padding-bottom: 5px;">
+                                                    <div class="planContainer"
+                                                         ng-class="{ 'planHasError': billingError.plan }">
+                              <span class="licenceType">
+                                   12 months
+                              </span><br>
+                              <span class="licencePrice">
+                                    120 $
+                              </span> <br>
+                                                        <span>Per user</span><br>
+                                                        <input type="radio" ng-model="billing.plan"
+                                                               name="purchaseplan"
+                                                               value="year" required>
+
+                                                        <div class="promotions"
+                                                             style="background-color: #8cc474;color: white;">2
+                                                            Months
+                                                            free
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6"
+                                                     style="text-align:center;padding-top: 5px; padding-bottom: 5px;">
+                                                    <div class="planContainer"
+                                                         ng-class="{ 'planHasError': billingError.plan }">
+                               <span class="licenceType">
+                                   1 month
+                              </span><br>
+                              <span class="licencePrice">
+                                    12 $
+                              </span> <br>
+                                                        <span>Per user</span><br>
+                                                        <input type="radio" ng-model="billing.plan"
+                                                               name="purchaseplan"
+                                                               value="month"
+                                                               ng-hide="billing.deactivate_month_option">
+
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                    <div class="news-blocks blank-card blank-card-yellow margin-bottom-15 purchaseSummary">
+                                        <h3 class="billingTitle"><i class="fa  fa-check-square-o"></i>
+                                            {{ _('Summary') }}</h3>
+
+                                        <div class="news-block-tags relatedBlock row">
+                                            <div class="col-md-12 totalDiv" ng-show="billing.total!=null">
+                                                <span class="totalDivlabel">{{ _('Total : ') }}</span>
+                                                <span class="totalcal"><%= billing.nb_licenses %> users</span>
+                                                x <span
+                                                    class="totalcal"> <%= billing.unit %>$ = <%= billing.total %> $</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="news-blocks blank-card blank-card-red  purchaseBilling"
+                                         style=" margin-bottom: 37px; ">
+                                        <h3 class="billingTitle"><i class="fa fa-money"
+                                                                    style="font-size: 21px;"></i>{{ _('Billing details')
+                                            }}
+                                        </h3>
+
+                                        <div class="news-block-tags relatedBlock purchaseLicenses">
+                                            <div class="">
+                                                <div id="gmap_canvas"
+                                                     style="width:100%;height:300px; display:none"></div>
+                                                <form class="form-inline newLeadForm margin-bottom-10" role="form">
+                                                    <div class="input-icon"
+                                                         ng-class="{ 'has-error': billingError.company_name }">
+                                                        <i class="fa fa-building"></i>
+                                                        <input type="text" class="form-control"
+                                                               ng-model="billing.company_name"
+                                                               placeholder="company name">
+                                                    </div>
+                                                </form>
+                                                <div class="row  margin-bottom-10">
+                                                    <div class="col-md-6 firstNameLeft"
+                                                         ng-class="{ 'has-error': billingError.contact_firstname }">
+                                                        <input ng-model="billing.contact_firstname" type="text"
+                                                               id="firstName"
+                                                               class="form-control sm-margin-bottom-10"
+                                                               placeholder="First Name">
+                                                    </div>
+                                                    <div class="col-md-6 lastNameRight"
+                                                         ng-class="{ 'has-error': billingError.contact_lastname }">
+                                                        <input type="text" id="lastName"
+                                                               ng-model="billing.contact_lastname"
+                                                               class="form-control"
+                                                               placeholder="Last Name">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="input-icon  margin-bottom-10"
+                                                             ng-class="{ 'has-error': billingError.address }">
+                                                            <i class="fa fa-map-marker"></i>
+                                                            <input id="pac-input" ng-model="billing.address"
+                                                                   class="form-control address-input" type="text"
+                                                                   placeholder="Billing address" autocomplete="off">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <form class="form-inline newLeadForm margin-bottom-10" role="form">
+                                                    <div class="input-icon"
+                                                         ng-class="{ 'has-error': billingError.email }">
+                                                        <i class="fa fa-envelope"></i>
+                                                        <input type="text" class="form-control"
+                                                               ng-model="billing.email"
+                                                               placeholder="Email adress">
+                                                    </div>
+                                                </form>
+                                                <form class="form-inline newLeadForm  margin-bottom-10" role="form">
+                                                    <div class="input-icon"
+                                                         ng-class="{ 'has-error': billingError.phone_number }">
+                                                        <i class="fa fa-phone"></i>
+                                                        <input type="text" class="form-control"
+                                                               ng-model="billing.phone_number"
+                                                               placeholder="Phone number">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="news-blocks blank-card blank-card-bluep margin-bottom-15 purchaseBilling">
+                                        <h3 class="billingTitle"><i class="fa fa-credit-card"
+                                                                    style="font-size: 21px;"></i>{{ _('Payment
+                                            method') }}</h3>
+
+                                        <div class="news-block-tags relatedBlock purchaseLicenses">
+                                            <div class="col-md-8">
+                                                <div class="row margin-bottom-15">
+                                                    <div class="col-md-5 col-sm-4">
+                                                        <input type="radio" ng-model="billing.payment_method"
+                                                               name="purchaseplan" value="stripe" required>
+                                                        <span class="paymentTitle" style="margin-left: 10px;">Credit card</span>
+                                                    </div>
+                                                    <div class="col-xs-10 col-xs-offset-1 col-md-6 col-sm-7">
+                                                        <img src="/static/img/visa.png"
+                                                             style=" width:40px; margin-bottom: 4px;" alt="">
+                                                        <img src="/static/img/mastercard.png" alt=""
+                                                             style=" width:40px; margin-bottom: 4px;">
+                                                        <img src="/static/img/american-express.png" alt=""
+                                                             style=" width:40px; margin-bottom: 4px;">
+                                                        <img src="/static/img/discover.png" alt=""
+                                                             style=" width:40px; margin-bottom: 4px;">
+                                                        <img src="/static/img/JCB.png" alt=""
+                                                             style=" width:40px; margin-bottom: 4px;">
+                                                        <img src="/static/img/DinersClub.png" alt=""
+                                                             style=" width:40px; margin-bottom: 4px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-md-12 col-sm-12">
+                                                        <!--<input type="radio" ng-model="billing.payment_method" name="purchaseplan" value="paypal">
+                                                        <span class="paymentTitle">Paypal</span>
+                                                        <img src="/static/img/paypal32.png" alt="" style=" width:40px; margin-left: 15px;">-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input value="Proceed to checkout" class="btn blue newAccountBtn pull-right"
+                                           ng-click="saveBilling(billing)" tabindex="19" type="submit">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="secondstep" ng-show="step=='payment'">
+                            <div class="row">
+                                <div class="col-md-6 payment_money">
+                                    <div class="paymentInfo"
+                                         style="min-height: 427px; background-color:rgb(239, 239, 239);padding: 20px;padding-top: 69px;">
+                                        <h3 style="text-align: center;">
+                        <span>
+                          <i class="fa fa-shopping-cart" style="font-size: 56px;color: #575757;"></i>
+                        </span>
+                                        </h3>
+
+                                        <h3 style="text-align: center;">Secure payment with&nbsp;
+                                            <span style="font-size: 30px;font-weight: 600; color: gray;">Stripe</span>
+                                        </h3>
+
+                                        <div class="paymentCards" style="text-align: center; margin-top: 18px; max-width: 288px;
+                        margin-left: auto; margin-right: auto;">
+                                            <img class="creditCardImg" src="/static/img/visa_g.png" alt=""
+                                                 style="padding: 0px 15px;">
+
+                                            <img class="creditCardImg" src="/static/img/mastercard_g.png" alt=""
+                                                 style="padding: 0px 15px;">
+
+                                            <img class="creditCardImg" src="/static/img/american_express_g.png"
+                                                 alt=""
+                                                 style="padding: 0px 15px;">
+
+                                            <img class="creditCardImg" src="/static/img/discover_g.png" alt=""
+                                                 style="padding: 0px 15px;">
+
+                                            <img class="creditCardImg" src="/static/img/jcb_g.png" alt=""
+                                                 style="padding: 0px 15px;">
+
+                                            <img class="creditCardImg" src="/static/img/diners_club_g.png" alt=""
+                                                 style=" padding: 0px 15px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 payment_form">
+                                    <div style=" /* font-size: 46px; */ padding-top: 40px;">
+                                        <div style="text-align: center;"><span
+                                                style="font-size: 24px;text-align: center;" align="center">Total Amount to be Paid</span>
+                                        </div>
+                                        <h3 style=" margin-top: 0px; margin-bottom: 40px; text-align: center; font-size: 40px; /* margin-top: 40px; */"
+                                            class=""> $ <%= billing.total%></h3></div>
+
+                                    <h3 style=" margin-top: 0px; margin-bottom: 10px; text-align: center;" class="">
+                                        Credit Card Details</h3>
+
+                                    <form class=" col-md-10 col-md-offset-1 creditCardDetailsForm" id="payment-form"
+                                          method="POST" action="">
+                                        <span class="payment-errors"></span>
+                                        <span id="payment-errors"></span>
+
+                                        <div class="form-row input-icon  margin-top-10"
+                                             ng-class="{ 'has-error':billingError.CardNumber}">
+                                            <i class="fa fa-credit-card">
+                                                <img src="/static/img/visa.png"
+                                                     style=" width: 31px;height: 21px; margin:-39px 0px 0px -8px;"
+                                                     alt="" ng-show="billing.visa">
+                                                <img src="/static/img/mastercard.png" alt=""
+                                                     style=" width: 31px;height: 21px; margin:-39px 0px 0px -8px;"
+                                                     ng-show="billing.mastercard">
+                                                <img src="/static/img/american-express.png" alt=""
+                                                     style=" width: 31px;height: 21px; margin:-39px 0px 0px -8px;"
+                                                     ng-show="billing.american_express">
+                                                <img src="/static/img/discover.png" alt=""
+                                                     style=" width: 31px;height: 21px; margin:-39px 0px 0px -8px;"
+                                                     ng-show="billing.discover">
+                                                <img src="/static/img/JCB.png" alt=""
+                                                     style=" width: 31px;height: 21px; margin:-39px 0px 0px -8px;"
+                                                     ng-show="billing.JCB">
+                                                <img src="/static/img/DinersClub.png" alt=""
+                                                     style="width: 31px;height: 21px; margin:-39px 0px 0px -8px;"
+                                                     ng-show="billing.DinersClub">
+                                            </i>
+                                            <input data-stripe="number" class="form-control"
+                                                   placeholder="Card Number"
+                                                   id="card_number" ng-model="cardnumber" maxlength="19" amount>
+
+
+                                        </div>
+                                        <div class="form-group form-row row" style=" margin-bottom: 0px;">
+                                            <label class="control-label col-xs-12 col-md-5 col-sm-5"
+                                                   style=" margin-top: 15px; ">
+                                                <i class="fa fa-calendar"
+                                                   style="color: #ccc;margin-left: 11px;margin-right: 4px;"></i>&nbsp;
+                                                Expiry Date
+                                            </label>
+
+                                            <div class="col-md-3 col-xs-5 col-sm-3" style="padding-right: 0px;"
+                                                 ng-class="{ 'has-error':billingError.exp_month }">
+                                                <div class="form-row input-icon  margin-top-10">
+                                                    <i class="fa fa-credit-card"></i>
+                                                    <input data-stripe="exp-month" class="form-control"
+                                                           placeholder="MM"
+                                                           id="exp_month">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-2 col-md-1 col-sm-1"
+                                                 style=" margin-top: 15px; padding-left: 5px; padding-right: 5px; text-align: center;">
+                                                <span> / </span>
+                                            </div>
+                                            <div class="col-xs-5 col-md-3 col-sm-3" style="padding-left: 0px;"
+                                                 ng-class="{ 'has-error':billingError.exp_year}">
+                                                <div class="form-row input-icon  margin-top-10">
+                                                    <i class="fa fa-credit-card"></i>
+                                                    <input data-stripe="exp-year" class="form-control"
+                                                           placeholder="YY"
+                                                           id="exp_year">
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="control-label col-md-9 col-sm-9"
+                                                   style=" margin-top: 15px; ">
+                                                <i class="fa fa-lock"
+                                                   style="color: #ccc;font-size: 21px;margin-left: 10px;margin-right: 4px;"></i>
+                                                &nbsp;Card Verification Number
+                                            </label>
+
+                                            <div id="cvcInput" class="col-md-3 col-sm-3 col-xs-12">
+                                                <div class="form-row input-icon  margin-top-10"
+                                                     ng-class="{ 'has-error':billingError.cvc}">
+                                                    <i class="fa fa-credit-card"></i>
+                                                    <input data-stripe="cvc" class="form-control" placeholder="CVC"
+                                                           id="cvc">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button type="" class="btn green btn-block"
+                                                        ng-click="prepareToken()"
+                                                        id="prepareToken">Confirm Payment
+                                                </button>
+                                                <div class="row">
+                                                    <div class="col-md-5"></div>
+                                                    <div class="col-md-2"><img src="/static/img/loading.gif"
+                                                                               ng-show="paymentOperation"/></div>
+                                                    <div class="col-md-5"></div>
+                                                </div>
+
+                                                <!--  -->
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="thirdstep" ng-show="step=='confirmation'">
+                            <div class="row">
+                                <div class="col-md-6 payment_money">
+                                    <div class="paymentInfo"
+                                         style="min-height: 427px; background-color:rgb(239, 239, 239);padding: 20px;padding-top: 100px;">
+                                        <div class="table-responsive col-md-offset-1 col-md-10"
+                                             style=" font-size: 15px;">
+                                            <table class="table">
+                                                <tbody>
+                                                <tr>
+                                                    <td style="font-weight: bold;">Licence type</td>
+                                                    <td><%=billing.licenses_type%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-weight: bold;">Company name</td>
+                                                    <td><%=billing.company_name%></td>
+                                                </tr>
+                                                <tr style="font-weight: bold;">
+                                                    <td>Number of licenses</td>
+                                                    <td><%=billing.nb_licenses%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-weight: bold;">Expire on</td>
+                                                    <td><%=billing.expires_on%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-weight: bold;">Total amount</td>
+                                                    <td style="font-weight: bold;">$ <%=billing.total_amount%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-weight: bold;">Transaction id</td>
+                                                    <td><%=billing.transaction_balance%></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 payment_form"
+                                     style="font-size: 19px;text-align: center;               padding-top: 100px;min-height: 390px;">
+                                    <div style="padding-top: 40px;">
+                                        <div style="text-align: center;">
+                                        <span style="font-size: 24px;text-align: center;color: #1d943b;"
+                                              align="center">Congratulations !</span>
+                                        </div>
+                                    </div>
+                  <span style=" margin-top: 0px; margin-bottom: 10px; text-align: center;" class="">
+                      The payment is approved by your bank. You will receive a confimration email shortly.
+                      You have now<span
+                          style="font-weight: 500;"> <%=billing.nb_licenses%> licences activated</span>, expire on
+                      <span style="font-weight: 500;"> <%=billing.expires_on | date:'dd-MM-yyyy'%></span>
+                  </span>
+                                </div>
+                                <button type="button" ng-click="closePayment()"
+                                        class="btn blue pull-right btn-inline"
+                                        style="margin-right: 15px;">Done
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="addAccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 class="modal-title">{{ _("New User") }}</h3>
+                    </div>
+                    <form id="addAccount" name="addaccount" class="form-horizontal">
+                        <div class="modal-body">
+                            <p>{{ _('Invite people from your team and start working together in seconds. Everyone you
+                                invite will receive a welcome email.') }}</p>
+
+                            <div class="form-group">
+                                <label class="required col-md-3 control-label">{{ _("Email") }} *</label>
+
+                                <div class="col-md-9">
+                                    <input class="form-control" type="email" required id="id_name"
+                                           ng-model="user.email">
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                            <button type="submit" class="btn blue addContactNow" ng-click="addNewUser(user)">{{ _("Add
+                                this user") }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- HADJI HICHAM- 22/12/2014 - buy more license modal-->
+        <div class="modal fade" id="MoreLicenseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h3>{{ _("Purchase more license") }}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p style="font-size:13px; color:red;">{{ _("You have reached the <%=organization.nb_licenses%>
+                            user license limit for this organization.") }}<span
+                                    style="font-size:13px;color:#4d90fe">{{ _("Buy more licenses.") }}</span>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button title='{{ _("Purchase") }}' class="btn btn-sm blue task_action pull-right"
+                                ng-click="showPurchase()">
+                            <i class="fa fa-shopping-cart"></i>
+       <span class="btn-text">
+          {{ _('Purchase') }}
+       </span>
+                        </button>
+                        <!-- <button type="button" class="btn default" data-dismiss="modal" ng-click="showPurchase()">{{_("Purchase Licenses")}}</button> -->
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+        <!--  error in insert user -->
+        <div class="modal fade" id="errorModalInsert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h3>{{ _("Error") }}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ _("<%=errorMsg%>") }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn default" data-dismiss="modal" ng-click="endError()">
+                            {{ _("Close") }}
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- end of modal-->
+        <!-- HADJI HICHAM- 22/12/2014 - buy more license modal-->
+        <div class="modal fade" id="LicenseExpiredModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h3>{{ _("Purchase license") }}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p style="font-size:13px; color:red;">{{ _("Your [ <%=organization.license.name%> ] license has
+                            been expired.") }}<span
+                                    style="font-size:13px;color:#4d90fe">{{ _("Buy more licenses.") }}</span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button title='{{ _("Purchase") }}' class="btn btn-sm blue task_action pull-right"
+                                ng-click="showPurchase()">
+                            <i class="fa fa-shopping-cart"></i>
+       <span class="btn-text">
+          {{ _('Purchase') }}
+       </span>
+                        </button>
+                        <!-- <button type="button" class="btn default" data-dismiss="modal" ng-click="showPurchase()">{{_("Purchase Licenses")}}</button> -->
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!--  error in insert user -->
     </div>
 </div>
+
+<!-- end more license moadal-->
+<script type="text/javascript">
+    // jQuery(function($) {
+    //   $('#payment-form').submit(function(event) {
+    //     var $form = $(this);
+
+    //     // Disable the submit button to prevent repeated clicks
+    //     $form.find('button').prop('disabled', true);
+
+    //     Stripe.card.createToken($form, stripeResponseHandler);
+
+    //     // Prevent the form from submitting with the default action
+    //     return false;
+    //   });
+    //   function stripeResponseHandler(status, response) {
+    //   var $form = $('#payment-form');
+
+    //   if (response.error) {
+    //     // Show the errors on the form
+    //     $form.find('.payment-errors').text(response.error.message);
+    //     $form.find('button').prop('disabled', false);
+    //   } else {
+    //     // response contains id and card, which contains additional card details
+    //     var token = response.id;
+    //     // Insert the token into the form so it gets submitted to the server
+    //     $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+    //     // and submit
+    //     $form.get(0).submit();
+    //   }
+    // };
+    // });
+
+    $('#slimtest1').slimScroll({
+        height: '20px'
+    });
+    $("#select2_sample2").select2({
+        placeholder: "{{ _('Click to Select a label')}}",
+        allowClear: false
+    });
+</script>

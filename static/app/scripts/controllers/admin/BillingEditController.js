@@ -47,9 +47,6 @@ app.controller('BillingEditCtrl', ['$scope', 'Auth', 'Billing', function ($scope
             Billing.enableAutoRenew($scope);
         }
     };
-    $scope.byNewLicences = function (quantity) {
-        Billing.byNewLicences($scope, {'quantity': quantity});
-    };
     $scope.editCardInfo = function () {
         $('#edit_card_info').modal('show');
     };
