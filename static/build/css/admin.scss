@@ -3,7 +3,7 @@ $separator-grey: #E9E9E9;
 
 @import "../../plugins/font-awesome/scss/mixins";
 
-.test {
+.test{
   @include border-radius(15)
 }
 
@@ -186,44 +186,11 @@ a.select2-choice {
     margin-top: -5px;
   }
 }
-
 .custom-header {
   text-align: center;
   margin-bottom: 2px;
   margin-top: 2px;
 }
-
-.wysihtml5-toolbar {
+.wysihtml5-toolbar{
   padding-bottom: 100px;
-}
-
-.modal-action-btn {
-  padding: 10px 30px
-}
-
-.credit-card-box .display-td {
-  display: table-cell;
-  vertical-align: middle;
-  width: 50%;
-}
-
-.credit-card-box .display-tr {
-  display: table-row;
-}
-
-.credit-card-box label {
-  display: block;
-}
-
-.blue-btn {
-  background: #168EEA;
-}
-
-.subscribe-btn {
-  background: #168EEA !important;
-  border-color: #168EEA !important;
-  -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
-  -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
-  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
-  color:white;
 }
