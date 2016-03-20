@@ -56,19 +56,5 @@ angular.module('crmEngine.billingservices', []).factory('Billing', function () {
                 $scope.apply();
             })
     };
-    Billing.byNewLicences = function ($scope, params) {
-        $scope.isLoading = true;
-        $scope.apply();
-        gapi.client.crmengine.subscription.by_new_licences(params).execute(
-            function (resp) {
-                if (!resp.code) {
-                    window.location.reload();
-                } else {
-                    notFoundHandle(resp, $scope);
-                }
-                $scope.isLoading = false;
-                $scope.apply();
-            });
-    };
     return Billing;
 });
