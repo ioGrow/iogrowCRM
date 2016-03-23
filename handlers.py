@@ -301,13 +301,6 @@ class RevokeException(Exception):
 
 class WelcomeHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
-        template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/index_opt.html')
-        self.response.out.write(template.render(template_values))
-
-
-class NewWelcomeHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
         template_values = {'CLIENT_ID': CLIENT_ID}
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
             try:
@@ -3918,8 +3911,7 @@ routes = [
     ('/sfapi/dev/search', SFsearchDev),
     ('/sfapi/search_photo', SFsearchphoto),
     ('/gogop', GoGoP),
-    ('/welcome/', NewWelcomeHandler),
-    # ('/welcome', NewWelcomeHandler),
+    ('/welcome/', WelcomeHandler),
     ('/new-sign-in/', NewSignInHandler),
     ('/chrome-extension/', ChromeExtensionHandler),
     ('/salesforce', SFExtensionHandler),

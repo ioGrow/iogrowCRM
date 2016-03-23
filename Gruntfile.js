@@ -213,7 +213,7 @@ module.exports = function (grunt) {
                     collapseWhitespace: true
                 },
                 files: {
-                    'templates/new_web_site/index.html': 'templates/new_web_site/index_opt.html'
+                    'templates/new_web_site/index.html': 'templates/new_web_site/index.html'
                 }
             }
         }
