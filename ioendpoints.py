@@ -2316,46 +2316,6 @@ class CrmEngineApi(remote.Service):
 
         return message_types.VoidMessage()
 
-    # Groups API
-    # groups.delete api
-    @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
-                      path='groups', http_method='DELETE',
-                      name='groups.delete')
-    def group_delete(self, request):
-        entityKey = ndb.Key(urlsafe=request.entityKey)
-        Edge.delete_all_cascade(start_node=entityKey)
-        return message_types.VoidMessage()
-
-    # groups.get API
-    @Group.method(request_fields=('id',), path='groups/{id}', http_method='GET', name='groups.get')
-    def GroupGet(self, my_model):
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Account not found.')
-        return my_model
-
-    # groups.insert API
-    @Group.method(path='groups', http_method='POST', name='groups.insert')
-    def GroupInsert(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        my_model.organization = user_from_email.organization
-        my_model.put()
-        return my_model
-
-    # groups.list API
-    @Group.query_method(query_fields=('limit', 'order', 'pageToken'), path='groups', name='groups.list')
-    def GroupList(self, query):
-        return query
-
-    # groups.patch API
-    @Group.method(
-        http_method='PATCH', path='groups/{id}', name='groups.patch')
-    def GroupPatch(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        my_model.put()
-        return my_model
-
     # Leads APIs
     # leads.delete api
     @endpoints.method(EntityKeyRequest, message_types.VoidMessage,
@@ -2395,68 +2355,6 @@ class CrmEngineApi(remote.Service):
     def lead_convert_beta(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Lead.convert(
-            user_from_email=user_from_email,
-            request=request
-        )
-
-    # leads.convert api
-    @endpoints.method(ID_RESOURCE, ConvertedLead,
-                      path='leads/convert/{id}', http_method='POST',
-                      name='leads.convert')
-    def leads_convert(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        try:
-            lead = Lead.get_by_id(int(request.id))
-        except (IndexError, TypeError):
-            raise endpoints.NotFoundException('Lead %s not found.' %
-                                              (request.id,))
-        moved_folder = EndpointsHelper.move_folder(user_from_email, lead.folder, 'Contact')
-        contact = Contact(owner=lead.owner,
-                          organization=lead.organization,
-                          collaborators_ids=lead.collaborators_ids,
-                          collaborators_list=lead.collaborators_list,
-                          folder=moved_folder['id'],
-                          firstname=lead.firstname,
-                          lastname=lead.lastname,
-                          title=lead.title)
-        if lead.company:
-            created_folder = EndpointsHelper.insert_folder(user_from_email, lead.company, 'Account')
-            account = Account(owner=lead.owner,
-                              organization=lead.organization,
-                              collaborators_ids=lead.collaborators_ids,
-                              collaborators_list=lead.collaborators_list,
-                              account_type='prospect',
-                              name=lead.company,
-                              folder=created_folder['id'])
-            account.put()
-            contact.account_name = lead.company
-            contact.account = account.key
-        contact.put()
-        notes = Note.query().filter(Note.about_kind == 'Lead', Note.about_item == str(lead.key.id())).fetch()
-        for note in notes:
-            note.about_kind = 'Contact'
-            note.about_item = str(contact.key.id())
-            note.put()
-        tasks = Task.query().filter(Task.about_kind == 'Lead', Task.about_item == str(lead.key.id())).fetch()
-        for task in tasks:
-            task.about_kind = 'Contact'
-            task.about_item = str(contact.key.id())
-            task.put()
-        events = Event.query().filter(Event.about_kind == 'Lead', Event.about_item == str(lead.key.id())).fetch()
-        for event in events:
-            event.about_kind = 'Contact'
-            event.about_item = str(contact.key.id())
-            event.put()
-        lead.key.delete()
-        return ConvertedLead(id=contact.key.id())
-
-    # leads.from_twitter api
-    @endpoints.method(LeadFromTwitterRequest, LeadSchema,
-                      path='leads/from_twitter', http_method='POST',
-                      name='leads.from_twitter')
-    def lead_from_twitter(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        return Lead.from_twitter(
             user_from_email=user_from_email,
             request=request
         )
@@ -2671,49 +2569,6 @@ class CrmEngineApi(remote.Service):
     )
     def LeadstatusPatch(self, my_model):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        my_model.put()
-        return my_model
-
-    # Members APIs
-    # members.get API
-    @Member.method(request_fields=('id',), path='members/{id}', http_method='GET', name='members.get')
-    def MemberGet(self, my_model):
-        if not my_model.from_datastore:
-            raise endpoints.NotFoundException('Account not found.')
-        return my_model
-
-    #  members.insert API
-
-    @Member.method(path='members', http_method='POST', name='members.insert')
-    def MemberInsert(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        my_model.organization = user_from_email.organization
-        my_model.put()
-        return my_model
-
-    # members.list API
-    @Member.query_method(query_fields=('limit', 'order', 'groupKey', 'pageToken'), path='members', name='members.list')
-    def MemberList(self, query):
-        return query
-
-    # members.patch API
-    @Member.method(
-        http_method='PATCH', path='members/{id}', name='members.patch')
-    def MemberPatch(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        my_model.put()
-        return my_model
-
-    # members.update API
-    @Member.method(
-        http_method='PUT', path='members/{id}', name='members.update')
-    def MemberUpdate(self, my_model):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # Todo: Check permissions
-        # my_model.owner = user_from_email.google_user_id
-        # my_model.organization =  user_from_email.organization
         my_model.put()
         return my_model
 
