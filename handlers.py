@@ -2671,13 +2671,6 @@ class ScrapydHandler(BaseHandler, SessionEnabledHandler):
         self.response.out.write(template.render(template_values))
 
 
-class SitemapHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        template_values = {}
-        template = jinja_environment.get_template('sitemap.xml')
-        self.response.out.write(template.render(template_values))
-
-
 class InsertCrawler(webapp2.RequestHandler):
     def post(self):
         topic = self.request.get('topic')
@@ -2911,13 +2904,7 @@ routes = [
     ('/sign-with-iogrow', SignInWithioGrow),
     ('/sf-users', SFusersCSV),
     ('/copylead/sf/api/users/get', GetSfUser),
-    ('/copylead/sf/api/invitees/list_by_partners', SFlistInviteesByPartners),
-
-    # ('/gmail-copylead',GmailAnalysisForCopylead),
-    # ('/copyleadcsv',GmailAnalysisForCopyleadCSV),
-
-
-    ('/sitemap', SitemapHandler)
+    ('/copylead/sf/api/invitees/list_by_partners', SFlistInviteesByPartners)
 
 ]
 
