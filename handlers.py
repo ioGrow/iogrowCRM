@@ -2162,7 +2162,7 @@ class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
     def post(self):
         entityKey = self.request.get('entityKey')
         linkedin = linked_in()
-        key1 = ndb.Key(urlsafe=entityKey)
+        key1 = ndb.Key(urlsafe = entityKey)
         lead = key1.get()
         keyword = lead.firstname + " " + lead.lastname + " "
         if lead.company:
@@ -2651,31 +2651,6 @@ class CheckJobStatus(webapp2.RequestHandler):
                 payload=json.dumps(params)
             )
 
-
-# paying with stripe 
-class StripePayingHandler(BaseHandler, SessionEnabledHandler):
-    def post(self):
-        # the secret key .
-        # stripe.api_key="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-        stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
-        # get the token from the client form
-        token = self.request.get('stripeToken')
-        # charging operation after the payment
-        try:
-            print "*-*-*-*-*-*-*-*-*-*-*-*-//////////////////////"
-            print "here we go !"
-            print stripe.Charge.all()
-            print "-*-*-*-*-*-*-*-*-*-*-*-*-*"
-            # charge= stripe.Charge.create(
-            #     amount=1000, 
-            #     currency="usd",
-            #     card=token,
-            #     description="hadji@iogrow.com")
-        except stripe.CardError, e:
-            # The card has been declined
-            pass
-
-
 class SFusersCSV(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'application/csv'
@@ -2929,7 +2904,6 @@ routes = [
     ('/invitation_sent', SFinvite),
     ('/stripe', StripeHandler),
     # paying with stripe
-    ('/paying', StripePayingHandler),
     ('/views/dashboard', DashboardHandler),
     ('/scrapyd', ScrapydHandler),
     ('/jj', ImportJob),
