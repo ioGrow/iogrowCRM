@@ -1804,11 +1804,6 @@ class ExportCompleted(BaseHandler, SessionEnabledHandler):
         self.response.out.write(json.dumps({'import': 'completed'}))
 
 
-class ioAdminHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/ioadmin.html')
-
-
 class CreateContactsGroup(webapp2.RequestHandler):
     @ndb.toplevel
     def post(self):
@@ -3263,7 +3258,6 @@ routes = [
 
     #
     ('/', IndexHandler),
-    ('/ioadmin', ioAdminHandler),
     ('/partners/', PartnersHandler),
     # Templates Views Routes
     ('/views/discovers/list', DiscoverListHandler),
