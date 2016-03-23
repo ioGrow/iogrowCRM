@@ -1762,15 +1762,12 @@ class SFsearchphoto(BaseHandler, SessionEnabledHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(response)
 
-class jj(BaseHandler, SessionEnabledHandler):
+class ImportJob(BaseHandler, SessionEnabledHandler):
     def post(self):
         data = json.loads(self.request.body)
         import_job_id = int(data['job_id'])
-        print import_job_id
-        print '-----------------/ JJ---------------'
         job = model.ImportJob.get_by_id(import_job_id)
         user = job.user.get()
-        body = '<p>' + user.google_display_name + ',</p>'
         body = '<p>The contacts import you requested has been completed!</p>'
         taskqueue.add(
             url='/workers/send_email_notification',
@@ -1810,178 +1807,6 @@ class ExportCompleted(BaseHandler, SessionEnabledHandler):
 class ioAdminHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/ioadmin.html')
-
-
-# class GBizCompanies(BaseHandler,SessionEnabledHandler):
-#     def get(self):
-
-#         users = model.User.query().fetch()
-#         companies={}
-#         for user in users:
-#             try:
-#                 str=user.email
-#                 match = re.search('([\w.-]+)@([\w.-]+)', str)
-#                 if match:
-#                     if match.group(2) != 'gmail.com':
-#                         if match.group(2) in companies.keys():
-#                             print 'don'
-#                             companies[match.group(2)]+=1
-#                         else:
-#                             print 'default'
-#                             companies[match.group(2)]=1
-#             except:
-#                 print 'error'
-#         biz_list = {'count':len(companies.keys()),'companies':companies}
-#         self.response.headers['Content-Type'] = 'application/json'
-#         self.response.out.write(json.dumps(biz_list))
-class GBizCompanies(BaseHandler, SessionEnabledHandler):
-    def get(self):
-
-        companies_list = [u'eSouQatar', u'GDG Chlef', u'Apple', u'dja3fer', u'bo', u'idiomas', u'Watco Systems Ltd',
-                          u'iogrow', u'Linde gas Alg\xe9rie', u'GDG Blida', u'AEF-CONSEIL', u'Jutus AS', u'ddd', u'bil',
-                          u'Apm', u'AlAqar', u'iogrow', u'ed prod', u'museomix', u'Gossto', u'Success2i',
-                          u'chellal_prod', u'Jobpitcher', u'RENAD', u'Al-Hassan Group',
-                          u'"><img src=x onerror=prompt(1)>', u'Jacobs', u'W-SiM', u'Mouhsine1210', u'LAKHDAR',
-                          u'InfoLabKram', u'HxH11092001', u'test', u'ArabNet', u'Sambatech', u"Charme d'Orient",
-                          u'HADJ ALI & CO', u'LABYOTEK', u'INITECH', u'atoune', u'esi', u'My Tech Report', u'test',
-                          u'weCloud', u'AJ', u'SME Cloud Sdn Bhd', u'TECHNODEAL SA', u'Sambatech', u'genimust',
-                          u'Wamda', u'IGMO', u'[\u0647\u0621\u0634\u0634\u0641', u'Hyper Stage', u'viknesh',
-                          u'C-Tecnologia', u'cpcl', u'iotask', u'elit', u'SAMTELECOM', u'\u015awiat ZOO', u'newyork@2',
-                          u'baba-AMAMA-1983', u'Noble Wealth', u'DZGenius', u'Vocalcom', u'Yala Taxi', u'Almubader',
-                          u'yeslamo', u'DigitalSIDE', u'Rafik', u'ioGrow', u'transline', u'Success2i', u'Assze',
-                          u'a_frendi', u'', u'LAAS-CNRS', u'Numericuss', u'Success2i Test',
-                          u'Jaba Satellite Engineering SA de CV', u'Gnehat', u'noCompanyName', u'WeRework', u'Hi',
-                          u'io task', u'Test', u'Nonya', u'SAHM', u'Shaker Technologies', u'Test', u'M/AY',
-                          u'yacine test', u'ETIC', u'DevelopersCentral', u'entreprise', u'GDG Women Tunis', u'Corex',
-                          u'Grow Web Services', u'IT Consultation Services', u'ggg', u'GDG Blida', u'ioGrow',
-                          u'GDG Lom\xe9', u'IOwork', u'Geo Sketch', u'crm', u'Perso', u'E.Connect', u'ESI', u'MMBRA',
-                          u'Stars', u'ollexy', u'Test', u'iogrow', u'Etiencel lubrifiants ',
-                          u'101151129 Saskatchewan Ltd.', u'Interactive BITS', u'Flinkware', u'BrfGo004', u'Innovcable',
-                          u'Y combinator', u'developatic', u'Melltoo', u'CSC', u'deleteme31', u'Retail Switch',
-                          u'CY Lim', u'program', u'werework', u'kemique water soluzione', u'Rapido Pest Control',
-                          u'christophe.sommacal@lacommunicationaimante.com',
-                          u'christophe.sommacal@lacommunicationaimante.com', u'Samsa', u'test',
-                          u'James Stephenson Architect', u'Palani', u'All Web n Mobile LLC', u'azedine', u'PanTech',
-                          u'\u0421\u043e\u0444\u0442 \u041d', u'iogrow', u'eSouQatar', u'Minisys S.A.', u'LABYOTEK',
-                          u'Essential', u'Melltoo', u'ANNA98', u'new', u'inbgoogle29', u'Rapido Pest Control',
-                          u'ImtyaZSoft', u'test_dle', u'transline', u'testcompany', u'Axiatel', u'MAOUEL',
-                          u'kemique water soluzione', u'SKA', u'LABYOTEK', u'google dz', u'\u0421\u042d\u0421',
-                          u'GUS - Guichet Unique Subventions', u'Tessst', u'test', u'esi', u'esi', u'azedine', u'',
-                          u'MountVacation.si', u'Nayluge', u'test', u'61users', u'Tiles',
-                          u'La Parole Aux Sourds & T1SCH', u'S F I Globel Business', u'Tempus Nova', u'Melltoo',
-                          u'Beladaci Consulting', u'djamel.lekhbassene@assa-associates.com', u'Follow', u'ISIT',
-                          u'Mico', u'', u'ContactIQ', u'CreativeBox', u'SoCo', u'GCDC Test', u'ESI',
-                          u'I have no company ', u'Zylinc', u'123mijnwebsite', u'mcgarrybowen ', u'T\xe9luq', u'REEZOM',
-                          u'Pichu', u'Naeem Co.', u'Dyworx', u'Quivers', u'op', u'Melltoo', u'Melltoo', u'Juniors Labs',
-                          u'Perso', u'TESOBE', u'chez moi', u'NABSET', u'"><img src=x onerror=prompt(1)>', u'test',
-                          u'Seven', u'Groupe JSK', u'christophe.sommacal@gmail.com', u'chihab', u'hakim', u'Pushlee',
-                          u'', u'nour644badou', u'Cloudenablers Pvt Ltd', u'Conexia', u'Connects',
-                          u'Nenooos Valladolid', u'ESI', u'U Turn', u'Tegetdot', u'Arcoten', u's09605344', u'ESI',
-                          u'Cervoni Conseil', u'YacineAcademy', u'Caam Properties', u'Aq', u'Y combinator',
-                          u"Yorkshire Children's Trust", u'Infinity Space ', u'ens', u'iogrow', u'chez moi',
-                          u'Secret d or', u'Hydra Heating Industries, LLC', u'forever',
-                          u'\u0639\u0627\u0644\u0645 \u0627\u0644\u062d\u0627\u0633\u0648\u0628', u'inbgoogle29',
-                          u'Marketing in Motion', u'Practrice Advantage', u'WeRework', u'IOV', u'esi',
-                          u'Veilleurs.info', u"Charme d'Orient USA", u'LABYOTEK', u'National University of Singapore',
-                          u'Melltoo', u'The Emob', u'Owl Marketing', u'HappyAton', u'crf', u'QT', u'GDG Chlef',
-                          u'magecloud', u'Muhammad', u'GDG Chlef', u'AATRealty', u'GotBox22', u'Imperial Infosys',
-                          u'cameleon', u'French-Connect', u'test', u'Serco', u'', u'If and Then', u'crm', u'HacenTech',
-                          u'GSD', u'ELRAHMA', u'Freelance', u'iconsoftware', u'lailahilaallah23478889 ', u'',
-                          u'JamesTanZ Dev', u'Webvixe', u'marslune81', u'Mashery ', u'Google ', u'\xba\xe7kpl\xb4+',
-                          u'Io Grow', u'Up Position', u'COVETA-XI', u'San Esteban Consulting',
-                          u'Dalogix Technologies Private Limited', u'my company', u'LABYOTEK', u'deliver.ee',
-                          u'EL AOUAD', u'tic think', u'GDG Chlef',
-                          u'S2M Consultoria em Telem\xe1tica e Gest\xe3o Empresarial', u'ens informatique', u'rucki',
-                          u'Indep', u'JABCOMPANY', u'', u'Lehman Hailey Homes', u'Smar Art', u'saso',
-                          u'Financi\xe8re de Berc\xe9', u'Cyberia', u'KOMCORP', u'Opalsmart',
-                          u'International Business Services', u'awqaf', u'MountVacation.si', u'idevmore', u'Tej :P',
-                          u'LABYOTEK', u'Sophiead Conseil et formation', u'SocialIO', u'esi', u'EEB1', u'compare dz',
-                          u"O'Clock", u'GUS - Guichet Unique Subventions', u'ContactIQ', u'ini',
-                          u'Wanamaker Corporation', u'Betaas ', u'RB & Associates Consulting, Inc.', u'Example ',
-                          u'delamerluche', u'Tehmus', u'Elrahma', u'E.Connect', u'Northeastern University',
-                          u'GDG MMUST', u'Foundation for Education and Development', u'MPT', u'Meeting',
-                          u' developatic', u'ELRAHMA', u'ini', u'PARKEON', u'azedine', u'Cyberia', u'IRIT', u'QBIC',
-                          u'Steve Holm Creative', u'Dairy', u' developatic', u'proserve', u'BoutiqueApts',
-                          u'moorestephens-qa', u'ASC', u'Asesor inmobiliario', u"CJ's BUTTer", u'compare dz',
-                          u'Beta-Tester', u'Success2i', u'Dz ingeniering', u'WinSoft', u'iCashProfits Ltd',
-                          u'VeryLastRoom', u'GDG Fresno', u'ESI', u'Openthrive', u'iogrow', u'Rockrose Realty', u'ISDI',
-                          u'ESI', u'Melltoo', u'ShoeSisters ', u'Cornosoft', u'Leiden Data Beheer', u'imagination',
-                          u'Creamed', u'BoxPay Solutions', u'PONYTAIL', u'Phunware, Inc', u'kemique water soluzione',
-                          u'deleteme', u'AqarDz', u'test', u'Jam Capital Entertainment', u'SavvyEra',
-                          u'Skyline Services', u'Casal Diffusion', u'Sped Advanced', u'jiltarjih', u'IanGraphics',
-                          u'hacene', u'ioCallCenter', u'Melltoo', u'interimio', u'ghYgiYghhggi',
-                          u'\u0421\u042d\u0421\u041a', u'Ayankar', u'Success2i', u'COVETA-XI', u'crm', u'gpcdz',
-                          u'blossom', u'GDG Power', u'JAWEB', u'Sickle Cell Disease Advocates of MInnesota',
-                          u' developatic', u'New Line For Media', u'benz', u'idriss', u'ProfIT', u'meziane',
-                          u'magecloud', u'ESI', u'ioGrow', u'', u'Mafil EIRL', u'TAS-HEEL',
-                          u'Integracion de Eventos Cali ', u'Cevital', u'excitem', u'AqarDz', u'Le Coach Marketing',
-                          u'YebSoft', u'ChefSean', u"Pilot'in", u'Test', u'Mobiacube', u'rfrf', u'goo ooo',
-                          u'ribeiro.consultorprev@gmail.com', u'mee', u'Ragheb', u'MuBeta Corporation',
-                          u'Omniconsulting', u'christophe.sommacal@lacommunicationaimante.com', u'Pushlee', u'Muhammad',
-                          u'Success2i', u'Master Controls', u'Casal Diffusion', u'Devided B.V.', u'ACSIOM',
-                          u'\u2601 CODE', u'TESOBE', u'\xd8redev', u'IBM', u'Puissance E', u'Developatic', u'Tritux',
-                          u'027712100', u'GDG Abidjan', u'Msar', u'ntg', u'Subol', u'itau', u'esi', u'yakali', u'HTC',
-                          u'yekyac2010', u'jevans.g2g@gmail.com', u'Elite International Assets', u'Sanabil',
-                          u'DZGenius', u'ETIC', u'Yala Taxi', u'Al-Mubader', u'Swinney Marketing', u'VIDEOSURVEILLANCE',
-                          u'Mona Tourism LLC', u'ens', u'Success2i', u'GENIOUS', u'Wahed Sefer', u'CSC', u'ALTAIDE',
-                          u'Mobilis', u'kemique water soluzione', u'rft', u'otricom', u'awqaf', u'sdsds', u'Cherfa',
-                          u'esi', u'freelance', u'Sling Media', u'i Web 3', u'', u'Ch Walid', u'CreArt',
-                          u'Santa Fe Way', u'ValoDech', u'HIGHLIGHT', u'Linde gas Alg\xe9rie', u'Orenji', u'CreArt',
-                          u'NAVITIME JAPAN', u'Google', u'Iogrow', u'Fixaat', u'Photography ', u'idevmore',
-                          u'ISEEFIRE22', u'delamerluche', u'AAB NetBat', u'MOWJOW', u'sebastderennes@gmail',
-                          u'Altazin.fr', u'yala taxi', u'AqarDz', u'ioWork', u'Swinney Marketing',
-                          u'MANAGIA Audit Conseil Formation', u'Semacare', u'Yahoo ', u'Hydra Heating Industries, LLC',
-                          u'ACDT', u'transline solutions', u'Alania', u'ESI',
-                          u'christophe.sommacal@lacommunicationaimante.com', u'Indep', u'Melltoo', u'chez moi',
-                          u'LABYOTEK', u'Prolocal', u'Timbergrove', u'Independent', u'Go Tech',
-                          u'Udell Enterprises, Inc ', u'ioclicandcal', u'lm1su2rnowboubi', u'Long Island Happy Feet',
-                          u'UNICEF', u'azedine', u'Success2i', u'Somerset Web Services Ltd', u'1way', u'babyprotect',
-                          u'no company', u'IGIAM', u'GPR3D', u'hak', u'Projetis Formation Conseil', u'ITSolutions.dz',
-                          u'Premium66', u'ldfksfk', u'deleteme', u'habbak', u'ioGrow User', u'ioGrow',
-                          u'international power logistics', u'test', u'Brassard Babin - VosCourtiersImmobiliers',
-                          u'test', u'Wamda', u'Maendeleo Ventures, LLC', u'assa associates', u'High Park Livery',
-                          u'sarra', u'ENAEGO', u'GDG Chlef ', u'Specialty Products', u'Minisys S.A', u'French-Connect',
-                          u'ioGrow', u'Demo Organization', u'kutiwa', u'dss',
-                          u'christophe.sommacal@lacommunicationaimante.com', u'crm', u'Capgemini', u'HyperMorris',
-                          u'IBM', u'Berlitz Algeria ', u'test', u'\u041c\u0418\u0420', u'Dsquared Media', u'mac',
-                          u'proserve', u' developatic', u'ALU', u'magincup', u'Mine', u'ahincapie@serfinco.com.co',
-                          u'dja3fer', u'Xlung', u'INSAT', u'my company', u'mac', u'esi', u'kemique water soluzione',
-                          u'katy&pshk213', u'Stratton Home Decor', u'proserve', u'moneyneversleeps', u'Ultimateweb Ltd',
-                          u'Clicandcal', u'myVLE.com', u'BPAAA', u'Test', u'esi', u'Jutus AS', u'kiki',
-                          u'La Parole Aux Sourds', u'Test company', u'Metal and shit ',
-                          u'"><img src=x onerror=prompt(1)>', u'NAVITIME JAPAN', u'idiomas sarl', u'French-Connect.com',
-                          u'ETIC', u'Altazin.fr', u'yeslamo', u'Mutual Mobile', u'kkkkk', u'Fidesio', u'Betrick',
-                          u'LA PESCADERIA GOURMET', u'AAB NetBat', u'TESOBE', u'CE', u'BZ', u'zaak', u'Axiatel',
-                          u'GDG Chlef', u'ioWork', u'Y combinator', u'koceila1991', u'hoto use', u'Ghingo', u'Provista',
-                          u'Assert', u'Passion', u'Vigour Events Ltd', u'Beepl', u'AAB NetBat', u'Beepl', u'comparedz',
-                          u'Bagpoint.cz', u'test', u'AAB NetBat', u'ioGrow', u'', u'MapEstate', u'kctek', u'Motorola',
-                          u'Melltoo', u'Dsquared Media', u'Time To Learn', u'Huzayen', u'None', u'My Company',
-                          u'ANteiKA', u'', u'ITEMS International', u'yazzz', u'Dream', u'hi', u"Pilot'in", u'Minisys',
-                          u'mps', u'KuTiWa', u'lool', u'Cloud11', u'AqarDz', u'DMY', u'globo.com', u'TESOBE',
-                          u'Pro Sales Systems', u'TESOBE', u'chez moi', u'entreprise', u'deleteme', u'HTC', u'iotasks',
-                          u'The Outdoor Vibe', u'christophe.sommacal@lacommunicationaimante.com', u'NAT', u'iogrow',
-                          u'Ibex - The App Date', u'Student', u'ICE', u'STARQ', u'gdg', u'Mitrus.cz', u'Courseit',
-                          u'AATRealty', u'My Company', u'Philapedia jo', u'ArabShare', u'AAB NetBat', u'WeRework',
-                          u'IIT', u'ISSAL', u'Alfanous', u'IT Real s.r.o.']
-        linkedIn = people.linked_in()
-        companies = {}
-        for company in companies_list:
-            print 'search'
-            try:
-                company_profile = linkedIn.scrape_company(company)
-                print 'found'
-                if company_profile['founded']:
-                    if company_profile['industry'] in companies.keys():
-                        companies[company_profile['industry']] += 1
-                    else:
-                        companies[company_profile['industry']] = 1
-            except:
-                print 'error'
-            print companies
-        print companies
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(biz_list))
-
 
 # Workers
 class CreateOrganizationFolders(webapp2.RequestHandler):
@@ -3498,7 +3323,6 @@ routes = [
     #
     ('/', IndexHandler),
     ('/ioadmin', ioAdminHandler),
-    ('/ioadmin/biz', GBizCompanies),
     ('/partners/', PartnersHandler),
     # Templates Views Routes
     ('/views/discovers/list', DiscoverListHandler),
@@ -3591,7 +3415,7 @@ routes = [
     ('/paying', StripePayingHandler),
     ('/views/dashboard', DashboardHandler),
     ('/scrapyd', ScrapydHandler),
-    ('/jj', jj),
+    ('/jj', ImportJob),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),
     ('/sf-users', SFusersCSV),
