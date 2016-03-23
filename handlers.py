@@ -1069,18 +1069,6 @@ class CalendarShowHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/calendar/calendar_show.html')
 
 
-# hadji hicham 07/08/2014
-class BillingListHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/billing/billing_list.html')
-
-
-# hadji hicham  11/08/2014
-class BillingShowHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/billing/billing_show.html')
-
-
 class DashboardHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/dashboard.html')
@@ -3776,9 +3764,6 @@ routes = [
     ('/subscribe', SubscriptionHandler),
     ('/stripe/subscription', StripeSubscriptionHandler),
     ('/stripe/subscription_web_hook', StripeSubscriptionWebHooksHandler),
-    # billing stuff. hadji hicham . 07/08/2014
-    ('/views/billing/list', BillingListHandler),
-    ('/views/billing/show', BillingShowHandler),
 
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),

@@ -153,14 +153,7 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'EventListController',
         templateUrl:'/views/calendar/show'
       })
-       .when('/billing/', {
-        controller: 'BillingListController',
-        templateUrl:'/views/billing/list'
-      })
-       .when('/billing/show/:userId', {
-        controller: 'BillingShowController',
-        templateUrl:'/views/billing/show'
-      }).when('/dashboard/', {
+       .when('/dashboard/', {
         controller: 'dashboardCtrl',
         templateUrl:'/views/dashboard'
          }).when('/admin/company', {
