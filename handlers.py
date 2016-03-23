@@ -316,7 +316,7 @@ class WelcomeHandler(BaseHandler, SessionEnabledHandler):
         self.response.out.write(template.render(template_values))
 
 
-class NewSignInHandler(BaseHandler, SessionEnabledHandler):
+class SignInHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         offline_access_prompt = True
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -539,40 +539,6 @@ class ChangeActiveAppHandler(SessionEnabledHandler):
                 self.redirect('/')
         else:
             self.redirect('/sign-in')
-
-
-class SignInHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-            try:
-                user = self.get_user_from_session()
-                # Set the user locale from user's settings
-                user_id = self.request.get('id')
-                lang = self.request.get('language')
-                self.set_user_locale(lang)
-                # Render the template
-                template_values = {
-                    'user': user,
-                    'CLIENT_ID': CLIENT_ID,
-                    'ID': user_id
-                }
-                template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
-                self.response.out.write(template.render(template_values))
-            except:
-                print 'an error has occured'
-        else:
-            # Set the user locale from user's settings
-            user_id = self.request.get('id')
-            lang = self.request.get('language')
-            self.set_user_locale(lang)
-            # Render the template
-            template_values = {
-                'CLIENT_ID': CLIENT_ID,
-                'ID': user_id
-            }
-            template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
-            self.response.out.write(template.render(template_values))
-
 
 class EarlyBirdHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -3890,15 +3856,13 @@ routes = [
     ('/sfapi/search_photo', SFsearchphoto),
     ('/gogop', GoGoP),
     ('/welcome/', WelcomeHandler),
-    ('/new-sign-in/', NewSignInHandler),
     ('/chrome-extension/', ChromeExtensionHandler),
     ('/terms-of-services/', TermsOfServicesHandler),
     ('/privacy/', PrivacyHandler),
     ('/security/', SecurityInformationsHandler),
     # Authentication Handlers
-    ('/early-bird', SignInHandler),
     ('/start-early-bird-account', StartEarlyBird),
-    ('/sign-in', NewSignInHandler),
+    ('/sign-in', SignInHandler),
     ('/sign-up', SignUpHandler),
     ('/gconnect', GooglePlusConnect),
     ('/install', InstallFromDecorator),
