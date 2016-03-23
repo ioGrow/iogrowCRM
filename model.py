@@ -995,15 +995,6 @@ class User(EndpointsModel):
             memcache.set(self.email, self)
         else:
             memcache.add(self.email, self)
-        if self.google_credentials:
-            if self.google_contacts_group is None:
-                taskqueue.add(
-                    url='/workers/createcontactsgroup',
-                    queue_name='iogrow-low',
-                    params={
-                        'email': self.email
-                    }
-                )
         self.put()
 
     def init_early_bird_config(self, org_key, profile_key):
@@ -1022,14 +1013,6 @@ class User(EndpointsModel):
             memcache.set(self.email, self)
         else:
             memcache.add(self.email, self)
-        if self.google_credentials:
-            taskqueue.add(
-                url='/workers/createcontactsgroup',
-                queue_name='iogrow-low',
-                params={
-                    'email': self.email
-                }
-            )
         self.put()
 
     @classmethod
@@ -1329,14 +1312,6 @@ class User(EndpointsModel):
             memcache.set(user.email, user)
         else:
             memcache.add(user.email, user)
-        if not user.google_contacts_group:
-            taskqueue.add(
-                url='/workers/createcontactsgroup',
-                queue_name='iogrow-low',
-                params={
-                    'email': user.email
-                }
-            )
         return user
 
     @classmethod

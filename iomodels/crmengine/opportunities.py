@@ -1260,16 +1260,6 @@ class Opportunity(EndpointsModel):
         opportunity.competitors = competitors_list
         opportunity_key = opportunity.put_async()
         opportunity_key_async = opportunity_key.get_result()
-        # taskqueue.add(
-        #             url='/workers/createobjectfolder',
-        #             queue_name='iogrow-low',
-        #             params={
-        #                     'kind': "Opportunity",
-        #                     'folder_name': request.name,
-        #                     'email': user_from_email.email,
-        #                     'obj_key':opportunity_key_async.urlsafe()
-        #                     }
-        #             )
         indexed = False
         current_stage_schema = None
         if request.stage:

@@ -432,17 +432,6 @@ class Pipeline(EndpointsModel):
         )
         pipeline_key = pipeline.put_async()
         pipeline_key_async = pipeline_key.get_result()
-        # taskqueue.add(
-        #             url='/workers/createobjectfolder',
-        #             queue_name='iogrow-low',
-        #             params={
-        #                     'kind': "Case",
-        #                     'folder_name': request.name,
-        #                     'email': user_from_email.email,
-        #                     'obj_key':pipeline_key_async.urlsafe()
-        #                     }
-        #             )
-
         data = {'id': pipeline_key_async.id()}
         pipeline.put_index(data)
         # current_status_schema = CaseStatusSchema(
