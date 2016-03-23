@@ -27,15 +27,18 @@ KINDS = (E_LEAD, E_TASK, E_ACCOUNT, E_EVENT, E_OPPORTUNITY, E_CASE, E_CONTACT, A
 
 ALL_KINDS_LIMIT = 10
 
-if 'HTTP_HOST' in os.environ and str(os.environ['HTTP_HOST']).__contains__("appspot"):
-    STRIPE_API_KEY = "sk_test_9WaLpLhVb0W9tKInz6Bs6x6l"
-    PUBLISHABLE_KEY = "pk_test_A8tZ6tBoVb7MHJpTOJLsTEXD"
-elif "SERVER_SOFTWARE" in os.environ:
-    if os.environ['SERVER_SOFTWARE'].startswith('Dev'):
-        STRIPE_API_KEY = "sk_test_9WaLpLhVb0W9tKInz6Bs6x6l"
-        PUBLISHABLE_KEY = "pk_test_A8tZ6tBoVb7MHJpTOJLsTEXD"
-    elif os.environ['SERVER_SOFTWARE'].startswith('Google'):
-        STRIPE_API_KEY = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
-        PUBLISHABLE_KEY = "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD"
-    else:
-        raise ValueError("Environment undetected")
+
+STRIPE_API_KEY = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+PUBLISHABLE_KEY = "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD"
+# if 'HTTP_HOST' in os.environ and str(os.environ['HTTP_HOST']).__contains__("appspot"):
+#     STRIPE_API_KEY = "sk_test_9WaLpLhVb0W9tKInz6Bs6x6l"
+#     PUBLISHABLE_KEY = "pk_test_A8tZ6tBoVb7MHJpTOJLsTEXD"
+# elif "SERVER_SOFTWARE" in os.environ:
+#     if os.environ['SERVER_SOFTWARE'].startswith('Dev'):
+#         STRIPE_API_KEY = "sk_test_9WaLpLhVb0W9tKInz6Bs6x6l"
+#         PUBLISHABLE_KEY = "pk_test_A8tZ6tBoVb7MHJpTOJLsTEXD"
+#     elif os.environ['SERVER_SOFTWARE'].startswith('Google'):
+#         STRIPE_API_KEY = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+#         PUBLISHABLE_KEY = "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD"
+#     else:
+#         raise ValueError("Environment undetected")

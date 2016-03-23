@@ -928,6 +928,9 @@ class GooglePlusConnect(SessionEnabledHandler):
         #     user = self.get_user_from_session()
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
+        self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+        self.response.headers['Access-Control-Allow-Methods'] = 'POST'
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(is_new_user))
 
