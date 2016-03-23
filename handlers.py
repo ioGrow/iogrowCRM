@@ -1808,64 +1808,6 @@ class ioAdminHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/ioadmin.html')
 
-# Workers
-class CreateOrganizationFolders(webapp2.RequestHandler):
-    @staticmethod
-    def init_drive_folder(http, driveservice, folder_name, parent=None):
-        folder = {
-            'title': folder_name,
-            'mimeType': 'application/vnd.google-apps.folder'
-        }
-        if parent:
-            folder['parents'] = [{'id': parent}]
-        try:
-            created_folder = driveservice.files().insert(fields='id', body=folder).execute()
-            return created_folder['id']
-        except errors.HttpError, error:
-            print 'An error occured: %s' % error
-            return None
-
-    @staticmethod
-    def folder_created_callback(request_id, response, exception):
-        global folders
-        if exception is not None:
-            # Do something with the exception
-            pass
-        else:
-            # Do something with the response
-            folder_name = response['title']
-            folders[folder_name] = response['id']
-
-    def post(self):  # should run at most 1/s due to entity group limit
-        admin = model.User.get_by_email(self.request.get('email'))
-        credentials = admin.google_credentials
-        org_key_str = self.request.get('org_key')
-        org_key = ndb.Key(urlsafe=org_key_str)
-        organization = org_key.get()
-        http = credentials.authorize(httplib2.Http(memcache))
-        driveservice = build('drive', 'v2', http=http)
-        # init the root folder
-        org_folder = self.init_drive_folder(http, driveservice, organization.name + ' (ioGrow)')
-        # init objects folders
-        batch = BatchHttpRequest()
-        for folder_name in FOLDERS.keys():
-            folder = {
-                'title': folder_name,
-                'mimeType': 'application/vnd.google-apps.folder',
-                'parents': [{'id': org_folder}]
-            }
-            batch.add(driveservice.files().insert(
-                fields='id,title',
-                body=folder),
-                callback=self.folder_created_callback
-            )
-        batch.execute(http=http)
-        organization.org_folder = org_folder
-        for folder_name in FOLDERS.keys():
-            if folder_name in folders.keys():
-                setattr(organization, FOLDERS[folder_name], folders[folder_name])
-        organization.put()
-
 
 class CreateContactsGroup(webapp2.RequestHandler):
     @ndb.toplevel
@@ -3271,7 +3213,6 @@ routes = [
     ('/workers/sharedocument', ShareDocument),
     ('/workers/shareobjectdocument', ShareObjectDocuments),
     ('/workers/syncdocumentwithteam', SyncDocumentWithTeam),
-    ('/workers/createorgfolders', CreateOrganizationFolders),
     ('/workers/createobjectfolder', CreateObjectFolder),
     ('/workers/createcontactsgroup', CreateContactsGroup),
     ('/workers/sync_contacts', SyncContact),
