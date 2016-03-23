@@ -174,6 +174,7 @@ class SFuser(ndb.Model):
 class SFinvitation(ndb.Model):
     user_email = ndb.StringProperty()
     user_key = ndb.KeyProperty()
+    partner_email = ndb.StringProperty()
     partner_key = ndb.KeyProperty()
     invitee_email = ndb.StringProperty()
     invitee_name = ndb.StringProperty()
@@ -189,21 +190,29 @@ class SFinvitation(ndb.Model):
         response = {
             'pending': [],
             'active': [],
-            'paying': []
+            'paying': [],
+            'all': []
         }
         invitees = cls.query(cls.partner_key==partner_key).fetch()
         for invitee in invitees:
+            invitee_dict = {
+                'invitee_email': invitee.invitee_email,
+                'status': invitee.status
+            }
             if invitee.status =='active':
-                response['active'].append(invitee)
+                response['active'].append(invitee_dict)
             elif invitee.status =='paying':
-                response['paying'].append(invitee)
+                response['paying'].append(invitee_dict)
             else:
-                response['pending'].append(invitee)
-
+                response['pending'].append(invitee_dict)
+        response['all'] = response['pending'] + response['active'] + response['paying']
         return response
 
-class CopyLeadSfSession(ndb.Model):
-    full_name = ndb.StringProperty()
+
+
+class SFpartner(ndb.Model):
+    firstname = ndb.StringProperty()
+    lastname = ndb.StringProperty()
     email = ndb.StringProperty()
     phone = ndb.StringProperty()
     country = ndb.StringProperty()
@@ -363,7 +372,6 @@ class Organization(ndb.Model):
     related_to_partner = ndb.KeyProperty()
     should_upgrade = ndb.BooleanProperty()
     subscription = ndb.KeyProperty(kind=Subscription)
-    stripe_customer_id = ndb.StringProperty()
 
     def get_subscription(self):
         if not self.subscription:
@@ -1875,14 +1883,11 @@ class ProxyServer(ndb.Model):
             server.put()
 
 
+
+
+
 class CopyLeadSfSession(ndb.Model):
     access_token = ndb.StringProperty()
-    user = ndb.KeyProperty()
-    created_at = ndb.DateTimeProperty(auto_now_add=True)
-
-
-class CopyLeadZhSession(ndb.Model):
-    access_token = ndb.StringProperty
     user = ndb.KeyProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
 

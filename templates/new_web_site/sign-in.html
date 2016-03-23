@@ -141,13 +141,13 @@ var helper = (function() {
         type: 'POST',
         url: '/gconnect',
 
-        success: function(result) {
-          if (result==true){
-             window.location.replace('/sign-up');
-          }
-          else{
-            window.location.replace('/');
-          }
+      success: function(result) {
+          console.log('i am in connectServer show me result please');
+          console.log(result);
+
+             window.location.replace('/');
+
+
          // helper.people();
         },
 

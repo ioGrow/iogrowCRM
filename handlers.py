@@ -248,7 +248,8 @@ class BaseHandler(webapp2.RequestHandler):
                     'decimal_delimiter': currency_format.decimal_delimiter,
                     'sales_tabs': STANDARD_TABS,
                     'admin_tabs': ADMIN_TABS,
-                    'plan': organization.get_subscription().plan.get()
+                    'plan': organization.get_subscription().plan.get(),
+                    'publishable_key': app_config.PUBLISHABLE_KEY
                 }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -1125,14 +1126,21 @@ class SubscriptionHandler(SessionEnabledHandler):
     def get(self):
         template = jinja_environment.get_template(name='templates/admin/subscription/subscription.html')
         user = self.get_user_from_session()
-        template_values = {
-            'user': user,
-            'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
-            'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
-            'publishable_key': app_config.PUBLISHABLE_KEY,
-            'users_count': model.User.get_users_count_by_organization(user.organization)
-        }
-        self.response.out.write(template.render(template_values))
+        if user:
+            org_key = user.organization
+            organization = org_key.get()
+            subscription = organization.get_subscription()
+            template_values = {
+                'user': user,
+                'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
+                'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
+                'publishable_key': app_config.PUBLISHABLE_KEY,
+                'users_count': model.User.get_users_count_by_organization(org_key),
+                'subscription': subscription
+            }
+            self.response.out.write(template.render(template_values))
+        else:
+            self.redirect('/welcome/')
 
 
 class SFsubscriber(BaseHandler, SessionEnabledHandler):
@@ -1200,19 +1208,11 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
         user = self.get_user_from_session()
         organization = user.organization.get()
-
-        # Set your secret key: remember to change this to your live secret key in production
-        # See your keys here https://dashboard.stripe.com/account/apikeys
         stripe.api_key = app_config.STRIPE_API_KEY
-
-        # Get the credit card details submitted by the form
         token = self.request.get('token')
         interval = self.request.get('interval')
         premium_subscription = Subscription.create_premium_subscription(interval)
-        # plane = self.request.get('plane')
-        # Create the charge on Stripe's servers - this will charge the user's card
         try:
-            stripe.Plan.retrieve('{}_{}'.format(app_config.PREMIUM, interval))
             customer = stripe.Customer.create(
                 source=token,
                 description=organization.key.id(),
@@ -1220,12 +1220,11 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
                 email=user.email,
                 quantity=User.get_users_count_by_organization(user.organization)
             )
-
             premium_subscription.is_auto_renew = not customer.subscriptions['data'][0].cancel_at_period_end
             premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
+            premium_subscription.stripe_customer_id = customer.id
             premium_subscription.put()
 
-            organization.stripe_customer_id = customer.id
             organization.set_subscription(premium_subscription)
             organization.put()
         except stripe.error.CardError, e:
@@ -1234,14 +1233,40 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
             self.response.set_status(e.http_status)
 
 
+class EditCreditCardHandler(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        user = self.get_user_from_session()
+        organization = user.organization.get()
+        stripe.api_key = app_config.STRIPE_API_KEY
+        token = self.request.get('token')
+        subscription = organization.get_subscription()
+        try:
+            customer = stripe.Customer.retrieve(subscription.stripe_customer_id)
+            customer.source = token
+            customer.save()
+        except stripe.error.CardError, e:
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.write(e.message)
+            self.response.set_status(e.http_status)
+
+
 class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
-        logging.info(self.request)
+        eve = json.loads(self.request.body)
+        if eve['type'] == "invoice.payment_succeeded":
+            logging.info(eve)
+
 
 class SFcallback(BaseHandler, SessionEnabledHandler):
     def get(self):
         code = self.request.get("code")
         url = 'http://app.copylead.com/oauth-authorized?code=%s' % code
+        self.redirect(str(url))
+
+class SFRMcallback(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        code = self.request.get("code")
+        url = 'http://referral.copylead.com/oauth-authorized?code=%s' % code
         self.redirect(str(url))
 
 class SFconnect(BaseHandler, SessionEnabledHandler):
@@ -1390,16 +1415,15 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
 class SFinvite(BaseHandler, SessionEnabledHandler):
     def post(self):
         data = json.loads(str(self.request.body))
-        print data
-        user_email = data['user_email']
+        user_email = ''
+        partner_email = ''
+        if 'user_email' in data.keys():
+            user_email = data['user_email']
+        if 'partner_email' in data.keys():
+            partner_email = data['partner_email']
         subject = data['subject']
         text = data['text'] + ' https://chrome.google.com/webstore/detail/copylead-for-salesforce/gbenffkgdeokfgjbbjibklflbaeelinh'
         emails = data['emails']
-        print user_email
-        print emails
-        print subject
-
-        # try:
         user = model.SFuser.query(model.SFuser.email == user_email).get()
         if user:
             for email in emails:
@@ -1413,9 +1437,19 @@ class SFinvite(BaseHandler, SessionEnabledHandler):
                     invitation.put()
                     sender_address =" %s %s <copylead@gcdc2013-iogrow.appspotmail.com>" % (user.firstname, user.lastname)
                     mail.send_mail(sender_address, email, subject, text)
-        # except:
-        #     print 'the user doesnt exist'
-
+        partner = model.SFpartner.query(model.SFpartner.email == partner_email).get()
+        if partner:
+            for email in emails:
+                existing = model.SFinvitation.query(model.SFinvitation.invitee_email == email).get()
+                if not existing:
+                    invitation = model.SFinvitation(
+                        partner_key = partner.key,
+                        partner_email=partner_email,
+                        invitee_email=email
+                    )
+                    invitation.put()
+                    sender_address =" %s %s <copylead@gcdc2013-iogrow.appspotmail.com>" % (partner.firstname, partner.lastname)
+                    mail.send_mail(sender_address, email, subject, text)
         self.response.headers['Access-Control-Allow-Origin'] = "*"
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps({}))
@@ -1424,12 +1458,12 @@ class SFinvite(BaseHandler, SessionEnabledHandler):
 class SFlistInviteesByPartners(BaseHandler, SessionEnabledHandler):
     def post(self):
         data = json.loads(str(self.request.body))
-        user_email = data['user_email']
-        partner = model.SFpartner.query(model.SFpartner.email==user_email).get()
-        response = model.SFinvitation().list_by_partner(partner.key)
+        partner_email = data['partner_email']
+        partner = model.SFpartner.query(model.SFpartner.email==partner_email).get()
+        resp = model.SFinvitation().list_by_partner(partner.key)
         self.response.headers['Access-Control-Allow-Origin'] = "*"
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(response))
+        self.response.out.write(json.dumps(resp))
 
 class SalesforceImporterCallback(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -2863,6 +2897,7 @@ routes = [
     ('/subscribe', SubscriptionHandler),
     ('/stripe/subscription', StripeSubscriptionHandler),
     ('/stripe/subscription_web_hook', StripeSubscriptionWebHooksHandler),
+    ('/stripe/change_card', EditCreditCardHandler),
 
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),

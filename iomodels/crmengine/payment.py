@@ -45,6 +45,8 @@ def payment_required():
             organization = _get_organization(kwargs)
             subscription = organization.get().get_subscription()
             plan = subscription.plan.get()
+            if not subscription.expiration_date:
+                    return f(*args, **kwargs)
             if subscription.expiration_date < datetime.datetime.now():
                 organization.get().set_subscription(Subscription.create_freemium_subscription())
             elif plan.name != config.PREMIUM:
@@ -144,8 +146,9 @@ class Subscription(BaseModel):
     start_date = ndb.DateTimeProperty(required=True)
     expiration_date = ndb.DateTimeProperty()
     description = ndb.StringProperty()
-    stripe_subscription_id = ndb.StringProperty()
     is_auto_renew = ndb.BooleanProperty()
+    stripe_customer_id = ndb.StringProperty()
+    stripe_subscription_id = ndb.StringProperty()
 
     @classmethod
     def create_freemium_subscription(cls):
