@@ -2257,43 +2257,6 @@ class get_popular_posts(webapp2.RequestHandler):
         Discovery.get_popular_posts()
 
 
-class GetCompanyFromTwitterToIoGrow(webapp2.RequestHandler):
-    def post(self):
-        entityKey = self.request.get('entityKey')
-        linkedin = linked_in()
-        key1 = ndb.Key(urlsafe=entityKey)
-        account = key1.get()
-        print account
-        screen_name = linkedin.scrape_twitter_company(account.name)
-        name = screen_name[screen_name.find("twitter.com/") + 12:]
-        profile_schema = EndpointsHelper.twitter_import_people(name)
-        print profile_schema, "prooooooooo"
-        if profile_schema:
-            d = profile_schema.name.lower()
-            if account.name in d:
-                profile = model.TwitterProfile()
-                profile.id = profile_schema.id
-                profile.followers_count = profile_schema.followers_count
-                profile.lang = profile_schema.lang
-                profile.last_tweet_text = profile_schema.last_tweet_text
-                profile.last_tweet_favorite_count = profile_schema.last_tweet_favorite_count
-                profile.last_tweet_retweeted = profile_schema.last_tweet_retweeted
-                profile.last_tweet_retweet_count = profile_schema.last_tweet_retweet_count
-                profile.language = profile_schema.language
-                profile.created_at = profile_schema.created_at
-                profile.nbr_tweets = profile_schema.nbr_tweets
-                profile.description_of_user = profile_schema.description_of_user
-                profile.friends_count = profile_schema.friends_count
-                profile.name = profile_schema.name
-                profile.screen_name = profile_schema.screen_name
-                profile.url_of_user_their_company = profile_schema.url_of_user_their_company
-                profile.location = profile_schema.location
-                profile.profile_image_url_https = profile_schema.profile_image_url_https
-                profile.profile_banner_url = profile_schema.profile_banner_url
-                key2 = profile.put()
-                ed = Edge.insert(start_node=key1, end_node=key2, kind='twitter', inverse_edge='parents')
-
-
 class GetFromTwitterToIoGrow(webapp2.RequestHandler):
     def post(self):
         entityKey = self.request.get('entityKey')
@@ -2879,7 +2842,6 @@ routes = [
     ('/workers/get_company_from_linkedin', GetCompanyFromLinkedinToIoGrow),
     ('/workers/update_tweets', update_tweets),
     ('/workers/update_tweets', delete_tweets),
-    ('/workers/get_company_from_twitter', GetCompanyFromTwitterToIoGrow),
     ('/workers/get_from_twitter', GetFromTwitterToIoGrow),
     ('/workers/send_gmail_message', SendGmailEmail),
     ('/workers/init_leads_from_gmail', InitLeadsFromGmail),
