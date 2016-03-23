@@ -386,13 +386,6 @@ class PartnersHandler(BaseHandler, SessionEnabledHandler):
         self.response.out.write(template.render(template_values))
 
 
-class WikiHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        template_values = {}
-        template = jinja_environment.get_template('wiki')
-        self.response.out.write(template.render(template_values))
-
-
 class PrivacyHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
@@ -3829,7 +3822,6 @@ routes = [
 
     #
     ('/', IndexHandler),
-    ('/wiki', WikiHandler),
     ('/ioadmin', ioAdminHandler),
     ('/ioadmin/biz', GBizCompanies),
     ('/partners/', PartnersHandler),
