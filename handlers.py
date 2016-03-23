@@ -1059,16 +1059,6 @@ class deleteAllRecordHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/admin/delete_all_records/delete_all_records.html')
 
 
-class ImportListHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/admin/imports/import_list.html')
-
-
-class ImportNewHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/admin/imports/import_new.html')
-
-
 class SearchListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/search/list.html')
@@ -3774,8 +3764,6 @@ routes = [
     ('/views/admin/users/show', UserShowHandler),
     ('/views/admin/billing/billing_edit', BillingEditHandler),
     ('/views/admin/settings', settingsShowHandler),
-    ('/views/admin/imports/list', ImportListHandler),
-    ('/views/admin/imports/new', ImportNewHandler),
     ('/views/admin/company/edit', EditCompanyHandler),
     ('/views/admin/email_signature/edit', EditEmailSignatureHandler),
     ('/views/admin/regional/edit', EditRegionalHandler),
