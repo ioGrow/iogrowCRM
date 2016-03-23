@@ -400,13 +400,6 @@ class SecurityInformationsHandler(BaseHandler, SessionEnabledHandler):
         self.response.out.write(template.render(template_values))
 
 
-class CrossLocalStorageHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/xdLocalStorage.html')
-        self.response.out.write(template.render(template_values))
-
-
 class StripeHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
         # Get the credit card details submitted by the form
@@ -3924,7 +3917,6 @@ routes = [
     ('/sf_invite', SFinvite),
     ('/invitation_sent', SFinvite),
     ('/stripe', StripeHandler),
-    ('/crosslocalstorage', CrossLocalStorageHandler),
     # paying with stripe
     ('/paying', StripePayingHandler),
     ('/views/dashboard', DashboardHandler),
