@@ -540,21 +540,6 @@ class ChangeActiveAppHandler(SessionEnabledHandler):
         else:
             self.redirect('/sign-in')
 
-class EarlyBirdHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        # Set the user locale from user's settings
-        user_id = self.request.get('id')
-        lang = self.request.get('language')
-        self.set_user_locale(lang)
-        # Render the template
-        template_values = {
-            'CLIENT_ID': CLIENT_ID,
-            'ID': user_id
-        }
-        template = jinja_environment.get_template('templates/early-bird.html')
-        self.response.out.write(template.render(template_values))
-
-
 class SignUpHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -595,18 +580,6 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             self.redirect('/sign-in')
 
 
-class StartEarlyBird(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-            user = self.get_user_from_session()
-            template_values = {
-                'userinfo': user,
-                'CLIENT_ID': CLIENT_ID}
-            template = jinja_environment.get_template('templates/sign-up-early-bird.html')
-            self.response.out.write(template.render(template_values))
-        else:
-            self.redirect('/early-bird')
-
     @ndb.toplevel
     def post(self):
         if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
@@ -622,31 +595,6 @@ class StartEarlyBird(BaseHandler, SessionEnabledHandler):
                 }
             )
             self.redirect('/')
-        else:
-            self.redirect('/early-bird')
-
-
-class SFConnectHelper(SessionEnabledHandler):
-    @staticmethod
-    def exchange_code(code):
-        """Exchanges the `code` member of the given AccessToken object, and returns
-        the relevant credentials.
-
-        Args:
-          code: authorization code to exchange.
-
-        Returns:
-          Credentials response from Google indicating token information.
-
-        Raises:
-          FlowExchangeException Failed to exchange code (code invalid).
-        """
-        oauth_flow = flow_from_clientsecrets(
-            'sf_client_secrets.json',
-            scope=['api']
-        )
-        credentials = oauth_flow.step2_exchange(code)
-        return credentials
 
 
 class GooglePlusConnect(SessionEnabledHandler):
@@ -3861,7 +3809,6 @@ routes = [
     ('/privacy/', PrivacyHandler),
     ('/security/', SecurityInformationsHandler),
     # Authentication Handlers
-    ('/start-early-bird-account', StartEarlyBird),
     ('/sign-in', SignInHandler),
     ('/sign-up', SignUpHandler),
     ('/gconnect', GooglePlusConnect),
