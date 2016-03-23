@@ -1475,13 +1475,6 @@ class ZohoUser(BaseHandler, SessionEnabledHandler):
         ).put()
 
 
-class GoGo(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        template_values = {}
-        template = jinja_environment.get_template('templates/sf.html')
-        self.response.out.write(template.render(template_values))
-
-
 class SFmarkAsLeadDev(BaseHandler, SessionEnabledHandler):
     def post(self):
         access_token = self.request.get("accessToken")
@@ -1959,18 +1952,6 @@ class SFsearchphoto(BaseHandler, SessionEnabledHandler):
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(response)
-
-
-class GoGoP(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        access_token = code = self.request.get("access_token")
-        url = self.request.get("url")
-        r = SfImporterHelper.sf_mark_as_lead(access_token, url)
-        print '----------------------------'
-        print r.__dict__
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps({}))
-
 
 class jj(BaseHandler, SessionEnabledHandler):
     def post(self):
@@ -3768,14 +3749,12 @@ routes = [
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),
     # ioGrow Live
-    ('/gogo', GoGo),
     ('/sfapi/markaslead', SFmarkAsLead),
     ('/zohoapi/markaslead', ZohoSaveLead),
     ('/sfapi/dev/markaslead', SFmarkAsLeadDev),
     ('/sfapi/search', SFsearch),
     ('/sfapi/dev/search', SFsearchDev),
     ('/sfapi/search_photo', SFsearchphoto),
-    ('/gogop', GoGoP),
     ('/welcome/', WelcomeHandler),
     ('/chrome-extension/', ChromeExtensionHandler),
     ('/terms-of-services/', TermsOfServicesHandler),
