@@ -1,6 +1,5 @@
 app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
     function ($scope, Auth, User, Map) {
-
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Users").addClass("active");
         trackMixpanelAction('USER_LIST_VIEW');
@@ -35,7 +34,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
         if (Auth.license_is_expired == "True") {
             $("#LicenseExpiredModal").modal('show');
         }
-        // What to do after authentication
         $scope.runTheProcess = function () {
             var params = {};
             User.getOrganizationLicensesStatus($scope, {});
@@ -46,51 +44,25 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
         $scope.refreshCurrent = function () {
             $scope.runTheProcess();
         };
-
-        $scope.setBillingDetails = function () {
-            $scope.billing.company_name = $scope.organization.name;
-            $scope.billing.contact_firstname = $scope.organization.billing_contact_firstname;
-            $scope.billing.contact_lastname = $scope.organization.billing_contact_lastname;
-            $scope.billing.address = $scope.organization.billing_contact_address;
-            $scope.billing.email = $scope.organization.billing_contact_email;
-            $scope.billing.phone_number = $scope.organization.billing_contact_phone_number;
-        };
         $scope.inProcess = function (varBool, message) {
-
             if (varBool) {
-
-                if (message) {
-                    console.log("starts of :" + message);
-
-                }
-                ;
-                console.log('true');
                 $scope.nbLoads = $scope.nbLoads + 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
-                ;
             } else {
-                if (message) {
-                    console.log("ends of :" + message);
-                }
-                ;
                 $scope.nbLoads = $scope.nbLoads - 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
                 }
-                ;
-            };
+            }
         };
-
         $scope.apply = function () {
             if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
                 $scope.$apply();
             }
             return false;
         }
-
-        // We need to call this to refresh token when user credentials are invalid
         $scope.refreshToken = function () {
             Auth.refreshToken();
         };
@@ -100,147 +72,8 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             } else {
                 return false;
             }
-            ;
-
         }
-        $scope.$watch('billing.nb_licenses', function (newValue, oldValue) {
-
-            if ($scope.billing.plan != '' && $scope.isNumber(newValue)) {
-                if ($scope.billing.plan == 'month') {
-                    if ($scope.organization.days_before_expiring <= 0) {
-
-                        $scope.billing.unit = 15;
-                        $scope.billing.total = 15 * $scope.billing.nb_licenses;
-                    }
-                    else {
-
-                        if ($scope.organization.license.name == "free_trial") {
-
-                            $scope.billing.unit = 15;
-                            $scope.billing.total = 15 * $scope.billing.nb_licenses;
-
-                        } else if ($scope.organization.license.name == "crm_monthly_online") {
-
-                            $scope.billing.unit = (15 / 30) * $scope.organization.days_before_expiring;
-                            $scope.billing.total = $scope.billing.unit * $scope.billing.nb_licenses;
-
-                        }
-
-                    }
-
-
-                } else {
-                    if ($scope.billing.plan == 'year') {
-
-                        if ($scope.organization.days_before_expiring <= 0) {
-                            $scope.billing.unit = 150;
-                            $scope.billing.total = 150 * $scope.billing.nb_licenses;
-
-
-                        } else {
-
-
-                            if ($scope.organization.license.name == "free_trial") {
-
-                                $scope.billing.unit = 150;
-                                $scope.billing.total = 150 * $scope.billing.nb_licenses;
-
-                            }
-                            else if ($scope.organization.license.name == "crm_monthly_online") {
-                                $scope.billing.unit = 150;
-                                $scope.billing.total = 150 * $scope.billing.nb_licenses;
-                            }
-                            else if ($scope.organization.license.name == "crm_annual_online") {
-
-                                $scope.billing.unit = ((150 / 365) * $scope.organization.days_before_expiring).toFixed(2);
-                                $scope.billing.total = ($scope.billing.unit * $scope.billing.nb_licenses).toFixed(2);
-
-                            }
-
-                        }
-
-
-                    }
-                    ;
-                }
-                ;
-            } else {
-                $scope.billing.total = null;
-            }
-            ;
-
-        });
-        $scope.$watch('billing.plan', function (newValue, oldValue) {
-            if ($scope.billing.plan != '' && $scope.isNumber($scope.billing.nb_licenses)) {
-                if (newValue == 'month') {
-
-                    if ($scope.organization.days_before_expiring <= 0) {
-
-                        $scope.billing.unit = 15;
-                        $scope.billing.total = 15 * $scope.billing.nb_licenses;
-
-                    } else {
-
-                        if ($scope.organization.license.name == "free_trial") {
-
-                            $scope.billing.unit = 15;
-                            $scope.billing.total = 15 * $scope.billing.nb_licenses;
-
-                        } else if ($scope.organization.license.name == "crm_monthly_online") {
-
-                            $scope.billing.unit = (15 / 30) * $scope.organization.days_before_expiring;
-                            $scope.billing.total = $scope.billing.unit * $scope.billing.nb_licenses;
-
-                        }
-
-                    }
-
-
-                } else {
-                    if (newValue == 'year') {
-
-                        if ($scope.organization.days_before_expiring <= 0) {
-
-                            $scope.billing.unit = 150;
-                            $scope.billing.total = 150 * $scope.billing.nb_licenses;
-
-                        } else {
-
-                            if ($scope.organization.license.name == "free_trial") {
-
-                                $scope.billing.unit = 150;
-                                $scope.billing.total = 150 * $scope.billing.nb_licenses;
-
-                            } else if ($scope.organization.license.name == "crm_monthly_online") {
-
-                                $scope.billing.unit = 150;
-                                $scope.billing.total = 150 * $scope.billing.nb_licenses;
-                            }
-                            else if ($scope.organization.license.name == "crm_annual_online") {
-
-                                $scope.billing.unit = ((150 / 365) * $scope.organization.days_before_expiring).toFixed(2);
-                                $scope.billing.total = ($scope.billing.unit * $scope.billing.nb_licenses).toFixed(2);
-
-                            }
-
-                        }
-
-
-                    }
-                    ;
-                }
-                ;
-            } else {
-                $scope.billing.total = null;
-            }
-            ;
-
-        });
-
-
         $scope.listNextPageItems = function () {
-
-
             var nextPage = $scope.currentPage + 1;
             var params = {};
             if ($scope.pages[nextPage]) {
@@ -255,8 +88,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             $scope.currentPage = $scope.currentPage + 1;
             User.list($scope, params);
         }
-
-
         $scope.filterByName = function () {
             if ($scope.predicate != 'google_display_name') {
                 console.log($scope.predicate);
@@ -284,54 +115,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             $scope.currentPage = $scope.currentPage - 1;
             User.list($scope, params);
         }
-        $scope.showPurchase = function () {
-
-            $("#purchaseModal").modal('show');
-            $("#MoreLicenseModal").modal('hide');
-            $("#LicenseExpiredModal").modal('hide');
-
-            $scope.initPurchaseData();
-
-        }
-
-
-        $scope.initPurchaseData = function () {
-            $scope.billing.payment_method = 'stripe';
-
-
-            if ($scope.organization.days_before_expiring <= 0) {
-                $scope.billing.nb_licenses = "1";
-                $scope.billing.plan = 'year';
-                $scope.billing.deactivate_month_option = false;
-
-                $scope.$apply();
-
-            } else {
-                if ($scope.organization.license.name == "premium_trial") {
-
-                    $scope.billing.nb_licenses = "1";
-                    $scope.billing.plan = 'year';
-                }
-                else if ($scope.organization.license.name == "crm_monthly_online") {
-                    $scope.billing.nb_licenses = "1";
-                    $scope.billing.plan = 'month';
-                }
-                else if ($scope.organization.license.name == "crm_annual_online") {
-
-                    $scope.billing.nb_licenses = "1";
-                    $scope.billing.plan = 'year';
-                    $scope.billing.deactivate_month_option = true;
-                }
-
-
-            }
-
-
-        }
-
-
         $scope.select_all_invitees = function ($event) {
-
             var checkbox = $event.target;
             if (checkbox.checked) {
                 $scope.selected_invitees = [];
@@ -343,285 +127,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                 $scope.allInvitees = false;
             }
         };
-
-        $scope.saveBilling = function (billing) {
-            $scope.billingError = {};
-            if ($scope.billing.nb_licenses == null || $scope.billing.nb_licenses == "") {
-                $scope.billingError.nb_licenses = true;
-                $scope.billingValid = false;
-
-            } else {
-                if ($scope.billing.plan == null || $scope.billing.plan == "") {
-                    $scope.billingError.plan = true;
-                    $scope.billingValid = false;
-                } else {
-                    if ($scope.billing.company_name == null || $scope.billing.company_name == "") {
-                        $scope.billingError.company_name = true;
-                        $scope.billingValid = false;
-                    } else {
-                        if ($scope.billing.contact_firstname == null || $scope.billing.contact_firstname == "") {
-                            $scope.billingError.contact_firstname = true;
-                            $scope.billingValid = false;
-                        } else {
-
-                            if ($scope.billing.contact_lastname == null || $scope.billing.contact_lastname == "") {
-                                $scope.billingError.contact_lastname = true;
-                                $scope.billingValid = false;
-                            } else {
-                                if ($scope.billing.address == null || $scope.billing.address == "") {
-                                    $scope.billingError.address = true;
-                                    $scope.billingValid = false;
-                                } else {
-                                    if ($scope.billing.email == null || $scope.billing.email == "") {
-                                        $scope.billingError.email = true;
-                                        $scope.billingValid = false;
-
-                                    } else {
-
-                                        if ($scope.billing.phone_number == null || $scope.billing.phone_number == "") {
-                                            $scope.billingError.phone_number = true;
-                                            $scope.billingValid = false;
-                                        } else {
-                                            $scope.billingValid = true;
-                                            $scope.step = 'payment';
-                                        }
-                                        ;
-
-                                    }
-                                    ;
-
-                                }
-                                ;
-
-                            }
-                            ;
-                        }
-                        ;
-
-                    }
-                    ;
-                }
-                ;
-            }
-            ;
-        }
-        $scope.paymentConfimration = function (resp) {
-            $scope.step = 'confirmation';
-            $scope.billing.expires_on = resp.expires_on;
-            $scope.billing.nb_licenses = resp.nb_licenses;
-            $scope.billing.total_amount = resp.total_amount;
-            if (resp.licenses_type == "crm_monthly_online") {
-                $scope.billing.licenses_type = "Monthly subscription";
-            } else {
-                $scope.billing.licenses_type = "Yearly subscription";
-            }
-            ;
-            $scope.billing.transaction_balance = resp.transaction_balance;
-            $scope.$apply();
-
-            User.getOrganizationLicensesStatus($scope, {});
-            $("#prepareToken").prop('disabled', false);
-            $('#card_number').val("");
-            $('#exp_month').val("");
-            $('#exp_year').val("");
-            $('#cvc').val("");
-            $scope.hideCarts();
-            $scope.$apply();
-        }
-        $scope.closePayment = function () {
-            $scope.step = 'billing';
-            $scope.billing.nb_licenses = null;
-            $scope.billing.plan = null;
-            $scope.billingValid = true;
-            $scope.billingError = {};
-            $("#purchaseModal").modal('hide');
-        }
-
-        // payment operation 
-
-
-        $scope.prepareToken = function () {
-            var $form = $('#payment-form');
-            if ($scope.checkFields()) {
-                $form.find('button').prop('disabled', true);
-                Stripe.card.createToken($form, stripeResponseHandler);
-            }
-
-
-        }
-
-        $scope.$watch('cardnumber', function (newValue, oldValue) {
-            var type = window.Stripe ? Stripe.card.cardType(newValue) : undefined;
-            if (type != "Unknown") {
-                switch (type) {
-                    case "Visa":
-                        $scope.billing.visa = true;
-                        $scope.billing.mastercard = false;
-                        $scope.billing.american_express = false;
-                        $scope.billing.discover = false;
-                        $scope.billing.JCB = false;
-                        $scope.billing.DinersClub = false;
-                        break;
-                    case "MasterCard":
-                        $scope.billing.visa = false;
-                        $scope.billing.mastercard = true;
-                        $scope.billing.american_express = false;
-                        $scope.billing.discover = false;
-                        $scope.billing.JCB = false;
-                        $scope.billing.DinersClub = false;
-                        break;
-                    case "American Express":
-                        $scope.billing.visa = false;
-                        $scope.billing.mastercard = false;
-                        $scope.billing.american_express = true;
-                        $scope.billing.discover = false;
-                        $scope.billing.JCB = false;
-                        $scope.billing.DinersClub = false;
-                        break;
-                    case "Discover":
-                        $scope.billing.visa = false;
-                        $scope.billing.mastercard = false;
-                        $scope.billing.american_express = false;
-                        $scope.billing.discover = true;
-                        $scope.billing.JCB = false;
-                        $scope.billing.DinersClub = false;
-                        break;
-                    case "Diners Club":
-                        $scope.billing.visa = false;
-                        $scope.billing.mastercard = false;
-                        $scope.billing.american_express = false;
-                        $scope.billing.discover = false;
-                        $scope.billing.JCB = false;
-                        $scope.billing.DinersClub = true;
-                        break;
-                    case "JCB":
-                        $scope.billing.visa = false;
-                        $scope.billing.mastercard = false;
-                        $scope.billing.american_express = false;
-                        $scope.billing.discover = false;
-                        $scope.billing.JCB = true;
-                        $scope.billing.DinersClub = false;
-                        break;
-                }
-                ;
-            } else {
-                $scope.hideCarts();
-            }
-        });
-
-        $scope.hideCarts = function () {
-            $scope.billing.visa = false;
-            $scope.billing.mastercard = false;
-            $scope.billing.american_express = false;
-            $scope.billing.discover = false;
-            $scope.billing.JCB = false;
-            $scope.billing.DinersClub = false;
-        };
-
-        function stripeResponseHandler(status, response) {
-            var $form = $('#payment-9+form');
-
-            if (response.error) {
-
-                $("#payment-errors").text(response.error.message).css("color", "red");
-                ;
-                $("#prepareToken").prop('disabled', false);
-
-                if (response.error.param == "number") {
-                    $scope.billingError.CardNumber = true;
-                }
-                if (response.error.param == "exp_month") {
-                    $scope.billingError.exp_month = true;
-                }
-                if (response.error.param == "exp_year") {
-                    $scope.billingError.exp_year = true;
-                }
-                if (response.error.param == "cvc") {
-
-                    $scope.billingError.cvc = true;
-                }
-
-                $scope.paymentOperation = false;
-                $scope.$apply();
-                // Show the errors on the form
-                // $form.find('.payment-errors').text(response.error.message);
-
-                // $form.find('button').prop('disabled', false);
-
-            } else {
-                // response contains id and card, which contains additional card details
-                var token = response.id;
-                // Insert the token into the form so it gets submitted to the server
-                $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-                // and submit
-
-
-                $scope.sendTokenToCharge(token);
-
-
-            }
-        };
-
-
-        $scope.checkFields = function () {
-            var goAhead = true;
-            if ($('#card_number').val() == "") {
-                $scope.billingError.CardNumber = true;
-            } else {
-                $scope.billingError.CardNumber = false;
-            }
-
-            if ($('#exp_month').val() == "") {
-
-                $scope.billingError.exp_month = true;
-            } else {
-
-                $scope.billingError.exp_month = false;
-            }
-
-            if ($('#exp_year').val() == "") {
-                $scope.billingError.exp_year = true;
-            }
-            else {
-                $scope.billingError.exp_year = false;
-            }
-            if ($('#cvc').val() == "") {
-                $scope.billingError.cvc = true;
-            } else {
-                $scope.billingError.cvc = false;
-
-            }
-            if ($scope.billingError.CardNumber || $scope.billingError.exp_month || $scope.billingError.exp_year || $scope.billingError.cvc) {
-                goAhead = false;
-
-            }
-
-
-            return goAhead;
-        }
-
-
-        $scope.sendTokenToCharge = function (token) {
-            $scope.paymentOperation = true;
-            $scope.$apply();
-
-            var params = {
-                'token': token,
-                'plan': $scope.billing.plan,
-                'nb_licenses': $scope.billing.nb_licenses,
-                'billing_contact_firstname': $scope.billing.contact_firstname,
-                'billing_contact_lastname': $scope.billing.contact_lastname,
-                'billing_contact_email': $scope.billing.email,
-                'billing_contact_address': $scope.billing.address,
-                'billing_contact_phone_number': $scope.billing.phone_number
-            };
-
-
-            User.purchase_lisences($scope, params);
-
-
-        }
-
 
         $scope.mapAutocomplete = function () {
             $scope.addresses = {};
@@ -642,15 +147,9 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             return ($scope.selected_invitees.indexOf(index) >= 0 || $scope.allInvitees);
         };
         $scope.select_all_users = function ($event) {
-
             var checkbox = $event.target;
             if (checkbox.checked) {
                 $scope.selected_users = [];
-
-                console.log("----------------------------------------------------");
-                console.log($scope.selected_users.concat($scope.users));
-                console.log("----------------------------------------------------");
-
                 $scope.selected_users = $scope.selected_users.concat($scope.users);
                 $scope.isSelectedAll = true;
             } else {
@@ -659,8 +158,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             }
         };
         $scope.select_user = function (user, index, $event) {
-            console.log('fffff');
-            console.log(user + index + $event);
             var checkbox = $event.target;
             if (checkbox.checked) {
                 if ($scope.selected_users.indexOf(user) == -1) {
@@ -674,55 +171,25 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             return ($scope.selected_users.indexOf(index) >= 0 || $scope.isSelectedAll);
         };
 
-
-        // HADJI HICHAM - 24/12/2014  - set admin .
         $scope.setAdmin = function (user, index, $event) {
             if (!user.is_super_admin) {
-
                 var checkbox = $event.target;
-
                 var params = {
                     'entityKey': user.entityKey,
                     'is_admin': checkbox.checked
                 }
-
-
                 User.setAdmin($scope, params);
-            } else {
-                // console.log("*****حمادة بالزنجبيل**************")
             }
-
         };
-
-// HADJI HICHAM - 24/12/2014 - delete user
         $scope.deleteUser = function () {
             var entityKeys = [];
-
-
             for (var i = $scope.selected_users.length - 1; i >= 0; i--) {
-
-                if ($scope.selected_users.is_admin) {
-
-                } else {
+                if (!$scope.selected_users.is_admin) {
                     entityKeys.push($scope.selected_users[i].entityKey)
                 }
-
             }
-            ;
-
-            var params = {
-                'entityKeys': entityKeys
-            };
-
-            User.deleteUser($scope, params)
+            User.deleteUser($scope, {'entityKeys': entityKeys})
         };
-
-        $scope.showModal = function () {
-            console.log('button clicked');
-            $('#addAccountModal').modal('show');
-
-        };
-
         $scope.addNewUser = function (user) {
             console.log('add a new user');
             console.log(user);
@@ -750,8 +217,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             });
         };
         $scope.unassignLicenses = function () {
-
-            var params = {};
             angular.forEach($scope.selected_users, function (user) {
                 if (!user.is_super_admin) {
                     params = {'entityKey': user.entityKey};
@@ -759,12 +224,9 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                 }
             });
         };
-
         $scope.inviteUser = function (elem) {
             if (elem != undefined && elem != null) {
-
                 switch (infos) {
-
                     case 'emails' :
                         if (elem.email) {
                             var copyOfElement = angular.copy(elem);
@@ -793,7 +255,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
             for (var i = 0; i < $scope.invitees.length; i++) if(email === $scope.invitees[i].invited_mail) return false;
             return true;
         };
-        //HADJI HICHAM 17/12/2014 - invite new users
         $scope.inviteNewUser = function (email) {
             if($scope.isEmailUnique(email.email)){
                 var nb_license_available = $scope.organization.nb_licenses - $scope.organization.nb_used_licenses;
@@ -818,66 +279,28 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map',
                         $scope.email_empty = true;
                     }
                 } else {
-
                     $scope.showBuyMoreLicense();
                 }
-
             }else{
-                //alert("this email already exist");
                 $scope.errorMsg = "The invited user already exist in users list or in your pending invitees list";
                 angular.element("#errorModalInsert").modal("show");
             }
-
         };
-
-
-// HADJI HICHAM -  22/12/2014 - 09:52 , show you don't have enough license please Buy more .
-        $scope.showBuyMoreLicense = function () {
-            $("#MoreLicenseModal").modal('show');
-        }
-
-
-// HADJI HICHAM -17/12/2014 - reload user list after adding a new one .
         $scope.reloadUsersList = function () {
             var params = {};
             User.list($scope, params);
         };
-
-//HADJI HICHAM -17/12/2014 . delete invited user .
         $scope.deleteInvitedUser = function () {
             var emails = [];
             for (var i = $scope.selected_invitees.length - 1; i >= 0; i--) {
-
                 emails.push($scope.selected_invitees[i].invited_mail)
-
-            }
-            ;
-
+            };
             var params = {
                 'emails': emails
             };
             User.deleteInvited($scope, params)
         };
-
-// HADJI HICHAM -  22/12/2014 - .
-
-// $scope.preparePriceOfPayment=function(price,plan){
-//  if(plan=="month"){
-//   $scope.unit=price/30;
-//  }else if(plan="year")
-//  {
-//    $scope.unit=price/365;
-//  }
-
-//   return  $scope.unit*parseInt($scope.organization.days_before_expiring);
-
-// }
-
-
-        // Google+ Authentication 
         Auth.init($scope);
-
-
     }]);
 
 app.controller('UserNewCtrl', ['$scope', 'Auth', 'User',
