@@ -3829,11 +3829,8 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(InvitationRequest, message_types.VoidMessage,
                       path='users/insert', http_method='POST',
                       name='users.insert')
-    # @User.method(path='users', http_method='POST', name='users.insert')
-    def UserInsert(self, request):
+    def user_insert(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = user_from_email.organization.get()
-        license = organization.plan.get()
         invitees = Invitation.list_invitees(user_from_email.organization)
         users = User.query(User.organization == user_from_email.organization).fetch()
         for invitee in invitees:
@@ -3842,84 +3839,57 @@ class CrmEngineApi(remote.Service):
         for user in users:
             if user.email == request.emails[0]:
                 return message_types.VoidMessage()
-        nb_invitees = len(invitees)
-        try:
-            nb_license_available = organization.nb_licenses - organization.nb_used_licenses
-        except:
-            nb_license_available = 1
-        if license.name == "life_time_free" or license.name == "freemium" or license.name == "premium_trial" or (
-                        nb_license_available > 0 and nb_license_available > nb_invitees):
-            credentials = user_from_email.google_credentials
-            http = credentials.authorize(httplib2.Http(memcache))
-            service = build('gmail', 'v1', http=http)
-            # OAuth flow
-
-            for email in request.emails:
-                my_model = User()
-                taskqueue.add(
-                    url='/workers/initpeertopeerdrive',
-                    queue_name='iogrow-low',
-                    params={
-                        'invited_by_email': user_from_email.email,
-                        'email': email,
-                    }
-                )
-                invited_user = User.get_by_email(email)
-                send_notification_mail = False
-                if invited_user is not None:
-                    if invited_user.organization == user_from_email.organization or invited_user.organization is None:
-                        invited_user.invited_by = user_from_email.key
-                        invited_user_key = invited_user.put_async()
-                        invited_user_async = invited_user_key.get_result()
-                        invited_user_id = invited_user_async.id()
-                        my_model.id = invited_user_id
-                        Invitation.insert(email, user_from_email)
-                        send_notification_mail = True
-                    elif invited_user.organization is not None:
-                        raise endpoints.UnauthorizedException('User exist within another organization')
-                        return
-                else:
-                    my_model.invited_by = user_from_email.key
-                    my_model.status = 'invited'
-                    my_model.is_admin = False
-                    # my_model.email = request.emails[0]
-                    invited_user_key = my_model.put_async()
+        credentials = user_from_email.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('gmail', 'v1', http=http)
+        for email in request.emails:
+            my_model = User()
+            taskqueue.add(
+                url='/workers/initpeertopeerdrive',
+                queue_name='iogrow-low',
+                params={
+                    'invited_by_email': user_from_email.email,
+                    'email': email,
+                }
+            )
+            invited_user = User.get_by_email(email)
+            send_notification_mail = False
+            if invited_user is not None:
+                if invited_user.organization == user_from_email.organization or invited_user.organization is None:
+                    invited_user.invited_by = user_from_email.key
+                    invited_user_key = invited_user.put_async()
                     invited_user_async = invited_user_key.get_result()
                     invited_user_id = invited_user_async.id()
+                    my_model.id = invited_user_id
                     Invitation.insert(email, user_from_email)
                     send_notification_mail = True
+                elif invited_user.organization is not None:
+                    raise endpoints.UnauthorizedException('User exist within another organization')
+            else:
+                my_model.invited_by = user_from_email.key
+                my_model.status = 'invited'
+                my_model.is_admin = False
+                invited_user_key = my_model.put_async()
+                invited_user_async = invited_user_key.get_result()
+                invited_user_id = invited_user_async.id()
+                Invitation.insert(email, user_from_email)
+                send_notification_mail = True
 
-                if send_notification_mail:
-                    confirmation_url = "http://www.iogrow.com/sign-in?id=" + str(invited_user_id) + '&'
-                    cc = None
-                    bcc = None
-                    subject = "Invitation from " + user_from_email.google_display_name
-                    html = "<html><head></head><body><div ><div style='margin-left:291px'><a href='www.iogrow.com'><img src='cid:user_cid'  style='width:130px;'/></div><div><h2 style='margin-left:130px ;font-family: sans-serif;color: rgba(137, 137, 137, 1);'></a><span style='color:#1C85BB'>" + user_from_email.google_display_name + "</span> has invited you to use ioGrow</h2><p style='margin-left: 30px;font-family: sans-serif;color: #5B5D62;font-size: 17px'>We are using ioGrow to collaborate, discover new customers and grow our business .It is a website where we manage our relationships with the customers .</p></div><div><a href='" + confirmation_url + "' style='margin-left: 259px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>JOIN YOUR TEAM ON IOGROW</a> <br><hr style=' width: 439px;margin-left: 150px;margin-top: 28px;'><p style='margin-left:290px;font-family:sans-serif'><a href='www.iogrow.com' style='text-decoration: none;'><img src='cid:logo_cid'  alt='Logo'/> ioGrow (c)2015</a></p></div></div></body></html>"
-                    message = EndpointsHelper.create_message_with_attchments_local_files(
-                        user_from_email.google_display_name,
-                        email,
-                        cc,
-                        bcc,
-                        subject,
-                        html
-                    )
-
-                    EndpointsHelper.send_message(service, 'me', message)
-                    # sender_address = user_from_email.google_display_name+" <notifications@gcdc2013-iogrow.appspotmail.com>"
-
-                    # body = """
-                    # Thank you for creating an account! Please confirm your email address by
-                    # clicking on the link below:
-                    # %s
-                    # """ % confirmation_url
-
-                    # body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
-                    # body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
-                    # body="<div >"+"<div style='margin-left:486px'>"+"<img src='/static/img/avatar_2x.png'  style='width:130px;border-radius: 69px;'/>"+"</div>"+"<div>"+"<h1 style='margin-left:303px ;font-family: sans-serif;color: #91ACFF;'>"+ "<span style='color:#1C85BB'>"+user_from_email.google_display_name+"</span>"+"has invited you to use ioGrow"+"</h1>"+"<p style='margin-left: 191px;font-family: monospace;color: #5B5D62;font-size: 17px'>"+"We are using ioGrow to collaborate, discover new customers and grow our business ."+"<br>"+"It is a website where we have discussions, share files and keep track of everything"+"<br>"+"<span style='margin-left:237px'>"+"related to our business."+"</span>"+"</p>"+"</div>"+"<div>"+"<a href='"+confirmation_url+"' style='margin-left: 420px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>"+"JOIN YOUR TEAM ON IOGROW"+"</a> <br>"+"<hr style=' width: 439px;margin-left: 334px;margin-top: 28px;'>"+"<p style='margin-left:470px;font-family:sans-serif'>"+"<img src='/static/img/sm-iogrow-true.png'>"+" ioGrow (c)2015" +"</p>"+"</div>"+"</div>"
-
-                    # mail.send_mail(sender_address, email , subject,body)
-        else:
-            print "piracy proccess has failed , ha ha ha !"
+            if send_notification_mail:
+                confirmation_url = "http://www.iogrow.com/sign-in?id=" + str(invited_user_id) + '&'
+                cc = None
+                bcc = None
+                subject = "Invitation from " + user_from_email.google_display_name
+                html = "<html><head></head><body><div ><div style='margin-left:291px'><a href='www.iogrow.com'><img src='cid:user_cid'  style='width:130px;'/></div><div><h2 style='margin-left:130px ;font-family: sans-serif;color: rgba(137, 137, 137, 1);'></a><span style='color:#1C85BB'>" + user_from_email.google_display_name + "</span> has invited you to use ioGrow</h2><p style='margin-left: 30px;font-family: sans-serif;color: #5B5D62;font-size: 17px'>We are using ioGrow to collaborate, discover new customers and grow our business .It is a website where we manage our relationships with the customers .</p></div><div><a href='" + confirmation_url + "' style='margin-left: 259px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>JOIN YOUR TEAM ON IOGROW</a> <br><hr style=' width: 439px;margin-left: 150px;margin-top: 28px;'><p style='margin-left:290px;font-family:sans-serif'><a href='www.iogrow.com' style='text-decoration: none;'><img src='cid:logo_cid'  alt='Logo'/> ioGrow (c)2015</a></p></div></div></body></html>"
+                message = EndpointsHelper.create_message_with_attchments_local_files(
+                    user_from_email.google_display_name,
+                    email,
+                    cc,
+                    bcc,
+                    subject,
+                    html
+                )
+                EndpointsHelper.send_message(service, 'me', message)
         return message_types.VoidMessage()
 
     # organizations.get api v2
@@ -6379,6 +6349,12 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(response_message=SubscriptionSchema, http_method='GET',
                       name='subscription.get', path='subscription/get')
     def get_subscription(self, request):
+        user = EndpointsHelper.require_iogrow_user()
+        return user.get_subscription().get_schema()
+
+    @endpoints.method(response_message=SubscriptionSchema, http_method='GET',
+                      name='subscription.organization_get', path='subscription/organization_get')
+    def get_org_subscription(self, request):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         return organization.get_subscription().get_schema()
 
@@ -6414,7 +6390,8 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(name='subscription.by_new_licences', path='subscription/by_new_licences',
                       request_message=LicencesQuantityMessage)
     def by_new_licences(self, request):
-        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        user = EndpointsHelper.require_iogrow_user()
+        organization = user.organization.get()
         subscription = organization.get_subscription()
         quantity = request.quantity
         if quantity <= 0:
@@ -6424,11 +6401,32 @@ class CrmEngineApi(remote.Service):
             sub = customer.subscriptions.retrieve(subscription.stripe_subscription_id)
             sub.quantity += quantity
             sub.save()
+            if user.subscription.get().plan.get().name != config.PREMIUM:
+                user.set_subscription(organization.subscription.get())
+                user.put()
+                quantity -= 1
 
-            subscription.quantity = sub.quantity
+            subscription.quantity += quantity
             subscription.put()
         except stripe.error.CardError, e:
             self.response.headers['Content-Type'] = 'application/json'
             self.response.write(e.message)
             self.response.set_status(e.http_status)
         return message_types.VoidMessage()
+
+    @endpoints.method(name='organization.licenses_status', path='organization/licenses_status',
+                      http_method='GET', response_message=iomessages.OrganizationSubscriptionStatusMessage)
+    def get_organizations_licenses_status(self, request):
+        org_key = EndpointsHelper.require_iogrow_user().organization
+        users_count = User.count_by_organization(org_key)
+        resp = iomessages.OrganizationSubscriptionStatusMessage(users_count=users_count)
+
+        organization = org_key.get()
+        subscription = organization.subscription.get()
+        plan_key = subscription.plan
+        plan = plan_key.get()
+        if plan.name == config.PREMIUM:
+            resp.assigned_licenses = len(filter(lambda user: user.has_license(plan_key),
+                                                User.fetch_by_organization(org_key)))
+            resp.licenses_bought = subscription.quantity
+        return resp

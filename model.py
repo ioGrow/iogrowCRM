@@ -583,7 +583,9 @@ class Organization(ndb.Model):
         admin.license_expires_on = now_plus_month
         admin.is_admin = True
         admin.put()
-        organization.subscription = organization.get_subscription().key
+        # organization.subscription = organization.get_subscription().key
+        organization.set_subscription(Subscription.create_freemium_subscription())
+        admin.set_subscription(Subscription.create_freemium_subscription())
         return org_key
 
     @classmethod
@@ -1007,13 +1009,22 @@ class User(EndpointsModel):
 
     def put_async(self, **kwargs):
         async = super(User, self).put_async(**kwargs)
-        # if not self.id and self.status == "active":
         self.after_create(async.get_result().id())
         return async
 
     @classmethod
-    def get_users_count_by_organization(cls, org_key):
+    def count_by_organization(cls, org_key):
         return cls.query(cls.organization == org_key).count()
+
+    def has_license(self, plan_key):
+        user_subscription = self.subscription
+        if user_subscription:
+            return user_subscription.get().plan == plan_key
+        return False
+
+    @classmethod
+    def fetch_by_organization(cls, org_key):
+        return cls.query(cls.organization == org_key).fetch()
 
     def init_user_config(self, org_key, profile_key):
         profile = profile_key.get()
@@ -1450,7 +1461,7 @@ class User(EndpointsModel):
             }
         )
 
-        Organization.create_instance(request.organization_name, user)
+        Organization.ance(request.organization_name, user)
 
     @classmethod
     def check_license(cls, user):

@@ -38,7 +38,8 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             var params = {};
             User.getOrganizationLicensesStatus($scope, {});
             User.list($scope, params);
-            Billing.getSubscription($scope)
+            Billing.getOrganizationSubscription($scope);
+            Billing.getSubscription($scope);
             $scope.mapAutocomplete();
             ga('send', 'pageview', '/admin/users');
         };
@@ -63,7 +64,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
                 $scope.$apply();
             }
             return false;
-        }
+        };
         $scope.refreshToken = function () {
             Auth.refreshToken();
         };
@@ -73,7 +74,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             } else {
                 return false;
             }
-        }
+        };
         $scope.listNextPageItems = function () {
             var nextPage = $scope.currentPage + 1;
             var params = {};
@@ -88,7 +89,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             console.log('in listNextPageItems');
             $scope.currentPage = $scope.currentPage + 1;
             User.list($scope, params);
-        }
+        };
         $scope.filterByName = function () {
             if ($scope.predicate != 'google_display_name') {
                 console.log($scope.predicate);
@@ -99,7 +100,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
                 $scope.predicate = '-google_display_name';
                 $scope.reverse = false;
             }
-        }
+        };
         $scope.listPrevPageItems = function () {
             var prevPage = $scope.currentPage - 1;
             var params = {};
@@ -256,29 +257,18 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
         };
         $scope.inviteNewUser = function (email) {
             if($scope.isEmailUnique(email.email)){
-                var nb_license_available = $scope.organization.nb_licenses - $scope.organization.nb_used_licenses;
-                var nb_invitees = 0;
-                if ($scope.invitees) {
-                    nb_invitees = $scope.invitees.length;
-                }
-                var licenceName = $scope.organization.license.name;
-                if (licenceName == "life_time_free" || licenceName == "freemium" || licenceName == "premium_trial"
-                    || (nb_license_available > 0 && nb_license_available > nb_invitees)) {
-                    if (email != undefined && email != null && email.email != "") {
-                        $scope.email_empty = false;
-                        var emails = [];
-                        emails.push(email.email);
-                        var params = {
-                            'emails': emails,
-                            'message': "message"
-                        };
-                        User.insert($scope, params);
-                        $scope.email.email = '';
-                    } else {
-                        $scope.email_empty = true;
-                    }
+                if (email != undefined && email != null && email.email != "") {
+                    $scope.email_empty = false;
+                    var emails = [];
+                    emails.push(email.email);
+                    var params = {
+                        'emails': emails,
+                        'message': "message"
+                    };
+                    User.insert($scope, params);
+                    $scope.email.email = '';
                 } else {
-                    $scope.showBuyMoreLicense();
+                    $scope.email_empty = true;
                 }
             }else{
                 $scope.errorMsg = "The invited user already exist in users list or in your pending invitees list";
@@ -293,7 +283,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             var emails = [];
             for (var i = $scope.selected_invitees.length - 1; i >= 0; i--) {
                 emails.push($scope.selected_invitees[i].invited_mail)
-            };
+            }
             var params = {
                 'emails': emails
             };

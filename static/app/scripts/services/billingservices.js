@@ -28,6 +28,25 @@ angular.module('crmEngine.billingservices', []).factory('Billing', function () {
             })
         });
     };
+    Billing.getOrganizationSubscription = function ($scope) {
+        $scope.isLoading = true;
+        gapi.client.request({
+            'root': ROOT,
+            'path': '/crmengine/v1/subscription/organization_get',
+            'method': 'GET',
+            'body': {},
+            'callback': (function (resp) {
+                if (!resp.code) {
+                    $scope.org_subscription = resp;
+                    $scope.org_subscription.is_auto_renew =parseInt(resp.is_auto_renew);
+                } else {
+                    notFoundHandle(resp, $scope);
+                }
+                $scope.isLoading = false;
+                $scope.apply();
+            })
+        });
+    };
     Billing.disableAutoRenew = function ($scope) {
         $scope.isLoading = true;
         $scope.apply();

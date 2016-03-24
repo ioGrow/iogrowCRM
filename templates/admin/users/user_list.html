@@ -21,14 +21,15 @@
             <i class="fa fa-trash-o"></i>
         </a>
         <a ng-class="{disabled: selected_users.length==0}" class="headerBtn"
-           ng-show="selected_users.length && subscription.quantity" ng-click="assignLicenses()">
+           ng-show="selected_users.length && org_subscription.quantity" ng-click="assignLicenses()">
             <i class="fa fa-plus"></i> <i class="fa fa-key"></i>
         </a>
         <a ng-class="{disabled: selected_users.length==0}" class="headerBtn"
-           ng-show="selected_users.length && subscription.quantity" ng-click="unassignLicenses()">
+           ng-show="selected_users.length && org_subscription.quantity" ng-click="unassignLicenses()">
             <i class="fa fa-minus"></i> <i class="fa fa-key"></i>
         </a>
-        <div class="col-sm-6 pull-right" ng-show="showInviteForm" ng-class="{ 'has-error':email_empty}">
+        <form style="display: inline">
+            <div class="col-sm-6 pull-right" ng-show="showInviteForm" ng-class="{ 'has-error':email_empty}">
             <label class="sr-only">Email</label>
             <input type="email" ng-model="email.email" placeholder="Enter a email" class="form-control"
                    style="width: 58%;display: inline;">
@@ -36,11 +37,12 @@
             <button ng-click="showInviteForm = false" class="btn btn-default">X</button>
         </div>
         <span ng-hide="showInviteForm">
-            <a title="New user" class="btn red newAccountBtnOnscroll pull-right save-btn"
+            <button type="submit" title="New user" class="btn red newAccountBtnOnscroll pull-right save-btn"
                ng-click="showInviteForm=true">
                 + <i class="fa fa-user"></i> {{ _('New') }}
-            </a>
+            </button>
         </span>
+        </form>
     </div>
 </div>
 <div class="page-content admin-content">
@@ -84,7 +86,7 @@
                             <span ng-show="userSortType == 'email' && !userSortReverse" class="fa fa-caret-down"></span>
                             <span ng-show="userSortType == 'email' && userSortReverse" class="fa fa-caret-up"></span>
                         </th>
-                        <th>
+                        <th ng-show="org_subscription.plan.name==='premium'">
                             <a href="" ng-click="userSortType='license_status';userSortReverse=!userSortReverse">
                                 {{_('License status') }}</a>
                             <span ng-show="userSortType == 'license_status' && !userSortReverse"
@@ -120,8 +122,8 @@
                         <td class="table-box">
                             <%= user.email %>
                         </td>
-                        <td class="table-box">
-                            <%= user.license_status %>
+                        <td class="table-box" ng-show="org_subscription.plan.name==='premium'">
+                            <%= (subscription.plan.name==='premium') ? 'active' :'' %>
                         </td>
                         {% if is_admin %}
                         <td class="table-box">
@@ -138,34 +140,38 @@
         <div class="showPage margin-bottom-15 col-md-3 user-resume">
             <div class="col-items">
                 <i class="fa  fa-key"></i>
-                {{ _('License type') }}: <span class="pull-right"><%=subscription.plan.name%></span>
-            </div>
-            <div class="col-items">
-                <i class="fa  fa-check "></i>
-                {{ _('licenses bought') }} <span class="pull-right"><%=subscription.quantity || 0 %></span>
+                {{ _('License type') }}: <span class="pull-right"><%=org_subscription.plan.name%></span>
             </div>
             <div class="col-items">
                 <i class="fa  fa-group "></i>
-                {{ _('Users') }} <span class="pull-right"><%=organization.nb_users%></span>
+                {{ _('Users') }} <span class="pull-right"><%=licencesStatus.users_count%></span>
             </div>
-            <div class="col-items">
-                <i class="fa  fa-user"></i>
-                {{ _('assigned licenses') }}
-                <span class="pull-right"><%=organization.nb_used_licenses%> </span>
-                <!--nb licenses>-->
+            <div class="col-items" ng-class="{'last-item': org_subscription.plan.name !='premium'}">
+                <i class="fa  fa-group "></i>
+                {{ _('Expiration date') }} <span class="pull-right"><%=org_subscription.expiration_date%></span>
             </div>
-            <div class="col-items last-item">
-                <i class="fa  fa-ticket "></i>
-                {{ _('available licenses') }}
-                <span class="pull-right"><%=organization.nb_licenses - organization.nb_used_licenses%></span>
-                <!--nb active licenses>-->
+            <div ng-show="org_subscription.plan.name==='premium'">
+                <div class="col-items">
+                    <i class="fa  fa-check "></i>
+                    {{ _('licenses bought') }} <span class="pull-right"><%=licencesStatus.licenses_bought %></span>
+                </div>
+                <div class="col-items">
+                    <i class="fa  fa-user"></i>
+                    {{ _('assigned licenses') }}
+                    <span class="pull-right"><%=licencesStatus.assigned_licenses%> </span>
+                </div>
+                <div class="col-items last-item">
+                    <i class="fa  fa-ticket "></i>
+                    {{ _('available licenses') }}
+                    <span class="pull-right"><%=licencesStatus.licenses_bought - licencesStatus.assigned_licenses%></span>
+                </div>
             </div>
 
             {% if is_not_a_life_time %}
             {% if is_freemium ==False %}
             <div class="col-lg">
                 <i class="fa  fa-calendar "></i>
-                {{ _('Expire') }} : <%=organization.expires_on | date:'yyyy-MM-dd'%> <!--ex date>-->
+                {{ _('Expire') }} : <%=org_subscription.expires_on | date:'yyyy-MM-dd'%> <!--ex date>-->
             </div>
             <button title='{{ _("Purchase") }}' class="btn btn-sm blue task_action pull-right"
                     ng-click="showPurchase()">
