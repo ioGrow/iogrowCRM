@@ -1,7 +1,7 @@
 import datetime
 # Google libs
-import logging
 import os
+
 import httplib2
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
@@ -979,6 +979,10 @@ class User(EndpointsModel):
             self.subscription = Subscription.create_freemium_subscription().key
             self.put()
         return self.subscription.get()
+
+    @classmethod
+    def fetch_by_organization(cls, org_key):
+        return cls.query(User.organization == org_key).fetch()
 
     def set_subscription(self, new_subscription):
         if not isinstance(new_subscription, Subscription):
