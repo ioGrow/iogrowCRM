@@ -89,7 +89,7 @@ from people import linked_in
 from operator import itemgetter
 import iomessages
 from iomessages import Scoring_Topics_Schema, Topics_Schema, Topic_Comparaison_Schema, TopicsResponse, \
-    TweetResponseSchema, SubscriptionSchema, LicencesQuantityMessage
+    TweetResponseSchema, SubscriptionSchema, LicencesQuantityMessage, SubscriptionListSchema
 from ioreporting import Reports, ReportSchema
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema, KewordsRequest, TwitterRequest, tweetsResponse, \
     LinkedinCompanySchema, \
@@ -6351,6 +6351,15 @@ class CrmEngineApi(remote.Service):
     def get_subscription(self, request):
         user = EndpointsHelper.require_iogrow_user()
         return user.get_subscription().get_schema()
+
+    @endpoints.method(response_message=SubscriptionListSchema, http_method='GET',
+                      name='subscription.list', path='subscription/list')
+    def fetch_subscriptions(self, request):
+        org_key = EndpointsHelper.require_iogrow_user().organization
+        users = User.fetch_by_organization(org_key)
+        data = [iomessages.UserSubscriptionSchema(subscriptions=user.get_subscription().get_schema(), email=user.email)
+                for user in users]
+        return SubscriptionListSchema(data=data)
 
     @endpoints.method(response_message=SubscriptionSchema, http_method='GET',
                       name='subscription.organization_get', path='subscription/organization_get')
