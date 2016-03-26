@@ -38,12 +38,14 @@ angular.module('crmEngine.billingservices', []).factory('Billing', function () {
             'callback': (function (resp) {
                 if (!resp.code) {
                     var data = resp.data;
-                    var users_subscriptions = {};
+                    $scope.users_subscriptions = {};
                     for (var i = 0; i < data.length; i++) {
                         var element = data[i];
-                        element.is_auto_renew =parseInt(element.is_auto_renew);
-                        users_subscriptions[element['email']] = element;
+                        element.subscription.is_auto_renew =parseInt(element.subscription.is_auto_renew);
+                        element.subscription.quantity =parseInt(element.subscription.quantity);
+                        $scope.users_subscriptions[element['email']] = element.subscription;
                     }
+                    console.log($scope.users_subscriptions);
                 } else {
                     notFoundHandle(resp, $scope);
                 }

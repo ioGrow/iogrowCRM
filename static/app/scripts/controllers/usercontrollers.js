@@ -39,7 +39,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             User.getOrganizationLicensesStatus($scope, {});
             User.list($scope, params);
             Billing.getOrganizationSubscription($scope);
-            Billing.getSubscription($scope);
+            Billing.listSubscription($scope);
             $scope.mapAutocomplete();
             ga('send', 'pageview', '/admin/users');
         };
