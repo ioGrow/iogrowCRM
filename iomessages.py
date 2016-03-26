@@ -574,7 +574,7 @@ class SubscriptionSchema(messages.Message):
 
 
 class UserSubscriptionSchema(messages.Message):
-    subscriptions = messages.MessageField(SubscriptionSchema, 1)
+    subscription = messages.MessageField(SubscriptionSchema, 1)
     email = messages.StringField(2)
 
 

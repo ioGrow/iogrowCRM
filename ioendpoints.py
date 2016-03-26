@@ -6357,7 +6357,7 @@ class CrmEngineApi(remote.Service):
     def fetch_subscriptions(self, request):
         org_key = EndpointsHelper.require_iogrow_user().organization
         users = User.fetch_by_organization(org_key)
-        data = [iomessages.UserSubscriptionSchema(subscriptions=user.get_subscription().get_schema(), email=user.email)
+        data = [iomessages.UserSubscriptionSchema(subscription=user.get_subscription().get_schema(), email=user.email)
                 for user in users]
         return SubscriptionListSchema(data=data)
 
