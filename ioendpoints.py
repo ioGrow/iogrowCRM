@@ -5134,16 +5134,6 @@ class CrmEngineApi(remote.Service):
                 task.put()
         return message_types.VoidMessage()
 
-    # users.upgrade api v2
-    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
-                      path='users/upgrade_early_birds', http_method='POST',
-                      name='users.upgrade_early_birds')
-    def upgrade_early_birds_to_business(self, request):
-        users = User.query(User.type == 'early_bird').fetch(20)
-        for user in users:
-            Organization.upgrade_to_business_version(user.organization)
-        return message_types.VoidMessage()
-
     # list colaborator arezki lebdiri 4-8-14
     @endpoints.method(EntityKeyRequest, ColaboratorItem,
                       path='permissions/get_colaborators', http_method='POST',
@@ -5742,7 +5732,7 @@ class CrmEngineApi(remote.Service):
                 # organization.nb_licenses=organization.nb_licenses+int(request.nb_licenses)
                 # organization.plan=new_plan[0].key
                 # now = datetime.datetime.now()
-                # now_plus_exp_day=now+datetime.timedelta(days=int(new_plan[0].duration)) 
+                # now_plus_exp_day=now+datetime.timedelta(days=int(new_plan[0].duration))
                 # organization.licenses_expires_on=now_plus_exp_day
                 # organization.billing_contact_firstname=request.billing_contact_firstname
                 # organization.billing_contact_lastname=request.billing_contact_lastname
@@ -5853,24 +5843,6 @@ class CrmEngineApi(remote.Service):
                 logo.fileUrl = logo.custom_logo
                 logo.custom_logo = None
             logo.put()
-
-        return message_types.VoidMessage()
-
-    @endpoints.method(FullContactRequest, message_types.VoidMessage,
-                      path='fullContact/web_hook', http_method='POST',
-                      name='fullContact.web_hook')
-    def handel_web_hook(self, request):
-        contact = request.contact
-        params = request.params
-
-        if not params:
-            raise endpoints.NotFoundException("no google id provided")
-        if not params.googleId:
-            raise endpoints.NotFoundException("no google id provided")
-        user = User.query(User.google_user_id == str(params.googleId)).get()
-        if not user:
-            raise endpoints.NotFoundException("no google id provided")
-        Lead.create_lead_full_contact(contact, user, params.access)
 
         return message_types.VoidMessage()
 
