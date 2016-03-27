@@ -1,3 +1,13 @@
+function getSelectableUser(users){
+    var selectableUsers = [];
+    for (var i = 0; i < $scope.users.length; i++) {
+        var user = $scope.users[i];
+        if (!user.is_super_admin)
+            selectableUsers.push(user);
+    }
+    return selectableUsers;
+}
+
 var accountservices = angular.module('crmEngine.userservices', []);
 accountservices.factory('User', function ($http) {
     var User = function (data) {
@@ -26,7 +36,7 @@ accountservices.factory('User', function ($http) {
             if (!resp.code) {
                 $scope.isLoading = false;
                 $scope.isSelected = false;
-                $scope.selected_users = [];
+                $scope.selectedUsers = [];
                 $scope.runTheProcess();
             } else {
                 if (resp.code == 401) {
@@ -46,7 +56,7 @@ accountservices.factory('User', function ($http) {
             if (!resp.code) {
                 $scope.isLoading = false;
                 $scope.isSelected = false;
-                $scope.selected_users = [];
+                $scope.selectedUsers = [];
                 $scope.runTheProcess();
 
             } else {
@@ -96,16 +106,13 @@ accountservices.factory('User', function ($http) {
         gapi.client.crmengine.users.list(params).execute(function (resp) {
             if (!resp.code) {
                 $scope.users = resp.items;
+                $scope.selectableUsers = getSelectableUser($scope.users);
                 $scope.invitees = resp.invitees;
-                $scope.inProcess(false);
-                $scope.apply();
-            } else {
-                if (resp.code == 401) {
+            } else if (resp.code == 401) {
                     $scope.refreshToken();
-                    $scope.inProcess(false);
-                    $scope.apply();
-                }
             }
+            $scope.inProcess(false);
+            $scope.apply();
         });
     };
     User.signature = function ($scope, params) {
