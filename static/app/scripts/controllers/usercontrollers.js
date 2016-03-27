@@ -11,7 +11,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
         $scope.isLoading = false;
         $scope.pagination = {};
         $scope.currentPage = 01;
-        $scope.selected_users = [];
+        $scope.selectedUsers = [];
         $scope.selected_invitees = [];
         $scope.pages = [];
         $scope.organization = {};
@@ -114,7 +114,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             }
             $scope.currentPage = $scope.currentPage - 1;
             User.list($scope, params);
-        }
+        };
         $scope.select_all_invitees = function ($event) {
             var checkbox = $event.target;
             if (checkbox.checked) {
@@ -132,7 +132,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             $scope.addresses = {};
             /*$scope.billing.addresses;*/
             Map.autocomplete($scope, "pac-input");
-        }
+        };
         $scope.select_invitee = function (invitee, index, $event) {
             var checkbox = $event.target;
             if (checkbox.checked) {
@@ -146,29 +146,33 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
         $scope.isSelectedInvitee = function (index) {
             return ($scope.selected_invitees.indexOf(index) >= 0 || $scope.allInvitees);
         };
-        $scope.select_all_users = function ($event) {
+        $scope.selectAllUsers = function ($event) {
             var checkbox = $event.target;
             if (checkbox.checked) {
-                $scope.selected_users = [];
-                $scope.selected_users = $scope.selected_users.concat($scope.users);
+                $scope.selectedUsers = angular.copy($scope.selectableUsers);
                 $scope.isSelectedAll = true;
             } else {
-                $scope.selected_users = [];
+                $scope.selectedUsers = [];
                 $scope.isSelectedAll = false;
             }
         };
         $scope.select_user = function (user, index, $event) {
             var checkbox = $event.target;
             if (checkbox.checked) {
-                if ($scope.selected_users.indexOf(user) == -1) {
-                    $scope.selected_users.push(user);
+                if ($scope.selectedUsers.indexOf(user) == -1) {
+                    $scope.selectedUsers.push(user);
                 }
+                if ($scope.selectedUsers.length == $scope.selectableUsers.length)
+                    $scope.isSelectedAll = true;
             } else {
-                $scope.selected_users.splice(index, 1);
+                $scope.selectedUsers.splice(index, 1);
+                if ($scope.selectedUsers.length == 0)
+                    $scope.isSelectedAll = false;
             }
+            console.log($scope.selectedUsers);
         };
         $scope.isSelected = function (index) {
-            return ($scope.selected_users.indexOf(index) >= 0 || $scope.isSelectedAll);
+            return ($scope.selectedUsers.indexOf(index) >= 0 || $scope.isSelectedAll);
         };
 
         $scope.setAdmin = function (user, index, $event) {
@@ -183,9 +187,9 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
         };
         $scope.deleteUser = function () {
             var entityKeys = [];
-            for (var i = $scope.selected_users.length - 1; i >= 0; i--) {
-                if (!$scope.selected_users.is_admin) {
-                    entityKeys.push($scope.selected_users[i].entityKey)
+            for (var i = $scope.selectedUsers.length - 1; i >= 0; i--) {
+                if (!$scope.selectedUsers.is_admin) {
+                    entityKeys.push($scope.selectedUsers[i].entityKey)
                 }
             }
             User.deleteUser($scope, {'entityKeys': entityKeys})
@@ -206,9 +210,9 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
         };
 
         $scope.assignLicenses = function () {
-            console.log($scope.selected_users);
+            console.log($scope.selectedUsers);
             var params = {};
-            angular.forEach($scope.selected_users, function (user) {
+            angular.forEach($scope.selectedUsers, function (user) {
                 if (!user.is_super_admin) {
                     params = {'entityKey': user.entityKey};
                     User.assignLicense($scope, params);
@@ -217,7 +221,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             });
         };
         $scope.unassignLicenses = function () {
-            angular.forEach($scope.selected_users, function (user) {
+            angular.forEach($scope.selectedUsers, function (user) {
                 if (!user.is_super_admin) {
                     params = {'entityKey': user.entityKey};
                     User.unAssignLicense($scope, params);

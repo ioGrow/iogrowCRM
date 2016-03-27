@@ -17,15 +17,15 @@
         <a class="headerBtn" title="{{ _('Refresh') }}" ng-click="refreshCurrent();">
             <i class="fa fa-repeat"></i>
         </a>
-        <a class="headerBtn" title="{{ _('Delete') }}" ng-show="selected_users.length" ng-click="deleteUser()">
+        <a class="headerBtn" title="{{ _('Delete') }}" ng-show="selectedUsers.length" ng-click="deleteUser()">
             <i class="fa fa-trash-o"></i>
         </a>
-        <a ng-class="{disabled: selected_users.length==0}" class="headerBtn"
-           ng-show="selected_users.length && org_subscription.quantity" ng-click="assignLicenses()">
+        <a ng-class="{disabled: selectedUsers.length}" class="headerBtn"
+           ng-show="selectedUsers.length && org_subscription.quantity" ng-click="assignLicenses()">
             <i class="fa fa-plus"></i> <i class="fa fa-key"></i>
         </a>
-        <a ng-class="{disabled: selected_users.length==0}" class="headerBtn"
-           ng-show="selected_users.length && org_subscription.quantity" ng-click="unassignLicenses()">
+        <a ng-class="{disabled: selectedUsers.length}" class="headerBtn"
+           ng-show="selectedUsers.length && org_subscription.quantity" ng-click="unassignLicenses()">
             <i class="fa fa-minus"></i> <i class="fa fa-key"></i>
         </a>
         <form style="display: inline">
@@ -69,7 +69,7 @@
                         {% if is_admin %}
                         <th>
                             <input title='{{ _("Select all Users") }}' type="checkbox" ng-checked="isSelectedAll"
-                                   ng-click="select_all_users($event)">
+                                   ng-click="selectAllUsers($event)">
                         </th>
                         {% endif %}
                         <th>
