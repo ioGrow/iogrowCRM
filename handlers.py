@@ -46,8 +46,6 @@ from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task, AssignedGoogleId
 import sfoauth2
 from discovery import Discovery
-# under the test .beta !
-from ioreporting import Reports
 import stripe
 import requests
 from requests.auth import HTTPBasicAuth
@@ -1041,11 +1039,6 @@ class SearchListHandler(BaseHandler, SessionEnabledHandler):
 class CalendarShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/calendar/calendar_show.html')
-
-
-class DashboardHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/dashboard.html')
 
 
 class SalesforceImporter(BaseHandler, SessionEnabledHandler):
@@ -2461,18 +2454,6 @@ class SendGmailEmail(webapp2.RequestHandler):
             )
         EndpointsHelper.send_message(service, 'me', message)
 
-
-class InitReport(webapp2.RequestHandler):
-    def post(self):
-        admin = ndb.Key(urlsafe=self.request.get("admin")).get()
-        Reports.create(user_from_email=admin)
-
-
-class InitReports(webapp2.RequestHandler):
-    def post(self):
-        Reports.init_reports()
-
-
 def extract_leads_from_message(gmail_service, user, thread_id):
     thread_details = gmail_service.users().threads().get(userId='me', id=thread_id, fields='messages/payload').execute()
     for message in thread_details['messages']:
@@ -2819,10 +2800,6 @@ routes = [
     ('/workers/syncevent', SyncCalendarEvent),
     ('/workers/syncpatchevent', SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent', SyncDeleteCalendarEvent),
-
-    # report actions
-    ('/workers/initreport', InitReport),
-    ('/workers/initreports', InitReports),
     ('/workers/insert_crawler', InsertCrawler),
     ('/workers/import_contact_from_gcsv', ImportContactFromGcsvRow),
     ('/workers/contact_import_second_step', ImportContactSecondStep),
@@ -2929,7 +2906,6 @@ routes = [
     ('/invitation_sent', SFinvite),
     ('/stripe', StripeHandler),
     # paying with stripe
-    ('/views/dashboard', DashboardHandler),
     ('/scrapyd', ScrapydHandler),
     ('/jj', ImportJob),
     ('/exportcompleted', ExportCompleted),

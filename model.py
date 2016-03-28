@@ -24,7 +24,6 @@ from iomodels.crmengine.casestatuses import Casestatus
 
 from search_helper import tokenize_autocomplete
 
-# from ioreporting import Reports
 import iomessages
 
 # hadji hicham 20/08/2014.
@@ -68,7 +67,6 @@ STANDARD_TABS = [
     {'name': 'Cases', 'label': 'Cases', 'url': '/#/cases/', 'icon': 'suitcase'},
     {'name': 'Tasks', 'label': 'Tasks', 'url': '/#/tasks/', 'icon': 'check'},
     {'name': 'Calendar', 'label': 'Calendar', 'url': '/#/calendar/', 'icon': 'calendar'}
-    # {'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
 ]
 EARLY_BIRD_TABS = [
     {'name': 'Contacts', 'label': 'Contacts', 'url': '/#/contacts/', 'icon': 'group'},
@@ -557,7 +555,6 @@ class Organization(ndb.Model):
                 admin.init_user_config(org_key, admin_profile_key)
             else:
                 created_profile.put()
-        # create reports details
 
         # init default stages,status, default values...
         cls.init_default_values(org_key)
@@ -639,9 +636,6 @@ class Organization(ndb.Model):
                 admin.init_early_bird_config(org_key, admin_profile_key)
             else:
                 created_profile.put_async()
-        # create reports details
-        # Reports.create(user_from_email=admin)
-
         # init default stages,status, default values...
         cls.init_default_values(org_key)
 
