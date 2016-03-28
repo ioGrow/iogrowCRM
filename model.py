@@ -1,6 +1,5 @@
 import datetime
 # Google libs
-import logging
 import os
 import httplib2
 from google.appengine.ext import ndb

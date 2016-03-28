@@ -1,14 +1,13 @@
-from model import User
-from google.appengine.ext import db
-from iomodels.crmengine.leads import Lead,LeadPatchRequest,LeadFromTwitterRequest,LeadInsertRequest,LeadListRequest,LeadListResponse,LeadSearchResults,LeadGetRequest,LeadSchema
-from iomodels.crmengine.opportunities import Opportunity,OpportunityPatchRequest,UpdateStageRequest,OpportunitySchema,OpportunityInsertRequest,OpportunityListRequest,OpportunityListResponse,OpportunitySearchResults,OpportunityGetRequest
-from model import User
-from model import Organization
 from google.appengine.ext import ndb
-from iomodels.crmengine.opportunitystage import Opportunitystage
 from protorpc import messages
-import iograph
- 
+
+from iomodels.crmengine.leads import Lead
+from iomodels.crmengine.opportunities import Opportunity
+from iomodels.crmengine.opportunitystage import Opportunitystage
+from model import Organization
+from model import User
+
+
 #idriss repor request
 class ReportingRequest(messages.Message):
     user_google_id = messages.StringField(1)

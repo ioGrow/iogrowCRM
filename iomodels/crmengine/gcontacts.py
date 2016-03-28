@@ -1,39 +1,14 @@
  #!/usr/bin/python
  # -*- coding: utf-8 -*-
-import endpoints
-import csv
-import re
-import json
-from StringIO import StringIO
-from django.utils.encoding import smart_str
-from google.appengine.ext import ndb
-from google.appengine.api import taskqueue
-from google.appengine.datastore.datastore_query import Cursor
-from endpoints_proto_datastore.ndb import EndpointsModel
-from google.appengine.api import search
-import gdata.contacts.data
-from protorpc import messages
-from search_helper import tokenize_autocomplete,SEARCH_QUERY_MODEL
-from endpoints_helper import EndpointsHelper
-from iomodels.crmengine.tags import Tag,TagSchema
-from iomodels.crmengine.tasks import Task,TaskRequest,TaskListResponse
-from iomodels.crmengine.events import Event,EventListResponse
-from iograph import Node, Edge,InfoNodeListResponse
-from iomodels.crmengine.notes import Note,TopicListResponse
-from iomodels.crmengine.opportunities import Opportunity,OpportunityListResponse
-from iomodels.crmengine.cases import Case,CaseListResponse
-from iomodels.crmengine.documents import Document,DocumentListResponse
-import model
-import iomessages
-import gdata.apps.emailsettings.client
+ import model
+ from endpoints_proto_datastore.ndb import EndpointsModel
+ from google.appengine.api import search
+ from google.appengine.ext import ndb
+
+ from search_helper import tokenize_autocomplete
 
 
-
-
-
-
-
-class Gcontact(EndpointsModel):
+ class Gcontact(EndpointsModel):
     owner = ndb.StringProperty()
     # organization = ndb.KeyProperty()
     contact_id=ndb.StringProperty()

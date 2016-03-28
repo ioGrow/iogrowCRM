@@ -1,11 +1,11 @@
-from google.appengine.ext import ndb
-from google.appengine.api import search
-from protorpc import messages
-from endpoints_proto_datastore.ndb import EndpointsModel
-from model import Userinfo
-from iograph import Edge
-
 import model
+from endpoints_proto_datastore.ndb import EndpointsModel
+from google.appengine.api import search
+from google.appengine.ext import ndb
+from model import Userinfo
+from protorpc import messages
+
+from iograph import Edge
 
 
 # The message class that defines the author schema

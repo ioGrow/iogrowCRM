@@ -3,10 +3,10 @@
 import cookielib
 import json
 import re
-import requests
 import urllib
 
 import mechanize
+import requests
 from bs4 import BeautifulSoup
 from google.appengine.ext import ndb
 

@@ -2,23 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import base64
+import mimetypes
+import os
+from django.utils.encoding import smart_str
 from email.mime.audio import MIMEAudio
 from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import mimetypes
-import os
 
-from django.utils.encoding import smart_str
-from google.appengine.api import search
-from google.appengine.api import memcache
-from google.appengine.api import urlfetch
-from apiclient.discovery import build
-from google.appengine.api import taskqueue
-from apiclient import errors
-import httplib2
 import endpoints
+import httplib2
+from apiclient import errors
+from apiclient.discovery import build
+from google.appengine.api import memcache
+from google.appengine.api import search
+from google.appengine.api import taskqueue
+from google.appengine.api import urlfetch
+
 # gdata
 import atom.data
 import gdata.data
@@ -37,7 +38,6 @@ import datetime
 import time
 from datetime import date
 import json
-import timeit
 from google.appengine.api import app_identity
 import detectlanguage
 import cloudstorage as gcs

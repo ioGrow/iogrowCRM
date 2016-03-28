@@ -2,6 +2,7 @@ import datetime
 
 import endpoints
 import model
+from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
@@ -9,7 +10,6 @@ from protorpc import messages
 
 import iomessages
 from endpoints_helper import EndpointsHelper
-from endpoints_proto_datastore.ndb import EndpointsModel
 from iograph import Node, Edge, InfoNodeListResponse
 from iomodels.crmengine.documents import Document, DocumentListResponse
 from iomodels.crmengine.events import Event, EventListResponse, EventInsertRequest, EventSchema

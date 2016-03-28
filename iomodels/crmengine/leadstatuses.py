@@ -1,8 +1,6 @@
-from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
-from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
-import model
+from google.appengine.ext import ndb
 
 
 class Leadstatus (EndpointsModel):

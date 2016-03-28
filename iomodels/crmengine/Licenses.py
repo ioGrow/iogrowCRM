@@ -1,14 +1,6 @@
-import endpoints
-import json
-from google.appengine.ext import ndb
-from google.appengine.api import taskqueue
 from endpoints_proto_datastore.ndb import EndpointsModel
-from google.appengine.api import search
+from google.appengine.ext import ndb
 from protorpc import messages
-import model
-import iomessages
-from iograph import Edge
-import datetime
 
 
 class LicenseSchema(messages.Message):

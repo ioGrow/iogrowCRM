@@ -1,36 +1,38 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
 import collections
-import logging
 import csv
-import re
 import json
+import logging
+import re
 import time
-import endpoints
 from django.utils.encoding import smart_str
-from google.appengine.ext import ndb
-from google.appengine.api import taskqueue
-from google.appengine.datastore.datastore_query import Cursor
-from google.appengine.api import search
-from protorpc import messages
-from google.appengine.api import app_identity
+
+import endpoints
+import gdata.apps.emailsettings.client
+import gdata.contacts.data
+import model
 import requests
 from endpoints_proto_datastore.ndb import EndpointsModel
-import gdata.contacts.data
-from iomodels.crmengine.payment import payment_required
-from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
+from google.appengine.api import app_identity
+from google.appengine.api import search
+from google.appengine.api import taskqueue
+from google.appengine.datastore.datastore_query import Cursor
+from google.appengine.ext import ndb
+from protorpc import messages
+
+import iomessages
 from endpoints_helper import EndpointsHelper
-from iomodels.crmengine.tags import Tag, TagSchema
-from iomodels.crmengine.tasks import Task, TaskListResponse
-from iomodels.crmengine.events import Event, EventListResponse
 from iograph import Node, Edge, InfoNodeListResponse
-from iomodels.crmengine.notes import Note, TopicListResponse
-from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
 from iomodels.crmengine.cases import Case, CaseListResponse
 from iomodels.crmengine.documents import Document, DocumentListResponse
-import model
-import iomessages
-import gdata.apps.emailsettings.client
+from iomodels.crmengine.events import Event, EventListResponse
+from iomodels.crmengine.notes import Note, TopicListResponse
+from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
+from iomodels.crmengine.payment import payment_required
+from iomodels.crmengine.tags import Tag, TagSchema
+from iomodels.crmengine.tasks import Task, TaskListResponse
+from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 # from pipeline.pipeline import FromCSVPipeline
 

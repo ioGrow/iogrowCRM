@@ -1,14 +1,15 @@
 import json
+
+import requests
+
+import iomessages
 from iomodels.crmengine.accounts import Account, AccountInsertRequest
+from iomodels.crmengine.cases import Case, CaseInsertRequest
+from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.contacts import Contact, ContactInsertRequest
 from iomodels.crmengine.leads import Lead, LeadInsertRequest
 from iomodels.crmengine.opportunities import Opportunity, OpportunityInsertRequest
 from iomodels.crmengine.opportunitystage import Opportunitystage
-from iomodels.crmengine.opportunitystage import Opportunitystage
-from iomodels.crmengine.cases import Case, CaseInsertRequest
-from iomodels.crmengine.casestatuses import Casestatus
-import requests
-import iomessages
 
 """
 name = messages.StringField(1)

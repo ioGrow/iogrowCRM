@@ -64,13 +64,10 @@ from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.casestatuses import Casestatus
 from iomodels.crmengine.tags import Tag, TagSchema, TagListRequest, TagListResponse, TagInsertRequest
 from iomodels.crmengine.profiles import ProfileDeleteRequest, Keyword, KeywordListResponse
-from lib.stripe.error import InvalidRequestError
 
 from model import User
 from model import Organization
 from model import Userinfo
-from model import Group
-from model import Member
 from model import Contributor
 from model import Invitation
 from model import TopicScoring

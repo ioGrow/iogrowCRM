@@ -1,13 +1,15 @@
-import logging
-import webapp2
 import re
+from django.utils.encoding import smart_str
+
+import webapp2
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
+
+from endpoints_helper import EndpointsHelper
+from iograph import Node,Edge
 from iomodels.crmengine.notes import Note
 from model import User,Userinfo
-from django.utils.encoding import smart_str
-from iograph import Node,Edge
-from endpoints_helper import EndpointsHelper
+
 
 class GetEmailsHandler(InboundMailHandler):
     def receive(self, mail_message):

@@ -1,9 +1,10 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
-from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.datastore.datastore_query import Cursor
+from google.appengine.ext import ndb
 from protorpc import messages
+
 import iomessages
 from model import User
 

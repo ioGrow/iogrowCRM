@@ -22,13 +22,11 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
 from google.appengine.api import mail
-from apiclient import errors
 from apiclient.discovery import build
-from apiclient.http import BatchHttpRequest
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.opportunities import Opportunity
 from iomodels.crmengine.payment import Subscription
-from model import Application, STANDARD_TABS, ADMIN_TABS, User
+from model import Application, STANDARD_TABS, ADMIN_TABS
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.appengine import OAuth2Decorator
@@ -47,7 +45,6 @@ from iograph import Edge
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task, AssignedGoogleId
 import sfoauth2
-from sf_importer_helper import SfImporterHelper
 from discovery import Discovery
 # under the test .beta !
 from ioreporting import Reports
@@ -55,7 +52,6 @@ import stripe
 import requests
 from requests.auth import HTTPBasicAuth
 import config as config_urls
-import people
 from intercom import Intercom
 from simple_salesforce import Salesforce
 from semantic.dates import DateService

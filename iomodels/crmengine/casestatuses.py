@@ -1,9 +1,8 @@
-from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
-from endpoints_proto_datastore import MessageFieldsSchema
 from google.appengine.api import search
+from google.appengine.ext import ndb
 from protorpc import messages
-import model
+
 
 class CaseStatusSchema(messages.Message):
     name  = messages.StringField(1)

@@ -1,34 +1,34 @@
 import csv
+import json
 import logging
 import re
 import time
-import json
-
 from django.utils.encoding import smart_str
-from google.appengine.ext import ndb
+
+import endpoints
+import model
+import requests
+from endpoints_proto_datastore.ndb import EndpointsModel
+from google.appengine.api import app_identity
+from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
-from google.appengine.api import search
+from google.appengine.ext import ndb
 from protorpc import messages
-import endpoints
-from google.appengine.api import app_identity
-import requests
 
-from endpoints_proto_datastore.ndb import EndpointsModel
+import iomessages
+from endpoints_helper import EndpointsHelper
+from iograph import Node, Edge, InfoNodeListResponse
+from iomodels.crmengine.cases import Case, CaseListResponse
+from iomodels.crmengine.contacts import Contact, ContactListResponse, ContactInsertRequest, is_the_same_node
+from iomodels.crmengine.documents import Document, DocumentListResponse
+from iomodels.crmengine.events import Event, EventListResponse
+from iomodels.crmengine.notes import Note, TopicListResponse
+from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
 from iomodels.crmengine.payment import payment_required
-from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
-import model
 from iomodels.crmengine.tags import Tag, TagSchema
 from iomodels.crmengine.tasks import Task, TaskListResponse
-from iomodels.crmengine.events import Event, EventListResponse
-from iomodels.crmengine.contacts import Contact, ContactListResponse, ContactInsertRequest, is_the_same_node
-from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
-from iograph import Node, Edge, InfoNodeListResponse
-from iomodels.crmengine.notes import Note, TopicListResponse
-from iomodels.crmengine.cases import Case, CaseListResponse
-from iomodels.crmengine.documents import Document, DocumentListResponse
-from endpoints_helper import EndpointsHelper
-import iomessages
+from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 
 # The message class that defines the EntityKey schema

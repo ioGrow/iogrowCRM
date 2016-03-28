@@ -1,20 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import httplib2
 import json
-import requests
 import urllib
 from datetime import date
 
+import httplib2
+import requests
 import tweepy
-from tweepy.streaming import StreamListener
-
 from gdata.gauth import OAuth2Token
 from geopy.geocoders import GoogleV3
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
-from google.appengine.ext import ndb
+from tweepy.streaming import StreamListener
 
 import config as config_urls
 from iomessages import tweetsSchema, Topic_Schema

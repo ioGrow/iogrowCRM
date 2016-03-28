@@ -1,12 +1,10 @@
-from google.appengine.ext import ndb
-from google.appengine.api import search
 from endpoints_proto_datastore.ndb import EndpointsModel
-from protorpc import messages
-from iograph import Edge
-from endpoints_helper import EndpointsHelper
 from google.appengine.api import taskqueue
-import config as config_urls
-import requests
+from google.appengine.ext import ndb
+from protorpc import messages
+
+from endpoints_helper import EndpointsHelper
+from iograph import Edge
 
 
 class TagSchema(messages.Message):

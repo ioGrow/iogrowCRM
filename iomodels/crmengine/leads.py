@@ -4,24 +4,23 @@ import json
 import logging
 import re
 import time
+from django.utils.encoding import smart_str
 
 import endpoints
 import model
 import requests
-from django.utils.encoding import smart_str
+import tweepy
+from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import app_identity
 from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
+from intercom import Intercom
 from protorpc import messages
 
-import config
 import iomessages
-import tweepy
 from endpoints_helper import EndpointsHelper
-from endpoints_proto_datastore.ndb import EndpointsModel
-from intercom import Intercom
 from iograph import Node, Edge, InfoNodeListResponse
 from iomodels.crmengine import contacts
 from iomodels.crmengine.accounts import Account
