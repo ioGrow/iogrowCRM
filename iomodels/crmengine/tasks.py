@@ -561,7 +561,7 @@ class Task(EndpointsModel):
                 assignee_user = assignee_key.get()
                 assignee_email = assignee_user.email
                 # add a task queue to send notification email to assignee
-                body = '<p>view details on ioGrow: <a href="http://www.iogrow.com/#/tasks/show/' + str(
+                body = '<p>view details on ioGrow: <a href="http://app.iogrow.com/#/tasks/show/' + str(
                     task_key_async.id()) + '">'
                 body += request.title
                 body += '</a></p>'
@@ -614,7 +614,7 @@ class Task(EndpointsModel):
             task.status = request.status
             if task.status == 'closed':
                 task.completed_by = user_from_email.google_user_id
-                body = '<p>#closed, view details on ioGrow: <a href="http://www.iogrow.com/#/tasks/show/' + str(
+                body = '<p>#closed, view details on ioGrow: <a href="http://app.iogrow.com/#/tasks/show/' + str(
                     task.key.id()) + '">'
                 body += task.title
                 body += '</a></p>'
