@@ -278,18 +278,6 @@ accountservices.factory('User', function ($http) {
         });
         $scope.inProcess(false);
     };
-    User.purchase_lisences = function ($scope, params) {
-
-        gapi.client.crmengine.users.purchase_lisences(params).execute(function (resp) {
-            if (!resp.code) {
-                $scope.paymentOperation = false;
-                $scope.$apply();
-                if (!resp.transaction_failed) {
-                    $scope.paymentConfimration(resp);
-                }
-            }
-        });
-    };
     User.saveBillingDetails = function ($scope, params) {
         $scope.isLoading = true;
         gapi.client.crmengine.users.saveBillingDetails(params).execute(function (resp) {
