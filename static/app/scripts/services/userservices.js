@@ -272,11 +272,11 @@ accountservices.factory('User', function ($http) {
         });
     };
     User.deleteUser = function ($scope, params) {
-        $scope.inProcess(true);
+        $scope.isLoading = true;
         gapi.client.crmengine.users.delete(params).execute(function (resp) {
             $scope.reloadUsersList();
+            $scope.isLoading = true;
         });
-        $scope.inProcess(false);
     };
     User.saveBillingDetails = function ($scope, params) {
         $scope.isLoading = true;

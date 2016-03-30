@@ -6119,13 +6119,14 @@ class CrmEngineApi(remote.Service):
         # not complete yet 
         user_from_email = EndpointsHelper.require_iogrow_user()
         if user_from_email.is_admin:
-            for x in xrange(0, len(request.entityKeys)):
-                userToDelete = ndb.Key(urlsafe=request.entityKeys[x]).get()
-                if userToDelete.is_admin:
-                    pass
-                else:
-                    ndb.Key(urlsafe=request.entityKeys[x]).delete()
+            for i in xrange(len(request.entityKeys)):
+                user_key = ndb.Key(urlsafe=request.entityKeys[i])
+                if not user_key.get().is_admin:
+                    user_key.delete()
                     # Invitation.delete_by(request.emails[x])
+        else:
+            raise endpoints.UnauthorizedException("you are not authorised")
+
         return message_types.VoidMessage()
 
     @endpoints.method(BillingDetailsRequest, message_types.VoidMessage, path="users/saveBillingDetails",

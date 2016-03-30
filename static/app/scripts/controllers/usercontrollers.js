@@ -162,12 +162,15 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
                 if ($scope.selectedUsers.length == $scope.selectableUsers.length)
                     $scope.isSelectedAll = true;
             } else {
-                var index = $scope.selectedUsers.indexOf(user);
-                if (index > -1) {
-                    $scope.selectedUsers.splice(index, 1);
-                    if ($scope.selectedUsers.length == 0)
-                        $scope.isSelectedAll = false;
+                for (var i = 0; i < $scope.selectedUsers.length; i++) {
+                    var user = $scope.selectedUsers[i];
+                    if (user.entityKey === user.entityKey){
+                        $scope.selectedUsers.splice(i, 1);
+                        if ($scope.selectedUsers.length == 0) $scope.isSelectedAll = false;
+                        break;
+                    }
                 }
+
             }
             console.log($scope.selectedUsers);
         };
@@ -187,7 +190,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
         };
         $scope.deleteUser = function () {
             var entityKeys = [];
-            for (var i = $scope.selectedUsers.length - 1; i >= 0; i--) {
+            for (var i = 0; i < $scope.selectedUsers.length ; i++) {
                 if (!$scope.selectedUsers.is_admin) {
                     entityKeys.push($scope.selectedUsers[i].entityKey)
                 }
