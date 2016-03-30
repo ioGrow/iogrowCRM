@@ -1,9 +1,8 @@
 function getSelectableUser(users){
     var selectableUsers = [];
-    for (var i = 0; i < $scope.users.length; i++) {
-        var user = $scope.users[i];
-        if (!user.is_super_admin)
-            selectableUsers.push(user);
+    for (var i = 0; i < users.length; i++) {
+        if (!users[i].is_super_admin)
+            selectableUsers.push(users[i]);
     }
     return selectableUsers;
 }

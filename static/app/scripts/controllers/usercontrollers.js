@@ -86,17 +86,14 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             } else {
                 params = {'limit': 7}
             }
-            console.log('in listNextPageItems');
             $scope.currentPage = $scope.currentPage + 1;
             User.list($scope, params);
         };
         $scope.filterByName = function () {
             if ($scope.predicate != 'google_display_name') {
-                console.log($scope.predicate);
                 $scope.predicate = 'google_display_name';
                 $scope.reverse = false
             } else {
-                console.log($scope.predicate);
                 $scope.predicate = '-google_display_name';
                 $scope.reverse = false;
             }
@@ -165,9 +162,12 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
                 if ($scope.selectedUsers.length == $scope.selectableUsers.length)
                     $scope.isSelectedAll = true;
             } else {
-                $scope.selectedUsers.splice(index, 1);
-                if ($scope.selectedUsers.length == 0)
-                    $scope.isSelectedAll = false;
+                var index = $scope.selectedUsers.indexOf(user);
+                if (index > -1) {
+                    $scope.selectedUsers.splice(index, 1);
+                    if ($scope.selectedUsers.length == 0)
+                        $scope.isSelectedAll = false;
+                }
             }
             console.log($scope.selectedUsers);
         };
@@ -195,8 +195,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             User.deleteUser($scope, {'entityKeys': entityKeys})
         };
         $scope.addNewUser = function (user) {
-            console.log('add a new user');
-            console.log(user);
             $('#addAccountModal').modal('hide');
             User.insert($scope, user);
         };
@@ -210,7 +208,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
         };
 
         $scope.assignLicenses = function () {
-            console.log($scope.selectedUsers);
             var params = {};
             angular.forEach($scope.selectedUsers, function (user) {
                 if (!user.is_super_admin) {
@@ -287,7 +284,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             var emails = [];
             for (var i = $scope.selected_invitees.length - 1; i >= 0; i--) {
                 emails.push($scope.selected_invitees[i].invited_mail)
-            }
+            };
             var params = {
                 'emails': emails
             };
