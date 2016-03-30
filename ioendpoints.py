@@ -6118,7 +6118,6 @@ class CrmEngineApi(remote.Service):
     def delete_users(self, request):
         # not complete yet 
         user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = user_from_email.organization.get()
         if user_from_email.is_admin:
             for x in xrange(0, len(request.entityKeys)):
                 userToDelete = ndb.Key(urlsafe=request.entityKeys[x]).get()
