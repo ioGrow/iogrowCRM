@@ -6316,7 +6316,6 @@ class CrmEngineApi(remote.Service):
         plan_key = subscription.plan
         plan = plan_key.get()
         if plan.name == config.PREMIUM:
-            resp.assigned_licenses = len(filter(lambda user: user.has_license(plan_key),
-                                                User.fetch_by_organization(org_key)))
+            resp.assigned_licenses = organization.get_assigned_licenses()
             resp.licenses_bought = subscription.quantity
         return resp

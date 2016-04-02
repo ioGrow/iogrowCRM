@@ -30,22 +30,19 @@ accountservices.factory('User', function ($http) {
     };
     User.assignLicense = function ($scope, params) {
         $scope.isLoading = true;
-        $scope.$apply();
-        gapi.client.crmengine.organizations.assign_license(params).execute(function (resp) {
+        gapi.client.crmengine.organizations.assign_license(params   ).execute(function (resp) {
             if (!resp.code) {
                 $scope.isLoading = false;
                 $scope.isSelected = false;
                 $scope.selectedUsers = [];
-                $scope.runTheProcess();
             } else {
                 if (resp.code == 401) {
                     if (resp.message == "Invalid grant") {
                         $scope.refreshToken();
                     }
-                    $scope.isLoading = false;
-                    $scope.$apply();
                 }
             }
+            $scope.isLoading = false;
         });
     };
     User.unAssignLicense = function ($scope, params) {
@@ -57,7 +54,6 @@ accountservices.factory('User', function ($http) {
                 $scope.isSelected = false;
                 $scope.selectedUsers = [];
                 $scope.runTheProcess();
-
             } else {
                 if (resp.code == 401) {
                     if (resp.message == "Invalid grant") {

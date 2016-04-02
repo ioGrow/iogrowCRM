@@ -211,19 +211,18 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
         };
 
         $scope.assignLicenses = function () {
-            var params = {};
+            if ($scope.licencesStatus.licenses_bought - $scope.licencesStatus.assigned_licenses < 1) return;
             angular.forEach($scope.selectedUsers, function (user) {
-                if (!user.is_super_admin) {
-                    params = {'entityKey': user.entityKey};
+                if ($scope.usersSubscriptions[user['email']].plan.name != "premium") {
+                    var params = {'entityKey': user.entityKey};
                     User.assignLicense($scope, params);
                 }
-
             });
         };
         $scope.unassignLicenses = function () {
             angular.forEach($scope.selectedUsers, function (user) {
-                if (!user.is_super_admin) {
-                    params = {'entityKey': user.entityKey};
+                if ($scope.usersSubscriptions[user['email']].plan.name != "premium") {
+                    var params = {'entityKey': user.entityKey};
                     User.unAssignLicense($scope, params);
                 }
             });

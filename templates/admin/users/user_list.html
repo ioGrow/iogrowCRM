@@ -123,7 +123,7 @@
                             <%= user.email %>
                         </td>
                         <td class="table-box" ng-show="org_subscription.plan.name==='premium'">
-                            <%= (users_subscriptions[user.email].plan.name==='premium') ? 'active' :'' %>
+                            <%= (usersSubscriptions[user.email].plan.name==='premium') ? 'active' :'' %>
                         </td>
                         {% if is_admin %}
                         <td class="table-box">
