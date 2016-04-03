@@ -122,17 +122,6 @@ class ParamsSchema(messages.Message):
     access = messages.StringField(2, default='public')
 
 
-class FullContactRequest(messages.Message):
-    contact = messages.MessageField(FullContactSchema, 1)
-    params = messages.MessageField(ParamsSchema, 2)
-
-
-# end fullContact schemas
-
-class LeadFromTwitterRequest(messages.Message):
-    user_id = messages.IntegerField(1, required=True)
-
-
 class LeadSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)

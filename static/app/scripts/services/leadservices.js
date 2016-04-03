@@ -14,12 +14,6 @@ leadservices.factory('Lead', function ($rootScope) {
             id: "hello-hopscotch",
             steps: [
                 {
-                    title: "Discovery",
-                    content: "Your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
-                    target: "id_Discovery",
-                    placement: "right"
-                },
-                {
                     title: "Leads",
                     content: "Use leads to easily track interesting people. You can add notes, set reminders or send emails",
                     target: "id_Leads",

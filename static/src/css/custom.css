@@ -1815,13 +1815,7 @@ border-top-color: transparent !important;
 color: #fff !important;
 border-left: 2px solid #1C91C0;
 }
-#id_Discovery.active > a{
 
-  background: #4099FF !important;
-border-top-color: transparent !important;
-color: #fff !important;
-border-left: 2px solid #4099FF;
-}
 /*------------------------------------*\
     $CUSTOM
 \*------------------------------------*/
@@ -3683,11 +3677,7 @@ input[type=checkbox]:checked ~ .labelElement .check {
     left; 0px;
     position: absolute;
 }
-.discoveryTags .form-inline{
 
-    width: calc(100% - 20px);
-
-}
 .accountstable .list-group,.contactstable .list-group{
   padding-left: 0px;
   list-style: none;

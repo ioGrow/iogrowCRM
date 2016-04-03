@@ -4,14 +4,14 @@ This file is the main part of ioGrow API. It contains all request, response
 classes add to calling methods.
 
 """
-# Standard libs
+
 import datetime
 import httplib2
 import json
 import logging
 
 from django.utils.encoding import smart_str
-# Google libs
+
 from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.api import memcache
@@ -23,9 +23,7 @@ from protorpc import messages
 import endpoints
 from protorpc import message_types
 import requests
-# Third party libraries
 
-# Our libraries
 from iograph import Node, Edge, RecordSchema, InfoNodeResponse, InfoNodeListResponse
 from iomodels.crmengine import config
 from iomodels.crmengine.accounts import Account, AccountGetRequest, AccountPatchRequest, AccountSchema, \
@@ -51,9 +49,9 @@ from iomodels.crmengine.events import Event, EventInsertRequest, EventSchema, Ev
 from iomodels.crmengine.documents import Document, DocumentInsertRequest, DocumentSchema, MultipleAttachmentRequest, \
     DocumentListResponse
 
-from iomodels.crmengine.leads import Lead, LeadPatchRequest, LeadFromTwitterRequest, LeadInsertRequest, LeadListRequest, \
+from iomodels.crmengine.leads import Lead, LeadPatchRequest, LeadInsertRequest, LeadListRequest, \
     LeadListResponse, LeadSearchResults, LeadGetRequest, LeadSchema, FLNameFilterRequest, LeadMergeRequest, \
-    FLsourceFilterRequest, FullContactRequest
+    FLsourceFilterRequest
 from iomodels.crmengine.cases import Case, UpdateStatusRequest, CasePatchRequest, CaseGetRequest, CaseInsertRequest, \
     CaseListRequest, CaseSchema, CaseListResponse, CaseSearchResults
 from iomodels.crmengine.comments import Comment
@@ -70,7 +68,6 @@ from model import Organization
 from model import Userinfo
 from model import Contributor
 from model import Invitation
-from model import TopicScoring
 from model import LicenseModel
 from model import TransactionModel
 from model import Logo
@@ -78,18 +75,13 @@ from model import CustomField
 from model import CountryCurrency
 
 from endpoints_helper import EndpointsHelper
-from discovery import Discovery
 from people import linked_in
 from operator import itemgetter
 import iomessages
-from iomessages import Scoring_Topics_Schema, Topics_Schema, Topic_Comparaison_Schema, TopicsResponse, \
-    TweetResponseSchema, SubscriptionSchema, LicencesQuantityMessage
+from iomessages import SubscriptionSchema, LicencesQuantityMessage
 from ioreporting import Reports, ReportSchema
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema, KewordsRequest, TwitterRequest, tweetsResponse, \
-    LinkedinCompanySchema, \
-    Tweet_id
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema, KewordsRequest, LinkedinCompanySchema
 import stripe
-import config as config_urls
 import re
 import ast
 
@@ -139,10 +131,6 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
 
 stripe.api_key = config.STRIPE_API_KEY
 
-
-class TwitterProfileRequest(messages.Message):
-    firstname = messages.StringField(1)
-    lastname = messages.StringField(2)
 
 
 class getLinkedinSchema(messages.Message):
@@ -469,16 +457,6 @@ class AddressSchema(messages.Message):
     lat = messages.StringField(1)
     lon = messages.StringField(2)
 
-
-class CompanyProfileSchema(messages.Message):
-    id = messages.StringField(1)
-    name = messages.StringField(2)
-    addresses = messages.MessageField(AddressSchema, 3, repeated=True)
-
-
-class CompanyProfileResponse(messages.Message):
-    items = messages.MessageField(CompanyProfileSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
 
 
 class PermissionRequest(messages.Message):
@@ -3230,28 +3208,6 @@ class CrmEngineApi(remote.Service):
         Edge.delete_all_cascade(tag_key)
         return message_types.VoidMessage()
 
-    # # tags.insert api
-    # @Tag.method(path='tags', http_method='POST', name='tags.insert')
-    # def TagInsert(self, my_model):
-    #     print "tagggggggginsert11", my_model
-    #     crawling_tweets=Crawling()
-    #     crawling_tweets.keyword=my_model.name
-    #     crawling_tweets.last_crawled_date=datetime.datetime.now()
-    #     crawling_tweets.put()
-    #     user_from_email = EndpointsHelper.require_iogrow_user()
-    #     my_model.organization = user_from_email.organization
-    #     my_model.owner = user_from_email.google_user_id
-    #     keyy=my_model.put()
-    #     list=[]
-    #     tag=PatchTagSchema()
-    #     tag.entityKey=keyy.urlsafe()
-    #     tag.name=my_model.name
-    #     list.append(tag)
-    #     #if from oppportunity do'nt launch tweets api....
-    #     Discovery.get_tweets(list,"recent")
-    #     return my_model
-    #     #launch frome here tasqueue
-    # tags.insert api
 
     @endpoints.method(TagInsertRequest, TagSchema,
                       path='tags/insert', http_method='POST',
@@ -5158,40 +5114,6 @@ class CrmEngineApi(remote.Service):
         response = linked_in.get_people_twitter(request.entityKey)
         return response
 
-    @endpoints.method(KewordsRequest, tweetsResponse,
-                      path='twitter/get_recent_tweets', http_method='POST',
-                      name='twitter.get_recent_tweets')
-    def twitter_get_recent_tweets(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-
-        if len(request.value) == 0:
-            tagss = Tag.list_by_kind(user_from_email, "topics")
-            val = []
-            for tag in tagss.items:
-                val.append(tag.name)
-            request.value = val
-
-        list_of_tweets = EndpointsHelper.get_tweets(request.value, "recent")
-        return tweetsResponse(items=list_of_tweets)
-
-    # @endpoints.method(KewordsRequest, tweetsResponse,
-    #                   path='twitter/get_best_tweets', http_method='POST',
-    #                   name='twitter.get_best_tweets')
-    # def twitter_get_best_tweets(self, request):
-    #     print request
-    #     user_from_email = EndpointsHelper.require_iogrow_user()
-    #     val=[]
-    #     tagss=Tag.list_by_kind(user_from_email,"topics")
-    #     for tag in tagss.items:
-    #         val.append(tag.name)
-    #     print val
-    #     list_of_tweets=EndpointsHelper.get_tweets(val,"popular")
-    #     # print list_of_tweets
-    #     #tweetsschema=tweetsSchema()
-
-    #     return tweetsResponse(items=list_of_tweets)
-
-    #     return profile_schema
     @endpoints.method(OrganizationRquest, OrganizationResponse, path='organization/info', http_method='GET',
                       name="users.get_organization")
     def get_organization_info(self, request):
@@ -5272,306 +5194,12 @@ class CrmEngineApi(remote.Service):
         # print sub[0]
         # cust.subscriptions.create(plan="iogrow_plan")
 
-    @endpoints.method(KewordsRequest, iomessages.DiscoverResponseSchema, path='twitter/get_best_tweets',
-                      http_method='POST',
-                      name='twitter.get_best_tweets')
-    def get_best_tweets(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        if len(request.value) == 0:
-            tags = Tag.list_by_kind(user_from_email, "topics")
-            request.value = [tag.name for tag in tags.items]
-
-        if len(request.value) != 0:
-            results = Discovery.get_best_tweets(request.value)
-        else:
-            results = "null"
-
-        return iomessages.DiscoverResponseSchema(results=results, more=False)
-
-    @endpoints.method(iomessages.DiscoverRequestSchema, iomessages.DiscoverResponseSchema,
-                      path='twitter/get_map', http_method='POST',
-                      name='twitter.get_map')
-    def get_map(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        if len(request.keywords) == 0:
-            tags = Tag.list_by_kind(user_from_email, "topics")
-            request.keywords = [tag.name for tag in tags.items]
-
-        if len(request.keywords) != 0:
-            payload = {'keywords[]': request.keywords}
-            r = requests.get(config_urls.nodeio_server + "/twitter/map/list", params=payload)
-            results = json.dumps(r.json()["results"])
-        else:
-            results = "null"
-        return iomessages.DiscoverResponseSchema(results=results, more=False)
-
-    # get_tweets_details
-    @endpoints.method(Tweet_id, TweetResponseSchema,
-                      path='twitter/get_tweets_details', http_method='POST',
-                      name='twitter.get_tweets_details')
-    def get_tweets_details(self, request):
-        idp = request.tweet_id
-        payload = {'tweet_id': idp}
-
-        r = requests.get(config_urls.nodeio_server + "/twitter/posts/tweet_details", params=payload)
-
-        result = json.dumps(r.json()["results"])
-        # return (json.dumps(r.json()["results"]),r.json()["more"])
-
-        # url="http://104.154.37.127:8091/get_tweet?idp="+str(idp)
-        # tweet=requests.get(url=url)
-        # result=json.dumps(tweet.json())
-
-        return TweetResponseSchema(results=result)
-
-    # get_twitter_map_tweets
-    @endpoints.method(iomessages.DiscoverRequestSchema, iomessages.DiscoverResponseSchema,
-                      path='twitter/get_tweets_map', http_method='POST',
-                      name='twitter.get_tweets_map')
-    def get_tweets_map(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        if len(request.keywords) == 0:
-            tags = Tag.list_by_kind(user_from_email, "topics")
-            request.keywords = [tag.name for tag in tags.items]
-        location = request.language
-
-        if len(request.keywords) != 0:
-            payload = {'keywords[]': request.keywords, 'location': location}
-            r = requests.get(config_urls.nodeio_server + "/twitter/map/map_tweets", params=payload)
-            # r.json()["more"]
-            result = json.dumps(r.json()["results"])
-
-        else:
-            results = "null"
-
-        return iomessages.DiscoverResponseSchema(results=result)
-
-    # get_twitter_influencers
-    @endpoints.method(iomessages.DiscoverRequestSchema, iomessages.DiscoverResponseSchema,
-                      path='twitter/get_influencers_v2', http_method='POST',
-                      name='twitter.get_influencers_v2')
-    def get_influencers_v2(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        if len(request.keywords) == 0:
-            tags = Tag.list_by_kind(user_from_email, "topics")
-            request.keywords = [tag.name for tag in tags.items]
-        language = request.language
-        if request.language == 'all':
-            language = ""
-
-        if len(request.keywords) != 0:
-            payload = {'keywords[]': request.keywords, 'page': request.page, 'language': language}
-            r = requests.get(config_urls.nodeio_server + "/twitter/influencers/list", params=payload)
-            # r.json()["more"]
-            result = json.dumps(r.json()["results"])
-            more = r.json()["more"]
-
-        else:
-            result = "null"
-            more = False
-
-        # #print idp,"idp"
-        # url="http://104.154.37.127:8091/list_influencers?keyword="+str(keyword)
-        # tweet=requests.get(url=url)
-        # result=json.dumps(tweet.json())
-
-        return iomessages.DiscoverResponseSchema(results=result, more=more)
-
-    # store_tweets_
-    @endpoints.method(KewordsRequest, message_types.VoidMessage,
-                      path='twitter/store_tweets', http_method='POST',
-                      name='twitter.store_tweets')
-    def store_tweets(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # something wrong here meziane
-        if len(request.value) == 0:
-            tagss = Tag.list_by_kind(user_from_email, "topics")
-            val = []
-            for tag in tagss.items:
-                val.append(tag)
-        else:
-            tagss = Tag.list_by_kind(user_from_email, "topics")
-            val = []
-            for tag in tagss.items:
-                if tag.name == request.value[0]:
-                    val.append(tag)
-                    # val=request.value
-        Discovery.get_tweets(val, "recent")
-
-        return message_types.VoidMessage()
-
-    # get_tweets_from_datastore
-    @endpoints.method(TwitterRequest, tweetsResponse,
-                      path='twitter/get_tweets_from_datastore', http_method='POST',
-                      name='twitter.get_tweets_from_datastore')
-    def get_tweets_from_datastore(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        if len(request.value) == 0:
-            tags = Tag.list_by_kind(user_from_email, "topics")
-            topics = [tag.name for tag in tags.items]
-        else:
-            topics = request.value
-        results = Discovery.list_tweets_from_datastore(topics, request.limit, request.pageToken)
-        return tweetsResponse(
-            items=results['items'],
-            nextPageToken=results['next_curs'],
-            is_crawling=results['is_crawling']
-        )
-
     @endpoints.method(KewordsRequest, ReportSchema,
                       path='reports/get', http_method='POST',
                       name='reports.get')
     def get_reports(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
         return Reports.reportQuery(user_from_email=user_from_email)
-
-    @endpoints.method(KewordsRequest, message_types.VoidMessage,
-                      path='twitter/delete_topic', http_method='POST',
-                      name='twitter.delete_topic')
-    def delete_topic(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # url="http://104.154.37.127:8091/delete_keyword?keyword="+str(request.value[0])+"&organization="+str(user_from_email.organization.id())
-        # requests.get(url=url)
-        organization = user_from_email.organization.id()
-        payload = {'keyword': str(request.value[0]), 'organization': organization}
-        r = requests.get(config_urls.nodeio_server + "/twitter/crawlers/delete", params=payload)
-        return message_types.VoidMessage()
-
-    # delete_tweets
-    @endpoints.method(KewordsRequest, message_types.VoidMessage,
-                      path='twitter/delete_tweets', http_method='POST',
-                      name='twitter.delete_tweets')
-    def delete_tweets(self, request):
-        Discovery.delete_tweets_by_name(request.value)
-        return message_types.VoidMessage()
-
-    # store_best_tweets_
-    @endpoints.method(KewordsRequest, message_types.VoidMessage,
-                      path='twitter/store_best_tweets', http_method='POST',
-                      name='twitter.store_best_tweets')
-    def store_best_tweets(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        # something wrong here meziane
-        if len(request.value) == 0:
-            tagss = Tag.list_by_kind(user_from_email, "topics")
-            val = []
-            for tag in tagss.items:
-                val.append(tag)
-        else:
-            tagss = Tag.list_by_kind(user_from_email, "topics")
-            val = []
-            for tag in tagss.items:
-                if tag.name == request.value[0]:
-                    val.append(tag)
-                    # val=request.value
-        Discovery.get_tweets(val, "popular")
-
-        return message_types.VoidMessage()
-
-    # store_best_tweets_
-    @endpoints.method(Topic_Comparaison_Schema, TopicsResponse,
-                      path='twitter/get_topics_from_freebase', http_method='POST',
-                      name='twitter.get_topics_from_freebase')
-    def get_topics_from_freebase(self, request):
-        result = Discovery.related_topics_between_keywords_and_tweets(request.keyword, request.tweet)
-
-        return TopicsResponse(items=result["items"], score_total=result["score_total"])
-
-    # get_last_tweets
-    @endpoints.method(KewordsRequest, message_types.VoidMessage,
-                      path='twitter/get_last_tweets', http_method='POST',
-                      name='twitter.get_last_tweets')
-    def get_last_tweets(self, request):
-        result = Discovery.get_lasts_tweets(request.value)
-        return message_types.VoidMessage()
-
-    # get_topics_of_person_tweets
-    @endpoints.method(KewordsRequest, Topics_Schema,
-                      path='twitter/get_topics_of_person', http_method='POST',
-                      name='twitter.get_topics_of_person')
-    def get_topics_of_person(self, request):
-        # get topics from resume
-        list_of_topics = []
-        score_total = 0.0
-
-        resume = Discovery.get_resume_from_twitter(request.value)
-        # ddddd
-        topics = Discovery.get_topics_of_tweet(resume)
-        result = topics["items"]
-        for ele in result:
-            qry = TopicScoring.query(TopicScoring.topic == ele.topic, TopicScoring.screen_name == request.value[0])
-            results = qry.fetch()
-            if len(results) != 0:
-                results[0].value += 40.0
-                results[0].put()
-                topics_schema = Scoring_Topics_Schema()
-                topics_schema.topic = results[0].topic
-                topics_schema.score = results[0].score
-                topics_schema.value = results[0].value
-            else:
-                ele.value = 60.0
-                ele.screen_name = request.value[0]
-                topics_schema = Scoring_Topics_Schema()
-                topics_schema.topic = ele.topic
-                topics_schema.score = ele.score
-                topics_schema.value = ele.value
-                ele.put()
-            list_of_topics.append(topics_schema)
-
-        # get topics from tweets
-        result = Discovery.get_lasts_tweets(request.value)
-        for ele in result:
-            topics = Discovery.get_topics_of_tweet(ele['text'].encode('utf-8'))
-            result = topics["items"]
-            for ele in result:
-                qry = TopicScoring.query(TopicScoring.topic == ele.topic, TopicScoring.screen_name == request.value[0])
-                results = qry.fetch()
-                if len(results) != 0:
-                    results[0].value += 30.0
-                    results[0].put()
-                    topics_schema = Scoring_Topics_Schema()
-                    topics_schema.topic = results[0].topic
-                    topics_schema.score = results[0].score
-                    topics_schema.value = results[0].value
-                    for ele in list_of_topics:
-                        if ele.topic == results[0].topic:
-                            ele.score = results[0].score
-                            ele.value = results[0].value
-                else:
-                    ele.value = 10.0
-                    ele.screen_name = request.value[0]
-                    topics_schema = Scoring_Topics_Schema()
-                    topics_schema.topic = ele.topic
-                    topics_schema.score = ele.score
-                    topics_schema.value = ele.value
-                    ele.put()
-                    list_of_topics.append(topics_schema)
-
-        # get topics from topics
-        qry = TopicScoring.query(TopicScoring.screen_name == request.value[0])
-        resultt = qry.fetch()
-        for res in resultt:
-            topics = Discovery.get_topics_of_tweet(res.topic.encode('utf-8'))
-            result = topics["items"]
-            for ele in result:
-                qry = TopicScoring.query(TopicScoring.topic == ele.topic, TopicScoring.screen_name == request.value[0])
-                results = qry.fetch()
-                if len(results):
-                    results[0].value += 30.0
-                    results[0].put()
-                    topics_schema = Scoring_Topics_Schema()
-                    topics_schema.topic = results[0].topic
-                    topics_schema.score = results[0].score
-                    topics_schema.value = results[0].value
-                    for ele in list_of_topics:
-                        if ele.topic == results[0].topic:
-                            ele.score = results[0].score
-                            ele.value = results[0].value
-                    results = []
-
-            score_total = score_total + topics["score_total"]
-        list_of_topics.sort(key=lambda x: x.value, reverse=True)
-        return Topics_Schema(items=list_of_topics, score_total=score_total)
 
     # init the reports for all users
     @endpoints.method(KewordsRequest, message_types.VoidMessage,
@@ -5595,28 +5223,6 @@ class CrmEngineApi(remote.Service):
         event = Event.get_by_id(int(request.id))
         return Document.list_by_parent(parent_key=event.key,
                                        request=request)
-
-    @endpoints.method(iomessages.DiscoverRequestSchema, iomessages.DiscoverResponseSchema,
-                      path="discover/get_tweets",
-                      http_method="POST",
-                      name="discover.get_tweets")
-    def get_tweets(self, request):
-
-        language = request.language
-        if request.language == 'all':
-            language = ""
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        if len(request.keywords) == 0:
-            tags = Tag.list_by_kind(user_from_email, "topics")
-            request.keywords = [tag.name for tag in tags.items]
-        if len(request.keywords) != 0:
-            results, more = Discovery.list_tweets_from_nodeio(request, language)
-
-        else:
-            results = "null"
-            more = False
-
-        return iomessages.DiscoverResponseSchema(results=results, more=more)
 
     @endpoints.method(deleteInvitedEmailRequest, message_types.VoidMessage,
                       path="invite/delete",
