@@ -27,10 +27,7 @@ KINDS = (E_LEAD, E_TASK, E_ACCOUNT, E_EVENT, E_OPPORTUNITY, E_CASE, E_CONTACT, A
 
 ALL_KINDS_LIMIT = 20
 
-if 'HTTP_HOST' in os.environ and str(os.environ['HTTP_HOST']).__contains__("appspot"):
-    STRIPE_API_KEY = "sk_test_9WaLpLhVb0W9tKInz6Bs6x6l"
-    PUBLISHABLE_KEY = "pk_test_A8tZ6tBoVb7MHJpTOJLsTEXD"
-elif "SERVER_SOFTWARE" in os.environ:
+if "SERVER_SOFTWARE" in os.environ:
     if os.environ['SERVER_SOFTWARE'].startswith('Dev'):
         STRIPE_API_KEY = "sk_test_9WaLpLhVb0W9tKInz6Bs6x6l"
         PUBLISHABLE_KEY = "pk_test_A8tZ6tBoVb7MHJpTOJLsTEXD"

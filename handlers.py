@@ -847,8 +847,8 @@ class GooglePlusConnect(SessionEnabledHandler):
         return header.split(',')[0]
 
     def post(self):
-        # try to get the user credentials from the code
         code = self.request.get("code")
+        is_paying = self.request.get("is_paying")
         try:
             credentials = GooglePlusConnect.exchange_code(code)
         except FlowExchangeError:
@@ -886,6 +886,7 @@ class GooglePlusConnect(SessionEnabledHandler):
                 credentials,
                 invited_user_id
             )
+            user.set_subscription(Subscription.create_freemium_subscription())
         else:
             user = GooglePlusConnect.save_token_for_user(
                 user_email,
@@ -929,7 +930,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         # Store the user ID in the session for later use.
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(is_new_user))
+        self.response.out.write(json.dumps({'is_new_user': is_new_user, 'is_paying': is_paying}))
 
 
 class InstallFromDecorator(SessionEnabledHandler):
@@ -1327,12 +1328,14 @@ class SubscriptionHandler(SessionEnabledHandler):
             org_key = user.organization
             organization = org_key.get()
             subscription = organization.get_subscription()
+            if subscription.plan.get().name == app_config.PREMIUM:
+                self.redirect('/#/admin/billing')
             template_values = {
                 'user': user,
                 'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
                 'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
                 'publishable_key': app_config.PUBLISHABLE_KEY,
-                'users_count': model.User.get_users_count_by_organization(org_key),
+                'users_count': model.User.count_by_organization(org_key),
                 'subscription': subscription
             }
             self.response.out.write(template.render(template_values))
@@ -1422,6 +1425,12 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
             premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
             premium_subscription.quantity = quantity
             premium_subscription.put()
+
+            if user.subscription.get().plan.get().name != app_config.PREMIUM:
+                user.set_subscription(premium_subscription)
+                user.put()
+                premium_subscription.quantity = quantity-1
+                premium_subscription.put()
 
             organization.stripe_customer_id = customer.id
             organization.set_subscription(premium_subscription)

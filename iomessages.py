@@ -573,5 +573,20 @@ class SubscriptionSchema(messages.Message):
     quantity = messages.IntegerField(7)
 
 
+class UserSubscriptionSchema(messages.Message):
+    subscription = messages.MessageField(SubscriptionSchema, 1)
+    email = messages.StringField(2)
+
+
+class SubscriptionListSchema(messages.Message):
+    data = messages.MessageField(UserSubscriptionSchema, 1, repeated=True)
+
+
 class LicencesQuantityMessage(messages.Message):
     quantity = messages.IntegerField(1, required=True)
+
+
+class OrganizationSubscriptionStatusMessage(messages.Message):
+    users_count = messages.IntegerField(1, required=True)
+    licenses_bought = messages.IntegerField(2)
+    assigned_licenses = messages.IntegerField(3)
