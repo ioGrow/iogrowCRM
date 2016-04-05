@@ -691,28 +691,6 @@ indexes:
   - name: updated_at
     direction: desc
 
-- kind: TweetsSchema
-  properties:
-  - name: topic
-  - name: __key__
-    direction: desc
-
-- kind: TweetsSchema
-  properties:
-  - name: topic
-  - name: author_followers_count
-    direction: desc
-  - name: __key__
-    direction: desc
-
-- kind: TweetsSchema
-  properties:
-  - name: topic
-  - name: id
-    direction: desc
-  - name: __key__
-    direction: desc
-
 - kind: User
   properties:
   - name: google_user_id

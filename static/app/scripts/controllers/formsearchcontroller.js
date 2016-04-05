@@ -56,22 +56,7 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
           /// $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
         };
     }
-    $scope.linkedinSearchSwitch=function(){
 
-        if ($scope.linkedSearch) {
-          if ($scope.iogrowSearch) {
-             $scope.linkedSearch=false;
-              $rootScope.linkedSearch=false;
-               localStorage['linkedSearch']=false;
-          };
-         
-        }else{
-           $scope.linkedSearch=true;
-           localStorage['linkedSearch']=true;
-            $rootScope.linkedSearch=true;
-        };
-
-    }
  // HADJI HICHAM - 08/02/2015
   $scope.createPickerUploader= function(){
 

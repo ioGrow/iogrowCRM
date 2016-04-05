@@ -1733,17 +1733,17 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                  $scope.linkedShortProfile.profile_picture=resp.profile_picture;
                  $scope.linkedShortProfile.title=resp.title;
                  $scope.linkedShortProfile.locality=resp.locality;
-                 $scope.linkedShortProfile.industry=resp.industry; 
+                 $scope.linkedShortProfile.industry=resp.industry;
                  $scope.linkedShortProfile.formations=resp.formations
                  $scope.linkedShortProfile.resume=resp.resume;
                  $scope.linkedShortProfile.skills=resp.skills;
                  $scope.linkedShortProfile.current_post=resp.current_post;
                  $scope.linkedShortProfile.past_post=resp.past_post;
-                 $scope.linkedShortProfile.experiences=JSON.parse(resp.experiences);  
+                 $scope.linkedShortProfile.experiences=JSON.parse(resp.experiences);
                  if($scope.linkedProfile.experiences){
                   $scope.linkedProfile.experiences.curr=$scope.linkedProfile.experiences['current-position'];
                   $scope.linkedProfile.experiences.past=$scope.linkedProfile.experiences['past-position'];
-                 }         
+                 }
                  $scope.linkedLoader=false;
                  $scope.apply();
                 }else {
@@ -2204,7 +2204,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             if (data.email) $scope.addEmail({'email':data.email});
             if (data.linkedin_url) $scope.addSocial({'url':data.linkedin_url});
             if (data.locality) $scope.addGeo({'formatted':data.locality,'country':' '});
-             //$scope.addWebsite({'url':data.linkedin_url});
             $scope.apply();
         }
      $scope.socialLinkOpener = function(socialLinkUrl){
@@ -4821,39 +4820,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                         }
                   });            
             }
-       // $scope.getLinkedinByUrl=function(url){
-       //         $scope.inIsLoading=true;
-       //         var par={'url' : url};
-       //         Linkedin.profileGet(par,function(resp){
-       //                if(!resp.code){
-       //                   prof={};
-       //                   prof.fullname=resp.fullname;
-       //                   prof.url=url;
-       //                   prof.profile_picture=resp.profile_picture;
-       //                   prof.title=resp.title;
-       //                   prof.locality=resp.locality;
-       //                   prof.industry=resp.industry; 
-       //                   prof.formations=resp.formations
-       //                   prof.resume=resp.resume;
-       //                   prof.skills=resp.skills;
-       //                   prof.current_post=resp.current_post;
-       //                   prof.past_post=resp.past_post;
-       //                   prof.experiences=JSON.parse(resp.experiences);  
-       //                   if(prof.experiences){
-       //                    prof.experiences.curr=prof.experiences['current-position'];
-       //                    prof.experiences.past=prof.experiences['past-position'];
-       //                   }         
-       //                   $scope.inShortProfiles.push(prof);
-       //                   $scope.inIsLoading=false;
-       //                   $scope.apply();
-       //                }else {
-       //                   if(resp.code==401){
-       //                    $scope.inIsLoading=false;
-       //                    $scope.apply();
-       //                   };
-       //                }
-       //             });
-       //      }
         $scope.twitterUrl=function(url){
                          var match="";
                          var matcher = new RegExp("twitter");
@@ -5294,9 +5260,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
          $("#select_0").removeClass('selectLinkedinButton');
       };
       
-    }; 
-    $scope.addLinkedIn = function(social){
-      $scope.getLinkedinByUrl(social.url);
     };
     $scope.mergedContacts = 0;
     $scope.mergeContact = function (baseContact, newContact) {

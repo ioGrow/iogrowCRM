@@ -25,7 +25,6 @@ from iomodels.crmengine.casestatuses import Casestatus
 
 from search_helper import tokenize_autocomplete
 
-# from ioreporting import Reports
 import iomessages
 
 # hadji hicham 20/08/2014.
@@ -61,7 +60,6 @@ VISIBLE_ACTIONS = [
 ]
 
 STANDARD_TABS = [
-    # {'name': 'Discovery','label': 'Discovery','url':'/#/discovers/','icon':'twitter'},
     {'name': 'Leads', 'label': 'Leads', 'url': '/#/leads/', 'icon': 'road'},
     {'name': 'Opportunities', 'label': 'Opportunities', 'url': '/#/opportunities/', 'icon': 'money'},
     {'name': 'Contacts', 'label': 'Contacts', 'url': '/#/contacts/', 'icon': 'group'},
@@ -69,7 +67,6 @@ STANDARD_TABS = [
     {'name': 'Cases', 'label': 'Cases', 'url': '/#/cases/', 'icon': 'suitcase'},
     {'name': 'Tasks', 'label': 'Tasks', 'url': '/#/tasks/', 'icon': 'check'},
     {'name': 'Calendar', 'label': 'Calendar', 'url': '/#/calendar/', 'icon': 'calendar'}
-    # {'name': 'Dashboard','label': 'Dashboard','url':'/#/dashboard/','icon':'dashboard'}
 ]
 EARLY_BIRD_TABS = [
     {'name': 'Contacts', 'label': 'Contacts', 'url': '/#/contacts/', 'icon': 'group'},
@@ -558,7 +555,6 @@ class Organization(ndb.Model):
                 admin.init_user_config(org_key, admin_profile_key)
             else:
                 created_profile.put()
-        # create reports details
 
         # init default stages,status, default values...
         cls.init_default_values(org_key)
@@ -642,9 +638,6 @@ class Organization(ndb.Model):
                 admin.init_early_bird_config(org_key, admin_profile_key)
             else:
                 created_profile.put_async()
-        # create reports details
-        # Reports.create(user_from_email=admin)
-
         # init default stages,status, default values...
         cls.init_default_values(org_key)
 
@@ -1831,40 +1824,6 @@ class TwitterProfile(ndb.Model):
     profile_image_url_https = ndb.StringProperty(indexed=False)
     lang = ndb.StringProperty(indexed=False)
     profile_banner_url = ndb.StringProperty(indexed=False)
-
-
-class TweetsSchema(ndb.Model):
-    id = ndb.StringProperty(indexed=True)
-    profile_image_url = ndb.StringProperty(indexed=False)
-    author_name = ndb.StringProperty(indexed=False)
-    created_at = ndb.DateTimeProperty(indexed=False)
-    content = ndb.StringProperty(indexed=False)
-    author_followers_count = ndb.IntegerProperty(indexed=False)
-    author_location = ndb.StringProperty(indexed=False)
-    author_language = ndb.StringProperty(indexed=False)
-    author_statuses_count = ndb.IntegerProperty(indexed=False)
-    author_description = ndb.StringProperty(indexed=False)
-    author_friends_count = ndb.IntegerProperty(indexed=False)
-    author_favourites_count = ndb.IntegerProperty(indexed=False)
-    author_url_website = ndb.StringProperty(indexed=False)
-    created_at_author = ndb.StringProperty(indexed=False)
-    time_zone_author = ndb.StringProperty(indexed=False)
-    author_listed_count = ndb.IntegerProperty(indexed=False)
-    screen_name = ndb.StringProperty(indexed=False)
-    retweet_count = ndb.IntegerProperty(indexed=True)
-    favorite_count = ndb.IntegerProperty(indexed=False)
-    topic = ndb.StringProperty(indexed=True)
-    order = ndb.StringProperty(indexed=True)
-    latitude = ndb.StringProperty(indexed=False)
-    longitude = ndb.StringProperty(indexed=False)
-    tweets_stored_at = ndb.DateTimeProperty(indexed=True)
-
-
-class TopicScoring(ndb.Model):
-    topic = ndb.StringProperty(indexed=True)
-    score = ndb.FloatProperty(indexed=True)
-    value = ndb.FloatProperty(indexed=True, default=0)
-    screen_name = ndb.StringProperty(indexed=True)
 
 
 class ImportJob(ndb.Model):

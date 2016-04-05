@@ -590,55 +590,12 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             }
             ;
         }
-        /*$scope.initDiscover=function(){
-         Profile.listKeywords($scope,{})
-         Profile.list($scope,{})
-         $scope.diselectedOption='discover'
-         }*/
-        /* 
 
-         $scope.isSelected = function(index) {
-         return ($scope.selected_leads.indexOf(index) >= 0||$scope.isSelectedAll);
-         };
-         $scope.select_lead= function(lead,$index,$event){
-         var checkbox = $event.target;
-         if(checkbox.checked){
-         if ($scope.selected_leads.indexOf(lead) == -1) {
-         
-         $scope.selected_leads.push(lead);
-         
-
-         }
-         }else{
-         $scope.selected_leads.splice($scope.selected_leads.indexOf(lead), 1);
-         
-         
-         
-         }
-         }
-         $scope.select_all_tasks=function($event){
-         var checkbox = $event.target;
-         if(checkbox.checked){
-         $scope.selected_leads=[];
-         $scope.selected_leads.push($scope.leads);
-         $scope.isSelectedAll=true;
-         }else{
-         $scope.selected_leads=[];
-         $scope.isSelectedAll=false;
-         
-         }
-         }*/
         $scope.wizard = function () {
             localStorage['completedTour'] = 'True';
             var tour = {
                 id: "hello-hopscotch",
                 steps: [
-                    {
-                        title: "Discovery",
-                        content: "Your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
-                        target: "id_Discovery",
-                        placement: "right"
-                    },
                     {
                         title: "Leads",
                         content: "Use leads to easily track  individuals or representatives of organizations who may be interested in your business. They are usually collected from various sources like Discovery feature, Linkedin, trade shows, seminars, advertisements and other marketing campaigns. You can add notes, set reminders or send emails",
@@ -2118,7 +2075,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             window.Intercom('update');
             $scope.mapAutocompleteCalendar()
         };
-        // new linkedin
         $scope.messageFromSocialLinkCallback = function(event){
         if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){   
             $scope.saveLinkedinData(event.data);
@@ -3288,9 +3244,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         };
 
 //HKA 22.11.2013 Add Social
-        $scope.addLinkedIn = function (social) {
-            $scope.getLinkedinByUrl(social.url);
-        };
         $scope.addSocial = function (social) {
 
             if (social.url != "" && social.url != undefined && !$scope.existsInfonode(social,'url','sociallinks')) {
@@ -4014,8 +3967,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             var par = {'url': url};
             Linkedin.profileGet(par, function (resp) {
                 if (!resp.code) {
-                    
-                    
+
+
                     $scope.linkedShortProfile = {};
                     $scope.linkedShortProfile.fullname = resp.fullname;
                     $scope.linkedShortProfile.url = url;
@@ -4035,14 +3988,14 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     }
                     $scope.linkedLoader = false;
                     $scope.apply();
-                    
-                    
-                    
+
+
+
                 } else {
-                    
+
                     if (resp.code == 401) {
                         // $scope.refreshToken();
-                        
+
                         $scope.linkedLoader = false;
                         $scope.apply();
                     }
@@ -5573,20 +5526,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 $scope.profile_img.profile_img_url = $scope.twProfile.profile_image_url_https;
             }
             ;
-            /*$scope.imageSrc = $scope.twProfile.profile_picture;*/
-            //  $scope.profile_img.profile_img_url = $scope.twProfile.profile_picture;
-            /*$scope.lead.source='Linkedin';
-             $scope.lead.industry=''
-             if (!$scope.lead.title) {
-             $scope.lead.title = $scope.twProfile.title;
-             };
-             if($scope.twProfile.current_post){
-             if ($scope.twProfile.current_post[0]){
-             $scope.lead.company = $scope.twProfile.current_post[0];
-             }
-             }
-             */
-            /*if ($scope.twProfile.location!=''&&$scope.twProfile.location!=null) {*/
+
             if (!$scope.addressModel) {
                 $scope.addressModel = $scope.twProfile.location;
             } else {
@@ -5596,8 +5536,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 ;
             }
             ;
-            // $scope.addGeo({'formatted':$scope.twProfile.location});
-            /*};*/
             $scope.apply();
         }
         $scope.cancelSelection = function (arrayname) {
@@ -5787,9 +5725,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             ;
 
         };
-        $scope.addLinkedIn = function (social) {
-            $scope.getLinkedinByUrl(social.url);
-        };
+
         $scope.mergedLeads = 0;
         $scope.mergeLead = function (baseLead, newLead) {
             var params = {base_id: baseLead.id, new_lead: $scope.getParamsFromLead(newLead)};

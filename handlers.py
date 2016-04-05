@@ -45,13 +45,9 @@ from iograph import Edge
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task, AssignedGoogleId
 import sfoauth2
-from discovery import Discovery
-# under the test .beta !
-from ioreporting import Reports
 import stripe
 import requests
 from requests.auth import HTTPBasicAuth
-import config as config_urls
 from intercom import Intercom
 from simple_salesforce import Salesforce
 from semantic.dates import DateService
@@ -872,21 +868,6 @@ class AccountShowHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/accounts/account_show.html')
 
 
-class DiscoverListHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/discovers/discover_list.html')
-
-
-class DiscoverShowHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/discovers/discover_show.html')
-
-
-class DiscoverNewHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/discovers/discover_new.html')
-
-
 class AccountNewHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/accounts/account_new.html')
@@ -1052,11 +1033,6 @@ class SearchListHandler(BaseHandler, SessionEnabledHandler):
 class CalendarShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/calendar/calendar_show.html')
-
-
-class DashboardHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/dashboard.html')
 
 
 class SalesforceImporter(BaseHandler, SessionEnabledHandler):
@@ -1838,10 +1814,6 @@ class SyncContact(webapp2.RequestHandler):
         id = self.request.get('id')
         user = model.User.get_by_email(email)
 
-        # sync contact
-        # Contact.sync_with_google_contacts(user,id)
-
-
 
 class SyncCalendarEvent(webapp2.RequestHandler):
     def post(self):
@@ -2207,106 +2179,6 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
         if user_from_email:
             Lead.insert(user_from_email, request)
 
-
-class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
-    def post(self):
-        entityKey = self.request.get('entityKey')
-        linkedin = linked_in()
-        key1 = ndb.Key(urlsafe = entityKey)
-        lead = key1.get()
-        keyword = lead.firstname + " " + lead.lastname + " "
-        if lead.company:
-            keyword = keyword + lead.company
-        print keyword
-        profil = linkedin.scrape_linkedin(keyword)
-        if profil:
-            pli = model.LinkedinProfile()
-            if "formations" in profil.keys():
-                pli.formations = profil["formations"]
-            if "firstname" in profil.keys():
-                pli.firstname = profil["firstname"]
-            if "lastname" in profil.keys():
-                pli.lastname = profil["lastname"]
-            if "industry" in profil.keys():
-                pli.industry = profil["industry"]
-            if "locality" in profil.keys():
-                pli.locality = profil["locality"]
-            if "headline" in profil.keys():
-                pli.headline = profil["headline"]
-            if "relation" in profil.keys():
-                pli.relation = profil["relation"]
-            if "resume" in profil.keys():
-                pli.resume = profil["resume"]
-            if "current_post" in profil.keys():
-                pli.current_post = profil["current_post"]
-            if "past_post" in profil.keys():
-                pli.past_post = profil["past_post"]
-            if "certifications" in profil.keys():
-                pli.certifications = json.dumps(profil["certifications"])
-            if "experiences" in profil.keys():
-                pli.experiences = json.dumps(profil["experiences"])
-            if "skills" in profil.keys():
-                pli.skills = profil["skills"]
-            if "url" in profil.keys():
-                pli.url = profil["url"]
-            key2 = pli.put()
-            es = Edge.insert(start_node=key1, end_node=key2, kind='linkedin', inverse_edge='parents')
-
-
-class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
-    def post(self):
-        entityKey = self.request.get('entityKey')
-        linkedin = linked_in()
-        key1 = ndb.Key(urlsafe=entityKey)
-        account = key1.get()
-        print account
-        profil = linkedin.scrape_company(account.name)
-        if profil:
-            pli = model.LinkedinCompany()
-            pli.name = profil["name"]
-            pli.website = profil["website"]
-            pli.industry = profil["industry"]
-            pli.headquarters = profil["headquarters"]
-            pli.summary = profil["summary"]
-            pli.founded = profil["founded"]
-            pli.followers = profil["followers"]
-            pli.logo = profil["logo"]
-            pli.specialties = profil["specialties"]
-            pli.top_image = profil["top_image"]
-            pli.type = profil["type"]
-            pli.company_size = profil["company_size"]
-            pli.url = profil["url"]
-            pli.workers = json.dumps(profil["workers"])
-            key2 = pli.put()
-            es = Edge.insert(start_node=key1, end_node=key2, kind='linkedin', inverse_edge='parents')
-
-
-class update_tweets(webapp2.RequestHandler):
-    def post(self):
-        # Discovery.update_tweets()
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        tagss = Tag.list_by_just_kind("topics")
-        for tag in tagss.items:
-            taskqueue.add(
-                url='/workers/insert_crawler',
-                queue_name='iogrow-critical',
-                params={
-                    'topic': tag.name,
-                    'organization': user_from_email.organization.id()
-                }
-            )
-
-
-class delete_tweets(webapp2.RequestHandler):
-    def post(self):
-        Discovery.delete_tweets()
-
-
-class get_popular_posts(webapp2.RequestHandler):
-    def post(self):
-        Discovery.get_popular_posts()
-
-
 class ShareDocument(webapp2.RequestHandler):
     def post(self):
 
@@ -2480,96 +2352,6 @@ class SendGmailEmail(webapp2.RequestHandler):
             )
         EndpointsHelper.send_message(service, 'me', message)
 
-
-class InitReport(webapp2.RequestHandler):
-    def post(self):
-        admin = ndb.Key(urlsafe=self.request.get("admin")).get()
-        Reports.create(user_from_email=admin)
-
-
-class InitReports(webapp2.RequestHandler):
-    def post(self):
-        Reports.init_reports()
-
-
-def extract_leads_from_message(gmail_service, user, thread_id):
-    thread_details = gmail_service.users().threads().get(userId='me', id=thread_id, fields='messages/payload').execute()
-    for message in thread_details['messages']:
-        updated_at = None
-        updated_at_dt = None
-        for field in message['payload']['headers']:
-            if field['name'] == 'Date':
-                try:
-                    service = DateService()
-                    updated_at_dt = service.extractDate(field['value'])
-                    if updated_at_dt:
-                        updated_at = updated_at_dt.isoformat()
-                except:
-                    print 'error when extracting date'
-
-            if field['name'] == 'From' or field['name'] == 'To':
-                name = field['value'].split('<')[0]
-                check_if_email = re.search('([\w.-]+)@([\w.-]+)', name)
-                if check_if_email is None:
-                    match = re.search('([\w.-]+)@([\w.-]+)', field['value'])
-                    if match:
-                        if match.group() != user.email:
-                            firstname = name.split()[0]
-                            lastname = " ".join(name.split()[1:])
-
-                            if Lead.get_key_by_name(user, firstname, lastname):
-                                lead_key = Lead.get_key_by_name(user, firstname, lastname)
-                                lead = lead_key.get()
-                                if updated_at_dt:
-                                    lead.updated_at = updated_at_dt
-                                    lead.put()
-                            else:
-                                email = iomessages.InfoNodeRequestSchema(kind='emails', fields=[
-                                    {'field': 'email', 'value': match.group()}])
-                                request = LeadInsertRequest(
-                                    firstname=firstname,
-                                    lastname=lastname,
-                                    infonodes=[email],
-                                    access='private',
-                                    source='Gmail sync',
-                                    updated_at=updated_at
-                                )
-                                print request
-                                Lead.insert(user, request)
-
-
-class InitLeadsFromGmail(webapp2.RequestHandler):
-    def post(self):
-        email = self.request.get('email')
-        user = model.User.get_by_email(email)
-        credentials = user.google_credentials
-        http = credentials.authorize(httplib2.Http(memcache))
-        gmail_service = build('gmail', 'v1', http=http)
-        nextPageToken = None
-        you_can_loop = True
-        threads_list = []
-        try:
-            while you_can_loop:
-                # prepare params to insert
-                threads = gmail_service.users().threads().list(userId='me', q='category:primary',
-                                                               pageToken=nextPageToken).execute()
-                for thread in threads['threads']:
-                    threads_list.append(thread['id'])
-                if 'nextPageToken' in threads:
-                    nextPageToken = threads['nextPageToken']
-                else:
-                    you_can_loop = False
-            for thread_id in threads_list:
-                try:
-                    thread_details = gmail_service.users().threads().get(userId='me', id=thread_id,
-                                                                         fields='messages/payload').execute()
-                    extract_leads_from_message(gmail_service, user, thread_id)
-                except:
-                    print 'error when extracting leads from thread number', thread_id
-        except:
-            print 'problem on getting threads'
-
-
 class ImportContactSecondStep(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -2713,48 +2495,6 @@ class SFusersCSV(BaseHandler, SessionEnabledHandler):
             writer.writerow(["%s %s" % (u.firstname, u.lastname), u.email, is_paying])
 
 
-# scrapyd UI
-class ScrapydHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        template_values = {}
-        template = jinja_environment.get_template('templates/scrapydUI.html')
-        self.response.out.write(template.render(template_values))
-
-
-class InsertCrawler(webapp2.RequestHandler):
-    def post(self):
-        topic = self.request.get('topic')
-        organization = self.request.get('organization')
-        # url="http://104.154.43.236:8091/insert_keyword?keyword="+topic+"&organization="+organization
-        # requests.get(url=url)
-        payload = {'keyword': topic, 'organization': organization}
-        r = requests.get(config_urls.nodeio_server + "/twitter/crawlers/insert", params=payload)
-
-
-class cron_update_tweets(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        taskqueue.add(
-            url='/workers/update_tweets',
-            queue_name='iogrow-low',
-            params={}
-        )
-
-
-class cron_delete_tweets(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        Discovery.delete_tweets()
-        '''taskqueue.add(
-                            url='/workers/delete_tweets',
-                            queue_name='iogrow-low',
-                            params={}
-                        )
-        '''
-
-
-class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        Discovery.get_popular_posts()
-
 
 class DeleteUserContacts(webapp2.RequestHandler):
     def post(self):
@@ -2819,12 +2559,7 @@ routes = [
     ('/workers/sync_contacts', SyncContact),
     ('/workers/send_email_notification', SendEmailNotification),
     ('/workers/add_to_iogrow_leads', AddToIoGrowLeads),
-    ('/workers/get_from_linkedin', GetFromLinkedinToIoGrow),
-    ('/workers/get_company_from_linkedin', GetCompanyFromLinkedinToIoGrow),
-    ('/workers/update_tweets', update_tweets),
-    ('/workers/update_tweets', delete_tweets),
     ('/workers/send_gmail_message', SendGmailEmail),
-    ('/workers/init_leads_from_gmail', InitLeadsFromGmail),
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
     ('/workers/synctask', SyncCalendarTask),
@@ -2838,11 +2573,6 @@ routes = [
     ('/workers/syncevent', SyncCalendarEvent),
     ('/workers/syncpatchevent', SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent', SyncDeleteCalendarEvent),
-
-    # report actions
-    ('/workers/initreport', InitReport),
-    ('/workers/initreports', InitReports),
-    ('/workers/insert_crawler', InsertCrawler),
     ('/workers/import_contact_from_gcsv', ImportContactFromGcsvRow),
     ('/workers/contact_import_second_step', ImportContactSecondStep),
     ('/workers/lead_import_second_step', ImportLeadSecondStep),
@@ -2859,10 +2589,6 @@ routes = [
     #
     ('/', IndexHandler),
     ('/partners/', PartnersHandler),
-    # Templates Views Routes
-    ('/views/discovers/list', DiscoverListHandler),
-    ('/views/discovers/show', DiscoverShowHandler),
-    ('/views/discovers/new', DiscoverNewHandler),
     # Accounts Views
     ('/views/accounts/list', AccountListHandler),
     ('/views/accounts/show', AccountShowHandler),
@@ -2948,8 +2674,6 @@ routes = [
     ('/invitation_sent', SFinvite),
     ('/stripe', StripeHandler),
     # paying with stripe
-    ('/views/dashboard', DashboardHandler),
-    ('/scrapyd', ScrapydHandler),
     ('/jj', ImportJob),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),

@@ -250,92 +250,8 @@ class TwitterProfileSchema(messages.Message):
     lang = messages.StringField(17)
     profile_banner_url = messages.StringField(18)
 
-
-class tweetsSchema(messages.Message):
-    id = messages.StringField(1)
-    profile_image_url = messages.StringField(2)
-    author_name = messages.StringField(3)
-    created_at = messages.StringField(4)
-    content = messages.StringField(5)
-    author_followers_count = messages.IntegerField(6)
-    author_location = messages.StringField(7)
-    author_language = messages.StringField(8)
-    author_statuses_count = messages.IntegerField(9)
-    author_description = messages.StringField(10)
-    author_friends_count = messages.IntegerField(11)
-    author_favourites_count = messages.IntegerField(12)
-    author_url_website = messages.StringField(13)
-    created_at_author = messages.StringField(14)
-    time_zone_author = messages.StringField(15)
-    author_listed_count = messages.IntegerField(16)
-    screen_name = messages.StringField(17)
-    retweet_count = messages.IntegerField(18)
-    favorite_count = messages.IntegerField(19)
-    topic = messages.StringField(20)
-    order = messages.StringField(21)
-    latitude = messages.StringField(22)
-    longitude = messages.StringField(23)
-
-
 class KewordsRequest(messages.Message):
     value = messages.StringField(1, repeated=True)
-
-
-class Topic_Schema(messages.Message):
-    topic = messages.StringField(1, repeated=False)
-    score = messages.FloatField(2, repeated=False)
-
-
-class TopicsResponse(messages.Message):
-    items = messages.MessageField(Topic_Schema, 1, repeated=True)
-    score_total = messages.FloatField(2)
-
-
-class TwitterRequest(messages.Message):
-    value = messages.StringField(1, repeated=True)
-    order = messages.StringField(2, repeated=False)
-    limit = messages.IntegerField(3)
-    pageToken = messages.StringField(4)
-
-
-class tweetsResponse(messages.Message):
-    items = messages.MessageField(tweetsSchema, 1, repeated=True)
-    nextPageToken = messages.StringField(2)
-    is_crawling = messages.BooleanField(3)
-
-
-class TwitterMapsSchema(messages.Message):
-    id = messages.StringField(1)
-    location = messages.StringField(2)
-    latitude = messages.StringField(3)
-    longitude = messages.StringField(4)
-    number = messages.StringField(5)
-
-
-class TwitterMapsResponse(messages.Message):
-    items = messages.MessageField(TwitterMapsSchema, 1, repeated=True)
-
-
-class Tweet_id(messages.Message):
-    tweet_id = messages.StringField(1)
-    topic = messages.StringField(2)
-
-
-class Topic_Comparaison_Schema(messages.Message):
-    tweet = messages.StringField(1)
-    keyword = messages.StringField(2)
-
-
-class Scoring_Topics_Schema(messages.Message):
-    topic = messages.StringField(1)
-    score = messages.FloatField(2)
-    value = messages.FloatField(3)
-
-
-class Topics_Schema(messages.Message):
-    items = messages.MessageField(Scoring_Topics_Schema, 1, repeated=True)
-    score_total = messages.FloatField(2)
-
 
 class FileAttachedSchema(messages.Message):
     id = messages.StringField(1)
@@ -393,23 +309,6 @@ class UpdateOrganizationLicenseRequest(messages.Message):
 
 class UpdateUserLicenseRequest(messages.Message):
     user_key = messages.StringField(1, required=True)
-
-
-class DiscoverResponseSchema(messages.Message):
-    results = messages.StringField(1)
-    more = messages.BooleanField(2)
-
-
-class TweetResponseSchema(messages.Message):
-    results = messages.StringField(1)
-
-
-class DiscoverRequestSchema(messages.Message):
-    keywords = messages.StringField(1, repeated=True)
-    page = messages.IntegerField(2)
-    limit = messages.IntegerField(3)
-    language = messages.StringField(4)
-
 
 class AccountSchema(messages.Message):
     id = messages.StringField(1)

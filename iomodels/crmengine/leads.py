@@ -122,17 +122,6 @@ class ParamsSchema(messages.Message):
     access = messages.StringField(2, default='public')
 
 
-class FullContactRequest(messages.Message):
-    contact = messages.MessageField(FullContactSchema, 1)
-    params = messages.MessageField(ParamsSchema, 2)
-
-
-# end fullContact schemas
-
-class LeadFromTwitterRequest(messages.Message):
-    user_id = messages.IntegerField(1, required=True)
-
-
 class LeadSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
@@ -1089,7 +1078,6 @@ class Lead(EndpointsModel):
             profile_img_id=lead.profile_img_id,
             profile_img_url=lead.profile_img_url,
             cover_image=lead.cover_image
-            # linkedin_url = lead.linkedin_url
         )
 
         contact_key = contact.put_async()
@@ -1166,8 +1154,6 @@ class Lead(EndpointsModel):
 
         lead.key.delete()
         EndpointsHelper.delete_document_from_index(id=request.id)
-        # Reports.add_lead(user_from_email,nbr=-1)
-        # Reports.add_contact(user_from_email)
         return LeadSchema(id=str(contact_key_async.id()))
 
     @classmethod

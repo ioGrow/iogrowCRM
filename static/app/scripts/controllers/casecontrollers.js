@@ -1617,10 +1617,7 @@ $scope.showAddEventPopup=function(){
        }
 
 // HADJI HICHAM 31/05/2015
-//auto complete 
-
-//auto complete 
-
+//auto complete
      var invitesparams ={};
      $scope.inviteResults =[];
      $scope.inviteResult = undefined;
@@ -1633,7 +1630,6 @@ $scope.$watch('invite', function(newValue, oldValue) {
            invitesparams['q'] = $scope.invite;
            gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
               if (resp.items){
-          
                 $scope.filterInviteResult(resp.items);
                 $scope.$apply();
               };
