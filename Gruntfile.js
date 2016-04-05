@@ -66,7 +66,6 @@ module.exports = function (grunt) {
                           'static/src/js/ng-google-chart.js'
                         ]
                      }
-                    
             },
             js_servs_ctrls: {
                 src: ['static/app/scripts/services/authservices.js',
