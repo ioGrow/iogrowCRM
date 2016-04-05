@@ -2188,80 +2188,6 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
         if user_from_email:
             Lead.insert(user_from_email, request)
 
-
-class GetFromLinkedinToIoGrow(webapp2.RequestHandler):
-    def post(self):
-        entityKey = self.request.get('entityKey')
-        linkedin = linked_in()
-        key1 = ndb.Key(urlsafe = entityKey)
-        lead = key1.get()
-        keyword = lead.firstname + " " + lead.lastname + " "
-        if lead.company:
-            keyword = keyword + lead.company
-        print keyword
-        profil = linkedin.scrape_linkedin(keyword)
-        if profil:
-            pli = model.LinkedinProfile()
-            if "formations" in profil.keys():
-                pli.formations = profil["formations"]
-            if "firstname" in profil.keys():
-                pli.firstname = profil["firstname"]
-            if "lastname" in profil.keys():
-                pli.lastname = profil["lastname"]
-            if "industry" in profil.keys():
-                pli.industry = profil["industry"]
-            if "locality" in profil.keys():
-                pli.locality = profil["locality"]
-            if "headline" in profil.keys():
-                pli.headline = profil["headline"]
-            if "relation" in profil.keys():
-                pli.relation = profil["relation"]
-            if "resume" in profil.keys():
-                pli.resume = profil["resume"]
-            if "current_post" in profil.keys():
-                pli.current_post = profil["current_post"]
-            if "past_post" in profil.keys():
-                pli.past_post = profil["past_post"]
-            if "certifications" in profil.keys():
-                pli.certifications = json.dumps(profil["certifications"])
-            if "experiences" in profil.keys():
-                pli.experiences = json.dumps(profil["experiences"])
-            if "skills" in profil.keys():
-                pli.skills = profil["skills"]
-            if "url" in profil.keys():
-                pli.url = profil["url"]
-            key2 = pli.put()
-            es = Edge.insert(start_node=key1, end_node=key2, kind='linkedin', inverse_edge='parents')
-
-
-class GetCompanyFromLinkedinToIoGrow(webapp2.RequestHandler):
-    def post(self):
-        entityKey = self.request.get('entityKey')
-        linkedin = linked_in()
-        key1 = ndb.Key(urlsafe=entityKey)
-        account = key1.get()
-        print account
-        profil = linkedin.scrape_company(account.name)
-        if profil:
-            pli = model.LinkedinCompany()
-            pli.name = profil["name"]
-            pli.website = profil["website"]
-            pli.industry = profil["industry"]
-            pli.headquarters = profil["headquarters"]
-            pli.summary = profil["summary"]
-            pli.founded = profil["founded"]
-            pli.followers = profil["followers"]
-            pli.logo = profil["logo"]
-            pli.specialties = profil["specialties"]
-            pli.top_image = profil["top_image"]
-            pli.type = profil["type"]
-            pli.company_size = profil["company_size"]
-            pli.url = profil["url"]
-            pli.workers = json.dumps(profil["workers"])
-            key2 = pli.put()
-            es = Edge.insert(start_node=key1, end_node=key2, kind='linkedin', inverse_edge='parents')
-
-
 class update_tweets(webapp2.RequestHandler):
     def post(self):
         # Discovery.update_tweets()
@@ -2694,13 +2620,6 @@ class SFusersCSV(BaseHandler, SessionEnabledHandler):
             writer.writerow(["%s %s" % (u.firstname, u.lastname), u.email, is_paying])
 
 
-# scrapyd UI
-class ScrapydHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        template_values = {}
-        template = jinja_environment.get_template('templates/scrapydUI.html')
-        self.response.out.write(template.render(template_values))
-
 
 class InsertCrawler(webapp2.RequestHandler):
     def post(self):
@@ -2800,8 +2719,6 @@ routes = [
     ('/workers/sync_contacts', SyncContact),
     ('/workers/send_email_notification', SendEmailNotification),
     ('/workers/add_to_iogrow_leads', AddToIoGrowLeads),
-    ('/workers/get_from_linkedin', GetFromLinkedinToIoGrow),
-    ('/workers/get_company_from_linkedin', GetCompanyFromLinkedinToIoGrow),
     ('/workers/update_tweets', update_tweets),
     ('/workers/update_tweets', delete_tweets),
     ('/workers/send_gmail_message', SendGmailEmail),
@@ -2930,7 +2847,6 @@ routes = [
     ('/stripe', StripeHandler),
     # paying with stripe
     ('/views/dashboard', DashboardHandler),
-    ('/scrapyd', ScrapydHandler),
     ('/jj', ImportJob),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),

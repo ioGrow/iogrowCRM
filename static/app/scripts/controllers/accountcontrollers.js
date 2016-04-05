@@ -1670,7 +1670,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                var par={'url' : url};
                Linkedin.getCompany(par,function(resp){
                       if(!resp.code){
-                       var prof={};                       
+                       var prof={};
                        prof.company_size=resp.company_size;
                        prof.headquarters=resp.headquarters;
                        prof.followers=resp.followers;
@@ -1682,9 +1682,9 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                        prof.top_image=resp.top_image;
                        prof.type=resp.type;
                        prof.url=resp.url;
-                       prof.website=resp.website; 
+                       prof.website=resp.website;
                        prof.workers=JSON.parse(resp.workers);
-                       $scope.inShortProfiles.push(prof);   
+                       $scope.inShortProfiles.push(prof);
                        $scope.inIsLoading=false;
                        $scope.apply();
                       }else {
@@ -1696,51 +1696,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                    });
             }
 
-          /*$scope.getLinkedinByUrl=function(url){
-               $scope.linkedLoader=true;
-               var par={'url' : url};
-               Linkedin.getCompany(par,function(resp){
-                      if(!resp.code){
-                       $scope.linkedShortProfile={};
-                       $scope.linkedShortProfile.company_size=resp.company_size;
-                       $scope.linkedShortProfile.headquarters=resp.headquarters;
-                       $scope.linkedShortProfile.followers=resp.followers;
-                       $scope.linkedShortProfile.founded=resp.founded;
-                       $scope.linkedShortProfile.industry=resp.industry;
-                       $scope.linkedShortProfile.logo=resp.logo;
-                       $scope.linkedShortProfile.name=resp.name;
-                       $scope.linkedShortProfile.summary=resp.summary;
-                       $scope.linkedShortProfile.top_image=resp.top_image;
-                       $scope.linkedShortProfile.type=resp.type;
-                       $scope.linkedShortProfile.url=resp.url;
-                       $scope.linkedShortProfile.website=resp.website; 
-                       $scope.linkedShortProfile.workers=JSON.parse(resp.workers); 
-                       if (!$scope.isEmpty($scope.account.contacts)) {
-                          angular.forEach($scope.linkedProfile.workers, function(worker){
-                              angular.forEach($scope.account.contacts.items, function(contact){
-                                  var exists = ((worker.firstname==contact.firstname)&&(worker.lastname==contact.lastname))||((worker.firstname==contact.lastname)&&(worker.lastname==contact.firstname));
-                                  if (exists) {
-                                    $scope.linkedProfile.workers.splice($scope.linkedProfile.workers.indexOf(worker), 1);
-                                  };
-                              }); 
-                          });      
-                       }else{
-                        console.log("is empty");
-                       };
-                       $scope.linkedLoader=false;
-                       $scope.apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          // $scope.refreshToken();
-                         console.log("no resp");
-                          $scope.linkedLoader=false;
-                          $scope.apply();
-                         };
-                      }
-                   });
-            }*/
- 
+
 
             $scope.getLinkedinProfile=function(){
                   var params={
@@ -1794,100 +1750,6 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             }
 
 
-/*
-            $scope.getLinkedinProfile=function(){
-                var params={
-                 "company":$scope.account.name
-                }
-                var linkedurl=null
-                if ($scope.infonodes.sociallinks==undefined) {
-                  $scope.infonodes.sociallinks=[];
-                };
-                var savedEntityKey=null;
-                if ($scope.infonodes.sociallinks.length > 0) {
-                   angular.forEach($scope.infonodes.sociallinks, function(link){
-
-                                    if ($scope.linkedinUrl(link.url)) {
-                                      linkedurl=link.url;
-                                      savedEntityKey=link.entityKey;
-                                    };
-                                });
-                };
-                if (linkedurl) {
-                    var par={'url' : linkedurl};
-                   Linkedin.getCompany(par,function(resp){
-                      if(!resp.code){
-                       $scope.linkedProfile={};
-                       $scope.linkedProfile.company_size=resp.company_size;
-                       $scope.linkedProfile.entityKey=savedEntityKey;
-                       $scope.linkedProfile.headquarters=resp.headquarters;
-                       $scope.linkedProfile.followers=resp.followers;
-                       $scope.linkedProfile.founded=resp.founded;
-                       $scope.linkedProfile.industry=resp.industry;
-                       $scope.linkedProfile.logo=resp.logo;
-                       $scope.linkedProfile.name=resp.name;
-                       $scope.linkedProfile.summary=resp.summary;
-                       $scope.linkedProfile.top_image=resp.top_image;
-                       $scope.linkedProfile.type=resp.type;
-                       $scope.linkedProfile.url=resp.url;
-                       $scope.linkedProfile.website=resp.website;
-                      /* $scope.linkedProfile.workers=JSON.parse(resp.workers);
-                       $scope.linkedContacts=JSON.parse(resp.workers);
-                       $scope.linkedProfile.workers=[];
-                       if (!$scope.isEmpty($scope.account.contacts)) {
-                          angular.forEach($scope.linkedContacts, function(worker){    
-                              var contactExist=false;                       
-                              angular.forEach($scope.account.contacts.items, function(contact){
-                                  var exists = ((worker.firstname==contact.firstname)&&(worker.lastname==contact.lastname))||((worker.firstname==contact.lastname)&&(worker.lastname==contact.firstname));
-                                  if (exists) {
-                                    contactExist=true;                                   
-                                  };
-                              }); 
-                              if (!contactExist) {
-                                 $scope.linkedProfile.workers.push(worker);
-                              };
-                          });      
-                       }else{
-                        $scope.linkedProfile.workers=$scope.linkedContacts;
-                       }; 
-                       $scope.linkedLoader=false;
-                       $scope.isLoading = false;
-                       $scope.apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          // $scope.refreshToken();
-                         console.log("no resp");
-                          $scope.isLoading = false;
-                          $scope.apply();
-                         };
-                      }
-                   });
-                }else{
-                  Linkedin.listCompanies(params,function(resp){
-                   if(!resp.code){
-                    if (resp.items==undefined) {
-                      $scope.listPeople=[];
-                      $scope.noLinkedInResults=true;
-                    }else{
-                      $scope.listPeople=resp.items;
-                      //$scope.hilightLinkedin();
-                    };
-                       $scope.isLoading = false;
-                       $scope.$apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          // $scope.refreshToken();
-                         console.log("no resp");
-                          $scope.isLoading = false;
-                          $scope.$apply();
-                         };
-                      }
-                });            
-                };
-
-            }*/
       $scope.deleteSocialLink = function(link,kind){
         if (link.entityKey) {
           var pars = {'entityKey':link.entityKey,'kind':kind};
@@ -4601,17 +4463,17 @@ $scope.updateEventRenderAfterAdd= function(){};
                          prof.profile_picture=resp.profile_picture;
                          prof.title=resp.title;
                          prof.locality=resp.locality;
-                         prof.industry=resp.industry; 
+                         prof.industry=resp.industry;
                          prof.formations=resp.formations
                          prof.resume=resp.resume;
                          prof.skills=resp.skills;
                          prof.current_post=resp.current_post;
                          prof.past_post=resp.past_post;
-                         prof.experiences=JSON.parse(resp.experiences);  
+                         prof.experiences=JSON.parse(resp.experiences);
                          if(prof.experiences){
                           prof.experiences.curr=prof.experiences['current-position'];
                           prof.experiences.past=prof.experiences['past-position'];
-                         }         
+                         }
                          $scope.inRelatedShortProfiles.push(prof);
                          $scope.inIsLoading=false;
                          $scope.apply();
@@ -4672,11 +4534,6 @@ $scope.updateEventRenderAfterAdd= function(){};
                             }
                         }
                   });            
-            }
-           $scope.clearRelatedLinkedin=function(){
-              $scope.relatedinProfile={};
-              $scope.inRelatedShortProfiles=[];
-              $scope.apply()
             }
 
 
@@ -5137,8 +4994,6 @@ $scope.updateEventRenderAfterAdd= function(){};
         });
 
     }]);
-
-
 app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'Edge','Map','Linkedin','Contact','Customfield',
     function($scope,$http,Auth, Account, Tag, Edge, Map, Linkedin,Contact,Customfield) {
         $("ul.page-sidebar-menu li").removeClass("active");
@@ -5535,7 +5390,6 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                    $scope.apply();
 
                 }
-             //new Linkedin 
                 $scope.messageFromSocialLinkCallback = function(event){
                   if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
                       $scope.saveLinkedinData(event.data);
@@ -5633,7 +5487,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                var par={'url' : url};
                Linkedin.getCompany(par,function(resp){
                       if(!resp.code){
-                       var prof={};                       
+                       var prof={};
                        prof.company_size=resp.company_size;
                        prof.headquarters=resp.headquarters;
                        prof.followers=resp.followers;
@@ -5645,9 +5499,9 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                        prof.top_image=resp.top_image;
                        prof.type=resp.type;
                        prof.url=resp.url;
-                       prof.website=resp.website; 
+                       prof.website=resp.website;
                        prof.workers=JSON.parse(resp.workers);
-                       $scope.inShortProfiles.push(prof);   
+                       $scope.inShortProfiles.push(prof);
                        $scope.inIsLoading=false;
                        $scope.apply();
                       }else {
@@ -5832,17 +5686,17 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                          prof.profile_picture=resp.profile_picture;
                          prof.title=resp.title;
                          prof.locality=resp.locality;
-                         prof.industry=resp.industry; 
+                         prof.industry=resp.industry;
                          prof.formations=resp.formations
                          prof.resume=resp.resume;
                          prof.skills=resp.skills;
                          prof.current_post=resp.current_post;
                          prof.past_post=resp.past_post;
-                         prof.experiences=JSON.parse(resp.experiences);  
+                         prof.experiences=JSON.parse(resp.experiences);
                          if(prof.experiences){
                           prof.experiences.curr=prof.experiences['current-position'];
                           prof.experiences.past=prof.experiences['past-position'];
-                         }         
+                         }
                          $scope.inRelatedShortProfiles.push(prof);
                          $scope.inIsLoading=false;
                          $scope.apply();
@@ -5887,11 +5741,6 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                            };
                         }
                   });            
-            }
-           $scope.clearRelatedLinkedin=function(){
-              $scope.relatedinProfile={};
-              $scope.inRelatedShortProfiles=[];
-              $scope.apply()
             }
           $scope.clearContact=function(){
 

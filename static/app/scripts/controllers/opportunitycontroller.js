@@ -3799,18 +3799,18 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
                          prof.created_at=resp.created_at
                          prof.description_of_user=resp.description_of_user;
                          prof.followers_count=resp.followers_count;
-                         prof.friends_count=resp.friends_count; 
-                         prof.id=resp.id; 
-                         prof.lang=resp.lang; 
-                         prof.language=resp.language; 
-                         prof.last_tweet_favorite_count=resp.last_tweet_favorite_count; 
-                         prof.last_tweet_retweet_count=resp.last_tweet_retweet_count; 
-                         prof.last_tweet_text=resp.last_tweet_text; 
-                         prof.location=resp.location; 
-                         prof.nbr_tweets=resp.nbr_tweets; 
-                         prof.profile_banner_url=resp.profile_banner_url+'/1500x500'; 
-                         prof.profile_image_url_https=resp.profile_image_url_https; 
-                         prof.url_of_user_their_company=resp.url_of_user_their_company; 
+                         prof.friends_count=resp.friends_count;
+                         prof.id=resp.id;
+                         prof.lang=resp.lang;
+                         prof.language=resp.language;
+                         prof.last_tweet_favorite_count=resp.last_tweet_favorite_count;
+                         prof.last_tweet_retweet_count=resp.last_tweet_retweet_count;
+                         prof.last_tweet_text=resp.last_tweet_text;
+                         prof.location=resp.location;
+                         prof.nbr_tweets=resp.nbr_tweets;
+                         prof.profile_banner_url=resp.profile_banner_url+'/1500x500';
+                         prof.profile_image_url_https=resp.profile_image_url_https;
+                         prof.url_of_user_their_company=resp.url_of_user_their_company;
                          prof.url=url;
                          $scope.twShortProfiles.push(prof);
                          $scope.twIsLoading=false;
@@ -3849,36 +3849,20 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
                 $scope.imageSrc=$scope.twProfile.profile_image_url_https;
                 $scope.profile_img.profile_img_url = $scope.twProfile.profile_image_url_https;
               };
-              /*$scope.imageSrc = $scope.twProfile.profile_picture;*/
-            //  $scope.profile_img.profile_img_url = $scope.twProfile.profile_picture;
-              /*$scope.lead.source='Linkedin';
-              $scope.lead.industry=''
-              if (!$scope.lead.title) {
-                $scope.lead.title = $scope.twProfile.title;
-              };
-              if($scope.twProfile.current_post){
-                    if ($scope.twProfile.current_post[0]){
-                        $scope.lead.company = $scope.twProfile.current_post[0];
-                    }
-                  }
-              */
-              /*if ($scope.twProfile.location!=''&&$scope.twProfile.location!=null) {*/
                if (!$scope.addressModel) {
-                    $scope.addressModel=$scope.twProfile.location; 
+                    $scope.addressModel=$scope.twProfile.location;
                   }else{
                     if ($scope.addressModel.length < $scope.twProfile.location.length) {
-                      $scope.addressModel=$scope.twProfile.location;  
+                      $scope.addressModel=$scope.twProfile.location;
                     };
                   };
-              
-                 // $scope.addGeo({'formatted':$scope.twProfile.location});
-              /*};*/
+
               $scope.apply();
           }
 
             $scope.prepareUrl=function(url){
                     var pattern=/^[a-zA-Z]+:\/\//;
-                     if(!pattern.test(url)){                        
+                     if(!pattern.test(url)){
                          url = 'http://' + url;
                      }
                      return url;

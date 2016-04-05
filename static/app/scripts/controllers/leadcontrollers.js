@@ -2118,7 +2118,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             window.Intercom('update');
             $scope.mapAutocompleteCalendar()
         };
-        // new linkedin
         $scope.messageFromSocialLinkCallback = function(event){
         if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){   
             $scope.saveLinkedinData(event.data);
@@ -3288,9 +3287,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         };
 
 //HKA 22.11.2013 Add Social
-        $scope.addLinkedIn = function (social) {
-            $scope.getLinkedinByUrl(social.url);
-        };
         $scope.addSocial = function (social) {
 
             if (social.url != "" && social.url != undefined && !$scope.existsInfonode(social,'url','sociallinks')) {
@@ -4014,8 +4010,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             var par = {'url': url};
             Linkedin.profileGet(par, function (resp) {
                 if (!resp.code) {
-                    
-                    
+
+
                     $scope.linkedShortProfile = {};
                     $scope.linkedShortProfile.fullname = resp.fullname;
                     $scope.linkedShortProfile.url = url;
@@ -4035,14 +4031,14 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     }
                     $scope.linkedLoader = false;
                     $scope.apply();
-                    
-                    
-                    
+
+
+
                 } else {
-                    
+
                     if (resp.code == 401) {
                         // $scope.refreshToken();
-                        
+
                         $scope.linkedLoader = false;
                         $scope.apply();
                     }
@@ -5573,20 +5569,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 $scope.profile_img.profile_img_url = $scope.twProfile.profile_image_url_https;
             }
             ;
-            /*$scope.imageSrc = $scope.twProfile.profile_picture;*/
-            //  $scope.profile_img.profile_img_url = $scope.twProfile.profile_picture;
-            /*$scope.lead.source='Linkedin';
-             $scope.lead.industry=''
-             if (!$scope.lead.title) {
-             $scope.lead.title = $scope.twProfile.title;
-             };
-             if($scope.twProfile.current_post){
-             if ($scope.twProfile.current_post[0]){
-             $scope.lead.company = $scope.twProfile.current_post[0];
-             }
-             }
-             */
-            /*if ($scope.twProfile.location!=''&&$scope.twProfile.location!=null) {*/
+
             if (!$scope.addressModel) {
                 $scope.addressModel = $scope.twProfile.location;
             } else {
@@ -5596,8 +5579,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 ;
             }
             ;
-            // $scope.addGeo({'formatted':$scope.twProfile.location});
-            /*};*/
             $scope.apply();
         }
         $scope.cancelSelection = function (arrayname) {
@@ -5787,9 +5768,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             ;
 
         };
-        $scope.addLinkedIn = function (social) {
-            $scope.getLinkedinByUrl(social.url);
-        };
+
         $scope.mergedLeads = 0;
         $scope.mergeLead = function (baseLead, newLead) {
             var params = {base_id: baseLead.id, new_lead: $scope.getParamsFromLead(newLead)};
