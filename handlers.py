@@ -449,7 +449,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     return
                 if user.google_credentials is None:
                     self.redirect('/sign-in')
-                logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/'
+                logout_url = 'https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com'
                 if user is None or user.type == 'public_user':
                     self.redirect('/welcome/')
                     return
@@ -706,8 +706,8 @@ class GooglePlusConnect(SessionEnabledHandler):
         return header.split(',')[0]
 
     def post(self):
-        # try to get the user credentials from the code
         code = self.request.get("code")
+        is_paying = self.request.get("is_paying")
         try:
             credentials = GooglePlusConnect.exchange_code(code)
         except FlowExchangeError:
@@ -745,6 +745,7 @@ class GooglePlusConnect(SessionEnabledHandler):
                 credentials,
                 invited_user_id
             )
+            user.set_subscription(Subscription.create_freemium_subscription())
         else:
             user = GooglePlusConnect.save_token_for_user(
                 user_email,
@@ -786,10 +787,20 @@ class GooglePlusConnect(SessionEnabledHandler):
         # if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
         #     user = self.get_user_from_session()
         # Store the user ID in the session for later use.
+        json_resp = json.dumps({'is_new_user': is_new_user, 'email': user.email})
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
+        self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+        self.response.headers['Access-Control-Allow-Methods'] = 'POST'
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(is_new_user))
+        self.response.out.write(json.dumps({'is_new_user': is_new_user, 'is_paying': is_paying}))
 
+
+class ActivateSession(BaseHandler, SessionEnabledHandler):
+    def get(self):
+        email = self.request.get('email')
+        self.session[self.CURRENT_USER_SESSION_KEY] = email
+        self.redirect('/')
 
 class InstallFromDecorator(SessionEnabledHandler):
     @decorator.oauth_required
@@ -1126,12 +1137,14 @@ class SubscriptionHandler(SessionEnabledHandler):
             org_key = user.organization
             organization = org_key.get()
             subscription = organization.get_subscription()
+            if subscription.plan.get().name == app_config.PREMIUM:
+                self.redirect('/#/admin/billing')
             template_values = {
                 'user': user,
                 'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
                 'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
                 'publishable_key': app_config.PUBLISHABLE_KEY,
-                'users_count': model.User.get_users_count_by_organization(org_key),
+                'users_count': model.User.count_by_organization(org_key),
                 'subscription': subscription
             }
             self.response.out.write(template.render(template_values))
@@ -1221,6 +1234,12 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
             premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
             premium_subscription.quantity = quantity
             premium_subscription.put()
+
+            if user.subscription.get().plan.get().name != app_config.PREMIUM:
+                user.set_subscription(premium_subscription)
+                user.put()
+                premium_subscription.quantity = quantity-1
+                premium_subscription.put()
 
             organization.stripe_customer_id = customer.id
             organization.set_subscription(premium_subscription)
@@ -2934,6 +2953,8 @@ routes = [
     ('/jj', ImportJob),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),
+    ('/activate_session', ActivateSession),
+
     ('/sf-users', SFusersCSV),
     ('/copylead/sf/api/users/get', GetSfUser),
     ('/copylead/sf/api/invitees/list_by_partners', SFlistInviteesByPartners)

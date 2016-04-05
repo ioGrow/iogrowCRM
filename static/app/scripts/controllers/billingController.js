@@ -15,7 +15,7 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
         $scope.billing = {};
         $scope.beforedeleteOrganization=function(){
             $("#beforedeleteOrganization").modal('show');
-        }
+        };
         $scope.deleteOrganization = function(){
              $("#beforedeleteOrganization").modal('hide');
         };
@@ -48,11 +48,8 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
                 }
-                ;
             }
-            ;
         };
-        // What to do after authentication
         $scope.runTheProcess = function () {
             User.getOrganizationLicensesStatus($scope, {});
             User.get_logo($scope);
@@ -71,7 +68,6 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             }
             User.switchLogo($scope);
         };
-
         $scope.setBillingDetails = function () {
             $scope.billing.company_name = $scope.organization.name;
             $scope.billing.contact_firstname = $scope.organization.billing_contact_firstname;
@@ -91,70 +87,16 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             };
             User.saveBillingDetails($scope, params);
         };
-// function for purchase lisenece .
-        $scope.purchaseLiseneces = function (organization) {
-// the key represent the public key which represent our company  , client side , we have two keys 
-// test  "pk_test_4Xa35zhZDqvXz1OzGRWaW4mX", mode dev 
-// live "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD", mode prod 
-
-            var handler = StripeCheckout.configure({
-
-                key: 'pk_test_4Xa35zhZDqvXz1OzGRWaW4mX',
-                image: "/static/src/img/IO_Grow.png",
-                token: function (token) {
-
-                    $scope.isLoading = true;
-                    $scope.$apply();
-
-                    var params = {
-                        'token_id': token.id,
-                        'token_email': token.email,
-                        "organization": organization.organizationName,
-                        "organizationKey": $scope.organization_key
-                    };
-
-                    gapi.client.crmengine.billing.purchase_lisence_for_org(params).execute(function (resp) {
-                        if (!resp.code) {
-                            // here be carefull .
-                            $scope.reloadOrganizationInfo();
-
-                        }
-
-                    });
-                    // Use the token to create the charge with a server-side script.
-                    // You can access the token ID with `token.id`
-                }
-            });
-
-            document.getElementById('customButton').addEventListener('click', function (e) {
-                // Open Checkout with further options
-                handler.open({
-                    name: organization.organizationName,
-                    description: 'bay a license $9.99',
-                    amount: 999
-
-                });
-                e.preventDefault();
-            });
-        };
-
-
         $scope.reloadOrganizationInfo = function () {
-
-
             var params = {
                 'organization': $scope.organization_key
             };
             User.get_organization($scope, params);
         };
-        // We need to call this to refresh token when user credentials are invalid
         $scope.refreshToken = function () {
             Auth.refreshToken();
         };
-
         $scope.listNextPageItems = function () {
-
-
             var nextPage = $scope.currentPage + 1;
             var params = {};
             if ($scope.pages[nextPage]) {
@@ -169,7 +111,6 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             User.list($scope, params);
         };
         $scope.listPrevPageItems = function () {
-
             var prevPage = $scope.currentPage - 1;
             var params = {};
             if ($scope.pages[prevPage]) {
@@ -183,7 +124,6 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             $scope.currentPage = $scope.currentPage - 1;
             User.list($scope, params);
         };
-
 
         $scope.showModal = function () {
             $('#addAccountModal').modal('show');
@@ -224,8 +164,5 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
                 }
             }
         };
-
-        // Google+ Authentication
         Auth.init($scope);
-
     }]);

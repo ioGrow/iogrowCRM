@@ -1,6 +1,7 @@
 import datetime
 # Google libs
 import os
+
 import httplib2
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
@@ -578,7 +579,9 @@ class Organization(ndb.Model):
         admin.license_expires_on = now_plus_month
         admin.is_admin = True
         admin.put()
-        organization.subscription = organization.get_subscription().key
+        # organization.subscription = organization.get_subscription().key
+        organization.set_subscription(Subscription.create_freemium_subscription())
+        admin.set_subscription(Subscription.create_freemium_subscription())
         return org_key
 
     @classmethod
@@ -645,42 +648,43 @@ class Organization(ndb.Model):
         # init default stages,status, default values...
         cls.init_default_values(org_key)
 
+    def get_assigned_licenses(self):
+        return len(filter(lambda user: user.has_license(self.plan),
+                          User.fetch_by_organization(self.key)))
+
     @classmethod
     def assign_license(cls, org_key, user_key):
         organization = org_key.get()
         user = user_key.get()
-        if user.organization == org_key:
-            if user.license_status != 'active':
-                if organization.nb_used_licenses <= organization.nb_licenses:
-                    user.license_status = 'active'
-                    user.status = 'active'
-                    user.license_expires_on = organization.licenses_expires_on
-                    user.put()
-                    organization.nb_used_licenses += 1
-                    organization.put()
-                else:
-                    raise endpoints.UnauthorizedException('you need more licenses')
-        else:
-            raise endpoints.UnauthorizedException('the user is not withing your organization')
+        assigned_licenses = organization.get_assigned_licenses()
+        org_subscription = organization.get_subscription()
+        user_subscription = user.get_subscription()
+        if org_subscription.plan.get().name != config.PREMIUM:
+            raise endpoints.BadRequestException('You have to upgrade')
+        if org_subscription.quantity - assigned_licenses < 1:
+            raise endpoints.UnauthorizedException('you need more licenses')
+        if user_subscription.key == org_subscription.key:
+            raise endpoints.BadRequestException('this user already have an activated licences')
+        if user.organization != org_key:
+            raise endpoints.UnauthorizedException('The user is not withing your organization')
+        user.set_subscription(org_subscription)
+        # org_subscription.quantity -= 1
+        # org_subscription.put()
 
     @classmethod
     def unassign_license(cls, org_key, user_key):
         organization = org_key.get()
         user = user_key.get()
-        if user.organization == org_key:
-            print 'go ahead'
-            if user.license_status == 'active':
-                print 'active will be suspended'
-                user.status = 'suspended'
-                user.license_status = 'suspended'
-                user.license_expires_on = organization.licenses_expires_on
-                user.put()
-                organization.nb_used_licenses -= 1
-                organization.put()
-            else:
-                raise endpoints.UnauthorizedException('the user is already suspended')
-        else:
-            raise endpoints.UnauthorizedException('the user is not withing your organization')
+        org_subscription = organization.get_subscription()
+        user_subscription = user.get_subscription()
+        if user_subscription.plan.get().name != config.PREMIUM:
+            raise endpoints.BadRequestException('You have to upgrade')
+        if user_subscription.key != org_subscription.key:
+            raise endpoints.BadRequestException('this user already have an activated licences')
+        if user.organization != org_key:
+            raise endpoints.UnauthorizedException('The user is not withing your organization')
+        user.set_subscription(Subscription.create_freemium_subscription())
+
 
     @classmethod
     def upgrade_to_business_version(cls, org_key):
@@ -957,6 +961,26 @@ class User(EndpointsModel):
     default_currency = ndb.StringProperty()
     country_code = ndb.StringProperty()
     date_time_format = ndb.StringProperty()
+    subscription = ndb.KeyProperty(kind=Subscription)
+
+    def get_subscription(self):
+        if not self.subscription and self.organization.get().subscription:
+            self.subscription = Subscription.create_freemium_subscription().key
+            self.put()
+        return self.subscription.get()
+
+    @classmethod
+    def fetch_by_organization(cls, org_key):
+        return cls.query(User.organization == org_key).fetch()
+
+    def set_subscription(self, new_subscription):
+        if not isinstance(new_subscription, Subscription):
+            raise ValueError('sub parameter should be of type {} '.format(Subscription.__class__))
+        if self.subscription:
+            if self.subscription != self.organization.get().get_subscription().key:
+                self.subscription.delete()
+        self.subscription = new_subscription.key
+        self.put()
 
     def after_create(self, user_id):
         if self.status == "active" and not is_locale():
@@ -979,13 +1003,22 @@ class User(EndpointsModel):
 
     def put_async(self, **kwargs):
         async = super(User, self).put_async(**kwargs)
-        # if not self.id and self.status == "active":
         self.after_create(async.get_result().id())
         return async
 
     @classmethod
-    def get_users_count_by_organization(cls, org_key):
+    def count_by_organization(cls, org_key):
         return cls.query(cls.organization == org_key).count()
+
+    def has_license(self, plan_key):
+        user_subscription = self.subscription
+        if user_subscription:
+            return user_subscription.get().plan == plan_key
+        return False
+
+    @classmethod
+    def fetch_by_organization(cls, org_key):
+        return cls.query(cls.organization == org_key).fetch()
 
     def init_user_config(self, org_key, profile_key):
         profile = profile_key.get()
@@ -1393,7 +1426,7 @@ class User(EndpointsModel):
             }
         )
 
-        Organization.create_instance(request.organization_name, user)
+        Organization.ance(request.organization_name, user)
 
     @classmethod
     def check_license(cls, user):

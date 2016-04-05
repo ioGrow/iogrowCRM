@@ -83,7 +83,7 @@ from people import linked_in
 from operator import itemgetter
 import iomessages
 from iomessages import Scoring_Topics_Schema, Topics_Schema, Topic_Comparaison_Schema, TopicsResponse, \
-    TweetResponseSchema, SubscriptionSchema, LicencesQuantityMessage
+    TweetResponseSchema, SubscriptionSchema, LicencesQuantityMessage, SubscriptionListSchema
 from ioreporting import Reports, ReportSchema
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema, KewordsRequest, TwitterRequest, tweetsResponse, \
     LinkedinCompanySchema, \
@@ -1199,7 +1199,7 @@ class CrmEngineApi(remote.Service):
             email_list.append(collaborator.email)
         to = ",".join(email_list)
         url = DISCUSSIONS[parent_key.kind()]['url'] + str(parent_key.id())
-        body = '<p>#new comment, view details on ioGrow: <a href="http://www.iogrow.com/' + url + '">'
+        body = '<p>#new comment, view details on ioGrow: <a href="http://app.iogrow.com/' + url + '">'
         body += parent.title
         body += '</a></p>'
         body += '<p>' + request.content + '</p>'
@@ -3420,11 +3420,8 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(InvitationRequest, message_types.VoidMessage,
                       path='users/insert', http_method='POST',
                       name='users.insert')
-    # @User.method(path='users', http_method='POST', name='users.insert')
-    def UserInsert(self, request):
+    def user_insert(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        organization = user_from_email.organization.get()
-        license = organization.plan.get()
         invitees = Invitation.list_invitees(user_from_email.organization)
         users = User.query(User.organization == user_from_email.organization).fetch()
         for invitee in invitees:
@@ -3433,59 +3430,48 @@ class CrmEngineApi(remote.Service):
         for user in users:
             if user.email == request.emails[0]:
                 return message_types.VoidMessage()
-        nb_invitees = len(invitees)
-        try:
-            nb_license_available = organization.nb_licenses - organization.nb_used_licenses
-        except:
-            nb_license_available = 1
-        if license.name == "life_time_free" or license.name == "freemium" or license.name == "premium_trial" or (
-                        nb_license_available > 0 and nb_license_available > nb_invitees):
-            credentials = user_from_email.google_credentials
-            http = credentials.authorize(httplib2.Http(memcache))
-            service = build('gmail', 'v1', http=http)
-            # OAuth flow
-
-            for email in request.emails:
-                my_model = User()
-                taskqueue.add(
-                    url='/workers/initpeertopeerdrive',
-                    queue_name='iogrow-low',
-                    params={
-                        'invited_by_email': user_from_email.email,
-                        'email': email,
-                    }
-                )
-                invited_user = User.get_by_email(email)
-                send_notification_mail = False
-                if invited_user:
-                    if invited_user.organization == user_from_email.organization or invited_user.organization is None:
-                        invited_user.invited_by = user_from_email.key
-                        invited_user_key = invited_user.put_async()
-                        invited_user_async = invited_user_key.get_result()
-                        invited_user_id = invited_user_async.id()
-                        my_model.id = invited_user_id
-                        Invitation.insert(email, user_from_email)
-                        send_notification_mail = True
-                    elif invited_user.organization is not None:
-                        raise endpoints.UnauthorizedException('User exist within another organization')
-
-                else:
-                    my_model.invited_by = user_from_email.key
-                    my_model.status = 'invited'
-                    my_model.is_admin = False
-                    # my_model.email = request.emails[0]
-                    invited_user_key = my_model.put_async()
+        credentials = user_from_email.google_credentials
+        http = credentials.authorize(httplib2.Http(memcache))
+        service = build('gmail', 'v1', http=http)
+        for email in request.emails:
+            my_model = User()
+            taskqueue.add(
+                url='/workers/initpeertopeerdrive',
+                queue_name='iogrow-low',
+                params={
+                    'invited_by_email': user_from_email.email,
+                    'email': email,
+                }
+            )
+            invited_user = User.get_by_email(email)
+            send_notification_mail = False
+            if invited_user is not None:
+                if invited_user.organization == user_from_email.organization or invited_user.organization is None:
+                    invited_user.invited_by = user_from_email.key
+                    invited_user_key = invited_user.put_async()
                     invited_user_async = invited_user_key.get_result()
                     invited_user_id = invited_user_async.id()
+                    my_model.id = invited_user_id
                     Invitation.insert(email, user_from_email)
                     send_notification_mail = True
+                elif invited_user.organization is not None:
+                    raise endpoints.UnauthorizedException('User exist within another organization')
+            else:
+                my_model.invited_by = user_from_email.key
+                my_model.status = 'invited'
+                my_model.is_admin = False
+                invited_user_key = my_model.put_async()
+                invited_user_async = invited_user_key.get_result()
+                invited_user_id = invited_user_async.id()
+                Invitation.insert(email, user_from_email)
+                send_notification_mail = True
 
                 if send_notification_mail:
-                    confirmation_url = "http://www.iogrow.com/sign-in?id=" + str(invited_user_id) + '&'
+                    confirmation_url = "http://app.iogrow.com/sign-in?id=" + str(invited_user_id) + '&'
                     cc = None
                     bcc = None
                     subject = "Invitation from " + user_from_email.google_display_name
-                    html = "<html><head></head><body><div ><div style='margin-left:291px'><a href='www.iogrow.com'><img src='cid:user_cid'  style='width:130px;'/></div><div><h2 style='margin-left:130px ;font-family: sans-serif;color: rgba(137, 137, 137, 1);'></a><span style='color:#1C85BB'>" + user_from_email.google_display_name + "</span> has invited you to use ioGrow</h2><p style='margin-left: 30px;font-family: sans-serif;color: #5B5D62;font-size: 17px'>We are using ioGrow to collaborate, discover new customers and grow our business .It is a website where we manage our relationships with the customers .</p></div><div><a href='" + confirmation_url + "' style='margin-left: 259px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>JOIN YOUR TEAM ON IOGROW</a> <br><hr style=' width: 439px;margin-left: 150px;margin-top: 28px;'><p style='margin-left:290px;font-family:sans-serif'><a href='www.iogrow.com' style='text-decoration: none;'><img src='cid:logo_cid'  alt='Logo'/> ioGrow (c)2015</a></p></div></div></body></html>"
+                    html = "<html><head></head><body><div ><div style='margin-left:291px'><a href='app.iogrow.com'><img src='cid:user_cid'  style='width:130px;'/></div><div><h2 style='margin-left:130px ;font-family: sans-serif;color: rgba(137, 137, 137, 1);'></a><span style='color:#1C85BB'>" + user_from_email.google_display_name + "</span> has invited you to use ioGrow</h2><p style='margin-left: 30px;font-family: sans-serif;color: #5B5D62;font-size: 17px'>We are using ioGrow to collaborate, discover new customers and grow our business .It is a website where we manage our relationships with the customers .</p></div><div><a href='" + confirmation_url + "' style='margin-left: 259px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>JOIN YOUR TEAM ON IOGROW</a> <br><hr style=' width: 439px;margin-left: 150px;margin-top: 28px;'><p style='margin-left:290px;font-family:sans-serif'><a href='app.iogrow.com' style='text-decoration: none;'><img src='cid:logo_cid'  alt='Logo'/> ioGrow (c)2015</a></p></div></div></body></html>"
                     message = EndpointsHelper.create_message_with_attchments_local_files(
                         user_from_email.google_display_name,
                         email,
@@ -5170,7 +5156,6 @@ class CrmEngineApi(remote.Service):
             for tag in tagss.items:
                 val.append(tag.name)
             request.value = val
-
         list_of_tweets = EndpointsHelper.get_tweets(request.value, "recent")
         return tweetsResponse(items=list_of_tweets)
 
@@ -5636,13 +5621,14 @@ class CrmEngineApi(remote.Service):
         # not complete yet 
         user_from_email = EndpointsHelper.require_iogrow_user()
         if user_from_email.is_admin:
-            for x in xrange(0, len(request.entityKeys)):
-                userToDelete = ndb.Key(urlsafe=request.entityKeys[x]).get()
-                if userToDelete.is_admin:
-                    pass
-                else:
-                    ndb.Key(urlsafe=request.entityKeys[x]).delete()
+            for i in xrange(len(request.entityKeys)):
+                user_key = ndb.Key(urlsafe=request.entityKeys[i])
+                if not user_key.get().is_admin:
+                    user_key.delete()
                     # Invitation.delete_by(request.emails[x])
+        else:
+            raise endpoints.UnauthorizedException("you are not authorised")
+
         return message_types.VoidMessage()
 
     @endpoints.method(BillingDetailsRequest, message_types.VoidMessage, path="users/saveBillingDetails",
@@ -5658,123 +5644,6 @@ class CrmEngineApi(remote.Service):
         organization.billing_contact_phone_number = request.billing_contact_phone_number
         organization.put()
         return message_types.VoidMessage()
-
-    @endpoints.method(purchaseRequest, purchaseResponse,
-                      path="users/purchase_lisences", http_method="POST", name="users.purchase_lisences")
-    def purchase_licenses(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        email = user_from_email.email
-        organization = user_from_email.organization.get()
-        now = datetime.datetime.now()
-        days_before_expiring = organization.licenses_expires_on - now
-        organization_plan = organization.plan.get()
-        token = request.token
-        amount_ch = 0
-        payment_switch_status = "f_m"
-        check_point = days_before_expiring.days + 1
-        if request.nb_licenses:
-            if check_point <= 0:
-                if request.plan == "month":
-                    new_plan = LicenseModel.query(LicenseModel.name == 'crm_monthly_online').fetch(1)
-                    amount_ch = int(new_plan[0].price * int(request.nb_licenses) * 100)
-                    payment_switch_status = "f_m"
-                elif request.plan == "year":
-                    new_plan = LicenseModel.query(LicenseModel.name == 'crm_annual_online').fetch(1)
-                    amount_ch = int(new_plan[0].price * int(request.nb_licenses) * 100)
-                    payment_switch_status = "f_y"
-            else:
-                if request.plan == "month":
-                    new_plan = LicenseModel.query(LicenseModel.name == 'crm_monthly_online').fetch(1)
-                    if organization_plan.name == "free_trial":
-                        amount_ch = int(new_plan[0].price * int(request.nb_licenses) * 100)
-                        payment_switch_status = "f_m"
-
-                    elif organization_plan.name == "crm_monthly_online":
-                        monthly_unit = new_plan[0].price / 30
-                        amount_ch = int(monthly_unit * int(days_before_expiring.days + 1) * 100)
-                        payment_switch_status = "m_m"
-
-                elif request.plan == "year":
-                    new_plan = LicenseModel.query(LicenseModel.name == 'crm_annual_online').fetch(1)
-
-                    if organization_plan.name == "free_trial":
-                        amount_ch = int(new_plan[0].price * int(request.nb_licenses) * 100)
-                        payment_switch_status = "f_y"
-
-                    elif organization_plan.name == "crm_monthly_online":
-                        amount_ch = int(new_plan[0].price * int(request.nb_licenses) * 100)
-                        payment_switch_status = "m_y"
-                    elif organization_plan.name == "crm_annual_online":
-                        yearly_unit = new_plan[0].price / 365
-                        amount_ch = int(yearly_unit * int(days_before_expiring.days + 1) * 100)
-                        payment_switch_status = "y_y"
-
-        try:
-
-            charge = stripe.Charge.create(
-                amount=amount_ch,  # amount in cents, again
-                currency="usd",
-                card=token,
-                description=email
-            )
-            if charge:
-                transaction = TransactionModel(organization=user_from_email.organization, charge=charge.id,
-                                               amount=amount_ch)
-                transaction.put()
-                transaction_message = "charge succeed!"
-                transaction_failed = False
-                transaction_balance = charge.balance_transaction
-                Organization.set_billing_infos(user_from_email.organization, request, payment_switch_status,
-                                               new_plan[0].key, int(request.nb_licenses), int(new_plan[0].duration))
-                # organization.nb_licenses=organization.nb_licenses+int(request.nb_licenses)
-                # organization.plan=new_plan[0].key
-                # now = datetime.datetime.now()
-                # now_plus_exp_day=now+datetime.timedelta(days=int(new_plan[0].duration))
-                # organization.licenses_expires_on=now_plus_exp_day
-                # organization.billing_contact_firstname=request.billing_contact_firstname
-                # organization.billing_contact_lastname=request.billing_contact_lastname
-                # organization.billing_contact_email=request.billing_contact_email
-                # organization.billing_contact_address=request.billing_contact_address
-                # organization.billing_contact_phone_number=request.billing_contact_phone_number
-                # organization.put()
-                total_amount = amount_ch / 100
-                list_emails = [user_from_email.email, request.billing_contact_email]
-                body = '<h2>Congratulations !</h2><p style="font-size: 15px;">The payment is approved by your bank.You have now ' + request.nb_licenses + ' licences activated.&nbsp;</p><ul style="list-style: none; padding-left: 15px;"><li style="/* padding-top: 10px; */ padding-bottom: 10px;"> <strong>Company name :</strong> ' + organization.name + ' </li><li style=" padding-bottom: 10px;"> <strong>number of licenses :</strong> ' + request.nb_licenses + ' </li><li style=" padding-bottom: 10px;"> <strong>Total amount :</strong> ' + str(
-                    total_amount) + ' $</li><li style="padding-bottom: 10px;"> <strong>Transaction reference : ' + transaction_balance + ' </strong> </li></ul>'
-                if (request.billing_contact_email is None) or (user_from_email.email == request.billing_contact_email):
-
-                    taskqueue.add(
-                        url='/workers/send_email_notification',
-                        queue_name='iogrow-low',
-                        params={
-                            'user_email': user_from_email.email,
-                            'to': user_from_email.email,
-                            'subject': '[RE]: Successful Payment operation',
-                            'body': body
-                        }
-                    )
-                else:
-                    for x in xrange(0, 2):
-                        taskqueue.add(
-                            url='/workers/send_email_notification',
-                            queue_name='iogrow-low',
-                            params={
-                                'user_email': user_from_email.email,
-                                'to': list_emails[x],
-                                'subject': '[RE]: Successful Payment operation',
-                                'body': body
-                            }
-                        )
-
-        except stripe.CardError:
-            transaction_message = "charge failed!"
-            transaction_failed = True
-            print "ERROR"
-
-        return purchaseResponse(transaction_balance=transaction_balance, transaction_message=transaction_message
-                                , transaction_failed=transaction_failed, nb_licenses=int(request.nb_licenses),
-                                total_amount=total_amount
-                                , expires_on=str(organization.licenses_expires_on), licenses_type=new_plan[0].name)
 
     @endpoints.method(message_types.VoidMessage, KeywordListResponse,
                       path='keywords/list', http_method='POST',
@@ -5846,6 +5715,21 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(response_message=SubscriptionSchema, http_method='GET',
                       name='subscription.get', path='subscription/get')
     def get_subscription(self, request):
+        user = EndpointsHelper.require_iogrow_user()
+        return user.get_subscription().get_schema()
+
+    @endpoints.method(response_message=SubscriptionListSchema, http_method='GET',
+                      name='subscription.list', path='subscription/list')
+    def fetch_subscriptions(self, request):
+        org_key = EndpointsHelper.require_iogrow_user().organization
+        users = User.fetch_by_organization(org_key)
+        data = [iomessages.UserSubscriptionSchema(subscription=user.get_subscription().get_schema(), email=user.email)
+                for user in users]
+        return SubscriptionListSchema(data=data)
+
+    @endpoints.method(response_message=SubscriptionSchema, http_method='GET',
+                      name='subscription.organization_get', path='subscription/organization_get')
+    def get_org_subscription(self, request):
         organization = EndpointsHelper.require_iogrow_user().organization.get()
         return organization.get_subscription().get_schema()
 
@@ -5881,7 +5765,8 @@ class CrmEngineApi(remote.Service):
     @endpoints.method(name='subscription.by_new_licences', path='subscription/by_new_licences',
                       request_message=LicencesQuantityMessage)
     def by_new_licences(self, request):
-        organization = EndpointsHelper.require_iogrow_user().organization.get()
+        user = EndpointsHelper.require_iogrow_user()
+        organization = user.organization.get()
         subscription = organization.get_subscription()
         quantity = request.quantity
         if quantity <= 0:
@@ -5891,11 +5776,31 @@ class CrmEngineApi(remote.Service):
             sub = customer.subscriptions.retrieve(subscription.stripe_subscription_id)
             sub.quantity += quantity
             sub.save()
+            if user.subscription.get().plan.get().name != config.PREMIUM:
+                user.set_subscription(organization.subscription.get())
+                user.put()
+                quantity -= 1
 
-            subscription.quantity = sub.quantity
+            subscription.quantity += quantity
             subscription.put()
         except stripe.error.CardError, e:
             self.response.headers['Content-Type'] = 'application/json'
             self.response.write(e.message)
             self.response.set_status(e.http_status)
         return message_types.VoidMessage()
+
+    @endpoints.method(name='organization.licenses_status', path='organization/licenses_status',
+                      http_method='GET', response_message=iomessages.OrganizationSubscriptionStatusMessage)
+    def get_organizations_licenses_status(self, request):
+        org_key = EndpointsHelper.require_iogrow_user().organization
+        users_count = User.count_by_organization(org_key)
+        resp = iomessages.OrganizationSubscriptionStatusMessage(users_count=users_count)
+
+        organization = org_key.get()
+        subscription = organization.subscription.get()
+        plan_key = subscription.plan
+        plan = plan_key.get()
+        if plan.name == config.PREMIUM:
+            resp.assigned_licenses = organization.get_assigned_licenses()
+            resp.licenses_bought = subscription.quantity
+        return resp

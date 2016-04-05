@@ -27,6 +27,50 @@ angular.module('crmEngine.billingservices', []).factory('Billing', function () {
                 $scope.apply();
             })
         });
+    }
+    Billing.listSubscription = function ($scope) {
+        $scope.isLoading = true;
+        gapi.client.request({
+            'root': ROOT,
+            'path': '/crmengine/v1/subscription/list',
+            'method': 'GET',
+            'body': {},
+            'callback': (function (resp) {
+                if (!resp.code) {
+                    var data = resp.data;
+                    $scope.usersSubscriptions = {};
+                    for (var i = 0; i < data.length; i++) {
+                        var element = data[i];
+                        element.subscription.is_auto_renew =parseInt(element.subscription.is_auto_renew);
+                        element.subscription.quantity =parseInt(element.subscription.quantity);
+                        $scope.usersSubscriptions[element['email']] = element.subscription;
+                    }
+                } else {
+                    notFoundHandle(resp, $scope);
+                }
+                $scope.isLoading = false;
+                $scope.apply();
+            })
+        });
+    };
+    Billing.getOrganizationSubscription = function ($scope) {
+        $scope.isLoading = true;
+        gapi.client.request({
+            'root': ROOT,
+            'path': '/crmengine/v1/subscription/organization_get',
+            'method': 'GET',
+            'body': {},
+            'callback': (function (resp) {
+                if (!resp.code) {
+                    $scope.org_subscription = resp;
+                    $scope.org_subscription.is_auto_renew =parseInt(resp.is_auto_renew);
+                } else {
+                    notFoundHandle(resp, $scope);
+                }
+                $scope.isLoading = false;
+                $scope.apply();
+            })
+        });
     };
     Billing.disableAutoRenew = function ($scope) {
         $scope.isLoading = true;

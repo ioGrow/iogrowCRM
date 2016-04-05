@@ -42,23 +42,24 @@ def payment_required():
         @wraps(f)
         def decorated_function(*args, **kwargs):
             rate_limit_message = "Your free plan reach it's limit."
-            organization = _get_organization(kwargs)
-            subscription = organization.get().get_subscription()
-            plan = subscription.plan.get()
-            if not subscription.expiration_date:
-                    return f(*args, **kwargs)
-            if subscription.expiration_date < datetime.datetime.now():
-                organization.get().set_subscription(Subscription.create_freemium_subscription())
-            elif plan.name != config.PREMIUM:
-                limit = subscription.get_records_limit()
-                if limit is not None:
-                    entities = subscription.get_activated_plan().kinds_to_limit
-                    count = created_record_sum(entities, organization, subscription.start_date)
-                    if count > limit:
-                        raise PreconditionFailedException(rate_limit_message)
+            user = _get_user(kwargs)
+            organization = user.organization
+            subscription = user.get_subscription()
+
+            if subscription.expiration_date:
+                plan = subscription.plan.get()
+                if subscription.expiration_date < datetime.datetime.now():
+                    organization.get().set_subscription(Subscription.create_freemium_subscription())
+                elif plan.name == config.FREEMIUM:
+                    limit = subscription.get_records_limit()
+                    if limit is not None:
+                        entities = subscription.get_activated_plan().kinds_to_limit
+                        count = created_record_sum(entities, organization, subscription.start_date)
+                        if count > limit:
+                            raise PreconditionFailedException(rate_limit_message)
             return f(*args, **kwargs)
 
-        def _get_organization(kwargs):
+        def _get_user(kwargs):
             endpoint_user = endpoints.get_current_user()
             can_not_verify = "Can not verify licence detail."
             if 'user_from_email' in kwargs:
@@ -71,8 +72,7 @@ def payment_required():
                         break
             if not user:
                 raise PreconditionFailedException(can_not_verify)
-            organization = user.organization
-            return organization
+            return user
 
         return decorated_function
 
