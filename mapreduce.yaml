@@ -57,13 +57,6 @@ mapreduce:
       default: model.Application
     - name: organization_key
       default:
-- name: add discovery tab 
-  mapper:
-    input_reader: mapreduce.input_readers.DatastoreInputReader
-    handler: myModel.add_discovery_tab
-    params:
-    - name: entity_kind
-      default: model.Application
 - name: upgrade early birds  
   mapper:
     input_reader: mapreduce.input_readers.DatastoreInputReader
@@ -127,15 +120,7 @@ mapreduce:
     handler: myModel.initialize_gmail_sync_with_lead
     params:
     - name: entity_kind
-      default: model.User 
-
-- name: delete_tweetsschema
-  mapper:
-    input_reader: mapreduce.input_readers.DatastoreInputReader
-    handler: myModel.delete_tweetsschema
-    params:
-    - name: entity_kind
-      default: iomessages.tweetsSchema
+      default: model.User
 - name: delete_Tokens
   mapper:
     input_reader: mapreduce.input_readers.DatastoreInputReader

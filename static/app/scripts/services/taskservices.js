@@ -446,15 +446,7 @@ topicservices.factory('Tag', function($http) {
                         if ($.inArray(params["about_kind"], ["topics","Lead","Account","Contact","Opportunity","Case","Task"])>0) {
                           $scope.tagInserted(resp);
                         };
-                        
 
-                        // TME_02_11_13 when a note gis inserted reload topics
-                        /*$scope.listContributors();*/                                               
-                       // $('#addAccountModal').modal('hide');
-                       // window.location.replace('#/accounts/show/'+resp.id);
-                       if ($scope.fromnewtab){
-                        window.location.replace('#/discovers/');
-                       }
                        $scope.inProcess(false,'tag list');  
                         $scope.apply();
 

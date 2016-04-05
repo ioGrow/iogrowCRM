@@ -70,14 +70,6 @@ class Keyword(EndpointsModel):
                 color=request.color,
                 locality=request.locality
             )
-        # if keyword.locality=='topics':
-        #     taskqueue.add(
-        #                 url='/workers/insert_crawler',
-        #                 queue_word='iogrow-critical',
-        #                 params={
-        #                         'topic':request.word
-        #                        }
-        #             )
         keyword_async = keyword.put_async()
         keyword_key = keyword_async.get_result()
         return KeywordSchema(

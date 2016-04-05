@@ -590,55 +590,12 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             }
             ;
         }
-        /*$scope.initDiscover=function(){
-         Profile.listKeywords($scope,{})
-         Profile.list($scope,{})
-         $scope.diselectedOption='discover'
-         }*/
-        /* 
 
-         $scope.isSelected = function(index) {
-         return ($scope.selected_leads.indexOf(index) >= 0||$scope.isSelectedAll);
-         };
-         $scope.select_lead= function(lead,$index,$event){
-         var checkbox = $event.target;
-         if(checkbox.checked){
-         if ($scope.selected_leads.indexOf(lead) == -1) {
-         
-         $scope.selected_leads.push(lead);
-         
-
-         }
-         }else{
-         $scope.selected_leads.splice($scope.selected_leads.indexOf(lead), 1);
-         
-         
-         
-         }
-         }
-         $scope.select_all_tasks=function($event){
-         var checkbox = $event.target;
-         if(checkbox.checked){
-         $scope.selected_leads=[];
-         $scope.selected_leads.push($scope.leads);
-         $scope.isSelectedAll=true;
-         }else{
-         $scope.selected_leads=[];
-         $scope.isSelectedAll=false;
-         
-         }
-         }*/
         $scope.wizard = function () {
             localStorage['completedTour'] = 'True';
             var tour = {
                 id: "hello-hopscotch",
                 steps: [
-                    {
-                        title: "Discovery",
-                        content: "Your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
-                        target: "id_Discovery",
-                        placement: "right"
-                    },
                     {
                         title: "Leads",
                         content: "Use leads to easily track  individuals or representatives of organizations who may be interested in your business. They are usually collected from various sources like Discovery feature, Linkedin, trade shows, seminars, advertisements and other marketing campaigns. You can add notes, set reminders or send emails",

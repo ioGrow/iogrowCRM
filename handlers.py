@@ -45,11 +45,9 @@ from iograph import Edge
 from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task, AssignedGoogleId
 import sfoauth2
-from discovery import Discovery
 import stripe
 import requests
 from requests.auth import HTTPBasicAuth
-import config as config_urls
 from intercom import Intercom
 from simple_salesforce import Salesforce
 from semantic.dates import DateService
@@ -857,21 +855,6 @@ class AccountListHandler(BaseHandler, SessionEnabledHandler):
 class AccountShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/accounts/account_show.html')
-
-
-class DiscoverListHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/discovers/discover_list.html')
-
-
-class DiscoverShowHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/discovers/discover_show.html')
-
-
-class DiscoverNewHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/discovers/discover_new.html')
 
 
 class AccountNewHandler(BaseHandler, SessionEnabledHandler):
@@ -2177,32 +2160,6 @@ class AddToIoGrowLeads(webapp2.RequestHandler):
         if user_from_email:
             Lead.insert(user_from_email, request)
 
-class update_tweets(webapp2.RequestHandler):
-    def post(self):
-        # Discovery.update_tweets()
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        tagss = Tag.list_by_just_kind("topics")
-        for tag in tagss.items:
-            taskqueue.add(
-                url='/workers/insert_crawler',
-                queue_name='iogrow-critical',
-                params={
-                    'topic': tag.name,
-                    'organization': user_from_email.organization.id()
-                }
-            )
-
-
-class delete_tweets(webapp2.RequestHandler):
-    def post(self):
-        Discovery.delete_tweets()
-
-
-class get_popular_posts(webapp2.RequestHandler):
-    def post(self):
-        Discovery.get_popular_posts()
-
-
 class ShareDocument(webapp2.RequestHandler):
     def post(self):
 
@@ -2598,41 +2555,6 @@ class SFusersCSV(BaseHandler, SessionEnabledHandler):
 
 
 
-class InsertCrawler(webapp2.RequestHandler):
-    def post(self):
-        topic = self.request.get('topic')
-        organization = self.request.get('organization')
-        # url="http://104.154.43.236:8091/insert_keyword?keyword="+topic+"&organization="+organization
-        # requests.get(url=url)
-        payload = {'keyword': topic, 'organization': organization}
-        r = requests.get(config_urls.nodeio_server + "/twitter/crawlers/insert", params=payload)
-
-
-class cron_update_tweets(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        taskqueue.add(
-            url='/workers/update_tweets',
-            queue_name='iogrow-low',
-            params={}
-        )
-
-
-class cron_delete_tweets(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        Discovery.delete_tweets()
-        '''taskqueue.add(
-                            url='/workers/delete_tweets',
-                            queue_name='iogrow-low',
-                            params={}
-                        )
-        '''
-
-
-class cron_get_popular_posts(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        Discovery.get_popular_posts()
-
-
 class DeleteUserContacts(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -2696,8 +2618,6 @@ routes = [
     ('/workers/sync_contacts', SyncContact),
     ('/workers/send_email_notification', SendEmailNotification),
     ('/workers/add_to_iogrow_leads', AddToIoGrowLeads),
-    ('/workers/update_tweets', update_tweets),
-    ('/workers/update_tweets', delete_tweets),
     ('/workers/send_gmail_message', SendGmailEmail),
     ('/workers/init_leads_from_gmail', InitLeadsFromGmail),
 
@@ -2713,7 +2633,6 @@ routes = [
     ('/workers/syncevent', SyncCalendarEvent),
     ('/workers/syncpatchevent', SyncPatchCalendarEvent),
     ('/workers/syncdeleteevent', SyncDeleteCalendarEvent),
-    ('/workers/insert_crawler', InsertCrawler),
     ('/workers/import_contact_from_gcsv', ImportContactFromGcsvRow),
     ('/workers/contact_import_second_step', ImportContactSecondStep),
     ('/workers/lead_import_second_step', ImportLeadSecondStep),
@@ -2730,10 +2649,6 @@ routes = [
     #
     ('/', IndexHandler),
     ('/partners/', PartnersHandler),
-    # Templates Views Routes
-    ('/views/discovers/list', DiscoverListHandler),
-    ('/views/discovers/show', DiscoverShowHandler),
-    ('/views/discovers/new', DiscoverNewHandler),
     # Accounts Views
     ('/views/accounts/list', AccountListHandler),
     ('/views/accounts/show', AccountShowHandler),

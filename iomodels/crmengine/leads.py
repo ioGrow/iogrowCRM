@@ -122,11 +122,6 @@ class ParamsSchema(messages.Message):
     access = messages.StringField(2, default='public')
 
 
-
-# end fullContact schemas
-
-
-
 class LeadSchema(messages.Message):
     id = messages.StringField(1)
     entityKey = messages.StringField(2)
