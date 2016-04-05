@@ -1819,10 +1819,6 @@ class SyncContact(webapp2.RequestHandler):
         id = self.request.get('id')
         user = model.User.get_by_email(email)
 
-        # sync contact
-        # Contact.sync_with_google_contacts(user,id)
-
-
 
 class SyncCalendarEvent(webapp2.RequestHandler):
     def post(self):

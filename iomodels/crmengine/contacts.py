@@ -1609,16 +1609,6 @@ class Contact(EndpointsModel):
         )
 
     @classmethod
-    def sync_with_google_contacts(cls, user_from_email, id):
-        request = ContactGetRequest(id=int(id))
-        contact_schema = cls.get_schema(user_from_email, request)
-        contact_key = ndb.Key(urlsafe=contact_schema.entityKey)
-        contact = contact_key.get()
-        users = Node.list_permissions(contact)
-        for user in users:
-            cls.gcontact_sync(user, contact_schema)
-
-    @classmethod
     def import_contact_from_gcsv(cls, user_from_email, row, matched_columns, customfields_columns):
         # try:
         contact = {}
