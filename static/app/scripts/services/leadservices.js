@@ -289,7 +289,6 @@ leadservices.factory('Lead', function ($rootScope) {
                     // $scope.listInfonodes();
 
                     //$scope.renderMaps();
-                    //$scope.getLinkedinProfile();
                     //$scope.DrawPsychometrics();
 
                     $scope.email.to = '';

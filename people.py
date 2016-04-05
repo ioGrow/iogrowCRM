@@ -421,19 +421,6 @@ class linked_in:
                 company_name.append(name)
         return lien
 
-    def scrape_linkedin(self, keyword):
-        person = {}
-        html = self.open_url(keyword)
-        if html:
-            soup = BeautifulSoup(html)
-            self.get_profile_header(soup, person)
-            person['experiences'] = self.get_exprience(soup)
-            person['resume'] = self.get_resume(soup)
-            person['certifications'] = self.get_certification(soup)
-            person['skills'] = self.get_skills(soup)
-            person['education'] = self.get_education(soup)
-            person['url'] = self.browser.geturl()
-        return person
 
     def scrape_linkedin_url(self, url):
         person = {}

@@ -51,9 +51,9 @@ from iomodels.crmengine.events import Event, EventInsertRequest, EventSchema, Ev
 from iomodels.crmengine.documents import Document, DocumentInsertRequest, DocumentSchema, MultipleAttachmentRequest, \
     DocumentListResponse
 
-from iomodels.crmengine.leads import Lead, LeadPatchRequest, LeadFromTwitterRequest, LeadInsertRequest, LeadListRequest, \
+from iomodels.crmengine.leads import Lead, LeadPatchRequest, LeadInsertRequest, LeadListRequest, \
     LeadListResponse, LeadSearchResults, LeadGetRequest, LeadSchema, FLNameFilterRequest, LeadMergeRequest, \
-    FLsourceFilterRequest, FullContactRequest
+    FLsourceFilterRequest
 from iomodels.crmengine.cases import Case, UpdateStatusRequest, CasePatchRequest, CaseGetRequest, CaseInsertRequest, \
     CaseListRequest, CaseSchema, CaseListResponse, CaseSearchResults
 from iomodels.crmengine.comments import Comment
@@ -3973,118 +3973,6 @@ class CrmEngineApi(remote.Service):
         response = linked_in.get_company(request.entityKey)
         return response
 
-    # arezki lebdiri 27/08/2014
-    @endpoints.method(LinkedinListRequestDB, LinkedinListResponseDB,
-                      path='linkedin/list_db', http_method='POST',
-                      name='linkedin.list_db')
-    def linkedin_list_db(self, request):
-        if request.limit:
-            limit = request.limit
-        else:
-            limit = 20
-        if request.page:
-            page = request.page
-        else:
-            page = 0
-        skip = page * limit
-        more = False
-        params = {
-            "query": {
-                "multi_match": {
-                    "query": request.keyword,
-                    "fields": [
-                        "fullname",
-                        "locality",
-                        "title"
-                    ],
-                    "tie_breaker": 0.5,
-                    "minimum_should_match": "30%"
-                }
-            },
-            "highlight": {
-                "fields": {
-                    "title": {},
-                    "summary": {},
-                    "experiences": {},
-                    "fullname": {},
-                    "locality": {}
-                }
-            }
-
-        }
-        params = json.dumps(params)
-
-        r = requests.post(
-            "http://104.154.66.240:9200/linkedin/profile/_search?size=" + str(limit) + "&from=" + str(skip),
-            data=params)
-        # r= requests.post("http://localhost:9200/linkedin/profile/_search?size="+str(limit)+"&from="+str(skip),data=params)
-        results = r.json()
-        total = results["hits"]["total"]
-        if (page + 1) * limit < total:
-            more = True
-        exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/" + request.keyword)
-        # exist = requests.get("http://localhost:9200/linkedin/keywords/"+request.keyword)
-
-        return LinkedinListResponseDB(more=more, results=r.text, KW_exist=exist.json()["found"])
-
-    @endpoints.method(LinkedinListRequestDB, LinkedinInsertResponseKW,
-                      path='linkedin/insert_kw', http_method='POST',
-                      name='linkedin.insert_kw')
-    def linkedin_insert_kw(self, request):
-        Bool = False
-        exist = requests.get("http://104.154.66.240:9200/linkedin/keywords/" + request.keyword)
-        # exist = requests.get("http://localhost:9200/linkedin/keywords/"+request.keyword)
-        results = exist.json()
-        print results
-
-        print results["found"]
-        if results["found"]:
-            Bool = True
-            message = "keyword exist"
-        else:
-            data = {
-                "keyword": str(request.keyword)
-            }
-            data = json.dumps(data)
-            requests.put("http://104.154.66.240:9200/linkedin/keywords/" + request.keyword, data=data)
-            # insert= requests.put("http://localhost:9200/linkedin/keywords/"+request.keyword,data=data)
-            message = "keyword inserted"
-        # print results
-        return LinkedinInsertResponseKW(exist=Bool, message=message)
-
-    @endpoints.method(LinkedinInsertRequest, LinkedinInsertResponse,
-                      path='linkedin/startSpider', http_method='POST',
-                      name='linkedin.startSpider')
-    def linkedin_startSpider(self, request):
-        r = requests.post("http://104.154.81.17:6800/schedule.json",  #
-                          params={
-                              "project": "linkedin",
-                              "spider": "Linkedin",
-                              "keyword": request.keyword
-                          })
-        data = {
-            "keyword": str(request.keyword)
-        }
-        data = json.dumps(data)
-        requests.put("http://104.154.66.240:9200/linkedin/keywords/" + request.keyword, data=data)
-        return LinkedinInsertResponse(results=r.text)
-
-    @endpoints.method(spiderStateRequest, spiderStateResponse,
-                      path='linkedin/spiderState', http_method='POST',
-                      name='linkedin.spiderState')
-    def linkedin_spiderState(self, request):
-        r = requests.get("http://104.154.81.17:6800/listjobs.json",  #
-                         # r= requests.get("http://localhost:6800/listjobs.json", #
-                         params={
-                             "project": "linkedin"
-                         })
-        state = False
-        running = r.json()["running"]
-        for job in running:
-            if request.jobId == job["id"]:
-                state = True
-                break
-        return spiderStateResponse(state=state)
 
     # arezki lebdiri 27/08/2014
     @endpoints.method(LinkedinProfileRequestSchema, LinkedinProfileSchema,
@@ -4124,37 +4012,6 @@ class CrmEngineApi(remote.Service):
         profile_schema = EndpointsHelper.twitter_import_people(name)
         return profile_schema
 
-    # arezki lebdiri 15/07/2014
-    @endpoints.method(LinkedinProfileRequest, LinkedinProfileSchema,
-                      path='people/linkedinProfileV2', http_method='POST',
-                      name='people.getLinkedinV2')
-    def get_people_linkedinV2(self, request):
-        empty_string = lambda x: x if x else ""
-        linkedin = linked_in()
-        keyword = empty_string(request.firstname) + " " + empty_string(request.lastname) + " " + empty_string(
-            request.title) + " " + empty_string(request.company)
-        pro = linkedin.scrape_linkedin(keyword)
-        response = LinkedinProfileSchema()
-        if pro:
-            if linkedin.dice_coefficient(keyword, pro["full-name"]) >= 0.5:
-                response = LinkedinProfileSchema(
-                    fullname=pro["full-name"],
-                    industry=pro["industry"],
-                    locality=pro["locality"],
-                    title=pro["title"],
-                    current_post=pro["current_post"],
-                    past_post=pro["past_post"],
-                    formations=pro["formations"],
-                    websites=pro["websites"],
-                    relation=pro["relation"],
-                    experiences=json.dumps(pro["experiences"]),
-                    resume=pro["resume"],
-                    certifications=json.dumps(pro["certifications"]),
-                    skills=pro["skills"],
-                    profile_picture=pro['profile_picture']
-                )
-
-        return response
 
     # arezki lebdiri 15/07/2014
     @endpoints.method(LinkedinProfileRequest, getLinkedinListSchema,

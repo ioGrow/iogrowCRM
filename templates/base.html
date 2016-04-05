@@ -116,10 +116,6 @@
             <form id="navbarSearchForm" ng-controller="SearchFormController" class="navbar-form ng-pristine ng-valid "
                   ng-submit="executeSearch(searchQuery)" role="search">
                 <div class="form-group">
-                    <!--        <div style="position: absolute;width: 55px; margin-top: 5px; margin-left: 3px;">
-                               <img id="iogrowSearchIcon" ng-click="iogrowSearchSwitch()" ng-src="static/img/sm-iogrow- <%=iogrowSearch%>.png" style="height: 20px;margin-right: 3px;">
-                                <i  class="fa fa-linkedin-square" ng-class="{true:'linkedInSelected'}[linkedSearch]" style=" font-size: 20px; vertical-align: baseline;color: rgb(195, 195, 195);  /* margin-right: -1px; */ top: 3px; position: absolute;" ng-click="linkedinSearchSwitch()"></i>
-                           </div> -->
                     <input type="text" ng-class="{'spinner':resultsLoading}" ng-model="searchQuery"
                            typeahead="result as result.title + ' (' + result.type + ')' for result in getResults($viewValue) | filter:$viewValue | limitTo:8"
                            typeahead-on-select="selectResult()" class="form-control" typeahead-loading="resultsLoading"
