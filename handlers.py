@@ -2472,85 +2472,6 @@ class InitReports(webapp2.RequestHandler):
     def post(self):
         Reports.init_reports()
 
-
-def extract_leads_from_message(gmail_service, user, thread_id):
-    thread_details = gmail_service.users().threads().get(userId='me', id=thread_id, fields='messages/payload').execute()
-    for message in thread_details['messages']:
-        updated_at = None
-        updated_at_dt = None
-        for field in message['payload']['headers']:
-            if field['name'] == 'Date':
-                try:
-                    service = DateService()
-                    updated_at_dt = service.extractDate(field['value'])
-                    if updated_at_dt:
-                        updated_at = updated_at_dt.isoformat()
-                except:
-                    print 'error when extracting date'
-
-            if field['name'] == 'From' or field['name'] == 'To':
-                name = field['value'].split('<')[0]
-                check_if_email = re.search('([\w.-]+)@([\w.-]+)', name)
-                if check_if_email is None:
-                    match = re.search('([\w.-]+)@([\w.-]+)', field['value'])
-                    if match:
-                        if match.group() != user.email:
-                            firstname = name.split()[0]
-                            lastname = " ".join(name.split()[1:])
-
-                            if Lead.get_key_by_name(user, firstname, lastname):
-                                lead_key = Lead.get_key_by_name(user, firstname, lastname)
-                                lead = lead_key.get()
-                                if updated_at_dt:
-                                    lead.updated_at = updated_at_dt
-                                    lead.put()
-                            else:
-                                email = iomessages.InfoNodeRequestSchema(kind='emails', fields=[
-                                    {'field': 'email', 'value': match.group()}])
-                                request = LeadInsertRequest(
-                                    firstname=firstname,
-                                    lastname=lastname,
-                                    infonodes=[email],
-                                    access='private',
-                                    source='Gmail sync',
-                                    updated_at=updated_at
-                                )
-                                print request
-                                Lead.insert(user, request)
-
-
-class InitLeadsFromGmail(webapp2.RequestHandler):
-    def post(self):
-        email = self.request.get('email')
-        user = model.User.get_by_email(email)
-        credentials = user.google_credentials
-        http = credentials.authorize(httplib2.Http(memcache))
-        gmail_service = build('gmail', 'v1', http=http)
-        nextPageToken = None
-        you_can_loop = True
-        threads_list = []
-        try:
-            while you_can_loop:
-                # prepare params to insert
-                threads = gmail_service.users().threads().list(userId='me', q='category:primary',
-                                                               pageToken=nextPageToken).execute()
-                for thread in threads['threads']:
-                    threads_list.append(thread['id'])
-                if 'nextPageToken' in threads:
-                    nextPageToken = threads['nextPageToken']
-                else:
-                    you_can_loop = False
-            for thread_id in threads_list:
-                try:
-                    thread_details = gmail_service.users().threads().get(userId='me', id=thread_id,
-                                                                         fields='messages/payload').execute()
-                    extract_leads_from_message(gmail_service, user, thread_id)
-                except:
-                    print 'error when extracting leads from thread number', thread_id
-        except:
-            print 'problem on getting threads'
-
-
 class ImportContactSecondStep(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -2805,7 +2726,6 @@ routes = [
     ('/workers/update_tweets', update_tweets),
     ('/workers/update_tweets', delete_tweets),
     ('/workers/send_gmail_message', SendGmailEmail),
-    ('/workers/init_leads_from_gmail', InitLeadsFromGmail),
 
     # tasks sync  hadji hicham 06/08/2014 queue_name='iogrow-tasks'
     ('/workers/synctask', SyncCalendarTask),
