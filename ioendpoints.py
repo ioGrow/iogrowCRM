@@ -640,55 +640,6 @@ class CrmEngineApi(remote.Service):
         message_types.VoidMessage,
         id=messages.StringField(1))
 
-    # Search API
-    @endpoints.method(SearchRequest, inviteResults, path="autocomplete", http_method="POST", name="autocomplete")
-    def autocomplete(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        index = search.Index(name="GlobalIndex")
-        # Show only objects where you have permissions
-        query_string = request.q + 'type:Gcontact AND owner:' + user_from_email.google_user_id
-        search_results = []
-        # if request.limit:
-        #     limit = int(request.limit)
-        # else:
-        #     limit = 10
-        # next_cursor = None
-        # if request.pageToken:
-        #     cursor = search.Cursor(web_safe_string=request.pageToken)
-        # else:
-        #     cursor = search.Cursor(per_result=True)
-        # if limit:
-        #     options = search.QueryOptions(limit=limit,cursor=cursor)
-        # else:
-        #     options = search.QueryOptions(cursor=cursor)
-        query = search.Query(query_string=query_string)
-        try:
-            if query:
-                result = index.search(query)
-                print "*************lets check this out results****************"
-                print len(result.results)
-                print "************************************************"
-                next_cursor = ""
-                # total_matches = results.number_found
-                # Iterate over the documents in the results
-                # if len(result.results) == limit + 1:
-                #     next_cursor = result.results[-1].cursor.web_safe_string
-                # else:
-                #     next_cursor = None
-                results = result.results
-                for scored_document in results:
-                    kwargs = {
-                        "id": scored_document.doc_id,
-                        "rank": scored_document.rank
-                    }
-                    for e in scored_document.fields:
-                        if e.name in ["title", "type", "emails"]:
-                            kwargs[e.name] = e.value
-                    search_results.append(inviteResult(**kwargs))
-        except search.Error:
-            logging.exception('Search failed')
-        return inviteResults(items=search_results, nextPageToken=next_cursor)
-
     @endpoints.method(SearchRequest, SearchResults,
                       path='search', http_method='POST',
                       name='search')
