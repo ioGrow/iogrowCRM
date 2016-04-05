@@ -85,11 +85,11 @@ module.exports = function (grunt) {
                     'static/app/scripts/services/billingservices.js',
                     'static/app/scripts/services/noteservices.js', 'static/app/scripts/services/commentservices.js',
                     'static/app/scripts/services/settingservices.js',
-                    'static/app/scripts/services/edgeservices.js', 'static/app/scripts/services/reportservices.js',
+                    'static/app/scripts/services/edgeservices.js',
                     'static/app/scripts/services/profileservices.js', 'static/app/scripts/services/linkedinservices.js',
                     'static/app/scripts/app.js', 'static/app/scripts/directives/directives.js',
                     'static/app/scripts/controllers/admin/**/*.js',
-                    'static/app/scripts/controllers/discovercontrollers.js', 'static/app/scripts/controllers/mysettingcontrollers.js', 'static/app/scripts/controllers/searchcontrollers.js', 'static/app/scripts/controllers/accountcontrollers.js', 'static/app/scripts/controllers/leadcontrollers.js', 'static/app/scripts/controllers/casecontrollers.js', 'static/app/scripts/controllers/billingController.js', 'static/app/scripts/controllers/contactcontroller.js', 'static/app/scripts/controllers/opportunitycontroller.js', 'static/app/scripts/controllers/documentcontrollers.js', 'static/app/scripts/controllers/notecontrollers.js', 'static/app/scripts/controllers/taskcontrollers.js', 'static/app/scripts/controllers/eventcontrollers.js', 'static/app/scripts/controllers/dashboardController.js', 'static/app/scripts/controllers/usercontrollers.js', 'static/app/scripts/controllers/settingscontrollers.js'],
+                    'static/app/scripts/controllers/discovercontrollers.js', 'static/app/scripts/controllers/mysettingcontrollers.js', 'static/app/scripts/controllers/searchcontrollers.js', 'static/app/scripts/controllers/accountcontrollers.js', 'static/app/scripts/controllers/leadcontrollers.js', 'static/app/scripts/controllers/casecontrollers.js', 'static/app/scripts/controllers/billingController.js', 'static/app/scripts/controllers/contactcontroller.js', 'static/app/scripts/controllers/opportunitycontroller.js', 'static/app/scripts/controllers/documentcontrollers.js', 'static/app/scripts/controllers/notecontrollers.js', 'static/app/scripts/controllers/taskcontrollers.js', 'static/app/scripts/controllers/eventcontrollers.js', 'static/app/scripts/controllers/usercontrollers.js', 'static/app/scripts/controllers/settingscontrollers.js'],
                 dest: 'static/build/js/sync_ctrls_sers_scripts.js',
             }
         },
@@ -146,7 +146,7 @@ module.exports = function (grunt) {
              },
             /*async_ctrls_sers_js: {
              files: {
-             'static/build/js/async_ctrls_sers_scripts.min.js': ['static/app/scripts/services/mapservices.js','static/app/scripts/services/caseservices.js','static/app/scripts/services/discoverservices.js','static/app/scripts/services/topicservices.js','static/app/scripts/services/eventservices.js','static/app/scripts/services/noteservices.js','static/app/scripts/services/commentservices.js','static/app/scripts/services/reportservices.js','static/app/scripts/controllers/discovercontrollers.js','static/app/scripts/controllers/casecontrollers.js','static/app/scripts/controllers/documentcontrollers.js','static/app/scripts/controllers/notecontrollers.js','static/app/scripts/controllers/eventcontrollers.js','static/app/scripts/controllers/dashboardController.js']
+             'static/build/js/async_ctrls_sers_scripts.min.js': ['static/app/scripts/services/mapservices.js','static/app/scripts/services/caseservices.js','static/app/scripts/services/discoverservices.js','static/app/scripts/services/topicservices.js','static/app/scripts/services/eventservices.js','static/app/scripts/services/noteservices.js','static/app/scripts/services/commentservices.js','static/app/scripts/controllers/discovercontrollers.js','static/app/scripts/controllers/casecontrollers.js','static/app/scripts/controllers/documentcontrollers.js','static/app/scripts/controllers/notecontrollers.js','static/app/scripts/controllers/eventcontrollers.js']
              }
              },*/
         },
@@ -170,7 +170,7 @@ module.exports = function (grunt) {
                     'static/app/scripts/services/commentservices.js',
                     'static/app/scripts/services/settingservices.js',
                     'static/app/scripts/services/edgeservices.js',
-                    'static/app/scripts/services/reportservices.js', 'static/app/scripts/services/profileservices.js',
+                    'static/app/scripts/services/profileservices.js',
                     'static/app/scripts/services/linkedinservices.js', 'static/app/scripts/app.js',
                     'static/app/scripts/directives/directives.js',
                     'static/app/scripts/controllers/discovercontrollers.js',
@@ -187,7 +187,6 @@ module.exports = function (grunt) {
                     'static/app/scripts/controllers/notecontrollers.js',
                     'static/app/scripts/controllers/taskcontrollers.js',
                     'static/app/scripts/controllers/eventcontrollers.js',
-                    'static/app/scripts/controllers/dashboardController.js',
                     'static/app/scripts/controllers/usercontrollers.js', 'static/app/scripts/controllers/settingscontrollers.js'],
                 tasks: ['concat', 'uglify'],
             },

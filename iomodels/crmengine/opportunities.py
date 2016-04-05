@@ -20,9 +20,6 @@ from iomodels.crmengine.tags import Tag, TagSchema
 from iomodels.crmengine.tasks import Task, TaskListResponse
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
-
-# from ioreporting import Reports
-
 class UpdateStageRequest(messages.Message):
     entityKey = messages.StringField(1, required=True)
     stage = messages.StringField(2, required=True)
@@ -1264,7 +1261,6 @@ class Opportunity(EndpointsModel):
         current_stage_schema = None
         if request.stage:
             stage_key = ndb.Key(urlsafe=request.stage)
-            # Reports.add_opportunity(stage_key,amount=int(request.amount_total))
             # insert edges
             Edge.insert(start_node=opportunity_key_async,
                         end_node=stage_key,
@@ -1470,7 +1466,6 @@ class Opportunity(EndpointsModel):
             for timing_request in request.timeline:
                 timing_request.opportunity = opportunity_key_async.urlsafe()
                 OppTimeline.insert(user_from_email, timing_request)
-        # Reports.add_opportunity(user_from_email, opp_entity=opportunity_key_async,nbr=1,amount=amount_total)
         opportunity_schema = OpportunitySchema(
                 id=str(opportunity_key_async.id()),
                 entityKey=opportunity_key_async.urlsafe(),
