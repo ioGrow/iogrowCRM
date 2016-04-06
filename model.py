@@ -976,9 +976,10 @@ class User(EndpointsModel):
     subscription = ndb.KeyProperty(kind=Subscription)
 
     def get_subscription(self):
-        if not self.subscription and self.organization.get().subscription:
-            self.subscription = Subscription.create_freemium_subscription().key
-            self.put()
+        if self.ogranization.subscription:
+            if not self.subscription or not self.subscription.get():
+                self.subscription = Subscription.create_freemium_subscription().key
+                self.put()
         return self.subscription.get()
 
     @classmethod
