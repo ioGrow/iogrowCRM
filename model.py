@@ -661,7 +661,7 @@ class Organization(ndb.Model):
         cls.init_default_values(org_key)
 
     def get_assigned_licenses(self):
-        return len(filter(lambda user: user.has_license(self.plan),
+        return len(filter(lambda user: user.has_license(self.get_subscription().key),
                           User.fetch_by_organization(self.key)))
 
     @classmethod
@@ -976,7 +976,7 @@ class User(EndpointsModel):
     subscription = ndb.KeyProperty(kind=Subscription)
 
     def get_subscription(self):
-        if self.ogranization.subscription:
+        if self.organization.get().subscription:
             if not self.subscription or not self.subscription.get():
                 self.subscription = Subscription.create_freemium_subscription().key
                 self.put()
@@ -1023,10 +1023,10 @@ class User(EndpointsModel):
     def count_by_organization(cls, org_key):
         return cls.query(cls.organization == org_key).count()
 
-    def has_license(self, plan_key):
+    def has_license(self, sub_key):
         user_subscription = self.subscription
         if user_subscription:
-            return user_subscription.get().plan == plan_key
+            return user_subscription == sub_key
         return False
 
     @classmethod

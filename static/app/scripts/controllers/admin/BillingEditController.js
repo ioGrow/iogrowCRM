@@ -42,6 +42,7 @@ app.controller('BillingEditCtrl', ['$scope', 'Auth', 'Billing', function ($scope
     };
     $scope.runTheProcess = function () {
         Billing.getSubscription($scope);
+        Billing.getOrganizationSubscription($scope);
     };
     $scope.refreshToken = function () {
         Auth.refreshToken();

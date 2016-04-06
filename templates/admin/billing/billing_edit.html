@@ -67,8 +67,8 @@
                             <p class="form-control-static"> <%= subscription.quantity%></p>
                         </div>
                     </div>
-                    <a ng-show="subscription.plan.name == 'freemium'" class="btn btn-danger"
-                       ng-href="<%= subscription_url %>"> Upgrade
+                    <a ng-show="subscription.plan.name == 'freemium' && org_subscription.plan.name == 'freemium'"
+                       class="btn btn-danger" ng-href="<%= subscription_url %>"> Upgrade
                     </a>
                 </form>
             </div>
