@@ -5,84 +5,75 @@ classes add to calling methods.
 
 """
 
+import ast
 import datetime
-import httplib2
 import json
 import logging
-
+import re
 from django.utils.encoding import smart_str
 
-from google.appengine.ext import ndb
-from google.appengine.api import search
-from google.appengine.api import memcache
-from google.appengine.api import taskqueue
-from google.appengine.api import mail
-from apiclient.discovery import build
-from protorpc import remote
-from protorpc import messages
 import endpoints
-from protorpc import message_types
+import httplib2
 import requests
+import stripe
+from apiclient.discovery import build
+from google.appengine.api import mail
+from google.appengine.api import memcache
+from google.appengine.api import search
+from google.appengine.api import taskqueue
+from google.appengine.ext import ndb
+from protorpc import message_types
+from protorpc import messages
+from protorpc import remote
 
+import iomessages
+from endpoints_helper import EndpointsHelper
 from iograph import Node, Edge, RecordSchema, InfoNodeResponse, InfoNodeListResponse
+from iomessages import LinkedinProfileSchema, TwitterProfileSchema, LinkedinCompanySchema
+from iomessages import SubscriptionSchema, LicencesQuantityMessage, SubscriptionListSchema
 from iomodels.crmengine import config
+from iomodels.crmengine.Licenses import License, LicenseSchema, LicenseInsertRequest
 from iomodels.crmengine.accounts import Account, AccountGetRequest, AccountPatchRequest, AccountSchema, \
     AccountListRequest, AccountListResponse, AccountSearchResults, AccountInsertRequest
+from iomodels.crmengine.cases import Case, UpdateStatusRequest, CasePatchRequest, CaseGetRequest, CaseInsertRequest, \
+    CaseListRequest, CaseSchema, CaseListResponse, CaseSearchResults
+from iomodels.crmengine.casestatuses import Casestatus
+from iomodels.crmengine.comments import Comment
 from iomodels.crmengine.contacts import Contact, ContactGetRequest, ContactInsertRequest, ContactPatchSchema, \
     ContactSchema, ContactListRequest, ContactListResponse, ContactSearchResults, ContactImportRequest, \
     ContactImportHighriseRequest, DetailImportHighriseRequest, \
     InvitationRequest, ContactMergeRequest
+from iomodels.crmengine.documents import Document, DocumentInsertRequest, DocumentSchema, MultipleAttachmentRequest, \
+    DocumentListResponse
+from iomodels.crmengine.events import Event, EventInsertRequest, EventSchema, EventPatchRequest, EventListRequest, \
+    EventListResponse, EventFetchListRequest, EventFetchResults
+from iomodels.crmengine.leads import Lead, LeadPatchRequest, LeadInsertRequest, LeadListRequest, \
+    LeadListResponse, LeadSearchResults, LeadGetRequest, LeadSchema, FLNameFilterRequest, LeadMergeRequest, \
+    FLsourceFilterRequest
+from iomodels.crmengine.leadstatuses import Leadstatus
 from iomodels.crmengine.notes import Note, AuthorSchema, DiscussionAboutSchema, \
     NoteSchema
-
-from iomodels.crmengine.tasks import Task, TaskSchema, TaskRequest, TaskListResponse, TaskInsertRequest
-
 from iomodels.crmengine.opportunities import Opportunity, OpportunityPatchRequest, UpdateStageRequest, \
     OpportunitySchema, OpportunityInsertRequest, OpportunityListRequest, OpportunityListResponse, \
     OpportunitySearchResults, OpportunityGetRequest, NewOpportunityListRequest, AggregatedOpportunitiesResponse, \
     OppTimeline
+from iomodels.crmengine.opportunitystage import Opportunitystage, OpportunitystagePatchListRequestSchema, \
+    OpportunitystageListSchema
 from iomodels.crmengine.pipelines import Pipeline, PipelineInsertRequest, PipelineSchema, PipelineGetRequest, \
     PipelineListRequest, PipelineListResponse, \
     PipelinePatchRequest
-from iomodels.crmengine.events import Event, EventInsertRequest, EventSchema, EventPatchRequest, EventListRequest, \
-    EventListResponse, EventFetchListRequest, EventFetchResults
-from iomodels.crmengine.documents import Document, DocumentInsertRequest, DocumentSchema, MultipleAttachmentRequest, \
-    DocumentListResponse
-
-from iomodels.crmengine.leads import Lead, LeadPatchRequest, LeadInsertRequest, LeadListRequest, \
-    LeadListResponse, LeadSearchResults, LeadGetRequest, LeadSchema, FLNameFilterRequest, LeadMergeRequest, \
-    FLsourceFilterRequest
-from iomodels.crmengine.cases import Case, UpdateStatusRequest, CasePatchRequest, CaseGetRequest, CaseInsertRequest, \
-    CaseListRequest, CaseSchema, CaseListResponse, CaseSearchResults
-from iomodels.crmengine.comments import Comment
-from iomodels.crmengine.Licenses import License, LicenseSchema, LicenseInsertRequest
-from iomodels.crmengine.opportunitystage import Opportunitystage, OpportunitystagePatchListRequestSchema, \
-    OpportunitystageListSchema
-from iomodels.crmengine.leadstatuses import Leadstatus
-from iomodels.crmengine.casestatuses import Casestatus
-from iomodels.crmengine.tags import Tag, TagSchema, TagListRequest, TagListResponse, TagInsertRequest
 from iomodels.crmengine.profiles import ProfileDeleteRequest, Keyword, KeywordListResponse
-
-from model import User
-from model import Organization
-from model import Userinfo
+from iomodels.crmengine.tags import Tag, TagSchema, TagListRequest, TagListResponse, TagInsertRequest
+from iomodels.crmengine.tasks import Task, TaskSchema, TaskRequest, TaskListResponse, TaskInsertRequest
 from model import Contributor
-from model import Invitation
-from model import LicenseModel
-from model import TransactionModel
-from model import Logo
-from model import CustomField
 from model import CountryCurrency
-
-from endpoints_helper import EndpointsHelper
+from model import CustomField
+from model import Invitation
+from model import Logo
+from model import Organization
+from model import User
+from model import Userinfo
 from people import linked_in
-from operator import itemgetter
-import iomessages
-from iomessages import SubscriptionSchema, LicencesQuantityMessage, SubscriptionListSchema
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema, KewordsRequest, LinkedinCompanySchema
-import stripe
-import re
-import ast
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console

@@ -1,4 +1,3 @@
-# Standard libs
 import csv
 import datetime
 import json
@@ -8,51 +7,45 @@ import re
 import sys
 import time
 
+import endpoints
 import httplib2
 import jinja2
+import model
+import requests
+import sfoauth2
+import stripe
 import webapp2
+from apiclient.discovery import build
 from google.appengine._internal.django.utils.encoding import smart_str
-from webapp2_extras import i18n
-from webapp2_extras import sessions
-
-# Google libs
-import endpoints
-from google.appengine.ext import ndb
+from google.appengine.api import mail
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
-from google.appengine.api import mail
-from apiclient.discovery import build
+from google.appengine.ext import ndb
+from intercom import Intercom
+from mixpanel import Mixpanel
+from oauth2client.appengine import OAuth2Decorator
+from oauth2client.client import FlowExchangeError
+from oauth2client.client import flow_from_clientsecrets
+from requests.auth import HTTPBasicAuth
+from simple_salesforce import Salesforce
+from webapp2_extras import i18n
+from webapp2_extras import sessions
+
+import iomessages
+from endpoints_helper import EndpointsHelper
+from iograph import Edge
+from iomodels.crmengine import config as app_config
+from iomodels.crmengine.accounts import Account
 from iomodels.crmengine.cases import Case
+from iomodels.crmengine.contacts import Contact
+from iomodels.crmengine.documents import Document
+from iomodels.crmengine.events import Event
+from iomodels.crmengine.leads import LeadInsertRequest, Lead
 from iomodels.crmengine.opportunities import Opportunity
 from iomodels.crmengine.payment import Subscription
-from model import Application, STANDARD_TABS, ADMIN_TABS
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
-from oauth2client.appengine import OAuth2Decorator
-# Our libraries
-from endpoints_helper import EndpointsHelper
-from people import linked_in
-import model
-from iomodels.crmengine.contacts import Contact
-from iomodels.crmengine.accounts import Account
-from iomodels.crmengine.leads import LeadInsertRequest, Lead
-from iomodels.crmengine.documents import Document
-from iomodels.crmengine.tags import Tag
-import iomessages
-from iograph import Edge
-# import event . hadji hicham 09-07-2014
-from iomodels.crmengine.events import Event
 from iomodels.crmengine.tasks import Task, AssignedGoogleId
-import sfoauth2
-import stripe
-import requests
-from requests.auth import HTTPBasicAuth
-from intercom import Intercom
-from simple_salesforce import Salesforce
-from semantic.dates import DateService
-from mixpanel import Mixpanel
-from iomodels.crmengine import config as app_config
+from model import Application, STANDARD_TABS, ADMIN_TABS
 
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
