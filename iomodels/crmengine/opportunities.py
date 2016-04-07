@@ -1240,7 +1240,7 @@ class Opportunity(EndpointsModel):
                         name=competitor_request
                 )
 
-                if competitor_key == None:
+                if competitor_key is None:
                     competitor = Account(
                             name=competitor_request,
                             owner=user_from_email.google_user_id,
@@ -1520,7 +1520,7 @@ class Opportunity(EndpointsModel):
         for p in properties:
             if hasattr(request, p):
                 if (eval('opportunity.' + p) != eval('request.' + p)) \
-                        and (eval('request.' + p) != None and not (p in ['put', 'set_perm', 'put_index'])):
+                        and (eval('request.' + p) is not None and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('opportunity.' + p + '= request.' + p)
         if request.closed_date:
             closed_date = datetime.datetime.strptime(
@@ -1548,7 +1548,7 @@ class Opportunity(EndpointsModel):
                         name=request.new_competitor
                 )
 
-                if competitor_key == None:
+                if competitor_key is None:
                     competitor = Account(
                             name=request.new_competitor,
                             owner=user_from_email.google_user_id,

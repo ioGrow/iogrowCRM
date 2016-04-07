@@ -234,7 +234,7 @@ class Task(EndpointsModel):
         if task.due:
             now = datetime.datetime.now()
             diff = task.due - now
-            if diff.days >= 0 and diff.days <= 2:
+            if 0 <= diff.days <= 2:
                 status_color = 'orange'
                 status_label = 'soon: due in ' + str(diff.days) + ' days'
             elif diff.days < 0:
@@ -639,7 +639,7 @@ class Task(EndpointsModel):
                     }
                 )
 
-        if request.due and task.due == None:
+        if request.due and task.due is None:
             task.due = datetime.datetime.strptime(request.due, "%Y-%m-%dT%H:%M:00.000000")
             if edges:
                 for edge in edges:
@@ -677,7 +677,7 @@ class Task(EndpointsModel):
                     }
                 )
 
-        elif request.due and task.due != None:
+        elif request.due and task.due is not None:
             task.due = datetime.datetime.strptime(request.due, "%Y-%m-%dT%H:%M:00.000000")
             if edges:
                 for edge in edges:

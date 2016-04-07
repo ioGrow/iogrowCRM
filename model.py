@@ -41,10 +41,10 @@ Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 
 CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+    open('client_secrets.json').read())['web']['client_id']
 
 CLIENT_SECRET = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_secret']
+    open('client_secrets.json').read())['web']['client_secret']
 
 SCOPES = [
     'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
@@ -1197,7 +1197,7 @@ class User(EndpointsModel):
         for p in properties:
             if hasattr(request, p):
                 if (eval('user.' + p) != eval('request.' + p)) \
-                        and (eval('request.' + p) != None and not (p in ['put', 'set_perm', 'put_index'])):
+                        and (eval('request.' + p) is not None and not (p in ['put', 'set_perm', 'put_index'])):
                     exec ('user.' + p + '= request.' + p)
         user.put()
         memcache.set(user_from_email.email, user)
