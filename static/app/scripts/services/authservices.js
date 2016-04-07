@@ -184,7 +184,7 @@ accountservices.factory('Auth', function($http) {
       if (!window.countInitExec){
           window.countInitExec = 1;
       }else{
-          window.countInitExec = window.countInitExec+1;
+          window.countInitExec += 1;
           var timeNow = new Date().getTime()/1000;
           Auth.$scope = $scope;
           Auth.license_is_expired= document.getElementById("license_is_expired").value;

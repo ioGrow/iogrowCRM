@@ -26,7 +26,7 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
      };    
     $scope.inProcess=function(varBool,message){
           if (varBool) {  
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
              var d = new Date();
              console.log(d.getTime());
             if ($scope.nbLoads==1) {
@@ -34,7 +34,7 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
             };
           }else{
             var d = new Date();
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -224,12 +224,12 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
               console.log("starts of :"+message);
              
             };
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
             };
@@ -317,7 +317,7 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
                       'limit':20}
           }
 
-          $scope.currentPage = $scope.currentPage + 1 ;
+          $scope.currentPage += 1 ;
           Search.list($scope,params);
      };
      $scope.listPrevPageItems = function(){
@@ -333,7 +333,7 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
             params = {'q':$route.current.params.q,
                       'limit':7}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.currentPage -= 1 ;
           Search.list($scope,params);
      };
 
@@ -377,14 +377,14 @@ app.controller('SearchFormController', ['$scope', '$http', 'Search', 'User', '$r
      };    
     $scope.inProcess=function(varBool,message){
           if (varBool) {  
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
              var d = new Date();
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
             var d = new Date();
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  

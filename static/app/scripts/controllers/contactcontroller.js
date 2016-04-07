@@ -103,13 +103,13 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
       }
              $scope.inProcess=function(varBool,message){
                 if (varBool) {
-                  $scope.nbLoads=$scope.nbLoads+1;
+                  $scope.nbLoads += 1;
                   if ($scope.nbLoads==1) {
                     $scope.isLoading=true;
                   };
                 }else{
 
-                  $scope.nbLoads=$scope.nbLoads-1;
+                  $scope.nbLoads -= 1;
                   if ($scope.nbLoads==0) {
                      $scope.isLoading=false;
        
@@ -790,7 +790,7 @@ $scope.switchShow=function(){
               var params = $scope.getRequestParams();
               if ($scope.contactpages[nextPage]) {
                   params.pageToken=$scope.contactpages[nextPage];
-                  $scope.contactCurrentPage = $scope.contactCurrentPage + 1;
+                  $scope.contactCurrentPage += 1;
                   Contact.listMore($scope,params);
               }
           };
@@ -806,7 +806,7 @@ $scope.switchShow=function(){
               params = {'order' : $scope.order,'limit':8}
             }
 
-            $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ;
+            $scope.contactCurrentPage += 1 ;
             Contact.list($scope,params);
        };
        $scope.listPrevPageItems = function(){
@@ -820,7 +820,7 @@ $scope.switchShow=function(){
             }else{
               params = {'order' : $scope.order,'limit':8}
             }
-            $scope.contactCurrentPage = $scope.contactCurrentPage - 1 ;
+            $scope.contactCurrentPage -= 1 ;
             Contact.list($scope,params);
        };
         $scope.showImportModal = function(){
@@ -1404,12 +1404,12 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
      }
     $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -2538,7 +2538,7 @@ $scope.lunchMapsCalendar=function(){
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-              $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+              $scope.topicCurrentPage += 1 ;
               Contact.get($scope,params);
             }
 
@@ -2570,7 +2570,7 @@ $scope.lunchMapsCalendar=function(){
                           'pageToken':$scope.opppages[nextPage]
                         }
                      }
-            $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
+            $scope.oppCurrentPage += 1 ;
             Contact.get($scope,params);
             }
 
@@ -2590,7 +2590,7 @@ $scope.CaselistNextPageItems = function(){
                           'pageToken':$scope.casepages[nextPage]
                         }
                      }
-            $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
+            $scope.caseCurrentPage += 1 ;
             Contact.get($scope,params);
           }
 
@@ -3676,7 +3676,7 @@ $scope.sendEmailSelected=function(){
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
-            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+            $scope.documentCurrentPage += 1 ;
 
             Contact.get($scope,params);
 
@@ -3705,7 +3705,7 @@ $scope.sendEmailSelected=function(){
                         }
                       }
           }
-          $scope.documentCurrentPage = $scope.documentCurrentPage - 1 ;
+          $scope.documentCurrentPage -= 1 ;
           Contact.get($scope,params);
 
 
@@ -4282,12 +4282,12 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       $scope.lunchMapsLinkedin=lunchMapsLinkedin;
       $scope.inProcess=function(varBool,message){
             if (varBool) {           
-              $scope.nbLoads=$scope.nbLoads+1;
+              $scope.nbLoads += 1;
               if ($scope.nbLoads==1) {
                 $scope.isLoading=true;
               };
             }else{
-              $scope.nbLoads=$scope.nbLoads-1;
+              $scope.nbLoads -= 1;
               if ($scope.nbLoads==0) {
                  $scope.isLoading=false;
    
@@ -5111,7 +5111,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                   }else{
                     return company;
                   };
-                  i=i-1;
+                  i -= 1;
                 
               }
            }

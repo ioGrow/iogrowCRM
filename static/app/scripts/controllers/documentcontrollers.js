@@ -16,12 +16,12 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
      $scope.attachment.assignees=[];
      $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
             };
@@ -39,12 +39,12 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
    };
     $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
             };
@@ -100,7 +100,7 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
           }else{
             params = {'limit':5}
           }
-          $scope.currentPage = $scope.currentPage + 1 ;
+          $scope.currentPage += 1 ;
           Comment.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
@@ -115,7 +115,7 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
           }else{
             params = {'limit':5}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.currentPage -= 1 ;
           Comment.list($scope,params);
      }
 
@@ -134,12 +134,12 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
 /*************************/
       $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  

@@ -210,7 +210,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 if (message) {
                     
                 }
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
@@ -218,7 +218,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 if (message) {
                     
                 }
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
 
@@ -741,7 +741,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 params = {'order': $scope.order, 'limit': 6}
             }
             
-            $scope.currentPage = $scope.currentPage + 1;
+            $scope.currentPage += 1;
             Lead.list($scope, params);
         }
         $scope.listMoreItems = function () {
@@ -749,7 +749,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             var params = $scope.getRequestParams();
             if ($scope.pages[nextPage]) {
                 params.pageToken=$scope.pages[nextPage];
-                $scope.currentPage = $scope.currentPage + 1;
+                $scope.currentPage += 1;
                 Lead.listMore($scope, params);
             }
         };
@@ -771,7 +771,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             } else {
                 params = {'order': $scope.order, 'limit': 6}
             }
-            $scope.currentPage = $scope.currentPage - 1;
+            $scope.currentPage -= 1;
             Lead.list($scope, params);
         }
         $scope.showAssigneeTags = function (lead) {
@@ -1699,7 +1699,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     
                 }
                 ;
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
@@ -1709,7 +1709,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     
                 }
                 ;
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
 
@@ -2503,7 +2503,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                         'pageToken': $scope.topicpages[nextPage]
                     }
                 }
-                $scope.topicCurrentPage = $scope.topicCurrentPage + 1;
+                $scope.topicCurrentPage += 1;
                 Lead.get($scope, params);
             }
 
@@ -3417,7 +3417,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                         'pageToken': $scope.documentpages[nextPage]
                     }
                 }
-                $scope.documentCurrentPage = $scope.documentCurrentPage + 1;
+                $scope.documentCurrentPage += 1;
 
                 Lead.get($scope, params);
 
@@ -4369,7 +4369,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 if (message) {
                     
                 };
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
@@ -4379,7 +4379,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     
                 }
                 ;
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
 
@@ -4758,7 +4758,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 params = {'order': $scope.order, 'limit': 6}
             }
             
-            $scope.currentPage = $scope.currentPage + 1;
+            $scope.currentPage += 1;
             Lead.list($scope, params);
         }
         $scope.listPrevPageItems = function () {
@@ -4773,7 +4773,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             } else {
                 params = {'order': $scope.order, 'limit': 6}
             }
-            $scope.currentPage = $scope.currentPage - 1;
+            $scope.currentPage -= 1;
             Lead.list($scope, params);
         }
 
@@ -5586,7 +5586,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     return company;
                 }
                 ;
-                i = i - 1;
+                i -= 1;
 
             }
         }

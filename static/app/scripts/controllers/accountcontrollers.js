@@ -106,12 +106,12 @@
         };
         $scope.inProcess=function(varBool,message){
           if (varBool) {   
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             }
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
             }
@@ -865,7 +865,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
             } else {
                 params = {'order': $scope.order, 'limit': 6}
             }
-            $scope.currentPage = $scope.currentPage + 1;
+            $scope.currentPage += 1;
             Account.list($scope, params);
         };
         $scope.listMoreItems = function() {
@@ -875,7 +875,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
             if ($scope.pages[nextPage]) {
                 params = $scope.getRequestParams();
                 params.pageToken=$scope.pages[nextPage];
-                $scope.currentPage = $scope.currentPage + 1;
+                $scope.currentPage += 1;
                 Account.listMore($scope, params);
             }
 
@@ -891,7 +891,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
             } else {
                 params = {'order': $scope.order, 'limit': 6}
             }
-            $scope.currentPage = $scope.currentPage - 1;
+            $scope.currentPage -= 1;
             Account.list($scope, params);
         };
         // Add a new account methods
@@ -1438,14 +1438,14 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
 
         $scope.inProcess=function(varBool,message){
           if (varBool) {  
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
              var d = new Date();
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
             var d = new Date();
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -2843,7 +2843,7 @@ $scope.lunchMapsCalendar=function(){
                         'pageToken': $scope.topicpages[nextPage]
                     }
                 }
-                $scope.topicCurrentPage = $scope.topicCurrentPage + 1;
+                $scope.topicCurrentPage += 1;
                 Account.get($scope, params);
             }
 
@@ -2895,7 +2895,7 @@ $scope.lunchMapsCalendar=function(){
                     }
                 }
             }
-            $scope.topicCurrentPage = $scope.topicCurrentPage - 1;
+            $scope.topicCurrentPage -= 1;
             Account.get($scope, params);
 
         }
@@ -2930,7 +2930,7 @@ $scope.lunchMapsCalendar=function(){
                         'pageToken': $scope.contactpages[nextPage]
                     }
                 }
-                $scope.contactCurrentPage = $scope.contactCurrentPage + 1;
+                $scope.contactCurrentPage += 1;
                 Account.get($scope, params);
             }
         }
@@ -2954,7 +2954,7 @@ $scope.lunchMapsCalendar=function(){
                     }
                 }
             }
-            $scope.contactCurrentPage = $scope.contactCurrentPage - 1;
+            $scope.contactCurrentPage -= 1;
             Account.get($scope, params);
         }
 /// update account with inlineEdit
@@ -3012,7 +3012,7 @@ $scope.lunchMapsCalendar=function(){
                         'pageToken': $scope.opppages[nextPage]
                     }
                 }
-                $scope.oppCurrentPage = $scope.oppCurrentPage + 1;
+                $scope.oppCurrentPage += 1;
                 Account.get($scope, params);
             }
 
@@ -3032,7 +3032,7 @@ $scope.lunchMapsCalendar=function(){
                         'pageToken': $scope.casepages[nextPage]
                     }
                 }
-                $scope.caseCurrentPage = $scope.caseCurrentPage + 1;
+                $scope.caseCurrentPage += 1;
                 Account.get($scope, params);
             }
 
@@ -3057,7 +3057,7 @@ $scope.lunchMapsCalendar=function(){
                     }
                 }
             }
-            $scope.caseCurrentPage = $scope.caseCurrentPage - 1;
+            $scope.caseCurrentPage -= 1;
             Account.get($scope, params);
         };
 
@@ -3075,7 +3075,7 @@ $scope.lunchMapsCalendar=function(){
                         'pageToken': $scope.documentpages[nextPage]
                     }
                 }
-                $scope.documentCurrentPage = $scope.documentCurrentPage + 1;
+                $scope.documentCurrentPage += 1;
 
                 Account.get($scope, params);
             }
@@ -5071,12 +5071,12 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
         // $scope.account.personal_account=true;
         $scope.inProcess=function(varBool,message){
           if (varBool) {           
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  

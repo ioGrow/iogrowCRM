@@ -270,12 +270,12 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
       }
       $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -747,7 +747,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           }else{
             params = {'order' : $scope.order,'limit':6}
           }
-          $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
+          $scope.oppCurrentPage += 1 ;
           Opportunity.list($scope,params);
      }
      $scope.listMoreItems = function(){
@@ -759,7 +759,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                       'limit':20,
                       'pageToken':$scope.opppages[nextPage]
                      }
-            $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
+            $scope.oppCurrentPage += 1 ;
             Opportunity.listMore($scope,params);
           }
 
@@ -775,7 +775,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           }else{
             params = {'order' : $scope.order,'limit':6}
           }
-          $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
+          $scope.oppCurrentPage -= 1 ;
           Opportunity.list($scope,params);
      }
 
@@ -1466,12 +1466,12 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
        };
       $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -2138,7 +2138,7 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-            $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+            $scope.topicCurrentPage += 1 ;
             Opportunity.get($scope,params);
             }
 
@@ -2707,7 +2707,7 @@ $scope.deleteopportunity= function(){
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
-            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+            $scope.documentCurrentPage += 1 ;
 
             Opportunity.get($scope,params);
 
@@ -3071,12 +3071,12 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
       $scope.opportunities.customfields=[];
       $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  

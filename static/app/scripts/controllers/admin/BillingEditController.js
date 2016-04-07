@@ -8,13 +8,13 @@ app.controller('BillingEditCtrl', ['$scope', 'Auth', 'Billing', function ($scope
     $scope.nbrSelected = 0;
     $scope.inProcess = function (varBool, message) {
         if (varBool) {
-            $scope.nbLoads = $scope.nbLoads + 1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads == 1) {
                 $scope.isLoading = true;
             }
             ;
         } else {
-            $scope.nbLoads = $scope.nbLoads - 1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads == 0) {
                 $scope.isLoading = false;
             }

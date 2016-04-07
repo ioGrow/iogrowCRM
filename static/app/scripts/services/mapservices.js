@@ -344,7 +344,7 @@ mapservices.factory('Map', function($http) {
       entry = ' ';
     }
     if(isLast=false){
-      entry = entry + ',';
+      entry += ',';
     }
     return entry
   }

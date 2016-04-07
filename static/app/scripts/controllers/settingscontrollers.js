@@ -48,13 +48,13 @@ app.controller('SettingsShowCtrl', ['$scope', '$route', 'Auth', 'Opportunitystag
         $scope.immediateFailed = false;
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
                 ;
             } else {
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
                 }
