@@ -1,5 +1,6 @@
 module.exports = function (grunt) {
     grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
         concat: {
             css:{
              files: {
@@ -211,15 +212,22 @@ module.exports = function (grunt) {
                     removeComments: true,
                     collapseWhitespace: true
                 },
-                files: {
-                    'templates/new_web_site/index.html': 'templates/new_web_site/index.html'
-                }
+                files: {}
             }
+        },
+        bower: {
+          install: {
+          }
         }
     });
+    grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.registerTask('default', ['bower','concat','uglify']);
+    //grunt.registerTask('dev', ['jshint:dev', 'uglify:dev', 'cssmin:dev', 'less:dev']);
+    //grunt.registerTask('production', ['jshint:production', 'uglify:production', 'cssmin:production', 'less:production']);
+
 };
