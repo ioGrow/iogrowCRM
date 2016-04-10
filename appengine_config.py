@@ -1,5 +1,7 @@
 from google.appengine.ext import vendor
+vendor.add('libx')
 vendor.add('lib')
+
 
 
 from google.appengine.ext.appstats import recording
