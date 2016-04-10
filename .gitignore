@@ -1,6 +1,7 @@
 *~
 *.py[cod]
 node_modules/*
+libx/*
 .idea/
 # C extensions
 *.so
