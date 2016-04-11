@@ -28,7 +28,7 @@ from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
 from model import User, Tokens
 import iograph
-from highrise.pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
+from pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
 import tweepy as tweepy
 from iomessages import TwitterProfileSchema, EmailSchema, AddressSchema, PhoneSchema
 import time

@@ -1,5 +1,5 @@
 apiclient
-atom==0.3.5
+#atom==0.3.5
 babel
 beautifulsoup4==4.3.2
 bson==0.4.2
@@ -13,12 +13,11 @@ graphy==1.0
 pyrise #==1.0 #highrise
 httplib2==0.7.6
 python-intercom==0.2.13
-mapreduce
+#mapreduce
 mechanize==0.2.5
 mixpanel==4.1.0
 oauth2client==1.4.11
 oauthlib==0.6.1
-#pipeline
 pymongo==2.7
 pytz==2013b0
 requests==2.3.0
@@ -28,6 +27,6 @@ simplejson==3.7.3
 stripe==1.28.0
 tweepy==2.1
 uritemplate
-python-gflags #gflags_validators
+python-gflags
 #sfoauth2
 six==1.9.0

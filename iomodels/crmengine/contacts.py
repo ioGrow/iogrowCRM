@@ -34,8 +34,6 @@ from iomodels.crmengine.tags import Tag, TagSchema
 from iomodels.crmengine.tasks import Task, TaskListResponse
 from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
-# from pipeline.pipeline import FromCSVPipeline
-
 ATTRIBUTES_MATCHING = {
     'fullname': ['Full Name'],
     'firstname': ['First Name', 'Given Name', 'First name'],
