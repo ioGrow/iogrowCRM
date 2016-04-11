@@ -32,7 +32,7 @@ def babel_update():
 
 @task
 def install_dep():
-	run_("pip install -r requirements.txt --target ./libx")
+	run_("pip install -r requirements.txt --upgrade --target ./libx")
 
 @task 
 def install_grunt():
