@@ -1,18 +1,18 @@
 apiclient
-atom
+atom==0.3.5
 babel
 bs4 #==4.3.2
-bson
-GoogleAppEngineCloudStorageClient
+bson==0.4.2
+GoogleAppEngineCloudStorageClient==1.9.21.0
 detectlanguage==1.0.1
 #endpoints_proto_datastore
-gdata==2.0.15 #==2.0.1
-geopy
+gdata==2.0.18 #==2.0.1
+geopy==0.99
 google-api-python-client==1.4.1
 graphy==1.0
 pyrise #==1.0 #highrise
 httplib2==0.7.6
-intercom==0.2.1 #==0.2.13
+python-intercom==0.2.13
 mapreduce
 mechanize==0.2.5
 mixpanel==4.1.0
@@ -21,7 +21,7 @@ oauthlib==0.6.1
 #pipeline
 pymongo==2.7
 pytz==2013b0
-requests==2.2.1
+requests==2.3.0
 requests_oauthlib==0.4.0
 simple_salesforce==0.67.0
 simplejson==3.7.3
