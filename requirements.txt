@@ -4,28 +4,28 @@ babel
 bs4 #==4.3.2
 bson
 GoogleAppEngineCloudStorageClient
-detectlanguage
+detectlanguage==1.0.1
 #endpoints_proto_datastore
-gdata
+gdata==2.0.15 #==2.0.1
 geopy
-google-api-python-client
+google-api-python-client==1.4.1
 graphy==1.0
 pyrise #==1.0 #highrise
 httplib2==0.7.6
-intercom
+intercom==0.2.1 #==0.2.13
 mapreduce
 mechanize==0.2.5
 mixpanel==4.1.0
 oauth2client==1.4.11
 oauthlib==0.6.1
 #pipeline
-pymongo
+pymongo==2.7
 pytz==2013b0
 requests==2.2.1
 requests_oauthlib==0.4.0
 simple_salesforce
 simplejson==3.7.3
-stripe
+stripe==1.28.0
 tweepy==2.1
 uritemplate
 python-gflags #gflags_validators
