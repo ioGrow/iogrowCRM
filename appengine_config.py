@@ -1,6 +1,7 @@
 from google.appengine.ext import vendor
 vendor.add('libx')
 vendor.add('lib')
+vendor.add('crm')
 
 
 
