@@ -6,11 +6,11 @@ bson==0.4.2
 GoogleAppEngineCloudStorageClient==1.9.21.0
 detectlanguage==1.0.1
 #endpoints_proto_datastore
-gdata==2.0.18 #==2.0.1
+gdata==2.0.18
 geopy==0.99
 google-api-python-client==1.4.1
 graphy==1.0
-pyrise #==1.0 #highrise
+pyrise
 httplib2==0.7.6
 python-intercom==0.2.13
 #mapreduce
