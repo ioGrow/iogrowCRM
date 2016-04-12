@@ -109,7 +109,7 @@ function HideupdateLogo() {
     } catch (e) {
     }
 }
-var created_at = new Date("{{user.created_at}}");
+var created_at = new Date(window.uuser.created_at);
 // sales/admin tabs plus intercom declaration
 $('document').ready(function () {
     if (window.location.hash.indexOf('admin') != -1) {$('#sales_tabs').hide();$('#admin_tabs').show();} 
@@ -118,12 +118,12 @@ $('document').ready(function () {
     window.Intercom('boot', {
             app_id: "s9iirr8w",
             // TODO: The current logged in user's full name
-            name: "{{user.google_display_name}}",
+            name: window.uuser.google_display_name,
             // TODO: The current logged in user's email address.
-            email: "{{user.email}}",
-            gid: "{{user.google_user_id}}",
-            completed_tour: '{{user.completed_tour}}',
-            oranization: '{{organization_name}}',
+            email: window.uuser.email,
+            gid: window.uuser.google_user_id,
+            completed_tour: window.uuser.completed_tour,
+            oranization: window.organization_name,
             // TODO: The current logged in user's sign-up date as a Unix timestamp.
             created_at: created_at.getTime() / 1000
     });
@@ -188,14 +188,29 @@ function loadCSS(e, n, o, t) {
             d.media = o || "all"
         }), d
     }
-loadCSS("/static/build/css/asyn_styles.min.css");
+loadCSS("/static/build/css/_async.min.css");
 // mixpanel declaration
 mixpanel.people.set({
-    "$email": "{{user.email}}",    // only special properties need the $
-    "$name": "{{user.google_display_name}}",
-    "$created": "{{user.created_at}}",
-    "$created": "{{user.created_at}}",
-    "$updated_at": "{{user.updated_at}}",
-    // //"$organization": "{{user.organization}}",
-    "$language": "{{user.language}}"
+    "$email": window.uuser.email,    // only special properties need the $
+    "$name": window.uuser.google_display_name,
+    "$created": window.uuser.created_at,
+    "$updated_at": window.uuser.updated_at,
+    // //"$organization": window.uuser.organization}}",
+    "$language": window.uuser.language
 });
+ (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-52188380-1', {'userId': window.uuser.google_user_id});
+        ga('set', 'dimension1', window.uuser.google_user_id); // Set a `customUserId` dimension at page level
+        ga('require', 'displayfeatures');
+        ga('send', 'pageview');

@@ -52,7 +52,8 @@
     "datetimepicker": "2.4.3",
     "bootstrap-datepicker": "^1.6.0",
     "fullcalendar": "2.0.1",
-    "font-awesome": "^4.5.0",
-    "jquery-validation": "jquery-validate#1.14.0"
+    "font-awesome": "v4.5.0",
+    "jquery-validation": "jquery-validate#1.14.0",
+    "angular-ui-select2": "0.0.5"
   }
 }
