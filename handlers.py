@@ -1475,13 +1475,15 @@ class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
         eve = json.loads(self.request.body)
         if eve['type'] == "invoice.payment_succeeded":
-            data = eve['data']['object']
-            org = Organization.query(Organization.stripe_customer_id == data['customer']).get()
-            sub = Subscription.query(Subscription.stripe_subscription_id == data['subscription']).get()
+            stripe_event_invoice = eve['data']['object']
+            org = Organization.query(Organization.stripe_customer_id == stripe_event_invoice['customer']).get()
+            sub = Subscription.query(Subscription.stripe_subscription_id == stripe_event_invoice['subscription']).get()
             if org.subscription == sub.key:
-                sub.start_date = datetime.datetime.now(),
-                sub.expiration_date = Subscription.calculate_expiration_date(config.MONTH)
+                sub.expiration_date = Subscription.calculate_expiration_date(app_config.MONTH)
+                sub.start_date = datetime.datetime.now()
                 sub.put()
+                invoice = stripe.Invoice.retrieve(stripe_event_invoice['id'])
+                logging.info(invoice)
 
 
 class SFcallback(BaseHandler, SessionEnabledHandler):
