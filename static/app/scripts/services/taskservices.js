@@ -107,11 +107,7 @@ Task.get_docs=function($scope,params){
                    $scope.apply(); 
                   }else{
                  $scope.tasks = resp.items;
-                  if ($scope.currentPage>1){
-                      $scope.taskpagination.prev = true;
-                   }else{
-                       $scope.taskpagination.prev = false;
-                   }
+                  $scope.taskpagination.prev = $scope.currentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.currentPage + 1;
                    // Store the nextPageToken
@@ -278,11 +274,7 @@ Task.delete=function($scope,params){
                 angular.forEach(resp.items, function(item){
                     $scope.tasks.push(item);
                 });
-                if ($scope.currentPage>1){
-                    $scope.taskpagination.prev = true;
-                 }else{
-                     $scope.taskpagination.prev = false;
-                 }
+                $scope.taskpagination.prev = $scope.currentPage > 1;
                if (resp.nextPageToken){
                  var nextPage = $scope.currentPage + 1;
                  // Store the nextPageToken

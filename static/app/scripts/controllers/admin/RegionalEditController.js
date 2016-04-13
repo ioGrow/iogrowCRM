@@ -9,7 +9,6 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
         $scope.isLoading = false;
-        $scope.defaultLang = $scope.defaultLang;
         $scope.defaultCurrency = "USD";
         $scope.inProcess = function (varBool, message) {
             if (varBool) {

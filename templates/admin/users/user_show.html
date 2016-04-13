@@ -24,7 +24,7 @@
 
     <h2 class="page-title">
       <a href="/#/admin/users" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
-                <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a> 
+                <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>
     {{ _("Team") }} > <%=user_acc.google_display_name %> </h2>
   </div>
 </div>
@@ -1204,8 +1204,8 @@
                 color: ($(this).attr("data-handle-color")  ? $(this).attr("data-handle-color") : '#a1b2bd'),
                 railColor: ($(this).attr("data-rail-color")  ? $(this).attr("data-rail-color") : '#333'),
                 height: height,
-                alwaysVisible: ($(this).attr("data-always-visible") == "1" ? true : false),
-                railVisible: ($(this).attr("data-rail-visible") == "1" ? true : false),
+                alwaysVisible: ($(this).attr("data-always-visible") == "1"),
+                railVisible: ($(this).attr("data-rail-visible") == "1"),
                 disableFadeOut: true
             });
         });

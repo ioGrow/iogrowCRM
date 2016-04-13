@@ -23,7 +23,7 @@ name = messages.StringField(1)
 """
 
 
-class SfImporterHelper():
+class SfImporterHelper:
     # accounts
     def __init__(self):
         pass

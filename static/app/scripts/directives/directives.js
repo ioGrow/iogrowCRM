@@ -477,8 +477,8 @@ app.directive('cusdatetimepicker', function($parse) {
         var dp = $(element);
         var params={
           "dateFormat": (attrs.dateFormat) ? attrs.dateFormat : "YY/MM/DD h:m",
-          "closeOnSelected": (attrs.closeOnSelected=="false") ? false: true,
-          "autodateOnStart": (attrs.autodateOnStart=="true") ? true: false,
+          "closeOnSelected": (attrs.closeOnSelected != "false"),
+          "autodateOnStart": (attrs.autodateOnStart == "true"),
           "onHide": function(handler){
                          model.assign($scope, dp.handleDtpicker('getDate'));
                          $scope.$apply();

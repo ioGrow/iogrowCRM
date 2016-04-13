@@ -34,11 +34,7 @@ topicservices.factory('Topic', function($http) {
                
                  $scope.topics = resp.items;
                  
-                  if ($scope.topicCurrentPage >1){
-                    $scope.topicpagination.prev = true;
-                  }else{
-                      $scope.topicpagination.prev= false;
-                   }
+                  $scope.topicpagination.prev = $scope.topicCurrentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.topicCurrentPage + 1;
                     // Store the nextPageToken

@@ -59,11 +59,7 @@
         $scope.filterNoResult=false;
         $scope.owner=null;
        $scope.isEmptyArray = function (Array) {
-            if (Array != undefined && Array.length > 0) {
-                return false;
-            } else {
-                return true;
-            };
+            return !(Array != undefined && Array.length > 0);;
         }
         $scope.accountFilterBy=function(filter,assignee){
             if ($scope.accountsfilter!=filter) {
@@ -1482,11 +1478,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         return jQuery.isEmptyObject(obj);
       }
       $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
         $scope.prepareInfonodes = function(){
@@ -1893,10 +1885,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         }
         $scope.savecontact = function(contact) {
                $scope.contact_err={};
-              if (!contact.firstname) $scope.contact_err.firstname=true;
-                    else $scope.contact_err.firstname=false;
-              if (!contact.lastname) $scope.contact_err.lastname=true;
-                    else $scope.contact_err.lastname=false;
+              $scope.contact_err.firstname = !contact.firstname;
+              $scope.contact_err.lastname = !contact.lastname;
               if (!$scope.contact_err.firstname&&!$scope.contact_err.lastname) {
                 var params ={
                             'firstname':contact.firstname,
@@ -2023,10 +2013,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             }
   $scope.saveOpp = function(opportunity){
              $scope.oppo_err={};
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
 
           if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
                opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
@@ -2086,8 +2074,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         // HKA 01.12.2013 Add Case related to Contact
         $scope.saveCase = function(casee) {
           $scope.case_err={};
-          if (!casee.name) $scope.case_err.name=true;
-                else $scope.case_err.name=false;
+          $scope.case_err.name = !casee.name;
           if (!$scope.case_err.name) { 
             casee.account=$scope.account.entityKey;
             casee.access=$scope.account.access;
@@ -2441,10 +2428,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
          };
          $scope.saveOpp = function(opportunity){
           $scope.oppo_err={};
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
 
           if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
           opportunity.account=$scope.account.entityKey;
@@ -2766,33 +2751,17 @@ $scope.lunchMapsCalendar=function(){
 
         // }
         $scope.noCompanyDetails=function(){
-            if (jQuery.isEmptyObject($scope.companydetails)&&jQuery.isEmptyObject($scope.twitterProfile)) {
-                return true;
-            }else{
-                return false;
-            };
+            return !!(jQuery.isEmptyObject($scope.companydetails) && jQuery.isEmptyObject($scope.twitterProfile));;
         }
         $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
         $scope.companydetailsEmpty=function(){
-            if (jQuery.isEmptyObject($scope.companydetails)) {
-                return true;
-            }else{
-                return false;
-            };
+            return !!jQuery.isEmptyObject($scope.companydetails);;
         }
         $scope.twitterProfileEmpty=function(){
-            if (jQuery.isEmptyObject($scope.companydetails)) {
-                return true;
-            }else{
-                return false;
-            };
+            return !!jQuery.isEmptyObject($scope.companydetails);;
         }
         $scope.selectMemberToTask = function() {
             if ($scope.selected_members.indexOf($scope.user) == -1) {
@@ -3482,11 +3451,7 @@ $scope.deleteInvite=function(index){
 }
 
 $scope.checkGuests=function(){
-   if($scope.invites.length !=0){
-   $scope.Guest_params=true;
- }else{
-  $scope.Guest_params=false;
- }
+   $scope.Guest_params = $scope.invites.length != 0;
 }
 
 
@@ -5605,11 +5570,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
         return jQuery.isEmptyObject(obj);
       }
       $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
     $scope.showSelectButton=function(index){
@@ -5849,11 +5810,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
           return jQuery.isEmptyObject(obj);
         }
         $scope.isEmptyArray=function(Array){
-                  if (Array!=undefined && Array.length>0) {
-                  return false;
-                  }else{
-                      return true;
-                  };    
+                  return !(Array != undefined && Array.length > 0);;
               
           }
         $scope.urlSource=function(url){

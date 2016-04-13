@@ -274,14 +274,11 @@ class Event(EndpointsModel):
     @classmethod
     def list(cls, user_from_email, request):
         curs = Cursor(urlsafe=request.pageToken)
-        filtered_events = []
         if request.limit:
             limit = int(request.limit)
         else:
             limit = 10
         items = []
-        date_to_string = lambda x: x.strftime("%Y-%m-%d") if x else ""
-        date_time_to_string = lambda x: x.strftime("%Y-%m-%dT%H:%M:00.000") if x else ""
         you_can_loop = True
         count = 0
         while you_can_loop:

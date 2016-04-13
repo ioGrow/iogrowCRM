@@ -14,11 +14,7 @@ noteservices.factory('Note', function($http) {
               if(!resp.code){
 
                  $scope.notes = resp.items;
-                  if ($scope.currentPage > 1){
-                    $scope.pagination.prev = true;
-                  }else{
-                      $scope.pagination.prev= false;
-                   }
+                  $scope.pagination.prev = $scope.currentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.currentPage + 1;
                     // Store the nextPageToken

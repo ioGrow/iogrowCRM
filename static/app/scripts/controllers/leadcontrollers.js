@@ -151,11 +151,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             window.location.replace('/#/search/type:contact tags:' + url);
         };
         $scope.isEmptyArray = function (Array) {
-            if (Array != undefined && Array.length > 0) {
-                return false;
-            } else {
-                return true;
-            }
+            return !(Array != undefined && Array.length > 0);
 
         };
         $scope.filterBySource = function (source) {
@@ -306,7 +302,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         // What to do after authentication
         $scope.runTheProcess = function () {
             var completedTour = document.getElementById("completedTour").value;
-            if (completedTour == 'False' | completedTour == 'None') {
+            if (completedTour == 'False' || completedTour == 'None') {
                 if (localStorage['completedTour'] != 'True') {
                     $scope.wizard();
                 }
@@ -1545,13 +1541,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             var hWindow = $(window).height();
 
 
-            if (hContent > hWindow) {
-
-                $scope.isbigScreen = false;
-            } else {
-
-                $scope.isbigScreen = true;
-            }
+            $scope.isbigScreen = hContent <= hWindow;
 
             $scope.apply();
 
@@ -2248,11 +2238,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
 
         $scope.isEmptyArray = function (Array) {
-            if (Array != undefined && Array.length > 0) {
-                return false;
-            } else {
-                return true;
-            }
+            return !(Array != undefined && Array.length > 0);
             ;
 
         }
@@ -2894,11 +2880,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         }
 
         $scope.checkGuests = function () {
-            if ($scope.invites.length != 0) {
-                $scope.Guest_params = true;
-            } else {
-                $scope.Guest_params = false;
-            }
+            $scope.Guest_params = $scope.invites.length != 0;
         }
 
 
@@ -3801,22 +3783,16 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             $scope.initialStage=stage;
           }
         $scope.validateBeforeSaveOpp=function(opportunity){
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
-          if (!$scope.searchAccountQuery) $scope.oppo_err.account=true;
-            else $scope.oppo_err.account=false;
-          if (!$scope.searchContactQuery) $scope.oppo_err.contact=true;
-            else $scope.oppo_err.contact=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
+          $scope.oppo_err.account = !$scope.searchAccountQuery;
+          $scope.oppo_err.contact = !$scope.searchContactQuery;
           if (!$scope.oppo_err.name && !$scope.oppo_err.amount_per_unit && !($scope.oppo_err.account && $scope.oppo_err.contact) )  $scope.save(opportunity)
       }
       $scope.saveOpp = function(opportunity){
            $scope.oppo_err={};
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
 
           if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
                 $scope.opportunity.lead=$scope.lead.entityKey;
@@ -4240,11 +4216,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             return jQuery.isEmptyObject(obj);
         }
         $scope.noDetails = function () {
-            if (jQuery.isEmptyObject($scope.twitterProfile) && jQuery.isEmptyObject($scope.linkedProfile)) {
-                return true;
-            } else {
-                return false;
-            }
+            return !!(jQuery.isEmptyObject($scope.twitterProfile) && jQuery.isEmptyObject($scope.linkedProfile));
             ;
         }
 
@@ -5240,11 +5212,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             return jQuery.isEmptyObject(obj);
         }
         $scope.isEmptyArray = function (Array) {
-            if (Array != undefined && Array.length > 0) {
-                return false;
-            } else {
-                return true;
-            }
+            return !(Array != undefined && Array.length > 0);
             ;
 
         }

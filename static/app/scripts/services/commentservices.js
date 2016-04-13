@@ -13,14 +13,7 @@ commentservices.factory('Comment', function($http) {
       gapi.client.crmengine.comments.listv2(params).execute(function(resp) {
               if(!resp.code){
                  $scope.comments = resp.items;
-
-
-
-                  if ($scope.currentPagecomment>1){
-                    $scope.paginationcomment.prev = true;
-                  }else{
-                      $scope.paginationcomment.prev= false;
-                   }
+                  $scope.paginationcomment.prev = $scope.currentPagecomment > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.currentPagecomment + 1;
                     // Store the nextPageToken

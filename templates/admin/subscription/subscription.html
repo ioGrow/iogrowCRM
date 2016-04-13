@@ -425,13 +425,9 @@
         }
     });
     paymentFormReady = function () {
-        if ($form.find('[name=cardNumber]').hasClass("success") &&
-                $form.find('[name=cardExpiry]').hasClass("success") &&
-                $form.find('[name=cardCVC]').val().length > 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return !!($form.find('[name=cardNumber]').hasClass("success") &&
+        $form.find('[name=cardExpiry]').hasClass("success") &&
+        $form.find('[name=cardCVC]').val().length > 1);
     };
     $form.find('[type=submit]').prop('disabled', true);
     var readyInterval = setInterval(function () {

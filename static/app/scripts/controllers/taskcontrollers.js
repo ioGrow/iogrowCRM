@@ -407,7 +407,7 @@ $scope.commentDelete=function(commentId){
   $scope.inlinePatch=function(kind,edge,name,task,value){
        
    if (kind=='Task') {
-       if (name='title')
+       if (name=='title')
           {params = {'id':$scope.task.id,
                       'entityKey':task.entityKey,
                       'due':moment(task.due).format('YYYY-MM-DDTHH:mm:00.000000'),
@@ -741,11 +741,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       $('.typeahead').width(433);
       handleColorPicker();
         $scope.isBlankState=function(tasks){
-          if (typeof tasks !== 'undefined' && tasks.length > 0) {
-            return false;
-          }else{
-            return true
-          }
+          return !(typeof tasks !== 'undefined' && tasks.length > 0);
         }
    
          $scope.gotoNewUser=function(){

@@ -1404,11 +1404,7 @@ $scope.lunchMapsCalendar=function(){
 
     // 
        $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
      $scope.TopiclistNextPageItems = function(){
@@ -1695,11 +1691,7 @@ $scope.deleteInvite=function(index){
 }
 
 $scope.checkGuests=function(){
-   if($scope.invites.length !=0){
-   $scope.Guest_params=true;
- }else{
-  $scope.Guest_params=false;
- }
+   $scope.Guest_params = $scope.invites.length != 0;
 }
 
 
@@ -2495,11 +2487,7 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
             $scope.apply(); 
         }
         $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
         $scope.addCustomField = function (customField,option) {  

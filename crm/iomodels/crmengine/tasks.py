@@ -279,7 +279,6 @@ class Task(EndpointsModel):
     @classmethod
     def list(cls, user_from_email, request):
         curs = Cursor(urlsafe=request.pageToken)
-        filtered_tasks = list()
         if request.limit:
             limit = int(request.limit)
         else:
@@ -287,7 +286,6 @@ class Task(EndpointsModel):
         items = list()
         date_to_string = lambda x: x.strftime("%Y-%m-%d") if x else ""
         date_time_to_string = lambda x: x.strftime("%Y-%m-%dT%H:%M:00.000") if x else ""
-        filtered_tasks = list()
         you_can_loop = True
         count = 0
         while you_can_loop:

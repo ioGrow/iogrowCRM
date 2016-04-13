@@ -776,7 +776,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                                 if ($scope.calendarFeeds) {
 
                                     for (var i = 0; i < $scope.calendarFeeds.length; i++) {
-                                        var allday = ($scope.calendarFeeds[i].allday == "false") ? false : true;
+                                        var allday = ($scope.calendarFeeds[i].allday != "false");
 
                                         var url = ($scope.calendarFeeds[i].my_type == "event") ? '/#/events/show/' : '/#/tasks/show/';
                                         var backgroundColor = ($scope.calendarFeeds[i].status_label == "closed") ? "" : $scope.calendarFeeds[i].backgroundColor;
@@ -1172,11 +1172,8 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
                 function (event) {
 
-                    if (event.title == "New Event") {
+                    return event.title == "New Event";
 
-                        return true;
-                    }
-                    return false;
                 }
             );
             $scope.start_event = "";
@@ -1279,11 +1276,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
 
         $scope.checkGuests = function () {
-            if ($scope.invites.length != 0) {
-                $scope.Guest_params = true;
-            } else {
-                $scope.Guest_params = false;
-            }
+            $scope.Guest_params = $scope.invites.length != 0;
         }
         $scope.checkallday = function () {
             $scope.updateAlldayOption();
@@ -1567,7 +1560,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
             var events = $('#calendar').fullCalendar('clientEvents', ["new"]);
             $('#calendar').fullCalendar('removeEvents', ["new"])
-            var allday = ($scope.justadded.allday == "false") ? false : true;
+            var allday = ($scope.justadded.allday != "false");
             var eventObject = {
                 id: $scope.justadded.id,
                 entityKey: $scope.justadded.entityKey,

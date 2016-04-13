@@ -20,12 +20,7 @@ app.controller('LeadScoringCtrl', ['$scope', 'Auth', 'User', 'Map',
             $scope.apply();
         }
         $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
-            
+                return !(Array != undefined && Array.length > 0);;s
         }
         $scope.addCustomField=function(scoringfield,related_to){
             var params={

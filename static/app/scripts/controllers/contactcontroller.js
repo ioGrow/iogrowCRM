@@ -635,11 +635,7 @@ $scope.switchShow=function(){
               $('#BeforedeleteSelectedContacts').modal('hide');
           };
           $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
           }
           $scope.contactDeleted = function (entityKey) {
@@ -1439,11 +1435,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
         return jQuery.isEmptyObject(obj);
       }
       $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
         $('#some-textarea1').wysihtml5();
@@ -1857,11 +1849,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
       
     }; 
       $scope.noDetails=function(){
-        if (jQuery.isEmptyObject($scope.twitterProfile)&&jQuery.isEmptyObject($scope.linkedProfile)) {
-          return true;
-        }else{
-          return false;
-        };
+        return !!(jQuery.isEmptyObject($scope.twitterProfile) && jQuery.isEmptyObject($scope.linkedProfile));;
       }
 
       $scope.fromNow = function(fromDate){
@@ -3023,11 +3011,7 @@ $scope.deleteInvite=function(index){
 }
 
 $scope.checkGuests=function(){
-   if($scope.invites.length !=0){
-   $scope.Guest_params=true;
- }else{
-  $scope.Guest_params=false;
- }
+   $scope.Guest_params = $scope.invites.length != 0;
 }
 
 
@@ -3325,10 +3309,8 @@ $scope.prepareInfonodes = function(){
     };
        $scope.saveOpp = function(opportunity){
         $scope.oppo_err={};
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
 
           if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
               opportunity.contact=$scope.contact.entityKey;
@@ -3383,8 +3365,7 @@ $scope.prepareInfonodes = function(){
     $scope.saveCase = function(casee){
       //casee.account=$scope.contact.account.entityKey;
       $scope.case_err={};
-      if (!casee.name) $scope.case_err.name=true;
-            else $scope.case_err.name=false;
+      $scope.case_err.name = !casee.name;
       if (!$scope.case_err.name) {
 
                 casee.contact=$scope.contact.entityKey;
@@ -4696,10 +4677,8 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
 
       }, true);
           $scope.validateBeforeSave=function(contact){
-           if (!contact.firstname) $scope.contact_err.firstname=true;
-            else $scope.contact_err.firstname=false;  
-          if (!contact.lastname) $scope.contact_err.lastname=true;
-            else $scope.contact_err.lastname=false;
+           $scope.contact_err.firstname = !contact.firstname;
+          $scope.contact_err.lastname = !contact.lastname;
           if (!$scope.contact_err.firstname && !$scope.contact_err.lastname)  $scope.save(contact)
       }
       // new Contact
@@ -5015,11 +4994,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
           return jQuery.isEmptyObject(obj);
         }
         $scope.isEmptyArray=function(Array){
-                  if (Array!=undefined && Array.length>0) {
-                  return false;
-                  }else{
-                      return true;
-                  };    
+                  return !(Array != undefined && Array.length > 0);;
               
           }
         $scope.urlSource=function(url){

@@ -73,8 +73,6 @@ app.controller('SettingsShowCtrl', ['$scope', '$route', 'Auth', 'Opportunitystag
         $scope.emailSignature = document.getElementById("signature").value;
         if ($scope.emailSignature == "None") {
             $scope.emailSignature = "";
-        } else {
-            $scope.emailSignature = $scope.emailSignature;
         }
         $('#some-textarea').wysihtml5();
         // What to do after authentication

@@ -100,7 +100,6 @@ class EndpointsHelper:
         """
         bucket_name = app_identity.get_default_gcs_bucket_name()
         bucket = '/' + bucket_name
-        ts = time.time()
         filename = bucket + '/' + file_name
         write_retry_params = gcs.RetryParams(backoff_factor=1.1)
         gcs_file = gcs.open(filename,
@@ -210,10 +209,6 @@ class EndpointsHelper:
         content_type2, encoding2 = mimetypes.guess_type(path2)
         main_type, sub_type = content_type.split('/', 1)
         main_type2, sub_type2 = content_type.split('/', 1)
-        if content_type is None or encoding is not None:
-            content_type = 'application/octet-stream'
-        if content_type2 is None or encoding2 is not None:
-            content_type2 = 'application/octet-stream'
 
         if main_type == 'image':
             fp = open(path, 'rb')
@@ -270,7 +265,6 @@ class EndpointsHelper:
 
     @classmethod
     def get_data_from_index(cls, id):
-        empty_string = lambda x: x if x else ""
         search_index = search.Index(name="GlobalIndex")
         search_document = search_index.get(id)
         data = {'id': id}

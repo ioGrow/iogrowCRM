@@ -193,11 +193,7 @@ leadservices.factory('Lead', function ($rootScope) {
                             $scope.topics = resp.topics.items;
                         }
 
-                        if ($scope.topicCurrentPage > 1) {
-                            $scope.topicpagination.prev = true;
-                        } else {
-                            $scope.topicpagination.prev = false;
-                        }
+                        $scope.topicpagination.prev = $scope.topicCurrentPage > 1;
                         if (resp.topics.nextPageToken) {
                             var nextPage = $scope.topicCurrentPage + 1;
                             // Store the nextPageToken
@@ -220,11 +216,7 @@ leadservices.factory('Lead', function ($rootScope) {
                         else {
                             $scope.documents = resp.documents.items;
                         }
-                        if ($scope.documentCurrentPage > 1) {
-                            $scope.documentpagination.prev = true;
-                        } else {
-                            $scope.documentpagination.prev = false;
-                        }
+                        $scope.documentpagination.prev = $scope.documentCurrentPage > 1;
                         if (resp.documents.nextPageToken) {
 
                             var nextPage = $scope.documentCurrentPage + 1;
@@ -246,11 +238,7 @@ leadservices.factory('Lead', function ($rootScope) {
                         }else {
                             $scope.opportunities = resp.opportunities.items;
                         }
-                        if ($scope.oppCurrentPage > 1) {
-                            $scope.opppagination.prev = true;
-                        } else {
-                            $scope.opppagination.prev = false;
-                        }
+                        $scope.opppagination.prev = $scope.oppCurrentPage > 1;
                         if (resp.opportunities.nextPageToken) {
                             var nextPage = $scope.oppCurrentPage + 1;
                             // Store the nextPageToken
@@ -510,11 +498,7 @@ leadservices.factory('Lead', function ($rootScope) {
                         $scope.blankStatelead = false;
                     }
                     $scope.leads = resp.items;
-                    if ($scope.currentPage > 1) {
-                        $scope.leadpagination.prev = true;
-                    } else {
-                        $scope.leadpagination.prev = false;
-                    }
+                    $scope.leadpagination.prev = $scope.currentPage > 1;
                     if (resp.nextPageToken) {
                         var nextPage = $scope.currentPage + 1;
                         // Store the nextPageToken
@@ -573,11 +557,7 @@ leadservices.factory('Lead', function ($rootScope) {
                          $scope.filterNoResult=false;
                     }
                 $scope.leads = resp.items;
-                if ($scope.currentPage > 1) {
-                    $scope.leadpagination.prev = true;
-                } else {
-                    $scope.leadpagination.prev = false;
-                }
+                $scope.leadpagination.prev = $scope.currentPage > 1;
                 if (resp.nextPageToken) {
                     var nextPage = $scope.currentPage + 1;
                     // Store the nextPageToken
@@ -649,11 +629,7 @@ leadservices.factory('Lead', function ($rootScope) {
                     angular.forEach(resp.items, function (item) {
                         $scope.leads.push(item);
                     });
-                    if ($scope.currentPage > 1) {
-                        $scope.leadpagination.prev = true;
-                    } else {
-                        $scope.leadpagination.prev = false;
-                    }
+                    $scope.leadpagination.prev = $scope.currentPage > 1;
                     if (resp.nextPageToken) {
                         var nextPage = $scope.currentPage + 1;
                         // Store the nextPageToken

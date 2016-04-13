@@ -214,8 +214,7 @@ class Pipeline(EndpointsModel):
         else:
             limit = 1000
         items = list()
-        you_can_loop = True
-        count = 0
+
         # while you_can_loop:
         if request.order:
             ascending = True

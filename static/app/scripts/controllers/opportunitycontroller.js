@@ -99,11 +99,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
       $scope.opportunitystage.items=[];
       $scope.opportunitiesbysatges=[];
        $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
 
@@ -115,10 +111,8 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                       });*/
 
       $scope.isStage = function(stage) {
-        if (stage.probability == 0 || stage.probability == 100) {
-          return false;
-        }
-        return true;
+        return !(stage.probability == 0 || stage.probability == 100);
+
       };
       $scope.ExportCsvFile = function () {
             if ($scope.selectedCards.length != 0) {
@@ -358,11 +352,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                         $scope.oppStagesOrigin.push(item);
                       };
                   });     
-                 if ($scope.oppCurrentPage>1){
-                      $scope.opppagination.prev = true;
-                   }else{
-                       $scope.opppagination.prev = false;
-                   }
+                 $scope.opppagination.prev = $scope.oppCurrentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.oppCurrentPage + 1;
                    // Store the nextPageToken
@@ -2004,11 +1994,7 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
 //  
 
   $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
 
@@ -2264,11 +2250,7 @@ $scope.deleteInvite=function(index){
 }
 
 $scope.checkGuests=function(){
-   if($scope.invites.length !=0){
-   $scope.Guest_params=true;
- }else{
-  $scope.Guest_params=false;
- }
+   $scope.Guest_params = $scope.invites.length != 0;
 }
 
 
@@ -3270,11 +3252,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
 
 
   $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
       $scope.prepareInfonodes = function(){
@@ -3447,14 +3425,10 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
         $('#newEventModalForm').modal("show");  
       }
       $scope.validateBeforeSave=function(opportunity){
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
-          if (!$scope.searchAccountQuery) $scope.oppo_err.account=true;
-            else $scope.oppo_err.account=false;
-          if (!$scope.searchContactQuery) $scope.oppo_err.contact=true;
-            else $scope.oppo_err.contact=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
+          $scope.oppo_err.account = !$scope.searchAccountQuery;
+          $scope.oppo_err.contact = !$scope.searchContactQuery;
           if (!$scope.oppo_err.name && !$scope.oppo_err.amount_per_unit && !($scope.oppo_err.account && $scope.oppo_err.contact) )  $scope.save(opportunity)
       }
       $scope.save = function(opportunity){
@@ -3871,11 +3845,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
           return jQuery.isEmptyObject(obj);
         }
         $scope.isEmptyArray=function(Array){
-                  if (Array!=undefined && Array.length>0) {
-                  return false;
-                  }else{
-                      return true;
-                  };    
+                  return !(Array != undefined && Array.length > 0);;
               
           }
         //HKA 10.11.2013 Add event
