@@ -28,7 +28,7 @@ from apiclient.http import BatchHttpRequest
 from iomodels.crmengine.cases import Case
 from iomodels.crmengine.opportunities import Opportunity
 from iomodels.crmengine.payment import Subscription
-from model import Application, STANDARD_TABS, ADMIN_TABS, User
+from model import Application, STANDARD_TABS, ADMIN_TABS, User, Organization
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.appengine import OAuth2Decorator
@@ -1475,7 +1475,13 @@ class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
         eve = json.loads(self.request.body)
         if eve['type'] == "invoice.payment_succeeded":
-            logging.info(eve)
+            data = eve['data']['object']
+            org = Organization.query(Organization.stripe_customer_id == data['customer']).get()
+            sub = Subscription.query(Subscription.stripe_subscription_id == data['subscription']).get()
+            if org.subscription == sub.key:
+                sub.start_date = datetime.datetime.now(),
+                sub.expiration_date = Subscription.calculate_expiration_date(config.MONTH)
+                sub.put()
 
 
 class SFcallback(BaseHandler, SessionEnabledHandler):

@@ -154,7 +154,7 @@ class Subscription(BaseModel):
     def create_freemium_subscription(cls):
         plan = Plan.get_freemium_plan()
         subscription = Subscription(plan=plan.key, start_date=datetime.datetime.now(),
-                                    expiration_date=cls._calculate_expiration_date(config.MONTH),
+                                    expiration_date=Subscription.calculate_expiration_date(config.MONTH),
                                     description='Default Subscription')
         subscription.put()
         return subscription
@@ -164,7 +164,7 @@ class Subscription(BaseModel):
         plan = Plan.get_premium_plan(interval)
         plan_key = plan.key
         subscription = Subscription(plan=plan_key, start_date=datetime.datetime.now(),
-                                    expiration_date=cls._calculate_expiration_date(interval),
+                                    expiration_date=Subscription.calculate_expiration_date(interval),
                                     description='{} Premium Subscription'.format(interval))
         _create_stripe_plan(plan.name, plan.interval, plan.price)
         subscription.put()
@@ -178,8 +178,8 @@ class Subscription(BaseModel):
         subscription.put()
         return subscription
 
-    @classmethod
-    def _calculate_expiration_date(cls, interval):
+    @staticmethod
+    def calculate_expiration_date(interval):
         if interval == config.MONTH:
             return datetime.datetime.now() + datetime.timedelta(days=31)
         elif interval == config.YEAR:
