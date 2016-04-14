@@ -2,7 +2,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
       pkg: grunt.file.readJSON('package.json'),
       concat: {
-          js_servs_ctrls: {
+          servs: {
               src: ['static/app/scripts/services/authservices.js',
                   'static/app/scripts/services/infonodeservices.js',
                   'static/app/scripts/services/mapservices.js',
@@ -20,12 +20,16 @@ module.exports = function (grunt) {
                   'static/app/scripts/services/noteservices.js', 'static/app/scripts/services/commentservices.js',
                   'static/app/scripts/services/settingservices.js',
                   'static/app/scripts/services/edgeservices.js', 'static/app/scripts/services/reportservices.js',
-                  'static/app/scripts/services/profileservices.js', 'static/app/scripts/services/linkedinservices.js',
+                  'static/app/scripts/services/profileservices.js', 'static/app/scripts/services/linkedinservices.js'],
+              dest: 'static/build/js/_servs.js',
+          },
+          ctrls: {
+              src: [
                   'static/app/scripts/app.js', 'static/app/scripts/directives/directives.js',
                   'static/app/scripts/controllers/admin/**/*.js',
                   'static/app/scripts/controllers/discovercontrollers.js', 'static/app/scripts/controllers/mysettingcontrollers.js', 'static/app/scripts/controllers/searchcontrollers.js', 'static/app/scripts/controllers/accountcontrollers.js', 'static/app/scripts/controllers/leadcontrollers.js', 'static/app/scripts/controllers/casecontrollers.js', 'static/app/scripts/controllers/billingController.js', 'static/app/scripts/controllers/contactcontroller.js', 'static/app/scripts/controllers/opportunitycontroller.js', 'static/app/scripts/controllers/documentcontrollers.js', 'static/app/scripts/controllers/notecontrollers.js', 'static/app/scripts/controllers/taskcontrollers.js', 'static/app/scripts/controllers/eventcontrollers.js', 'static/app/scripts/controllers/dashboardController.js', 'static/app/scripts/controllers/usercontrollers.js', 'static/app/scripts/controllers/settingscontrollers.js'],
-              dest: 'static/build/js/sync_ctrls_sers_scripts.js',
-          }
+              dest: 'static/build/js/_ctrls.js',
+          },
         },
         bower_concat: {
           first: {
@@ -146,92 +150,71 @@ module.exports = function (grunt) {
              'static/build/js/_async.min.js': ['static/build/js/_async.js']
              }
             },
-            sync_ctrls_sers_js: {
+            ctrls: {
                 files: {
-                    'static/build/js/sync_ctrls_sers_scripts.min.js': ['static/build/js/sync_ctrls_sers_scripts.js']
+                    'static/build/js/_ctrls.min.js': ['static/build/js/_ctrls.js']
+                }
+            },
+            servs: {
+                files: {
+                    'static/build/js/_servs.min.js': ['static/build/js/_servs.js']
                 }
             }
         },
         watch: {
-            /* sync_ctrls_servs: {
-             files: ['static/app/scripts/services/authservices.js','static/app/scripts/services/infonodeservices.js','static/app/scripts/services/mapservices.js','static/app/scripts/services/accountservices.js','static/app/scripts/services/contactservices.js','static/app/scripts/services/opportunityservices.js','static/app/scripts/services/leadservices.js','static/app/scripts/services/caseservices.js','static/app/scripts/services/discoverservices.js','static/app/scripts/services/topicservices.js','static/app/scripts/services/taskservices.js','static/app/scripts/services/eventservices.js','static/app/scripts/services/userservices.js','static/app/scripts/services/noteservices.js','static/app/scripts/services/commentservices.js','static/app/scripts/services/settingservices.js','static/app/scripts/services/edgeservices.js','static/app/scripts/services/reportservices.js','static/app/scripts/services/profileservices.js','static/app/scripts/services/linkedinservices.js','static/app/scripts/app.js','static/app/scripts/directives/directives.js','static/app/scripts/controllers/discovercontrollers.js','static/app/scripts/controllers/mysettingcontrollers.js','static/app/scripts/controllers/searchcontrollers.js','static/app/scripts/controllers/accountcontrollers.js','static/app/scripts/controllers/leadcontrollers.js','static/app/scripts/controllers/casecontrollers.js','static/app/scripts/controllers/billingController.js','static/app/scripts/controllers/contactcontroller.js','static/app/scripts/controllers/opportunitycontroller.js','static/app/scripts/controllers/documentcontrollers.js','static/app/scripts/controllers/notecontrollers.js','static/app/scripts/controllers/taskcontrollers.js','static/app/scripts/controllers/eventcontrollers.js','static/app/scripts/controllers/dashboardController.js','static/app/scripts/controllers/usercontrollers.js','static/app/scripts/controllers/settingscontrollers.js'],
-             tasks: ['uglify'],
-             },*/
-            async_ctrls_servs: {
-                files: ['static/app/scripts/services/authservices.js',
-                    'static/app/scripts/services/infonodeservices.js',
-                    'static/app/scripts/services/mapservices.js',
-                    'static/app/scripts/services/accountservices.js',
-                    'static/app/scripts/services/contactservices.js',
-                    'static/app/scripts/services/opportunityservices.js',
-                    'static/app/scripts/services/leadservices.js',
-                    'static/app/scripts/services/caseservices.js',
-                    'static/app/scripts/services/discoverservices.js',
-                    'static/app/scripts/services/topicservices.js',
-                    'static/app/scripts/services/taskservices.js',
-                    'static/app/scripts/services/eventservices.js',
-                    'static/app/scripts/services/userservices.js',
-                    'static/app/scripts/services/billingservices.js',
-                    'static/app/scripts/services/noteservices.js',
-                    'static/app/scripts/services/commentservices.js',
-                    'static/app/scripts/services/settingservices.js',
-                    'static/app/scripts/services/edgeservices.js',
-                    'static/app/scripts/services/reportservices.js', 'static/app/scripts/services/profileservices.js',
-                    'static/app/scripts/services/linkedinservices.js', 'static/app/scripts/app.js',
-                    'static/app/scripts/directives/directives.js',
-                    'static/app/scripts/controllers/discovercontrollers.js',
-                    'static/app/scripts/controllers/mysettingcontrollers.js',
-                    'static/app/scripts/controllers/searchcontrollers.js',
-                    'static/app/scripts/controllers/accountcontrollers.js',
-                    'static/app/scripts/controllers/admin/**/*.js',
-                    'static/app/scripts/controllers/leadcontrollers.js',
-                    'static/app/scripts/controllers/casecontrollers.js',
-                    'static/app/scripts/controllers/billingController.js',
-                    'static/app/scripts/controllers/contactcontroller.js',
-                    'static/app/scripts/controllers/opportunitycontroller.js',
-                    'static/app/scripts/controllers/documentcontrollers.js',
-                    'static/app/scripts/controllers/notecontrollers.js',
-                    'static/app/scripts/controllers/taskcontrollers.js',
-                    'static/app/scripts/controllers/eventcontrollers.js',
-                    'static/app/scripts/controllers/dashboardController.js',
-                    'static/app/scripts/controllers/usercontrollers.js', 'static/app/scripts/controllers/settingscontrollers.js'],
-                tasks: ['concat', 'uglify'],
+            ctrls: {
+                files: ['static/app/scripts/app.js',
+                        'static/app/scripts/directives/directives.js',
+                        'static/app/scripts/controllers/*.js',
+                        'static/app/scripts/controllers/admin/*.js'],
+                tasks: ['concat:ctrls', 'uglify:ctrls'],
             },
-        },
-        imagemin: {
-            dynamic: {
-                files: [{
-                    expand: true,
-                    cwd: '/static/src/img/',
-                    src: ['**/*.{png,jpg,gif}'],
-                    dest: '/static/build/img/'
-                }]
-            }
-        },
-      htmlmin: {
-            dist: {
-                options: {
-                    removeComments: true,
-                    collapseWhitespace: true
-                },
-                files: {}
-            }
+            servs: {
+                files: ['static/app/scripts/services/*.js'],
+                tasks: ['concat:servs', 'uglify:servs'],
+            },
         },
         bower: {
           install: {
           }
-      }
+        },
+        targethtml: {
+            dist: {
+              files: {
+                'templates/base.html': 'templates/base.html'
+              }
+            },
+            dev: {
+              files: {
+                'templates/base.html': 'templates/base.html'
+              }
+            }
+        }
     });
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-bower-concat');
-    grunt.registerTask('default', ['bower_concat','cssmin','uglify:first_sync_js','uglify:sync_js','uglify:async_js']);
+    grunt.loadNpmTasks('grunt-targethtml');
+    //grunt.registerTask('default', ['bower_concat','cssmin','uglify:first_sync_js','uglify:sync_js','uglify:async_js']);
     //grunt.registerTask('default', ['bower','concat','uglify']);
     //grunt.registerTask('dev', ['jshint:dev', 'uglify:dev', 'cssmin:dev', 'less:dev']);
-    //grunt.registerTask('production', ['jshint:production', 'uglify:production', 'cssmin:production', 'less:production']);
+    grunt.registerTask('dev', [
+      'bower',
+      'bower_concat',
+      'concat',
+      'cssmin',
+      'targethtml:dev'
+    ]);
+    grunt.registerTask('production', [
+      'bower',
+      'bower_concat',
+      'concat',
+      'cssmin',
+      'uglify',
+      'targethtml:dist'
+    ]);
 
 };

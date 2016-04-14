@@ -24,14 +24,14 @@
     <!-- end of web fonts-->
     <!--  GLOBAL CSS Sync Files -->
      <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-     <link href="/static/build/css/_sync.css" rel="stylesheet" type="text/css"/>
+     <link href="/static/build/css/_sync.min.css" rel="stylesheet" type="text/css"/>
      <!-- <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css"/> -->
-     <link href="static/src/css/style-metronic.css" rel="stylesheet" type="text/css"/>
-     <link href="static/src/css/style.css" rel="stylesheet" type="text/css"/>
-     <link href="static/src/css/style-responsive.css" rel="stylesheet" type="text/css"/>
-     <link href="static/src/css/plugins.css" rel="stylesheet" type="text/css"/>
-     <link href="static/src/css/light.css" rel="stylesheet" type="text/css"/>
-     <link href="static/src/css/select2_metro.css" rel="stylesheet" type="text/css"/>
+     <link href="static/vendor/css/style-metronic.css" rel="stylesheet" type="text/css"/>
+     <link href="static/vendor/css/style.css" rel="stylesheet" type="text/css"/>
+     <link href="static/vendor/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+     <link href="static/vendor/css/plugins.css" rel="stylesheet" type="text/css"/>
+     <link href="static/vendor/css/light.css" rel="stylesheet" type="text/css"/>
+     <link href="static/vendor/css/select2_metro.css" rel="stylesheet" type="text/css"/>
     <link href="/static/src/css/bootstrap3_test.css" rel="stylesheet" type="text/css"/>
     <!--  end GLOBAL CSS Sync Files -->
     <link rel="stylesheet" href="/static/build/css/admin.css">
@@ -427,17 +427,22 @@
 </script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="/static/build/js/_sync.min.js"></script>
-<script type="text/javascript" src="static/vendor/jquery.waterfall.js"></script>
+<script type="text/javascript" src="static/vendor/js/jquery.waterfall.js"></script>
 <script src="/static/build/js/_async.min.js"></script>
 <!-- <script src="/static/build/js/async_scripts_2.min.js"></script> -->
-<script type="text/javascript" src="static/vendor/jquery.caret.js"></script>
+<script type="text/javascript" src="static/vendor/js/jquery.caret.js"></script>
 <!-- end async_scripts.js replacement -->
 
-<script type="text/javascript" src="/static/build/js/sync_ctrls_sers_scripts.js"></script>
+<!-- <script type="text/javascript" src="/static/build/js/sync_ctrls_sers_scripts.js"></script> -->
+
+        <script type="text/javascript" src="static/build/js/_servs.js"></script>
+        <script type="text/javascript" src="static/build/js/_ctrls.js"></script>
+
+
 <!-- /End of ioGrow controllers -->
 <!--[if lt IE 9]>
-  <script src="/static/src/js/excanvas.min.js"></script>
-  <script src="/static/src/js/respond.min.js"></script>
+  <script src="/static/vendor/js/excanvas.min.js"></script>
+  <script src="/static/vendor/js/respond.min.js"></script>
   <![endif]-->
 <script src="http://maps.google.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY&sensor=true"
         type="text/javascript"></script>
