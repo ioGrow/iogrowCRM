@@ -14,7 +14,7 @@
 We gratefully acknowledge contributions from the following. Please let us know if we missed anyone, thanks :)
 
 ### Backend
-- Tedj Meabeo [@tedj](https://github.com/tedj)
+- Tedj Meabiou [@tedj](https://github.com/tedj)
 - Hakim Karriche [@hkarriche](https://github.com/hkarriche)
 - Hichem hadji [@dixdix](https://github.com/dixdix)
 - Meziane Hadjadj [@MezianeHadjadj](https://github.com/MezianeHadjadj)
@@ -22,27 +22,28 @@ We gratefully acknowledge contributions from the following. Please let us know i
 - Arezki Lebdiri [@arezki1990](https://github.com/arezki1990)
 - Khaled Ghiboub [@proserve](https://github.com/proserve)
 - Idris Belamri [@belidr09](https://github.com/belidr09)
+- Sid Ali Hallak [@bigali](https://github.com/bigali)
 
 ### Frontend
 - Yacine Hamidia [@y-hamidia](https://github.com/y-hamidia)
-- Tedj Meabeo [@tedj](https://github.com/tedj)
+- Tedj Meabiou [@tedj](https://github.com/tedj)
 - Hakim Karriche [@hkarriche](https://github.com/hkarriche)
 - Hichem hadji [@dixdix](https://github.com/dixdix)
 - Meziane Hadjadj [@MezianeHadjadj](https://github.com/MezianeHadjadj)
 - Arezki Lebdiri [@arezki1990](https://github.com/arezki1990)
 - Khaled Ghiboub [@proserve](https://github.com/proserve)
-- Sid Ali Hellak
+- Sid Ali Hallak [@bigali](https://github.com/bigali)
 
 ### Mobile
-- Sid Ali Hellak [@bigali](https://github.com/bigali)
+- Sid-ali Hallak [@bigali](https://github.com/bigali)
 
 
 ### Chrome Extension
-- Tedj Meabeo [@tedj](https://github.com/tedj)
-- Yacine Hamidia [@y-hamidia](https://github.com/y-hamidia)
+- Tedj Meabiou [@tedj](https://github.com/tedj)
 - Amine Aboura [@amaboura](https://github.com/amaboura)
+- Yacine Hamidia [@y-hamidia](https://github.com/y-hamidia)
 
 
 ### Design & User Experience
 - Ilyes boujelthiya [@osidsoft](https://github.com/osidsoft)
-- Ben BenFoudil [@Benabes](https://github.com/Benabes)
+- Ben Belfodil [@Benabes](https://github.com/Benabes)
