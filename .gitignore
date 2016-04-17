@@ -2,6 +2,8 @@
 *.py[cod]
 node_modules/*
 libx/*
+bower_components/*
+static/build/*
 .idea/
 # C extensions
 *.so
