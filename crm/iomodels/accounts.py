@@ -6,7 +6,6 @@ import time
 from django.utils.encoding import smart_str
 
 import endpoints
-import model
 import requests
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import app_identity
@@ -14,21 +13,22 @@ from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
+from iomodels.contacts import Contact, ContactListResponse, ContactInsertRequest, is_the_same_node
+from iomodels.documents import Document, DocumentListResponse
+from iomodels.events import Event, EventListResponse
+from iomodels.notes import Note, TopicListResponse
+from iomodels.opportunities import Opportunity, OpportunityListResponse
+from iomodels.payment import payment_required
+from iomodels.tags import Tag, TagSchema
+from iomodels.tasks import Task, TaskListResponse
 from protorpc import messages
+from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 import iomessages
+import model
+from crm.iomodels.cases import Case, CaseListResponse
 from endpoints_helper import EndpointsHelper
 from iograph import Node, Edge, InfoNodeListResponse
-from iomodels.crmengine.cases import Case, CaseListResponse
-from iomodels.crmengine.contacts import Contact, ContactListResponse, ContactInsertRequest, is_the_same_node
-from iomodels.crmengine.documents import Document, DocumentListResponse
-from iomodels.crmengine.events import Event, EventListResponse
-from iomodels.crmengine.notes import Note, TopicListResponse
-from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
-from iomodels.crmengine.payment import payment_required
-from iomodels.crmengine.tags import Tag, TagSchema
-from iomodels.crmengine.tasks import Task, TaskListResponse
-from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 
 # The message class that defines the EntityKey schema

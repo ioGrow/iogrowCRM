@@ -19,7 +19,7 @@ mapreduce:
     handler: myModel.is_admin
     params:
     - name: entity_kind
-      default: iomodels.crmengine.leads.Lead
+      default: iomodels.leads.Lead
 - name: put is admin option to users 
   mapper:
     input_reader: mapreduce.input_readers.DatastoreInputReader

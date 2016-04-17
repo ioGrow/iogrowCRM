@@ -5,9 +5,9 @@ import webapp2
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 
+from crm.iomodels.notes import Note
 from endpoints_helper import EndpointsHelper
 from iograph import Node,Edge
-from iomodels.crmengine.notes import Note
 from model import User,Userinfo
 
 

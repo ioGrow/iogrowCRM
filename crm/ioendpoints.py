@@ -22,49 +22,49 @@ from google.appengine.api import memcache
 from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.ext import ndb
+from iomodels.Licenses import License, LicenseSchema, LicenseInsertRequest
+from iomodels.accounts import Account, AccountGetRequest, AccountPatchRequest, AccountSchema, \
+    AccountListRequest, AccountListResponse, AccountSearchResults, AccountInsertRequest
+from iomodels.cases import Case, UpdateStatusRequest, CasePatchRequest, CaseGetRequest, CaseInsertRequest, \
+    CaseListRequest, CaseSchema, CaseListResponse, CaseSearchResults
+from iomodels.casestatuses import Casestatus
+from iomodels.comments import Comment
+from iomodels.contacts import Contact, ContactGetRequest, ContactInsertRequest, ContactPatchSchema, \
+    ContactSchema, ContactListRequest, ContactListResponse, ContactSearchResults, ContactImportRequest, \
+    ContactImportHighriseRequest, DetailImportHighriseRequest, \
+    InvitationRequest, ContactMergeRequest
+from iomodels.documents import Document, DocumentInsertRequest, DocumentSchema, MultipleAttachmentRequest, \
+    DocumentListResponse
+from iomodels.events import Event, EventInsertRequest, EventSchema, EventPatchRequest, EventListRequest, \
+    EventListResponse, EventFetchListRequest, EventFetchResults
+from iomodels.leads import Lead, LeadPatchRequest, LeadInsertRequest, LeadListRequest, \
+    LeadListResponse, LeadSearchResults, LeadGetRequest, LeadSchema, FLNameFilterRequest, LeadMergeRequest, \
+    FLsourceFilterRequest
+from iomodels.leadstatuses import Leadstatus
+from iomodels.notes import Note, AuthorSchema, DiscussionAboutSchema, \
+    NoteSchema
+from iomodels.opportunities import Opportunity, OpportunityPatchRequest, UpdateStageRequest, \
+    OpportunitySchema, OpportunityInsertRequest, OpportunityListRequest, OpportunityListResponse, \
+    OpportunitySearchResults, OpportunityGetRequest, NewOpportunityListRequest, AggregatedOpportunitiesResponse, \
+    OppTimeline
+from iomodels.opportunitystage import Opportunitystage, OpportunitystagePatchListRequestSchema, \
+    OpportunitystageListSchema
+from iomodels.profiles import ProfileDeleteRequest, Keyword, KeywordListResponse
+from iomodels.tags import Tag, TagSchema, TagListRequest, TagListResponse, TagInsertRequest
+from iomodels.tasks import Task, TaskSchema, TaskRequest, TaskListResponse, TaskInsertRequest
 from protorpc import message_types
 from protorpc import messages
 from protorpc import remote
 
 import iomessages
+from crm.iomodels.pipelines import Pipeline, PipelineInsertRequest, PipelineSchema, PipelineGetRequest, \
+    PipelineListRequest, PipelineListResponse, \
+    PipelinePatchRequest
 from endpoints_helper import EndpointsHelper
 from iograph import Node, Edge, RecordSchema, InfoNodeResponse, InfoNodeListResponse
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema, LinkedinCompanySchema
 from iomessages import SubscriptionSchema, LicencesQuantityMessage, SubscriptionListSchema
-from iomodels.crmengine import config
-from iomodels.crmengine.Licenses import License, LicenseSchema, LicenseInsertRequest
-from iomodels.crmengine.accounts import Account, AccountGetRequest, AccountPatchRequest, AccountSchema, \
-    AccountListRequest, AccountListResponse, AccountSearchResults, AccountInsertRequest
-from iomodels.crmengine.cases import Case, UpdateStatusRequest, CasePatchRequest, CaseGetRequest, CaseInsertRequest, \
-    CaseListRequest, CaseSchema, CaseListResponse, CaseSearchResults
-from iomodels.crmengine.casestatuses import Casestatus
-from iomodels.crmengine.comments import Comment
-from iomodels.crmengine.contacts import Contact, ContactGetRequest, ContactInsertRequest, ContactPatchSchema, \
-    ContactSchema, ContactListRequest, ContactListResponse, ContactSearchResults, ContactImportRequest, \
-    ContactImportHighriseRequest, DetailImportHighriseRequest, \
-    InvitationRequest, ContactMergeRequest
-from iomodels.crmengine.documents import Document, DocumentInsertRequest, DocumentSchema, MultipleAttachmentRequest, \
-    DocumentListResponse
-from iomodels.crmengine.events import Event, EventInsertRequest, EventSchema, EventPatchRequest, EventListRequest, \
-    EventListResponse, EventFetchListRequest, EventFetchResults
-from iomodels.crmengine.leads import Lead, LeadPatchRequest, LeadInsertRequest, LeadListRequest, \
-    LeadListResponse, LeadSearchResults, LeadGetRequest, LeadSchema, FLNameFilterRequest, LeadMergeRequest, \
-    FLsourceFilterRequest
-from iomodels.crmengine.leadstatuses import Leadstatus
-from iomodels.crmengine.notes import Note, AuthorSchema, DiscussionAboutSchema, \
-    NoteSchema
-from iomodels.crmengine.opportunities import Opportunity, OpportunityPatchRequest, UpdateStageRequest, \
-    OpportunitySchema, OpportunityInsertRequest, OpportunityListRequest, OpportunityListResponse, \
-    OpportunitySearchResults, OpportunityGetRequest, NewOpportunityListRequest, AggregatedOpportunitiesResponse, \
-    OppTimeline
-from iomodels.crmengine.opportunitystage import Opportunitystage, OpportunitystagePatchListRequestSchema, \
-    OpportunitystageListSchema
-from iomodels.crmengine.pipelines import Pipeline, PipelineInsertRequest, PipelineSchema, PipelineGetRequest, \
-    PipelineListRequest, PipelineListResponse, \
-    PipelinePatchRequest
-from iomodels.crmengine.profiles import ProfileDeleteRequest, Keyword, KeywordListResponse
-from iomodels.crmengine.tags import Tag, TagSchema, TagListRequest, TagListResponse, TagInsertRequest
-from iomodels.crmengine.tasks import Task, TaskSchema, TaskRequest, TaskListResponse, TaskInsertRequest
+from iomodels import config
 from model import Contributor
 from model import CountryCurrency
 from model import CustomField

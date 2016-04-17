@@ -10,7 +10,6 @@ import time
 import endpoints
 import httplib2
 import jinja2
-import model
 import requests
 import sfoauth2
 import stripe
@@ -23,6 +22,14 @@ from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
 from intercom import Intercom
+from iomodels.accounts import Account
+from iomodels.contacts import Contact
+from iomodels.documents import Document
+from iomodels.events import Event
+from iomodels.leads import LeadInsertRequest, Lead
+from iomodels.opportunities import Opportunity
+from iomodels.payment import Subscription
+from iomodels.tasks import Task, AssignedGoogleId
 from mixpanel import Mixpanel
 from oauth2client.appengine import OAuth2Decorator
 from oauth2client.client import FlowExchangeError
@@ -33,18 +40,11 @@ from webapp2_extras import i18n
 from webapp2_extras import sessions
 
 import iomessages
+import model
+from crm.iomodels.cases import Case
 from endpoints_helper import EndpointsHelper
 from iograph import Edge
-from iomodels.crmengine import config as app_config
-from iomodels.crmengine.accounts import Account
-from iomodels.crmengine.cases import Case
-from iomodels.crmengine.contacts import Contact
-from iomodels.crmengine.documents import Document
-from iomodels.crmengine.events import Event
-from iomodels.crmengine.leads import LeadInsertRequest, Lead
-from iomodels.crmengine.opportunities import Opportunity
-from iomodels.crmengine.payment import Subscription
-from iomodels.crmengine.tasks import Task, AssignedGoogleId
+from iomodels import config as app_config
 from model import Application, STANDARD_TABS, ADMIN_TABS
 
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')

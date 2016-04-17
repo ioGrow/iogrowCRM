@@ -11,8 +11,8 @@ from protorpc import messages
 import iomessages
 from endpoints_helper import EndpointsHelper
 from iograph import Edge
-from iomodels.crmengine.notes import AuthorSchema, DiscussionAboutSchema
-from iomodels.crmengine.tags import Tag, TagSchema
+from iomodels.notes import AuthorSchema, DiscussionAboutSchema
+from iomodels.tags import Tag, TagSchema
 
 
 class AttachmentSchema(messages.Message):

@@ -13,9 +13,9 @@ from protorpc import messages
 
 from endpoints_helper import EndpointsHelper
 from iograph import Edge
-from iomodels.crmengine.notes import AuthorSchema, DiscussionAboutSchema
-from iomodels.crmengine.payment import payment_required
-from iomodels.crmengine.tags import Tag, TagSchema
+from iomodels.notes import AuthorSchema, DiscussionAboutSchema
+from iomodels.payment import payment_required
+from iomodels.tags import Tag, TagSchema
 from search_helper import tokenize_autocomplete
 
 

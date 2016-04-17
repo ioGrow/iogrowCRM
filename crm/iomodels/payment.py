@@ -6,8 +6,8 @@ import stripe
 from endpoints.api_exceptions import PreconditionFailedException
 from google.appengine.ext import ndb
 
+from crm.iomodels import config
 from iomessages import SubscriptionSchema, PlanSchema
-from iomodels.crmengine import config
 
 
 def _created_record_count_after(entity, organization, start_date):

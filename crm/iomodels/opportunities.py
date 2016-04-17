@@ -1,24 +1,25 @@
 import datetime
 
 import endpoints
-import model
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
+from iomodels.documents import Document, DocumentListResponse
+from iomodels.events import Event, EventListResponse, EventInsertRequest, EventSchema
+from iomodels.notes import Note, TopicListResponse
+from iomodels.opportunitystage import OpportunitystageSchema, Opportunitystage
+from iomodels.payment import payment_required
+from iomodels.tags import Tag, TagSchema
+from iomodels.tasks import Task, TaskListResponse
 from protorpc import messages
+from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 import iomessages
+import model
 from endpoints_helper import EndpointsHelper
 from iograph import Node, Edge, InfoNodeListResponse
-from iomodels.crmengine.documents import Document, DocumentListResponse
-from iomodels.crmengine.events import Event, EventListResponse, EventInsertRequest, EventSchema
-from iomodels.crmengine.notes import Note, TopicListResponse
-from iomodels.crmengine.opportunitystage import OpportunitystageSchema, Opportunitystage
-from iomodels.crmengine.payment import payment_required
-from iomodels.crmengine.tags import Tag, TagSchema
-from iomodels.crmengine.tasks import Task, TaskListResponse
-from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
+
 
 class UpdateStageRequest(messages.Message):
     entityKey = messages.StringField(1, required=True)
@@ -1234,7 +1235,7 @@ class Opportunity(EndpointsModel):
             try:
                 competitor_key = ndb.Key(urlsafe=competitor_request)
             except:
-                from iomodels.crmengine.accounts import Account
+                from crm.iomodels.accounts import Account
                 competitor_key = Account.get_key_by_name(
                         user_from_email=user_from_email,
                         name=competitor_request
@@ -1277,7 +1278,7 @@ class Opportunity(EndpointsModel):
                 account_key = ndb.Key(urlsafe=request.account)
                 account = account_key.get()
             except:
-                from iomodels.crmengine.accounts import Account
+                from crm.iomodels.accounts import Account
                 account_key = Account.get_key_by_name(
                         user_from_email=user_from_email,
                         name=request.account
@@ -1302,7 +1303,7 @@ class Opportunity(EndpointsModel):
                 contact_key = ndb.Key(urlsafe=c.contact)
                 contact = contact_key.get()
             except:
-                from iomodels.crmengine.contacts import Contact
+                from crm.iomodels.contacts import Contact
                 contact_key = Contact.get_key_by_name(
                         user_from_email=user_from_email,
                         name=c.contact
@@ -1350,7 +1351,7 @@ class Opportunity(EndpointsModel):
                 contact_key = ndb.Key(urlsafe=request.contact)
                 contact = contact_key.get()
             except:
-                from iomodels.crmengine.contacts import Contact
+                from crm.iomodels.contacts import Contact
                 contact_key = Contact.get_key_by_name(
                         user_from_email=user_from_email,
                         name=request.contact
@@ -1542,7 +1543,7 @@ class Opportunity(EndpointsModel):
             try:
                 competitor_key = ndb.Key(urlsafe=request.new_competitor)
             except:
-                from iomodels.crmengine.accounts import Account
+                from crm.iomodels.accounts import Account
                 competitor_key = Account.get_key_by_name(
                         user_from_email=user_from_email,
                         name=request.new_competitor
@@ -1580,7 +1581,7 @@ class Opportunity(EndpointsModel):
                 contact_key = ndb.Key(urlsafe=request.new_contact.contact)
                 contact = contact_key.get()
             except:
-                from iomodels.crmengine.contacts import Contact
+                from crm.iomodels.contacts import Contact
                 contact_key = Contact.get_key_by_name(
                         user_from_email=user_from_email,
                         name=request.new_contact.contact

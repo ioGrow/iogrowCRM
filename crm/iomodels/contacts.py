@@ -11,7 +11,6 @@ from django.utils.encoding import smart_str
 import endpoints
 import gdata.apps.emailsettings.client
 import gdata.contacts.data
-import model
 import requests
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import app_identity
@@ -19,20 +18,21 @@ from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
+from iomodels.documents import Document, DocumentListResponse
+from iomodels.events import Event, EventListResponse
+from iomodels.notes import Note, TopicListResponse
+from iomodels.opportunities import Opportunity, OpportunityListResponse
+from iomodels.payment import payment_required
+from iomodels.tags import Tag, TagSchema
+from iomodels.tasks import Task, TaskListResponse
 from protorpc import messages
+from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 import iomessages
+import model
+from crm.iomodels.cases import Case, CaseListResponse
 from endpoints_helper import EndpointsHelper
 from iograph import Node, Edge, InfoNodeListResponse
-from iomodels.crmengine.cases import Case, CaseListResponse
-from iomodels.crmengine.documents import Document, DocumentListResponse
-from iomodels.crmengine.events import Event, EventListResponse
-from iomodels.crmengine.notes import Note, TopicListResponse
-from iomodels.crmengine.opportunities import Opportunity, OpportunityListResponse
-from iomodels.crmengine.payment import payment_required
-from iomodels.crmengine.tags import Tag, TagSchema
-from iomodels.crmengine.tasks import Task, TaskListResponse
-from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 ATTRIBUTES_MATCHING = {
     'fullname': ['Full Name'],
@@ -993,7 +993,7 @@ class Contact(EndpointsModel):
                 account = account_key.get()
             except:
                 print 'i cant find the account'
-                from iomodels.crmengine.accounts import Account
+                from crm.iomodels.accounts import Account
                 account_key = Account.get_key_by_name(
                     user_from_email=user_from_email,
                     name=request.account
@@ -1360,7 +1360,7 @@ class Contact(EndpointsModel):
                     account_key = ndb.Key(urlsafe=account_request.account)
                     account = account_key.get()
                 except:
-                    from iomodels.crmengine.accounts import Account
+                    from crm.iomodels.accounts import Account
                     account_key = Account.get_key_by_name(
                         user_from_email=user_from_email,
                         name=account_request.account
@@ -1396,7 +1396,7 @@ class Contact(EndpointsModel):
                 account_key = ndb.Key(urlsafe=request.account)
                 account = account_key.get()
             except:
-                from iomodels.crmengine.accounts import Account
+                from crm.iomodels.accounts import Account
                 account_key = Account.get_key_by_name(
                     user_from_email=user_from_email,
                     name=request.account
@@ -1616,7 +1616,7 @@ class Contact(EndpointsModel):
             if row[key]:
                 # check if this contact is related to an account
                 if matched_columns[key] == 'account':
-                    from iomodels.crmengine.accounts import Account
+                    from crm.iomodels.accounts import Account
                     # Check if the account exist to not duplicate it
                     account = Account.get_key_by_name(
                         user_from_email=user_from_email,
@@ -1797,7 +1797,7 @@ class Contact(EndpointsModel):
                     access='public'
                 )
                 if row[42]:
-                    from iomodels.crmengine.accounts import Account
+                    from crm.iomodels.accounts import Account
                     # Check if the account exist to not duplicate it
                     if row[42] in imported_accounts.keys():
                         # check first if in those imported accounts
@@ -2030,7 +2030,7 @@ class Contact(EndpointsModel):
                 account_key = ndb.Key(urlsafe=new_account)
                 account = account_key.get()
             except:
-                from iomodels.crmengine.accounts import Account
+                from crm.iomodels.accounts import Account
                 account_key = Account.get_key_by_name(
                     user_from_email=user_from_email,
                     name=new_account

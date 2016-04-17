@@ -9,8 +9,8 @@ from google.appengine.api import taskqueue
 from google.appengine.api import search
 from google.appengine.api import urlfetch
 
-from iomodels.crmengine import config
-from iomodels.crmengine.payment import Subscription
+from crm.iomodels import config
+from crm.iomodels.payment import Subscription
 from oauth2client.appengine import CredentialsNDBProperty
 from apiclient.discovery import build
 from oauth2client.client import flow_from_clientsecrets
@@ -19,9 +19,9 @@ from oauth2client.client import FlowExchangeError
 # Third parties
 from endpoints_proto_datastore.ndb import EndpointsModel
 # Our libraries
-from iomodels.crmengine.opportunitystage import Opportunitystage
-from iomodels.crmengine.leadstatuses import Leadstatus
-from iomodels.crmengine.casestatuses import Casestatus
+from crm.iomodels.opportunitystage import Opportunitystage
+from crm.iomodels.leadstatuses import Leadstatus
+from crm.iomodels.casestatuses import Casestatus
 
 from search_helper import tokenize_autocomplete
 
@@ -1475,15 +1475,15 @@ class User(EndpointsModel):
     def switch_org(cls, user_from_email, entityKey):
         msg = "user not found "
         print user_from_email
-        from iomodels.crmengine.leads import Lead
-        from iomodels.crmengine.notes import Note
-        from iomodels.crmengine.contacts import Contact
-        from iomodels.crmengine.events import Event
-        from iomodels.crmengine.cases import Case
-        from iomodels.crmengine.opportunities import Opportunity
-        from iomodels.crmengine.tasks import Task
-        from iomodels.crmengine.tags import Tag
-        from iomodels.crmengine.documents import Document
+        from crm.iomodels.leads import Lead
+        from crm.iomodels.notes import Note
+        from crm.iomodels.contacts import Contact
+        from crm.iomodels.events import Event
+        from crm.iomodels.cases import Case
+        from crm.iomodels.opportunities import Opportunity
+        from crm.iomodels.tasks import Task
+        from crm.iomodels.tags import Tag
+        from crm.iomodels.documents import Document
 
         user = ndb.Key(urlsafe=entityKey).get()
         if user_from_email:
@@ -1519,7 +1519,7 @@ class User(EndpointsModel):
                 for tab in tabs:
                     tab.key.delete()
 
-                from  iomodels.crmengine.accounts import Account
+                from  crm.iomodels.accounts import Account
 
                 accounts = Account.query(Account.organization == user.organization).fetch()
                 for account in accounts:

@@ -1,23 +1,23 @@
 import endpoints
-import model
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
+from iomodels.documents import Document, DocumentListResponse
+from iomodels.events import Event, EventListResponse
+from iomodels.notes import Note, TopicListResponse
+from iomodels.payment import payment_required
+from iomodels.tags import Tag, TagSchema
+from iomodels.tasks import Task, TaskListResponse
 from protorpc import messages
+from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 import iomessages
+import model
+from crm.iomodels.casestatuses import CaseStatusSchema
 from endpoints_helper import EndpointsHelper
 from iograph import Node, Edge, InfoNodeListResponse
 from iomessages import EmailListSchema, PhoneListSchema, AddressListSchema, SocialLinkListSchema
-from iomodels.crmengine.casestatuses import CaseStatusSchema
-from iomodels.crmengine.documents import Document, DocumentListResponse
-from iomodels.crmengine.events import Event, EventListResponse
-from iomodels.crmengine.notes import Note, TopicListResponse
-from iomodels.crmengine.payment import payment_required
-from iomodels.crmengine.tags import Tag, TagSchema
-from iomodels.crmengine.tasks import Task, TaskListResponse
-from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 
 class UpdateStatusRequest(messages.Message):
@@ -747,7 +747,7 @@ class Case(EndpointsModel):
                 account_key = ndb.Key(urlsafe=request.account)
                 account = account_key.get()
             except:
-                from iomodels.crmengine.accounts import Account
+                from crm.iomodels.accounts import Account
                 account_key = Account.get_key_by_name(
                     user_from_email=user_from_email,
                     name=request.account
@@ -786,7 +786,7 @@ class Case(EndpointsModel):
                 contact_key = ndb.Key(urlsafe=request.contact)
                 contact = contact_key.get()
             except:
-                from iomodels.crmengine.contacts import Contact
+                from crm.iomodels.contacts import Contact
                 contact_key = Contact.get_key_by_name(
                     user_from_email=user_from_email,
                     name=request.contact
