@@ -52,7 +52,7 @@ function SignOut() {
     if (typeof(Storage) != "undefined") {
         localStorage.removeItem('access_token');
     }
-    window.location.replace('{{logout_url}}');
+    window.location.replace(window.uuser.logout_url);
 }
 
 var iogrow = {};

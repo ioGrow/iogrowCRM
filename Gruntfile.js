@@ -174,47 +174,36 @@ module.exports = function (grunt) {
                 tasks: ['concat:servs', 'uglify:servs'],
             },
         },
-        bower: {
-          install: {
-          }
-        },
         targethtml: {
             dist: {
               files: {
-                'templates/base.html': 'templates/base.html'
+                'templates/base.html': 'templates/base_source.html'
               }
             },
             dev: {
               files: {
-                'templates/base.html': 'templates/base.html'
+                'templates/base.html': 'templates/base_source.html'
               }
             }
         }
     });
-    grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-concat');
     grunt.loadNpmTasks('grunt-targethtml');
-    //grunt.registerTask('default', ['bower_concat','cssmin','uglify:first_sync_js','uglify:sync_js','uglify:async_js']);
-    //grunt.registerTask('default', ['bower','concat','uglify']);
-    //grunt.registerTask('dev', ['jshint:dev', 'uglify:dev', 'cssmin:dev', 'less:dev']);
-    grunt.registerTask('dev', [
-      'bower',
+    grunt.registerTask('default', [
       'bower_concat',
       'concat',
       'cssmin',
       'targethtml:dev'
     ]);
-    grunt.registerTask('production', [
-      'bower',
+    grunt.registerTask('prod', [
       'bower_concat',
       'concat',
       'cssmin',
       'uglify',
       'targethtml:dist'
     ]);
-
 };
