@@ -1,5 +1,5 @@
-app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
-    function ($scope, Auth, User, Map, Billing) {
+app.controller('UserListCtrl', ['$scope', 'Auth', 'User','Billing',
+    function ($scope, Auth, User, Billing) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Users").addClass("active");
         trackMixpanelAction('USER_LIST_VIEW');
@@ -10,7 +10,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
         $scope.nbLoads = 0;
         $scope.isLoading = false;
         $scope.pagination = {};
-        $scope.currentPage = 01;
+        $scope.currentPage = 1;
         $scope.selectedUsers = [];
         $scope.selected_invitees = [];
         $scope.pages = [];
@@ -40,13 +40,12 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             User.list($scope, params);
             Billing.getOrganizationSubscription($scope);
             Billing.listSubscription($scope);
-            $scope.mapAutocomplete();
             ga('send', 'pageview', '/admin/users');
         };
         $scope.refreshCurrent = function () {
             $scope.runTheProcess();
         };
-        $scope.inProcess = function (varBool, message) {
+        $scope.inProcess = function (varBool) {
             if (varBool) {
                 $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
@@ -125,11 +124,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             }
         };
 
-        $scope.mapAutocomplete = function () {
-            $scope.addresses = {};
-            /*$scope.billing.addresses;*/
-            Map.autocomplete($scope, "pac-input");
-        };
         $scope.select_invitee = function (invitee, index, $event) {
             var checkbox = $event.target;
             if (checkbox.checked) {
@@ -163,8 +157,8 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
                     $scope.isSelectedAll = true;
             } else {
                 for (var i = 0; i < $scope.selectedUsers.length; i++) {
-                    var user = $scope.selectedUsers[i];
-                    if (user.entityKey === user.entityKey){
+                    var selectedUser = $scope.selectedUsers[i];
+                    if (selectedUser.entityKey === selectedUser.entityKey){
                         $scope.selectedUsers.splice(i, 1);
                         if ($scope.selectedUsers.length == 0) $scope.isSelectedAll = false;
                         break;
@@ -179,12 +173,12 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
         };
 
         $scope.setAdmin = function (user, index, $event) {
-            if (!user.is_super_admin) {
+            if (!user['is_super_admin']) {
                 var checkbox = $event.target;
                 var params = {
                     'entityKey': user.entityKey,
                     'is_admin': checkbox.checked
-                }
+                };
                 User.setAdmin($scope, params);
             }
         };
@@ -211,7 +205,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
         };
 
         $scope.assignLicenses = function () {
-            if ($scope.licencesStatus.licenses_bought - $scope.licencesStatus.assigned_licenses < 1) return;
+            if ($scope.licencesStatus['licenses_bought'] - $scope.licencesStatus['assigned_licenses'] < 1) return;
             angular.forEach($scope.selectedUsers, function (user) {
                 if ($scope.usersSubscriptions[user['email']].plan.name != "premium") {
                     var params = {'entityKey': user.entityKey};
@@ -219,7 +213,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
                 }
             });
         };
-        $scope.unassignLicenses = function () {
+        $scope.unAssignLicenses = function () {
             angular.forEach($scope.selectedUsers, function (user) {
                 if ($scope.usersSubscriptions[user['email']].plan.name != "premium") {
                     var params = {'entityKey': user.entityKey};
@@ -236,10 +230,10 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
                         }
-                        emailss = [];
-                        emailss.push(elem);
-                        params = {
-                            'emails': emailss,
+                        var emails = [];
+                        emails.push(elem);
+                        var params = {
+                            'emails': emails,
                             'message': "message"
                         };
                         User.insert($scope, params);
@@ -286,7 +280,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User', 'Map','Billing',
             var emails = [];
             for (var i = $scope.selected_invitees.length - 1; i >= 0; i--) {
                 emails.push($scope.selected_invitees[i].invited_mail)
-            };
+            }
             var params = {
                 'emails': emails
             };

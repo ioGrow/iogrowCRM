@@ -27,7 +27,7 @@ angular.module('crmEngine.billingservices', []).factory('Billing', function () {
                 $scope.apply();
             })
         });
-    }
+    };
     Billing.listSubscription = function ($scope) {
         $scope.isLoading = true;
         gapi.client.request({

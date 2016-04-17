@@ -734,7 +734,11 @@ class GooglePlusConnect(SessionEnabledHandler):
                 credentials,
                 invited_user_id
             )
-            user.set_subscription(Subscription.create_freemium_subscription())
+            organization = user.organization.get()
+            if organization.plan and organization.plan.get().name == "life_time_free":
+                user.set_subscription(organization.get_subscription())
+            else:
+                user.set_subscription(Subscription.create_freemium_subscription())
         else:
             user = GooglePlusConnect.save_token_for_user(
                 user_email,

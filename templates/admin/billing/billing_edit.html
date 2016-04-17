@@ -11,9 +11,6 @@
         </ul>
     </div>
     <div class="subHeaderContent" style="border-right-width: 0;">
-        <a class="btn" ng-show="nbrSelected > 1" ng-click="deleteSelected()">
-            <i class="fa fa-trash-o"></i>
-        </a>
         <div class="col-md-4 active-app"><i class="fa fa-credit-card section-icon"></i>
             {{ _('Billing & Subscription Settings') }}
         </div>
@@ -70,8 +67,8 @@
                             <p class="form-control-static"> <%= subscription.quantity%></p>
                         </div>
                     </div>
-                    <a ng-show="subscription.plan.name == 'freemium'" class="btn btn-danger"
-                       ng-href="<%= subscription_url %>"> Upgrade
+                    <a ng-show="subscription.plan.name == 'freemium' && org_subscription.plan.name == 'freemium'"
+                       class="btn btn-danger" ng-href="<%= subscription_url %>"> Upgrade
                     </a>
                 </form>
             </div>
