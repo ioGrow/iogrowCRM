@@ -30,15 +30,15 @@
         </a>
         <form style="display: inline">
             <div class="col-sm-6 pull-right" ng-show="showInviteForm" ng-class="{ 'has-error':email_empty}">
-            <label class="sr-only">Email</label>
-            <input type="email" ng-model="email.email" placeholder="Enter a email" class="form-control"
-                   style="width: 58%;display: inline;">
-            <button class="btn red" ng-click="inviteNewUser(email)">Invite</button>
-            <button ng-click="showInviteForm = false" class="btn btn-default">X</button>
-        </div>
+                <label class="sr-only">Email</label>
+                <input type="email" ng-model="email.email" placeholder="Enter a email" class="form-control"
+                       style="width: 58%;display: inline;">
+                <button class="btn red" ng-click="inviteNewUser(email)">Invite</button>
+                <button ng-click="showInviteForm = false" class="btn btn-default">X</button>
+            </div>
         <span ng-hide="showInviteForm">
             <button type="submit" title="New user" class="btn red newAccountBtnOnscroll pull-right save-btn"
-               ng-click="showInviteForm=true">
+                    ng-click="showInviteForm=true">
                 + <i class="fa fa-user"></i> {{ _('New') }}
             </button>
         </span>
@@ -189,9 +189,7 @@
             <button ng-class="{disabled: selected_invitees.length==0}" title=" Delete invitee "
                     class="btn btn-sm btn-default task_action pull-right" ng-click="deleteInvitedUser()" ng-show="true">
                 <i class="fa fa-trash-o"></i>
-              <span class="btn-text">
-                  Delete invitee
-              </span>
+              <span class="btn-text"> Delete invitee </span>
             </button>
             {% endif %}
             <h3>Invitees : </h3>
