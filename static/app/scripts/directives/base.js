@@ -188,7 +188,7 @@ function loadCSS(e, n, o, t) {
             d.media = o || "all"
         }), d
     }
-loadCSS("/static/build/css/_async.min.css");
+loadCSS("/static/build/css/_async.css");
 // mixpanel declaration
 mixpanel.people.set({
     "$email": window.uuser.email,    // only special properties need the $

@@ -146,12 +146,12 @@ module.exports = function (grunt) {
       cssmin: {
             sync_css: {
                 files: {
-                    'static/build/css/_sync.min.css': ['static/build/css/_sync.css']
+                    'static/build/css/_sync.css': ['static/build/css/_sync.css']
                 }
             },
              async_css: {
                 files: {
-                    'static/build/css/_async.min.css': ['static/build/css/_async.css']
+                    'static/build/css/_async.css': ['static/build/css/_async.css']
                 }
             },
 
@@ -163,27 +163,27 @@ module.exports = function (grunt) {
             },
             first_sync_js: {
                files: {
-               'static/build/js/_first.min.js': ['static/build/js/_first.js']
+               'static/build/js/_first.js': ['static/build/js/_first.js']
                }
             },
             sync_js: {
                files: {
-               'static/build/js/_sync.min.js': ['static/build/js/_sync.js']
+               'static/build/js/_sync.js': ['static/build/js/_sync.js']
                }
             },
             async_js: {
              files: {
-             'static/build/js/_async.min.js': ['static/build/js/_async.js']
+             'static/build/js/_async.js': ['static/build/js/_async.js']
              }
             },
             ctrls: {
                 files: {
-                    'static/build/js/_ctrls.min.js': ['static/build/js/_ctrls.js']
+                    'static/build/js/_ctrls.js': ['static/build/js/_ctrls.js']
                 }
             },
             servs: {
                 files: {
-                    'static/build/js/_servs.min.js': ['static/build/js/_servs.js']
+                    'static/build/js/_servs.js': ['static/build/js/_servs.js']
                 }
             }
         },
@@ -200,36 +200,44 @@ module.exports = function (grunt) {
                 tasks: ['concat:servs', 'uglify:servs'],
             },
         },
-        targethtml: {
-            dist: {
-              files: {
-                'templates/base.html': 'templates/base_source.html'
-              }
+            removeLoggingCalls: {
+        // the files inside which you want to remove the console statements
+        files: ['static/build/js/*.js'],
+        options: {
+            // an array of method names to remove
+            methods: ['log', 'info', 'assert'],
+            // replacement strategy
+            strategy: function(consoleStatement) {
+                // comments console calls statements
+                //return '/* ' + consoleStatement + '*/';
+                return ''; // to remove
             },
-            dev: {
-              files: {
-                'templates/base.html': 'templates/base_source.html'
-              }
-            }
+
+            // when the logging statement is ended by a semicolon ';'
+            // include it in the 'consoleStatement' given to the strategy
+            removeSemicolonIfPossible: true
         }
+    }
+
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-concat');
-    grunt.loadNpmTasks('grunt-targethtml');
+    //grunt.loadNpmTasks("grunt-remove-logging-calls");
+
     grunt.registerTask('default', [
       'bower_concat',
       'concat',
-      'cssmin',
-      'targethtml:dev'
+      'cssmin'
     ]);
     grunt.registerTask('prod', [
       'bower_concat',
       'concat',
       'cssmin',
+      //  'removeLoggingCalls',       //buggy
       'uglify',
-      'targethtml:dist'
+
     ]);
 };
