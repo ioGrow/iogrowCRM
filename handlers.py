@@ -1478,12 +1478,38 @@ class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
             stripe_event_invoice = eve['data']['object']
             org = Organization.query(Organization.stripe_customer_id == stripe_event_invoice['customer']).get()
             sub = Subscription.query(Subscription.stripe_subscription_id == stripe_event_invoice['subscription']).get()
-            if org.subscription == sub.key:
+            if org and sub and org.subscription == sub.key:
+                customer = stripe.Customer.retrieve(stripe_event_invoice['customer'])
+                email = customer['email']
+                org.billing_contact_address = org.billing_contact_address or ''
+                org.billing_contact_firstname = org.billing_contact_firstname or ''
+                org.billing_contact_lastname = org.billing_contact_lastname or ''
+                org.billing_contact_phone_number = org.billing_contact_phone_number or ''
+                org.billing_contact_email = org.billing_contact_email or ''
                 sub.expiration_date = Subscription.calculate_expiration_date(app_config.MONTH)
                 sub.start_date = datetime.datetime.now()
                 sub.put()
                 invoice = stripe.Invoice.retrieve(stripe_event_invoice['id'])
+                logging.info("Invoice Object")
                 logging.info(invoice)
+                body_path = "templates/emails/invoice.html"
+                template = jinja_environment.get_template(body_path)
+                due_date = sub.expiration_date.strftime("%A %d. %B %Y")
+                created = sub.start_date.strftime("%A %d. %B %Y")
+                last_4 = customer['sources']['data'][0]['last4']
+                line_0 = invoice['lines']['data'][0]
+                plan = line_0['plan']
+                total = line_0['amount']
+                interval = plan['interval']
+                body = template.render({'invoice': invoice, 'created': created, 'due': due_date, 'org': org,
+                                        'last4': last_4, 'interval': interval, 'quantity': line_0['quantity'],
+                                        'amount': plan['amount']/100, 'total':total/100})
+                message = mail.EmailMessage()
+                message.sender = 'hakim@iogrow.com'
+                message.to = org.billing_contact_email or email
+                message.subject = 'Invoice'
+                message.html = body
+                message.send()
 
 
 class SFcallback(BaseHandler, SessionEnabledHandler):
@@ -1623,7 +1649,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         #     #                                      custom_attributes={'sf_extension': True}
         #     #                                      )
         #     # print intercom_user
-        # except: 
+        # except:
         #     print 'error'
         #
 
@@ -3752,7 +3778,7 @@ class CheckJobStatus(webapp2.RequestHandler):
             )
 
 
-# paying with stripe 
+# paying with stripe
 class StripePayingHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
         # the secret key .
@@ -3767,7 +3793,7 @@ class StripePayingHandler(BaseHandler, SessionEnabledHandler):
             print stripe.Charge.all()
             print "-*-*-*-*-*-*-*-*-*-*-*-*-*"
             # charge= stripe.Charge.create(
-            #     amount=1000, 
+            #     amount=1000,
             #     currency="usd",
             #     card=token,
             #     description="hadji@iogrow.com")
