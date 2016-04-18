@@ -15,20 +15,16 @@ def install_libs():
 
 @task
 def install_grunt():
-	run("sudo npm i -g grunt")
-	run("npm i grunt-contrib-watch")
-	run("npm i grunt-contrib-concat")
-	run("npm i grunt-contrib-uglify")
-	run("npm i grunt-contrib-cssmin")
-	run("npm i grunt-contrib-htmlmin")
+	run("npm i")
 
 @task
 def install_deps_ubuntu():
 	run("curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -; sudo apt-get install -y nodejs ") #nodejs
 	install_grunt()
+	run("sudo npm i -g bower")
 
 
-@task
+@task(default=True)
 def build():
 	run("grunt")
 
@@ -40,6 +36,13 @@ def build_prod():
 @task(build)
 def start(gae_path="../google_appengine/"):
     run(gae_path + "dev_appserver.py ./ --port 8090")
+
+
+@task(build_prod)
+def start_prod(gae_path="../google_appengine/"):
+    run(gae_path + "dev_appserver.py ./ --port 8090")
+
+
 
 @task(build_prod)
 def deploy(gae_path="../google_appengine/"):
