@@ -1,7 +1,9 @@
 *~
 *.py[cod]
-node_modules/*
-libx/*
+node_modules/
+bower_components/
+static/build/
+libx/
 .idea/
 # C extensions
 *.so
@@ -38,4 +40,4 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
-.idea/*
+

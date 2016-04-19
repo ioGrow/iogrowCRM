@@ -140,7 +140,7 @@ class EndpointsHelper:
         Returns:
           An object containing a base64 encoded email object.
         """
-        message_html += '<p>Sent from my <a href="http://goo.gl/a5S8xZ">ioGrow account </a></p>'
+        message_html += '<p>Sent from my <a href="http://www.iogrow.com/">ioGrow account </a></p>'
         message = MIMEText(smart_str(message_html), 'html')
         message['to'] = to
         message['cc'] = cc
@@ -169,7 +169,7 @@ class EndpointsHelper:
         message['bcc'] = bcc
         message['from'] = sender
         message['subject'] = subject
-        message_html += '<p>Sent from my <a href="http://goo.gl/a5S8xZ">ioGrow account </a></p>'
+        message_html += '<p>Sent from my <a href="http://www.iogrow.com/">ioGrow account </a></p>'
         msg = MIMEText(smart_str(message_html), 'html')
         message.attach(msg)
         for file_id in files:
@@ -200,7 +200,7 @@ class EndpointsHelper:
         message['bcc'] = bcc
         message['from'] = sender
         message['subject'] = subject
-        message_html += '<p>Sent from my <a href="http://goo.gl/a5S8xZ">ioGrow account </a></p>'
+        message_html += '<p>Sent from my <a href="http://www.iogrow.com/">ioGrow account </a></p>'
         msg = MIMEText(smart_str(message_html), 'html')
         message.attach(msg)
         path = os.path.join('mail_images', 'sm-iogrow-true.png')

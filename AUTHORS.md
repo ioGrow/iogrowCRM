@@ -16,7 +16,7 @@ We gratefully acknowledge contributions from the following. Please let us know i
 ### Backend
 - Tedj Meabiou [@tedj](https://github.com/tedj)
 - Hakim Karriche [@hkarriche](https://github.com/hkarriche)
-- Hichem hadji [@dixdix](https://github.com/dixdix)
+- Hichem Hadji [@dixdix](https://github.com/dixdix)
 - Meziane Hadjadj [@MezianeHadjadj](https://github.com/MezianeHadjadj)
 - Assem Chelli [@assem-ch](https://github.com/assem-ch)
 - Arezki Lebdiri [@arezki1990](https://github.com/arezki1990)
@@ -28,7 +28,7 @@ We gratefully acknowledge contributions from the following. Please let us know i
 - Yacine Hamidia [@y-hamidia](https://github.com/y-hamidia)
 - Tedj Meabiou [@tedj](https://github.com/tedj)
 - Hakim Karriche [@hkarriche](https://github.com/hkarriche)
-- Hichem hadji [@dixdix](https://github.com/dixdix)
+- Hichem Hadji [@dixdix](https://github.com/dixdix)
 - Meziane Hadjadj [@MezianeHadjadj](https://github.com/MezianeHadjadj)
 - Arezki Lebdiri [@arezki1990](https://github.com/arezki1990)
 - Khaled Ghiboub [@proserve](https://github.com/proserve)
@@ -45,5 +45,5 @@ We gratefully acknowledge contributions from the following. Please let us know i
 
 
 ### Design & User Experience
-- Ilyes boujelthiya [@osidsoft](https://github.com/osidsoft)
+- Ilyes Boudjelthia [@osidsoft](https://github.com/osidsoft)
 - Ben Belfodil [@Benabes](https://github.com/Benabes)
