@@ -6310,7 +6310,6 @@ class CrmEngineApi(remote.Service):
             if user.subscription.get().plan.get().name != config.PREMIUM:
                 user.set_subscription(organization.subscription.get())
                 user.put()
-                quantity -= 1
 
             subscription.quantity += quantity
             subscription.put()

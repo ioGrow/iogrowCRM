@@ -1443,7 +1443,6 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
             if user.subscription.get().plan.get().name != app_config.PREMIUM:
                 user.set_subscription(premium_subscription)
                 user.put()
-                premium_subscription.quantity = quantity-1
                 premium_subscription.put()
 
             organization.stripe_customer_id = customer.id
