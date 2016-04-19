@@ -34,6 +34,11 @@ def deploy(gae_path="../google_appengine/"):
 	run(gae_path + "appcfg.py update ./")
 
 
+
+@task
+def test():
+    print "TODO"
+
 @task
 def babel(extract=False, init =False, compile=False, update=False):
     if init:
