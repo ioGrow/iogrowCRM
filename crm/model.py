@@ -1420,7 +1420,7 @@ class User(EndpointsModel):
             }
         )
 
-        Organization.ance(request.organization_name, user)
+        Organization.create_instance(request.organization_name, user)
 
     @classmethod
     def check_license(cls, user):
