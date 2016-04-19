@@ -14,6 +14,7 @@ info | _
 
 ## Hacking
 ### Requirements
+- [Google App Engine SDK for python](https://cloud.google.com/appengine/downloads#Google_App_Engine_SDK_for_Python)
 - [nodejs](https://nodejs.org/en/)
 - [pip](https://github.com/pypa/pip)
 - [pyinvoke](http://www.pyinvoke.org/)
@@ -22,10 +23,10 @@ info | _
  1. Install dependencies: 
     `invoke install`
  1. Build generated files:
-    - DEV
+    - DEV:
       `invoke build`
 
-    - PROD
+    - PROD:
       `invoke build -p`
 
  1. Run the app locally (localhost:8090):
