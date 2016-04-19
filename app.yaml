@@ -34,6 +34,9 @@ handlers:
 - url: /static
   static_dir: static
 
+- url: /bower_components
+  static_dir: bower_components
+
 - url: /static/new_web_site/google_drive_files
   static_dir: static/new_web_site/google_drive_files
   expiration: "30d"

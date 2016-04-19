@@ -1,4 +1,4 @@
-var app = angular.module('crmEngine', ['googlechart', 'easypiechart', 'xeditable', 'ui.bootstrap', 'ui.select2', 'angularMoment',
+var app = angular.module('crmEngine', ['googlechart','xeditable', 'ui.bootstrap', 'ui.select2', 'angularMoment',
     'angular-sortable-view',
     'crmEngine.authservices', 'crmEngine.accountservices', 'crmEngine.contactservices', 'crmEngine.topicservices',
     'crmEngine.taskservices', 'crmEngine.eventservices', 'crmEngine.leadservices', 'crmEngine.opportunityservices',
