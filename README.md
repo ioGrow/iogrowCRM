@@ -30,27 +30,28 @@ ioGrow is designed to work the way you work. Seamlessly integrated with Google a
 - [pip](https://github.com/pypa/pip)
 - [pyinvoke](http://www.pyinvoke.org/)
 
-### Install dependencies:
-  `invoke install`
-### Build generated files: 
-#### DEV
-  `invoke build`
+### Tasks
+ 1. Install dependencies: 
+    `invoke install`
+ 1. Build generated files:
+    - DEV
+      `invoke build`
 
-#### PROD
-  `invoke build -p` 
+    - PROD
+      `invoke build -p`
 
-### Run the app locally (localhost:8090):
-  `invoke start`
+ 1. Run the app locally (localhost:8090):
+   `invoke start`
 
-### Deploy to GAE:
-  `invoke deploy`
+ 1. Deploy to GAE:
+   `invoke deploy`
   
-### Run tests
-  `invoke test`
+ 1. Run tests
+   `invoke test`
   
-### Localization
-#### Extract messages:
-  `invoke babel --extract`
+ 1. Localization
+    - Extract messages:
+     `invoke babel --extract`
   
-#### Compile messages:
-  `invoke babel --compile`
+    - Compile messages:
+     `invoke babel --compile`
