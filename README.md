@@ -12,18 +12,6 @@ info | _
  Website |	[iogrow.com](http://www.iogrow.com)
  Accounts |	[@Facebook](https://www.facebook.com/iogrow) [@Twitter](https://twitter.com/iogrow) [@GooglePlus](https://plus.google.com/110820504821255547625)
 
-## Features
-### Social CRM, designed to work social
-ioGrow is smoothly integrated with major social networks, you just enter your contact's name and last name and we will suggest you some potential profiles from LinkedIn and Twitter related to your contact. ioGrow brings LinkedIn and Twitter profiles right to you.
-Top Three ioGrow Features
-
-### No data entry, developed to be smart
-With io Grow Chrome extension, it's just one click to add a new leads from Social networks to ioGrow. No need to spend time on data entry, focus on what matters the most, **your customers**. 
-
-### Built to speak with Google Apps
-ioGrow is designed to work the way you work. Seamlessly integrated with Google apps that you already love & use, it's much easier for your team to create, collaborate, communicate and share. 
-
-
 ## Hacking
 ### Requirements
 - [nodejs](https://nodejs.org/en/)
