@@ -45,7 +45,7 @@ from crm.iomodels.cases import Case
 from endpoints_helper import EndpointsHelper
 from iograph import Edge
 from iomodels import config as app_config
-from model import Application, STANDARD_TABS, ADMIN_TABS
+from model import Application, STANDARD_TABS, ADMIN_TABS, User, Organization
 
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
@@ -1211,7 +1211,6 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
             if user.subscription.get().plan.get().name != app_config.PREMIUM:
                 user.set_subscription(premium_subscription)
                 user.put()
-                premium_subscription.quantity = quantity-1
                 premium_subscription.put()
 
             organization.stripe_customer_id = customer.id
@@ -1243,7 +1242,41 @@ class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
     def post(self):
         eve = json.loads(self.request.body)
         if eve['type'] == "invoice.payment_succeeded":
-            logging.info(eve)
+            stripe_event_invoice = eve['data']['object']
+            org = Organization.query(Organization.stripe_customer_id == stripe_event_invoice['customer']).get()
+            sub = Subscription.query(Subscription.stripe_subscription_id == stripe_event_invoice['subscription']).get()
+            if org and sub and org.subscription == sub.key:
+                customer = stripe.Customer.retrieve(stripe_event_invoice['customer'])
+                email = customer['email']
+                org.billing_contact_address = org.billing_contact_address or ''
+                org.billing_contact_firstname = org.billing_contact_firstname or ''
+                org.billing_contact_lastname = org.billing_contact_lastname or ''
+                org.billing_contact_phone_number = org.billing_contact_phone_number or ''
+                org.billing_contact_email = org.billing_contact_email or ''
+                sub.expiration_date = Subscription.calculate_expiration_date(app_config.MONTH)
+                sub.start_date = datetime.datetime.now()
+                sub.put()
+                invoice = stripe.Invoice.retrieve(stripe_event_invoice['id'])
+                logging.info("Invoice Object")
+                logging.info(invoice)
+                body_path = "templates/emails/invoice.html"
+                template = jinja_environment.get_template(body_path)
+                due_date = sub.expiration_date.strftime("%A %d. %B %Y")
+                created = sub.start_date.strftime("%A %d. %B %Y")
+                last_4 = customer['sources']['data'][0]['last4']
+                line_0 = invoice['lines']['data'][0]
+                plan = line_0['plan']
+                total = line_0['amount']
+                interval = plan['interval']
+                body = template.render({'invoice': invoice, 'created': created, 'due': due_date, 'org': org,
+                                        'last4': last_4, 'interval': interval, 'quantity': line_0['quantity'],
+                                        'amount': plan['amount']/100, 'total':total/100})
+                message = mail.EmailMessage()
+                message.sender = 'hakim@iogrow.com'
+                message.to = org.billing_contact_email or email
+                message.subject = 'Invoice'
+                message.html = body
+                message.send()
 
 
 class SFcallback(BaseHandler, SessionEnabledHandler):
@@ -1384,7 +1417,7 @@ class SFconnect(BaseHandler, SessionEnabledHandler):
         #     #                                      custom_attributes={'sf_extension': True}
         #     #                                      )
         #     # print intercom_user
-        # except: 
+        # except:
         #     print 'error'
         #
 
@@ -2479,6 +2512,31 @@ class CheckJobStatus(webapp2.RequestHandler):
                 queue_name='iogrow-critical',
                 payload=json.dumps(params)
             )
+
+
+# paying with stripe
+class StripePayingHandler(BaseHandler, SessionEnabledHandler):
+    def post(self):
+        # the secret key .
+        # stripe.api_key="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
+        stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
+        # get the token from the client form
+        token = self.request.get('stripeToken')
+        # charging operation after the payment
+        try:
+            print "*-*-*-*-*-*-*-*-*-*-*-*-//////////////////////"
+            print "here we go !"
+            print stripe.Charge.all()
+            print "-*-*-*-*-*-*-*-*-*-*-*-*-*"
+            # charge= stripe.Charge.create(
+            #     amount=1000,
+            #     currency="usd",
+            #     card=token,
+            #     description="hadji@iogrow.com")
+        except stripe.CardError, e:
+            # The card has been declined
+            pass
+
 
 class SFusersCSV(BaseHandler, SessionEnabledHandler):
     def get(self):
