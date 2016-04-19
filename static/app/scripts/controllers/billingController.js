@@ -38,13 +38,13 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
         };
         $scope.inProcess = function (varBool) {
             if (varBool) {
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
                 ;
             } else {
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
                 }
@@ -107,8 +107,7 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             } else {
                 params = {'limit': 7}
             }
-            console.log('in listNextPageItems');
-            $scope.currentPage = $scope.currentPage + 1;
+            $scope.currentPage += 1;
             User.list($scope, params);
         };
         $scope.listPrevPageItems = function () {
@@ -122,19 +121,16 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             } else {
                 params = {'limit': 7}
             }
-            $scope.currentPage = $scope.currentPage - 1;
+            $scope.currentPage -= 1;
             User.list($scope, params);
         };
 
         $scope.showModal = function () {
-            console.log('button clicked');
             $('#addAccountModal').modal('show');
 
         };
 
         $scope.addNewUser = function (user) {
-            console.log('add a new user');
-            console.log(user);
             $('#addAccountModal').modal('hide');
             User.insert($scope, user);
         };

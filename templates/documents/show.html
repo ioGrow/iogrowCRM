@@ -15,7 +15,7 @@
             <a href="<%=uri%>" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
                 <img onload="this.__gwtLastUnhandledEvent = & quot;
                         load & quot;
-                        ;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
+                        ;" src="/static/src/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
             </a>
             <%=attachment.about.kind%> > <%=attachment.about.name%>
         </h2>
@@ -48,7 +48,7 @@
                             </span>
                             <span class="page-meta pull-right">
                                 <a href=" https://docs.google.com/file/d/<%=attachment.resource_id%>/edit?usp=drive_web" class="btn-link addAnotherPhone" target="new">
-                                    <img src="/static/img/drive_icon.png" width="16">
+                                    <img src="/static/src/img/drive_icon.png" width="16">
                                     {{ _('Open with Google Drive')}}
                                 </a>
                                 |
@@ -656,7 +656,7 @@
                     <div class=''>
                         <p>{{ _("Invited user:")}}</p>
                         <div class="invitation" ng-repeat="invited in sharing_with">
-                            <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
+                            <img class="google-avatar" ng-src="invited.google_public_profile_photo_url"/>
                             <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
                             <hr/>
                         </div>

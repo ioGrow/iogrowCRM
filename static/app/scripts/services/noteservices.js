@@ -9,22 +9,12 @@ noteservices.factory('Note', function($http) {
   
   
   Note.list = function($scope,params){
-      console.log('in notes.list');
-      console.log(params);
-
       $scope.isLoading = true;
       gapi.client.crmengine.notes.list(params).execute(function(resp) {
               if(!resp.code){
-                console.log('in topics.list looking for pagingation');
-                console.log('CurrentPage   is '+$scope.currentPage);
 
                  $scope.notes = resp.items;
-                  if ($scope.currentPage > 1){
-                      console.log('Should show PREV');
-                    $scope.pagination.prev = true;
-                  }else{
-                      $scope.pagination.prev= false;
-                   }
+                  $scope.pagination.prev = $scope.currentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.currentPage + 1;
                     // Store the nextPageToken
@@ -68,7 +58,6 @@ noteservices.factory('Note', function($http) {
                 $scope.$apply();
                };
             }
-            console.log('gapi #end_execute');
           });
   };
 

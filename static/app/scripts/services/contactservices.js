@@ -63,8 +63,6 @@ accountservices.factory('Contact', function ($rootScope) {
                 } 
                 $scope.linkedProfileresume=$scope.contact.linkedin_profile.resume;
                 if (resp.infonodes) {
-                    console.log("infonodes");
-                    console.log(resp.infonodes);
                     if (resp.infonodes.items) {
                         for (var i = 0; i < resp.infonodes.items.length; i++) {
                             if (resp.infonodes.items[i].kind == 'addresses') {
@@ -92,8 +90,6 @@ accountservices.factory('Contact', function ($rootScope) {
                     }
                 }
                 $scope.getCustomFields('contacts');
-                console.log('cus cus');
-                console.log($scope.contact);
                 if (resp.topics) {
                     if (params.topics.pageToken) {
                         angular.forEach(resp.topics.items, function (item) {
@@ -104,12 +100,7 @@ accountservices.factory('Contact', function ($rootScope) {
                         $scope.topics = resp.topics.items;
                     }
 
-                    if ($scope.topicCurrentPage > 1) {
-                        console.log('Should show PREV');
-                        $scope.topicpagination.prev = true;
-                    } else {
-                        $scope.topicpagination.prev = false;
-                    }
+                    $scope.topicpagination.prev = $scope.topicCurrentPage > 1;
                     if (resp.topics.nextPageToken) {
                         var nextPage = $scope.topicCurrentPage + 1;
                         // Store the nextPageToken
@@ -133,11 +124,7 @@ accountservices.factory('Contact', function ($rootScope) {
                     else {
                         $scope.opportunities = resp.opportunities.items;
                     }
-                    if ($scope.oppCurrentPage > 1) {
-                        $scope.opppagination.prev = true;
-                    } else {
-                        $scope.opppagination.prev = false;
-                    }
+                    $scope.opppagination.prev = $scope.oppCurrentPage > 1;
                     if (resp.opportunities.nextPageToken) {
                         var nextPage = $scope.oppCurrentPage + 1;
                         // Store the nextPageToken
@@ -164,11 +151,7 @@ accountservices.factory('Contact', function ($rootScope) {
                     else {
                         $scope.cases = resp.cases.items;
                     }
-                    if ($scope.caseCurrentPage > 1) {
-                        $scope.casepagination.prev = true;
-                    } else {
-                        $scope.casepagination.prev = false;
-                    }
+                    $scope.casepagination.prev = $scope.caseCurrentPage > 1;
                     if (resp.cases.nextPageToken) {
                         var nextPage = $scope.caseCurrentPage + 1;
                         // Store the nextPageToken
@@ -195,11 +178,7 @@ accountservices.factory('Contact', function ($rootScope) {
                     else {
                         $scope.documents = resp.documents.items;
                     }
-                    if ($scope.documentCurrentPage > 1) {
-                        $scope.documentpagination.prev = true;
-                    } else {
-                        $scope.documentpagination.prev = false;
-                    }
+                    $scope.documentpagination.prev = $scope.documentCurrentPage > 1;
                     if (resp.documents.nextPageToken) {
 
                         var nextPage = $scope.documentCurrentPage + 1;
@@ -228,7 +207,7 @@ accountservices.factory('Contact', function ($rootScope) {
                 if (resp.profile_img_url) {
                     $scope.imageSrc = resp.profile_img_url;
                 } else {
-                    $scope.imageSrc = '/static/img/avatar_contact.jpg';
+                    $scope.imageSrc = '/static/src/img/avatar_contact.jpg';
                 }
                 $scope.isContentLoaded = true;
 
@@ -274,8 +253,6 @@ accountservices.factory('Contact', function ($rootScope) {
                 $scope.getLinkedinProfile();
                 $scope.getTwitterProfile();
 
-                console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhere contact');
-                console.log($scope.contact);
 
             } else {
                 if (resp.code == 401) {
@@ -367,8 +344,6 @@ accountservices.factory('Contact', function ($rootScope) {
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.contacts.import(params).execute(function (resp) {
-            console.log(params);
-            console.log(resp);
             if (!resp.code) {
                 $scope.isContentLoaded = true;
                 $scope.numberOfRecords = resp.number_of_records;
@@ -394,10 +369,7 @@ accountservices.factory('Contact', function ($rootScope) {
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.contacts.import_from_csv_second_step(params).execute(function (resp) {
-            console.log(params);
-            console.log(resp);
             if (!resp.code) {
-                console.log(resp);
                 $scope.showImportMessages();
                 $scope.inProcess(false);
                 $scope.apply();
@@ -434,18 +406,10 @@ accountservices.factory('Contact', function ($rootScope) {
                 }
                 $scope.contacts = resp.items;
 
-                if ($scope.contactCurrentPage > 1) {
-                    $scope.contactpagination.prev = true;
-                } else {
-                    $scope.contactpagination.prev = false;
-                }
+                $scope.contactpagination.prev = $scope.contactCurrentPage > 1;
                 if (resp.nextPageToken) {
-                    // console.log("resp.nextPageToken");
-                    // console.log(resp.nextPageToken);
                     var nextPage = $scope.contactCurrentPage + 1;
                     $scope.contactpages[nextPage] = resp.nextPageToken;
-                    // console.log("$scope.contactpages[nextPage]");
-                    // console.log($scope.contactpages[nextPage]);
                     $scope.contactpagination.next = true;
 
                 } else {
@@ -487,8 +451,6 @@ accountservices.factory('Contact', function ($rootScope) {
     Contact.search = function ($scope, params) {
         gapi.client.crmengine.contacts.search(params).execute(function (resp) {
             if (resp.items) {
-                console.log("resp.items from contact search");
-                console.log(resp.items);
                 $scope.results = resp.items;
                 $scope.apply();
             }
@@ -511,17 +473,9 @@ accountservices.factory('Contact', function ($rootScope) {
                 angular.forEach(resp.items, function (item) {
                     $scope.contacts.push(item);
                 });
-                if ($scope.contactCurrentPage > 1) {
-                    $scope.contactpagination.prev = true;
-                } else {
-                    $scope.contactpagination.prev = false;
-                }
+                $scope.contactpagination.prev = $scope.contactCurrentPage > 1;
                 if (resp.nextPageToken) {
-                     console.log("resp.nextPageToken");
-                    console.log(resp.nextPageToken);
                     var nextPage = $scope.contactCurrentPage + 1;
-                    console.log("scope.contactCurrentPage");
-                    console.log($scope.contactCurrentPage);
                     // Store the nextPageToken
                     $scope.contactpages[nextPage] = resp.nextPageToken;
                     $scope.contactpagination.next = true;
@@ -628,7 +582,6 @@ accountservices.factory('Contact', function ($rootScope) {
         gapi.client.crmengine.contacts.export(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
-                console.log("request sent")
 
             } else {
 
@@ -642,7 +595,6 @@ accountservices.factory('Contact', function ($rootScope) {
         gapi.client.crmengine.contacts.export_keys(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
-                console.log("request ssent")
 
             } else {
 
@@ -666,7 +618,6 @@ accountservices.factory('Contact', function ($rootScope) {
                     $scope.blankStatecontact = false;
                 }
                 $scope.contacts.unshift(resp);
-                console.log($scope.contacts);
                 if ($scope.contactInserted) {
                     
                     $scope.contactInserted(resp);
@@ -677,7 +628,6 @@ accountservices.factory('Contact', function ($rootScope) {
                 $scope.apply();
 
             } else {
-                console.log(resp.message);
                 $('#addAContactModal').modal('hide');
                 $('#errorModal').modal('show');
                 if (resp.message == "Invalid grant") {

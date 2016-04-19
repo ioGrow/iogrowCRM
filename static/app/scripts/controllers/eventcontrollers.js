@@ -31,21 +31,13 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
-                if (message) {
-                    console.log("starts of :" + message);
-                }
-                ;
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
                 ;
             } else {
-                if (message) {
-                    console.log("ends of :" + message);
-                }
-                ;
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
 
@@ -90,7 +82,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         // HKA 10.12.2015 new function to create docume
    $scope.docCreated=function(url){
-            console.log('here docCreated');
             window.open($scope.prepareEmbedLink(url),'_blank');
         }
    $scope.prepareEmbedLink=function(link){
@@ -196,7 +187,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
         $scope.listNextPageItemscomment = function () {
 
-            console.log('i am in list next comment page')
             var nextPage = $scope.currentPagecomment + 1;
 
             var params = {};
@@ -214,8 +204,7 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
                     'order': '-updated_at',
                 }
             }
-            console.log('in listNextPageItems');
-            $scope.currentPagecomment = $scope.currentPagecomment + 1;
+            $scope.currentPagecomment += 1;
             Comment.list($scope, params);
         }
 
@@ -237,7 +226,7 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
                     'discussion': $scope.eventt.entityKey
                 }
             }
-            $scope.currentPagecomment = $scope.currentPagecomment - 1;
+            $scope.currentPagecomment -= 1;
             Comment.list($scope, params);
         };
 
@@ -261,14 +250,12 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
         };
         // LBA le 21-10-2014
         $scope.DeleteCollaborator = function (entityKey) {
-            console.log("delete collaborators")
             var item = {
                 'type': "user",
                 'value': entityKey,
                 'about': $scope.event.entityKey
             };
             Permission.delete($scope, item)
-            console.log(item)
         };
         $scope.refreshToken = function () {
             Auth.refreshToken();
@@ -321,7 +308,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
         };
 
         $scope.showModal = function () {
-            console.log('button clicked');
             $('#addAccountModal').modal('show');
 
         };
@@ -358,7 +344,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
 //HKA 18.11.2013 highlight the comment
         $scope.hilightComment = function () {
-            console.log('Should higll');
             $('#comment_0').effect("bounce", "slow");
             $('#comment_0 .message').effect("highlight", "slow");
         };
@@ -366,8 +351,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
         //HKA 02.12.2013 Add Contributor
 
         $scope.addNewContributor = function (selected_user, role) {
-            console.log('*************** selected user ***********************');
-            console.log(selected_user);
 
             var params = {
                 'discussionKey': $scope.eventt.entityKey,
@@ -385,7 +368,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
 
 
             }
-            console.log('selected member');
 
             $('#addContributor').modal('hide');
         };
@@ -475,7 +457,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
                 params.items = new Array();
 
                 $.each(data.docs, function (index) {
-                    console.log(data.docs);
 
                     var item = {
                         'id': data.docs[index].id,
@@ -603,31 +584,18 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
 
 
-// console.log("Timezone of browser:");
-// console.log(moment().format("Z"));
 // var language = window.navigator.userLanguage || window.navigator.language;
-// console.log("language:")
-// console.log(language)
-//
 
 
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
-                if (message) {
-                    console.log("starts of :" + message);
-                }
-                ;
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
                 ;
             } else {
-                if (message) {
-                    console.log("ends of :" + message);
-                }
-                ;
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
 
@@ -705,17 +673,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         $scope.runTheProcess = function () {
             var eventid = {'id': $route.current.params.eventId};
-
             var userGId = {'google_user_id': $scope.user_id};
-
-            $("head").append('<link href="/static/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>');
-            //$("head").append('<script src="/static/datetimepicker/jquery.js"></script>');
-            $("head").append('<link rel="stylesheet" type="text/css" href="/static/datetimepicker/jquery.datetimepicker.css"/>');
-
-            $("head").append('<script type="text/javascript" src="/static/plugins/fullcalendar/fullcalendar.min.js"></script>');
-            $("head").append('<script type="text/javascript" src="/static/plugins/fullcalendar/lang-all.js"></script>');
-            $("head").append('<script type="text/javascript" src="/static/plugins/fullcalendar/gcal.js"></script>');
-            $("head").append('<script src="/static/datetimepicker/jquery.datetimepicker.js"></script>');
             User.get_user_by_gid($scope, userGId);
             // Event.list($scope);
             User.list($scope, {});
@@ -769,7 +727,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
             };
             // Start the tour!
-            console.log("beginstr");
             hopscotch.startTour(tour);
         };
 
@@ -819,7 +776,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                                 if ($scope.calendarFeeds) {
 
                                     for (var i = 0; i < $scope.calendarFeeds.length; i++) {
-                                        var allday = ($scope.calendarFeeds[i].allday == "false") ? false : true;
+                                        var allday = ($scope.calendarFeeds[i].allday != "false");
 
                                         var url = ($scope.calendarFeeds[i].my_type == "event") ? '/#/events/show/' : '/#/tasks/show/';
                                         var backgroundColor = ($scope.calendarFeeds[i].status_label == "closed") ? "" : $scope.calendarFeeds[i].backgroundColor;
@@ -888,8 +845,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                                 $scope.$apply();
                             }
                             else {
-                                console.log(resp.message);
-                                console.log("Ooops!");
                                 if (resp.code == 401) {
                                     $scope.refreshToken();
                                     $scope.isLoading = false;
@@ -1162,7 +1117,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
             var offset4index = parseInt(timezone4index) - parseInt(eventTimezone4index)
             var offset = (parseInt($scope.timezone) + (parseInt($scope.timezone) - parseInt(eventTimezone))) % 13;
             if (offset.toString().length == 1) {
-                offsetStr = offsetStr + offset.toString();
+                offsetStr += offset.toString();
             } else {
                 offsetStr = offset.toString();
             }
@@ -1217,11 +1172,8 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
                 function (event) {
 
-                    if (event.title == "New Event") {
+                    return event.title == "New Event";
 
-                        return true;
-                    }
-                    return false;
                 }
             );
             $scope.start_event = "";
@@ -1324,11 +1276,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
 
         $scope.checkGuests = function () {
-            if ($scope.invites.length != 0) {
-                $scope.Guest_params = true;
-            } else {
-                $scope.Guest_params = false;
-            }
+            $scope.Guest_params = $scope.invites.length != 0;
         }
         $scope.checkallday = function () {
             $scope.updateAlldayOption();
@@ -1612,7 +1560,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
             var events = $('#calendar').fullCalendar('clientEvents', ["new"]);
             $('#calendar').fullCalendar('removeEvents', ["new"])
-            var allday = ($scope.justadded.allday == "false") ? false : true;
+            var allday = ($scope.justadded.allday != "false");
             var eventObject = {
                 id: $scope.justadded.id,
                 entityKey: $scope.justadded.entityKey,
@@ -1656,7 +1604,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
         $scope.listNextPageItemscomment = function () {
 
-            console.log('i am in list next comment page')
             var nextPage = $scope.currentPagecomment + 1;
 
             var params = {};
@@ -1674,8 +1621,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                     'order': '-updated_at',
                 }
             }
-            console.log('in listNextPageItems');
-            $scope.currentPagecomment = $scope.currentPagecomment + 1;
+            $scope.currentPagecomment += 1;
             Comment.list($scope, params);
         }
 
@@ -1697,19 +1643,17 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                     'discussion': $scope.eventt.entityKey
                 }
             }
-            $scope.currentPagecomment = $scope.currentPagecomment - 1;
+            $scope.currentPagecomment -= 1;
             Comment.list($scope, params);
         };
 
         $scope.renderMaps = function () {
-            console.log("hhhhhhhhhhhhh");
             Map.render($scope);
             //Map.searchLocation($scope,$scope.event.where);
         };
 
 
         $scope.showModal = function () {
-            console.log('button clicked');
             $('#addAccountModal').modal('show');
 
         };
@@ -1728,7 +1672,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         //HKA 18.11.2013 highlight the comment
         $scope.hilightComment = function () {
-            console.log('Should higll');
             $('#comment_0').effect("bounce", "slow");
             $('#comment_0 .message').effect("highlight", "slow");
         };
@@ -1752,8 +1695,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                 // Create contributors.list api
                 //list all contributors after getting the task.
             }
-            console.log('selected member');
-            console.log(params);
             Contributor.insert($scope, params);
             $('#addContributor').modal('hide');
         };

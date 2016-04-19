@@ -20,12 +20,7 @@ app.controller('LeadScoringCtrl', ['$scope', 'Auth', 'User', 'Map',
             $scope.apply();
         }
         $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
-            
+                return !(Array != undefined && Array.length > 0);;s
         }
         $scope.addCustomField=function(scoringfield,related_to){
             var params={
@@ -34,8 +29,6 @@ app.controller('LeadScoringCtrl', ['$scope', 'Auth', 'User', 'Map',
                         "related_object":related_to
                         }
                 if (!$scope.isEmptyArray(scoringfield.options)) {
-                    console.log('with options');
-                    console.log(scoringfield.options);
                     params.options=scoringfield.options;
                 };
                 Customfield.insert($scope,params);
@@ -47,12 +40,9 @@ app.controller('LeadScoringCtrl', ['$scope', 'Auth', 'User', 'Map',
             };
             $scope[resp.related_object].customfields.push(resp);
             $scope.apply();
-            console.log('leads.customfields');
-            console.log($scope.leads.customfields);
 
         };
         $scope.addOption=function(options,scoringfield){
-            console.log("clicked");
             var option="Option "+(options.length+1);
             if (option!=""&&options.indexOf(option)<0) {
                 options.push(option);

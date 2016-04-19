@@ -75,23 +75,15 @@ mapservices.factory('Map', function($http) {
                   zoom: 01
       };
       mapCanvas = new google.maps.Map(document.getElementById('gmap_canvas'),mapOptions);
-      console.log('render from map service');
-      console.log($scope.infonodes.addresses);
       if($scope.infonodes.addresses){
-        console.log("in addresses array");
-        console.log($scope.infonodes.addresses);
         for (var i=0; i<$scope.infonodes.addresses.length; i++) {
           if ($scope.infonodes.addresses[i].lat){
             var loca=$scope.infonodes.addresses[i];
                var lat = parseFloat(loca.lat);
                var lng = parseFloat(loca.lon);   
                if (!lng) {
-                console.log("loca.lng");
-                console.log(loca.lng);                
-                lng = parseFloat(loca.lng);   
+                lng = parseFloat(loca.lng);
                };
-               console.log("lng");
-               console.log(lng);
              /* var lat = parseFloat($scope.infonodes.addresses[i].lat);
               var lng = parseFloat($scope.infonodes.addresses[i].lng);*/           
               var marker = new google.maps.Marker({
@@ -123,7 +115,6 @@ mapservices.factory('Map', function($http) {
       google.maps.event.addListener(mapCanvas, 'tilesloaded', function() {
          $map.find('a').attr('tabindex', 999);
       });*/
-      console.log("enter");
       var input = /** @type {HTMLInputElement} */(document.getElementById(inputId));
       var autocomplete = new google.maps.places.Autocomplete(input);
       /*autocomplete.bindTo('bounds', mapCanvas);*/
@@ -135,7 +126,6 @@ mapservices.factory('Map', function($http) {
         /*infowindow.close();
         marker.setVisible(false);*/
         if (inputId=="relatedaddressInput") {
-          console.log("in related addresses");
           $scope.isRelatedAddress=true;
         };
         var place = autocomplete.getPlace();
@@ -169,9 +159,6 @@ mapservices.factory('Map', function($http) {
          add.formatted=place.formatted_address;
         var component={};
         for (var i=0; i<place.address_components.length; i++) {
-          /*console.log('component');
-          console.log(component);
-          console.log(add);*/
            component=place.address_components[i];
           if (component.types[0]=='country') {
             add.country=component.long_name;
@@ -209,7 +196,6 @@ mapservices.factory('Map', function($http) {
       google.maps.event.addListener(mapCanvas, 'tilesloaded', function() {
          $map.find('a').attr('tabindex', 999);
       });*/
-      console.log("enter");
       var input = /** @type {HTMLInputElement} */(document.getElementById(inputId));
       var autocomplete = new google.maps.places.Autocomplete(input);
       /*autocomplete.bindTo('bounds', mapCanvas);*/
@@ -221,7 +207,6 @@ mapservices.factory('Map', function($http) {
         /*infowindow.close();
         marker.setVisible(false);*/
         if (inputId=="relatedaddress") {
-          console.log("in related addresses");
           $scope.isRelatedAddress=true;
         };
         var place = autocomplete.getPlace();
@@ -255,9 +240,6 @@ mapservices.factory('Map', function($http) {
          add.formatted=place.formatted_address;
         var component={};
         for (var i=0; i<place.address_components.length; i++) {
-          /*console.log('component');
-          console.log(component);
-          console.log(add);*/
            component=place.address_components[i];
           if (component.types[0]=='country') {
             add.country=component.long_name;
@@ -289,7 +271,6 @@ mapservices.factory('Map', function($http) {
 
 
   Map.setLocation= function($scope,address){
-      console.log("work");
       var marker = new google.maps.Marker({
         map: mapCanvas,
         anchorPoint: new google.maps.Point(0, 0)
@@ -320,8 +301,6 @@ mapservices.factory('Map', function($http) {
          /* mapCanvas.setCenter(place.geometry.location);
           mapCanvas.setZoom(17);  // Why 17? Because it looks good.*/
         }
-        console.log('place');
-        console.log(place);
         var address = '';
         var add = {};
         add.lat=place.geometry.location.lat();
@@ -348,12 +327,8 @@ mapservices.factory('Map', function($http) {
         }
         if (addresstosave instanceof Array) {
           addresstosave.push(add);
-          console.log('hereee array');
         } else {
           addresstosave= add;
-          console.log('hereee object');
-          console.log(addresstosave);
-          console.log($scope.currentContact.address);
         }
         input.value="";
 
@@ -368,13 +343,12 @@ mapservices.factory('Map', function($http) {
     if (entry==undefined){
       entry = ' ';
     }
-    if(isLast=false){
-      entry = entry + ',';
+    if(isLast==false){
+      entry += ',';
     }
     return entry
   }
   Map.destroy = function(){
-    console.log("mappppppppppppp");
     $('#gmap_canvas').gmap('destroy');
   }
   Map.searchLocation = function($scope,address){
@@ -389,13 +363,11 @@ mapservices.factory('Map', function($http) {
                 
               if ( status == 'OK' ) {
                   
-                  console.log("okkkkkkkkkkkkkkkkkss");
                   address.lat = results[0].geometry.location.lat();
                   address.lon = results[0].geometry.location.lng();
                   var position = results[0].geometry.location.lat() + ',' + results[0].geometry.location.lng();
                 
                   $('#gmap_canvas').gmap('addMarker', {'position': position, 'bounds': true, 'draggable':true,'address':address}).dragend( function(event) {
-                          console.log("uppppppppppppp");
                           Map.updateLocation($scope,event.latLng, this);
                   });
                   $scope.addGeo(address);

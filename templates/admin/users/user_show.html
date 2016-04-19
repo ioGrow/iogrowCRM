@@ -24,7 +24,7 @@
 
     <h2 class="page-title">
       <a href="/#/admin/users" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
-                <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a> 
+                <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>
     {{ _("Team") }} > <%=user_acc.google_display_name %> </h2>
   </div>
 </div>
@@ -38,13 +38,13 @@
   </div>
   <div class="dropOut"  ng-show="showUntag" >
     <div class="trash">
-      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png" >
     </div>
   </div>
 
   <div class="dropOut"  ng-show="showUntag" >
     <div class="trash">
-      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png" >
     </div>
 </div>
 
@@ -260,7 +260,6 @@
                                        <form ng-submit="done_edit_task(task)">
                                           <input ng-type="text" class="form-control inlineEditTask" ng-blur="done_edit_task(task)" ng-model="task.title">
                                        </form>
-
                                        </div>
                                         <div class="col-md-5 col-xs-12">
                                             <span draggable  ng-drag="dragTagItem(task_tag.edgeKey)"  ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
@@ -268,7 +267,7 @@
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
                                                <a href="/#/admin/users/show/<%= assignee.google_user_id %>"> <%= assignee.display_name %></a>
-                                               <img alt="" src="<%= assignee.photo%>" class="user-photo" />
+                                               <img alt="" ng-src="assignee.photo" class="user-photo" />
                                             </span>
                                         </div>
                                     </div>
@@ -1037,7 +1036,7 @@
                       <div id="assigeeList" class="list-group">
                         <div class="invitation list-group-item" ng-repeat="selected_us in slected_members">
                           <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
-                          <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                          <img class="google-avatar" ng-src="selected_us.google_public_profile_photo_url"/>
                             <strong> <%= selected_us.google_display_name %> < <%=selected_us.email%> ></strong>
                         </div>
                       </div>
@@ -1205,8 +1204,8 @@
                 color: ($(this).attr("data-handle-color")  ? $(this).attr("data-handle-color") : '#a1b2bd'),
                 railColor: ($(this).attr("data-rail-color")  ? $(this).attr("data-rail-color") : '#333'),
                 height: height,
-                alwaysVisible: ($(this).attr("data-always-visible") == "1" ? true : false),
-                railVisible: ($(this).attr("data-rail-visible") == "1" ? true : false),
+                alwaysVisible: ($(this).attr("data-always-visible") == "1"),
+                railVisible: ($(this).attr("data-rail-visible") == "1"),
                 disableFadeOut: true
             });
         });

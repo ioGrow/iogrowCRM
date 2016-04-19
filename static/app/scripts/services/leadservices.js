@@ -14,12 +14,6 @@ leadservices.factory('Lead', function ($rootScope) {
             id: "hello-hopscotch",
             steps: [
                 {
-                    title: "Discovery",
-                    content: "Your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
-                    target: "id_Discovery",
-                    placement: "right"
-                },
-                {
                     title: "Leads",
                     content: "Use leads to easily track interesting people. You can add notes, set reminders or send emails",
                     target: "id_Leads",
@@ -73,12 +67,10 @@ leadservices.factory('Lead', function ($rootScope) {
                     var params = {'id': parseInt(userId), 'completed_tour': true};
                     User.completedTour(Lead.$scope, params);
                 }
-                console.log("dddezz");
                 $('#installChromeExtension').modal("show");
             }
         };
         // Start the tour!
-        console.log("beginstr");
         hopscotch.startTour(tour);
     };
 
@@ -99,7 +91,7 @@ leadservices.factory('Lead', function ($rootScope) {
                     if (resp.profile_img_url) {
                         $scope.imageSrc = resp.profile_img_url;
                     } else {
-                        $scope.imageSrc = '/static/img/avatar_contact.jpg';
+                        $scope.imageSrc = '/static/src/img/avatar_contact.jpg';
                     }
                     //$scope.renderMaps();
                     var renderMap = false;
@@ -190,8 +182,6 @@ leadservices.factory('Lead', function ($rootScope) {
                         }
                         // $scope.renderMaps();
                     }
-                    console.log('before customfield');
-                    console.log($scope.infonodes.customfields);
                     $scope.getCustomFields('leads');
                     if (resp.topics) {
                         if (params.topics.pageToken) {
@@ -203,12 +193,7 @@ leadservices.factory('Lead', function ($rootScope) {
                             $scope.topics = resp.topics.items;
                         }
 
-                        if ($scope.topicCurrentPage > 1) {
-                            console.log('Should show PREV');
-                            $scope.topicpagination.prev = true;
-                        } else {
-                            $scope.topicpagination.prev = false;
-                        }
+                        $scope.topicpagination.prev = $scope.topicCurrentPage > 1;
                         if (resp.topics.nextPageToken) {
                             var nextPage = $scope.topicCurrentPage + 1;
                             // Store the nextPageToken
@@ -231,11 +216,7 @@ leadservices.factory('Lead', function ($rootScope) {
                         else {
                             $scope.documents = resp.documents.items;
                         }
-                        if ($scope.documentCurrentPage > 1) {
-                            $scope.documentpagination.prev = true;
-                        } else {
-                            $scope.documentpagination.prev = false;
-                        }
+                        $scope.documentpagination.prev = $scope.documentCurrentPage > 1;
                         if (resp.documents.nextPageToken) {
 
                             var nextPage = $scope.documentCurrentPage + 1;
@@ -257,11 +238,7 @@ leadservices.factory('Lead', function ($rootScope) {
                         }else {
                             $scope.opportunities = resp.opportunities.items;
                         }
-                        if ($scope.oppCurrentPage > 1) {
-                            $scope.opppagination.prev = true;
-                        } else {
-                            $scope.opppagination.prev = false;
-                        }
+                        $scope.opppagination.prev = $scope.oppCurrentPage > 1;
                         if (resp.opportunities.nextPageToken) {
                             var nextPage = $scope.oppCurrentPage + 1;
                             // Store the nextPageToken
@@ -294,7 +271,6 @@ leadservices.factory('Lead', function ($rootScope) {
                     // $scope.listInfonodes();
 
                     //$scope.renderMaps();
-                    //$scope.getLinkedinProfile();
                     //$scope.DrawPsychometrics();
 
                     $scope.email.to = '';
@@ -333,7 +309,6 @@ leadservices.factory('Lead', function ($rootScope) {
                 } else {
                     if (resp.code == 401) {
                         // $scope.refreshToken();
-                        console.log(resp);
                         $scope.inProcess(false);
                         $scope.apply();
                     }
@@ -421,7 +396,6 @@ leadservices.factory('Lead', function ($rootScope) {
                     ;
                 }
 
-                console.log('gapi #end_execute');
             })
         });
     };
@@ -501,7 +475,6 @@ leadservices.factory('Lead', function ($rootScope) {
                 }
                 }
                 $scope.getColaborators();
-                console.log(resp);
             })
 
         });
@@ -525,11 +498,7 @@ leadservices.factory('Lead', function ($rootScope) {
                         $scope.blankStatelead = false;
                     }
                     $scope.leads = resp.items;
-                    if ($scope.currentPage > 1) {
-                        $scope.leadpagination.prev = true;
-                    } else {
-                        $scope.leadpagination.prev = false;
-                    }
+                    $scope.leadpagination.prev = $scope.currentPage > 1;
                     if (resp.nextPageToken) {
                         var nextPage = $scope.currentPage + 1;
                         // Store the nextPageToken
@@ -563,7 +532,6 @@ leadservices.factory('Lead', function ($rootScope) {
                     ;
                 }
         };
-        console.log(params);
         gapi.client.request({
             'root': ROOT,
             'path': '/crmengine/v1/leads/listv2',
@@ -577,8 +545,6 @@ leadservices.factory('Lead', function ($rootScope) {
         var callback = function (resp) {
             if (!resp.code) {
                 if (!resp.items) {
-                    console.log("resp.items");
-                    console.log(resp.items);
                     if (!$scope.isFiltering) {
                         $scope.blankStatelead = true;
                          $scope.filterNoResult=false;
@@ -591,13 +557,7 @@ leadservices.factory('Lead', function ($rootScope) {
                          $scope.filterNoResult=false;
                     }
                 $scope.leads = resp.items;
-                console.log('***************resp.items');
-                console.log(resp.items)
-                if ($scope.currentPage > 1) {
-                    $scope.leadpagination.prev = true;
-                } else {
-                    $scope.leadpagination.prev = false;
-                }
+                $scope.leadpagination.prev = $scope.currentPage > 1;
                 if (resp.nextPageToken) {
                     var nextPage = $scope.currentPage + 1;
                     // Store the nextPageToken
@@ -634,13 +594,9 @@ leadservices.factory('Lead', function ($rootScope) {
         };
         if ((params.tags) || (params.owner) ||(params.source)  || (params.order != '-updated_at')) {
             var updateCache = callback;
-            console.log("in normal callback");
         } else {
-            console.log("FROM THE CACHE FIRT");
             var updateCache = function (resp) {
                 // Update the cache
-                console.log("the resp object form source");
-                console.log(resp);
                 iogrow.ioStorageCache.renderIfUpdated('leads', resp, callback);
             };
             var resp = iogrow.ioStorageCache.read('leads');
@@ -673,11 +629,7 @@ leadservices.factory('Lead', function ($rootScope) {
                     angular.forEach(resp.items, function (item) {
                         $scope.leads.push(item);
                     });
-                    if ($scope.currentPage > 1) {
-                        $scope.leadpagination.prev = true;
-                    } else {
-                        $scope.leadpagination.prev = false;
-                    }
+                    $scope.leadpagination.prev = $scope.currentPage > 1;
                     if (resp.nextPageToken) {
                         var nextPage = $scope.currentPage + 1;
                         // Store the nextPageToken
@@ -825,7 +777,6 @@ leadservices.factory('Lead', function ($rootScope) {
         gapi.client.crmengine.leads.convertv2(params).execute(function (resp) {
             if (!resp.code) {
                 $('#convertLeadModal').modal('hide');
-                console.log("here rasp id");
                 console.log(resp);
                 $scope.inProcess(false);
                 $scope.apply();
@@ -845,8 +796,6 @@ leadservices.factory('Lead', function ($rootScope) {
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.leads.import(params).execute(function (resp) {
-            console.log(params);
-            console.log(resp);
             if (!resp.code) {
                 $scope.isContentLoaded = true;
                 $scope.numberOfRecords = resp.number_of_records;
@@ -872,8 +821,6 @@ leadservices.factory('Lead', function ($rootScope) {
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.leads.import_from_csv_second_step(params).execute(function (resp) {
-            console.log(params);
-            console.log(resp);
             if (!resp.code) {
                 console.log(resp);
                 $scope.showImportMessages();

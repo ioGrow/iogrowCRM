@@ -1,18 +1,4 @@
-/*app.directive('editTooltip', function() {
-  return {
-    restrict: 'A',
-    require:'?ngModel',
-    link: function ($scope, elem, attrs,ngModel) {
-     var field=$(elem);
-     var position=field.position();
-        field.hover(function() {
-          console.log('test hover');
-          $(this).append('<div class="cusTooltip" id="inlineEditTooltip"><a href=""><i class="fa fa-trash-o"></i></a><a href="">edit</a></div>');   
-          $('#inlineEditTooltip').css('top', position.top);
-          $('#inlineEditTooltip').css('left', position.left - 59 );
-        });
-  }
-}});*/
+
 var lunchMapsLinkedin=function(address){
         var p=$("#newAccMain");
         var offsets = document.getElementById('newAccMain').getBoundingClientRect();
@@ -29,11 +15,9 @@ var lunchMapsLinkedin=function(address){
                     var left = offsets.left;
                     var width = document.getElementById('newAccMain').offsetWidth;
                     var height = document.getElementById('newAccMain').offsetHeight;
-                    console.log(width,height,top,left);
               if (lat&&lng) {
                 window.open('http://www.google.com/maps/place/'+lat+','+lng,'winname','width='+width+',height=500, left='+left+',top='+top);
               }else{
-                 console.log(address);
                  var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
                  window.open('http://www.google.com/maps/search/'+locality,'winname','width='+width+',height=500, left='+left+',top='+top);
               };
@@ -52,7 +36,6 @@ app.directive('edittooltip',  function() {
           content: '<div class="customTip"><span id="inlineDeleteElement" ><i class="fa fa-trash-o"></i></span><span  id="inlineEditElement">edit</span></div>'
       }).parent().on('click', '#inlineEditElement', function() {
           /*$scope.textBtnForm.$show();*/
-          console.log("e-form");
           var item=field.attr('e-form');
           $scope[item].$show();
       }).on('click', '#inlineDeleteElement', function() {
@@ -242,45 +225,26 @@ app.directive('amount', function() {
         var field=$(elem);
         field.blur(function() {
          var value=$(this).val();
-          console.log("here is key up ");
-          console.log(value)
           if (value!='') {
             var num=toffloat(value,'.', ',')
-           console.log("here is to toFloat ");
-            console.log(num);
-            console.log("here is to toFormat ");
-            console.log(toFormat(num,2, 3,'.', ','));
           $(this).val(toFormat(num,2, 3,'.', ','));
           };
         });
        /* field.focus(function() {
           var value=$(this).val();
-          console.log("here is key up ");
-          console.log(value)
           if (value!='') {
             var num=toffloat(value,',', '.')
-           console.log("here is to toFloat ");
-            console.log(num);
-            console.log("here is to toFormat ");
-            console.log(toFormat(num,2, 3,'.', ','));
           $(this).val(toFormat(num,2, 3,'.', ','));
           };  
         });
       /*field.keyup(function() {
           var value=$(this).val();
-          console.log("here is key up ");
-          console.log(value)
           if (value!='') {
             var num=toffloat(value,',', '.')
-           console.log("here is to toFloat ");
-            console.log(num);
-            console.log("here is to toFormat ");
-            console.log(toFormat(num,2, 3,'.', ','));
           $(this).val(toFormat(num,2, 3,'.', ','));
           };  
         });*/
         function toffloat(stringVar,s, c) {
-            console.log("hereee executed toFloat")
             var regex1 = new RegExp('\\'+s+'', "g");
             var regex1 = new RegExp('\\'+c+'', "g");
             stringVar=stringVar.replace(regex1, '');
@@ -328,10 +292,9 @@ app.directive('draggable', function() {
             function(e) {
               /* var ell=$(el).closest(".cardElement");
                 var position=$(ell).position();
-                                console.log(position);
                 ell.offset({ top: (15-position.top), left: (15-position.left)});
                 var position=$(ell).position();
-                                console.log(position);*/
+                */
                /* $(el).css({"position":"absolute"});*/
                 e.dataTransfer.effectAllowed = 'move';
                 e.dataTransfer.setData('Text', this.id);
@@ -397,7 +360,6 @@ app.directive('droppable', function() {
             'dragleave',
             function(e) {
                 this.classList.remove('over');
-                console.log("darg live");
                 $(this).parent().addAttr("droppable");
                 return false;
             },
@@ -437,15 +399,15 @@ app.directive('searchresult', function($compile) {
                 $(elmnt).append(el);  
                 break;
             case 'Contact':
-                 el='<div class="item-content"><div class="pic"><img src="/static/img/avatar_contact.jpg" ></div><div class="text"><ul class="list-group linkedinItemDetails"><li class="likedinItemName"><a href="/#/contacts/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType">Customer Development &amp; Secret History, Teaching </li><li class="likedinItemAddress"><i class="fa fa-building"></i>Stanford, Berkeley and Columbia</li>--><li class="likedinType"><span class="pull-right">Contact</span></li></ul></div><div class="clearfix"></div></div>'; 
+                 el='<div class="item-content"><div class="pic"><img src="/static/src/img/avatar_contact.jpg" ></div><div class="text"><ul class="list-group linkedinItemDetails"><li class="likedinItemName"><a href="/#/contacts/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType">Customer Development &amp; Secret History, Teaching </li><li class="likedinItemAddress"><i class="fa fa-building"></i>Stanford, Berkeley and Columbia</li>--><li class="likedinType"><span class="pull-right">Contact</span></li></ul></div><div class="clearfix"></div></div>';
                 $(elmnt).append(el); 
                 break;
             case 'Lead':
-                 el='<div class="item-content"><div class="pic"><img src="/static/img/avatar_contact.jpg" ></div><div class="text"><ul class="list-group linkedinItemDetails"><li class="likedinItemName"><a href="/#/leads/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType">Customer Development &amp; Secret History, Teaching </li><li class="likedinItemAddress"><i class="fa fa-building"></i>Stanford, Berkeley and Columbia</li>--><li class="likedinType"><span class="pull-right">Lead</span></li></ul></div><div class="clearfix"></div></div>'; 
+                 el='<div class="item-content"><div class="pic"><img src="/static/src/img/avatar_contact.jpg" ></div><div class="text"><ul class="list-group linkedinItemDetails"><li class="likedinItemName"><a href="/#/leads/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType">Customer Development &amp; Secret History, Teaching </li><li class="likedinItemAddress"><i class="fa fa-building"></i>Stanford, Berkeley and Columbia</li>--><li class="likedinType"><span class="pull-right">Lead</span></li></ul></div><div class="clearfix"></div></div>';
                 $(elmnt).append(el); 
                 break;
             case 'Account':
-                el='  <li class="linkedinListItem" ><div class="pic" ><img src="/static/img/default_company.png"></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" ><a href="/#/accounts/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType" >Logiciels informatiques</li><li class="likedinItemAddress" ><i class="fa fa-map-marker" ></i>Région de Seattle , États-Unis+ de 10 000 employés</li>--><li class="likedinType" ><span class="pull-right">Account</span></li></ul></div><div class="clearfix"></div></li>'
+                el='  <li class="linkedinListItem" ><div class="pic" ><img src="/static/src/img/default_company.png"></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" ><a href="/#/accounts/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType" >Logiciels informatiques</li><li class="likedinItemAddress" ><i class="fa fa-map-marker" ></i>Région de Seattle , États-Unis+ de 10 000 employés</li>--><li class="likedinType" ><span class="pull-right">Account</span></li></ul></div><div class="clearfix"></div></li>'
                 $(elmnt).append(el);
                 break;
             case 'Task':
@@ -474,7 +436,6 @@ app.directive('editoptions', function($compile) {
         var element=$(element).parent();
         if($scope.editshow == 'undefined'){
             $(element).mouseenter(function() {
-              console.log($scope.editshow);         
               if($(element).prop("tagName")=='LI'){
                     $(element).find(".page-meta").remove();
                      var edit = $(element).find("a[editable-text]" );
@@ -493,7 +454,6 @@ app.directive('editoptions', function($compile) {
                   }
             });
         }else{
-          console.log("enter to else");
           if($(element).prop("tagName")=='LI'){
                     $(element).find(".page-meta").remove();
                      var edit = $(element).find("a[editable-text]" );
@@ -517,8 +477,8 @@ app.directive('cusdatetimepicker', function($parse) {
         var dp = $(element);
         var params={
           "dateFormat": (attrs.dateFormat) ? attrs.dateFormat : "YY/MM/DD h:m",
-          "closeOnSelected": (attrs.closeOnSelected=="false") ? false: true,
-          "autodateOnStart": (attrs.autodateOnStart=="true") ? true: false,
+          "closeOnSelected": (attrs.closeOnSelected != "false"),
+          "autodateOnStart": (attrs.autodateOnStart == "true"),
           "onHide": function(handler){
                          model.assign($scope, dp.handleDtpicker('getDate'));
                          $scope.$apply();
@@ -589,24 +549,19 @@ app.directive('gototext', function($parse) {
       require:'ngModel',
       link: function($scope, element, attrs,ngModel) {
           var limit = 100;/* $scope.limit;*/
-          console.log("ngModel.$viewValue");
           var model = $(element).text();
-          console.log($scope["linkedProfileresume"]);
           var ellipsestext = "...";
-         /* console.log($scope["linkedProfileresume"]);
+         /*
           var moretext = attrs.moretext;
           var lesstext = attrs.lesstext;
-          console.log($scope.moretext)*/
+          */
           if (model!=null) {
-              console.log(model.length);
               if(model.length > limit) {
               var shortText = model.substr(0, limit);
               var h = model.substr(limit-1, model.length - limit);
               var cont = shortText + '<span class="moreelipses less">'+ellipsestext+'</span>&nbsp;<span class="morecontent more">' + h + '</span>&nbsp;&nbsp;<span><a href="" class="morelink">'+moretext+'</a></span>';
               $(element).html(cont);
             }
-          /*  console.log(shortText);
-            console.log(h);*/
             $(".morelink").click(function(){
               if($(".morelink").hasClass("less")) {
                 $(this).removeClass("less");
@@ -672,13 +627,8 @@ app.directive('taggable', ['$parse',function($parse) {
                      if (item.tag=='@') {$scope.pattern = /^@([\w]*)/;};
                      if (item.tag=='!') {$scope.pattern = /^!([\w]*)/;};
                      var text=$scope.newTaskValue;
-                     console.log(value);
-                     console.log($scope.pattern);
-                     console.log($scope.newTaskValue);
-                     console.log($scope.newTaskValue);
-                     
+
                      if($scope.pattern.test($scope.newTaskValue)){
-                          console.log('fired');
                           $scope.returnedValue = text.replace($scope.pattern, "$1");
                           $scope.matchPattern=true;
                         }else{
@@ -716,11 +666,8 @@ app.directive('taggable', ['$parse',function($parse) {
                   }
           }
         $scope.selectItem = function(value){
-          console.log("fired");
-         console.log($scope.modelName); 
           angular.forEach($scope.tagInfo, function(item){
               if (item.data.name==$scope.objectName) {
-                  console.log(value);
                   if ($scope.currentAttribute!='name') {
                       delete value["value"];
                   };
@@ -732,8 +679,7 @@ app.directive('taggable', ['$parse',function($parse) {
                   var afterText= ReturnWord($(elem).val(),$(elem).caret()).after;
                   var tag= text.substring(0,1);
                   $parse(attrs.ngModel).assign($scope, beforeText+' '+tag+value[item.data.attribute]+' '+afterText);
-                  console.log($parse(attrs.ngModel).assign($scope, beforeText+' '+tag+value[item.data.attribute]+' '+afterText));
-              }; 
+              };
            });
            
          };
@@ -784,7 +730,6 @@ app.directive('fittext', function($timeout) {
             var ratioWidth = Math.floor(textContainerWidth / maxWidth);
             var shrinkFactor = ratioHeight > ratioWidth ? ratioHeight : ratioWidth;
             fontSize -= shrinkFactor;
-            // console.log("fontSize", fontSize);
             resizeText();
           }else{
             /*textContainer.style.visibility = "visible";*/
@@ -799,7 +744,6 @@ app.directive('fittext', function($timeout) {
         // text was deleted
         if(oldText !== undefined && newText.length < oldText.length){
           fontSize = maxFontSize;
-           console.log("Letter was deleted");
         }
         /*textContainer.style.visibility = "hidden";*/
         resizeText();
@@ -809,7 +753,6 @@ app.directive('fittext', function($timeout) {
 });
 
 app.directive('parseUrl', function () {
-    console.log('work');
     var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/gi;
     return {
         restrict: 'A',
@@ -823,7 +766,6 @@ app.directive('parseUrl', function () {
             scope.$watch('ngModel', function (value) {
                 var match = urlPattern.exec(value);
                 var test0=match[0];
-                console.log(match);                                
                 var html = value.replace(urlPattern, '<a target="' + scope.props.target + '" href="$&">$&</a>') + " | " + scope.props.otherProp;
                 element.html(html);
             });

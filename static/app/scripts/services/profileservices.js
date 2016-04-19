@@ -38,8 +38,6 @@ topicservices.factory('Profile', function($http) {
 
                  $scope.keywords = resp.items;
               
-                  console.log($scope.keywords)
-
                  $scope.isLoading = false;
                 
                  // Call the method $apply to make the update on the scope
@@ -79,7 +77,6 @@ topicservices.factory('Profile', function($http) {
                 };
                 if (data.more){
                   $scope.page++;
-                  console.log(">>>>>>>>>>",$scope.page)
                 }
                
                $scope.more=data.more;
@@ -115,7 +112,6 @@ topicservices.factory('Profile', function($http) {
                         if(data.satatus=="ok"){
                           alert("is carawlink")
                         }else{
-                          console.log(data.results)
                           $scope.profiles=data.results
                         }
                       $scope.listKeywords($scope,{});
@@ -137,7 +133,6 @@ topicservices.factory('Profile', function($http) {
 
     Profile.patch = function($scope,params){
       $scope.isLoading = true;
-              console.log('task service');
 
       gapi.client.crmengine.tags.patch(params).execute(function(resp) {
 

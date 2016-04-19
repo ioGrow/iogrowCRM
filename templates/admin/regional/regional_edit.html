@@ -10,7 +10,7 @@
             {%endfor%}
         </ul>
     </div>
-    <div class="subHeaderContent" style="border-right-width: 0px;">
+    <div class="subHeaderContent" style="border-right-width: 0;">
         <div class="col-md-4 active-app"><i class="fa fa-globe section-icon"></i>
             {{ _('Regional') }}
         </div>
@@ -438,7 +438,7 @@
 <script>
     function format(state) {
         if (!state.id) return state.text;
-        return "<img class='flag' src='static/img/flags_iso/32/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text;
+        return "<img class='flag' src='static/src/img/flags_iso/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text;
     }
     $("#country_list").select2({
         placeholder: "Select a Country",

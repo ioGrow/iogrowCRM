@@ -5,11 +5,11 @@
           rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="https://storage.googleapis.com/iogrowgs/jquery.min.js"></script>
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-    <link rel="stylesheet" href="/static/react-components/stripe-form/stripe-form.css">
+    <link rel="stylesheet" href="/static/src/css/stripe-form.css">
     <script src="https://fb.me/react-0.14.3.js"></script>
     <script src="https://fb.me/react-dom-0.14.3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
-    <script src="/static/react-components/stripe-form/stripe-form.react.js" type="text/babel"></script>
+    <script src="/static/src/js/stripe-form.react.js" type="text/babel"></script>
 </head>
 <style>
 
@@ -33,7 +33,6 @@
    border: 1px solid #3CA4EE;
      width: 550px;
      margin-top: 150px;
-     margin-bottom:15px;
     /* min-height: 500px;*/
      background-color: white;
      -webkit-box-shadow: 0px 2px 5px 2px rgba(222,222,222,1);
@@ -188,9 +187,6 @@
                 url: '/sfconnect',
                 datatype:'json',
                 success: function(result) {
-                  console.log('i am in connectServer show me result please');
-                  console.log(result);
-
                    window.close();
                 },
                 error:function(result){

@@ -1,10 +1,12 @@
 *~
 *.py[cod]
 node_modules/*
+libx/*
 .idea/
 # C extensions
 *.so
 *.DS_Store
+Thumbs.db
 
 # Packages
 *.egg

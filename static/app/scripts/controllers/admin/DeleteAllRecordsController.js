@@ -76,7 +76,3 @@ app.controller('DeleteAllRecordsCtrl', ['$scope', 'Auth', 'User','Lead','Account
         };
         Auth.init($scope);
     }]);
-
-/**
- * Created by arezki on 10/11/15.
- */

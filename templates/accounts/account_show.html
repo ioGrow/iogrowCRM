@@ -3,11 +3,11 @@
           <tbody><tr>
             <td class="appTd">
             <div class="btn-group">
-                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
                   {% if active_app.label =="Relationships" %}
-                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                       {% else%}
-                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                      <img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                   {% endif %}
                   <span class="hide_sm">{{_(active_app.label)}}</span>   
                   <i class="icon-angle-down fa fa-angle-down"></i>
@@ -15,9 +15,9 @@
                  <ul class="dropdown-menu">
                   {%for application in apps %}
                         {% if application.label =="Relationships" %}
-                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                           {% else%}
-                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                         
                           {% endif %}
                        
@@ -33,7 +33,7 @@
                 <a href="/#/accounts/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
                     <img onload="this.__gwtLastUnhandledEvent = & quot;
                     load & quot;
-                    ;" src="/static/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
+                    ;" src="/static/src/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
                 </a>
                 <a class="headerBtn" title="Refresh" ng-click="runTheProcess();"> 
                       <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
@@ -117,17 +117,17 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
-                                        <img src="/static/img/google_drive/text/plain.png" class="">
+                                        <img src="/static/src/img/google_drive/text/plain.png" class="">
                                         {{ _('Document') }}
                                     </a>
                                     </li>
                                     <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
-                                        <img src="/static/img/google_drive/presentation.png" class="">
+                                        <img src="/static/src/img/google_drive/presentation.png" class="">
                                         {{ _('Presentation') }}
                                     </a>
                                     </li>
                                     <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
-                                        <img src="/static/img/google_drive/spreadsheet.png" class="">
+                                        <img src="/static/src/img/google_drive/spreadsheet.png" class="">
                                         {{ _('Spreadsheet') }}
                                     </a>
                                     </li>
@@ -214,15 +214,15 @@
             <div id="newAccMain" ng-hide="selectedTab == 3" class="showPage custom-show margin-bottom-15  col-md-12" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
               <div class="row margin-bottom-10" style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;">
                   <div class="col-md-12 showCover" style="height: 128px; overflow: hidden;padding-left: 0px;padding-right: 0px;">
-                      <img src="<%=account.cover_image||twProfile.profile_banner_url||'/static/img/covers/11.jpg'%>" style="width: 100%;">
+                      <img src="<%=account.cover_image||twProfile.profile_banner_url||'/static/src/img/covers/11.jpg'%>" style="width: 100%;">
                   </div>
                 <div class="col-md-12" style="background: white;">
                           <div class="row">
                             <div class="col-md-3 col-sm-3 col-xs-3" ng-mouseenter="showUpload = true" ng-mouseleave="showUpload = false" style="padding-right:0px;display: table;vertical-align: middle;width: 25%;">
                                   <div class="pic" style="vertical-align:middle;top: -50px;position: absolute;left: 28%;">
-                                          <img alt="<%= account.name %>" class=" img-responsive img-thumbnail" ng-src="<%=imageSrc%>" err-src="/static/img/default_company.png" style="width: 105px;height: auto;">
+                                          <img alt="<%= account.name %>" class=" img-responsive img-thumbnail" ng-src="<%=imageSrc%>" err-src="/static/src/img/default_company.png" style="width: 105px;height: auto;">
                                           <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href="" class="btn-on-show btn-upload btn-upload-contact" data-toggle="modal">
-                                              <img src="/static/img/upload_logo.png">
+                                              <img src="/static/src/img/upload_logo.png">
                                           </a>
                                   </div>
                                   <ul class="list-unstyled leadInfos" style="text-align:center;padding-top:56px;">
@@ -389,7 +389,8 @@
                                       <ul ng-hide="isEmptyArray(infonodes.sociallinks)" class="socialLinks" style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;" ng-class="{socialLiknsAbsolute: !showEdit}">
                                         <li ng-repeat="sociallink in infonodes.sociallinks" class="socialItem" style="padding-bottom: 5px;">
                                           <div class="cont">
-                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="24" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;">
+                                                <img width="24" src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                             <input ng-show="showEdit" ng-blur="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-enter="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)" ng-model="sociallink.url"  id="exampleInputEmail2" placeholder="Add a Website" style="padding-top: 0px;padding-bottom: 0px;height: 24px;border: none;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 38px);" class="form-control">                                            
                                             <button  ng-show="showEdit" type="button" class="close" data-dismiss="modal" aria-hidden="true" style=" opacity:1;top: 14px;display: inline-block;float: left;margin-top: 7px;" ng-click="deleteSocialLink(sociallink,'sociallinks')"></button>
                                             <div class="clearfix"></div>
@@ -398,7 +399,8 @@
                                       </ul>
                                       <form ng-show="showEdit" class="form-inline newLeadForm" role="form" style="display: inline-block;float: left;margin-bottom: 0px;">
                                           <div class="cont">
-                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="24" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                            <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;">
+                                                <img width="24" src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                             <input ng-show="showEdit" ng-blur="addSocial(sociallink)" ng-enter="addSocial(sociallink)" ng-model="sociallink.url" placeholder="Add a social link" style="padding-top: 0px;padding-bottom: 0px;height: 24px;border: none;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 38px);" class="form-control">                                            
                                             <div class="clearfix"></div>
                                           </div>
@@ -508,7 +510,7 @@
                                         <div class="col-md-6 ">
                             <div class="news-blocks blank-card blank-card-yellow newsCard"  style="  border-top-color: rgb(25, 133, 188) !important;" ng-class="{'linkedInLoader': inIsSearching}" >
                               <div ng-show="inIsSearching" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
+                                <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                               </div>
                               
                               <h3 style="margin-top:0px"> <i  class="fa fa-linkedin-square" style=" font-size: 20px; vertical-align: baseline;color: rgb(25, 133, 188) !important;"></i>{{_(' Linkedin Informations')}} 
@@ -619,7 +621,7 @@
                                                   <div id="contactScroll" class="scroll-list">
                                                   <div ng-repeat="worker in account.linkedin_profile.workers" style="margin-bottom:10px" ng-hide="isEmpty(worker)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=worker.img || '/static/img/avatar_contact.jpg'%>" err-src="/static/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
+                                                              <img src="<%=worker.img || '/static/src/img/avatar_contact.jpg'%>" err-src="/static/src/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
@@ -721,7 +723,7 @@
                                                 <ul  ng-hide="isEmptyArray(contacts)" id="slimRelated" class="list-unstyled contact-infos showList">   
                                                   <div  class="relatedContactsonAccount" ng-repeat="contact in contacts" style="margin-bottom: 5px;position: relative;border-bottom: 1px solid rgb(216, 216, 216);padding-bottom: 3px;" ng-hide="isEmpty(contact)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=contact.profile_img_url || '/static/img/avatar_contact.jpg'%>" err-src="/static/img/avatar_contact.jpg" style="width: 73px !important;height: auto !important;">
+                                                              <img src="<%=contact.profile_img_url || '/static/src/img/avatar_contact.jpg'%>" err-src="/static/src/img/avatar_contact.jpg" style="width: 73px !important;height: auto !important;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px;"  ng-mouseenter="showDelete = true" ng-mouseleave="showDelete = false">
@@ -766,7 +768,8 @@
                                                   <ul class="socialLinks" style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3; max-height:116px;overflow: auto;margin-bottom: 0px;  position: absolute;">
                                                     <li ng-repeat="sociallink in contact.sociallinks" class="socialItem" style="padding-bottom: 5px;">
                                                       <div class="cont">
-                                                        <a href="" onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="16" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                        <a href="" onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;">
+                                                            <img width="16" src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                         <div class="clearfix"></div>
                                                       </div>
                                                     </li>                                      
@@ -812,7 +815,7 @@
                                                      </h3>
                                                     <div class="news-block-tags">
                                                         <div ng-show="twIsSearching" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                            <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
+                                            <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                                           </div>
                                           
                                          
@@ -836,32 +839,10 @@
                                                 <li style="padding-top:15px">
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
-                                                <!--<li ng-show="twList.length > 0 && isEmpty(twProfile)&&isEmptyArray(twShortProfiles)" style="padding-top:15px">
-                                                    <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                                  </li>
-                                                  <li ng-show="twList.length > 0 && isEmpty(twProfile)&&isEmptyArray(twShortProfiles)">
-                                                        <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                            <div class="input-icon">
-                                                                <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                                <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                                            </div>
-                                                        </form>
-                                                  </li>-->
-                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                                </li>
-                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                          <div class="input-icon">
-                                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                                          </div>
-                                                      </form>
-                                                </li>-->
                                                 </ul> 
                                                 <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(twShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>" err-src="/static/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
+                                                              <img src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>" err-src="/static/src/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
@@ -984,7 +965,7 @@
                   <div class="pic" ng-mouseenter="showContactUpload = true" ng-mouseleave="showContactUpload = false">
                       <img alt="<%=newcontact.firstname%> <%=newcontact.lastname%>" ng-src="<%=imageSrcnewContact%>" class="img-responsive profile-photo-large">
                       <a ng-click="createPickerUploaderContact()" href="" class="btn-upload btn-upload-contact" data-toggle="modal" ng-show="showContactUpload">
-                          <img src="/static/img/upload_logo.png" class="" >
+                          <img src="/static/src/img/upload_logo.png" class="" >
                       </a>
                       <div  class="responsivePhotoIcon"></div>
                 </div>
@@ -1170,7 +1151,8 @@
                                     <ul ng-hide="isEmptyArray(newcontact.sociallinks)" class="socialLinkssocialLiknsAbsolute" style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;">
                                         <li ng-repeat="newsociallink in newcontact.sociallinks" class="socialItem" style="padding-bottom: 5px;">
                                           <div class="cont">
-                                            <a onclick="window.open('<%=prepareUrl(newsociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="28" src="/static/img/social_icons/<%=urlSource(newsociallink.url)%>.png"></a>
+                                            <a onclick="window.open('<%=prepareUrl(newsociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;">
+                                                <img width="28" src="/static/src/img/social_icons/<%=urlSource(newsociallink.url)%>.png"></a>
                                             <span  onclick="window.open('<%=prepareUrl(newsociallink.url)%>','winname','width=700,height=550')" title="<%= newsociallink.url%>" style="line-height: 25px;font-size: 15px;padding-left: 20px; display: inline-block; float: left; cursor:pointer">
                                             <%= newsociallink.url | limitTo:42%><%= newsociallink.url.length > 42 ? '...' : ''%></span>       
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="opacity: 1; top: 14px;  float: left; margin-top: 8px;margin-left: 5px;" ng-click="deleteInfos(newcontact.sociallinks,$index)"></button>
@@ -1180,7 +1162,9 @@
                                       </ul>
                                       <form class="form-inline newLeadForm" role="form" >
                                           <div class="cont">
-                                            <a onclick="window.open('<%=prepareUrl(newsociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="28" src="/static/img/social_icons/<%=urlSource(newsociallink.url)%>.png"></a>
+                                            <a onclick="window.open('<%=prepareUrl(newsociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;">
+                                                <img width="28" src="/static/src/img/social_icons/<%=urlSource(newsociallink.url)%>.png">
+                                            </a>
                                             <input  ng-enter="pushElement(newsociallink,newcontact.sociallinks,'sociallinks')"  ng-blur="pushElement(newsociallink,newcontact.sociallinks,'sociallinks')"  ng-model="newsociallink.url" placeholder="Add a social link" style="padding-top: 0px;padding-bottom: 0px;height: 24px;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 31px);height:28px" class="form-control">                                            
                                             <div class="clearfix"></div>
                                           </div>
@@ -1277,8 +1261,8 @@
               <div class="head">
                 <div class="pic">
                   <a href="/#/contacts/show/<%= contact.id %>" class="startup-link" title="<%=contact.firstname%> <%=contact.lastname%>">
-                    <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/img/avatar_contact.jpg" >
-                    <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= contact.profile_img_url %>" err-src="/static/img/avatar_contact.jpg" data-hasqtip="2" >
+                    <img ng-hide="contact.profile_img_url"  class="img-responsive profile-photo" src="/static/src/img/avatar_contact.jpg" >
+                    <img ng-show="contact.profile_img_url"  class="img-responsive profile-photo" ng-src="<%= contact.profile_img_url %>" err-src="/static/src/img/avatar_contact.jpg" data-hasqtip="2" >
                   </a>
                 </div>
                 <div class="text">
@@ -1338,7 +1322,7 @@
                       <div class="dashboard-stat cards">
                           <div class="blank_slate_arrow"></div>
                           <div class="thumbnail blank_slate_body">
-                              <img class="img-responsive" src="/static/img/contacts_blank.png">
+                              <img class="img-responsive" src="/static/src/img/contacts_blank.png">
                               <p class="lead">{{_('Each contact gets a page in i/oGrow. You and your co-workers can add notes from calls,conversations, meetings, or any other historic information about this person.')}}</p>
                           </div>
                       </div>
@@ -1349,43 +1333,7 @@
 
 
   </div>
-  <!-- $ needs tab -->
-                                <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4" style="display: none;">
-                                    <div class="row cards-container">
-                                        <div class="btn-group relbutton">
-                                            <button ng-click="addNeedModal()" id="sample_editable_1_new" class="btn red">
-                                                {{_('Add Need')}}
-                                            </button>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                <div ng-show="blankStateneeds" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12" style="">
-                                                    <div class="dashboard-stat cards">
-                                                        <div class="blank_slate_arrow"></div>
-                                                        <div class=" thumbnail blank_slate_body">
-                                                            <img class="img-responsive" src="/static/img/cases_blank.png">
-                                                            <p class="lead">{{_('Let your customers explain their needs, and after you can validate or reject those needs (Lean Development).')}}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="clearfix"></div>
-                                            </div><!--/inner-cards-container-->
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="pagination pull-right" ng-hide="isLoading">
-                                                <button ng-click="NeedPrevPageItems()" id="sample_editable_1_new" class="btn" ng-show="needspagination.prev" style="display: none;">
-                                                    {{_('Prev')}}
-                                                </button>
-                                                <button ng-click="NeedlistNextPageItems()" class="btn" ng-show="needspagination.next" style="display: none;">
-                                                    {{_('Next')}}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <!-- $ opportunities tab -->
                                 <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5" style="display: none;">
 
@@ -1661,7 +1609,7 @@
                                         </div>
                                         <ul class="list-unstyled contact-infos infoslist">
                                           <li ng-repeat="competitor in competitors"> 
-                                             <img class="contact-photo" src="/static/img/avatar_contact.jpg">
+                                             <img class="contact-photo" src="/static/src/img/avatar_contact.jpg">
                                              <span>
                                                <%= competitor.name %> 
                                               </span>                                                                          
@@ -1937,7 +1885,7 @@
                   </table>
                   <div class="loaderList" ng-show="isMoreItemLoading">
                         <div class="loaderCardContent">
-                           <img class="img-responsive " src="/static/img/gloader.gif">
+                           <img class="img-responsive " src="/static/src/img/gloader.gif">
                            <span> {{ _('Loading...')}}</span>
                         </div>
                   </div>
@@ -1951,7 +1899,7 @@
 
                           <div class="blank_slate_arrow"></div>
                           <div class="thumbnail blank_slate_body">
-                              <img src="/static/img/opportunities_blank.png" class="img-responsive">
+                              <img src="/static/src/img/opportunities_blank.png" class="img-responsive">
 
                               <p class="lead">{{ _('Know which proposals/bids are pending, which you’ve won, and which you’ve lost. Enter notes about the opportunities, attach proposals or contracts to the opportunities, and keep a log of any changes.') }}</p>
                           </div>
@@ -2160,7 +2108,7 @@
                                                   </table>
                                                   <div class="loaderList" ng-show="isMoreItemLoading">
                                                         <div class="loaderCardContent">
-                                                           <img class="img-responsive " src="/static/img/gloader.gif">
+                                                           <img class="img-responsive " src="/static/src/img/gloader.gif">
                                                            <span> {{ _('Loading...')}}</span>
                                                         </div>
                                                   </div>
@@ -2172,7 +2120,7 @@
 
                                                               <div class="blank_slate_arrow"></div>
                                                             <div class="thumbnail blank_slate_body">
-                                                                <img src="/static/img/cases_blank.png" class="img-responsive">
+                                                                <img src="/static/src/img/cases_blank.png" class="img-responsive">
                                                               <p class="lead">{{_('The main goal of cases is to assist collaboration and focus of teams on delivering amazing customer experience.')}}</p>
                                                                  </div>
 
@@ -2371,7 +2319,7 @@
                                                        class="startup-link" title="attachment.title">
                                                         <img alt="attachment.title"
                                                              class="google-drive-icon img-responsive img-thumbnail"
-                                                             ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" ng-class="{ 'documentimgsize': attachment.mimeType=='image/jpeg'||attachment.mimeType=='image/png'||attachment.mimeType=='image/x-icon'}">
+                                                             ng-src="/static/src/img/google_drive/<%=attachment.mimeType%>.png" ng-class="{ 'documentimgsize': attachment.mimeType=='image/jpeg'||attachment.mimeType=='image/png'||attachment.mimeType=='image/x-icon'}">
                                                     </a>
                                                 </div>
                                                 <div class="text">
@@ -2394,7 +2342,7 @@
                                                     <div class="dashboard-stat cards">
                                                         <div class="blank_slate_arrow"></div>
                                                         <div class=" thumbnail blank_slate_body">
-                                                            <img src="/static/img/documents_blanks.png" class="img-responsive">
+                                                            <img src="/static/src/img/documents_blanks.png" class="img-responsive">
                                                             <p class="lead">{{_('Manage easily your documments using Google drive')}}</p>
                                                         </div>
                                                     </div>
@@ -2746,7 +2694,7 @@
                                             <div id="assigeeList" class="list-group" ng-hide="selected_members == []">
                                                 <div ng-show="true" class="invitation list-group-item" ng-repeat="selected_us in selected_members">
                                                     <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
-                                                    <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                                                    <img class="google-avatar" ng-src="selected_us.google_public_profile_photo_url"/>
                                                     <strong> <%= selected_us.google_display_name %></strong>
                                                 </div>
                                             </div>
@@ -2895,7 +2843,7 @@
                         <div class="portlet-body" id="chats">
                            
                                           <div ng-show="inIsSearching" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                            <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
+                                            <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                                           </div>
                                           
                                          
@@ -2921,21 +2869,10 @@
                                                 <li style="padding-top:15px">
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
-                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                                </li>
-                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                          <div class="input-icon">
-                                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                                          </div>
-                                                      </form>
-                                                </li>-->
                                                 </ul> 
                                                 <div ng-repeat="inRelatedShortProfile in inRelatedShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(inRelatedShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=inRelatedShortProfile.profile_picture || '/static/img/avatar_contact.jpg'%>" err-src="/static/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
+                                                              <img src="<%=inRelatedShortProfile.profile_picture || '/static/src/img/avatar_contact.jpg'%>" err-src="/static/src/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
@@ -3078,7 +3015,7 @@
                         <div class="portlet-body" id="chats">
                            
                                           <div ng-show="twIsSearching" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                            <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
+                                            <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                                           </div>
                                           
                                          
@@ -3102,21 +3039,10 @@
                                                 <li style="padding-top:15px">
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
-                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                                </li>
-                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                          <div class="input-icon">
-                                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                                          </div>
-                                                      </form>
-                                                </li>-->
-                                                </ul> 
+                                                </ul>
                                                 <div ng-repeat="twShortProfile in twRelatedShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(twShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>" err-src="/static/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
+                                                              <img src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>" err-src="/static/src/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
@@ -3844,7 +3770,7 @@
                     <div ng-show="account.owner.google_user_id=={{ME}}">
                         <p>{{ _("Invited user:")}}</p>
                         <div class="invitation" ng-repeat="invited in sharing_with">
-                            <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
+                            <img class="google-avatar" ng-src="invited.google_public_profile_photo_url"/>
                             <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
                             <hr/>
                         </div>
@@ -4049,7 +3975,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel" class="modal-title">
-                  <img ng-src="/static/img/google_drive/<%=mimeType%>.png" class="" style="width: 27px;margin-top: -10px;">
+                  <img ng-src="/static/src/img/google_drive/<%=mimeType%>.png" class="" style="width: 27px;margin-top: -10px;">
                   {{ _("Create a new") }} <%=mimeType%>
                 </h3>
             </div>
@@ -4839,18 +4765,13 @@
 <script type="text/javascript">
  function wizz(){
   if (!jQuery().bootstrapWizard) {
-                    console.log("hhhhhhhhhhhhhhhhhhhhhhhhherrrrrrrrrrrrre");
+
+
                     return;
                 }
                 var handleTitle = function(tab, navigation, index) {
-                    console.log('index');
-                    console.log(index);
                     var total = navigation.find('li').length;
-                    console.log("total equal===");
-                    console.log(total);
                     var current = index + 1;
-                    console.log('index');
-                    console.log(index)
                     // set wizard title
                    // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
                     // set done steps
@@ -4905,10 +4826,7 @@
 function waitwizard() {
       if (jQuery.isEmptyObject(angular.element("#signin").scope().insideStages)) {
           setTimeout("waitwizard()", 500);
-          console.log("not yet");
       }else{
-                console.log("yes it works");
-                console.log(angular.element("#signin").scope().insideStages);
                  wizz()// you will need an asynch callback
     }
 

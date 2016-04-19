@@ -16,11 +16,11 @@
           <tbody><tr>
             <td class="appTd">
             <div class="btn-group">
-                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
                   {% if active_app.label =="Relationships" %}
-                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                       {% else%}
-                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                      <img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                   {% endif %}
                   <span class="hide_sm">{{_(active_app.label)}}</span>   
                   <i class="icon-angle-down fa fa-angle-down"></i>
@@ -28,9 +28,9 @@
                  <ul class="dropdown-menu">
                   {%for application in apps %}
                         {% if application.label =="Relationships" %}
-                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                           {% else%}
-                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                         
                           {% endif %}
                        
@@ -287,7 +287,7 @@
                                 <div class="col-md-6">
                                    <ul id="slimList" class="list-unstyled contact-infos infoslist">
                                         <li ng-repeat="contact in contacts"> 
-                                           <img class="contact-photo" src="/static/img/avatar_contact.jpg">
+                                           <img class="contact-photo" src="/static/src/img/avatar_contact.jpg">
                                             <%= contact.firstname || contact.full_name %> <%= contact.lastname %>
                                              <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(existingcontacts,$index)" data-dismiss="alert">                                                   
                                              </button>
@@ -440,7 +440,7 @@
                                         </div>
                                         <ul class="list-unstyled contact-infos infoslist">
                                           <li ng-repeat="competitor in competitors"> 
-                                             <img class="contact-photo" src="/static/img/avatar_contact.jpg">
+                                             <img class="contact-photo" src="/static/src/img/avatar_contact.jpg">
                                              <span>
                                                <%= competitor.name %> 
                                               </span>                                                                          
@@ -573,12 +573,13 @@
                                 <div class="news-block-tags relatedBlock">
                                   <ul id="slimList" class="list-unstyled contact-infos infoslist">
                                       <li ng-repeat="excontact in newcontacts"> 
-                                         <img class="contact-photo" src="/static/img/avatar_contact.jpg" style="float:left; display: inline-block;">
+                                         <img class="contact-photo" src="/static/src/img/avatar_contact.jpg" style="float:left; display: inline-block;">
                                          <span style="float:left; display: inline-block;line-height: 29px;margin-left: 5px;"><%= excontact.firstname %> <%= excontact.lastname %></span> 
                                          <ul class="socialLinks" style="list-style: none;float:left; display: inline-block;">
                                                     <li ng-repeat="sociallink in excontact.sociallinks" class="socialItem" style="padding-bottom: 5px;float: left;display: inline-block;">
                                                       <div class="cont">
-                                                        <a href="" onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;"><img width="16" src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                        <a href="" onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')" style="display: inline-block;   float: left;">
+                                                            <img width="16" src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                         <div class="clearfix"></div>
                                                       </div>
                                                     </li>            
@@ -602,7 +603,7 @@
                                         <div class="clearfix"></div>
                                       </li>
                                       <li ng-repeat="contact in contacts"> 
-                                         <img class="contact-photo" src="/static/img/avatar_contact.jpg">
+                                         <img class="contact-photo" src="/static/src/img/avatar_contact.jpg">
                                           <span>
                                            <%= contact.firstname||contact.full_name %> <%= contact.lastname %> <%= contact.title%> 
                                           </span>                                                                          
@@ -643,7 +644,7 @@
                                     <div class="formElements">
                                         <div class="row">
                                           <div class="col-md-6 firstNameLeft">
-                                              <input ng-model="currentContact.firstname" type="text" id="firstName" class="form-control" placeholder="{{_('First Name')}}">
+                                              <input ng-model="currentContact.firstname" type="text" id="firstName" class="form-control" placeholder="{{_('First Name')}}" ng-blur="getLinkedinProfile();getTwitterProfile()">
                                           </div>
                                           <!--/span-->
                                           <div class="col-md-6 lastNameRight">
@@ -790,7 +791,7 @@
                         <div class="portlet-body" id="chats">
                            
                                           <div ng-show="inIsSearching" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                            <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
+                                            <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                                           </div>
                                           
                                          
@@ -816,21 +817,10 @@
                                                 <li style="padding-top:15px">
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
-                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                                </li>
-                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                          <div class="input-icon">
-                                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                                          </div>
-                                                      </form>
-                                                </li>-->
-                                                </ul> 
+                                                </ul>
                                                 <div ng-repeat="inShortProfile in inShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(inShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=inShortProfile.profile_picture || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
+                                                              <img src="<%=inShortProfile.profile_picture || '/static/src/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
@@ -971,7 +961,7 @@
                         <div class="portlet-body" id="chats">
                            
                                           <div ng-show="twIsSearching" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                            <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
+                                            <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                                           </div>
                                           
                                          
@@ -995,21 +985,10 @@
                                                 <li style="padding-top:15px">
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
-                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                                </li>
-                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                          <div class="input-icon">
-                                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                                          </div>
-                                                      </form>
-                                                </li>-->
-                                                </ul> 
+                                                </ul>
                                                 <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(twShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img src="<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
+                                                              <img src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
@@ -1349,18 +1328,11 @@
 <script type="text/javascript">
 function wizz(){
   if (!jQuery().bootstrapWizard) {
-                    console.log("hhhhhhhhhhhhhhhhhhhhhhhhherrrrrrrrrrrrre");
                     return;
                 }
                 var handleTitle = function(tab, navigation, index) {
-                    console.log('index');
-                    console.log(index);
                     var total = navigation.find('li').length;
-                    console.log("total equal===");
-                    console.log(total);
                     var current = index + 1;
-                    console.log('index');
-                    console.log(index)
                     // set wizard title
                    // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
                     // set done steps
@@ -1415,10 +1387,7 @@ function wizz(){
 function waitwizard() {
       if (jQuery.isEmptyObject(angular.element("#signin").scope().insideStages)) {
           setTimeout("waitwizard()", 500);
-          console.log("not yet");
       }else{
-                console.log("yes it works");
-                console.log(angular.element("#signin").scope().insideStages);
                  wizz()// you will need an asynch callback
     }
 

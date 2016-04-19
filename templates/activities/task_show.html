@@ -26,7 +26,7 @@
             <a href="/#/tasks/" data-toggle="tooltip" data-placement="bottom" title="Back to Tasks">
                 <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;"
                      src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif"
-                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;"
+                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;"
                      border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a> {{_("Tasks")}}  </a>
         </h2>
 
@@ -279,17 +279,17 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
-                                    <img src="/static/img/google_drive/text/plain.png" class="">
+                                    <img src="/static/src/img/google_drive/text/plain.png" class="">
                                     {{ _('Document')}}
                                 </a>
                                 </li>
                                 <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
-                                    <img src="/static/img/google_drive/presentation.png" class="">
+                                    <img src="/static/src/img/google_drive/presentation.png" class="">
                                     {{ _('Presentation')}}
                                 </a>
                                 </li>
                                 <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
-                                    <img src="/static/img/google_drive/spreadsheet.png" class="">
+                                    <img src="/static/src/img/google_drive/spreadsheet.png" class="">
                                     {{ _('Spreadsheet')}}
                                 </a>
                                 </li>
@@ -484,7 +484,7 @@
                                                 data-dismiss="alert"></button>
                                         <div class="photo">
                                             <img class="google-avatar"
-                                                 src="<%= selected_us.google_public_profile_photo_url%>"/>
+                                                 ng-src="selected_us.google_public_profile_photo_url"/>
                                         </div>
                                         <div class="details">
                                             <p>
@@ -605,7 +605,7 @@
                     <div ng-show="task.owner.google_user_id=={{ME}}">
                         <p>{{ _("Invited user:")}}</p>
                         <div class="invitation" ng-repeat="invited in sharing_with">
-                            <img class="google-avatar" src="<%= invited.google_public_profile_photo_url%>"/>
+                            <img class="google-avatar" ng-src="invited.google_public_profile_photo_url"/>
                             <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
                             <hr/>
                         </div>

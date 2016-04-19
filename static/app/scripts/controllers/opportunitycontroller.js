@@ -99,11 +99,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
       $scope.opportunitystage.items=[];
       $scope.opportunitiesbysatges=[];
        $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
 
@@ -115,10 +111,8 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                       });*/
 
       $scope.isStage = function(stage) {
-        if (stage.probability == 0 || stage.probability == 100) {
-          return false;
-        }
-        return true;
+        return !(stage.probability == 0 || stage.probability == 100);
+
       };
       $scope.ExportCsvFile = function () {
             if ($scope.selectedCards.length != 0) {
@@ -135,7 +129,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             $("#TakesFewMinutes").modal('show');
         }
       $scope.LoadCsvFile = function () {
-            console.log("exporting", $scope.selectedCards.length);
             if ($scope.selectedCards.length != 0) {
                 var ids = [];
                 angular.forEach($scope.selectedCards, function (selected_oppo) {
@@ -148,7 +141,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                     tags.push(selected_tag.entityKey);
                 });
                 var params = {"tags": tags};
-                console.log(params);
                 Opportunity.export($scope, params);
                 $scope.selectedKeyLeads = [];
             }
@@ -178,11 +170,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           $scope.opportunityToChage=opportunity;
       };
      $scope.updateOpportunityStage = function(stage,opp){
-        console.log("here started");
-        console.log(stage);
-        console.log(opp);
-        console.log("here started");
-
           $scope.stageTo=stage;
           $scope.opportunityToChage=opp;
           if (stage[0].entityKey) {
@@ -215,7 +202,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             $scope.apply();
             $scope.stageFrom=[];
           }else{
-            console.log("in no from stage defined");
             $scope.oppTochange={};
             angular.forEach($scope.selectedCards, function(opp){
               if (opp.entityKey==resp.entityKey) {
@@ -223,9 +209,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               }
             });
             if (!jQuery.isEmptyObject($scope.oppTochange)) {
-              console.log("in not isEmptyObject")
-              console.log("stageTo");
-              console.log($scope.stageTo);
               angular.forEach($scope.opportunitiesbysatges, function(stag){
                 if (stag.items!=undefined) {
                   if (stag.items.indexOf($scope.oppTochange) >= 0) {
@@ -259,7 +242,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                               'entityKey':selected_opportunity.entityKey,
                               'stage': stage.stage.entityKey
                     };
-                    console.log(params);
                     Opportunity.update_stage($scope,params);
                 }); 
 
@@ -268,14 +250,12 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             $scope.finalStageName=null;
         }else{
           if (stage.stage.probability==100 && $scope.closewonstage.items!=undefined) {
-            console.log("in closewonstage");
             $scope.opportunities=$scope.closewonstage.items;
             $scope.finalStageName="won";              
           }else{
 
             if (stage.stage.probability==0 && $scope.closeloststage.items!=undefined) {
-              console.log("in closeloststage");
-              $scope.opportunities=$scope.closeloststage.items;  
+              $scope.opportunities=$scope.closeloststage.items;
               $scope.finalStageName="lost";
             };
           };
@@ -283,19 +263,13 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
         };      
       }
       $scope.inProcess=function(varBool,message){
-          if (varBool) {           
-            if (message) {
-              console.log("starts of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads+1;
+          if (varBool) {
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -318,8 +292,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
        $scope.runTheProcess = function(){
           var params = {};
           Opportunity.list2($scope,params,function(resp){
-                console.log("here check resp");
-                console.log(resp);
                 if(!resp.code){
                   if (!resp.items){
                     if(!$scope.isFiltering){
@@ -362,10 +334,8 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                           item.items=[];
                         };
                         item.items.unshift({'entityKey':item.stage.entityKey});
-                        // console.log(item.items);
                         if (refreshOpp) {
 
-                          console.log('in   refreshOpp =true');
                           var stagexists=false;
                           angular.forEach($scope.opportunitiesbysatges, function(stage){
                             if (stage.stage.entityKey==item.stage.entityKey) {
@@ -377,19 +347,12 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                           console.log($scope.opportunitiesbysatges);
 
                         }else{
-                            console.log('in else of refreshOpp');
                             $scope.opportunitiesbysatges.push(item);
                         }
                         $scope.oppStagesOrigin.push(item);
                       };
                   });     
-                 console.log('$scope.opportunitiesbysatges');
-                 console.log($scope.opportunitiesbysatges);                 
-                 if ($scope.oppCurrentPage>1){
-                      $scope.opppagination.prev = true;
-                   }else{
-                       $scope.opppagination.prev = false;
-                   }
+                 $scope.opppagination.prev = $scope.oppCurrentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.oppCurrentPage + 1;
                    // Store the nextPageToken
@@ -452,20 +415,15 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
          };
       $scope.unselectMember = function(index) {
             $scope.selected_members.splice(index, 1);
-            console.log($scope.selected_members);
         };
       $scope.share = function (me) {
             if ($scope.selectedPermisssions) {
                 var sharing_with=$.extend(true, [], $scope.sharing_with);
                 $scope.sharing_with=[];
                 angular.forEach($scope.selectedCards, function (selected_lead) {
-                    console.log("selected_lead");
-                    console.log(selected_lead);
                     var id = selected_lead.id;
                     if (selected_lead.owner.google_user_id == me) {
                         var params = {'id': id, 'access': $scope.selected_access};
-                        console.log("$scope.selected_access");
-                        console.log($scope.selected_access);
                         Opportunity.patch($scope, params);
                         params["parent"] = "opportunity";
                         Event.permission($scope, params);
@@ -487,7 +445,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                                     'about': selected_lead.entityKey,
                                     'items': items
                                 };
-                                console.log(params);
                                 Permission.insert($scope, params);
                         }
                     }
@@ -496,20 +453,12 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
         };
 
       $scope.checkPermissions= function(me){
-          console.log("enter here in permission");
           $scope.selectedPermisssions=true;
           angular.forEach($scope.selectedCards, function(selected_opportunity){
-              console.log(selected_opportunity.owner.google_user_id);
-              console.log(me);
-              if (selected_opportunity.owner.google_user_id==me) {
-                console.log("hhhhhhhhheree enter in equal");
-              };
               if (selected_opportunity.owner.google_user_id!=me) {
-                console.log("in not owner");
                 $scope.selectedPermisssions=false;
               };
           });
-          console.log($scope.selectedPermisssions);
         }
    $scope.getColaborators=function(){
 
@@ -529,7 +478,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               var checkbox = $event.target;
                if(checkbox.checked){
                   $scope.selectedCards=[];
-                  console.log($scope.opportunities);
                   $scope.selectedCards=$scope.selectedCards.concat($scope.opportunities);
                     
                   $scope.allCardsSelected=true;
@@ -566,7 +514,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
            
           };
           // Start the tour!
-          console.log("beginstr");
           hopscotch.startTour(tour);
       };
           
@@ -576,7 +523,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           };
           $scope.deleteSelection = function(){
               if (!jQuery.isEmptyObject($scope.opportunityToChage)) {
-                console.log("in oppo to change");
                   var params = {'entityKey':$scope.opportunityToChage.entityKey};
                   Opportunity.delete($scope, params);
               }else{
@@ -591,10 +537,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               $('#BeforedeleteSelectedOpportunities').modal('hide');
           };
           $scope.oppDeleted=function(entityKey){
-            console.log("test oppoo deleted");
-            console.log(entityKey);
             if ($scope.selectedOpportunity) {
-                  console.log("test selectedOpportunity");
                $scope.opportunities.splice($scope.opportunities.indexOf($scope.selectedOpportunity) , 1);
                $scope.apply();
                $scope.selectedCards=[];
@@ -604,9 +547,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                 $scope.apply();
                 $scope.selectedCards=[];
               }else{
-               /* console.log("$scope.selectedCards");
-                console.log($scope.selectedCards);*/
-               
                   angular.forEach($scope.opportunities, function(opp){
                     if (opp.entityKey==entityKey) {
                       $scope.opportunities.splice($scope.opportunities.indexOf(opp) , 1);
@@ -619,7 +559,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                       $scope.apply();
                     };
                   });
-                  console.log("yes heeeeeeeeeeere");
                   angular.forEach($scope.opportunitiesbysatges, function(stage){
 
                       angular.forEach(stage.items, function(item){
@@ -653,8 +592,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                if(checkbox.checked){
                   if ($scope.selectedCards.indexOf(opportunity) == -1) {             
                     $scope.selectedCards.push(opportunity);
-                    console.log("card pushed");
-                    console.log($scope.selectedCards);
                   }
                }else{       
                     $scope.selectedCards.splice($scope.selectedCards.indexOf(opportunity) , 1);
@@ -703,7 +640,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
             Auth.refreshToken();
        };
        $scope.editbeforedelete = function(opportunity){
-        console.log("ssssss");
          $scope.selectedOpportunity=opportunity;
          $('#BeforedeleteOpportunity').modal('show');
        };
@@ -736,7 +672,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                 var tags=[];
                 var items = [];
                 tags=$('#select2_sample2').select2("val");
-                console.log(tags);
                 if ($scope.currentOpportunity!=null) {
                   angular.forEach(tags, function(tag){
                            var params = {
@@ -786,7 +721,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
 
           return index+1;
         }else{
-          console.log((index%4)+1);
           return (index%4)+1;
         }
      };
@@ -803,8 +737,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           }else{
             params = {'order' : $scope.order,'limit':6}
           }
-          console.log('in listNextPageItems');
-          $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
+          $scope.oppCurrentPage += 1 ;
           Opportunity.list($scope,params);
      }
      $scope.listMoreItems = function(){
@@ -816,7 +749,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                       'limit':20,
                       'pageToken':$scope.opppages[nextPage]
                      }
-            $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
+            $scope.oppCurrentPage += 1 ;
             Opportunity.listMore($scope,params);
           }
 
@@ -832,14 +765,13 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           }else{
             params = {'order' : $scope.order,'limit':6}
           }
-          $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
+          $scope.oppCurrentPage -= 1 ;
           Opportunity.list($scope,params);
      }
 
 
 
      $scope.showModal = function(){
-        console.log('button clicked');
         $('#addOpportunityModal').modal('show');
 
       };
@@ -936,10 +868,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
         Opportunity.list($scope,params);
      };
      $scope.filterByStage = function(filter){
-      console.log('----------hello--------');
-
-
-          console.log(filter);
           var params = {
                          'stage': filter,
                          'order': $scope.order
@@ -1036,8 +964,6 @@ $scope.updateTag = function(tag){
                           }
                           ;
                       } else {
-                          console.log('not tags selection');
-                          console.log(currFilters.orderBy);
                           $scope.cloneOppStages[ind].items.push(opp);
                           $scope.cloneOppStages[ind].items = $filter('orderBy')($scope.cloneOppStages[ind].items, currFilters.orderBy);
                       }
@@ -1064,8 +990,6 @@ $scope.updateTag = function(tag){
                       $scope.opportunitiesAssignee = null;
                       break;
                   case 'my':
-                      console.log('in my');
-                      console.log(assignee);
                       angular.forEach($scope.opportunitiesbysatges, function (stage) {
                           var ind = $scope.opportunitiesbysatges.indexOf(stage);
                           angular.forEach(stage.items, function (opp) {
@@ -1092,10 +1016,6 @@ $scope.updateTag = function(tag){
               stage.items = [];
           });
           angular.forEach($scope.opportunitiesbysatges, function (stage) {
-              console.log('stage.items');
-              console.log(stage.items)
-              console.log('stage.items after filter');
-              console.log($filter('orderBy')(stage.items, fltr));
               $scope.cloneOppStages[$scope.opportunitiesbysatges.indexOf(stage)].items = $filter('orderBy')(stage.items, fltr);
               var ind = $scope.opportunitiesbysatges.indexOf(stage);
           });
@@ -1239,8 +1159,6 @@ $scope.addTags=function(){
      var handleColorPicker = function () {
           if (!jQuery().colorpicker) {
               return;
-              console.log('errooooooooooooooor');
-              console.log("working******************************");
           }
           $('.colorpicker-default').colorpicker({
               format: 'hex'
@@ -1277,8 +1195,6 @@ $scope.addTags=function(){
       }
       $scope.dropTag=function(opportunity,index){
         var items = [];
-         console.log('-----------Drag Tag-----------');
-         console.log(opportunity.entityKey);
         var params = {
               'parent': opportunity.entityKey,
               'tag_key': $scope.draggedTag.entityKey
@@ -1367,7 +1283,6 @@ $scope.addTags=function(){
             $scope.opptoUnattachTag = opportunity;
         }
         $scope.tagUnattached = function() {
-          console.log("inter to tagDeleted");
             $scope.opptoUnattachTag.tags.splice($scope.opptoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
             $scope.apply()
         };
@@ -1535,25 +1450,18 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
         console.log("in stage updated");
         angular.forEach($scope.opportunitystages, function(stage){
             if (stage.entityKey==params.stage) {
-              console.log("stage found");
               $scope.opportunity.current_stage=stage;
             };
         });
        };
       $scope.inProcess=function(varBool,message){
-          if (varBool) {           
-            if (message) {
-              console.log("starts of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads+1;
+          if (varBool) {
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -1594,32 +1502,22 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
         $scope.docDeleted=function(entityKey){
             var ind=null;
             var listIndex=null;
-            console.log("in docDeleted");
-            console.log("entityKey");
-            console.log(entityKey);
             angular.forEach($scope.selectedDocs, function (doc) {
                 if (doc.entityKey==entityKey) {
                     ind=$scope.selectedDocs.indexOf(doc);
                     listIndex=$scope.documents.indexOf(doc);
-                    console.log("doc index found");
-                    console.log("listIndex",ind);
-                    console.log("listIndex",listIndex);
                 };
             });
             if (ind!=-1) {
-                console.log("in if ind");
                 $scope.documents.splice(listIndex,1);
                 $scope.selectedDocs.splice(ind,1);
                 $scope.apply(); 
                 if ($scope.documents.length==0) {
                     $scope.blankStatdocuments=true;
                 };
-                console.log($scope.documents);
-                console.log($scope.selectedDocs);
             };
         };
     $scope.docCreated=function(url){
-            console.log('here docCreated');
             window.open($scope.prepareEmbedLink(url),'_blank');
         }
     $scope.isSelectedDoc = function (doc) {
@@ -1632,8 +1530,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
                if(checkbox.checked){
                   if ($scope.selectedDocs.indexOf(doc) == -1) {             
                     $scope.selectedDocs.push(doc);
-                    console.log("opp pushed");
-                    console.log($scope.selectedDocs);
                   }
                }else{       
 
@@ -1687,15 +1583,11 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
                     infonode.value=infonode.fields[0].value;
                     infonode.field=infonode.fields[0].field;
                 if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
-                    console.log('in stringtype______________________________________ ');
-                    console.log(infonode);
                     additionalCustomFields.push(infonode);
                 }else{
                         var schemaExists=false;
                         angular.forEach($scope[related_object].customfields, function (customfield) {
                         if (customfield.id==infonode.property_type) {
-                            console.log('in not stringprope ______________________________');
-                            console.log(infonode);
                             schemaExists=true;
                             var info_value=null;
                             if (infonode.fields[0].field=="property_type") {
@@ -1746,7 +1638,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
      }
      /************** account and contact update******/
      $scope.getResults = function (val, location) {
-         console.log('here executed');
          var url = ROOT + location + '?alt=json'
          var config = {
              headers: {
@@ -1768,9 +1659,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
          });
      }
      $scope.selectContact = function(){
-        console.log('$scope.searchAccountQuery ....');
-         console.log($scope.searchRelatedContactQuery);
-
          if (typeof($scope.searchRelatedContactQuery) == 'object') {
              var params = {
                  'id': $scope.opportunity.id,
@@ -1784,15 +1672,12 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
          $scope.searchRelatedContactQuery = "";
      };
         $scope.selectCompetitor = function () {
-            console.log("enter fired");
-            console.log($scope.searchCompetitorQuery);
             if ($scope.opportunity.competitors == undefined) {
                 $scope.opportunity.competitors = [];
             }
             ;
             var par = {};
             if (typeof($scope.searchCompetitorQuery) == 'object') {
-                console.log("enter object");
                 par = {
                     'id': $scope.opportunity.id,
                     'new_competitor': $scope.searchCompetitorQuery.entityKey
@@ -1800,7 +1685,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
                 Opportunity.patch($scope, par);
             } else {
                 if ($scope.searchCompetitorQuery != "") {
-                    console.log("enter string");
                     par = {
                         'id': $scope.opportunity.id,
                         'new_competitor': $scope.searchCompetitorQuery
@@ -1822,15 +1706,11 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
         }
       };
         $scope.addGeo = function (address) {
-            console.log("geo added");
-            console.log(address);
             $scope.currentContact.address = address.formatted;
             /*$scope.addresses.push(address);*/
             $scope.apply();
-            // console.log($scope.infonodes.addresses);
         };
         $scope.setDecisionMaker = function (contact) {
-            console.log("deciosion maker");
             contact.is_decesion_maker = !contact.is_decesion_maker;
             var params = {
                 id: $scope.opportunity.id,
@@ -1865,8 +1745,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
                 /* $scope.newContactform = false;*/
             }
             ;
-            console.log('hhhhhhhhhhhhhhhhhere save new contact');
-            console.log($scope.newcontacts);
 
         }
         $scope.contactInserted = function (resp) {
@@ -1890,7 +1768,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
               gapi.client.crmengine.leads.search(params_search_lead).execute(function(resp) {
                 if (resp.items){
                 $scope.leadsResults = resp.items;
-                console.log($scope.leadsResults);
                 $scope.apply();
               };
             });
@@ -1898,8 +1775,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
         }
       });
      $scope.selectLead = function(){
-        console.log('$scope.searchLeadQuery ....');
-        console.log($scope.searchLeadQuery);
         if (typeof($scope.searchLeadQuery)=='object'){
           $scope.updateOpportunity({
           'id':$scope.opportunity.id,
@@ -1921,8 +1796,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
      }
       $scope.selectAccount = function(){
         //  $scope.opportunity.account  = $scope.searchAccountQuery;
-        console.log('$scope.searchAccountQuery ....');
-        console.log($scope.searchAccountQuery);
         if (typeof($scope.searchAccountQuery)=='object'){
           $scope.updateOpportunity({
           'id':$scope.opportunity.id,
@@ -1968,16 +1841,11 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
             $('#beforedelinkContact').modal('show');
         };
         $scope.disassociateItem = function () {
-            console.log('edge to delete');
-            console.log($scope.itemToDisassociate);
             if ($scope.itemToDisassociate.type == 'contact') {
                 var params = {'entityKey': $scope.itemToDisassociate.item.edgeKey};
-                console.log('egde params');
-                console.log(params);
                 Edge.delete($scope, params);
             } else {
                 if ($scope.itemToDisassociate.type == 'competitor') {
-                    console.log('in competitor');
                     var params = {
                         'id': $scope.opportunity.id,
                         'removed_competitor': $scope.itemToDisassociate.item.entityKey
@@ -2023,8 +1891,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
         $scope.listInfonodes = function (kind) {
 
             if (!$scope.isEmpty($scope.relatedInfonode)) {
-                console.log('phone inserted');
-                console.log($scope.relatedInfonode);
                 if ($scope.relatedInfonode.contact[$scope.relatedInfonode.infonode.kind] == undefined) {
                     $scope.relatedInfonode.contact[$scope.relatedInfonode.infonode.kind] = {};
                     $scope.relatedInfonode.contact[$scope.relatedInfonode.infonode.kind].items = [];
@@ -2043,8 +1909,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
 
         }
         $scope.addEmailToContact = function (email, contact) {
-            console.log(email);
-            console.log(email);
             if (email.email) {
                 params = {
                     'parent': contact.entityKey,
@@ -2081,15 +1945,11 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
             var tags = [];
             var items = [];
             tags = $('#select2_sample2').select2("val");
-            console.log("tagstags");
-            console.log(tags);
             angular.forEach(tags, function (tag) {
                 var params = {
                     'parent': $scope.opportunity.entityKey,
                     'tag_key': tag
                 };
-                console.log("tagtagtags");
-                console.log(tag);
                 Tag.attach($scope, params, 1, 'opportunity');
             });
             $('#select2_sample2').select2("val", "");
@@ -2134,17 +1994,12 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
 //  
 
   $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
 
   //
       $scope.selectMemberToTask = function() {
-            console.log($scope.selected_members);
             if ($scope.selected_members.indexOf($scope.user) == -1) {
                 $scope.selected_members.push($scope.user);
                 $scope.selected_member = $scope.user;
@@ -2154,7 +2009,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
         };
         $scope.unselectMember = function(index) {
             $scope.selected_members.splice(index, 1);
-            console.log($scope.selected_members);
         };
      //$('#addLeadModal').modal('show');
   //HKA 09.11.2013 Add a new Task
@@ -2227,7 +2081,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
         }
      }
      $scope.hilightTask = function(){
-        console.log('Should higll');
         $('#task_0').effect("highlight","slow");
         $('#task_0').effect( "bounce", "slow" );
 
@@ -2271,7 +2124,7 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-            $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+            $scope.topicCurrentPage += 1 ;
             Opportunity.get($scope,params);
             }
 
@@ -2397,11 +2250,7 @@ $scope.deleteInvite=function(index){
 }
 
 $scope.checkGuests=function(){
-   if($scope.invites.length !=0){
-   $scope.Guest_params=true;
- }else{
-  $scope.Guest_params=false;
- }
+   $scope.Guest_params = $scope.invites.length != 0;
 }
 
 
@@ -2500,8 +2349,6 @@ $('#timeZone').on('change', function() {
 
                   }else{
 
-                        console.log("yeah babay");
-                        console.log($scope.allday);
 
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
@@ -2739,7 +2586,6 @@ $scope.updateEventRenderAfterAdd= function(){};
   $('#EditOpportunityModal').modal('hide');
  };
  $scope.updateOpportunityStage = function(stage){
-  console.log("here started");
    if (stage) {
     var params = {
                   'entityKey':$scope.opportunity.entityKey,
@@ -2843,7 +2689,7 @@ $scope.deleteopportunity= function(){
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
-            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+            $scope.documentCurrentPage += 1 ;
 
             Opportunity.get($scope,params);
 
@@ -2906,7 +2752,6 @@ $scope.deleteopportunity= function(){
                 params.items = new Array();
 
                  $.each(data.docs, function(index) {
-                      console.log(data.docs);
                       /*
                       {'about_kind':'Account',
                       'about_item': $scope.account.id,
@@ -2950,10 +2795,7 @@ $scope.deleteopportunity= function(){
     //07.03.2014 update Close date, Reason lost, Main competitor, Type, Description, Source
 
      $scope.updateClosedate = function(opportunity){
-      console.log('***************close date**************');
-      console.log(opportunity.closed_date);
       var close_at = $filter('date')(opportunity.closed_date,['yyyy-MM-ddTHH:mm:00.000000']);
-      console.log(close_at);
       params = {'id':$scope.opportunity.id,
               'closed_date':close_at};
       Opportunity.patch($scope,params);
@@ -3143,7 +2985,6 @@ $scope.listInfonodes = function(kind) {
                           'about':$scope.opportunity.entityKey
                         };
             Permission.delete($scope,item)
-            console.log(item)
         };
     // Google+ Authentication
     Auth.init($scope);
@@ -3194,7 +3035,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
       $scope.opportunity={access:'public',currency:'USD',duration_unit:'fixed',closed_date:new Date()};
       $scope.users=[];
       $scope.opportunity.estimated=null;
-      $scope.imageSrc = '/static/img/default_company.png';
+      $scope.imageSrc = '/static/src/img/default_company.png';
       $scope.opportunity.contacts=[];
       $scope.contacts=[];
       $scope.competitors=[];
@@ -3211,19 +3052,13 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
       $scope.opportunities=[];
       $scope.opportunities.customfields=[];
       $scope.inProcess=function(varBool,message){
-          if (varBool) {           
-            if (message) {
-              console.log("starts of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads+1;
+          if (varBool) {
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -3271,13 +3106,9 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
               $scope.apply();
             }   
      $scope.linkedinUrl=function(url){
-                         console.log("urrrrrl linkedin");
-                         console.log(url);
-                         
                          var match="";
                          var matcher = new RegExp("linkedin");
                          var test = matcher.test(url);
-                         console.log(test);                        
                          return test;
         }
         $scope.apply=function(){
@@ -3293,8 +3124,6 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
               }
       }
       $scope.addNewContact = function(current) {
-            console.log('in add contact');
-            console.log(current);
             if (current.firstname != null && current.lastname != null) {
                 $scope.contact=current;
                 $scope.contact.access = $scope.opportunity.acces;
@@ -3315,8 +3144,6 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
                 $scope.currentContact = {};
                /* $scope.newContactform = false;*/
             }
-            console.log('hhhhhhhhhhhhhhhhhere save new contact');
-            console.log($scope.newcontacts);
 
         }
         $scope.contactInserted = function (resp) {
@@ -3335,7 +3162,6 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
      }
       $scope.changeInitialStage=function(stage){
         $scope.initialStage=stage;
-        console.log($scope.initialStage.probability);
       }
       $scope.pullElement=function(index,elem,arr){
         if ($scope.customfields.indexOf(elem) != -1) {
@@ -3359,8 +3185,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
           if (elem.field && elem.value) {
                         var copyOfElement = angular.copy(elem);
                         arr.push(copyOfElement);
-                        console.log(elem);
-                        $scope.initObject(elem); 
+                        $scope.initObject(elem);
                       }
 
                     }else{
@@ -3427,11 +3252,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
 
 
   $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
       $scope.prepareInfonodes = function(){
@@ -3461,7 +3282,6 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
               gapi.client.crmengine.accounts.search(params_search_competitor).execute(function(resp) {
                 if (resp.items){
                 $scope.competitorsResult = resp.items;
-                console.log($scope.competitorsResult);
                 $scope.apply();
               };
             });
@@ -3469,15 +3289,12 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
         }
       });
       $scope.selectCompetitor = function(){
-        console.log("enter fired");
-        console.log($scope.searchCompetitorQuery);
         if (typeof($scope.searchCompetitorQuery)=='object') {
            console.log("enter object");
            $scope.competitors.push($scope.searchCompetitorQuery);
            $scope.opportunity.competitors.push($scope.searchCompetitorQuery.entityKey);
         }else{
            if ($scope.searchCompetitorQuery!="") {
-             console.log("enter string");
             $scope.competitors.push({name:$scope.searchCompetitorQuery});
             $scope.opportunity.competitors.push($scope.searchCompetitorQuery);
            };          
@@ -3493,7 +3310,6 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
               gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
                 if (resp.items){
                 $scope.contactsResults = resp.items;
-                console.log($scope.contactsResults);
                 $scope.apply();
               };
             });
@@ -3508,15 +3324,9 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
 
 
         }else{
-          
-            console.log('test searchContactQuery');
-            console.log($scope.searchContactQuery);
             if ($scope.searchContactQuery != "") {
                 $scope.contacts.push({full_name: $scope.searchContactQuery, is_decesion_maker: false});
-
             };
-           
-
         };   
         $scope.searchContactQuery="";    
        
@@ -3553,7 +3363,6 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
             });
         }
         $scope.getAccountsResults = function (val) {
-            console.log('here executed');
             var url = ROOT + '/crmengine/v1/accounts/search?alt=json'
             var config = {
                 headers: {
@@ -3616,14 +3425,10 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
         $('#newEventModalForm').modal("show");  
       }
       $scope.validateBeforeSave=function(opportunity){
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
-          if (!$scope.searchAccountQuery) $scope.oppo_err.account=true;
-            else $scope.oppo_err.account=false;
-          if (!$scope.searchContactQuery) $scope.oppo_err.contact=true;
-            else $scope.oppo_err.contact=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
+          $scope.oppo_err.account = !$scope.searchAccountQuery;
+          $scope.oppo_err.contact = !$scope.searchContactQuery;
           if (!$scope.oppo_err.name && !$scope.oppo_err.amount_per_unit && !($scope.oppo_err.account && $scope.oppo_err.contact) )  $scope.save(opportunity)
       }
       $scope.save = function(opportunity){
@@ -3641,8 +3446,6 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
               }
               ;
           });
-          console.log('opportunity contacts');
-          console.log($scope.opportunity.contacts);
           opportunity.infonodes = $scope.prepareInfonodes();
             // prepare amount attributes
             
@@ -3970,18 +3773,18 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
                          prof.created_at=resp.created_at
                          prof.description_of_user=resp.description_of_user;
                          prof.followers_count=resp.followers_count;
-                         prof.friends_count=resp.friends_count; 
-                         prof.id=resp.id; 
-                         prof.lang=resp.lang; 
-                         prof.language=resp.language; 
-                         prof.last_tweet_favorite_count=resp.last_tweet_favorite_count; 
-                         prof.last_tweet_retweet_count=resp.last_tweet_retweet_count; 
-                         prof.last_tweet_text=resp.last_tweet_text; 
-                         prof.location=resp.location; 
-                         prof.nbr_tweets=resp.nbr_tweets; 
-                         prof.profile_banner_url=resp.profile_banner_url+'/1500x500'; 
-                         prof.profile_image_url_https=resp.profile_image_url_https; 
-                         prof.url_of_user_their_company=resp.url_of_user_their_company; 
+                         prof.friends_count=resp.friends_count;
+                         prof.id=resp.id;
+                         prof.lang=resp.lang;
+                         prof.language=resp.language;
+                         prof.last_tweet_favorite_count=resp.last_tweet_favorite_count;
+                         prof.last_tweet_retweet_count=resp.last_tweet_retweet_count;
+                         prof.last_tweet_text=resp.last_tweet_text;
+                         prof.location=resp.location;
+                         prof.nbr_tweets=resp.nbr_tweets;
+                         prof.profile_banner_url=resp.profile_banner_url+'/1500x500';
+                         prof.profile_image_url_https=resp.profile_image_url_https;
+                         prof.url_of_user_their_company=resp.url_of_user_their_company;
                          prof.url=url;
                          $scope.twShortProfiles.push(prof);
                          $scope.twIsLoading=false;
@@ -4015,41 +3818,25 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
               /*$scope.currentContact.sociallinks.push($scope.sociallink);
               $scope.pushElement($scope.sociallink,$scope.currentContact.sociallinks,'sociallinks');
               $scope.pushElement($scope.website,$scope.currentContact.websites,'websites');*/
-              if ($scope.imageSrc=='/static/img/avatar_contact.jpg'||$scope.imageSrc=='') {
+              if ($scope.imageSrc=='/static/src/img/avatar_contact.jpg'||$scope.imageSrc=='') {
                 console.log("innnnnn no imageSrc");
                 $scope.imageSrc=$scope.twProfile.profile_image_url_https;
                 $scope.profile_img.profile_img_url = $scope.twProfile.profile_image_url_https;
               };
-              /*$scope.imageSrc = $scope.twProfile.profile_picture;*/
-            //  $scope.profile_img.profile_img_url = $scope.twProfile.profile_picture;
-              /*$scope.lead.source='Linkedin';
-              $scope.lead.industry=''
-              if (!$scope.lead.title) {
-                $scope.lead.title = $scope.twProfile.title;
-              };
-              if($scope.twProfile.current_post){
-                    if ($scope.twProfile.current_post[0]){
-                        $scope.lead.company = $scope.twProfile.current_post[0];
-                    }
-                  }
-              */
-              /*if ($scope.twProfile.location!=''&&$scope.twProfile.location!=null) {*/
                if (!$scope.addressModel) {
-                    $scope.addressModel=$scope.twProfile.location; 
+                    $scope.addressModel=$scope.twProfile.location;
                   }else{
                     if ($scope.addressModel.length < $scope.twProfile.location.length) {
-                      $scope.addressModel=$scope.twProfile.location;  
+                      $scope.addressModel=$scope.twProfile.location;
                     };
                   };
-              
-                 // $scope.addGeo({'formatted':$scope.twProfile.location});
-              /*};*/
+
               $scope.apply();
           }
 
             $scope.prepareUrl=function(url){
                     var pattern=/^[a-zA-Z]+:\/\//;
-                     if(!pattern.test(url)){                        
+                     if(!pattern.test(url)){
                          url = 'http://' + url;
                      }
                      return url;
@@ -4058,11 +3845,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
           return jQuery.isEmptyObject(obj);
         }
         $scope.isEmptyArray=function(Array){
-                  if (Array!=undefined && Array.length>0) {
-                  return false;
-                  }else{
-                      return true;
-                  };    
+                  return !(Array != undefined && Array.length > 0);;
               
           }
         //HKA 10.11.2013 Add event

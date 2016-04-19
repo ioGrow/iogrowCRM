@@ -4,12 +4,12 @@
         <tr>
             <td class="appTd">
                 <div class="btn-group">
-                    <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                    <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
                         {% if active_app.label =="Relationships" %}
-                            <img class="app_icon" src="static/img/sm-iogrow-true.png"
+                            <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png"
                                  style="display:inline-block;height: 20px;margin-right: 3px;">
                         {% else %}
-                            <img class="app_icon" src="static/img/admin_min.png"
+                            <img class="app_icon" src="../../static/src/img/admin_min.png"
                                  style="display:inline-block;height: 20px;margin-right: 3px;">
                         {% endif %}
                         <span class="hide_sm">{{ _(active_app.label) }}</span>
@@ -18,10 +18,10 @@
                     <ul class="dropdown-menu">
                         {% for application in apps %}
                             {% if application.label =="Relationships" %}
-                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"                                                     src="static/img/sm-iogrow-true.png"                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
                                 </a></li>
                             {% else %}
-                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
                                 </a></li>
 
                             {% endif %}
@@ -161,17 +161,17 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
-                                        <img src="/static/img/google_drive/text/plain.png" class="">
+                                        <img src="/static/src/img/google_drive/text/plain.png" class="">
                                         {{ _('Document') }}
                                     </a>
                                     </li>
                                     <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
-                                        <img src="/static/img/google_drive/presentation.png" class="">
+                                        <img src="/static/src/img/google_drive/presentation.png" class="">
                                         {{ _('Presentation') }}
                                     </a>
                                     </li>
                                     <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
-                                        <img src="/static/img/google_drive/spreadsheet.png" class="">
+                                        <img src="/static/src/img/google_drive/spreadsheet.png" class="">
                                         {{ _('Spreadsheet') }}
                                     </a>
                                     </li>
@@ -311,7 +311,7 @@
                          style="margin-left: 0px; margin-right: 0px;margin-bottom: 0px !important;">
                         <div class="col-md-12 showCover" ng-class="{bigCover: twProfile.profile_banner_url}"
                              style="height: 128px; overflow: hidden;padding-left: 0px;padding-right: 0px;">
-                            <img ng-src="<%=lead.cover_image||twProfile.profile_banner_url||'/static/img/covers/11.jpg'%>"
+                            <img ng-src="<%=lead.cover_image||twProfile.profile_banner_url||'/static/src/img/covers/11.jpg'%>"
                                  style="width: 100%;">
                         </div>
                         <div class="col-md-12" style="background: white;">
@@ -323,10 +323,10 @@
                                          style="vertical-align:middle;top: -50px;position: absolute;left: 28%;">
                                         <img alt="<%= lead.firstname %> <%= lead.lastname %>"
                                              class="img-responsive profile-photo-large" ng-src="<%=imageSrc%>"
-                                             err-src="/static/img/avatar_contact.jpg" style="width: 105px;height: 105px;border: 2px solid white;">
+                                             err-src="/static/src/img/avatar_contact.jpg" style="width: 105px;height: 105px;border: 2px solid white;">
                                         <a ng-show="showUpload" ng-click="createLogoPickerUploader()" href=""
                                            class="btn-on-show btn-upload btn-upload-contact" data-toggle="modal">
-                                            <img ng-src="/static/img/upload_logo.png">
+                                            <img ng-src="/static/src/img/upload_logo.png">
                                         </a>
                                     </div>
                                     <ul class="list-unstyled leadInfos" style="text-align:center;padding-top:56px;">
@@ -681,7 +681,7 @@
                                                         <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                            style="display: inline-block;   float: left;cursor:pointer">
                                                             <img width="24"
-                                                                 ng-src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                                 ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                         <input ng-show="showEdit"
                                                                ng-blur="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)"
                                                                ng-enter="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)"
@@ -703,7 +703,7 @@
                                                     <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                        style="display: inline-block;   float: left;">
                                                         <img width="24"
-                                                             ng-src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                             ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                     <input ng-show="showEdit" ng-blur="addSocial(sociallink)"
                                                            ng-enter="addSocial(sociallink)" ng-model="sociallink.url"
                                                            placeholder="Add a social link"
@@ -820,7 +820,7 @@
                                         <div class="col-md-6">
                                           <div ng-show="listPeople.length > 0 || lead.linkedin_profile" class="news-blocks blank-card blank-card-yellow newsCard"  style="  border-top-color: rgb(25, 133, 188) !important;" ng-class="{'linkedInLoader': linkedLoader}" >
                                           <div ng-show="linkedLoader" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                            <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
+                                            <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                                           </div>
                                           
                                           <h3 style="margin-top:0px"> <i  class="fa fa-linkedin-square" style=" font-size: 20px; vertical-align: baseline;color: rgb(25, 133, 188) !important;"></i>{{_(' Linkedin Informations')}} 
@@ -966,7 +966,7 @@
                                                      </h3>
                                                     <div class="news-block-tags">
                                                         <div ng-show="twIsSearching" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                            <img  src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">  
+                                            <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                                           </div>
                                           
                                          
@@ -990,21 +990,10 @@
                                                 <li style="padding-top:15px">
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
-                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                                </li>
-                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                          <div class="input-icon">
-                                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                                          </div>
-                                                      </form>
-                                                </li>-->
                                                 </ul> 
                                                 <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(twShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                                              <img ng-src="<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
+                                                              <img ng-src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
 
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
@@ -1052,7 +1041,7 @@
                                                 </div>
                                                 <div ng-show="watsonUrl" class="news-blocks blank-card blank-card-black newsCard">
                                                 <h3 style="margin-top:0px; margin-bottom: 20px;">
-                                                  <img src="/static/img/watson_logo.png" style="width: 35px;margin-top: -12px;">{{_(' IBM Watson Analysis')}}
+                                                  <img src="/static/src/img/watson_logo.png" style="width: 35px;margin-top: -12px;">{{_(' IBM Watson Analysis')}}
                                                  </h3>
                                                 <div class="news-block-tags" style="min-height: 300px;">
                                                    <iframe src="<%=watsonUrl%>" style="border: none;width: 100%;height: 
@@ -1246,7 +1235,7 @@
                                                        title="contact.firstname">
                                                         <img ng-hide="account.logo_img_id" alt="contact.firstname"
                                                              class="img-responsive img-thumbnail"
-                                                             src="/static/img/default_company.png">
+                                                             src="/static/src/img/default_company.png">
                                                         <img ng-show="account.logo_img_id" alt="account.name"
                                                              class="img-responsive img-thumbnail"
                                                              ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>"
@@ -1284,7 +1273,7 @@
                                         <div class="dashboard-stat cards">
                                             <div class="blank_slate_arrow"></div>
                                             <div class="thumbnail blank_slate_body">
-                                                <img class="img-responsive" src="/static/img/accounts_blank.png">
+                                                <img class="img-responsive" src="/static/src/img/accounts_blank.png">
 
                                                 <p class="lead">{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}</p>
                                             </div>
@@ -1361,7 +1350,7 @@
                                                        class="startup-link" title="attachment.title">
                                                         <img alt="attachment.title"
                                                              class="google-drive-icon img-responsive img-thumbnail"
-                                                             ng-src="/static/img/google_drive/<%=attachment.mimeType%>.png" ng-class="{ 'documentimgsize': attachment.mimeType=='image/jpeg'||attachment.mimeType=='image/png'||attachment.mimeType=='image/x-icon'}">
+                                                             ng-src="/static/src/img/google_drive/<%=attachment.mimeType%>.png" ng-class="{ 'documentimgsize': attachment.mimeType=='image/jpeg'||attachment.mimeType=='image/png'||attachment.mimeType=='image/x-icon'}">
                                                     </a>
                                                 </div>
                                                 <div class="text">
@@ -1393,7 +1382,7 @@
                                     <div class="dashboard-stat cards">
                                         <div class="blank_slate_arrow"></div>
                                         <div class=" thumbnail blank_slate_body">
-                                            <img src="/static/img/documents_blanks.png" class="img-responsive">
+                                            <img src="/static/src/img/documents_blanks.png" class="img-responsive">
 
                                             <p class="lead">{{ _('Manage easily your documments using Google drive') }}</p>
                                         </div>
@@ -1768,7 +1757,7 @@
                                         </div>
                                         <ul class="list-unstyled contact-infos infoslist">
                                           <li ng-repeat="competitor in competitors"> 
-                                             <img class="contact-photo" src="/static/img/avatar_contact.jpg">
+                                             <img class="contact-photo" src="/static/src/img/avatar_contact.jpg">
                                              <span>
                                                <%= competitor.name %> 
                                               </span>                                                                          
@@ -2065,7 +2054,7 @@
                                 </table>
                                 <div class="loaderList" ng-show="isMoreItemLoading">
                                       <div class="loaderCardContent">
-                                         <img class="img-responsive " src="/static/img/gloader.gif">
+                                         <img class="img-responsive " src="/static/src/img/gloader.gif">
                                          <span> {{ _('Loading...')}}</span>
                                       </div>
                                 </div>
@@ -2079,7 +2068,7 @@
 
                                         <div class="blank_slate_arrow"></div>
                                         <div class="thumbnail blank_slate_body">
-                                            <img src="/static/img/opportunities_blank.png" class="img-responsive">
+                                            <img src="/static/src/img/opportunities_blank.png" class="img-responsive">
 
                                             <p class="lead">{{ _('Know which proposals/bids are pending, which you’ve won, and which you’ve lost. Enter notes about the opportunities, attach proposals or contracts to the opportunities, and keep a log of any changes.') }}</p>
                                         </div>
@@ -2121,7 +2110,7 @@
                                     onload="iframeLoaded()" id="iframePan" seamless="seamless" scrolling="no"><br/>
 
                                 <p>Your browser does not support iframes.</p><br/></iframe>
-                            <img src="/static/img/gloader.gif" id="loadingPan" style="margin-left: 395px;
+                            <img src="/static/src/img/gloader.gif" id="loadingPan" style="margin-left: 395px;
 margin-top: 20px"/>
 
                         </div>
@@ -2505,7 +2494,7 @@ margin-top: 20px"/>
                                                 <button type="button" class="close" ng-click="unselectMember($index)"
                                                         data-dismiss="alert"></button>
                                                 <img class="google-avatar"
-                                                     ng-src="<%= selected_us.google_public_profile_photo_url%>"/>
+                                                     ng-src="selected_us.google_public_profile_photo_url"/>
                                                 <strong> <%= selected_us.google_display_name %></strong>
                                             </div>
                                         </div>
@@ -3302,7 +3291,7 @@ margin-top: 20px"/>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel" class="modal-title">
-                  <img ng-src="/static/img/google_drive/<%=mimeType%>.png" class="" style="width: 27px;margin-top: -10px;">
+                  <img ng-src="/static/src/img/google_drive/<%=mimeType%>.png" class="" style="width: 27px;margin-top: -10px;">
                   {{ _("Create a new") }} <%=mimeType%>
                 </h3>
             </div>
@@ -4387,18 +4376,11 @@ margin-top: 20px"/>
     <script type="text/javascript">
     function wizz(){
   if (!jQuery().bootstrapWizard) {
-                    console.log("hhhhhhhhhhhhhhhhhhhhhhhhherrrrrrrrrrrrre");
                     return;
                 }
                 var handleTitle = function(tab, navigation, index) {
-                    console.log('index');
-                    console.log(index);
                     var total = navigation.find('li').length;
-                    console.log("total equal===");
-                    console.log(total);
                     var current = index + 1;
-                    console.log('index');
-                    console.log(index)
                     // set wizard title
                    // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
                     // set done steps
@@ -4453,10 +4435,7 @@ margin-top: 20px"/>
 function waitwizard() {
       if (jQuery.isEmptyObject(angular.element("#signin").scope().insideStages)) {
           setTimeout("waitwizard()", 500);
-          console.log("not yet");
       }else{
-                console.log("yes it works");
-                console.log(angular.element("#signin").scope().insideStages);
                  wizz()// you will need an asynch callback
     }
 

@@ -54,11 +54,7 @@ opportunityservices.factory('Opportunity', function($rootScope) {
                       $scope.topics = resp.topics.items;
                   }
 
-                    if ($scope.topicCurrentPage >1){
-                      $scope.topicpagination.prev = true;
-                    }else{
-                        $scope.topicpagination.prev= false;
-                     }
+                    $scope.topicpagination.prev = $scope.topicCurrentPage > 1;
                    if (resp.topics.nextPageToken){
                      var nextPage = $scope.topicCurrentPage + 1;
                       // Store the nextPageToken
@@ -83,11 +79,7 @@ opportunityservices.factory('Opportunity', function($rootScope) {
                       else{
                           $scope.documents = resp.documents.items;
                       }
-                      if ($scope.documentCurrentPage >1){
-                          $scope.documentpagination.prev = true;
-                      }else{
-                           $scope.documentpagination.prev = false;
-                      }
+                      $scope.documentpagination.prev = $scope.documentCurrentPage > 1;
                      if (resp.documents.nextPageToken){
 
                        var nextPage = $scope.documentCurrentPage + 1;
@@ -169,7 +161,6 @@ opportunityservices.factory('Opportunity', function($rootScope) {
       callback(resp);
         gapi.client.crmengine.opportunities.listv3().execute(function(resp) {
             // Update the cache
-            console.log(resp);
             iogrow.ioStorageCache.renderIfUpdated('opportunities', resp, callback);
 
         });
@@ -186,11 +177,7 @@ opportunityservices.factory('Opportunity', function($rootScope) {
                  $scope.opportunities = resp.items;
             
 
-                 if ($scope.oppCurrentPage>1){
-                      $scope.opppagination.prev = true;
-                   }else{
-                       $scope.opppagination.prev = false;
-                   }
+                 $scope.opppagination.prev = $scope.oppCurrentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.oppCurrentPage + 1;
                    // Store the nextPageToken
@@ -222,11 +209,7 @@ opportunityservices.factory('Opportunity', function($rootScope) {
                   angular.forEach(resp.items, function(item){
                       $scope.opportunities.push(item);
                   });
-                 if ($scope.oppCurrentPage>1){
-                      $scope.opppagination.prev = true;
-                   }else{
-                       $scope.opppagination.prev = false;
-                   }
+                 $scope.opppagination.prev = $scope.oppCurrentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.oppCurrentPage + 1;
                    // Store the nextPageToken
@@ -283,10 +266,7 @@ Opportunity.patch = function($scope,params) {
                     $scope.opportunity.contacts = resp.contacts;
                 }
                 ;
-                console.log('resp after patch');
-                console.log(resp);
-                console.log($scope.opportunity);
-               $scope.inProcess(false);  
+               $scope.inProcess(false);
                $scope.apply();
             }else {
                if(resp.code==401){
@@ -323,26 +303,15 @@ Opportunity.update_stage = function($scope,params){
 
     trackMixpanelAction('OPPORTUNITY_UPDATE_STAGE');
     gapi.client.crmengine.opportunities.update_stage(params).execute(function(resp){
-      console.log("$scope.isLoading before inProcess true");
-      console.log($scope.isLoading);
       $scope.inProcess(true);
       $scope.apply();
-      console.log("$scope.isLoading after inProcess true");
-      console.log($scope.isLoading);
-      console.log("applying");
       if(!resp.code){
-         /* console.log("resp.code");
-          console.log(params.entityKey);*/
-          $scope.stageUpdated(params); 
-          console.log("$scope.isLoading before inProcess false");
-          console.log($scope.isLoading);
-          $scope.inProcess(false);          
+          $scope.stageUpdated(params);
+          $scope.inProcess(false);
           $scope.apply();
-          console.log("$scope.isLoading after inProcess false");
-          console.log($scope.isLoading);
        }else{
         console.log("error in Update Stage");
-         if(resp.code==401){  
+         if(resp.code==401){
           $scope.inProcess(false);
           $scope.apply();
          };
@@ -395,17 +364,14 @@ Opportunity.delete = function($scope,params){
     $scope.apply();
       gapi.client.crmengine.opportunities.delete(params).execute(function(resp){
         if ( $scope.relatedOpp==true) {
-          console.log("source");
           $scope.oppDeleted(params.entityKey);
         }else{
           if(params.source){
-            console.log("source");
             $scope.selectedTab = 5;
             $scope.waterfallTrigger();
             $scope.listOpportunities();
 
           }else{
-            console.log(" non source");
             $scope.oppDeleted(params.entityKey);
           } 
         };
@@ -480,8 +446,6 @@ opportunityservices.factory('Email', function() {
       gapi.client.crmengine.emails.send(params).execute(function(resp) {
             $('#sendingEmail').modal('show');
             if(!resp.code){
-             console.log("resp.code");
-             console.log(resp.code);
              $scope.emailSent= true;
              $scope.sending = false;
              $scope.selectedTab = 1;

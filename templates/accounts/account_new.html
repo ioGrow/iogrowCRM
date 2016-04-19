@@ -17,12 +17,12 @@
         <tr>
             <td class="appTd">
                 <div class="btn-group">
-                    <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                    <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
                         {% if active_app.label =="Relationships" %}
-                        <img class="app_icon" src="static/img/sm-iogrow-true.png"
+                        <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png"
                              style="display:inline-block;height: 20px;margin-right: 3px;">
                         {% else%}
-                        <img class="app_icon" src="static/img/admin_min.png"
+                        <img class="app_icon" src="../../static/src/img/admin_min.png"
                              style="display:inline-block;height: 20px;margin-right: 3px;">
                         {% endif %}
                         <span class="hide_sm">{{_(active_app.label)}}</span>
@@ -31,10 +31,10 @@
                     <ul class="dropdown-menu">
                         {%for application in apps %}
                         {% if application.label =="Relationships" %}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
+                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
                         </li>
                         {% else%}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
+                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
                         </li>
 
                         {% endif %}
@@ -153,7 +153,7 @@
                                                      class="img-responsive img-thumbnail">
                                                 <a ng-show="showUpload" ng-click="createPickerUploader()" href=""
                                                    class="btn-upload btn-upload-account" data-toggle="modal">
-                                                    <img src="/static/img/upload_logo.png">
+                                                    <img src="/static/src/img/upload_logo.png">
                                                 </a>
                                             </div>
                                         </div>
@@ -403,14 +403,14 @@
                                         <div class="news-block-tags relatedBlock">
                                             <ul id="slimList" class="list-unstyled contact-infos infoslist">
                                                 <li ng-repeat="excontact in existingcontacts">
-                                                    <img class="contact-photo" src="/static/img/avatar_contact.jpg">
+                                                    <img class="contact-photo" src="/static/src/img/avatar_contact.jpg">
                                                     <%= excontact.firstname %> <%= excontact.lastname %>
                                                     <button type="button" class="close closeContactForm" tabindex='-1'
                                                             ng-click="deleteInfos(existingcontacts,$index)"
                                                             data-dismiss="alert"></button>
                                                 </li>
                                                 <li ng-repeat="contact in account.contacts">
-                                                    <img class="contact-photo" src="/static/img/avatar_contact.jpg">
+                                                    <img class="contact-photo" src="/static/src/img/avatar_contact.jpg">
                                           <span ng-hide="contact.infonodes[0].fields[0].value">
                                            <%= contact.firstname %> <%= contact.lastname %> <%= contact.title%> 
                                           </span>
@@ -542,7 +542,7 @@
                                                     <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                        style="display: inline-block;float: left;height: 40px;padding-top: 4px;"><img
                                                             width="28"
-                                                            src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                            src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                     <a data-dismiss="modal" aria-hidden="true"
                                                        style="opacity: 1;top: 0;position: absolute;margin-top: -3px; margin-left: -10px;"
                                                        ng-click="deleteInfos(sociallinks,$index)"><i
@@ -560,7 +560,7 @@
                                             <div class="cont">
                                                 <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                    style="display: inline-block;   float: left;"><img width="28"
-                                                                                                      src="/static/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                                                                      src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                 <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"
                                                        ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"
                                                        ng-model="sociallink.url" placeholder="Add a social link"
@@ -644,40 +644,6 @@
         </div>
         <div class="col-md-3 ">
             <div class="row">
-                <!--<div class="col-md-12">
-                <!-- BEGIN PORTLET-->
-                <!--   <div class="portlet showPage rightCardContent">
-                    <div class="portlet-title line">
-                      <div class="caption"><!--<i class="fa fa-linkedin" style='color:#169ef4'></i>-->
-                <!-- {{_('Do you mean...')}}
-               </div>
-
-             </div>
-             <div class="portlet-body" >
-                <ul class="list-group linkedinList">
-                   <li class="linkedinListItem" style="padding-top: 10px;">
-                       <div class="pic" style="   height: 64px;width: 64px; display: inline-block;float: left;">
-                          <img src="http://upload.wikimedia.org/wikipedia/commons/8/82/Dell_Logo.png" style="height: 64px;">
-                       </div>
-                      <div class="text" style="width: calc(100% - 64px);display: inline-block; float: left;">
-                         <ul class="list-group linkedinItemDetails" style="padding-left: 5px;">
-                             <li class="likedinItemName" style="font-size: 16px;font-weight: bold;">
-                               Dell
-                             </li>
-                              <li class="likedinItemType" style="font-size: 12px; color: gray; white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">Technologies et services de l’information</li>
-                               <li class="likedinItemAddress" style="font-size: 12px;color: gray;white-space: nowrap; overflow: hidden; text-overflow: ellipsis !important;">
-                                 <i class="fa fa-map-marker" style="margin-left: -3px;color: rgb(22, 158, 244);"></i>Région de Austin, Texas , États-Unis+ de 10 000 employés</li>
-                         </ul>
-                      </div>
-                      <div class="clearfix"></div>
-                   </li>
-
-                 </ul>
-                 <img src="http://blogs.kenan-flagler.unc.edu/wp-content/uploads/2013/10/LinkedIn-Logo-2C.png" style="height: 20px;" class="pull-right">
-                 <div class="clearfix"></div>
-             </div>
-           </div>
-         </div>-->
                 <div class="col-md-12">
                     <!-- BEGIN PORTLET -->
                     <div id="linkedinSearch" ng-show="inList.length > 0||inIsSearching" class="portlet showPage rightCardContent"
@@ -695,7 +661,7 @@
 
                             <div ng-show="inIsLoading"
                                  style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                <img src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">
+                                <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                             </div>
 
 
@@ -732,23 +698,12 @@
                                     <p style="font-size: 16px;color: black;text-align: center;">No matching profile
                                         found</p>
                                 </li>
-                                <!--  <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                    <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                  </li>
-                                  <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                        <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                            <div class="input-icon">
-                                                <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control"  placeholder="Add a linkedIn link">
-                                            </div>
-                                        </form>
-                                  </li>-->
                             </ul>
                             </ul>
                             <div ng-repeat="inShortProfile in inShortProfiles" style="margin-bottom:10px"
                                  ng-show="!isEmpty(inShortProfile)&&isEmpty(inProfile)">
                                 <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                    <img src="<%=inShortProfile.logo || '/static/img/avatar_contact.jpg'%>"
+                                    <img src="<%=inShortProfile.logo || '/static/src/img/avatar_contact.jpg'%>"
                                          style="width: 90px;height: 90px;">
 
                                 </div>
@@ -873,7 +828,7 @@
                                     <div ng-repeat="worker in inProfile.workers" style="margin-bottom:10px"
                                          ng-hide="isEmpty(worker)">
                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                            <img src="<%=worker.img || '/static/img/avatar_contact.jpg'%>"
+                                            <img src="<%=worker.img || '/static/src/img/avatar_contact.jpg'%>"
                                                  style="width: 90px;height: 90px;">
 
                                         </div>
@@ -918,7 +873,7 @@
 
                             <div ng-show="twIsSearching"
                                  style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                <img src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">
+                                <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                             </div>
 
 
@@ -955,22 +910,11 @@
                                     <p style="font-size: 16px;color: black;text-align: center;">No matching profile
                                         found</p>
                                 </li>
-                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                </li>
-                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                          <div class="input-icon">
-                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control"  placeholder="Add a linkedIn link">
-                                          </div>
-                                      </form>
-                                </li>-->
                             </ul>
                             <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px"
                                  ng-hide="isEmpty(twShortProfile)">
                                 <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                    <img src="<%=twShortProfile.profile_image_url_https || '/static/img/avatar_contact.jpg'%>"
+                                    <img src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
                                          style="width: 90px;height: 90px;">
 
                                 </div>
@@ -1154,7 +1098,7 @@
 
                             <div ng-show="inIsSearching"
                                  style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
-                                <img src="/static/img/linkedinLoader.gif" style="width:100%;height: 6px;">
+                                <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                             </div>
 
 

@@ -3,11 +3,11 @@
           <tbody><tr>
             <td class="appTd">
             <div class="btn-group">
-                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
                   {% if active_app.label =="Relationships" %}
-                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                       {% else%}
-                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                      <img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                   {% endif %}
                   <span class="hide_sm">{{_(active_app.label)}}</span>   
                   <i class="icon-angle-down fa fa-angle-down"></i>
@@ -15,9 +15,9 @@
                  <ul class="dropdown-menu">
                   {%for application in apps %}
                         {% if application.label =="Relationships" %}
-                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                           {% else%}
-                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                         
                           {% endif %}
                        
@@ -91,18 +91,6 @@
                   </ul>
               </div> -->
               </div>
-               <!--<div class="communicationBottons pull-right">
-                    <a class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                      <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
-                    </a>
-                    <a class="" title="Start a Hangout" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                          <i class="fa fa-video-camera" style="padding-top: 6px; font-size: 16px;"></i>
-                    </a>
-                    <a class="" title="Tweet" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                          <i class="fa fa-twitter" style="padding-top: 6px; font-size: 16px;"></i>
-                    </a>
-                  
-              </div>-->
               <div class="clearfix"></div>
         </div>
                  
@@ -294,13 +282,13 @@
   </div>
   <div class="dropOut"  ng-show="showUntag" >
     <div class="trash">
-      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png" >
     </div>
   </div>
 
   <div class="dropOut"  ng-show="showUntag" >
     <div class="trash">
-      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png" >
     </div>
 </div>
 
@@ -682,7 +670,7 @@
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
                                                <a href="/#/admin/users/show/<%= assignee.google_user_id %>"> <%= assignee.display_name %>
-                                                 <img alt="" src="<%= assignee.photo%>" class="user-photo" />
+                                                 <img alt="" ng-src="assignee.photo" class="user-photo" />
                                                </a>
                                             </span>
                                         </div>
@@ -1306,7 +1294,7 @@
                         <div class="taskAssigneList invitation list-group-item" ng-repeat="selected_us in slected_members">
                           <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
                           <div class="photo">
-                            <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                            <img class="google-avatar" ng-src="selected_us.google_public_profile_photo_url"/>
                           </div>
                           <div class="details">
                             <p>

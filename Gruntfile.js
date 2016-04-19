@@ -1,11 +1,74 @@
 module.exports = function (grunt) {
     grunt.initConfig({
         concat: {
-            /*css:{
-             src: ['static/bootstrap3/plugins/select2/select2_metro.css','static/bootstrap3/plugins/uniform/css/uniform.default.css','static/plugins/date-time-picker/jquery.simple-dtpicker.css','static/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.css','static/angular-xeditable-0.1.8/css/xeditable.css','static/plugins/fullcalendar/fullcalendar.css','static/plugins/fullcalendar/fullcalendar.print.css'],
-             dest: 'static/build/css/asyn_styles.css',
-             }*/
-            js: {
+            css:{
+             files: {
+                    'static/build/css/sync_styles.css': [
+                      'static/src/css/font-awesome.min.css',
+                      'static/src/css/bootstrap.min.css',
+                      'static/src/css/wysiwyg-color.css',
+                      'static/src/css/style-metronic.css',
+                      'static/src/css/style.css',
+                      'static/src/css/style-responsive.css',
+                      'static/src/css/plugins.css',
+                      'static/src/css/light.css',
+                      'static/src/css/hopscotch.css',
+                      'static/src/css/datepicker.css'
+                    ],
+                    'static/build/css/asyn_styles.css': [
+                      'static/src/css/select2_metro.css',
+                      'static/src/css/uniform.default.css',
+                      'static/src/css/jquery.simple-dtpicker.css',
+                      'static/src/css/xeditable.css',
+                      'static/src/css/fullcalendar.css',
+                      'static/src/css/fullcalendar.print.css',
+                        'static/src/css/jquery.datetimepicker.css'
+                    ]
+                }
+            },
+            js_libs:{
+                     files: {
+                          'static/build/js/async_scripts.js': [
+                          'static/src/js/select2.min.js',
+                          'static/src/js/ui-select2.js',
+                          'static/src/js/angular.easypiechart.js',
+                          'static/src/js/xeditable.min.js',
+                          'static/src/js/wysihtml5-0.3.0.min.js',
+                          'static/src/js/bootstrap-wysihtml5.js',
+                          'static/src/js/jquery.slimscroll.min.js',
+                          'static/src/js/jquery.uniform.min.js',
+                          'static/src/js/jquery.textfill.min.js',
+                          'static/src/js/jquery.simple-dtpicker.js',
+                              'static/src/js/jquery.datetimepicker.js',
+                          'static/src/js/bootstrap-datetimepicker.min.js',
+                          'static/src/js/jquery.caret.js',
+                          'static/src/js/twitter-bootstrap-hover-dropdown.min.js',
+                              'static/src/js/fullcalendar.min.js',
+                              'static/src/js/lang-all.js',
+                              'static/src/js/gcal.js',
+                        ],
+                        'static/build/js/sync_scripts.js': [
+                          'static/src/js/bootstrap.min.js',
+                          'static/src/js/ui-bootstrap-0.5.0.min.js',
+                          'static/src/js/ui-bootstrap-tpls-0.5.0.js',
+                          'static/src/js/angular.moment.js',
+                          'static/src/js/zepto.js',
+                          'static/src/js/jquery.waterfall.js',
+                          'static/src/js/jquery.ui.map.min.js',
+                          'static/src/js/jquery.ui.map.services.js'
+                        ],
+                        'static/build/js/first_sync_scripts.js': [
+                          'static/src/js/jquery.min.js',
+                          'static/src/js/jquery-ui-1.10.3.custom.min.js',
+                          'static/src/js/moment.min.js',
+                          'static/src/js/angular.min.js',
+                          'static/src/js/socket.io.js',
+                          'static/src/js/ng-google-chart.js'
+                        ]
+                     }
+                    
+            },
+            js_servs_ctrls: {
                 src: ['static/app/scripts/services/authservices.js',
                     'static/app/scripts/services/infonodeservices.js',
                     'static/app/scripts/services/mapservices.js',
@@ -14,49 +77,39 @@ module.exports = function (grunt) {
                     'static/app/scripts/services/opportunityservices.js',
                     'static/app/scripts/services/leadservices.js',
                     'static/app/scripts/services/caseservices.js',
-                    'static/app/scripts/services/discoverservices.js',
                     'static/app/scripts/services/topicservices.js',
                     'static/app/scripts/services/taskservices.js',
                     'static/app/scripts/services/eventservices.js',
                     'static/app/scripts/services/userservices.js',
                     'static/app/scripts/services/billingservices.js',
-                    'static/app/scripts/services/groupservices.js',
                     'static/app/scripts/services/noteservices.js', 'static/app/scripts/services/commentservices.js',
-                    'static/app/scripts/services/settingservices.js', 'static/app/scripts/services/importservices.js',
-                    'static/app/scripts/services/edgeservices.js', 'static/app/scripts/services/reportservices.js',
+                    'static/app/scripts/services/settingservices.js',
+                    'static/app/scripts/services/edgeservices.js',
                     'static/app/scripts/services/profileservices.js', 'static/app/scripts/services/linkedinservices.js',
                     'static/app/scripts/app.js', 'static/app/scripts/directives/directives.js',
                     'static/app/scripts/controllers/admin/**/*.js',
-                    'static/app/scripts/controllers/discovercontrollers.js', 'static/app/scripts/controllers/mysettingcontrollers.js', 'static/app/scripts/controllers/searchcontrollers.js', 'static/app/scripts/controllers/accountcontrollers.js', 'static/app/scripts/controllers/leadcontrollers.js', 'static/app/scripts/controllers/casecontrollers.js', 'static/app/scripts/controllers/billingController.js', 'static/app/scripts/controllers/contactcontroller.js', 'static/app/scripts/controllers/opportunitycontroller.js', 'static/app/scripts/controllers/documentcontrollers.js', 'static/app/scripts/controllers/notecontrollers.js', 'static/app/scripts/controllers/taskcontrollers.js', 'static/app/scripts/controllers/eventcontrollers.js', 'static/app/scripts/controllers/dashboardController.js', 'static/app/scripts/controllers/usercontrollers.js', 'static/app/scripts/controllers/groupcontrollers.js', 'static/app/scripts/controllers/settingscontrollers.js', 'static/app/scripts/controllers/importcontrollers.js'],
+                    'static/app/scripts/controllers/mysettingcontrollers.js', 'static/app/scripts/controllers/searchcontrollers.js', 'static/app/scripts/controllers/accountcontrollers.js', 'static/app/scripts/controllers/leadcontrollers.js', 'static/app/scripts/controllers/casecontrollers.js', 'static/app/scripts/controllers/billingController.js', 'static/app/scripts/controllers/contactcontroller.js', 'static/app/scripts/controllers/opportunitycontroller.js', 'static/app/scripts/controllers/documentcontrollers.js', 'static/app/scripts/controllers/notecontrollers.js', 'static/app/scripts/controllers/taskcontrollers.js', 'static/app/scripts/controllers/eventcontrollers.js', 'static/app/scripts/controllers/usercontrollers.js', 'static/app/scripts/controllers/settingscontrollers.js'],
                 dest: 'static/build/js/sync_ctrls_sers_scripts.js',
             }
         },
         cssmin: {
-            /*css: {
-             files: {
-             'static/build/css/asyn_styles.min.css': ['static/build/css/asyn_styles.css']
-             }
-             },*/
-            /*custom_css: {
-             files: {
-             'static/build/css/custom_css.min.css': ['static/build/css/test.css']
-             }
-             },*/
             sync_css: {
                 files: {
                     'static/build/css/sync_styles.min.css': ['static/build/css/sync_styles.css']
                 }
             },
+             async_css: {
+                files: {
+                    'static/build/css/asyn_styles.min.css': ['static/build/css/asyn_styles.css']
+                }
+            },
+
+
         },
         uglify: {
             options: {
                 mangle: false
             },
-            /*sync_js: {
-             files: {
-             'static/build/js/hopscotch.min.js': ['static/hopscotch/js/hopscotch.js']
-             }
-             }*/
             /* sync_js: {
              files: {
              'static/build/js/sync_scripts.min.js': ['static/build/js/sync_scripts.js']
@@ -67,13 +120,16 @@ module.exports = function (grunt) {
              'static/build/js/async_scripts.min.js': ['static/build/js/async_scripts.js']
              }
              },*/
-            /* first_sync_js: {
+            first_sync_js: {
              files: {
              'static/build/js/first_sync_scripts.min.js': ['static/build/js/first_sync_scripts.js']
              }
-             }*/
+             },
             sync_ctrls_sers_js: {
                 files: {
+                    'static/build/js/sync_scripts.min.js': ['static/build/js/sync_scripts.js'],
+                    'static/build/js/async_scripts.min.js': ['static/build/js/async_scripts.js'],
+                    'static/build/js/first_sync_scripts.min.js': ['static/build/js/first_sync_scripts.js'],
                     'static/build/js/sync_ctrls_sers_scripts.min.js': ['static/build/js/sync_ctrls_sers_scripts.js']
                 }
             },
@@ -81,27 +137,14 @@ module.exports = function (grunt) {
              files: {
              'static/build/js/async_scripts_2.min.js': ['static/build/js/async_scripts_2.js']
              }
-             },
+             },   */
              sync_ctrls_sers_js: {
              files: {
              'static/build/js/first_sync_scripts.min.js': ['static/build/js/first_sync_scripts.js']
              }
-             },    */
-            /*async_ctrls_sers_js: {
-             files: {
-             'static/build/js/async_ctrls_sers_scripts.min.js': ['static/app/scripts/services/mapservices.js','static/app/scripts/services/caseservices.js','static/app/scripts/services/discoverservices.js','static/app/scripts/services/topicservices.js','static/app/scripts/services/eventservices.js','static/app/scripts/services/groupservices.js','static/app/scripts/services/noteservices.js','static/app/scripts/services/commentservices.js','static/app/scripts/services/importservices.js','static/app/scripts/services/reportservices.js','static/app/scripts/controllers/discovercontrollers.js','static/app/scripts/controllers/casecontrollers.js','static/app/scripts/controllers/documentcontrollers.js','static/app/scripts/controllers/notecontrollers.js','static/app/scripts/controllers/eventcontrollers.js','static/app/scripts/controllers/dashboardController.js','static/app/scripts/controllers/groupcontrollers.js','static/app/scripts/controllers/importcontrollers.js']
-             }
-             },*/
+             },
         },
         watch: {
-            /*js: {
-             files: ['static/build/css/test.css'],
-             tasks: ['cssmin'],
-             },
-             sync_ctrls_servs: {
-             files: ['static/app/scripts/services/authservices.js','static/app/scripts/services/infonodeservices.js','static/app/scripts/services/mapservices.js','static/app/scripts/services/accountservices.js','static/app/scripts/services/contactservices.js','static/app/scripts/services/opportunityservices.js','static/app/scripts/services/leadservices.js','static/app/scripts/services/caseservices.js','static/app/scripts/services/discoverservices.js','static/app/scripts/services/topicservices.js','static/app/scripts/services/taskservices.js','static/app/scripts/services/eventservices.js','static/app/scripts/services/userservices.js','static/app/scripts/services/groupservices.js','static/app/scripts/services/noteservices.js','static/app/scripts/services/commentservices.js','static/app/scripts/services/settingservices.js','static/app/scripts/services/importservices.js','static/app/scripts/services/edgeservices.js','static/app/scripts/services/reportservices.js','static/app/scripts/services/profileservices.js','static/app/scripts/services/linkedinservices.js','static/app/scripts/app.js','static/app/scripts/directives/directives.js','static/app/scripts/controllers/discovercontrollers.js','static/app/scripts/controllers/mysettingcontrollers.js','static/app/scripts/controllers/searchcontrollers.js','static/app/scripts/controllers/accountcontrollers.js','static/app/scripts/controllers/leadcontrollers.js','static/app/scripts/controllers/casecontrollers.js','static/app/scripts/controllers/billingController.js','static/app/scripts/controllers/contactcontroller.js','static/app/scripts/controllers/opportunitycontroller.js','static/app/scripts/controllers/documentcontrollers.js','static/app/scripts/controllers/notecontrollers.js','static/app/scripts/controllers/taskcontrollers.js','static/app/scripts/controllers/eventcontrollers.js','static/app/scripts/controllers/dashboardController.js','static/app/scripts/controllers/usercontrollers.js','static/app/scripts/controllers/groupcontrollers.js','static/app/scripts/controllers/settingscontrollers.js','static/app/scripts/controllers/importcontrollers.js'],
-             tasks: ['uglify'],
-             },*/
             async_ctrls_servs: {
                 files: ['static/app/scripts/services/authservices.js',
                     'static/app/scripts/services/infonodeservices.js',
@@ -111,21 +154,18 @@ module.exports = function (grunt) {
                     'static/app/scripts/services/opportunityservices.js',
                     'static/app/scripts/services/leadservices.js',
                     'static/app/scripts/services/caseservices.js',
-                    'static/app/scripts/services/discoverservices.js',
                     'static/app/scripts/services/topicservices.js',
                     'static/app/scripts/services/taskservices.js',
                     'static/app/scripts/services/eventservices.js',
                     'static/app/scripts/services/userservices.js',
                     'static/app/scripts/services/billingservices.js',
-                    'static/app/scripts/services/groupservices.js',
                     'static/app/scripts/services/noteservices.js',
                     'static/app/scripts/services/commentservices.js',
                     'static/app/scripts/services/settingservices.js',
-                    'static/app/scripts/services/importservices.js', 'static/app/scripts/services/edgeservices.js',
-                    'static/app/scripts/services/reportservices.js', 'static/app/scripts/services/profileservices.js',
+                    'static/app/scripts/services/edgeservices.js',
+                    'static/app/scripts/services/profileservices.js',
                     'static/app/scripts/services/linkedinservices.js', 'static/app/scripts/app.js',
                     'static/app/scripts/directives/directives.js',
-                    'static/app/scripts/controllers/discovercontrollers.js',
                     'static/app/scripts/controllers/mysettingcontrollers.js',
                     'static/app/scripts/controllers/searchcontrollers.js',
                     'static/app/scripts/controllers/accountcontrollers.js',
@@ -139,8 +179,7 @@ module.exports = function (grunt) {
                     'static/app/scripts/controllers/notecontrollers.js',
                     'static/app/scripts/controllers/taskcontrollers.js',
                     'static/app/scripts/controllers/eventcontrollers.js',
-                    'static/app/scripts/controllers/dashboardController.js',
-                    'static/app/scripts/controllers/usercontrollers.js', 'static/app/scripts/controllers/groupcontrollers.js', 'static/app/scripts/controllers/settingscontrollers.js', 'static/app/scripts/controllers/importcontrollers.js'],
+                    'static/app/scripts/controllers/usercontrollers.js', 'static/app/scripts/controllers/settingscontrollers.js'],
                 tasks: ['concat', 'uglify'],
             },
         },
@@ -148,7 +187,7 @@ module.exports = function (grunt) {
             dynamic: {
                 files: [{
                     expand: true,
-                    cwd: '/static/img/',
+                    cwd: '/static/src/img/',
                     src: ['**/*.{png,jpg,gif}'],
                     dest: '/static/build/img/'
                 }]
@@ -161,7 +200,7 @@ module.exports = function (grunt) {
                     collapseWhitespace: true
                 },
                 files: {
-                    'templates/new_web_site/index.html': 'templates/new_web_site/index_opt.html'
+                    'templates/new_web_site/index.html': 'templates/new_web_site/index.html'
                 }
             }
         }

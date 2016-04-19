@@ -3,11 +3,11 @@
           <tbody><tr>
             <td class="appTd">
             <div class="btn-group">
-                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
                   {% if active_app.label =="Relationships" %}
-                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                       {% else%}
-                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                      <img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                   {% endif %}
                   <span class="hide_sm">{{_(active_app.label)}}</span>   
                   <i class="icon-angle-down fa fa-angle-down"></i>
@@ -15,9 +15,9 @@
                  <ul class="dropdown-menu">
                   {%for application in apps %}
                         {% if application.label =="Relationships" %}
-                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                           {% else%}
-                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                         
                           {% endif %}
                        
@@ -94,18 +94,6 @@
                   </ul>
               </div> -->
               </div>
-               <!--<div class="communicationBottons pull-right">
-                    <a class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                      <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
-                    </a>
-                    <a class="" title="Start a Hangout" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                          <i class="fa fa-video-camera" style="padding-top: 6px; font-size: 16px;"></i>
-                    </a>
-                    <a class="" title="Tweet" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                          <i class="fa fa-twitter" style="padding-top: 6px; font-size: 16px;"></i>
-                    </a>
-                  
-              </div>-->
               <div class="clearfix"></div>
         </div>
             <a href="/#/cases/new" id="new_case" class="btn red newAccountBtnOnscroll pull-right">
@@ -115,10 +103,6 @@
       </td> 
       <td class="settingsTd">
             <div style=" padding-left: 10px;" class="pull-right">
-            <!-- <a class="headerBtn hide_sm" title="View" style="margin-left: 6px;margin-right: 12px;" ng-click="switchShow()"> 
-                  <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
-                  <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
-              </a>-->
               <div class="btn-group hide_sm" ng-class="{'filterSelected': casesfilter!='all'}" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;padding-left: 0px;padding-right: 0px;">
                   <a class="headerBtn" title="Filter/Sort options" data-toggle="dropdown"> 
                       <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
@@ -294,7 +278,7 @@
   </div>
   <div class="dropOut"  ng-show="showUntag" >
     <div class="trash">
-      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png" >
     </div>
 </div>
       <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
@@ -445,7 +429,7 @@
                 </table>
                 <div class="loaderList" ng-show="isMoreItemLoading">
                       <div class="loaderCardContent">
-                         <img class="img-responsive " src="/static/img/gloader.gif">
+                         <img class="img-responsive " src="/static/src/img/gloader.gif">
                          <span> {{ _('Loading...')}}</span>
                       </div>
                 </div>
@@ -520,7 +504,7 @@
               <div class="col-md-3 col-xs-3 col-pic">
                   <a href="/#/cases/show/<%= casee.id %>" class="startup-link" title="<%= casee.name %>"><img
                           ng-hide="casee.logo_img_id" alt="casee.name" class="img-responsive img-thumbnail account-img"
-                          src="/static/img/default_company.png">
+                          src="/static/src/img/default_company.png">
                 <img ng-show="casee.logo_img_id" alt="casee.name" class="img-responsive img-thumbnail account-img" ng-src="https://docs.google.com/uc?id=<%= casee.logo_img_id %>" data-hasqtip="2">
                 </a>
               </div>
@@ -529,7 +513,7 @@
                   <div class="col-md-2 col-xs-2">
                     <div class="pic">
                       <a href="/#/contacts/show/6509108836433920" class="startup-link" title="Ilyes BOUDJELTHIA">
-                        <img ng-hide="contact.profile_img_url" class="img-responsive profile-photo" height="40" width="40" src="/static/img/avatar_contact.jpg">
+                        <img ng-hide="contact.profile_img_url" class="img-responsive profile-photo" height="40" width="40" src="/static/src/img/avatar_contact.jpg">
                         <img ng-show="contact.profile_img_url" class="img-responsive profile-photo" ng-src="https://docs.google.com/uc?id=" data-hasqtip="2" src="https://docs.google.com/uc?id=" style="display: none;">
                       </a>
                     </div>
@@ -581,7 +565,7 @@
           <div class="dashboard-stat cards">
             <div class="blank_slate_arrow"></div>
               <div class="thumbnail blank_slate_body">
-                <img class="img-responsive" src="/static/img/cases_blank.png">
+                <img class="img-responsive" src="/static/src/img/cases_blank.png">
                   <p class="lead">{{_('cases  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.')}}
                   </p>
               </div>
@@ -991,7 +975,7 @@
                         <div  class="taskAssigneList invitation list-group-item" ng-repeat="selected_us in sharing_with" style="padding: 5px;">
                           <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
                           <div class="photo">
-                            <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                            <img class="google-avatar" ng-src="selected_us.google_public_profile_photo_url"/>
                           </div>
                           <div class="details">
                             <p>

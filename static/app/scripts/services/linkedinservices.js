@@ -7,22 +7,6 @@ accountservices.factory('Linkedin', function($http) {
     angular.extend(this, data);
   }
 
-
-  Linkedin.getContact = function(params,callback) {
-    gapi.client.crmengine.people.getLinkedinV2(params).execute(function(resp){
-      callback(resp)
-    });
-  }
-  Linkedin.listDb = function(params,callback) {
-    gapi.client.crmengine.linkedin.list_db(params).execute(function(resp){
-      callback(resp)
-    });
-  }  
-  Linkedin.spiderState = function(params,callback) {
-    gapi.client.crmengine.linkedin.spiderState(params).execute(function(resp){
-      callback(resp)
-    });
-  }
   Linkedin.listPeople = function(params,callback) {
     gapi.client.crmengine.people.getLinkedinList(params).execute(function(resp){
       callback(resp)

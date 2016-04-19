@@ -9,23 +9,11 @@ commentservices.factory('Comment', function($http) {
 
 
   Comment.list = function($scope,params){
-      console.log('in comments.list');
-      console.log(params);
-
       $scope.isLoading = true;
       gapi.client.crmengine.comments.listv2(params).execute(function(resp) {
               if(!resp.code){
-                console.log(resp);
                  $scope.comments = resp.items;
-
-
-
-                  if ($scope.currentPagecomment>1){
-                      console.log('Should show PREV');
-                    $scope.paginationcomment.prev = true;
-                  }else{
-                      $scope.paginationcomment.prev= false;
-                   }
+                  $scope.paginationcomment.prev = $scope.currentPagecomment > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.currentPagecomment + 1;
                     // Store the nextPageToken
@@ -66,7 +54,6 @@ commentservices.factory('Comment', function($http) {
             }else {
                alert("Error, response is: " + angular.toJson(resp));
             }
-            console.log('gapi #end_execute');
           });
   };
 
@@ -74,8 +61,6 @@ Comment.insert = function($scope,params){
       $scope.isLoading = true;
 
       gapi.client.crmengine.comments.insertv2(params).execute(function(resp) {
-          console.log(params);
-          console.log(resp);
          if(!resp.code){
           // TME_02_11_13 when a note is inserted reload topics
           //$scope.listTopics();
@@ -117,7 +102,6 @@ Comment.patch=function($scope,params){
         $scope.isLoading=false;
         $scope.$apply();
 
-             console.log(resp);
    });
 
 }; 

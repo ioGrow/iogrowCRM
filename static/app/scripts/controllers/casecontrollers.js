@@ -101,20 +101,13 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
         }
       $scope.inProcess=function(varBool,message){
         
-          if (varBool) {           
-            if (message) {
-              console.log("starts of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads+1;
+          if (varBool) {
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -138,15 +131,12 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             Case.list($scope,params);
             Casestatus.list($scope,{});
             User.list($scope,{});
-            console.log($scope.cases);
             var paramsTag = {'about_kind':'Case'};
             Tag.list($scope,paramsTag);
               // for (var i=0;i<100;i++)
               // {
               // var poww= Math.floor((Math.random() * 10) + 1);
               //     var addon=Math.pow(10, poww);
-              //     console.log(poww);
-              //     console.log(addon);
               //     var test=addon.toString();
               //     var casee = {
               //               'name':  test + ' Sync',
@@ -173,7 +163,6 @@ $scope.selectMember = function(){
          };
       $scope.unselectMember = function(index) {
             $scope.selected_members.splice(index, 1);
-            console.log($scope.selected_members);
         };
       $scope.share = function (me) {
             if ($scope.selectedPermisssions) {
@@ -206,7 +195,6 @@ $scope.selectMember = function(){
                                     'about': selected_lead.entityKey,
                                     'items': items
                                 };
-                                console.log(params);
                                 Permission.insert($scope, params);
                         }
                     }
@@ -215,20 +203,13 @@ $scope.selectMember = function(){
         };
 
       $scope.checkPermissions= function(me){
-          console.log("enter here in permission");
           $scope.selectedPermisssions=true;
           angular.forEach($scope.selectedCards, function(selected_case){
-              console.log(selected_case.owner.google_user_id);
-              console.log(me);
-              if (selected_case.owner.google_user_id==me) {
-                console.log("hhhhhhhhheree enter in equal");
-              };
+
               if (selected_case.owner.google_user_id!=me) {
-                console.log("in not owner");
                 $scope.selectedPermisssions=false;
               };
           });
-          console.log($scope.selectedPermisssions);
         }
    $scope.getColaborators=function(){
 
@@ -296,7 +277,6 @@ $scope.selectMember = function(){
           
           $scope.editbeforedeleteselection = function(){
             $('#BeforedeleteSelectedCases').modal('show');
-            console.log($scope.selectedCards.length);
           };
           $scope.deleteSelection = function(){
               angular.forEach($scope.selectedCards, function(selected_case){
@@ -320,9 +300,7 @@ $scope.selectMember = function(){
                 });
                 $scope.selectedCards.splice($scope.selectedCards.indexOf(indx),1);
                 if ($scope.isEmptyArray($scope.selectedCards)) {
-                    console.log("selection array is empty");
                     var params=$scope.getRequestParams();
-                    console.log(params);
                     Case.list($scope,params);
                 }
                 $scope.apply();
@@ -371,7 +349,6 @@ $scope.selectMember = function(){
             $("#TakesFewMinutes").modal('show');
         }
         $scope.LoadCsvFile = function () {
-            console.log("exporting", $scope.selectedCards.length);
             if ($scope.selectedCards.length != 0) {
                 var ids = [];
                 angular.forEach($scope.selectedCards, function (selected_case) {
@@ -384,7 +361,6 @@ $scope.selectMember = function(){
                     tags.push(selected_tag.entityKey);
                 });
                 var params = {"tags": tags};
-                console.log(params);
                 Case.export($scope, params);
                 $scope.selectedKeyLeads = [];
             }
@@ -415,7 +391,6 @@ $scope.selectMember = function(){
            
           };
           // Start the tour!
-          console.log("beginstr");
           hopscotch.startTour(tour);
       };
          
@@ -462,7 +437,6 @@ $scope.selectMember = function(){
            var tags=[];
               var items = [];
               tags=$('#select2_sample2').select2("val");
-              console.log(tags);
               if ($scope.currentCasee!=null) {
                 angular.forEach(tags, function(tag){
                          var params = {
@@ -481,7 +455,6 @@ $scope.selectMember = function(){
                       'tag_key': tag
                     };
                      Tag.attach($scope, params);
-                     console.log("request sent");
                   });
               });
               }
@@ -516,8 +489,7 @@ $scope.selectMember = function(){
           }else{
             params = {'order' : $scope.order,'limit':6}
           }
-          console.log('in listNextPageItems');
-          $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
+          $scope.caseCurrentPage += 1 ;
           Case.list($scope,params);
      };
      $scope.listMoreItems = function(){
@@ -526,7 +498,7 @@ $scope.selectMember = function(){
           if ($scope.casepages[nextPage]){
             var params = $scope.getRequestParams();
             params.pageToken=$scope.casepages[nextPage];
-            $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
+            $scope.caseCurrentPage += 1 ;
             Case.listMore($scope,params);
           }
      }
@@ -541,14 +513,13 @@ $scope.selectMember = function(){
           }else{
             params = {'order' : $scope.order,'limit':6}
           }
-          $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
+          $scope.caseCurrentPage -= 1 ;
           Case.list($scope,params);
      }
 
 
 
      $scope.showModal = function(){
-        console.log('button clicked');
         $('#addCaseModal').modal('show');
 
       };
@@ -963,7 +934,6 @@ $scope.addTags=function(){
         $scope.draggedTag=tag;
       };
       $scope.dropTag=function(casee,index){
-        console.log(casee);
         var items = [];
 
         var params = {
@@ -992,12 +962,8 @@ $scope.addTags=function(){
 
                 
            }else{
-             console.log('$scope.selectedCards.length ');
-             console.log($scope.selectedCards.length);
              if ($scope.selectedCards.length >0) {
-              console.log("enter to $scope.selectedCards.length ");
               angular.forEach($scope.selectedCards, function(selected_case){
-                console.log(selected_case);
                   var existstag=false;
                   angular.forEach(selected_case.tags, function(elementtag){
 
@@ -1011,8 +977,7 @@ $scope.addTags=function(){
                         }
                      selected_case.tags.push(tag);
                   };  
-                  console.log("tag  tested");
-            });        
+            });
             /*$scope.selectedCards=[];*/
           };
          $scope.apply();
@@ -1041,7 +1006,6 @@ $scope.addTags=function(){
             $scope.casetoUnattachTag = casee;
         }
         $scope.tagUnattached = function() {
-          console.log("inter to tagDeleted");
             $scope.casetoUnattachTag.tags.splice($scope.casetoUnattachTag.tags.indexOf($scope.tagtoUnattach),1)
             $scope.apply()
         };
@@ -1126,19 +1090,13 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
      }
 
      $scope.inProcess=function(varBool,message){
-          if (varBool) {           
-            if (message) {
-              console.log("starts of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads+1;
+          if (varBool) {
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -1253,15 +1211,11 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                     infonode.value=infonode.fields[0].value;
                     infonode.field=infonode.fields[0].field;
                 if (infonode.property_type==""||infonode.property_type=="StringProperty"||infonode.property_type==null) {
-                    console.log('in stringtype______________________________________ ');
-                    console.log(infonode);
                     additionalCustomFields.push(infonode);
                 }else{
                         var schemaExists=false;
                         angular.forEach($scope[related_object].customfields, function (customfield) {
                         if (customfield.id==infonode.property_type) {
-                            console.log('in not stringprope ______________________________');
-                            console.log(infonode);
                             schemaExists=true;
                             var info_value=null;
                             if (infonode.fields[0].field=="property_type") {
@@ -1310,32 +1264,22 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
         $scope.docDeleted=function(entityKey){
             var ind=null;
             var listIndex=null;
-            console.log("in docDeleted");
-            console.log("entityKey");
-            console.log(entityKey);
             angular.forEach($scope.selectedDocs, function (doc) {
                 if (doc.entityKey==entityKey) {
                     ind=$scope.selectedDocs.indexOf(doc);
                     listIndex=$scope.documents.indexOf(doc);
-                    console.log("doc index found");
-                    console.log("listIndex",ind);
-                    console.log("listIndex",listIndex);
                 };
             });
             if (ind!=-1) {
-                console.log("in if ind");
                 $scope.documents.splice(listIndex,1);
                 $scope.selectedDocs.splice(ind,1);
                 $scope.apply(); 
                 if ($scope.documents.length==0) {
                     $scope.blankStatdocuments=true;
                 };
-                console.log($scope.documents);
-                console.log($scope.selectedDocs);
             };
         };
     $scope.docCreated=function(url){
-            console.log('here docCreated');
             window.open($scope.prepareEmbedLink(url),'_blank');
         }
     $scope.isSelectedDoc = function (doc) {
@@ -1348,8 +1292,6 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
                if(checkbox.checked){
                   if ($scope.selectedDocs.indexOf(doc) == -1) {             
                     $scope.selectedDocs.push(doc);
-                    console.log("opp pushed");
-                    console.log($scope.selectedDocs);
                   }
                }else{       
 
@@ -1358,7 +1300,6 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
 
         }
    $scope.mapAutocompleteCalendar=function(){
-            console.log("yes man yes man");
             $scope.addresses = {};/*$scope.billing.addresses;*/
             Map.autocompleteCalendar($scope,"pac-input2");
         }
@@ -1415,14 +1356,11 @@ $scope.lunchMapsCalendar=function(){
           var tags=[];
           var items = [];
           tags=$('#select2_sample1').select2("val");
-          console.log("tags tags tags");
-          console.log(tags);
               angular.forEach(tags, function(tag){
                 var params = {
                       'parent': $scope.casee.entityKey,
                       'tag_key': tag
                 };
-                console.log(params);
                 Tag.attach($scope,params);
               });
            $('#assigneeTagsToCase').modal('hide');
@@ -1455,7 +1393,6 @@ $scope.lunchMapsCalendar=function(){
           /* $scope.tags.push()*/
           };
          $scope.removeTag = function(tag,$index) {
-          console.log('work.....');
             var params = {'tag': tag,'index':$index}
             Edge.delete($scope, params);
         }
@@ -1467,11 +1404,7 @@ $scope.lunchMapsCalendar=function(){
 
     // 
        $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
      $scope.TopiclistNextPageItems = function(){
@@ -1487,7 +1420,7 @@ $scope.lunchMapsCalendar=function(){
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-            $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+            $scope.topicCurrentPage += 1 ;
             Case.get($scope,params);
             }
 
@@ -1569,7 +1502,6 @@ $scope.lunchMapsCalendar=function(){
 
      };
      $scope.showModal = function(){
-        console.log('button clicked');
         $('#addCaseModal').modal('show');
 
       };
@@ -1592,7 +1524,6 @@ $scope.lunchMapsCalendar=function(){
        $('#EditCaseModal').modal('show');
     }
     $scope.selectMemberToTask = function() {
-      console.log($scope.selected_members);
       if ($scope.selected_members.indexOf($scope.user) == -1) {
           $scope.selected_members.push($scope.user);
           $scope.selected_member = $scope.user;
@@ -1602,7 +1533,6 @@ $scope.lunchMapsCalendar=function(){
   };
   $scope.unselectMember = function(index) {
       $scope.selected_members.splice(index, 1);
-      console.log($scope.selected_members);
   };
 //HKA 09.11.2013 Add a new Task
    $scope.addTask = function(task){
@@ -1683,10 +1613,7 @@ $scope.showAddEventPopup=function(){
        }
 
 // HADJI HICHAM 31/05/2015
-//auto complete 
-
-//auto complete 
-
+//auto complete
      var invitesparams ={};
      $scope.inviteResults =[];
      $scope.inviteResult = undefined;
@@ -1699,7 +1626,6 @@ $scope.$watch('invite', function(newValue, oldValue) {
            invitesparams['q'] = $scope.invite;
            gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
               if (resp.items){
-          
                 $scope.filterInviteResult(resp.items);
                 $scope.$apply();
               };
@@ -1765,11 +1691,7 @@ $scope.deleteInvite=function(index){
 }
 
 $scope.checkGuests=function(){
-   if($scope.invites.length !=0){
-   $scope.Guest_params=true;
- }else{
-  $scope.Guest_params=false;
- }
+   $scope.Guest_params = $scope.invites.length != 0;
 }
 
 
@@ -1867,9 +1789,6 @@ $('#timeZone').on('change', function() {
 
 
                   }else{
-
-                        console.log("yeah babay");
-                        console.log($scope.allday);
 
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
@@ -2068,7 +1987,6 @@ $scope.updateEventRenderAfterAdd= function(){};
       $scope.newEventform=false;
     }
      $scope.hilightEvent = function(){
-        console.log('Should higll');
         $('#event_0').effect("highlight","slow");
         $('#event_0').effect( "bounce", "slow" );
 
@@ -2106,8 +2024,6 @@ $scope.updatCasetHeader = function(casee){
       Case.patch($scope,params);
   };
  $scope.updateCaseStatus = function(){
-    console.log('$scope.casee.current_status.entityKey');
-    console.log($scope.casee);
     var params = {
                   'entityKey':$scope.casee.entityKey,
                   'status': $scope.casee.current_status.entityKey
@@ -2193,7 +2109,7 @@ $scope.deletecase = function(){
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
-            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+            $scope.documentCurrentPage += 1 ;
 
             Case.get($scope,params);
 
@@ -2256,7 +2172,6 @@ $scope.deletecase = function(){
                 params.items = new Array();
 
                  $.each(data.docs, function(index) {
-                      console.log(data.docs);
                       /*
                       {'about_kind':'Account',
                       'about_item': $scope.account.id,
@@ -2379,8 +2294,6 @@ $scope.listInfonodes = function(kind) {
                'parent':$scope.casee.entityKey,
                'connections': kind
               };
-      console.log('-----Listing infonodes----');
-      console.log(params);
 
      InfoNode.list($scope,params);
 
@@ -2388,10 +2301,7 @@ $scope.listInfonodes = function(kind) {
 
  // HKA 19.03.2014 inline update infonode
      $scope.inlinePatch=function(kind,edge,name,entityKey,value){
-      console.log('entityKey');
-      console.log(entityKey);
         if (kind == 'Case') {
-               console.log("in cases kind");
               var params={};
                 switch(name){
                   case "name": 
@@ -2406,8 +2316,7 @@ $scope.listInfonodes = function(kind) {
                 }
                 if (!jQuery.isEmptyObject(params)) {
                   params.id=entityKey;
-                  console.log(params);
-                  Case.patch($scope, params);  
+                  Case.patch($scope, params);
                 }                
             } 
        };
@@ -2449,14 +2358,12 @@ $scope.listInfonodes = function(kind) {
      };
     // LBA 27-10-2014
     $scope.DeleteCollaborator=function(entityKey){
-            console.log("delete collaborators")
             var item = {
                           'type':"user",
                           'value':entityKey,
                           'about':$scope.casee.entityKey
                         };
             Permission.delete($scope,item)
-            console.log(item)
         };
     // Google+ Authentication
     Auth.init($scope);
@@ -2498,7 +2405,7 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
       $scope.sociallinks=[];
       $scope.customfields=[];
       $scope.results=[];
-      $scope.imageSrc = '/static/img/default_company.png';
+      $scope.imageSrc = '/static/src/img/default_company.png';
       $scope.casee = {
                       'access': 'public',
                       'priority':4
@@ -2522,26 +2429,19 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
               $scope.customfields=[];
               $scope.searchContactQuery="";
               $scope.searchAccountQuery="";
-              console.log($scope.cases.customfields)
               angular.forEach($scope.cases.customfields, function (cusfield) {
                     cusfield.value="";
                 });
               $scope.apply();
             }
       $scope.inProcess=function(varBool,message){
-          if (varBool) {           
-            if (message) {
-              console.log("starts of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads+1;
+          if (varBool) {
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -2567,7 +2467,6 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
             if (elem.field && elem.value) {
               var copyOfElement = angular.copy(elem);
               arr.push(copyOfElement);
-              console.log(elem);
               $scope.initObject(elem);}
 
           }else{
@@ -2588,11 +2487,7 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
             $scope.apply(); 
         }
         $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
         $scope.addCustomField = function (customField,option) {  
@@ -2623,7 +2518,6 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
                                     "value": custom_value
                                 };
                         $scope.customfields.push(params);
-                        console.log($scope.customfields);
 
                     }
             }
@@ -2638,7 +2532,6 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
           $scope.save($scope.contact);
       };
        $scope.getResults=function(val,location){
-          console.log('here executed');
           var url=ROOT+location+'?alt=json'
           var config={
             headers:  {
@@ -2662,13 +2555,11 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
        // $scope.result = undefined;
        // $scope.q = undefined;
        // $scope.$watch('searchAccountQuery', function() {
-       //      console.log('i am searching');
        //     params_search_account['q'] = $scope.searchAccountQuery;
        //     Account.search($scope,params_search_account);
 
        //  });
       $scope.changeStatus=function(status){
-          console.log("in case status");
           $scope.status_selected=status;
       }
       $scope.selectAccount = function(){
@@ -2676,8 +2567,6 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
 
        };
        $scope.accountInserted = function(resp){
-          console.log('account inserted ok');
-          console.log(resp);
           $scope.contact.account = resp;
         //  $scope.save($scope.contact);
       };
@@ -2696,7 +2585,6 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
       //   }
       // });
      $scope.selectContact = function(){
-        console.log($scope.searchContactQuery);
         if ($scope.searchContactQuery.account!=undefined) {
            var account = {'entityKey':$scope.searchContactQuery.account.entityKey,
                       'name':$scope.searchContactQuery.account.name};

@@ -15,20 +15,13 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
      $scope.entityKey="";
      $scope.attachment.assignees=[];
      $scope.inProcess=function(varBool,message){
-          if (varBool) {   
-            if (message) {
-              console.log("starts of :"+message);
-             
-            };
-            $scope.nbLoads=$scope.nbLoads+1;
+          if (varBool) {
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
             };
@@ -45,20 +38,13 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
     $('#BeforedeleteAttachement').modal('show');
    };
     $scope.inProcess=function(varBool,message){
-          if (varBool) {   
-            if (message) {
-              console.log("starts of :"+message);
-             
-            };
-            $scope.nbLoads=$scope.nbLoads+1;
+          if (varBool) {
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
             };
@@ -114,8 +100,7 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
           }else{
             params = {'limit':5}
           }
-          console.log('in listNextPageItems');
-          $scope.currentPage = $scope.currentPage + 1 ;
+          $scope.currentPage += 1 ;
           Comment.list($scope,params);
      }
      $scope.listPrevPageItems = function(){
@@ -130,7 +115,7 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
           }else{
             params = {'limit':5}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.currentPage -= 1 ;
           Comment.list($scope,params);
      }
 
@@ -148,19 +133,13 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
 
 /*************************/
       $scope.inProcess=function(varBool,message){
-          if (varBool) {           
-            if (message) {
-              console.log("starts of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads+1;
+          if (varBool) {
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -174,7 +153,6 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
 
 
      $scope.showModal = function(){
-        console.log('button clicked');
         $('#addAccountModal').modal('show');
 
       };
@@ -210,7 +188,6 @@ $scope.commentDelete=function(commentId){
 }  
 //HKA 18.11.2013 highlight the comment
    $scope.hilightComment = function(){
-        console.log('Should higll');
        $('#comment_0').effect( "bounce", "slow" );
        $('#comment_0 .message').effect("highlight","slow");
      };

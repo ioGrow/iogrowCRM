@@ -2,9 +2,9 @@ var app = angular.module('crmEngine', ['googlechart', 'easypiechart', 'xeditable
     'angular-sortable-view',
     'crmEngine.authservices', 'crmEngine.accountservices', 'crmEngine.contactservices', 'crmEngine.topicservices',
     'crmEngine.taskservices', 'crmEngine.eventservices', 'crmEngine.leadservices', 'crmEngine.opportunityservices',
-    'crmEngine.caseservices', 'crmEngine.userservices', 'crmEngine.groupservices', 'crmEngine.noteservices',
-    'crmEngine.commentservices', 'crmEngine.settingservices', 'crmEngine.importservices', 'mapServices',
-    'crmEngine.infonodeservices', 'crmEngine.edgeservices', 'crmEngine.discoverservices', 'crmEngine.reportservices',
+    'crmEngine.caseservices', 'crmEngine.userservices', 'crmEngine.noteservices',
+    'crmEngine.commentservices', 'crmEngine.settingservices', 'mapServices',
+    'crmEngine.infonodeservices', 'crmEngine.edgeservices',
     'crmEngine.profileservices', 'crmEngine.linkedinservices', 'crmEngine.billingservices']);
 //app.js Single page application
 
@@ -31,18 +31,6 @@ app.run(['$rootScope', function($rootScope){
 app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
      // Accounts
-     
-     when('/discovers/', {
-        controller: 'DiscoverListCtrl',
-        templateUrl:'/views/discovers/list'
-      }).when('/discovers/new', {
-        controller: 'DiscoverNewCtrl',
-        templateUrl:'/views/discovers/new'
-      }).when('/discovers/show/:tweetId', {
-        controller: 'DiscoverShowCtrl',
-        templateUrl:'/views/discovers/show'
-      }).
-
       when('/accounts/', {
         controller: 'AccountListCtrl',
         templateUrl:'/views/accounts/list'
@@ -99,11 +87,6 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'CaseNewCtrl',
         templateUrl:'/views/cases/new'
       }).
-      // Needs
-      when('/needs/show/:needId', {
-        controller: 'NeedShowCtrl',
-        templateUrl:'/views/needs/show'
-      }).
       // Notes
       when('/notes/show/:noteId',{
       controller : 'NoteShowController',
@@ -149,74 +132,16 @@ app.config(['$routeProvider', function($routeProvider) {
       }).when('/admin/users/show/:userGID', {
         controller: 'UserShowCtrl',
         templateUrl:'/views/admin/users/show'
-      }).when('/admin/groups', {
-        controller: 'GroupListCtrl',
-        templateUrl:'/views/admin/groups/list'
-      }).when('/admin/groups/show/:groupId', {
-        controller: 'GroupShowCtrl',
-        templateUrl:'/views/admin/groups/show'
       }).when('/admin/settings',{
         controller:'SettingsShowCtrl',
         templateUrl:'/views/admin/settings'
-
-      }).when('/admin/imports', {
-        controller: 'ImportListCtrl',
-        templateUrl:'/views/admin/imports/list'
-      }).when('/admin/imports/new', {
-        controller: 'ImportNewCtrl',
-        templateUrl:'/views/admin/imports/new'
-      }).
-      //Shows
-      when('/live/shows', {
-        controller: 'ShowListCtrl',
-        templateUrl:'/views/shows/list'
-      }).when('/live/shows/show/:showId', {
-        controller: 'ShowShowCtrl',
-        templateUrl:'/views/shows/show'
-
-      }).when('/live/company_profile/:organizationId',{
-        controller:'CompanyProfileShowCtrl',
-        templateUrl:'/views/live/company_profile'
-
-      }).when('/live/product_videos',{
-        controller:'ProductVideoListCtrl',
-        templateUrl:'/views/live/product_videos'
-
-      }).when('/live/product_videos/product_video/:productId',{
-        controller:'ProductVideoShowCtrl',
-        templateUrl:'/views/live/product_videos/show'
-
-      }).when('/live/customer_stories',{
-        controller:'CustomerStoriesListCtrl',
-        templateUrl:'/views/live/customer_stories'
-
-      }).when('/live/customer_stories/customer_story/:customerstoryId',{
-        controller:'CustomerStoriesShowCtrl',
-        templateUrl:'/views/live/customer_stories/show'
-
-      }).when('/live/feedbacks',{
-        controller:'FeedBacksListCtrl',
-        templateUrl:'/views/live/feedbacks'
-      }).when('/live/feedbacks/feedback/:feedbackId',{
-        controller:'FeedBacksShowCtrl',
-        templateUrl:'/views/live/feedbacks/show'
       }).
        //Calendar
        when('/calendar/', {
         controller: 'EventListController',
         templateUrl:'/views/calendar/show'
       })
-       .when('/billing/', {
-        controller: 'BillingListController',
-        templateUrl:'/views/billing/list'
-      })
-       .when('/billing/show/:userId', {
-        controller: 'BillingShowController',
-        templateUrl:'/views/billing/show'
-      }).when('/dashboard/', {
-        controller: 'dashboardCtrl',
-        templateUrl:'/views/dashboard'
-         }).when('/admin/company', {
+       .when('/admin/company', {
              controller: 'BillingListController',
              templateUrl: '/views/admin/company/edit'
          }).when('/admin/email_signature', {
@@ -234,12 +159,6 @@ app.config(['$routeProvider', function($routeProvider) {
          }).when('/admin/lead_status', {
              controller: 'LeadStatusEditCtrl',
              templateUrl: '/views/admin/lead_status/edit'
-         }).when('/admin/data_transfer', {
-             controller: 'DataTransferEditCtrl',
-             templateUrl: '/views/admin/data_transfer/edit'
-         }).when('/admin/synchronisation', {
-             controller: 'SynchronisationEditCtrl',
-             templateUrl: '/views/admin/synchronisation/edit'
          }).when('/admin/custom_fields/:customfieldId', {
              controller: 'CustomFieldsEditCtrl',
              templateUrl: '/views/admin/custom_fields/edit'
@@ -457,4 +376,3 @@ incrementer = function(property) {
 
   mixpanel.register(update);
 };
-

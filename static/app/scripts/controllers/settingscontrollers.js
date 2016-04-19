@@ -48,20 +48,13 @@ app.controller('SettingsShowCtrl', ['$scope', '$route', 'Auth', 'Opportunitystag
         $scope.immediateFailed = false;
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
-                if (message) {
-                    console.log("starts of :" + message);
-                };
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
                 ;
             } else {
-                if (message) {
-                    console.log("ends of :" + message);
-                }
-                ;
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
                 }
@@ -80,8 +73,6 @@ app.controller('SettingsShowCtrl', ['$scope', '$route', 'Auth', 'Opportunitystag
         $scope.emailSignature = document.getElementById("signature").value;
         if ($scope.emailSignature == "None") {
             $scope.emailSignature = "";
-        } else {
-            $scope.emailSignature = $scope.emailSignature;
         }
         $('#some-textarea').wysihtml5();
         // What to do after authentication
@@ -135,7 +126,6 @@ app.controller('SettingsShowCtrl', ['$scope', '$route', 'Auth', 'Opportunitystag
                 'gmail_to_lead_sync': parseInt(user.gmail_to_lead_sync)
             };
 
-            console.log(params)
 
             User.patch($scope, params);
 
@@ -158,7 +148,6 @@ app.controller('SettingsShowCtrl', ['$scope', '$route', 'Auth', 'Opportunitystag
         };
         //HKA 15.12.2013 Edit opportunity stage
         $scope.editopportunitystage = function (stage) {
-            console.log(stage);
             $scope.oppstageedit.name = stage.name;
             $scope.oppstageedit.stage_number = stage.stage_number;
             $scope.oppstageedit.probability = stage.probability;
@@ -233,7 +222,6 @@ app.controller('SettingsShowCtrl', ['$scope', '$route', 'Auth', 'Opportunitystag
 
         //HKA 15.12.2013 Edit case status
         $scope.editcasestatus = function (casestat) {
-            console.log('I am on edit case status');
             $scope.casestatusedit.status = casestat.status;
             $scope.casestatusedit.id = casestat.id;
             $('#EditCaseStatus').modal('show');
@@ -241,7 +229,6 @@ app.controller('SettingsShowCtrl', ['$scope', '$route', 'Auth', 'Opportunitystag
         };
         //18.12.2013 HKA  Update case status
         $scope.updateCasestatus = function (casestat) {
-            console.log('I am on update  case status');
             var params = {
                 'id': $scope.casestatusedit.id,
                 'status': casestat.status

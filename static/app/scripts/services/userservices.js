@@ -193,7 +193,6 @@ accountservices.factory('User', function ($http) {
                 $scope.renderCalendar(resp);
                 $scope.isLoading = false;
             } else {
-                console.log(resp.message);
                 $('#addAccountModal').modal('hide');
                 $('#errorModal').modal('show');
                 if (resp.message == "Invalid grant") {
@@ -212,7 +211,6 @@ accountservices.factory('User', function ($http) {
                 $scope.organizationInfo = resp;
                 $scope.purchaseLiseneces(resp);
             } else {
-                console.log(resp.message);
                 $('#addAccountModal').modal('hide');
                 $('#errorModal').modal('show');
                 if (resp.message == "Invalid grant") {
@@ -291,8 +289,6 @@ accountservices.factory('Permission', function ($http) {
     Permission.insert = function ($scope, params) {
         $scope.isLoading = true;
         gapi.client.crmengine.permissions.insertv2(params).execute(function (resp) {
-            console.log('in insert resp');
-            console.log(resp);
             if (!resp.code) {
                 $scope.isLoading = false;
                 $scope.apply();
@@ -300,7 +296,6 @@ accountservices.factory('Permission', function ($http) {
             } else {
                 $scope.isLoading = false;
                 $scope.apply();
-                console.log(resp.code);
             }
         });
     };

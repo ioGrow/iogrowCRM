@@ -3,11 +3,11 @@
           <tbody><tr>
             <td class="appTd">
             <div class="btn-group">
-                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
                   {% if active_app.label =="Relationships" %}
-                      <img class="app_icon" src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
+                      <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                       {% else%}
-                      <img class="app_icon" src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">                        
+                      <img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                   {% endif %}
                   <span class="hide_sm">{{_(active_app.label)}}</span>   
                   <i class="icon-angle-down fa fa-angle-down"></i>
@@ -15,9 +15,9 @@
                  <ul class="dropdown-menu">
                   {%for application in apps %}
                         {% if application.label =="Relationships" %}
-                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"  src="static/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                           {% else%}
-                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"src="static/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
+                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
                         
                           {% endif %}
                        
@@ -91,18 +91,6 @@
                   </ul>
               </div> 
               </div>
-               <!--<div class="communicationBottons pull-right">
-                    <a class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                      <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
-                    </a>
-                    <a class="" title="Start a Hangout" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                          <i class="fa fa-video-camera" style="padding-top: 6px; font-size: 16px;"></i>
-                    </a>
-                    <a class="" title="Tweet" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                          <i class="fa fa-twitter" style="padding-top: 6px; font-size: 16px;"></i>
-                    </a>
-                  
-              </div>-->
               <div class="clearfix"></div>
         </div>
             <a href="/#/accounts/new" id="new_account" class="btn red newAccountBtnOnscroll pull-right">
@@ -219,7 +207,7 @@
 </div>
 <div class="dropOut"  ng-show="showUntag" >
     <div class="trash">
-      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/img/iotrash.png" >
+      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png" >
     </div>
 </div>
 <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
@@ -435,8 +423,8 @@
                         <td>
                             <a href="/#/accounts/show/<%= account.id %>" class="startup-link"
                                title="<%= account.name %>">
-                            <img width="40" ng-hide="account.logo_img_id" alt="account.name" class="img-resonsive img-thumbnail" src="/static/img/default_company.png" >
-                            <img  width="40" ng-show="account.logo_img_id" alt="account.name" class="img-thumbnail" err-src="/static/img/default_company.png" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
+                            <img width="40" ng-hide="account.logo_img_id" alt="account.name" class="img-resonsive img-thumbnail" src="/static/src/img/default_company.png" >
+                            <img  width="40" ng-show="account.logo_img_id" alt="account.name" class="img-thumbnail" err-src="/static/src/img/default_company.png" ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>" data-hasqtip="2">
                           </a>
                         </td>
                         <td>
@@ -486,7 +474,7 @@
                 </table>
                 <div class="loaderList" ng-show="isMoreItemLoading">
                       <div class="loaderCardContent">
-                         <img class="img-responsive " src="/static/img/gloader.gif">
+                         <img class="img-responsive " src="/static/src/img/gloader.gif">
                          <span> {{ _('Loading...')}}</span>
                       </div>
                  </div>
@@ -565,8 +553,8 @@
               <div class="head">
                 <div class="pic">
                  <!-- <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="account.name">-->
-                 <img ng-hide="account.logo_img_id||account.logo_img_url" alt="account.name" class="img-resonsive img-thumbnail" src="/static/img/default_company.png">
-                  <img  ng-show="account.logo_img_id||account.logo_img_url" alt="account.name" class="img-resonsive img-thumbnail" err-src="/static/img/default_company.png" ng-src="<%=(account.logo_img_id) ? 'https://docs.google.com/uc?id='+account.logo_img_id : account.logo_img_url%>" data-hasqtip="2" >
+                 <img ng-hide="account.logo_img_id||account.logo_img_url" alt="account.name" class="img-resonsive img-thumbnail" src="/static/src/img/default_company.png">
+                  <img  ng-show="account.logo_img_id||account.logo_img_url" alt="account.name" class="img-resonsive img-thumbnail" err-src="/static/src/img/default_company.png" ng-src="<%=(account.logo_img_id) ? 'https://docs.google.com/uc?id='+account.logo_img_id : account.logo_img_url%>" data-hasqtip="2" >
 
                   <!--</a>-->
                 </div>
@@ -612,7 +600,7 @@
           </div>
           <div class="loaderCard" ng-show="isMoreItemLoading" data-span="all">
             <div class="loaderCardContent">
-               <img class="img-responsive " src="/static/img/gloader.gif">
+               <img class="img-responsive " src="/static/src/img/gloader.gif">
                <span> {{ _('Loading...')}}</span>
             </div>
           </div>
@@ -623,7 +611,7 @@
             <div class="">
               <div class="blank_slate_arrow"></div>
               <div class="thumbnail blank_slate_body">
-                <img class="img-responsive" src="/static/img/accounts_blank.png">
+                <img class="img-responsive" src="/static/src/img/accounts_blank.png">
                 <p class="lead">
                   {{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.')}}
                 </p>
@@ -1113,7 +1101,7 @@
                         <div  class="taskAssigneList invitation list-group-item" ng-repeat="selected_us in sharing_with" style="padding: 5px;">
                           <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
                           <div class="photo">
-                            <img class="google-avatar" src="<%= selected_us.google_public_profile_photo_url%>"/>
+                            <img class="google-avatar" ng-src="selected_us.google_public_profile_photo_url"/>
                           </div>
                           <div class="details">
                             <p>
@@ -1179,10 +1167,10 @@
   });
   /*var cw = $('#card_0').width();
   $('.cardElement').css({'height':(cw/1.618)+'px'});
-  console.log(cw);*/
+
+*/
   $('.textfill').textfill({debug: true, maxFontPixels: 16});
   $('#slimList').slimScroll({height: '193px'});
   /*$('.labelElement').click(function() {
-          console.log("testedfslhkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
         }); */
 </script>

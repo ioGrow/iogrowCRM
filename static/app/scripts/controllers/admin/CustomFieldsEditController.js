@@ -58,27 +58,19 @@ app.controller('CustomFieldsEditCtrl', ['$scope','$route', 'Auth', 'User', 'Map'
             $scope.apply();
         }
         $scope.inProcess=function(varBool,message){
-          if (varBool) {   
-            if (message) {
-              console.log("starts of :"+message);
-             
-            };
-            $scope.nbLoads=$scope.nbLoads+1;
+          if (varBool) {
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            if (message) {
-              console.log("ends of :"+message);
-            };
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
             };
           };
         } 
         $scope.sortCustomField=function($item,$indexTo){
-            console.log("fired");
             var params={
                 id:$item.id,
                 order:$indexTo+1
@@ -97,7 +89,6 @@ app.controller('CustomFieldsEditCtrl', ['$scope','$route', 'Auth', 'User', 'Map'
             Customfield.patch($scope,params);
         }
         $scope.customFieldUpdated=function(customfield){
-            console.log(customfield);
             if (!customfield.field_type) {
                 console.log('in order');
             }else{
@@ -142,11 +133,7 @@ app.controller('CustomFieldsEditCtrl', ['$scope','$route', 'Auth', 'User', 'Map'
         	$scope.apply();
         }
         $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
         $scope.addCustomField=function(customfield,related_to){
@@ -156,8 +143,6 @@ app.controller('CustomFieldsEditCtrl', ['$scope','$route', 'Auth', 'User', 'Map'
 						"related_object":related_to
 						}
 				if (!$scope.isEmptyArray(customfield.options)) {
-					console.log('with options');
-					console.log(customfield.options);
 					params.options=customfield.options;
 				};
 				Customfield.insert($scope,params);
@@ -169,12 +154,9 @@ app.controller('CustomFieldsEditCtrl', ['$scope','$route', 'Auth', 'User', 'Map'
             };
         	$scope[resp.related_object].customfields.push(resp);
         	$scope.apply();
-        	console.log('leads.customfields');
-        	console.log($scope.leads.customfields);
 
         };
         $scope.addOption=function(options,customfield){
-        	console.log("clicked");
 	        var option="Option "+(options.length+1);
         	if (option!=""&&options.indexOf(option)<0) {
         		options.push(option);

@@ -47,12 +47,12 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User','Billing',
         };
         $scope.inProcess = function (varBool) {
             if (varBool) {
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
             } else {
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
                 }
@@ -85,7 +85,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User','Billing',
             } else {
                 params = {'limit': 7}
             }
-            $scope.currentPage = $scope.currentPage + 1;
+            $scope.currentPage += 1;
             User.list($scope, params);
         };
         $scope.filterByName = function () {
@@ -108,7 +108,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User','Billing',
             } else {
                 params = {'limit': 7}
             }
-            $scope.currentPage = $scope.currentPage - 1;
+            $scope.currentPage -= 1;
             User.list($scope, params);
         };
         $scope.select_all_invitees = function ($event) {

@@ -60,8 +60,6 @@ accountservices.factory('Account', function($rootScope) {
                                         });
                                     }
                             });
-                            console.log("item contact");
-                            console.log(item);
                             $scope.contacts.push(item);
                         });
                     }
@@ -86,17 +84,10 @@ accountservices.factory('Account', function($rootScope) {
                                         });
                                     };
                             });
-                            console.log("item contact");
-                            console.log(item);
                         });
                         $scope.contacts = resp.contacts.items;
                     }
-                    if ($scope.contactCurrentPage > 1) {
-                        $scope.contactpagination.prev = true;
-                    } else {
-
-                        $scope.contactpagination.prev = false;
-                    }
+                    $scope.contactpagination.prev = $scope.contactCurrentPage > 1;
                     if (resp.contacts.nextPageToken) {
                         var nextPage = $scope.contactCurrentPage + 1;
                         // Store the nextPageToken
@@ -122,7 +113,7 @@ accountservices.factory('Account', function($rootScope) {
                     if (resp.logo_img_url) {
                          $scope.imageSrc = resp.logo_img_url;
                     }else{
-                         $scope.imageSrc = '/static/img/default_company.png';
+                         $scope.imageSrc = '/static/src/img/default_company.png';
                     }
                 }
                 // list infonodes
@@ -157,8 +148,6 @@ accountservices.factory('Account', function($rootScope) {
                         }
 
                     }
-                    console.log("here infonodes *****************************");
-                    console.log($scope.infonodes);
                 }
                 $scope.getCustomFields('accounts');
                 if (resp.topics) {
@@ -171,11 +160,7 @@ accountservices.factory('Account', function($rootScope) {
                         $scope.topics = resp.topics.items;
                     }
 
-                    if ($scope.topicCurrentPage > 1) {
-                        $scope.topicpagination.prev = true;
-                    } else {
-                        $scope.topicpagination.prev = false;
-                    }
+                    $scope.topicpagination.prev = $scope.topicCurrentPage > 1;
                     if (resp.topics.nextPageToken) {
                         var nextPage = $scope.topicCurrentPage + 1;
                         // Store the nextPageToken
@@ -184,28 +169,6 @@ accountservices.factory('Account', function($rootScope) {
 
                     } else {
                         $scope.topicpagination.next = false;
-                    }
-                }
-
-
-                if (resp.needs) {
-                    if (!resp.needs.items) {
-                        $scope.blankStateneeds = true;
-                    }
-                    $scope.needs = resp.needs.items;
-                    if ($scope.needsCurrentPage > 1) {
-                        $scope.needspagination.prev = true;
-                    } else {
-                        $scope.needspagination.prev = false;
-                    }
-                    if (resp.needs.nextPageToken) {
-                        var nextPage = $scope.needsCurrentPage + 1;
-                        // Store the nextPageToken
-                        $scope.needspages[nextPage] = resp.needs.nextPageToken;
-                        $scope.needspagination.next = true;
-
-                    } else {
-                        $scope.needspagination.next = false;
                     }
                 }
 
@@ -221,11 +184,7 @@ accountservices.factory('Account', function($rootScope) {
                     else {
                         $scope.opportunities = resp.opportunities.items;
                     }
-                    if ($scope.oppCurrentPage > 1) {
-                        $scope.opppagination.prev = true;
-                    } else {
-                        $scope.opppagination.prev = false;
-                    }
+                    $scope.opppagination.prev = $scope.oppCurrentPage > 1;
                     if (resp.opportunities.nextPageToken) {
                         var nextPage = $scope.oppCurrentPage + 1;
                         // Store the nextPageToken
@@ -252,11 +211,7 @@ accountservices.factory('Account', function($rootScope) {
                     else {
                         $scope.cases = resp.cases.items;
                     }
-                    if ($scope.caseCurrentPage > 1) {
-                        $scope.casepagination.prev = true;
-                    } else {
-                        $scope.casepagination.prev = false;
-                    }
+                    $scope.casepagination.prev = $scope.caseCurrentPage > 1;
                     if (resp.cases.nextPageToken) {
                         var nextPage = $scope.caseCurrentPage + 1;
                         // Store the nextPageToken
@@ -284,11 +239,7 @@ accountservices.factory('Account', function($rootScope) {
                         $scope.documents = resp.documents.items;
                     }
 
-                    if ($scope.documentCurrentPage > 1) {
-                        $scope.documentpagination.prev = true;
-                    } else {
-                        $scope.documentpagination.prev = false;
-                    }
+                    $scope.documentpagination.prev = $scope.documentCurrentPage > 1;
                     if (resp.documents.nextPageToken) {
 
                         var nextPage = $scope.documentCurrentPage + 1;
@@ -336,14 +287,8 @@ accountservices.factory('Account', function($rootScope) {
                 // }
                /* $scope.renderMaps();*/
                 $scope.mapAutocomplete();
-                /*console.log("before render renderMaps")
-                 $scope.renderMaps();
-                    
-               */
                 $scope.getLinkedinProfile();
                 $scope.getTwitterProfile();
-                console.log("    twitter trigger");
-                
                 $scope.inProcess(false);
                 $scope.apply();
             } else {
@@ -363,8 +308,6 @@ accountservices.factory('Account', function($rootScope) {
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.accounts.import(params).execute(function (resp) {
-            console.log(params);
-            console.log(resp);
             if (!resp.code) {
                 $scope.isContentLoaded = true;
                 $scope.numberOfRecords = resp.number_of_records;
@@ -390,10 +333,7 @@ accountservices.factory('Account', function($rootScope) {
         $scope.inProcess(true);
         $scope.apply();
         gapi.client.crmengine.accounts.import_from_csv_second_step(params).execute(function (resp) {
-            console.log(params);
-            console.log(resp);
             if (!resp.code) {
-                console.log(resp);
                 $scope.showImportMessages();
                 $scope.inProcess(false);
                 $scope.apply();
@@ -446,8 +386,6 @@ accountservices.factory('Account', function($rootScope) {
                                         });
                                     };
                             });
-                            console.log("item contact");
-                            console.log(item);
                         });
                         $scope.contacts = resp.contacts.items;
                 }
@@ -473,17 +411,11 @@ accountservices.factory('Account', function($rootScope) {
                       $scope.blankStateaccount = false;
                     }
                 }else{
-                    console.log("resp.items https://media.licdn.com/media/p/4/005/046/1d8/27c5000.png");
-                    console.log(resp.items);
                     $scope.blankStateaccount = false;
                     $scope.filterNoResult=false;
                 }
                 $scope.accounts = resp.items;
-                if ($scope.currentPage > 1) {
-                    $scope.pagination.prev = true;
-                } else {
-                    $scope.pagination.prev = false;
-                }
+                $scope.pagination.prev = $scope.currentPage > 1;
                 if (resp.nextPageToken) {
                     var nextPage = $scope.currentPage + 1;
                     // Store the nextPageToken
@@ -535,8 +467,6 @@ accountservices.factory('Account', function($rootScope) {
         gapi.client.crmengine.accounts.export(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
-                console.log("request ssent")
-
             } else {
 
             }
@@ -549,7 +479,6 @@ accountservices.factory('Account', function($rootScope) {
         gapi.client.crmengine.accounts.export_keys(params).execute(function (resp) {
             if (!resp.code) {
                 //$scope.DataLoaded(resp.items)
-                console.log("request ssent")
 
             } else {
 
@@ -568,11 +497,7 @@ accountservices.factory('Account', function($rootScope) {
                     $scope.accounts.push(item);
                 });
 
-                if ($scope.currentPage > 1) {
-                    $scope.pagination.prev = true;
-                } else {
-                    $scope.pagination.prev = false;
-                }
+                $scope.pagination.prev = $scope.currentPage > 1;
                 if (resp.nextPageToken) {
                     var nextPage = $scope.currentPage + 1;
                     // Store the nextPageToken
@@ -612,8 +537,6 @@ accountservices.factory('Account', function($rootScope) {
         gapi.client.crmengine.accounts.search(params).execute(function(resp) {
 
             if (resp.items) {
-                console.log("resp.items from account search");
-                console.log(resp.items);
                 $scope.accountsResults = resp.items;
                 $scope.apply();
             }
@@ -624,7 +547,6 @@ accountservices.factory('Account', function($rootScope) {
     Account.searcha = function ($scope, params) {
 
         return gapi.client.crmengine.accounts.search(params).then(function (resp) {
-            console.log(resp.result.items);
             return resp.result.items
         });
     };
@@ -783,15 +705,7 @@ accountservices.factory('Search', function($http) {
                 break;
             case 'Show':
                 base_url = '/#/live/shows/show/';
-                break;
-            case 'Product_Video':
-                base_url = '/#/live/product_videos/product_video/';
-                break;
-            case 'Customer_Story':
                 base_url = '/#/live/customer_stories/customer_story/';
-                break;
-            case 'Need':
-                base_url = '/#/needs/show/';
                 break;
             case 'Document' :
                 base_url = '#/documents/show/';
@@ -853,11 +767,7 @@ accountservices.factory('Search', function($http) {
                             result.url = url;
                             $scope.searchResults.push(result);
                         });
-                        if ($scope.currentPage > 1) {
-                            $scope.pagination.prev = true;
-                        } else {
-                            $scope.pagination.prev = false;
-                        }                       
+                        $scope.pagination.prev = $scope.currentPage > 1;
                         if (resp.nextPageToken) {
                             var nextPage = $scope.currentPage + 1;
                             $scope.pages[nextPage] = resp.nextPageToken;
@@ -897,8 +807,6 @@ accountservices.factory('Attachement', function($http) {
 
      $scope.documents = resp.items;
 
-     console.log('-----------Documents--------');
-     console.log($scope.documents);
 
      if ($scope.documentCurrentPage > 1){
      $scope.documentpagination.prev = true;
@@ -939,11 +847,7 @@ accountservices.factory('Attachement', function($http) {
                     }
                 }
                 $scope.documents = resp.items;
-                if ($scope.documentCurrentPage > 1) {
-                    $scope.documentpagination.prev = true;
-                } else {
-                    $scope.documentpagination.prev = false;
-                }
+                $scope.documentpagination.prev = $scope.documentCurrentPage > 1;
                 if (resp.nextPageToken) {
                     var nextPage = $scope.documentCurrentPage + 1;
                     // Store the nextPageToken
@@ -995,8 +899,7 @@ accountservices.factory('Attachement', function($http) {
                 //$('#newDocument').modal('hide');
                 if ($scope.newDoc) {
                     if (resp.embedLink) {
-                        console.log('here executed');
-                        $scope.docCreated(resp.embedLink);    
+                        $scope.docCreated(resp.embedLink);
                     };
                     
                 };

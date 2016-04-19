@@ -34,12 +34,7 @@ topicservices.factory('Topic', function($http) {
                
                  $scope.topics = resp.items;
                  
-                  if ($scope.topicCurrentPage >1){
-                      console.log('Should show PREV');
-                    $scope.topicpagination.prev = true;
-                  }else{
-                      $scope.topicpagination.prev= false;
-                   }
+                  $scope.topicpagination.prev = $scope.topicCurrentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.topicCurrentPage + 1;
                     // Store the nextPageToken
@@ -83,7 +78,6 @@ topicservices.factory('Topic', function($http) {
                 $scope.$apply();
                };
             }
-            console.log('gapi #end_execute');
           });
   };
   
