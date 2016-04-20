@@ -12,7 +12,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-targethtml": "^0.2.6"
   },
-  "author": "Tedj",
+  "author": "ioGrow Team",
   "license": "AGPL",
   "bugs": {
     "url": "https://github.com/ioGrow/iogrow/issues"
