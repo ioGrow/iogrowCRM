@@ -16,7 +16,7 @@ def install():
 
 @task
 def build(prod=False):
-    cmd = "grunt " + "prod" if prod else ""
+    cmd = "grunt %s" % ("prod" if prod else "")
     run(cmd)
 
 @task
