@@ -1,6 +1,6 @@
 invoke
 apiclient
-#atom==0.3.5
+atom==0.3.5
 babel
 beautifulsoup4==4.3.2
 bson==0.4.2
@@ -14,7 +14,6 @@ graphy==1.0
 pyrise
 httplib2==0.7.6
 python-intercom==0.2.13
-#mapreduce
 mechanize==0.2.5
 mixpanel==4.1.0
 oauth2client==1.4.11
