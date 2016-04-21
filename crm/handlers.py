@@ -62,10 +62,10 @@ sfoauth2.SF_INSTANCE = 'na12'
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com', 'hakim@iogrow.com']
 
 CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+    open('config/client_secrets.json', 'r').read())['web']['client_id_online']
 
 CLIENT_SECRET = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_secret']
+    open('config/client_secrets.json', 'r').read())['web']['client_secret']
 
 SCOPES = [
     'https://mail.google.com https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
@@ -599,7 +599,7 @@ class GooglePlusConnect(SessionEnabledHandler):
           FlowExchangeException Failed to exchange code (code invalid).
         """
         oauth_flow = flow_from_clientsecrets(
-            'offline_client_secrets.json',
+            'config/client_secrets.json',
             scope=SCOPES
         )
         oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
