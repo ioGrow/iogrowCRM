@@ -657,7 +657,7 @@ class Organization(ndb.Model):
         if org_subscription.quantity - assigned_licenses < 1:
             raise endpoints.UnauthorizedException('you need more licenses')
         if user_subscription.key == org_subscription.key:
-            raise endpoints.BadRequestException('this user already have an activated licences')
+            raise endpoints.BadRequestException('this user already have an activated licenses')
         if user.organization != org_key:
             raise endpoints.UnauthorizedException('The user is not withing your organization')
         user.set_subscription(org_subscription)
@@ -673,7 +673,7 @@ class Organization(ndb.Model):
         if user_subscription.plan.get().name != config.PREMIUM:
             raise endpoints.BadRequestException('You have to upgrade')
         if user_subscription.key != org_subscription.key:
-            raise endpoints.BadRequestException('this user already have an activated licences')
+            raise endpoints.BadRequestException('this user already have an activated licenses')
         if user.organization != org_key:
             raise endpoints.UnauthorizedException('The user is not withing your organization')
         user.set_subscription(Subscription.create_freemium_subscription())
