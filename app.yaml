@@ -21,9 +21,6 @@ builtins:
 - appstats: on #/_ah/stats/
 
 handlers:
-- login: admin
-  script: pipeline.handlers._APP
-  url: /_ah/pipeline.*
 - url: /admin/.*
   script: google.appengine.ext.admin.application
   login: admin
