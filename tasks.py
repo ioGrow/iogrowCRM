@@ -1,6 +1,6 @@
 from invoke import task
 from invoke import run
-
+from distutils.spawn import find_executable
 
 @task(default=True)
 def default():
@@ -8,10 +8,20 @@ def default():
 
 @task
 def install():
-    run("sudo npm i -g grunt")
-    run("sudo npm i -g bower")
-    run("npm i")
+    if not find_executable("npm"):
+        print "Please install Nodejs"
+    if not find_executable("grunt"):
+        print "Installing grunt ..."
+        run("sudo npm i -g grunt")
+    if not find_executable("bower"):
+        print "Installing bower ..."
+        run("sudo npm i -g bower")
+
+    print "Updating grunt dependencies ..."
+    run("npm up")
+    print "Updating python libraries ..."
     run("pip install -r requirements.txt --upgrade --target ./libx")  #python
+    print "Updating js libraries ..."
     run("bower install")  #js
 
 @task
@@ -41,6 +51,9 @@ def test():
 
 @task
 def babel(extract=False, init =False, compile=False, update=False):
+    if not find_executable("pybabel"):
+        print "Installing babel ..."
+        run("sudo pip install babel")
     if init:
         lang = raw_input("language to initialize?")
         run("pybabel init -l %s -d ./locale -i ./locale/messages.pot" % lang)
