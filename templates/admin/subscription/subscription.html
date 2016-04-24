@@ -8,6 +8,37 @@
         }
 
         /* Plane selctor Style */
+        .checkout-plan-select {
+            margin-top: 3px;
+            font-size: 28px
+        }
+
+        .checkout-plan-select label.licence-num {
+            padding: 3px 15px;
+        }
+
+        .checkout-plan-select label.licence-num > i {
+            float: left;
+            color: #168EEA;
+            font-size: 32px;
+            margin-top: 10px;
+        }
+
+        .checkout-plan-select label.licence-num > i:first-child {
+            float: left;
+        }
+
+        .checkout-plan-select label.licence-num > i:last-child {
+            float: right;
+        }
+
+        .checkout-plan-select label.licence-num > input[type=text] {
+            width: 74%;
+            margin-left: 4%;
+            height: 50px;
+            text-align: center;
+        }
+
         .checkout-plan-select label {
             background: #cbd7df;
             -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
@@ -23,6 +54,10 @@
             font-weight: 400;
             -webkit-font-smoothing: antialiased;
             width: 100%;
+        }
+
+        .checkout-plan-select span {
+            font-weight: 600;
         }
 
         .checkout-plan-select input[type=radio]:checked + label > i.fa-check-circle {
@@ -71,6 +106,11 @@
         }
 
         /* CSS for Credit Card Payment form */
+        .credit-card-box {
+            padding: 10px 0px 0px;
+            box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.16);
+        }
+
         .credit-card-box .panel-title {
             display: inline;
             font-weight: bold;
@@ -121,6 +161,15 @@
             min-width: 180px;
         }
 
+        .credit-card-box .header-logo {
+            position: absolute;
+            right: 15px
+        }
+
+        .credit-card-box .header-logo img {
+            width: 50%;
+        }
+
         .cost-box {
             text-align: center;
             font-size: 26px;
@@ -134,11 +183,12 @@
             padding-bottom: 5px;
         }
 
-        .cost-message {
+        .resume-row .cost-message {
             font-weight: 800;
             font-size: 32px;
             text-transform: uppercase;
             text-align: center;
+            margin-top: 21px;
         }
 
         .subscribe-btn {
@@ -157,6 +207,25 @@
             border-left: 1px solid #DDD;
             padding-left: 15px;
         }
+
+        .card-demo {
+            height: 254px;
+            padding: 0px
+        }
+
+        .resume-row {
+            border-top: 1px solid rgb(169, 169, 169);
+            margin-top: 20px;
+            padding-top: 25px;
+        }
+        .resume-row .subscribe-btn{
+            text-transform: uppercase;
+            padding: 30px 27px;
+            border: none;
+            border-radius: 3px;
+            font-weight: 900;
+            font-size: 22px;
+        }
     </style>
     <meta charset="UTF-8">
     <title>Payment</title>
@@ -166,7 +235,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
-<div class="container-fuild col-md-offset-1 col-md-10" style="padding: 0;">
+<div class="container-fluid col-md-offset-1 col-md-10" style="padding: 0;">
     <div class="page-header">
         <img src="/static/src/img/iogrow-logo-app.png" alt="logo" class="img-responsive">
     </div>
@@ -174,55 +243,34 @@
         <div class="panel-body">
             <form role="form" id="payment-form" style="margin-top: 110px;">
                 <div class="row">
-                    <div class="checkout-plan-select col-md-4" style="margin-top: 3px;font-size: 28px">
-                        <label style="
-    padding: 3px 15px;
-">
-                            <i class="fa fa-arrow-down" id="minus" style="
-    float: left;
-    color: #168EEA;
-    font-size: 32px;
-    margin-top: 10px;
-"></i>
+                    <div class="checkout-plan-select col-md-4">
+                        <label class="licence-num">
+                            <i class="fa fa-arrow-down " id="minus"></i>
                             <input type="hidden" name="quantity" id="quantity" value="{{ users_count }}">
-                            <input type="text" value="{{ users_count }} users" id="users" style="
-    width: 74%;
-    margin-left: 4%;
-    height: 50px;
-    text-align: center;
-">
-                            <i class="fa fa-arrow-up" id="plus" style="
-    float: right;
-    color: #168EEA;
-    font-size: 32px;
-    margin-top: 10px;
-"></i>
+                            <input type="text" value="{{ users_count }} users" id="users">
+                            <i class="fa fa-arrow-up" id="plus"></i>
                         </label>
                         <div class="plan-option">
                             <input id="month" name="interval" type="radio" value="month">
                             <label for="month">
                                 <i class="fa fa-check-circle"></i>
-                                <span style="font-weight: 600">${{ month_price }}</span>/user/mo
+                                <span>${{ month_price }}</span>/user/mo
                             </label>
                         </div>
                         <div class="plan-option">
                             <input id="year" name="interval" type="radio" value="year" checked="checked">
                             <label for="year">
                                 <i class="fa fa-check-circle"></i>
-                                <span style="font-weight: 600">${{ year_price }}</span>/user/yr
-                                <div class="plan-note">
-                                    SAVE 16.66%
-                                </div>
+                                <span>${{ year_price }}</span>/user/yr
+                                <div class="plan-note">SAVE 16.66%</div>
                             </label>
                         </div>
                     </div>
                     <!-- CREDIT CARD FORM STARTS HERE -->
                     <div class="col-md-4">
-                        <div class="panel panel-default credit-card-box"
-                             style="padding: 10px 0px 0px;box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.16);">
-                            <div style="position: absolute;right: 15px" class="col-xs-12">
-                                <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png"
-                                     style="width: 50%">
+                        <div class="panel panel-default credit-card-box">
+                            <div class="col-xs-12 header-logo">
+                                <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png">
                             </div>
                             <div class="panel-body">
                                 <div class="row">
@@ -289,25 +337,15 @@
                         </div>
                     </div>
                     <!-- CREDIT CARD FORM ENDS HERE -->
-                    <div class="col-md-4" style="height: 254px; padding: 0px">
+                    <div class="col-md-4 card-demo">
                         <div class="card-wrapper"></div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-offset-1 col-md-10" style="    border-top: 1px solid rgb(169, 169, 169);
-    margin-top: 20px;
-    padding-top: 25px;">
-                        <div class="col-md-6 cost-message" style="margin-top: 21px;">Total cost : <span
-                                id="total-cost"></span>$</div>
+                    <div class="col-md-offset-1 col-md-10 resume-row">
+                        <div class="col-md-6 cost-message">Total cost : <span id="total-cost"></span>$</div>
                         <div class="col-md-4 col-md-offset-1">
-                            <button class="subscribe-btn btn btn-success btn-lg btn-block" type="submit" style="
-    text-transform: uppercase;
-    padding: 30px 27px;
-    border: none;
-    border-radius: 3px;
-    font-weight: 900;
-    font-size: 22px;
-">
+                            <button class="subscribe-btn btn btn-success btn-lg btn-block" type="submit">
                                 Start Subscription
                             </button>
                         </div>
