@@ -8,7 +8,6 @@ var app = angular.module('crmEngine', ['googlechart','xeditable', 'ui.bootstrap'
     'crmEngine.profileservices', 'crmEngine.linkedinservices', 'crmEngine.billingservices']);
 //app.js Single page application
 
-
 app.config(function($interpolateProvider){
   $interpolateProvider.startSymbol('<%=');
   $interpolateProvider.endSymbol('%>');

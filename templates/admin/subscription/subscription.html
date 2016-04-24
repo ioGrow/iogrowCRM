@@ -8,11 +8,21 @@
         }
 
         /* Plane selctor Style */
-        .checkout-plan-select label:hover {
+        .checkout-plan-select label {
             background: #cbd7df;
             -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
             -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
             box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+            position: relative;
+            padding: 18px 10px 18px 45px;
+            cursor: pointer;
+            background: #D9E1E5;
+            border-radius: 3px;
+            color: #323b43;
+            font-size: 24px;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            width: 100%;
         }
 
         .checkout-plan-select input[type=radio]:checked + label > i.fa-check-circle {
@@ -22,48 +32,38 @@
         .checkout-plan-select input[type=radio] + label > i.fa-check-circle {
             background: #76b852;
             border-radius: 15px;
-            /* font-size: 11px; */
             height: 18px;
-            left: 11px;
+            left: 12px;
             line-height: 21px;
             opacity: 0;
             pointer-events: none;
             position: absolute;
             text-align: center;
-            top: 22px;
+            top: 26px;
             width: 18px;
             z-index: 1;
         }
 
-        .checkout-plan-select label {
-            position: relative;
-            padding: 4px 15px 8px 45px;
-            margin: 6px 0px;
-            cursor: pointer;
-            background: #eaeff2;
-            border-radius: 3px;
-            color: #323b43;
-            font-size: 24px;
-            font-weight: 400;
-            -webkit-font-smoothing: antialiased;
-            width: 100%;
-        }
-
         .checkout-plan-select .plan-note {
-            display: block;
-            font-size: 12px;
-            font-weight: 400;
+            font-size: 14px;
+            font-weight: 600;
+            float: right;
+            margin-top: 6px;
         }
 
         .plan-option > input[type="radio"] {
             position: absolute;
             z-index: 1;
-            margin-top: 31px;
-            margin-left: 12px;
+            margin-top: 27px;
+            margin-left: 15px;
+        }
+
+        .plan-option {
+            margin-top: 28px;
         }
 
         .checkout-plan-select input[type=radio]:checked + label {
-            background-color: #168eea;
+            background-color: #168EEA;
             color: #fff;
             -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
             -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
@@ -137,6 +137,8 @@
         .cost-message {
             font-weight: 800;
             font-size: 32px;
+            text-transform: uppercase;
+            text-align: center;
         }
 
         .subscribe-btn {
@@ -145,6 +147,15 @@
             -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
             -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
             box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+        }
+
+        .jp-card-container {
+            position: absolute !important;
+            margin: auto !important;
+            top: 0;
+            bottom: 0;
+            border-left: 1px solid #DDD;
+            padding-left: 15px;
         }
     </style>
     <meta charset="UTF-8">
@@ -155,141 +166,154 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
-<div class="container">
-
+<div class="container-fuild col-md-offset-1 col-md-10" style="padding: 0;">
     <div class="page-header">
         <img src="/static/src/img/iogrow-logo-app.png" alt="logo" class="img-responsive">
     </div>
-    <div class="panel panel-default">
-        <!--<div class="page-header">-->
-        <h1 style="text-align: center;margin-bottom: 40px">
-            Pay securely With Your Credit Card
-        </h1>
+    <div class="panel panel-default" style="border: none;">
         <div class="panel-body">
-            <form role="form" id="payment-form">
-                <div class="demo-container row">
-                    <!-- CREDIT CARD FORM STARTS HERE -->
-                    <div class="panel panel-default col-md-4 col-md-offset-1 credit-card-box " style="padding: 0px">
-                        <div class="panel-heading display-table">
-                            <div class="row display-tr">
-                                <h3 class="panel-title display-td">Payment Details</h3>
-                                <div class="display-td">
-                                    <img class="img-responsive pull-right"
-                                         src="http://i76.imgup.net/accepted_c22e0.png">
-                                </div>
-                            </div>
+            <form role="form" id="payment-form" style="margin-top: 110px;">
+                <div class="row">
+                    <div class="checkout-plan-select col-md-4" style="margin-top: 3px;font-size: 28px">
+                        <label style="
+    padding: 3px 15px;
+">
+                            <i class="fa fa-arrow-down" id="minus" style="
+    float: left;
+    color: #168EEA;
+    font-size: 32px;
+    margin-top: 10px;
+"></i>
+                            <input type="hidden" name="quantity" id="quantity" value="{{ users_count }}">
+                            <input type="text" value="{{ users_count }} users" id="users" style="
+    width: 74%;
+    margin-left: 4%;
+    height: 50px;
+    text-align: center;
+">
+                            <i class="fa fa-arrow-up" id="plus" style="
+    float: right;
+    color: #168EEA;
+    font-size: 32px;
+    margin-top: 10px;
+"></i>
+                        </label>
+                        <div class="plan-option">
+                            <input id="month" name="interval" type="radio" value="month">
+                            <label for="month">
+                                <i class="fa fa-check-circle"></i>
+                                <span style="font-weight: 600">${{ month_price }}</span>/user/mo
+                            </label>
                         </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="cardNumber">CARD NUMBER</label>
-                                        <div class="input-group">
-                                            <input type="tel" class="form-control" name="cardNumber" required
-                                                   id="cardNumber" placeholder="Valid Card Number" autofocus
-                                                   autocomplete="cc-number"/>
-                                            <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                        <div class="plan-option">
+                            <input id="year" name="interval" type="radio" value="year" checked="checked">
+                            <label for="year">
+                                <i class="fa fa-check-circle"></i>
+                                <span style="font-weight: 600">${{ year_price }}</span>/user/yr
+                                <div class="plan-note">
+                                    SAVE 16.66%
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- CREDIT CARD FORM STARTS HERE -->
+                    <div class="col-md-4">
+                        <div class="panel panel-default credit-card-box"
+                             style="padding: 10px 0px 0px;box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.16);">
+                            <div style="position: absolute;right: 15px" class="col-xs-12">
+                                <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png"
+                                     style="width: 50%">
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="cardNumber">CARD NUMBER</label>
+                                            <div class="input-group">
+                                                <input type="tel" class="form-control" name="cardNumber" required
+                                                       id="cardNumber" placeholder="Valid Card Number" autofocus
+                                                       autocomplete="cc-number"/>
+                                                <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-7 col-md-7">
-                                    <div class="form-group">
-                                        <label for="cardExpiry"><span class="hidden-xs">EXPIRATION</span><span
-                                                class="visible-xs-inline">EXP</span> DATE</label>
-                                        <input
-                                                type="tel"
-                                                class="form-control"
-                                                name="cardExpiry"
-                                                id="cardExpiry"
-                                                placeholder="MM / YY"
-                                                autocomplete="cc-exp"
-                                                required
-                                        />
+                                <div class="row">
+                                    <div class="col-xs-7 col-md-7">
+                                        <div class="form-group">
+                                            <label for="cardExpiry"><span class="hidden-xs">EXPIRATION</span><span
+                                                    class="visible-xs-inline">EXP</span> DATE</label>
+                                            <input
+                                                    type="tel"
+                                                    class="form-control"
+                                                    name="cardExpiry"
+                                                    id="cardExpiry"
+                                                    placeholder="MM / YY"
+                                                    autocomplete="cc-exp"
+                                                    required
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-5 col-md-5 pull-right">
+                                        <div class="form-group">
+                                            <label for="cardCVC">CV CODE</label>
+                                            <input
+                                                    type="tel"
+                                                    class="form-control"
+                                                    name="cardCVC"
+                                                    id="cardCVC"
+                                                    placeholder="CVC"
+                                                    autocomplete="cc-csc"
+                                                    required/>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-5 col-md-5 pull-right">
-                                    <div class="form-group">
-                                        <label for="cardCVC">CV CODE</label>
-                                        <input
-                                                type="tel"
-                                                class="form-control"
-                                                name="cardCVC"
-                                                id="cardCVC"
-                                                placeholder="CVC"
-                                                autocomplete="cc-csc"
-                                                required/>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="name">Full name</label>
+                                            <input type="text" class="form-control" name="name" id="name"
+                                                   placeholder="First & Last name"/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="name">Full name</label>
-                                        <input type="text" class="form-control" name="name" id="name"
-                                               placeholder="First & Last name"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <button class="subscribe-btn btn btn-success btn-lg btn-block" type="submit">
-                                        Start Subscription
-                                    </button>
-                                </div>
-                            </div>
-                            <input type="hidden" value="{{ user.id }}" id="user-id">
 
-                            <div class="row" style="display:none;">
-                                <div class="col-xs-12">
-                                    <p class="payment-errors"></p>
+                                <input type="hidden" value="{{ user.id }}" id="user-id">
+
+                                <div class="row" style="display:none;">
+                                    <div class="col-xs-12">
+                                        <p class="payment-errors"></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- CREDIT CARD FORM ENDS HERE -->
-                    <div class="col-md-4 col-md-offset-2">
+                    <div class="col-md-4" style="height: 254px; padding: 0px">
                         <div class="card-wrapper"></div>
-                        <div class="checkout-plan-select" style="margin-top: 10px">
-                            <div class="plan-option">
-                                <input id="month" name="interval" type="radio" value="month">
-                                <label for="month">
-                                    <i class="fa fa-check-circle"></i>
-                                    ${{ month_price }}/user/mo
-                                    <div class="plan-note">
-
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="plan-option">
-                                <input id="year" name="interval" type="radio" value="year" checked="checked">
-                                <label for="year">
-                                    <i class="fa fa-check-circle"></i>
-                                    ${{ year_price }}/user/yr
-                                    <div class="plan-note">
-                                        Save 16.66% vs. paying monthly
-                                    </div>
-                                </label>
-                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-10" style="    border-top: 1px solid rgb(169, 169, 169);
+    margin-top: 20px;
+    padding-top: 25px;">
+                        <div class="col-md-6 cost-message" style="margin-top: 21px;">Total cost : <span
+                                id="total-cost"></span>$</div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <button class="subscribe-btn btn btn-success btn-lg btn-block" type="submit" style="
+    text-transform: uppercase;
+    padding: 30px 27px;
+    border: none;
+    border-radius: 3px;
+    font-weight: 900;
+    font-size: 22px;
+">
+                                Start Subscription
+                            </button>
                         </div>
                     </div>
                 </div>
             </form>
-            <div class="row cost-box">
-                <div class="row">
-                    <!--<p>You have {{ users_count }} user{% if users_count != 1 %}
-                            s{% endif %} in your organization</p>-->
-                    <p>How much of licences you want to buy </p>
-                    <div class="col-sm-4 col-sm-offset-4">
-                        <input type="number" class="form-control" name="quantity" id="quantity"
-                               placeholder="How match of licences you want to buy" value="{{ users_count }}"
-                               style="text-align: center;font-size: 18px">
-                    </div>
-                </div>
-                <hr>
-                <span class="cost-message">Total cost : <span id="total-cost"></span>$</span>
-            </div>
         </div>
     </div>
 
@@ -314,7 +338,20 @@
             nameInput: 'input#name' // optional - defaults input[name="name"]
         }
     });
-
+    $('#minus').click(function () {
+        var quantity = $('#quantity');
+        if (parseInt(quantity.val()) > 1) {
+            quantity.val(parseInt(quantity.val()) - 1);
+            $('#users').val(quantity.val() + ' users');
+            writeNewTotalCost();
+        }
+    });
+    $('#plus').click(function () {
+        var quantity = $('#quantity');
+        quantity.val(parseInt(quantity.val()) + 1);
+        $('#users').val(quantity.val() + ' users');
+        writeNewTotalCost();
+    });
     $form.on('submit', payWithStripe);
     var users_count = parseInt({{ users_count }});
     var month_price = parseInt({{ month_price }});
