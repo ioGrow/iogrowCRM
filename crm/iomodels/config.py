@@ -36,6 +36,3 @@ if "SERVER_SOFTWARE" in os.environ:
         PUBLISHABLE_KEY = "pk_live_4Xa3cFwLO3vTgdjpjnC6gmAD"
     else:
         raise ValueError("Environment undetected")
-
-STRIPE_API_KEY = "sk_test_9WaLpLhVb0W9tKInz6Bs6x6l"
-PUBLISHABLE_KEY = "pk_test_A8tZ6tBoVb7MHJpTOJLsTEXD"
