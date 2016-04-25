@@ -31,13 +31,13 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
                 ;
             } else {
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
 
@@ -204,7 +204,7 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
                     'order': '-updated_at',
                 }
             }
-            $scope.currentPagecomment = $scope.currentPagecomment + 1;
+            $scope.currentPagecomment += 1;
             Comment.list($scope, params);
         }
 
@@ -226,7 +226,7 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
                     'discussion': $scope.eventt.entityKey
                 }
             }
-            $scope.currentPagecomment = $scope.currentPagecomment - 1;
+            $scope.currentPagecomment -= 1;
             Comment.list($scope, params);
         };
 
@@ -589,13 +589,13 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
                 ;
             } else {
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
 
@@ -776,7 +776,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                                 if ($scope.calendarFeeds) {
 
                                     for (var i = 0; i < $scope.calendarFeeds.length; i++) {
-                                        var allday = ($scope.calendarFeeds[i].allday == "false") ? false : true;
+                                        var allday = ($scope.calendarFeeds[i].allday != "false");
 
                                         var url = ($scope.calendarFeeds[i].my_type == "event") ? '/#/events/show/' : '/#/tasks/show/';
                                         var backgroundColor = ($scope.calendarFeeds[i].status_label == "closed") ? "" : $scope.calendarFeeds[i].backgroundColor;
@@ -1117,7 +1117,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
             var offset4index = parseInt(timezone4index) - parseInt(eventTimezone4index)
             var offset = (parseInt($scope.timezone) + (parseInt($scope.timezone) - parseInt(eventTimezone))) % 13;
             if (offset.toString().length == 1) {
-                offsetStr = offsetStr + offset.toString();
+                offsetStr += offset.toString();
             } else {
                 offsetStr = offset.toString();
             }
@@ -1172,11 +1172,8 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
                 function (event) {
 
-                    if (event.title == "New Event") {
+                    return event.title == "New Event";
 
-                        return true;
-                    }
-                    return false;
                 }
             );
             $scope.start_event = "";
@@ -1279,11 +1276,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
 
         $scope.checkGuests = function () {
-            if ($scope.invites.length != 0) {
-                $scope.Guest_params = true;
-            } else {
-                $scope.Guest_params = false;
-            }
+            $scope.Guest_params = $scope.invites.length != 0;
         }
         $scope.checkallday = function () {
             $scope.updateAlldayOption();
@@ -1567,7 +1560,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
             var events = $('#calendar').fullCalendar('clientEvents', ["new"]);
             $('#calendar').fullCalendar('removeEvents', ["new"])
-            var allday = ($scope.justadded.allday == "false") ? false : true;
+            var allday = ($scope.justadded.allday != "false");
             var eventObject = {
                 id: $scope.justadded.id,
                 entityKey: $scope.justadded.entityKey,
@@ -1628,7 +1621,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                     'order': '-updated_at',
                 }
             }
-            $scope.currentPagecomment = $scope.currentPagecomment + 1;
+            $scope.currentPagecomment += 1;
             Comment.list($scope, params);
         }
 
@@ -1650,7 +1643,7 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                     'discussion': $scope.eventt.entityKey
                 }
             }
-            $scope.currentPagecomment = $scope.currentPagecomment - 1;
+            $scope.currentPagecomment -= 1;
             Comment.list($scope, params);
         };
 

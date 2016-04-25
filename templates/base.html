@@ -33,7 +33,7 @@
      <link href="static/vendor/css/light.css" rel="stylesheet" type="text/css"/>
      <link href="static/vendor/css/select2_metro.css" rel="stylesheet" type="text/css"/>
      <link href="static/vendor/css/lionbars.css" rel="stylesheet" type="text/css"/>
-    <link href="/static/src/css/bootstrap3_test.css" rel="stylesheet" type="text/css"/>
+     <link href="/static/src/css/bootstrap3_test.css" rel="stylesheet" type="text/css"/>
     <!--  end GLOBAL CSS Sync Files -->
     <link rel="stylesheet" href="/static/build/css/admin.css">
     <!-- start Mixpanel -->
@@ -50,7 +50,6 @@
                             b.push([h].concat(Array.prototype.slice.call(arguments, 0)))
                         }
                     }
-
                     var c = b;
                     "undefined" !== typeof d ? c = b[d] = [] : d = "mixpanel";
                     c.people = c.people || [];
@@ -326,8 +325,8 @@
                      style="width: 30%;float: left;margin-top: 25px;">
                 <div style="width: 70%;float: left;padding: 6px 5%;font-weight: 300;">
                     <h3 style="font-family: Ubuntu, sans-serif;font-weight: 400 !important;">
-                        {% if plan.name=='freemium' %} Freemium Limit Reahed
-                        {% elif plan.name=='premium' %} You subscription has expired.{% endif %}
+                        {% if plan.name=='freemium' %} Freemium Limit Reached
+                        {% elif plan.name=='premium' %} Your subscription has expired.{% endif %}
                     </h3>
                     <p style="font-size: 18px;">
                         You have reached your monthly records limit of your freemium account.

@@ -43,14 +43,7 @@ accountservices.factory('Auth', function($http) {
       if(Auth.user_suspended =="True" &&  window.location.hash !="#/admin/users"){
           Auth.suspended=true;
           window.location.replace("#/admin/users");
-        }else if(Auth.user_suspended =="True" &&  window.location.hash =="#/admin/users"){
-           Auth.suspended=true;
-        
-
-        }else{
-           Auth.suspended=false;
- 
-        } 
+        }else Auth.suspended = (Auth.user_suspended == "True" && window.location.hash == "#/admin/users");
               
         Auth.$scope.runTheProcess();
       }
@@ -104,14 +97,7 @@ accountservices.factory('Auth', function($http) {
                   if(Auth.user_suspended =="True" &&  window.location.hash !="#/admin/users"){
           Auth.suspended=true;
           window.location.replace("#/admin/users");
-        }else if(Auth.user_suspended =="True" &&  window.location.hash =="#/admin/users"){
-           Auth.suspended=true;
-        //window.location.replace('https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://www.iogrow.com/welcome/')
-
-        }else{
-           Auth.suspended=false;
- 
-        } 
+        }else Auth.suspended = (Auth.user_suspended == "True" && window.location.hash == "#/admin/users");
               
         Auth.$scope.runTheProcess();
       }
@@ -136,15 +122,7 @@ accountservices.factory('Auth', function($http) {
               if(Auth.user_suspended =="True" &&  window.location.hash !="#/admin/users"){
           Auth.suspended=true;
           window.location.replace("#/admin/users");
-        }else if(Auth.user_suspended =="True" &&  window.location.hash =="#/admin/users"){
-           Auth.suspended=true;
-          
-
-
-        }else{
-           Auth.suspended=false;
- 
-        } 
+        }else Auth.suspended = !!(Auth.user_suspended == "True" && window.location.hash == "#/admin/users");
 
         Auth.$scope.runTheProcess();
       }
@@ -184,7 +162,7 @@ accountservices.factory('Auth', function($http) {
       if (!window.countInitExec){
           window.countInitExec = 1;
       }else{
-          window.countInitExec = window.countInitExec+1;
+          window.countInitExec += 1;
           var timeNow = new Date().getTime()/1000;
           Auth.$scope = $scope;
           Auth.license_is_expired= document.getElementById("license_is_expired").value;

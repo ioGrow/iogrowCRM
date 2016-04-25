@@ -26,14 +26,14 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
      };    
     $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
              var d = new Date();
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
             var d = new Date();
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
 
@@ -56,22 +56,7 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
           /// $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
         };
     }
-    $scope.linkedinSearchSwitch=function(){
 
-        if ($scope.linkedSearch) {
-          if ($scope.iogrowSearch) {
-             $scope.linkedSearch=false;
-              $rootScope.linkedSearch=false;
-               localStorage['linkedSearch']=false;
-          };
-         
-        }else{
-           $scope.linkedSearch=true;
-           localStorage['linkedSearch']=true;
-            $rootScope.linkedSearch=true;
-        };
-
-    }
  // HADJI HICHAM - 08/02/2015
   $scope.createPickerUploader= function(){
 

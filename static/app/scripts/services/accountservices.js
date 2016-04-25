@@ -87,12 +87,7 @@ accountservices.factory('Account', function($rootScope) {
                         });
                         $scope.contacts = resp.contacts.items;
                     }
-                    if ($scope.contactCurrentPage > 1) {
-                        $scope.contactpagination.prev = true;
-                    } else {
-
-                        $scope.contactpagination.prev = false;
-                    }
+                    $scope.contactpagination.prev = $scope.contactCurrentPage > 1;
                     if (resp.contacts.nextPageToken) {
                         var nextPage = $scope.contactCurrentPage + 1;
                         // Store the nextPageToken
@@ -165,11 +160,7 @@ accountservices.factory('Account', function($rootScope) {
                         $scope.topics = resp.topics.items;
                     }
 
-                    if ($scope.topicCurrentPage > 1) {
-                        $scope.topicpagination.prev = true;
-                    } else {
-                        $scope.topicpagination.prev = false;
-                    }
+                    $scope.topicpagination.prev = $scope.topicCurrentPage > 1;
                     if (resp.topics.nextPageToken) {
                         var nextPage = $scope.topicCurrentPage + 1;
                         // Store the nextPageToken
@@ -193,11 +184,7 @@ accountservices.factory('Account', function($rootScope) {
                     else {
                         $scope.opportunities = resp.opportunities.items;
                     }
-                    if ($scope.oppCurrentPage > 1) {
-                        $scope.opppagination.prev = true;
-                    } else {
-                        $scope.opppagination.prev = false;
-                    }
+                    $scope.opppagination.prev = $scope.oppCurrentPage > 1;
                     if (resp.opportunities.nextPageToken) {
                         var nextPage = $scope.oppCurrentPage + 1;
                         // Store the nextPageToken
@@ -224,11 +211,7 @@ accountservices.factory('Account', function($rootScope) {
                     else {
                         $scope.cases = resp.cases.items;
                     }
-                    if ($scope.caseCurrentPage > 1) {
-                        $scope.casepagination.prev = true;
-                    } else {
-                        $scope.casepagination.prev = false;
-                    }
+                    $scope.casepagination.prev = $scope.caseCurrentPage > 1;
                     if (resp.cases.nextPageToken) {
                         var nextPage = $scope.caseCurrentPage + 1;
                         // Store the nextPageToken
@@ -256,11 +239,7 @@ accountservices.factory('Account', function($rootScope) {
                         $scope.documents = resp.documents.items;
                     }
 
-                    if ($scope.documentCurrentPage > 1) {
-                        $scope.documentpagination.prev = true;
-                    } else {
-                        $scope.documentpagination.prev = false;
-                    }
+                    $scope.documentpagination.prev = $scope.documentCurrentPage > 1;
                     if (resp.documents.nextPageToken) {
 
                         var nextPage = $scope.documentCurrentPage + 1;
@@ -436,11 +415,7 @@ accountservices.factory('Account', function($rootScope) {
                     $scope.filterNoResult=false;
                 }
                 $scope.accounts = resp.items;
-                if ($scope.currentPage > 1) {
-                    $scope.pagination.prev = true;
-                } else {
-                    $scope.pagination.prev = false;
-                }
+                $scope.pagination.prev = $scope.currentPage > 1;
                 if (resp.nextPageToken) {
                     var nextPage = $scope.currentPage + 1;
                     // Store the nextPageToken
@@ -522,11 +497,7 @@ accountservices.factory('Account', function($rootScope) {
                     $scope.accounts.push(item);
                 });
 
-                if ($scope.currentPage > 1) {
-                    $scope.pagination.prev = true;
-                } else {
-                    $scope.pagination.prev = false;
-                }
+                $scope.pagination.prev = $scope.currentPage > 1;
                 if (resp.nextPageToken) {
                     var nextPage = $scope.currentPage + 1;
                     // Store the nextPageToken
@@ -796,11 +767,7 @@ accountservices.factory('Search', function($http) {
                             result.url = url;
                             $scope.searchResults.push(result);
                         });
-                        if ($scope.currentPage > 1) {
-                            $scope.pagination.prev = true;
-                        } else {
-                            $scope.pagination.prev = false;
-                        }                       
+                        $scope.pagination.prev = $scope.currentPage > 1;
                         if (resp.nextPageToken) {
                             var nextPage = $scope.currentPage + 1;
                             $scope.pages[nextPage] = resp.nextPageToken;
@@ -880,11 +847,7 @@ accountservices.factory('Attachement', function($http) {
                     }
                 }
                 $scope.documents = resp.items;
-                if ($scope.documentCurrentPage > 1) {
-                    $scope.documentpagination.prev = true;
-                } else {
-                    $scope.documentpagination.prev = false;
-                }
+                $scope.documentpagination.prev = $scope.documentCurrentPage > 1;
                 if (resp.nextPageToken) {
                     var nextPage = $scope.documentCurrentPage + 1;
                     // Store the nextPageToken

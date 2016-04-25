@@ -31,12 +31,12 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
      $scope.newDoc=true;
      $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -146,7 +146,7 @@ var taskid = {'id':$route.current.params.taskId};
                       'discussion':$scope.task.entityKey,
                       'order':'-updated_at',}
           }
-          $scope.currentPagecomment = $scope.currentPagecomment + 1 ;
+          $scope.currentPagecomment += 1 ;
           Comment.list($scope,params);
      }
      $scope.listPrevPageItemscomment = function(){
@@ -164,7 +164,7 @@ var taskid = {'id':$route.current.params.taskId};
             'order':'-updated_at',
             'discussion':$scope.task.entityKey}
           }
-          $scope.currentPagecomment = $scope.currentPagecomment - 1 ;
+          $scope.currentPagecomment -= 1 ;
           Comment.list($scope,params);
      }
 
@@ -382,7 +382,7 @@ $scope.commentDelete=function(commentId){
       if (task.due){
 
             var dueDate= $filter('date')(task.due,['yyyy-MM-dd']);
-            dueDate = dueDate +'T00:00:00.000000'
+            dueDate += 'T00:00:00.000000'
             params ={ 'id':$scope.task.id,
                       'title': task.title,
                       'due': dueDate,
@@ -407,7 +407,7 @@ $scope.commentDelete=function(commentId){
   $scope.inlinePatch=function(kind,edge,name,task,value){
        
    if (kind=='Task') {
-       if (name='title')
+       if (name=='title')
           {params = {'id':$scope.task.id,
                       'entityKey':task.entityKey,
                       'due':moment(task.due).format('YYYY-MM-DDTHH:mm:00.000000'),
@@ -707,13 +707,13 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       $scope.inProcess=function(varBool,message){
           if (varBool) {           
 
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
 
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -741,11 +741,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
       $('.typeahead').width(433);
       handleColorPicker();
         $scope.isBlankState=function(tasks){
-          if (typeof tasks !== 'undefined' && tasks.length > 0) {
-            return false;
-          }else{
-            return true
-          }
+          return !(typeof tasks !== 'undefined' && tasks.length > 0);
         }
    
          $scope.gotoNewUser=function(){
@@ -1032,7 +1028,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           }else{
             params = {'order' : $scope.order,'limit':7}
           }
-          $scope.currentPage = $scope.currentPage + 1 ;
+          $scope.currentPage += 1 ;
           Account.list($scope,params);
      };
      $scope.listPrevPageItems = function(){
@@ -1046,7 +1042,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           }else{
             params = {'order' : $scope.order,'limit':7}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.currentPage -= 1 ;
           Account.list($scope,params);
      };
      // Add a new account methods
@@ -1503,7 +1499,7 @@ $scope.selectTag= function(tag,index,$event){
                       'order' : $scope.order,
                       'pageToken':$scope.pages[nextPage]
                     }
-            $scope.currentPage = $scope.currentPage + 1 ;
+            $scope.currentPage += 1 ;
             Task.listMore($scope,params);
         }
       };

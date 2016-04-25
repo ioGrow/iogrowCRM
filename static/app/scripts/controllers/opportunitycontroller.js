@@ -99,11 +99,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
       $scope.opportunitystage.items=[];
       $scope.opportunitiesbysatges=[];
        $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
 
@@ -115,10 +111,8 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                       });*/
 
       $scope.isStage = function(stage) {
-        if (stage.probability == 0 || stage.probability == 100) {
-          return false;
-        }
-        return true;
+        return !(stage.probability == 0 || stage.probability == 100);
+
       };
       $scope.ExportCsvFile = function () {
             if ($scope.selectedCards.length != 0) {
@@ -270,12 +264,12 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
       }
       $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -358,11 +352,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                         $scope.oppStagesOrigin.push(item);
                       };
                   });     
-                 if ($scope.oppCurrentPage>1){
-                      $scope.opppagination.prev = true;
-                   }else{
-                       $scope.opppagination.prev = false;
-                   }
+                 $scope.opppagination.prev = $scope.oppCurrentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.oppCurrentPage + 1;
                    // Store the nextPageToken
@@ -747,7 +737,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           }else{
             params = {'order' : $scope.order,'limit':6}
           }
-          $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
+          $scope.oppCurrentPage += 1 ;
           Opportunity.list($scope,params);
      }
      $scope.listMoreItems = function(){
@@ -759,7 +749,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
                       'limit':20,
                       'pageToken':$scope.opppages[nextPage]
                      }
-            $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
+            $scope.oppCurrentPage += 1 ;
             Opportunity.listMore($scope,params);
           }
 
@@ -775,7 +765,7 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
           }else{
             params = {'order' : $scope.order,'limit':6}
           }
-          $scope.oppCurrentPage = $scope.oppCurrentPage - 1 ;
+          $scope.oppCurrentPage -= 1 ;
           Opportunity.list($scope,params);
      }
 
@@ -1466,12 +1456,12 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
        };
       $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -2004,11 +1994,7 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
 //  
 
   $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
 
@@ -2138,7 +2124,7 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-            $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+            $scope.topicCurrentPage += 1 ;
             Opportunity.get($scope,params);
             }
 
@@ -2264,11 +2250,7 @@ $scope.deleteInvite=function(index){
 }
 
 $scope.checkGuests=function(){
-   if($scope.invites.length !=0){
-   $scope.Guest_params=true;
- }else{
-  $scope.Guest_params=false;
- }
+   $scope.Guest_params = $scope.invites.length != 0;
 }
 
 
@@ -2707,7 +2689,7 @@ $scope.deleteopportunity= function(){
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
-            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+            $scope.documentCurrentPage += 1 ;
 
             Opportunity.get($scope,params);
 
@@ -3071,12 +3053,12 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
       $scope.opportunities.customfields=[];
       $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -3270,11 +3252,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
 
 
   $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
       $scope.prepareInfonodes = function(){
@@ -3447,14 +3425,10 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
         $('#newEventModalForm').modal("show");  
       }
       $scope.validateBeforeSave=function(opportunity){
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
-          if (!$scope.searchAccountQuery) $scope.oppo_err.account=true;
-            else $scope.oppo_err.account=false;
-          if (!$scope.searchContactQuery) $scope.oppo_err.contact=true;
-            else $scope.oppo_err.contact=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
+          $scope.oppo_err.account = !$scope.searchAccountQuery;
+          $scope.oppo_err.contact = !$scope.searchContactQuery;
           if (!$scope.oppo_err.name && !$scope.oppo_err.amount_per_unit && !($scope.oppo_err.account && $scope.oppo_err.contact) )  $scope.save(opportunity)
       }
       $scope.save = function(opportunity){
@@ -3799,18 +3773,18 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
                          prof.created_at=resp.created_at
                          prof.description_of_user=resp.description_of_user;
                          prof.followers_count=resp.followers_count;
-                         prof.friends_count=resp.friends_count; 
-                         prof.id=resp.id; 
-                         prof.lang=resp.lang; 
-                         prof.language=resp.language; 
-                         prof.last_tweet_favorite_count=resp.last_tweet_favorite_count; 
-                         prof.last_tweet_retweet_count=resp.last_tweet_retweet_count; 
-                         prof.last_tweet_text=resp.last_tweet_text; 
-                         prof.location=resp.location; 
-                         prof.nbr_tweets=resp.nbr_tweets; 
-                         prof.profile_banner_url=resp.profile_banner_url+'/1500x500'; 
-                         prof.profile_image_url_https=resp.profile_image_url_https; 
-                         prof.url_of_user_their_company=resp.url_of_user_their_company; 
+                         prof.friends_count=resp.friends_count;
+                         prof.id=resp.id;
+                         prof.lang=resp.lang;
+                         prof.language=resp.language;
+                         prof.last_tweet_favorite_count=resp.last_tweet_favorite_count;
+                         prof.last_tweet_retweet_count=resp.last_tweet_retweet_count;
+                         prof.last_tweet_text=resp.last_tweet_text;
+                         prof.location=resp.location;
+                         prof.nbr_tweets=resp.nbr_tweets;
+                         prof.profile_banner_url=resp.profile_banner_url+'/1500x500';
+                         prof.profile_image_url_https=resp.profile_image_url_https;
+                         prof.url_of_user_their_company=resp.url_of_user_their_company;
                          prof.url=url;
                          $scope.twShortProfiles.push(prof);
                          $scope.twIsLoading=false;
@@ -3849,36 +3823,20 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
                 $scope.imageSrc=$scope.twProfile.profile_image_url_https;
                 $scope.profile_img.profile_img_url = $scope.twProfile.profile_image_url_https;
               };
-              /*$scope.imageSrc = $scope.twProfile.profile_picture;*/
-            //  $scope.profile_img.profile_img_url = $scope.twProfile.profile_picture;
-              /*$scope.lead.source='Linkedin';
-              $scope.lead.industry=''
-              if (!$scope.lead.title) {
-                $scope.lead.title = $scope.twProfile.title;
-              };
-              if($scope.twProfile.current_post){
-                    if ($scope.twProfile.current_post[0]){
-                        $scope.lead.company = $scope.twProfile.current_post[0];
-                    }
-                  }
-              */
-              /*if ($scope.twProfile.location!=''&&$scope.twProfile.location!=null) {*/
                if (!$scope.addressModel) {
-                    $scope.addressModel=$scope.twProfile.location; 
+                    $scope.addressModel=$scope.twProfile.location;
                   }else{
                     if ($scope.addressModel.length < $scope.twProfile.location.length) {
-                      $scope.addressModel=$scope.twProfile.location;  
+                      $scope.addressModel=$scope.twProfile.location;
                     };
                   };
-              
-                 // $scope.addGeo({'formatted':$scope.twProfile.location});
-              /*};*/
+
               $scope.apply();
           }
 
             $scope.prepareUrl=function(url){
                     var pattern=/^[a-zA-Z]+:\/\//;
-                     if(!pattern.test(url)){                        
+                     if(!pattern.test(url)){
                          url = 'http://' + url;
                      }
                      return url;
@@ -3887,11 +3845,7 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
           return jQuery.isEmptyObject(obj);
         }
         $scope.isEmptyArray=function(Array){
-                  if (Array!=undefined && Array.length>0) {
-                  return false;
-                  }else{
-                      return true;
-                  };    
+                  return !(Array != undefined && Array.length > 0);;
               
           }
         //HKA 10.11.2013 Add event

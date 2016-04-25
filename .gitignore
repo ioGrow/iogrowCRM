@@ -2,7 +2,8 @@
 *.py[cod]
 node_modules/*
 static/build/*
-.idea/
+libx/*
+.idea/*
 # C extensions
 *.so
 *.DS_Store
@@ -38,4 +39,3 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
-.idea/*

@@ -343,8 +343,8 @@ mapservices.factory('Map', function($http) {
     if (entry==undefined){
       entry = ' ';
     }
-    if(isLast=false){
-      entry = entry + ',';
+    if(isLast==false){
+      entry += ',';
     }
     return entry
   }

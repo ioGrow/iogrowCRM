@@ -102,12 +102,12 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
       $scope.inProcess=function(varBool,message){
         
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -489,7 +489,7 @@ $scope.selectMember = function(){
           }else{
             params = {'order' : $scope.order,'limit':6}
           }
-          $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
+          $scope.caseCurrentPage += 1 ;
           Case.list($scope,params);
      };
      $scope.listMoreItems = function(){
@@ -498,7 +498,7 @@ $scope.selectMember = function(){
           if ($scope.casepages[nextPage]){
             var params = $scope.getRequestParams();
             params.pageToken=$scope.casepages[nextPage];
-            $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
+            $scope.caseCurrentPage += 1 ;
             Case.listMore($scope,params);
           }
      }
@@ -513,7 +513,7 @@ $scope.selectMember = function(){
           }else{
             params = {'order' : $scope.order,'limit':6}
           }
-          $scope.caseCurrentPage = $scope.caseCurrentPage - 1 ;
+          $scope.caseCurrentPage -= 1 ;
           Case.list($scope,params);
      }
 
@@ -1091,12 +1091,12 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
 
      $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -1404,11 +1404,7 @@ $scope.lunchMapsCalendar=function(){
 
     // 
        $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
      $scope.TopiclistNextPageItems = function(){
@@ -1424,7 +1420,7 @@ $scope.lunchMapsCalendar=function(){
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-            $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+            $scope.topicCurrentPage += 1 ;
             Case.get($scope,params);
             }
 
@@ -1617,10 +1613,7 @@ $scope.showAddEventPopup=function(){
        }
 
 // HADJI HICHAM 31/05/2015
-//auto complete 
-
-//auto complete 
-
+//auto complete
      var invitesparams ={};
      $scope.inviteResults =[];
      $scope.inviteResult = undefined;
@@ -1633,7 +1626,6 @@ $scope.$watch('invite', function(newValue, oldValue) {
            invitesparams['q'] = $scope.invite;
            gapi.client.crmengine.autocomplete(invitesparams).execute(function(resp) {
               if (resp.items){
-          
                 $scope.filterInviteResult(resp.items);
                 $scope.$apply();
               };
@@ -1699,11 +1691,7 @@ $scope.deleteInvite=function(index){
 }
 
 $scope.checkGuests=function(){
-   if($scope.invites.length !=0){
-   $scope.Guest_params=true;
- }else{
-  $scope.Guest_params=false;
- }
+   $scope.Guest_params = $scope.invites.length != 0;
 }
 
 
@@ -2121,7 +2109,7 @@ $scope.deletecase = function(){
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
-            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+            $scope.documentCurrentPage += 1 ;
 
             Case.get($scope,params);
 
@@ -2448,12 +2436,12 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
             }
       $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -2499,11 +2487,7 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
             $scope.apply(); 
         }
         $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
         $scope.addCustomField = function (customField,option) {  

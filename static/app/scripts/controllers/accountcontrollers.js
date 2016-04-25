@@ -59,11 +59,7 @@
         $scope.filterNoResult=false;
         $scope.owner=null;
        $scope.isEmptyArray = function (Array) {
-            if (Array != undefined && Array.length > 0) {
-                return false;
-            } else {
-                return true;
-            };
+            return !(Array != undefined && Array.length > 0);;
         }
         $scope.accountFilterBy=function(filter,assignee){
             if ($scope.accountsfilter!=filter) {
@@ -106,12 +102,12 @@
         };
         $scope.inProcess=function(varBool,message){
           if (varBool) {   
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             }
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
             }
@@ -865,7 +861,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
             } else {
                 params = {'order': $scope.order, 'limit': 6}
             }
-            $scope.currentPage = $scope.currentPage + 1;
+            $scope.currentPage += 1;
             Account.list($scope, params);
         };
         $scope.listMoreItems = function() {
@@ -875,7 +871,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
             if ($scope.pages[nextPage]) {
                 params = $scope.getRequestParams();
                 params.pageToken=$scope.pages[nextPage];
-                $scope.currentPage = $scope.currentPage + 1;
+                $scope.currentPage += 1;
                 Account.listMore($scope, params);
             }
 
@@ -891,7 +887,7 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
             } else {
                 params = {'order': $scope.order, 'limit': 6}
             }
-            $scope.currentPage = $scope.currentPage - 1;
+            $scope.currentPage -= 1;
             Account.list($scope, params);
         };
         // Add a new account methods
@@ -1438,14 +1434,14 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
 
         $scope.inProcess=function(varBool,message){
           if (varBool) {  
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
              var d = new Date();
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
             var d = new Date();
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -1482,11 +1478,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         return jQuery.isEmptyObject(obj);
       }
       $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
         $scope.prepareInfonodes = function(){
@@ -1670,7 +1662,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                var par={'url' : url};
                Linkedin.getCompany(par,function(resp){
                       if(!resp.code){
-                       var prof={};                       
+                       var prof={};
                        prof.company_size=resp.company_size;
                        prof.headquarters=resp.headquarters;
                        prof.followers=resp.followers;
@@ -1682,9 +1674,9 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                        prof.top_image=resp.top_image;
                        prof.type=resp.type;
                        prof.url=resp.url;
-                       prof.website=resp.website; 
+                       prof.website=resp.website;
                        prof.workers=JSON.parse(resp.workers);
-                       $scope.inShortProfiles.push(prof);   
+                       $scope.inShortProfiles.push(prof);
                        $scope.inIsLoading=false;
                        $scope.apply();
                       }else {
@@ -1696,51 +1688,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
                    });
             }
 
-          /*$scope.getLinkedinByUrl=function(url){
-               $scope.linkedLoader=true;
-               var par={'url' : url};
-               Linkedin.getCompany(par,function(resp){
-                      if(!resp.code){
-                       $scope.linkedShortProfile={};
-                       $scope.linkedShortProfile.company_size=resp.company_size;
-                       $scope.linkedShortProfile.headquarters=resp.headquarters;
-                       $scope.linkedShortProfile.followers=resp.followers;
-                       $scope.linkedShortProfile.founded=resp.founded;
-                       $scope.linkedShortProfile.industry=resp.industry;
-                       $scope.linkedShortProfile.logo=resp.logo;
-                       $scope.linkedShortProfile.name=resp.name;
-                       $scope.linkedShortProfile.summary=resp.summary;
-                       $scope.linkedShortProfile.top_image=resp.top_image;
-                       $scope.linkedShortProfile.type=resp.type;
-                       $scope.linkedShortProfile.url=resp.url;
-                       $scope.linkedShortProfile.website=resp.website; 
-                       $scope.linkedShortProfile.workers=JSON.parse(resp.workers); 
-                       if (!$scope.isEmpty($scope.account.contacts)) {
-                          angular.forEach($scope.linkedProfile.workers, function(worker){
-                              angular.forEach($scope.account.contacts.items, function(contact){
-                                  var exists = ((worker.firstname==contact.firstname)&&(worker.lastname==contact.lastname))||((worker.firstname==contact.lastname)&&(worker.lastname==contact.firstname));
-                                  if (exists) {
-                                    $scope.linkedProfile.workers.splice($scope.linkedProfile.workers.indexOf(worker), 1);
-                                  };
-                              }); 
-                          });      
-                       }else{
-                        console.log("is empty");
-                       };
-                       $scope.linkedLoader=false;
-                       $scope.apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          // $scope.refreshToken();
-                         console.log("no resp");
-                          $scope.linkedLoader=false;
-                          $scope.apply();
-                         };
-                      }
-                   });
-            }*/
- 
+
 
             $scope.getLinkedinProfile=function(){
                   var params={
@@ -1794,100 +1742,6 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             }
 
 
-/*
-            $scope.getLinkedinProfile=function(){
-                var params={
-                 "company":$scope.account.name
-                }
-                var linkedurl=null
-                if ($scope.infonodes.sociallinks==undefined) {
-                  $scope.infonodes.sociallinks=[];
-                };
-                var savedEntityKey=null;
-                if ($scope.infonodes.sociallinks.length > 0) {
-                   angular.forEach($scope.infonodes.sociallinks, function(link){
-
-                                    if ($scope.linkedinUrl(link.url)) {
-                                      linkedurl=link.url;
-                                      savedEntityKey=link.entityKey;
-                                    };
-                                });
-                };
-                if (linkedurl) {
-                    var par={'url' : linkedurl};
-                   Linkedin.getCompany(par,function(resp){
-                      if(!resp.code){
-                       $scope.linkedProfile={};
-                       $scope.linkedProfile.company_size=resp.company_size;
-                       $scope.linkedProfile.entityKey=savedEntityKey;
-                       $scope.linkedProfile.headquarters=resp.headquarters;
-                       $scope.linkedProfile.followers=resp.followers;
-                       $scope.linkedProfile.founded=resp.founded;
-                       $scope.linkedProfile.industry=resp.industry;
-                       $scope.linkedProfile.logo=resp.logo;
-                       $scope.linkedProfile.name=resp.name;
-                       $scope.linkedProfile.summary=resp.summary;
-                       $scope.linkedProfile.top_image=resp.top_image;
-                       $scope.linkedProfile.type=resp.type;
-                       $scope.linkedProfile.url=resp.url;
-                       $scope.linkedProfile.website=resp.website;
-                      /* $scope.linkedProfile.workers=JSON.parse(resp.workers);
-                       $scope.linkedContacts=JSON.parse(resp.workers);
-                       $scope.linkedProfile.workers=[];
-                       if (!$scope.isEmpty($scope.account.contacts)) {
-                          angular.forEach($scope.linkedContacts, function(worker){    
-                              var contactExist=false;                       
-                              angular.forEach($scope.account.contacts.items, function(contact){
-                                  var exists = ((worker.firstname==contact.firstname)&&(worker.lastname==contact.lastname))||((worker.firstname==contact.lastname)&&(worker.lastname==contact.firstname));
-                                  if (exists) {
-                                    contactExist=true;                                   
-                                  };
-                              }); 
-                              if (!contactExist) {
-                                 $scope.linkedProfile.workers.push(worker);
-                              };
-                          });      
-                       }else{
-                        $scope.linkedProfile.workers=$scope.linkedContacts;
-                       }; 
-                       $scope.linkedLoader=false;
-                       $scope.isLoading = false;
-                       $scope.apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          // $scope.refreshToken();
-                         console.log("no resp");
-                          $scope.isLoading = false;
-                          $scope.apply();
-                         };
-                      }
-                   });
-                }else{
-                  Linkedin.listCompanies(params,function(resp){
-                   if(!resp.code){
-                    if (resp.items==undefined) {
-                      $scope.listPeople=[];
-                      $scope.noLinkedInResults=true;
-                    }else{
-                      $scope.listPeople=resp.items;
-                      //$scope.hilightLinkedin();
-                    };
-                       $scope.isLoading = false;
-                       $scope.$apply();
-                      }else {
-                        console.log("no 401");
-                         if(resp.code==401){
-                          // $scope.refreshToken();
-                         console.log("no resp");
-                          $scope.isLoading = false;
-                          $scope.$apply();
-                         };
-                      }
-                });            
-                };
-
-            }*/
       $scope.deleteSocialLink = function(link,kind){
         if (link.entityKey) {
           var pars = {'entityKey':link.entityKey,'kind':kind};
@@ -2031,10 +1885,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         }
         $scope.savecontact = function(contact) {
                $scope.contact_err={};
-              if (!contact.firstname) $scope.contact_err.firstname=true;
-                    else $scope.contact_err.firstname=false;
-              if (!contact.lastname) $scope.contact_err.lastname=true;
-                    else $scope.contact_err.lastname=false;
+              $scope.contact_err.firstname = !contact.firstname;
+              $scope.contact_err.lastname = !contact.lastname;
               if (!$scope.contact_err.firstname&&!$scope.contact_err.lastname) {
                 var params ={
                             'firstname':contact.firstname,
@@ -2161,10 +2013,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             }
   $scope.saveOpp = function(opportunity){
              $scope.oppo_err={};
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
 
           if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
                opportunity.closed_date = $filter('date')(opportunity.closed_date,['yyyy-MM-dd']);
@@ -2224,8 +2074,7 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
         // HKA 01.12.2013 Add Case related to Contact
         $scope.saveCase = function(casee) {
           $scope.case_err={};
-          if (!casee.name) $scope.case_err.name=true;
-                else $scope.case_err.name=false;
+          $scope.case_err.name = !casee.name;
           if (!$scope.case_err.name) { 
             casee.account=$scope.account.entityKey;
             casee.access=$scope.account.access;
@@ -2579,10 +2428,8 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
          };
          $scope.saveOpp = function(opportunity){
           $scope.oppo_err={};
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
 
           if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
           opportunity.account=$scope.account.entityKey;
@@ -2904,33 +2751,17 @@ $scope.lunchMapsCalendar=function(){
 
         // }
         $scope.noCompanyDetails=function(){
-            if (jQuery.isEmptyObject($scope.companydetails)&&jQuery.isEmptyObject($scope.twitterProfile)) {
-                return true;
-            }else{
-                return false;
-            };
+            return !!(jQuery.isEmptyObject($scope.companydetails) && jQuery.isEmptyObject($scope.twitterProfile));;
         }
         $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
         $scope.companydetailsEmpty=function(){
-            if (jQuery.isEmptyObject($scope.companydetails)) {
-                return true;
-            }else{
-                return false;
-            };
+            return !!jQuery.isEmptyObject($scope.companydetails);;
         }
         $scope.twitterProfileEmpty=function(){
-            if (jQuery.isEmptyObject($scope.companydetails)) {
-                return true;
-            }else{
-                return false;
-            };
+            return !!jQuery.isEmptyObject($scope.companydetails);;
         }
         $scope.selectMemberToTask = function() {
             if ($scope.selected_members.indexOf($scope.user) == -1) {
@@ -2981,7 +2812,7 @@ $scope.lunchMapsCalendar=function(){
                         'pageToken': $scope.topicpages[nextPage]
                     }
                 }
-                $scope.topicCurrentPage = $scope.topicCurrentPage + 1;
+                $scope.topicCurrentPage += 1;
                 Account.get($scope, params);
             }
 
@@ -3033,7 +2864,7 @@ $scope.lunchMapsCalendar=function(){
                     }
                 }
             }
-            $scope.topicCurrentPage = $scope.topicCurrentPage - 1;
+            $scope.topicCurrentPage -= 1;
             Account.get($scope, params);
 
         }
@@ -3068,7 +2899,7 @@ $scope.lunchMapsCalendar=function(){
                         'pageToken': $scope.contactpages[nextPage]
                     }
                 }
-                $scope.contactCurrentPage = $scope.contactCurrentPage + 1;
+                $scope.contactCurrentPage += 1;
                 Account.get($scope, params);
             }
         }
@@ -3092,7 +2923,7 @@ $scope.lunchMapsCalendar=function(){
                     }
                 }
             }
-            $scope.contactCurrentPage = $scope.contactCurrentPage - 1;
+            $scope.contactCurrentPage -= 1;
             Account.get($scope, params);
         }
 /// update account with inlineEdit
@@ -3150,7 +2981,7 @@ $scope.lunchMapsCalendar=function(){
                         'pageToken': $scope.opppages[nextPage]
                     }
                 }
-                $scope.oppCurrentPage = $scope.oppCurrentPage + 1;
+                $scope.oppCurrentPage += 1;
                 Account.get($scope, params);
             }
 
@@ -3170,7 +3001,7 @@ $scope.lunchMapsCalendar=function(){
                         'pageToken': $scope.casepages[nextPage]
                     }
                 }
-                $scope.caseCurrentPage = $scope.caseCurrentPage + 1;
+                $scope.caseCurrentPage += 1;
                 Account.get($scope, params);
             }
 
@@ -3195,7 +3026,7 @@ $scope.lunchMapsCalendar=function(){
                     }
                 }
             }
-            $scope.caseCurrentPage = $scope.caseCurrentPage - 1;
+            $scope.caseCurrentPage -= 1;
             Account.get($scope, params);
         };
 
@@ -3213,7 +3044,7 @@ $scope.lunchMapsCalendar=function(){
                         'pageToken': $scope.documentpages[nextPage]
                     }
                 }
-                $scope.documentCurrentPage = $scope.documentCurrentPage + 1;
+                $scope.documentCurrentPage += 1;
 
                 Account.get($scope, params);
             }
@@ -3620,11 +3451,7 @@ $scope.deleteInvite=function(index){
 }
 
 $scope.checkGuests=function(){
-   if($scope.invites.length !=0){
-   $scope.Guest_params=true;
- }else{
-  $scope.Guest_params=false;
- }
+   $scope.Guest_params = $scope.invites.length != 0;
 }
 
 
@@ -4601,17 +4428,17 @@ $scope.updateEventRenderAfterAdd= function(){};
                          prof.profile_picture=resp.profile_picture;
                          prof.title=resp.title;
                          prof.locality=resp.locality;
-                         prof.industry=resp.industry; 
+                         prof.industry=resp.industry;
                          prof.formations=resp.formations
                          prof.resume=resp.resume;
                          prof.skills=resp.skills;
                          prof.current_post=resp.current_post;
                          prof.past_post=resp.past_post;
-                         prof.experiences=JSON.parse(resp.experiences);  
+                         prof.experiences=JSON.parse(resp.experiences);
                          if(prof.experiences){
                           prof.experiences.curr=prof.experiences['current-position'];
                           prof.experiences.past=prof.experiences['past-position'];
-                         }         
+                         }
                          $scope.inRelatedShortProfiles.push(prof);
                          $scope.inIsLoading=false;
                          $scope.apply();
@@ -4672,11 +4499,6 @@ $scope.updateEventRenderAfterAdd= function(){};
                             }
                         }
                   });            
-            }
-           $scope.clearRelatedLinkedin=function(){
-              $scope.relatedinProfile={};
-              $scope.inRelatedShortProfiles=[];
-              $scope.apply()
             }
 
 
@@ -5137,8 +4959,6 @@ $scope.updateEventRenderAfterAdd= function(){};
         });
 
     }]);
-
-
 app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'Edge','Map','Linkedin','Contact','Customfield',
     function($scope,$http,Auth, Account, Tag, Edge, Map, Linkedin,Contact,Customfield) {
         $("ul.page-sidebar-menu li").removeClass("active");
@@ -5216,12 +5036,12 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
         // $scope.account.personal_account=true;
         $scope.inProcess=function(varBool,message){
           if (varBool) {           
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -5535,7 +5355,6 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                    $scope.apply();
 
                 }
-             //new Linkedin 
                 $scope.messageFromSocialLinkCallback = function(event){
                   if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){
                       $scope.saveLinkedinData(event.data);
@@ -5633,7 +5452,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                var par={'url' : url};
                Linkedin.getCompany(par,function(resp){
                       if(!resp.code){
-                       var prof={};                       
+                       var prof={};
                        prof.company_size=resp.company_size;
                        prof.headquarters=resp.headquarters;
                        prof.followers=resp.followers;
@@ -5645,9 +5464,9 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                        prof.top_image=resp.top_image;
                        prof.type=resp.type;
                        prof.url=resp.url;
-                       prof.website=resp.website; 
+                       prof.website=resp.website;
                        prof.workers=JSON.parse(resp.workers);
-                       $scope.inShortProfiles.push(prof);   
+                       $scope.inShortProfiles.push(prof);
                        $scope.inIsLoading=false;
                        $scope.apply();
                       }else {
@@ -5751,11 +5570,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
         return jQuery.isEmptyObject(obj);
       }
       $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
     $scope.showSelectButton=function(index){
@@ -5832,17 +5647,17 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                          prof.profile_picture=resp.profile_picture;
                          prof.title=resp.title;
                          prof.locality=resp.locality;
-                         prof.industry=resp.industry; 
+                         prof.industry=resp.industry;
                          prof.formations=resp.formations
                          prof.resume=resp.resume;
                          prof.skills=resp.skills;
                          prof.current_post=resp.current_post;
                          prof.past_post=resp.past_post;
-                         prof.experiences=JSON.parse(resp.experiences);  
+                         prof.experiences=JSON.parse(resp.experiences);
                          if(prof.experiences){
                           prof.experiences.curr=prof.experiences['current-position'];
                           prof.experiences.past=prof.experiences['past-position'];
-                         }         
+                         }
                          $scope.inRelatedShortProfiles.push(prof);
                          $scope.inIsLoading=false;
                          $scope.apply();
@@ -5887,11 +5702,6 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                            };
                         }
                   });            
-            }
-           $scope.clearRelatedLinkedin=function(){
-              $scope.relatedinProfile={};
-              $scope.inRelatedShortProfiles=[];
-              $scope.apply()
             }
           $scope.clearContact=function(){
 
@@ -6000,11 +5810,7 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
           return jQuery.isEmptyObject(obj);
         }
         $scope.isEmptyArray=function(Array){
-                  if (Array!=undefined && Array.length>0) {
-                  return false;
-                  }else{
-                      return true;
-                  };    
+                  return !(Array != undefined && Array.length > 0);;
               
           }
         $scope.urlSource=function(url){

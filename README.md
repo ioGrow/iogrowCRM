@@ -1,7 +1,8 @@
-iogrow
-
-
-ioGrow Platform
-
-Welcome to ioGrow Platform
-Take a look at the API at Google Api Explorer
+Authors:	AUTHORS.md
+Release:	--
+License:	AGPL
+Tracker:	ioGrow/iogrow/Issues
+Mailinglist:	iogrow-public@googlegroups.com
+IRC:	#iogrow @ freenode
+Website:	www.iogrow.com
+Accounts:	@Facebook @Twitter @GooglePlus

@@ -151,11 +151,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             window.location.replace('/#/search/type:contact tags:' + url);
         };
         $scope.isEmptyArray = function (Array) {
-            if (Array != undefined && Array.length > 0) {
-                return false;
-            } else {
-                return true;
-            }
+            return !(Array != undefined && Array.length > 0);
 
         };
         $scope.filterBySource = function (source) {
@@ -210,7 +206,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 if (message) {
                     
                 }
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
@@ -218,7 +214,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 if (message) {
                     
                 }
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
 
@@ -306,7 +302,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         // What to do after authentication
         $scope.runTheProcess = function () {
             var completedTour = document.getElementById("completedTour").value;
-            if (completedTour == 'False' | completedTour == 'None') {
+            if (completedTour == 'False' || completedTour == 'None') {
                 if (localStorage['completedTour'] != 'True') {
                     $scope.wizard();
                 }
@@ -590,55 +586,12 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             }
             ;
         }
-        /*$scope.initDiscover=function(){
-         Profile.listKeywords($scope,{})
-         Profile.list($scope,{})
-         $scope.diselectedOption='discover'
-         }*/
-        /* 
 
-         $scope.isSelected = function(index) {
-         return ($scope.selected_leads.indexOf(index) >= 0||$scope.isSelectedAll);
-         };
-         $scope.select_lead= function(lead,$index,$event){
-         var checkbox = $event.target;
-         if(checkbox.checked){
-         if ($scope.selected_leads.indexOf(lead) == -1) {
-         
-         $scope.selected_leads.push(lead);
-         
-
-         }
-         }else{
-         $scope.selected_leads.splice($scope.selected_leads.indexOf(lead), 1);
-         
-         
-         
-         }
-         }
-         $scope.select_all_tasks=function($event){
-         var checkbox = $event.target;
-         if(checkbox.checked){
-         $scope.selected_leads=[];
-         $scope.selected_leads.push($scope.leads);
-         $scope.isSelectedAll=true;
-         }else{
-         $scope.selected_leads=[];
-         $scope.isSelectedAll=false;
-         
-         }
-         }*/
         $scope.wizard = function () {
             localStorage['completedTour'] = 'True';
             var tour = {
                 id: "hello-hopscotch",
                 steps: [
-                    {
-                        title: "Discovery",
-                        content: "Your customers are talking about topics related to your business on Twitter. We provide you the right tool to discover them.",
-                        target: "id_Discovery",
-                        placement: "right"
-                    },
                     {
                         title: "Leads",
                         content: "Use leads to easily track  individuals or representatives of organizations who may be interested in your business. They are usually collected from various sources like Discovery feature, Linkedin, trade shows, seminars, advertisements and other marketing campaigns. You can add notes, set reminders or send emails",
@@ -784,7 +737,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 params = {'order': $scope.order, 'limit': 6}
             }
             
-            $scope.currentPage = $scope.currentPage + 1;
+            $scope.currentPage += 1;
             Lead.list($scope, params);
         }
         $scope.listMoreItems = function () {
@@ -792,7 +745,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             var params = $scope.getRequestParams();
             if ($scope.pages[nextPage]) {
                 params.pageToken=$scope.pages[nextPage];
-                $scope.currentPage = $scope.currentPage + 1;
+                $scope.currentPage += 1;
                 Lead.listMore($scope, params);
             }
         };
@@ -814,7 +767,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             } else {
                 params = {'order': $scope.order, 'limit': 6}
             }
-            $scope.currentPage = $scope.currentPage - 1;
+            $scope.currentPage -= 1;
             Lead.list($scope, params);
         }
         $scope.showAssigneeTags = function (lead) {
@@ -1588,13 +1541,7 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             var hWindow = $(window).height();
 
 
-            if (hContent > hWindow) {
-
-                $scope.isbigScreen = false;
-            } else {
-
-                $scope.isbigScreen = true;
-            }
+            $scope.isbigScreen = hContent <= hWindow;
 
             $scope.apply();
 
@@ -1742,7 +1689,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     
                 }
                 ;
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
@@ -1752,7 +1699,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     
                 }
                 ;
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
 
@@ -2118,7 +2065,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             window.Intercom('update');
             $scope.mapAutocompleteCalendar()
         };
-        // new linkedin
         $scope.messageFromSocialLinkCallback = function(event){
         if (event.origin!=='https://accounts.google.com'&&event.origin!=='https://gcdc2013-iogrow.appspot.com'&&event.origin!=='http://localhost:8090'){   
             $scope.saveLinkedinData(event.data);
@@ -2292,11 +2238,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
 
         $scope.isEmptyArray = function (Array) {
-            if (Array != undefined && Array.length > 0) {
-                return false;
-            } else {
-                return true;
-            }
+            return !(Array != undefined && Array.length > 0);
             ;
 
         }
@@ -2547,7 +2489,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                         'pageToken': $scope.topicpages[nextPage]
                     }
                 }
-                $scope.topicCurrentPage = $scope.topicCurrentPage + 1;
+                $scope.topicCurrentPage += 1;
                 Lead.get($scope, params);
             }
 
@@ -2938,11 +2880,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         }
 
         $scope.checkGuests = function () {
-            if ($scope.invites.length != 0) {
-                $scope.Guest_params = true;
-            } else {
-                $scope.Guest_params = false;
-            }
+            $scope.Guest_params = $scope.invites.length != 0;
         }
 
 
@@ -3288,9 +3226,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         };
 
 //HKA 22.11.2013 Add Social
-        $scope.addLinkedIn = function (social) {
-            $scope.getLinkedinByUrl(social.url);
-        };
         $scope.addSocial = function (social) {
 
             if (social.url != "" && social.url != undefined && !$scope.existsInfonode(social,'url','sociallinks')) {
@@ -3464,7 +3399,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                         'pageToken': $scope.documentpages[nextPage]
                     }
                 }
-                $scope.documentCurrentPage = $scope.documentCurrentPage + 1;
+                $scope.documentCurrentPage += 1;
 
                 Lead.get($scope, params);
 
@@ -3848,22 +3783,16 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             $scope.initialStage=stage;
           }
         $scope.validateBeforeSaveOpp=function(opportunity){
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
-          if (!$scope.searchAccountQuery) $scope.oppo_err.account=true;
-            else $scope.oppo_err.account=false;
-          if (!$scope.searchContactQuery) $scope.oppo_err.contact=true;
-            else $scope.oppo_err.contact=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
+          $scope.oppo_err.account = !$scope.searchAccountQuery;
+          $scope.oppo_err.contact = !$scope.searchContactQuery;
           if (!$scope.oppo_err.name && !$scope.oppo_err.amount_per_unit && !($scope.oppo_err.account && $scope.oppo_err.contact) )  $scope.save(opportunity)
       }
       $scope.saveOpp = function(opportunity){
            $scope.oppo_err={};
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
 
           if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
                 $scope.opportunity.lead=$scope.lead.entityKey;
@@ -4014,8 +3943,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             var par = {'url': url};
             Linkedin.profileGet(par, function (resp) {
                 if (!resp.code) {
-                    
-                    
+
+
                     $scope.linkedShortProfile = {};
                     $scope.linkedShortProfile.fullname = resp.fullname;
                     $scope.linkedShortProfile.url = url;
@@ -4035,14 +3964,14 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     }
                     $scope.linkedLoader = false;
                     $scope.apply();
-                    
-                    
-                    
+
+
+
                 } else {
-                    
+
                     if (resp.code == 401) {
                         // $scope.refreshToken();
-                        
+
                         $scope.linkedLoader = false;
                         $scope.apply();
                     }
@@ -4287,11 +4216,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             return jQuery.isEmptyObject(obj);
         }
         $scope.noDetails = function () {
-            if (jQuery.isEmptyObject($scope.twitterProfile) && jQuery.isEmptyObject($scope.linkedProfile)) {
-                return true;
-            } else {
-                return false;
-            }
+            return !!(jQuery.isEmptyObject($scope.twitterProfile) && jQuery.isEmptyObject($scope.linkedProfile));
             ;
         }
 
@@ -4416,7 +4341,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 if (message) {
                     
                 };
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
@@ -4426,7 +4351,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     
                 }
                 ;
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
 
@@ -4805,7 +4730,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 params = {'order': $scope.order, 'limit': 6}
             }
             
-            $scope.currentPage = $scope.currentPage + 1;
+            $scope.currentPage += 1;
             Lead.list($scope, params);
         }
         $scope.listPrevPageItems = function () {
@@ -4820,7 +4745,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             } else {
                 params = {'order': $scope.order, 'limit': 6}
             }
-            $scope.currentPage = $scope.currentPage - 1;
+            $scope.currentPage -= 1;
             Lead.list($scope, params);
         }
 
@@ -5287,11 +5212,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             return jQuery.isEmptyObject(obj);
         }
         $scope.isEmptyArray = function (Array) {
-            if (Array != undefined && Array.length > 0) {
-                return false;
-            } else {
-                return true;
-            }
+            return !(Array != undefined && Array.length > 0);
             ;
 
         }
@@ -5573,20 +5494,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 $scope.profile_img.profile_img_url = $scope.twProfile.profile_image_url_https;
             }
             ;
-            /*$scope.imageSrc = $scope.twProfile.profile_picture;*/
-            //  $scope.profile_img.profile_img_url = $scope.twProfile.profile_picture;
-            /*$scope.lead.source='Linkedin';
-             $scope.lead.industry=''
-             if (!$scope.lead.title) {
-             $scope.lead.title = $scope.twProfile.title;
-             };
-             if($scope.twProfile.current_post){
-             if ($scope.twProfile.current_post[0]){
-             $scope.lead.company = $scope.twProfile.current_post[0];
-             }
-             }
-             */
-            /*if ($scope.twProfile.location!=''&&$scope.twProfile.location!=null) {*/
+
             if (!$scope.addressModel) {
                 $scope.addressModel = $scope.twProfile.location;
             } else {
@@ -5596,8 +5504,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 ;
             }
             ;
-            // $scope.addGeo({'formatted':$scope.twProfile.location});
-            /*};*/
             $scope.apply();
         }
         $scope.cancelSelection = function (arrayname) {
@@ -5648,7 +5554,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     return company;
                 }
                 ;
-                i = i - 1;
+                i -= 1;
 
             }
         }
@@ -5787,9 +5693,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             ;
 
         };
-        $scope.addLinkedIn = function (social) {
-            $scope.getLinkedinByUrl(social.url);
-        };
+
         $scope.mergedLeads = 0;
         $scope.mergeLead = function (baseLead, newLead) {
             var params = {base_id: baseLead.id, new_lead: $scope.getParamsFromLead(newLead)};

@@ -26,7 +26,7 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
      };    
     $scope.inProcess=function(varBool,message){
           if (varBool) {  
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
              var d = new Date();
              console.log(d.getTime());
             if ($scope.nbLoads==1) {
@@ -34,7 +34,7 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
             };
           }else{
             var d = new Date();
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -56,22 +56,6 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
            $rootScope.iogrowSearch=true;
           /// $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
         };
-    }
-    $scope.linkedinSearchSwitch=function(){
-
-        if ($scope.linkedSearch) {
-          if ($scope.iogrowSearch) {
-             $scope.linkedSearch=false;
-              $rootScope.linkedSearch=false;
-               localStorage['linkedSearch']=false;
-          };
-         
-        }else{
-           $scope.linkedSearch=true;
-           localStorage['linkedSearch']=true;
-            $rootScope.linkedSearch=true;
-        };
-
     }
  // HADJI HICHAM - 08/02/2015
   $scope.createPickerUploader= function(){
@@ -240,12 +224,12 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
               console.log("starts of :"+message);
              
             };
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
             };
@@ -257,75 +241,7 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
               }
               return false;
             }
-     //What to do after authentification
-    /*console.log("")*/
-    /*start search in first either in database or in real time*/
-    $scope.linkedinSearch=function(params){
-      if(params.keyword){
-          $scope.isLoadingLinkedin=true;
-          Linkedin.listDb(params,function(resp){
-            var result=JSON.parse(resp.results)
-            $scope.profiles=result.hits.hits;
-            if(!resp.KW_exist){
-              $scope.startSpider({"keyword":$route.current.params.q})
-            }
-            if (resp.more) {
-              $scope.linkedinNextPage=$scope.linkedinNextPage+1
-            };
-            $scope.morelinkedin=resp.more;
-            $scope.isLoadingLinkedin=false;
-            $scope.apply();
-            
-          });
-        }
-    };
-    /*list more  profile form db*/
-    $scope.linkedinlistMoreItems = function() {
-                params = {
-                    "keyword":$route.current.params.q,
-                    'page': $scope.linkedinNextPage
-                }
-                if(params.keyword){
-                    $scope.isLoadingLinkedin=true;
-                    Linkedin.listDb(params,function(resp){
-                    var result=JSON.parse(resp.results)
-                    $scope.profiles=$scope.profiles.concat(result.hits.hits);
-                    if (resp.more) {
-                      $scope.linkedinNextPage=$scope.linkedinNextPage+1;                      
-                    };
-                    $scope.morelinkedin=resp.more;
-                    $scope.isLoadingLinkedin=false;
-                    $scope.apply();
-                    });
-                  }
-        };
-    /*start spider if the keyword doesnt exist*/
-     $scope.startSpider=function(params){
-       Linkedin.startSpider(params,function(resp){
-            var result=JSON.parse(resp.results)
-            if (result.status=='ok'){
-                $scope.isRunning=true;
-                $scope.socket.on(params.keyword, function (data) {
-                  var result1 = $.grep($scope.profiles, function(e){ return e._source.id == data._source.id; })
-                  var result2 = $.grep($scope.profilesRT, function(e){ return e._source.id == data._source.id; })
-                  if( data._score!=0 && result1.length==0 && result2.length==0) {
-                    $scope.profilesRT.push(data);
-                  }
-                $scope.apply();
-               });      
-                $scope.socket.on('stop:'+params.keyword, function (data) {
-                $scope.socket.disconnect();
-                $scope.isRunning=false;
-                $scope.apply();
-               });
-          }
-       });
-     }
-   /*stop  the running spider*/
-    $scope.stopSpider=function(){
-      $scope.socket.disconnect()
-      $scope.isRunning=false;
-    };
+
 
       /*mark as  lead in the search result in linkedin*/
       $scope.markAsLead = function(profile){
@@ -379,9 +295,6 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
      }
      $scope.runTheProcess = function(){
           var params = {'q':$route.current.params.q,'limit':20};
-        /*  if ($rootScope.linkedSearch) {
-            $scope.linkedinSearch({"keyword":$route.current.params.q});
-          };*/
           Search.list($scope,params);
           ga('send', 'pageview', '/search');
           window.Intercom('update');
@@ -404,7 +317,7 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
                       'limit':20}
           }
 
-          $scope.currentPage = $scope.currentPage + 1 ;
+          $scope.currentPage += 1 ;
           Search.list($scope,params);
      };
      $scope.listPrevPageItems = function(){
@@ -420,7 +333,7 @@ app.controller('SearchShowController', ['$scope', '$http', '$route', 'Auth', 'Se
             params = {'q':$route.current.params.q,
                       'limit':7}
           }
-          $scope.currentPage = $scope.currentPage - 1 ;
+          $scope.currentPage -= 1 ;
           Search.list($scope,params);
      };
 
@@ -464,14 +377,14 @@ app.controller('SearchFormController', ['$scope', '$http', 'Search', 'User', '$r
      };    
     $scope.inProcess=function(varBool,message){
           if (varBool) {  
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
              var d = new Date();
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
             var d = new Date();
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -493,22 +406,6 @@ app.controller('SearchFormController', ['$scope', '$http', 'Search', 'User', '$r
            $rootScope.iogrowSearch=true;
           /// $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
         };
-    }
-    $scope.linkedinSearchSwitch=function(){
-
-        if ($scope.linkedSearch) {
-          if ($scope.iogrowSearch) {
-             $scope.linkedSearch=false;
-              $rootScope.linkedSearch=false;
-               localStorage['linkedSearch']=false;
-          };
-         
-        }else{
-           $scope.linkedSearch=true;
-           localStorage['linkedSearch']=true;
-            $rootScope.linkedSearch=true;
-        };
-
     }
  // HADJI HICHAM - 08/02/2015
   $scope.createPickerUploader= function(){

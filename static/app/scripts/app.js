@@ -4,7 +4,7 @@ var app = angular.module('crmEngine', ['googlechart','xeditable', 'ui.bootstrap'
     'crmEngine.taskservices', 'crmEngine.eventservices', 'crmEngine.leadservices', 'crmEngine.opportunityservices',
     'crmEngine.caseservices', 'crmEngine.userservices', 'crmEngine.noteservices',
     'crmEngine.commentservices', 'crmEngine.settingservices', 'mapServices',
-    'crmEngine.infonodeservices', 'crmEngine.edgeservices', 'crmEngine.discoverservices', 'crmEngine.reportservices',
+    'crmEngine.infonodeservices', 'crmEngine.edgeservices',
     'crmEngine.profileservices', 'crmEngine.linkedinservices', 'crmEngine.billingservices']);
 //app.js Single page application
 
@@ -31,18 +31,6 @@ app.run(['$rootScope', function($rootScope){
 app.config(['$routeProvider', function($routeProvider) {
      $routeProvider.
      // Accounts
-     
-     when('/discovers/', {
-        controller: 'DiscoverListCtrl',
-        templateUrl:'/views/discovers/list'
-      }).when('/discovers/new', {
-        controller: 'DiscoverNewCtrl',
-        templateUrl:'/views/discovers/new'
-      }).when('/discovers/show/:tweetId', {
-        controller: 'DiscoverShowCtrl',
-        templateUrl:'/views/discovers/show'
-      }).
-
       when('/accounts/', {
         controller: 'AccountListCtrl',
         templateUrl:'/views/accounts/list'
@@ -153,10 +141,7 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'EventListController',
         templateUrl:'/views/calendar/show'
       })
-       .when('/dashboard/', {
-        controller: 'dashboardCtrl',
-        templateUrl:'/views/dashboard'
-         }).when('/admin/company', {
+       .when('/admin/company', {
              controller: 'BillingListController',
              templateUrl: '/views/admin/company/edit'
          }).when('/admin/email_signature', {

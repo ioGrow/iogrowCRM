@@ -3,7 +3,7 @@
           <tbody><tr>
             <td class="appTd">
             <div class="btn-group">
-                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0px">
+                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
                   {% if active_app.label =="Relationships" %}
                       <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
                       {% else%}
@@ -839,28 +839,6 @@
                                                 <li style="padding-top:15px">
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
-                                                <!--<li ng-show="twList.length > 0 && isEmpty(twProfile)&&isEmptyArray(twShortProfiles)" style="padding-top:15px">
-                                                    <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                                  </li>
-                                                  <li ng-show="twList.length > 0 && isEmpty(twProfile)&&isEmptyArray(twShortProfiles)">
-                                                        <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                            <div class="input-icon">
-                                                                <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                                <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                                            </div>
-                                                        </form>
-                                                  </li>-->
-                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                                </li>
-                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                          <div class="input-icon">
-                                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                                          </div>
-                                                      </form>
-                                                </li>-->
                                                 </ul> 
                                                 <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(twShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
@@ -2891,17 +2869,6 @@
                                                 <li style="padding-top:15px">
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
-                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                                </li>
-                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                          <div class="input-icon">
-                                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                                          </div>
-                                                      </form>
-                                                </li>-->
                                                 </ul> 
                                                 <div ng-repeat="inRelatedShortProfile in inRelatedShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(inRelatedShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
@@ -3072,18 +3039,7 @@
                                                 <li style="padding-top:15px">
                                                   <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
                                                 </li>
-                                                <!--<li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 14px;color: black;margin-bottom: 5px;">Or copy here the linkedin profile url manualy :</p>
-                                                </li>
-                                                <li ng-show="listPeople.length > 0 && isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)">
-                                                      <form class="form-inline newLeadForm ng-pristine ng-valid" role="form">
-                                                          <div class="input-icon">
-                                                              <i class="fa fa-linkedin"  style="  margin-top: 9px;"></i>
-                                                              <input ng-blur="addLinkedIn(sociallink)" ng-enter="addLinkedIn(sociallink)" ng-model="sociallink.url" class="form-control" id="exampleInputEmail2" placeholder="Add a linkedIn link">
-                                                          </div>
-                                                      </form>
-                                                </li>-->
-                                                </ul> 
+                                                </ul>
                                                 <div ng-repeat="twShortProfile in twRelatedShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(twShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
                                                               <img src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>" err-src="/static/src/img/avatar_contact.jpg" style="width: 90px;height: 90px;">

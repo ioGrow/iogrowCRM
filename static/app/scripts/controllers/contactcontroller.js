@@ -103,13 +103,13 @@ app.controller('ContactListCtrl', ['$scope','$filter','Auth','Account','Contact'
       }
              $scope.inProcess=function(varBool,message){
                 if (varBool) {
-                  $scope.nbLoads=$scope.nbLoads+1;
+                  $scope.nbLoads += 1;
                   if ($scope.nbLoads==1) {
                     $scope.isLoading=true;
                   };
                 }else{
 
-                  $scope.nbLoads=$scope.nbLoads-1;
+                  $scope.nbLoads -= 1;
                   if ($scope.nbLoads==0) {
                      $scope.isLoading=false;
        
@@ -635,11 +635,7 @@ $scope.switchShow=function(){
               $('#BeforedeleteSelectedContacts').modal('hide');
           };
           $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
           }
           $scope.contactDeleted = function (entityKey) {
@@ -790,7 +786,7 @@ $scope.switchShow=function(){
               var params = $scope.getRequestParams();
               if ($scope.contactpages[nextPage]) {
                   params.pageToken=$scope.contactpages[nextPage];
-                  $scope.contactCurrentPage = $scope.contactCurrentPage + 1;
+                  $scope.contactCurrentPage += 1;
                   Contact.listMore($scope,params);
               }
           };
@@ -806,7 +802,7 @@ $scope.switchShow=function(){
               params = {'order' : $scope.order,'limit':8}
             }
 
-            $scope.contactCurrentPage = $scope.contactCurrentPage + 1 ;
+            $scope.contactCurrentPage += 1 ;
             Contact.list($scope,params);
        };
        $scope.listPrevPageItems = function(){
@@ -820,7 +816,7 @@ $scope.switchShow=function(){
             }else{
               params = {'order' : $scope.order,'limit':8}
             }
-            $scope.contactCurrentPage = $scope.contactCurrentPage - 1 ;
+            $scope.contactCurrentPage -= 1 ;
             Contact.list($scope,params);
        };
         $scope.showImportModal = function(){
@@ -1404,12 +1400,12 @@ app.controller('ContactShowCtrl', ['$scope','$http','$filter','$route','Auth','E
      }
     $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
  
@@ -1439,11 +1435,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
         return jQuery.isEmptyObject(obj);
       }
       $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
         $('#some-textarea1').wysihtml5();
@@ -1733,17 +1725,17 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                  $scope.linkedShortProfile.profile_picture=resp.profile_picture;
                  $scope.linkedShortProfile.title=resp.title;
                  $scope.linkedShortProfile.locality=resp.locality;
-                 $scope.linkedShortProfile.industry=resp.industry; 
+                 $scope.linkedShortProfile.industry=resp.industry;
                  $scope.linkedShortProfile.formations=resp.formations
                  $scope.linkedShortProfile.resume=resp.resume;
                  $scope.linkedShortProfile.skills=resp.skills;
                  $scope.linkedShortProfile.current_post=resp.current_post;
                  $scope.linkedShortProfile.past_post=resp.past_post;
-                 $scope.linkedShortProfile.experiences=JSON.parse(resp.experiences);  
+                 $scope.linkedShortProfile.experiences=JSON.parse(resp.experiences);
                  if($scope.linkedProfile.experiences){
                   $scope.linkedProfile.experiences.curr=$scope.linkedProfile.experiences['current-position'];
                   $scope.linkedProfile.experiences.past=$scope.linkedProfile.experiences['past-position'];
-                 }         
+                 }
                  $scope.linkedLoader=false;
                  $scope.apply();
                 }else {
@@ -1857,11 +1849,7 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
       
     }; 
       $scope.noDetails=function(){
-        if (jQuery.isEmptyObject($scope.twitterProfile)&&jQuery.isEmptyObject($scope.linkedProfile)) {
-          return true;
-        }else{
-          return false;
-        };
+        return !!(jQuery.isEmptyObject($scope.twitterProfile) && jQuery.isEmptyObject($scope.linkedProfile));;
       }
 
       $scope.fromNow = function(fromDate){
@@ -2204,7 +2192,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             if (data.email) $scope.addEmail({'email':data.email});
             if (data.linkedin_url) $scope.addSocial({'url':data.linkedin_url});
             if (data.locality) $scope.addGeo({'formatted':data.locality,'country':' '});
-             //$scope.addWebsite({'url':data.linkedin_url});
             $scope.apply();
         }
      $scope.socialLinkOpener = function(socialLinkUrl){
@@ -2539,7 +2526,7 @@ $scope.lunchMapsCalendar=function(){
                           'pageToken':$scope.topicpages[nextPage]
                         }
                      }
-              $scope.topicCurrentPage = $scope.topicCurrentPage + 1 ;
+              $scope.topicCurrentPage += 1 ;
               Contact.get($scope,params);
             }
 
@@ -2571,7 +2558,7 @@ $scope.lunchMapsCalendar=function(){
                           'pageToken':$scope.opppages[nextPage]
                         }
                      }
-            $scope.oppCurrentPage = $scope.oppCurrentPage + 1 ;
+            $scope.oppCurrentPage += 1 ;
             Contact.get($scope,params);
             }
 
@@ -2591,7 +2578,7 @@ $scope.CaselistNextPageItems = function(){
                           'pageToken':$scope.casepages[nextPage]
                         }
                      }
-            $scope.caseCurrentPage = $scope.caseCurrentPage + 1 ;
+            $scope.caseCurrentPage += 1 ;
             Contact.get($scope,params);
           }
 
@@ -3024,11 +3011,7 @@ $scope.deleteInvite=function(index){
 }
 
 $scope.checkGuests=function(){
-   if($scope.invites.length !=0){
-   $scope.Guest_params=true;
- }else{
-  $scope.Guest_params=false;
- }
+   $scope.Guest_params = $scope.invites.length != 0;
 }
 
 
@@ -3326,10 +3309,8 @@ $scope.prepareInfonodes = function(){
     };
        $scope.saveOpp = function(opportunity){
         $scope.oppo_err={};
-           if (!opportunity.name) $scope.oppo_err.name=true;
-            else $scope.oppo_err.name=false;  
-          if (!opportunity.amount_per_unit) $scope.oppo_err.amount_per_unit=true;
-            else $scope.oppo_err.amount_per_unit=false;
+           $scope.oppo_err.name = !opportunity.name;
+          $scope.oppo_err.amount_per_unit = !opportunity.amount_per_unit;
 
           if (!$scope.oppo_err.amount_per_unit&&!$scope.oppo_err.name) {
               opportunity.contact=$scope.contact.entityKey;
@@ -3384,8 +3365,7 @@ $scope.prepareInfonodes = function(){
     $scope.saveCase = function(casee){
       //casee.account=$scope.contact.account.entityKey;
       $scope.case_err={};
-      if (!casee.name) $scope.case_err.name=true;
-            else $scope.case_err.name=false;
+      $scope.case_err.name = !casee.name;
       if (!$scope.case_err.name) {
 
                 casee.contact=$scope.contact.entityKey;
@@ -3677,7 +3657,7 @@ $scope.sendEmailSelected=function(){
                           'pageToken':$scope.documentpages[nextPage]
                         }
                       }
-            $scope.documentCurrentPage = $scope.documentCurrentPage + 1 ;
+            $scope.documentCurrentPage += 1 ;
 
             Contact.get($scope,params);
 
@@ -3706,7 +3686,7 @@ $scope.sendEmailSelected=function(){
                         }
                       }
           }
-          $scope.documentCurrentPage = $scope.documentCurrentPage - 1 ;
+          $scope.documentCurrentPage -= 1 ;
           Contact.get($scope,params);
 
 
@@ -4283,12 +4263,12 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       $scope.lunchMapsLinkedin=lunchMapsLinkedin;
       $scope.inProcess=function(varBool,message){
             if (varBool) {           
-              $scope.nbLoads=$scope.nbLoads+1;
+              $scope.nbLoads += 1;
               if ($scope.nbLoads==1) {
                 $scope.isLoading=true;
               };
             }else{
-              $scope.nbLoads=$scope.nbLoads-1;
+              $scope.nbLoads -= 1;
               if ($scope.nbLoads==0) {
                  $scope.isLoading=false;
    
@@ -4697,10 +4677,8 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
 
       }, true);
           $scope.validateBeforeSave=function(contact){
-           if (!contact.firstname) $scope.contact_err.firstname=true;
-            else $scope.contact_err.firstname=false;  
-          if (!contact.lastname) $scope.contact_err.lastname=true;
-            else $scope.contact_err.lastname=false;
+           $scope.contact_err.firstname = !contact.firstname;
+          $scope.contact_err.lastname = !contact.lastname;
           if (!$scope.contact_err.firstname && !$scope.contact_err.lastname)  $scope.save(contact)
       }
       // new Contact
@@ -4821,39 +4799,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                         }
                   });            
             }
-       // $scope.getLinkedinByUrl=function(url){
-       //         $scope.inIsLoading=true;
-       //         var par={'url' : url};
-       //         Linkedin.profileGet(par,function(resp){
-       //                if(!resp.code){
-       //                   prof={};
-       //                   prof.fullname=resp.fullname;
-       //                   prof.url=url;
-       //                   prof.profile_picture=resp.profile_picture;
-       //                   prof.title=resp.title;
-       //                   prof.locality=resp.locality;
-       //                   prof.industry=resp.industry; 
-       //                   prof.formations=resp.formations
-       //                   prof.resume=resp.resume;
-       //                   prof.skills=resp.skills;
-       //                   prof.current_post=resp.current_post;
-       //                   prof.past_post=resp.past_post;
-       //                   prof.experiences=JSON.parse(resp.experiences);  
-       //                   if(prof.experiences){
-       //                    prof.experiences.curr=prof.experiences['current-position'];
-       //                    prof.experiences.past=prof.experiences['past-position'];
-       //                   }         
-       //                   $scope.inShortProfiles.push(prof);
-       //                   $scope.inIsLoading=false;
-       //                   $scope.apply();
-       //                }else {
-       //                   if(resp.code==401){
-       //                    $scope.inIsLoading=false;
-       //                    $scope.apply();
-       //                   };
-       //                }
-       //             });
-       //      }
         $scope.twitterUrl=function(url){
                          var match="";
                          var matcher = new RegExp("twitter");
@@ -5049,11 +4994,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
           return jQuery.isEmptyObject(obj);
         }
         $scope.isEmptyArray=function(Array){
-                  if (Array!=undefined && Array.length>0) {
-                  return false;
-                  }else{
-                      return true;
-                  };    
+                  return !(Array != undefined && Array.length > 0);;
               
           }
         $scope.urlSource=function(url){
@@ -5145,7 +5086,7 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                   }else{
                     return company;
                   };
-                  i=i-1;
+                  i -= 1;
                 
               }
            }
@@ -5294,9 +5235,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
          $("#select_0").removeClass('selectLinkedinButton');
       };
       
-    }; 
-    $scope.addLinkedIn = function(social){
-      $scope.getLinkedinByUrl(social.url);
     };
     $scope.mergedContacts = 0;
     $scope.mergeContact = function (baseContact, newContact) {

@@ -9,16 +9,15 @@ app.controller('RegionalEditCtrl', ['$scope', 'Auth', 'User',
         $scope.isSignedIn = false;
         $scope.immediateFailed = false;
         $scope.isLoading = false;
-        $scope.defaultLang = $scope.defaultLang;
         $scope.defaultCurrency = "USD";
         $scope.inProcess = function (varBool, message) {
             if (varBool) {
-                $scope.nbLoads = $scope.nbLoads + 1;
+                $scope.nbLoads += 1;
                 if ($scope.nbLoads == 1) {
                     $scope.isLoading = true;
                 }
             } else {
-                $scope.nbLoads = $scope.nbLoads - 1;
+                $scope.nbLoads -= 1;
                 if ($scope.nbLoads == 0) {
                     $scope.isLoading = false;
                 }

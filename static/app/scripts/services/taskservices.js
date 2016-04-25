@@ -107,11 +107,7 @@ Task.get_docs=function($scope,params){
                    $scope.apply(); 
                   }else{
                  $scope.tasks = resp.items;
-                  if ($scope.currentPage>1){
-                      $scope.taskpagination.prev = true;
-                   }else{
-                       $scope.taskpagination.prev = false;
-                   }
+                  $scope.taskpagination.prev = $scope.currentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.currentPage + 1;
                    // Store the nextPageToken
@@ -278,11 +274,7 @@ Task.delete=function($scope,params){
                 angular.forEach(resp.items, function(item){
                     $scope.tasks.push(item);
                 });
-                if ($scope.currentPage>1){
-                    $scope.taskpagination.prev = true;
-                 }else{
-                     $scope.taskpagination.prev = false;
-                 }
+                $scope.taskpagination.prev = $scope.currentPage > 1;
                if (resp.nextPageToken){
                  var nextPage = $scope.currentPage + 1;
                  // Store the nextPageToken
@@ -446,15 +438,7 @@ topicservices.factory('Tag', function($http) {
                         if ($.inArray(params["about_kind"], ["topics","Lead","Account","Contact","Opportunity","Case","Task"])>0) {
                           $scope.tagInserted(resp);
                         };
-                        
 
-                        // TME_02_11_13 when a note gis inserted reload topics
-                        /*$scope.listContributors();*/                                               
-                       // $('#addAccountModal').modal('hide');
-                       // window.location.replace('#/accounts/show/'+resp.id);
-                       if ($scope.fromnewtab){
-                        window.location.replace('#/discovers/');
-                       }
                        $scope.inProcess(false,'tag list');  
                         $scope.apply();
 

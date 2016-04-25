@@ -50,11 +50,7 @@ accountservices.factory('Case', function($rootScope) {
                         $scope.topics = resp.topics.items;
                     }
 
-                    if ($scope.topicCurrentPage >1){
-                      $scope.topicpagination.prev = true;
-                    }else{
-                        $scope.topicpagination.prev= false;
-                     }
+                    $scope.topicpagination.prev = $scope.topicCurrentPage > 1;
                    if (resp.topics.nextPageToken){
                      var nextPage = $scope.topicCurrentPage + 1;
                       // Store the nextPageToken
@@ -71,11 +67,7 @@ accountservices.factory('Case', function($rootScope) {
                         $scope.blankStateopportunity = true;
                       }
                        $scope.opportunities = resp.opportunities.items;
-                       if ($scope.oppCurrentPage>1){
-                           $scope.opppagination.prev = true;
-                       }else{
-                           $scope.opppagination.prev = false;
-                       }
+                       $scope.opppagination.prev = $scope.oppCurrentPage > 1;
                        if (resp.opportunities.nextPageToken){
                          var nextPage = $scope.oppCurrentPage + 1;
                          // Store the nextPageToken
@@ -93,11 +85,7 @@ accountservices.factory('Case', function($rootScope) {
                         $scope.blankStatecase = true;
                       }
                        $scope.cases = resp.cases.items;
-                       if ($scope.caseCurrentPage>1){
-                          $scope.casepagination.prev = true;
-                       }else{
-                          $scope.casepagination.prev = false;
-                       }
+                       $scope.casepagination.prev = $scope.caseCurrentPage > 1;
                      if (resp.cases.nextPageToken){
                        var nextPage = $scope.caseCurrentPage + 1;
                        // Store the nextPageToken
@@ -122,11 +110,7 @@ accountservices.factory('Case', function($rootScope) {
                       else{
                           $scope.documents = resp.documents.items;
                       }
-                      if ($scope.documentCurrentPage >1){
-                          $scope.documentpagination.prev = true;
-                      }else{
-                           $scope.documentpagination.prev = false;
-                      }
+                      $scope.documentpagination.prev = $scope.documentCurrentPage > 1;
                      if (resp.documents.nextPageToken){
 
                        var nextPage = $scope.documentCurrentPage + 1;
@@ -208,11 +192,7 @@ accountservices.factory('Case', function($rootScope) {
                  
                  $scope.cases = resp.items;
 
-                 if ($scope.caseCurrentPage>1){
-                      $scope.casepagination.prev = true;
-                   }else{
-                       $scope.casepagination.prev = false;
-                   }
+                 $scope.casepagination.prev = $scope.caseCurrentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.caseCurrentPage + 1;
                    // Store the nextPageToken
@@ -259,11 +239,7 @@ accountservices.factory('Case', function($rootScope) {
                   angular.forEach(resp.items, function(item){
                       $scope.cases.push(item);
                   });
-                 if ($scope.caseCurrentPage>1){
-                      $scope.casepagination.prev = true;
-                   }else{
-                       $scope.casepagination.prev = false;
-                   }
+                 $scope.casepagination.prev = $scope.caseCurrentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.caseCurrentPage + 1;
                    // Store the nextPageToken

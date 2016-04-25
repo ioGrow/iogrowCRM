@@ -59,12 +59,12 @@ app.controller('CustomFieldsEditCtrl', ['$scope','$route', 'Auth', 'User', 'Map'
         }
         $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
             };
@@ -133,11 +133,7 @@ app.controller('CustomFieldsEditCtrl', ['$scope','$route', 'Auth', 'User', 'Map'
         	$scope.apply();
         }
         $scope.isEmptyArray=function(Array){
-                if (Array!=undefined && Array.length>0) {
-                return false;
-                }else{
-                    return true;
-                };    
+                return !(Array != undefined && Array.length > 0);;
             
         }
         $scope.addCustomField=function(customfield,related_to){

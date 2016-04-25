@@ -50,7 +50,7 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
                       'order':'-updated_at',
                       'discussion':$scope.note.entityKey}
           }
-          $scope.currentPagecomment = $scope.currentPagecomment + 1 ;
+          $scope.currentPagecomment += 1 ;
           Comment.list($scope,params);
      }
      $scope.listPrevPageItemscomment = function(){
@@ -68,7 +68,7 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
             'discussion':$scope.note.entityKey,
             'order':'-updated_at'}
           }
-          $scope.currentPagecomment = $scope.currentPagecomment - 1 ;
+          $scope.currentPagecomment -= 1 ;
           Comment.list($scope,params);
      }
 
@@ -103,12 +103,12 @@ app.controller('NoteShowController',['$scope','$filter','$route','Auth','Note','
 
    $scope.inProcess=function(varBool,message){
           if (varBool) {
-            $scope.nbLoads=$scope.nbLoads+1;
+            $scope.nbLoads += 1;
             if ($scope.nbLoads==1) {
               $scope.isLoading=true;
             };
           }else{
-            $scope.nbLoads=$scope.nbLoads-1;
+            $scope.nbLoads -= 1;
             if ($scope.nbLoads==0) {
                $scope.isLoading=false;
             };
