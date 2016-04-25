@@ -1,6 +1,7 @@
 *~
 *.py[cod]
 node_modules/*
+static/build/*
 .idea/
 # C extensions
 *.so
