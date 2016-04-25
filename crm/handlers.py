@@ -793,7 +793,12 @@ class ActivateSession(BaseHandler, SessionEnabledHandler):
     def get(self):
         email = self.request.get('email')
         self.session[self.CURRENT_USER_SESSION_KEY] = email
-        self.redirect('/')
+        is_paying = int(self.request.get('isPaying'))
+        if is_paying:
+            self.redirect('/subscribe')
+        else:
+            self.redirect('/')
+
 
 class InstallFromDecorator(SessionEnabledHandler):
     @decorator.oauth_required
