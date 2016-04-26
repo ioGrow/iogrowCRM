@@ -42,15 +42,6 @@
                             <a class="headerBtn" title="Refresh" ng-click="runTheProcess();">
                                 <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
                             </a>
-                            <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                      <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>
-                <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                      <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>
-                <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                      <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>-->
                             <a class="headerBtn" title="Add tags" ng-click="showAssigneeTagsToLead()"
                                ng-hide=" selectedCards.length==0" ng-show="selectedTab==2">
                                 + <i class="fa fa-tags"></i>
@@ -77,7 +68,7 @@
                                ng-click="editbeforedeleteDoc()">
                                 <i class="fa fa-trash-o"></i>
                             </a>
-                            <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
+                            <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
                       <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
                 </a>-->
                             <div class="btn-group show_md"
@@ -112,9 +103,6 @@
                                ng-click="gotosendMail(infonodes.emails[0].email)">
                                 <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
                             </a>
-                            <!--<a class="" title="Start a Hangout" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                          <i class="fa fa-video-camera" style="padding-top: 6px; font-size: 16px;"></i>
-                    </a>-->
                             <div id="placeholder-div1" class="pull-right hangout-btn"
                                  style=" margin-top: -1px !important; margin-left: 15px !important;"></div>
                             <a ng-show="screen_name"
@@ -144,8 +132,6 @@
                         <i class="fa fa-save"ng-show="(selectedTab==2&&showEdit)||(selectedTab==5&&topOppButton=='save')" ></i>
                                <%=' '+topButtonMessage()%>
                         </span>
-                        <!-- <span ng-hide="showEdit"><i class="fa fa-pencil"></i> Edit</span>
-                        <span ng-show="showEdit"><i class="fa fa-save"></i> Save</span> -->
                     </a>
                     <div class="btn-group relbutton pull-right" ng-show="selectedTab==7" style="padding:0px">
                              <div class="btn-group" style="margin-right: 5px;">
@@ -193,18 +179,6 @@
                             <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;"
                                ng-show="show=='cards'"></i>
                         </a>
-                        <!--<div class="btn-group">
-                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
-                    <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
-                  </a>
-                  <ul class="dropdown-menu drp-dwn-right">
-                    <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
-                        <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
-                        <!--<li><a  ng-click="lead_wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
-                    <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
-                    
-                  </ul>
-               </div>-->
                         {% for application in apps %}
                             {% if application.label =="Settings" %}
                                 <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
@@ -239,42 +213,6 @@
         </tbody>
     </table>
 </div>
-
-
-<!--<div class="row subHeader">
-    <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
-
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
-
-            {%endfor%}
-           </ul>
-        </div>
-    </div>
-    <div class=" subHeaderContent">
-        <h2 class="page-title">
-            <a href="/#/leads" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
-                <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>     {{_("Leads")}} > <a editable-text="lead.firstname" onbeforesave="inlinePatch('Lead','', 'firstname',lead.entityKey,$data)"> <%= lead.firstname %>  </a> <a editable-text="lead.lastname" onbeforesave="inlinePatch('Lead','', 'lastname',lead.entityKey,$data)" > <%= lead.lastname %> </a></h2>
-   
-
-          
-    </div>
-</div>
-
-
-
-
-
-
--->
-
-
 <div class="page-content" style="margin-top:45px">
     <div class="loader-container row">
         <div ng-show="isLoading" class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -766,54 +704,6 @@
                             <!-- $ tabs -->
                             <div class="tab-content">
                                 <!-- $ notes tab -->
-                                <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
-                                    <div class="showPage">
-                                        <div class="row">
-                                            <div class="col-md-12  margin-bottom-10">
-                                                <p class⁼"lead"="">
-                                                {{ _('To add an outside email to this account, forward or BCC to:') }}
-                                                <a href="mailto:{{ ME }}@gcdc2013-iogrow.appspotmail.com">
-                                                    {{ ME }}@gcdc2013-iogrow.appspotmail.com
-                                                </a>
-                                                <br>
-                                                {{ _('Or just add notes to remember what\'s important.')}}
-                                                    <br>
-                                                </p>
-                                                <form id="addNote" class="ng-pristine ng-valid">
-                                                    <div class="form-group">
-                                                        <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Add a new subject')}}" id="messageSubject" ng-model="note.title">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                                                    </div>
-                                                    <div class="pull-right">
-                                                        <input ng-disabled="isLoading || !note.title" ng-click="addNote(note)"  type="submit" class="btn green" value="Add this note">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <ul class="chats">
-                                            <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
-                                                <img class="avatar" alt="" ng-src="<%= topic.last_updater.photo%>" />
-                                                <div class="message">
-                                                    <span class="arrow"></span>
-                                                    <a  class="name">
-                                                        <%= topic.last_updater.display_name%>
-                                                    </a>
-                                                    <span class="datetime">
-                                                        at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss '  %>
-                                                    </span>
-                                                    <span class="body">
-                                                        <a href="<%=getTopicUrl(topic.topic_kind,topic.id)%>" class="discussion-content"><strong class="ng-binding">
-                                                                <a href="#/notes/show/<%= topic.id%>"><%= topic.title%></a> </strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <a href="#/notes/show/<%= topic.id%>"> <%= topic.comments%> </a> {{_('comments')}}</span>
-                                                        </a>
-                                                    </span>
-                                                </div>
-                                            </li>
-                                        </ul>
-
-                                    </div>
-                                </div>
                                 <!-- $ about tab -->
                                 <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                                     <div class="row slimform">
@@ -822,15 +712,14 @@
                                           <div ng-show="linkedLoader" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
                                             <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                                           </div>
-                                          
-                                          <h3 style="margin-top:0px"> <i  class="fa fa-linkedin-square" style=" font-size: 20px; vertical-align: baseline;color: rgb(25, 133, 188) !important;"></i>{{_(' Linkedin Informations')}} 
+
+                                          <h3 style="margin-top:0px"> <i  class="fa fa-linkedin-square" style=" font-size: 20px; vertical-align: baseline;color: rgb(25, 133, 188) !important;"></i>{{_(' Linkedin Informations')}}
                                            <span style="cursor:pointer" ng-hide="isEmpty(linkedProfile)" class="pull-right" ng-click="deleteSocialLink(linkedProfile,'sociallinks')"> <i class="fa fa-trash-o" style="font-size:15px;color: rgb(171, 171, 171);"></i></span>
                                           </h3>
-                                                <div ng-show="listPeople.length > 0 && isEmpty(lead.linkedin_profile)">                                       
+                                                <div ng-show="listPeople.length > 0 && isEmpty(lead.linkedin_profile)">
                                                   <div class="news-block-tags">
                                                         <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{_('We found diffrent possible matches. Click the one you want :')}}</strong>
                                                   </div>
-                                                 
                                                   <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px">
                                                       <li  id="item_<%=$index%>" ng-class="{true:'grayBackground', false:''}[$index == 0]" ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)" title="Select" class="linkedin-item-on-list" ng-repeat="profile in listPeople" style="margin-bottom:10px padding-left:10px;cursor:pointer" >
                                                         <div class="linkedin-item-name">
@@ -842,7 +731,7 @@
                                                           <%= profile.title%>
                                                         </div>
                                                       </li>
-                                                  </ul>                                                
+                                                  </ul>
                                                 </div>
 
                                     <div class="linkedin-details" ng-hide="isEmpty(lead.linkedin_profile)">
@@ -852,57 +741,56 @@
                                         <div style="margin-bottom:10px">
                                             <div class="details" style="padding-left: 15px; padding-top: 5px;">
                                                 <div class="past-position-title" style="font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;">
-                                                   <%=lead.linkedin_profile.firstname%> <%=lead.linkedin_profile.lastname%> 
+                                                   <%=lead.linkedin_profile.firstname%> <%=lead.linkedin_profile.lastname%>
                                                </div>
                                                 <div class="past-position-company" style="padding-bottom:1px">
-                                                   <%=lead.linkedin_profile.title%> 
+                                                   <%=lead.linkedin_profile.title%>
                                                 </div>
                                                 <div class="past-position-duration" style="color: gray;">
                                                   <%=lead.linkedin_profile.locality%>
-                                                </div>  
+                                                </div>
                                             </div>
-                                      </div> 
+                                      </div>
                                         <div ng-hide="isEmptyArray(lead.linkedin_profile.current_post)" class="news-block-tags" style="margin-bottom:10px;">
                                             <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-male"></i> {{_('current positions')}}</strong>
                                         </div>
-                                       
                                         <ul ng-hide="isEmptyArray(lead.linkedin_profile.current_post)" class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
                                             <li style="margin-bottom:10px" ng-hide  ="showMoreCurrent">
                                               <div class="past-position-title">
-                                                 <%=lead.linkedin_profile.current_post[0].title%> 
+                                                 <%=lead.linkedin_profile.current_post[0].title%>
                                               </div>
                                               <div class="past-position-company">
-                                                <%=lead.linkedin_profile.current_post[0].organisation%> 
+                                                <%=lead.linkedin_profile.current_post[0].organisation%>
                                               </div>
                                               <div class="past-position-duration">
                                                 <%=lead.linkedin_profile.current_post[0].period%>
-                                              </div> 
+                                              </div>
                                             </li>
                                             <li ng-show="showMoreCurrent" ng-repeat="exp in lead.linkedin_profile.current_post" style="margin-bottom:10px" >
                                               <div class="past-position-title">
                                                  <%=exp.title%>
                                               </div>
                                               <div class="past-position-company">
-                                                <%=exp.organisation%> 
+                                                <%=exp.organisation%>
                                               </div>
                                               <div class="past-position-duration">
                                                 <%=exp.period%>
-                                              </div> 
+                                              </div>
                                             </li>
                                             <li ng-show="lead.linkedin_profile.current_post.length > 1" style="text-align: center;" >
                                               <a href="" ng-click="showMoreCurrent=!showMoreCurrent">
                                               <span ng-hide="showMoreCurrent">+ Show more...</span>
                                               <span ng-show="showMoreCurrent">- Show less</span></a>
                                             </li>
-                                        </ul> 
+                                        </ul>
                                        <div ng-hide="isEmptyArray(lead.linkedin_profile.formations)" ng-show="" class="news-block-tags" style="margin-bottom:10px;  ">
                                             <strong style="font-size: 17px;color: rgb(25, 133, 188);"><i class="fa fa-briefcase"></i>{{_(' education')}}</strong>
                                         </div>
                                         <ul class="list-unstyled contact-infos" style="padding-left:10px">
                                         <li ng-repeat="formation in lead.linkedin_profile.formations"style="margin-bottom:10px" >
                                               <div class="past-position-title">
-                                                 <%=formation.degree%> 
-                                              </div> 
+                                                 <%=formation.degree%>
+                                              </div>
                                         </li>
                                         </ul>
                                         <div ng-show="lead.linkedin_profile.resume" class="news-block-tags" style="margin-bottom:10px;">
@@ -922,39 +810,39 @@
                                         <ul class="list-unstyled contact-infos" style="padding-left:10px;">
                                             <li style="margin-bottom:10px" ng-show="lead.linkedin_profile.past_post.length > 1 &&!showMore">
                                               <div class="past-position-title">
-                                                 <%=lead.linkedin_profile.past_post[0].title%> 
+                                                 <%=lead.linkedin_profile.past_post[0].title%>
                                               </div>
                                               <div class="past-position-company">
-                                                <%=lead.linkedin_profile.past_post[0].organisation%> 
+                                                <%=lead.linkedin_profile.past_post[0].organisation%>
                                               </div>
                                               <div class="past-position-duration">
                                                 <%=lead.linkedin_profile.past_post[0].period%>
-                                              </div> 
+                                              </div>
                                             </li>
                                             <li ng-show="showMore" ng-repeat="exp in lead.linkedin_profile.past_post" style="margin-bottom:10px" >
                                               <div class="past-position-title">
-                                                 <%=exp.title%> 
+                                                 <%=exp.title%>
                                               </div>
                                               <div class="past-position-company">
-                                                <%=exp.organisation%> 
+                                                <%=exp.organisation%>
                                               </div>
                                               <div class="past-position-duration">
                                                 <%=exp.period%>
-                                              </div>                                                  
+                                              </div>
                                             </li>
                                             <li ng-show="lead.linkedin_profile.past_post.length > 1" style="text-align: center;" >
                                               <a href="" ng-click="showMore=!showMore">
                                               <span ng-hide="showMore">+ Show more...</span>
                                               <span ng-show="showMore">- Show less</span></a>
                                             </li>
-                                        </ul>  
-                                    </div> 
+                                        </ul>
+                                    </div>
                                                 <ul class="list-unstyled contact-infos" style="padding-left:10px margin:0px">
                                                 <li ng-show="noLinkedInResults&& isEmpty(linkedProfile)&&isEmpty(linkedShortProfile)" style="padding-top:15px">
-                                                  <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
+                                                  <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>
                                                 </li>
-                                                </ul>                                          
-                                            </div>  
+                                                </ul>
+                                            </div>
                                                <div class="news-blocks blank-card blank-card-twitter newsCard">
                                                   <h3 style="margin-top:0px; margin-bottom: 20px;">
                                                       <i class="fa fa-twitter" style="  font-size: 24px;color:rgb(85, 172, 238);"></i>{{_(' Twitter')}}
@@ -968,10 +856,10 @@
                                                         <div ng-show="twIsSearching" style="margin-left: -10px; margin-right: -10px;margin-top: -13px;">
                                             <img src="/static/src/img/linkedinLoader.gif" style="width:100%;height: 6px;">
                                           </div>
-                                          
-                                         
-                                                <div>                                       
-                                                 
+
+
+                                                <div>
+
                                                   <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px" ng-show="twList.length >= 4&&isEmptyArray(twShortProfiles)">
                                                       <li  ng-mouseover="showSelectTwitter($index)" ng-mouseleave="hideSelectTwitter($index)" title="Select" class="linkedin-item-on-list" ng-repeat="profile in twList" style="margin-bottom:10px padding-left:10px;cursor:pointer"  id="titem_<%=$index%>"  ng-class="{true:'grayBackground', false:''}[$index == 0]">
                                                         <div class="linkedin-item-name">
@@ -984,13 +872,17 @@
                                                           <%= profile.description_of_user%>
                                                         </div>
                                                       </li>
-                                                  </ul>                                                
+                                                  </ul>
                                                 </div>
                                                 <ul ng-show="twNoResults" class="list-unstyled contact-infos" style="padding-left:10px">
                                                 <li style="padding-top:15px">
-                                                  <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>                                                  
+                                                  <p style="font-size: 16px;color: black;text-align: center;">No matching profile found</p>
                                                 </li>
+<<<<<<< HEAD
+                                                </ul>
+=======
                                                 </ul> 
+>>>>>>> ioGrow/clean
                                                 <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px" ng-hide="isEmpty(twShortProfile)">
                                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
                                                               <img ng-src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>" style="width: 90px;height: 90px;">
@@ -998,14 +890,14 @@
                                                           </div>
                                                           <div class="details" style="  width: calc(100% - 93px); display: inline-block;float: left; padding-left: 15px; padding-top: 5px;">
                                                               <div class="past-position-title" style="font-size: 18px; color: rgb(25, 133, 188); padding-bottom: 5px;">
-                                                             <%=twShortProfile.name%> 
+                                                             <%=twShortProfile.name%>
                                                           </div>
                                                           <div class="past-position-company" style="padding-bottom:1px">
-                                                            <%=twShortProfile.description_of_user%> 
+                                                            <%=twShortProfile.description_of_user%>
                                                           </div>
                                                           <div class="past-position-duration" style="color: gray;">
                                                             <%=twShortProfile.location%>
-                                                          </div>  
+                                                          </div>
                                                         <button  style="margin-left:10px" type="button" ng-click="saveTwitterUrl(twShortProfile)" class="btn red btn-sm pull-right btn-inline ">Get
                                                         </button>
                                                         <button  type="button" ng-click="cancelSelection('twShortProfiles')" class="btn btn-default btn-sm pull-right btn-inline " style="padding-bottom:3px" ng-hide="twList.length < 4">Cancel
@@ -1023,7 +915,7 @@
                                                     </div>
                                                     <div class="news-block-tags" style="margin-bottom:10px;">
                                                         <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i class="fa fa-comment"></i> {{_('Last tweet :')}}</strong>
-                                                        
+
                                                     </div>
                                                     <div class="news-block-tags">
 
@@ -1032,10 +924,10 @@
                                                         </label>
                                                         </div>
                                                     </div>
-                                                    
-                                                  
-                                                </div>                                                
-                            <div class="clearfix"></div>                                                
+
+
+                                                </div>
+                            <div class="clearfix"></div>
                                                     </div>
 
                                                 </div>
@@ -1044,9 +936,9 @@
                                                   <img src="/static/src/img/watson_logo.png" style="width: 35px;margin-top: -12px;">{{_(' IBM Watson Analysis')}}
                                                  </h3>
                                                 <div class="news-block-tags" style="min-height: 300px;">
-                                                   <iframe src="<%=watsonUrl%>" style="border: none;width: 100%;height: 
+                                                   <iframe src="<%=watsonUrl%>" style="border: none;width: 100%;height:
                                                    630px;">
-                                                    </iframe>                                           
+                                                    </iframe>
                                                 </div>
 
                                             </div>
@@ -1061,7 +953,7 @@
                                         <div ng-show="isEmptyArray(leads.customfields)" style="text-align:center">
                                                   <a href="/#/admin/custom_fields/1" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
                                                     + <i class="fa fa-list-alt"></i>  Add Custom fields
-                                                  </a> 
+                                                  </a>
                                         </div>
                                         <ul ng-show="!isEmptyArray(leads.customfields)" style="list-style: none;padding-left: 0px;">
                                             <li ng-repeat="cusfield in leads.customfields"  style="padding: 5px;">
@@ -1078,12 +970,12 @@
                                                             <div ng-show="cusfield.field_type=='radio'" role="radiogroup" ng-repeat="option in cusfield.options">
                                                                 <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>" type="radio" ng-model="cusfield.value" value="<%=option%>"  ng-click="addCustomField(cusfield)">
                                                                 <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>" ng-click="addCustomField(cusfield)"> <%=option%></label>
-                                                                <br>        
+                                                                <br>
                                                             </div>
                                                             <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
                                                                 <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
                                                                 <label for="<%=option%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
-                                                                <br>        
+                                                                <br>
                                                             </div>
                                                             <input ng-blur="addCustomField(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">
                                                             <textarea ng-model="cusfield.value" ng-blur="addCustomField(cusfield)" class="form-control" ng-show="cusfield.field_type=='paragraph'"></textarea>
@@ -1094,8 +986,8 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                        
-                                        
+
+
                                          <div class="clearfix"></div>
                                 </div>
                                               <div class="news-blocks blank-card blank-card-yellow newsCard">
@@ -1124,15 +1016,6 @@
                                                     </ul>
                                                         <div class="row">
                                                         <div class="col-md-12  margin-bottom-10">
-                                                            <!--<p class⁼"lead"="">
-                                                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                                                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                                                </a>
-                                                                <br>
-                                                                {{_('Or just add notes to remember what\'s important.')}}
-                                                <br>
-                                                </p>-->
                                                 <form id="addNote" class="ng-pristine ng-valid">
                                                     <div class="form-group">
                                                         <input class="form-control ng-pristine ng-valid" autofocus=""
@@ -1156,22 +1039,6 @@
                                     </div>
 
                                 </div>
-                                <!--<div class="news-blocks blank-card blank-card-red newsCard">
-                                                    <h3 style="margin-top:0px">{{_('Introduction')}}</h3>
-                                                    <div class="news-block-tags">
-                                                        <div class="news-block-tags">
-
-                                                        <div class="form-group row">
-                                                          <div class="col-md-12">
-                                                             <p ng-hide="showEdit"><%=lead.introduction%></p>
-                                                            <textarea ng-show="showEdit||!lead.introduction" id="noteBody" ng-blur="updateintro(lead)" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
-                                                          </div>
-                                                        </div>                                                        
-                                                    </div>
-                                                    </div>
-
-                                                </div>-->
-                              
                                 <div ng-show="!isEmptyArray(infonodes.customfields)" class="news-blocks blank-card blank-card-gray newsCard">
                                     <h3 style="margin-top:0px"><i class="fa  fa-list-ul" style="font-size:20px"></i> {{ _('Other details') }}</h3>
                                     <ul class="list-unstyled contact-infos showList">
@@ -1215,91 +1082,6 @@
                     </div>
                 </div>
                 <!-- $ contacts tab -->
-                <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3" style="display: none;">
-                    <div class="row cards-container">
-                        <div class="btn-group relbutton">
-                            <button ng-click="addContactModal()" id="sample_editable_1_new" class="btn red">
-                                {{ _('Add person') }}
-                            </button>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
-                                    <div droppable ng-repeat="contact in contacts"
-                                         data-column="<%=getPosition($index)%>" class="cardElement"
-                                         ng-drop="dropTag(contact)" ng-class="{rightcards: getPosition($index) == 4}">
-                                        <div class="detailsSection">
-                                            <div class="head">
-                                                <div class="pic">
-                                                    <a href="/#/contact/show/<%= contact.id %>" class="startup-link"
-                                                       title="contact.firstname">
-                                                        <img ng-hide="account.logo_img_id" alt="contact.firstname"
-                                                             class="img-responsive img-thumbnail"
-                                                             src="/static/src/img/default_company.png">
-                                                        <img ng-show="account.logo_img_id" alt="account.name"
-                                                             class="img-responsive img-thumbnail"
-                                                             ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>"
-                                                             data-hasqtip="2">
-                                                    </a>
-                                                </div>
-                                                <div class="text">
-                                                    <div class="name"><a href="/#/contact/show/<%= contact.id %>"
-                                                                         class="profile-link" data-id="126085"
-                                                                         data-type="Startup"><%= contact.firstname %>
-                                                        <%= contact.lastname %></a></div>
-                                                    <div class="pitch">
-                                                                        <span ng-show="contact.account_type">
-                                                                            <a href="/#/search/type:contact <%=contact.title%>">
-                                                                                #<%= contact.title %></a>
-                                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                                        </div>
-                                        <div class="tagsSection" ng-class="{hidden: contact.tags == null}">
-                                            <div class="sectionContent">
-                                                <a ng-repeat="tag in contact.tags"
-                                                   href="/#/search/type:contact tags:<%=tag.id%>"> <span
-                                                        class="pull-right task-label task-tag badge ng-scope ng-binding"
-                                                        style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--blank stat-->
-                                    <div ng-show="blankStateaccount" data-span="3" class="col-md-12 responsive"
-                                         data-tablet="span6" data-desktop="span12">
-                                        <div class="dashboard-stat cards">
-                                            <div class="blank_slate_arrow"></div>
-                                            <div class="thumbnail blank_slate_body">
-                                                <img class="img-responsive" src="/static/src/img/accounts_blank.png">
-
-                                                <p class="lead">{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div ng-show="isFiltering * !accounts" data-span="3" class="col-md-12 responsive"
-                                         data-tablet="span6" data-desktop="span12">
-                                        <div class="dashboard-stat cards">
-                                            <div class="blank_slate_arrow"></div>
-                                            <div class="thumbnail blank_slate_body">
-
-                                                <p class="lead">{{ _('No results found, try with another filter') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix"></div>
-
-                                </div>
-                                <!--/inner-cards-container-->
-                            </div>
-                            <!--/inner-cards-container-->
-                        </div>
-                    </div>
-
-
-                </div>
                 <div id="beforedeleteLead" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -1336,12 +1118,12 @@
                                 <!-- ngRepeat: attachment in documents -->
                                 <div class="col-md-12 waterfall2" ng-hide="blankStateaccount">
                                     <div ng-repeat="attachment in documents" class="cardElement cusCardElement" style="min-height: 76px;">
-                                      <div class="customCheckbox cusCheckOnCard checkboxOnSmallScreen ">  
+                                      <div class="customCheckbox cusCheckOnCard checkboxOnSmallScreen ">
                                             <input  title="Select document" type="checkbox" ng-checked="isSelectedDoc(attachment)" ng-click="selectDocWithCheck($event,$index,attachment)" id="docCard_<%= $index %>">
                                             <label for="docCard_<%= $index %>" class="labelElement">
                                               <span class="check"></span>
                                               <span class="box"></span>
-                                            </label>  
+                                            </label>
                                         </div>
                                         <div class="detailsSection">
                                             <div class="head">
@@ -1367,7 +1149,7 @@
                                                               <%=attachment.access%>
                                                         </span>
                                                     </div>
-                                                     
+
                                                 </div>
                                                 <div class="clearfix"></div>
                                             </div>
@@ -1395,46 +1177,6 @@
                     </div>
 
                 </div>
-                <!-- $ send email tab -->
-                <!--  <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 8">
-                                    <div class="showPage">
-                                        <div class="row">
-                                            <div class="col-md-12  margin-bottom-10">
-                                                <p class⁼"lead"=""><strong>{{_('Send an Email to :')}}</strong> </p>
-                                                <form  class="ng-pristine ng-valid">
-                                                    <div class="form-group">
-                                                        <input  type="text" required class="form-control ng-pristine ng-valid" autofocus  placeholder="{{_('To')}}" id="messageSubject" ng-model="email.to">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{_('CC')}}" id="messageSubject" ng-model="email.cc">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{_('BCC')}}" id="messageSubject" ng-model="email.bcc">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <input  required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{_('Add a subject')}}" id="messageSubject" ng-model="email.subject">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <textarea id="some-textarea" placeholder="{{_('Enter text ...')}}" id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa fa-file"></i> {{_('Attach files')}}</a>
-                                                        <ul class="list-unstyled">
-                                                            <li ng-repeat="file in sendWithAttachments">
-                                                                <%= file.title %>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-
-                                                    <div class="pull-right">
-                                                        <input   ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit" class="btn green" value="{{_('Send')}}">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
                 <!-- $ opportunities tab -->
 
                 <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5" style="display: none;">
@@ -1596,7 +1338,7 @@
                                           <div class="col-md-12">
                                            <div class="input-icon">
                                              <i class="fa fa-building"></i>
-                                               <input disabled type="text" class="disabled-input" required 
+                                               <input disabled type="text" class="disabled-input" required
                                                       value="<%=lead.company%>"
                                                       placeholder="{{_('Company name')}}" style="background-color:white !important">
                                            </div>
@@ -1612,11 +1354,8 @@
                                   </div>
                                 </div>
                             </div>
-                        </div>                   
+                        </div>
                    </div>
-
-                  
-
                   </div>
                   <div class="row">
                     <div class="col-md-12">
@@ -1629,7 +1368,7 @@
                                     <li ng-repeat="opps in insideStages" id="wizardstep">
                                       <a ng-click="changeInitialStage(opps)" ng-href="#<%='tab'+$index%>" data-toggle="tab" class="step">
                                       <span class="number">
-                                        <%=$index%>                          
+                                        <%=$index%>
                                       </span>
                                       <span class="desc">
                                         <i class="fa fa-check"></i> <%=opps.name%>
@@ -1641,7 +1380,7 @@
                                     <div class="progress-bar progress-bar-success" style="height:100%!important;">
                                     </div>
                                   </div>
-                                  
+
                                 </div>
                                 <div class="form-actions fluid" style="display:none">
                                   <div class="row">
@@ -1669,39 +1408,6 @@
               </div>
               </div>
               <div class="row" style="margin-top:20px">
-                         <!--<div class="col-md-6">
-
-                               <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>{{ _('Opportunity Stage') }}</h3>
-                                <div class="row">
-                                  <div class="col-md-12">
-                                    <div class="form-group">
-
-                                        <div class="">
-                                          <select ng-model="initialStage" ng-options="opps as opps.name + ' - ( ' + opps.probability + '% )'   for opps in opportunitystages track by opps.probability" class="form-control selector-margin" >
-
-                                          </select>
-                                        </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-md-12">
-                                    <p>{{ _('Estimated closed date') }}:</p>
-                                    <div class="form-group row">
-                                        <div class="col-md-12">
-                                            <input cusdatetimepicker data-model="opportunity.closed_date" type="text" class="form-control" placeholder="{{ _('Add a due date')}}" value="" id="leadEventStartsAt">
-                                        </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-
-                              </div>
-
-
-                          </div>-->
-
               <div class="col-md-6">
                   <div class="news-blocks blank-card blank-card-red">
                     <h3><i class="fa fa-dot-circle-o" style="font-size: 24px;"></i> {{ _(' Qualification')}}</h3>
@@ -1715,7 +1421,7 @@
                                   <div class="col-md-4" style="padding-right: 0px;">
                                     <select class="form-control">
                                         <option value="yes">{{ _('Yes')}}</option>
-                                        <option value="no">{{ _('No')}}</option>                                        
+                                        <option value="no">{{ _('No')}}</option>
                                     </select>
                                   </div>
                                   <div class="col-md-8"  style="padding-left: 5px;">
@@ -1738,9 +1444,6 @@
                                 <div class="news-block-tags">
                                   <div class="form-group row">
                                     <label class="control-label col-md-4"><i class="fa fa-group"></i>{{ _(' Competitors')}}</label>
-                                    <!--<div class="col-md-8">
-                                      <textarea id="noteBody"  ng-model="opportunity.competitor" class="form-control ng-pristine ng-valid" rows="3" ></textarea>
-                                    </div>-->
                                     <div class="col-md-8">
                                         <div class="" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }" style="margin-bottom:15px">
                                               <div class="input-icon">
@@ -1756,39 +1459,21 @@
                                               </div>
                                         </div>
                                         <ul class="list-unstyled contact-infos infoslist">
-                                          <li ng-repeat="competitor in competitors"> 
+                                          <li ng-repeat="competitor in competitors">
                                              <img class="contact-photo" src="/static/src/img/avatar_contact.jpg">
                                              <span>
-                                               <%= competitor.name %> 
-                                              </span>                                                                          
+                                               <%= competitor.name %>
+                                              </span>
                                              <button type="button" class="close closeContactForm" tabindex='-1' ng-click="pullFromArray($index, competitor, competitors)" data-dismiss="alert"></button>
                                              <div class="clearfix"></div>
-                                             <div class="pull-right">      
+                                             <div class="pull-right">
                                             </div>
                                           </li>
                                         </ul>
-                                    </div>                                    
+                                    </div>
                                     <div class="clearfix"></div>
                                   </div>
                                 </div>
-                                <!--<div class="news-block-tags">
-                                    <div class="form-group row">
-                                      <label class="control-label col-md-4"><i class="fa fa-user"></i> {{ _(' Descision Maker')}}</label>
-                                      <div class="col-md-8">
-                                        <div class="row">
-                                          <div class="col-md-4" style="padding-right: 0px;">
-                                            <select ng-model="" class="form-control">
-                                                <option value='true'>{{ _('Yes')}}</option>
-                                                <option value='false'>{{ _('No')}}</option>                                        
-                                            </select> 
-                                          </div>
-                                          <div class="col-md-8"  style="padding-left: 5px;">
-                                             <input ng-model="opportunityAddi.decission_maker"   class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Descision Maker ?')}}"  >
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>-->
                           </div>
                           <div class="col-md-12">
                              <div class="news-block-tags">
@@ -1862,15 +1547,15 @@
                               </div>
                           </div>
                         </div>
-                          
-                             
+
+
                   </div>
                    <div class="news-blocks blank-card blank-card-gray relatedBlock" ng-class="{'disabledBlock':isEmptyArray(opp.customfields)}" >
                                     <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
                                         <div ng-show="isEmptyArray(opp.customfields)" style="text-align:center">
                                                   <a href="/#/admin/custom_fields/2" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
                                                     + <i class="fa fa-list-alt"></i>  Add Custom fields
-                                                  </a> 
+                                                  </a>
                                         </div>
                                         <ul ng-show="!isEmptyArray(opp.customfields)" style="list-style: none;padding-left: 0px;">
                                             <li ng-repeat="cusfield in opp.customfields"  style="padding: 5px;">
@@ -1887,12 +1572,12 @@
                                                             <div ng-show="cusfield.field_type=='radio'" role="radiogroup" ng-repeat="option in cusfield.options">
                                                                 <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>" type="radio" ng-model="cusfield.value" value="<%=option%>"  ng-click="addCustomFieldForOpp(cusfield)">
                                                                 <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>" ng-click="addCustomFieldForOpp(cusfield)"> <%=option%></label>
-                                                                <br>        
+                                                                <br>
                                                             </div>
                                                             <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
                                                                 <input type="checkbox" value="<%=option%>" ng-click="addCustomFieldForOpp(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
                                                                 <label for="<%=option%>"> <%=option%></label ng-click="addCustomFieldForOpp(cusfield,option)">
-                                                                <br>        
+                                                                <br>
                                                             </div>
                                                             <input ng-blur="addCustomFieldForOpp(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">
                                                             <textarea ng-model="cusfield.value" ng-blur="addCustomFieldForOpp(cusfield)" class="form-control" ng-show="cusfield.field_type=='paragraph'"></textarea>
@@ -1935,15 +1620,6 @@
                         </ul>
                                                         <div class="row">
                                                         <div class="col-md-12  margin-bottom-10">
-                                                            <!--<p class⁼"lead"="">
-                                                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                                                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                                                </a>
-                                                                <br>
-                                                                {{_('Or just add notes to remember what\'s important.')}}
-                                                                <br>
-                                                            </p>-->
                                                             <form id="addNote" class="ng-pristine ng-valid">
                                                                 <div class="form-group">
                                                                     <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Title')}}" id="messageSubject" ng-model="newOppNote.title">
@@ -1956,10 +1632,10 @@
                                                                 </div>
                                                             </form>
                                                         </div>
-                                                    </div>                                                    
+                                                    </div>
                                                     </div>
 
-                                                </div> 
+                                                </div>
 
               </div>
 
@@ -1980,25 +1656,25 @@
                                         <th>
                                           <input type="checkbox" ng-checked="allOppsSelected" ng-click="selectAllOpp($event)" >
                                         </th>
-                                    
-                                        <th >                          
+
+                                        <th >
                                             <a href="" ng-click="filterBy('name')"> {{ _(' Opportunity')}}</a>
                                             <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
                                             <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
                                         </th>
-                                        
-                                        <th >                          
+
+                                        <th >
                                             <a href="" ng-click="fltby = 'title'; reverse=false"> {{ _(' Amount')}}</a>
                                         </th>
-                                        
 
-                                        <th>                          
+
+                                        <th>
                                           <a href=""  ng-click="filterBy('last_stage.name')" > {{ _('Last Stage')}}</a>
                                         </th>
-                                        <th style="text-align:center">                          
+                                        <th style="text-align:center">
                                             <a href="" ng-click="filterBy('account.name')" style="text-align:center"> {{ _(' Estimated close date')}}</a>
                                         </th>
-                                          <th style=" width: 100px; ">                          
+                                          <th style=" width: 100px; ">
                                             <a href="" ng-click="fltby = 'updated_at'; reverse=false" > {{ _(' Last update')}}</a>
                                         </th>
                                     </tr>
@@ -2008,7 +1684,7 @@
                                         <td>
                                           <input title="Select all Users" type="checkbox" ng-checked="isSelectedOpp(opportunity)" ng-click="selectOppWithCheck($event,$index,opportunity)" >
                                         </td>
-                                       
+
                                         <td>
                                           <div class="nameContainer" style="max-width:210px font-size:15px">
                                             <a href="/#/opportunities/show/<%= opportunity.id %>" style=" font-size: 15px; " class="profile-link">
@@ -2022,7 +1698,7 @@
                                              <div class="clearfix"></div>
                                           </div>
                                         </td>
-                                      
+
                                         <td>
                                 <span style=" color: #d12610;font-weight: 400;"><%= opportunity.currency %> <%= opportunity.amount_total %></span><br>
                                                     <span style=" color: rgb(156, 156, 156); font-size: 13px; " class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
@@ -2030,26 +1706,26 @@
                                                     </span>
 
                                         </td>
-                                        
+
                                         <td>
                                           <span style=" font-size: 16px; font-weight:400"><%= opportunity.current_stage.name%></span>
                                           <!--<div easypiechart class="chart chartOnList" options="chartOptionsOnList" percent="opportunity.current_stage.probability"></div>
-                                          <div class="oppStage">                            
+                                          <div class="oppStage">
                                               <div style=" text-align: center;">
                                                 <span style=" font-size: 16px; color: rgb(39, 153, 28); "><%=opportunity.current_stage.probability%> %</span>
                                                 <span style=" font-size: 15px; "><%=opportunity.current_stage.name%></span>
-                                                
+
                                               </div>
                                            </div>-->
                                         </td>
                                         <td style="word-wrap: break-word;max-width:200px;text-align:center">
-                                            <span> <%= opportunity.closed_date | date:'dd-MM-yyyy' %></span> 
-                                              </span> 
+                                            <span> <%= opportunity.closed_date | date:'dd-MM-yyyy' %></span>
+                                              </span>
                                         </td>
                                         <td style=" font-size: 11px; ">
                                           <%=fromNow(opportunity.updated_at)%>
                                         </td>
-                                    </tr>                    
+                                    </tr>
                                 </tbody>
                                 </table>
                                 <div class="loaderList" ng-show="isMoreItemLoading">
@@ -2094,143 +1770,13 @@
                                 </button>
 
                             </div>
-                            <!--h3 class="pagination pull-right" ng-show="isLoading">Loading...</h3-->
                         </div>
                     </div>
 
 
-                </div>
-                <!-- Psychometrics tab-->
-                <div class="tab-pane active" id="tab_1_10" ng-show="selectedTab == 10">
-                    <div class="showPage">
-                        <div class="row">
-
-                            <iframe src="http://iocontext.eu-gb.mybluemix.net/api/v1/vizualize/<%=twitterScreenName%>"
-                                    frameborder="0" style="height: 800px;overflow:hidden;width: 800px;"
-                                    onload="iframeLoaded()" id="iframePan" seamless="seamless" scrolling="no"><br/>
-
-                                <p>Your browser does not support iframes.</p><br/></iframe>
-                            <img src="/static/src/img/gloader.gif" id="loadingPan" style="margin-left: 395px;
-margin-top: 20px"/>
-
-                        </div>
-
-
-                    </div>
                 </div>
                 <!-- end of tab -->
                 <!-- $ linkedin profile -->
-                <div class="tab-pane active" id="tab_1_2" ng-if="(selectedTab == 9)">
-                    <div class="row slimform">
-                        <div class="col-md-6">
-
-
-                            <!--<div class="news-blocks blank-card blank-card-yellow newsCard" ng-show="twitterProfile.description_of_user||twitterProfile.screen_name||twitterProfile.location||twitterProfile.lang">
-                                                <h3>{{_('General Informations from Twitter')}}</h3>
-                                                <img class="google-avatar pull-right" src="<%=twitterProfile.profile_image_url_https%>"/>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Description of user')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                
-                                                    <li>
-                                                        <%=twitterProfile.description_of_user%>
-                                                    </li>
-                                    
-
-                                                </ul>
-                                               
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Screen name')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.screen_name%>
-                                                    </li>
-                                                </ul> 
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Location')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.location%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Language')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.lang%>
-                                                    </li>
-                                                </ul>
-                                            </div>
-
-                                            <div class="news-blocks blank-card blank-card-red newsCard" ng-show="twitterProfile.nbr_tweets||twitterProfile.followers_count||twitterProfile.friends_count">
-
-                                                <h3>{{_('Stats from Twitter')}}</h3>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Number of Tweets')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.nbr_tweets%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Number of followers')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                <li>
-                                                        <%=twitterProfile.followers_count%>
-                                                </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Number of friends')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.friends_count%>
-                                                    </li>
-                                                </ul> 
-                                            </div>
-
-                                             <div ng-show="twitterProfile.last_tweet_text||twitterProfile.last_tweet_retweet_count||twitterProfile.last_tweet_favorite_count" class="news-blocks blank-card blank-card-red newsCard">
-
-                                                <h3> {{_('Tweets')}}</h3>
-                                                <div class="news-block-tags">
-                                                    <strong>{{_('Last Tweet:')}}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        {{_('Text:')}}
-                                                        <br/>
-                                                        <%=twitterProfile.last_tweet_text%>
-                                                    </li>
-                                                </ul>
-                                                <ul  class="list-unstyled contact-infos" >
-                                                    {{_('Number of retweets:')}}
-                                                    <br/>
-                                                        <%=twitterProfile.last_tweet_retweet_count%>
-                                                    <br/>
-                                                    {{_('Number of favorites:')}}
-                                                    <br/>
-                                                <%=twitterProfile.last_tweet_favorite_count%>
-                                                    
-                                                </ul>
-                                                
-                                                
-                                            </div>-->
-
-                        </div>
-                        <div class="col-md-6">
-                            <div class="right-col">
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -2259,7 +1805,7 @@ margin-top: 20px"/>
                                        <span>
                                             <%=lead.status%>
                                        </span>
-                                       
+
                                         <i class="icon-angle-down fa fa-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu">
@@ -2268,11 +1814,11 @@ margin-top: 20px"/>
                                                 <%=leadstat.status%>
                                             </a>
                                         </li>
-                                        
+
                                     </ul>
                                 </div>
                         </li>
-                        <li ng-show="lead.source|| showEdit"> 
+                        <li ng-show="lead.source|| showEdit">
                              <div class="btn-group">
                                     <span class="title">
                                             <i class="fa fa-code-fork"></i>
@@ -2306,15 +1852,15 @@ margin-top: 20px"/>
                             <div class="row">
                                 <div class="col-md-5" style="padding-right:0px">
                                   <span class="title">
-                                    <i class="fa fa-gear"></i> 
+                                    <i class="fa fa-gear"></i>
                                    {{_('Industry :')}}
-                                   </span>  
+                                   </span>
                                 </div>
                                 <div class="col-md-7" style="padding-left:0px">
                                   <span ng-hide="showEdit">
                                       <%= lead.industry %>
-                                  </span> 
-                                  <input ng-show="showEdit" type="text" required ng-model="lead.industry" typeahead-on-select="inlinePatch('Lead','', 'industry',lead.id,lead.industry)" typeahead="industry as industry for industry in industries | filter:$viewValue | limitTo:10" class="form-control relatedExistingInput" placeholder="{{_('Industry')}}" style="padding: 0px;height: 20px;margin-bottom: 0px;"> 
+                                  </span>
+                                  <input ng-show="showEdit" type="text" required ng-model="lead.industry" typeahead-on-select="inlinePatch('Lead','', 'industry',lead.id,lead.industry)" typeahead="industry as industry for industry in industries | filter:$viewValue | limitTo:10" class="form-control relatedExistingInput" placeholder="{{_('Industry')}}" style="padding: 0px;height: 20px;margin-bottom: 0px;">
                                 </div>
                             </div>
                         </li>
@@ -2328,7 +1874,7 @@ margin-top: 20px"/>
                                       <%= lead.owner.google_display_name %>
                                 </span>
                                 <a ng-show="(showEdit)&&(lead.owner.google_user_id=={{ME}}||{{is_admin}})" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
-                                   data-toggle="dropdown" style="margin-right:0px">           
+                                   data-toggle="dropdown" style="margin-right:0px">
                                     <span>
                                       <%= lead.owner.google_display_name %>
                                     </span>
@@ -2350,14 +1896,14 @@ margin-top: 20px"/>
                                          {{ _(' Access : ') }}
                                 </span>
                                 <span ng-hide="showEdit">
-                                       <%=lead.access%> 
+                                       <%=lead.access%>
                                 </span>
                                 <a ng-show="showEdit" style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
                                    data-toggle="dropdown" style="margin-right:0px">
                                    <span>
-                                       <%=lead.access%> 
+                                       <%=lead.access%>
                                    </span>
-                                   
+
                                     <i class="icon-angle-down fa fa-angle-down"></i>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -2440,22 +1986,6 @@ margin-top: 20px"/>
                             </span>
                                 </div>
                                 <div class="moreDetails row" ng-show="showDetails">
-                                    <!--  <div class="col-md-6 col-xs-6 event-schedule">
-                                <span class=""><i class="fa fa-calendar"></i>
-                                 <%= task.due | date:'dd MMM'%> </span>
-                            </div>
-                            <div class="col-md-6 col-xs-6 event-schedule">
-                               <span class="">
-                                  <i class="fa fa-bell-o"></i>
-                                  <%= task.reminder | date:'dd MMM'%>
-                                </span>
-                            </div>
-                            <div class="col-md-12">
-                               <span class="">
-                                  <i class="fa fa-map-marker"></i>
-                                  <%= event.where %>-->
-                                    <!--</span>
-                            </div>-->
                                 </div>
                             </div>
                         </li>
@@ -2577,56 +2107,11 @@ margin-top: 20px"/>
                         </li>
                     </ul>
                     <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
-                        <!--  <div class="formElements newEventToLead" ng-show="newEventform">
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="{{ _('Event tilte')}}">
-                              </div>
-                              
-                            </div>
-                            {{ _('All day')}} <input type="checkbox" ng-model="allday"/>
-                              
-                              <div class="row" ng-show="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                       <div class="input-icon ">
-                                        <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="{{ _('When?')}}" value="" id="leadEventStartsAt">
-                                      </div>
-                                </div>
-                            </div>
-                        
-                            <div class="row" ng-hide="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                      <div class="input-icon">
-                                        <i class="fa fa-calendar"></i>
-                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
-                                      </div>
-
-                                </div>
-                            </div>
-                            <div class="row" ng-hide="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                       <div class="input-icon ">
-                                        <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="{{ _('To')}}" value="" id="leadEventStartsAt">
-                                      </div>
-                                </div>
-                            </div>
-                          
-
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="{{ _('Where ?')}}">
-                              </div>
-                             
-                            </div>
-                  </div> -->
                         <div class="row">
                             <div class="col-md-12 margin-top-10">
                                 <p class="newEventText"><span ng-hide="newEventform">{{ _('Add New Event') }}</span>
                                     <button type="button" ng-click="showAddEventPopup()"
                                             class="btn blue btn-sm pull-right btn-inline">{{ _('Add') }}</button>
-                                    <!--  <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button> -->
                                 </p>
                             </div>
                         </div>
@@ -2638,13 +2123,6 @@ margin-top: 20px"/>
 
         </div>
     </div>
-
-    <script type="text/javascript">
-        $('.lead_related_events').slimScroll({
-            height: '160px'
-        });
-
-    </script>
 </div>
 </div>
 
@@ -2693,16 +2171,6 @@ margin-top: 20px"/>
 
                         </div>
                     </div>
-                    <!--div class="control-group">
-                            <label  class="required col-md-3 control-label">{{_("Company")}} </label>
-
-                            <div class="col-md-9">
-                              <input type="text" class="form-control"   id="id_Company" ng-model="contact.company">
-
-                            </div>
-                        </div-->
-
-
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
@@ -2738,11 +2206,7 @@ margin-top: 20px"/>
         </div>
     </div>
 </div>
-
-
 <!--HKA 18.11.2013 Add Phone Modal -->
-
-
 <div id="phonemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -2756,7 +2220,6 @@ margin-top: 20px"/>
                         <label class="col-md-3 control-label">{{ _("Type") }} </label>
 
                         <div class="col-md-9">
-                            <!--input type="text" placeholder="{{_('home')}},{{_('work')}},{{_('mobile')}},{{_('other')}} ..." required id="id_name" ng-model="phone.type_number"-->
                             <select ng-model="phone.type_number" class="form-control">
                                 <option value="home" selected="selected">{{ _('home') }}</option>
                                 <option>{{ _('work') }}</option>
@@ -3942,7 +3405,7 @@ margin-top: 20px"/>
                                             <div class="oppEstDate"
                                                  style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
                                                 <!--  <input id="datetimepickerjquery" type="text" > -->
-                                           
+
 
                                     <span ng-hide="showStartsCalendar||showEventInput"
                                           ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
@@ -4309,9 +3772,9 @@ margin-top: 20px"/>
                                                                            style=" top: 2px !important;"></a></span>
                                         <!--      <ul  class="list-inline"style="list-style:none" ng-show="remindmeby">
                                                  <li> <strong> By:</strong> </li>
-                                                 <li><input type="radio"  name="by" ng-model="method" value="email"> Email</li> 
+                                                 <li><input type="radio"  name="by" ng-model="method" value="email"> Email</li>
                                                  <li><input type="radio" ng- name="by" ng-model="method" value="sms">SMS</li>
-                                                
+
                                                </ul> -->
                                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                             <li role="presentation"><a role="menuitem" tabindex="-1"
@@ -4467,21 +3930,7 @@ function waitwizard() {
             }
         };
         /* $('body').popover({ selector: '[data-popover]', trigger: 'click hover', placement: 'left', delay: {show: 50, hide: 400}});*/
-        $('#assigeeList').slimScroll({
-            height: '200px'
-        });
-        $('.slim-linkedin').slimScroll({
-            height: '215px',
-            alwaysVisible: true
-        });
-        $('#collaborators').slimScroll({
-            height: '192px'
-        });
-        $('.waterfall').waterfall({
-            colMinWidth: 210,
-            defaultContainerWidth: 840,
-            autoresize: true
-        });
+        $('#assigeeList, .lead_related_events, .slim-linkedin, #collaborators').lionbars({ autohide: true });
         $('.waterfall2').waterfall({
             colMinWidth: 210,
             defaultContainerWidth: 840,
@@ -4499,8 +3948,4 @@ function waitwizard() {
             placeholder: "{{_('Click to Select a label')}}",
             allowClear: false
         });
-        $('.lead_related_events').slimScroll({
-            height: '160px'
-        });
-
     </script>

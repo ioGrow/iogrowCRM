@@ -1167,9 +1167,7 @@
        </div>
     <!-- -->
        <script type="text/javascript">
-          $('#assigeeList').slimScroll({
-              height: '200px'
-          });
+          $('#assigeeList').lionbars({});
        </script>
 
 <script type="text/javascript">
@@ -1192,22 +1190,5 @@
         }
     }
     handleUniform();
-      $('.scroller').each(function () {
-            var height;
-            if ($(this).attr("data-height")) {
-                height = $(this).attr("data-height");
-            } else {
-                height = $(this).css('height');
-            }
-            $(this).slimScroll({
-                size: '7px',
-                color: ($(this).attr("data-handle-color")  ? $(this).attr("data-handle-color") : '#a1b2bd'),
-                railColor: ($(this).attr("data-rail-color")  ? $(this).attr("data-rail-color") : '#333'),
-                height: height,
-                alwaysVisible: ($(this).attr("data-always-visible") == "1"),
-                railVisible: ($(this).attr("data-rail-visible") == "1"),
-                disableFadeOut: true
-            });
-        });
-        $('#slimList').slimScroll({});
+        $('#slimList').lionbars({});
 </script>

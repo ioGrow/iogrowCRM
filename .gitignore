@@ -1,10 +1,10 @@
 *~
 *.py[cod]
-node_modules/
-bower_components/
-static/build/
-libx/
-.idea/
+node_modules/*
+bower_components/*
+static/build/*
+libx/*
+.idea/*
 # C extensions
 *.so
 *.DS_Store
@@ -40,4 +40,3 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
-

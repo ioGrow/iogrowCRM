@@ -1,4 +1,3 @@
-
 /*------------------------------------*\
     CONTENTS
 \*------------------------------------*/
@@ -43,59 +42,10 @@ font-size: 14px;
 .news-block-tags strong{
   font-weight: 400;
 }
-/* enable absolute positioning */
-.inner-addon { 
-    position: relative; 
-}
-
-/* style icon */
-.inner-addon .glyphicon {
-  position: absolute;
-  padding: 10px;
-  pointer-events: none;
-}
-
-/* align icon */
-.left-addon .glyphicon  { left:  0px;}
-.right-addon .glyphicon { right: 0px;}
-
-/* add padding  */
-.left-addon input  { padding-left:  30px; }
-.right-addon input { padding-right: 30px; }
 .inbox-label {
 font-weight: 300;
 }
 
-.calendar-form-controle{
-  height: 29px !important;
-  margin-bottom: 8px;
-  font-size: none !important;
-  width: 100% !important;
-  border-bottom: 1px solid #e5e5e5;
-  border-top: none ! important;
-  border-left: none !important;
-  border-right: none !important;
-}
-.calendar_blank_card{
-  border-top: 1px solid #fff;
-}
-
-.xdsoft_datetimepicker{
-  z-index: 99999 !important;
-}
-.calendar-close-invite{
-     display: inline-block;
-  width: 12px;
-  height: 13px;
-  position: relative;
-  /* margin-top: -14px; */
-  /* right: 3px; */
-  top: 4px;
-  font-size: 1px;
-  outline: 0;
-  /* margin-top: 2px; */
-  background: url('../../src/img/select2/select2.png')right top no-repeat;
-}
 .chromeCastLoader{
   width: 100px;
   height: 101px;
@@ -471,7 +421,7 @@ sm Search
   border: 0px;
   padding: 0px;
   outline: none !important;
-  background-image: url(../img/search-icon.png);
+  background-image: url(src/img/search-icon.png);
 }
 .sm-search .form-container input[type="text"] {
   margin: 0px;
@@ -630,7 +580,7 @@ sm Search
   .subHeader{
     position: fixed;
   }
-.page-sidebar ul{
+  .page-sidebar ul{
   /*height: 100% !important;*/
   margin-top: 40px;
 }
@@ -997,7 +947,7 @@ transition-timing-function: ease-in;
   position: absolute;
   top: 2px;
   right: 2px;
-  z-index: 99;
+  z-index: 999;
   }
   .taskCard .inCardOptionsBtn{
     right: -7px;
@@ -1050,7 +1000,6 @@ transition-timing-function: ease-in;
 }
 .newsCard{
   padding: 10px;
-  padding-top: 4px;
   box-shadow:0 1px 2px #aaa;
   background:white;
   /*margin:0 1rem 1rem !important;*/
@@ -1866,23 +1815,20 @@ border-top-color: transparent !important;
 color: #fff !important;
 border-left: 2px solid #1C91C0;
 }
+
 /*------------------------------------*\
     $CUSTOM
 \*------------------------------------*/
 .btn {
    border-radius: 3px !important;
 }
-.dropOut,.otherStages{
+.dropOut{
 width: 100%;
 height: 70px;
 position: fixed;
 bottom: 0px;
 left: 0px;
 z-index: 9998;
-}
-.otherStages{
-  /*height: 90px !important;*/
-  background-color: rgb(201, 201, 191);
 }
 .portlet .scroller{
   overflow: visible;
@@ -3238,9 +3184,13 @@ margin-top: 20px;
   width: 100% !important;
 }
 .wysihtml5-toolbar{
-  height: 30px !important;
+  list-style: none;
+  padding-left: 0px;
+  height: 40px !important;
   width: 100% !important;
-  padding-bottom:0px !important; 
+}
+.wysihtml5-toolbar .dropdown{
+  float: left;
 }
 .emailModal .modal-dialog .modal-footer{
   text-align: left !important;
@@ -3629,7 +3579,7 @@ margin-bottom: 10px;
   bottom: 2px;
   position: absolute;
   right: 2px;
-    z-index: 983;
+  z-index: 999;
 }
 .cusCardElement .cusOptionsBtn .btn{
     border: none;
@@ -3861,8 +3811,8 @@ font-weight: 300;
   vertical-align: inherit;
   font-size: 31px;
   position: relative;
-  top: 18px;
-  left: 7px;
+  top: 24px;
+  left: 12px;
   color: gray;
 }
 .withoutimgitem .text i{
@@ -3895,588 +3845,6 @@ font-weight: 300;
 }
 
 /*** end of search item       ****/
-.actionsBar{
-  height: 55px !important;
-  border-top: 1px solid rgb(234, 234, 234);
-}
-.currentApp .btn-group{
-    width: 100%;
-}
-.currentApp .btn-group a{
-    margin-left: 42px !important;
-}
-@media (min-width: 992px){
-  .page-sidebar ul {
-    margin-top: 55px !important;
-    }
-    .listContainer {
-    margin-top: 15px !important;
-    margin-right: 216px !important;
-    }
-    .fixed-labelsCard{
-      top: 135px !important;
-    }
-    .page-sidebar-menu {
-      width: 160px;
-    }
-    .page-content{
-      margin-left: 190px;
-    }
-    .subHeader .currentApp {
-      width: 175px;
-      padding-left: 15px;
-      }
-      .subHeader .subHeaderContent {
-        width: calc(100% - 381px);
-        padding-right: 15px;
-        padding-left: 15px;
-        border-right: 1px solid rgb(226, 226, 226);
-        padding-top: 5px !important;
-      }
-
-}
-/*  **end media 992px **/
-  .subHeader .subHeaderContent{
-    padding-top: 0px;
-  }
-  .customPortlet{
-    padding: 15px;
-    padding-top: 10px;
-  }
-  .fixed-labelsCard{
-    width: 190px;
-  }
-  .subHeaderActions{
-    float: left;
-  }
-  .headerBtn i{
-    padding-top: 6px; font-size: 16px;
-  }
-  .afterScrollBtn {
-  margin-bottom: 0px;
-  margin-top: -3px;
-  margin-right: -3px;
-  }
-  .page-sidebar-menu .title{
-    font-size: 14px;
-  }
-  .customCheckboxOnHeader .check{
-    margin-top: 3px;
-    margin-left: 5px;
-    width: 8px;
-    height: 17px;
-  }
-  .customCheckboxOnHeader .box{
-    margin-top: -14px;
-    height: 14px;
-    width: 14px;
-  }
-  #id_Opportunities.active > a{
-    padding-left: 9px;
-  }
-  .settingsDiv{
-    float: left;
-    width: 193px;
-    text-align: center;
-    vertical-align: middle;
-    margin-top: 6px;
-  }
-  .communicationBottons{
-    float: left;
-  }
-  .header .navbar-brand{
-    width: 191px;
-    min-height: 63px;
-  }
-  .headerBtn{
-  font-size: 16px;
-  color: #737373;
-  cursor: pointer;
-  margin-left: 12px;
-  margin-right: 12px;
-}
-.cus-dropdown-header{
-  padding-top: 10px;
-  padding-left: 0px;
-  padding-right: 0px;
-  /*border-bottom: 1px solid rgb(201, 201, 201);*/
-  margin-left: 10px;
-  margin-right: 15px;
-}
-.settingsTd{
-    width: 207px;
-    padding-right: 17px;
-  }
-.appTd{
-  width: 190px; padding-left: 15px; padding-right: 15px;
-}
-.middleHeaderTd{
-  vertical-align: middle; padding-top: 0px;padding-right:13px;
-  padding-left: 0px;
-}
-/*** header bar responsiveness*/
-.hide_md, .hide_sm{ display: none;}
-.wysihtml5-toolbar{
-  list-style: none;
-  padding-left:0;
-}
-.wysihtml5-toolbar .dropdown{
-  float: left;
-}
-.appTd .btn-group .filterItem{
-  padding-bottom: 0px;
-}
-.settingsTdShow{
- width: 280px;
- padding-right: 17px;
-}
-.hangout-btn .g-Wh9Azc-b-Ja-F{
-    margin-left: 0px;
-    color: rgb(115, 115, 115);
-}
-.hangout-btn div[role="button"]{
-  width: inherit !important;
-  background: none !important;
-}
-.hangout-btn .g-Wh9Azc-wa-t{
-  width: inherit!important;
-  background: none !important;
-}
-.hangout-btn .g-Wh9Azc-b-nb{
-  background: none !important;
-}
-.in-top-card{
-  border: none;
-}
-.activeMenuFilter{
-  margin-left: 8px;
-  width: 10px;
-  height: 20px;
-  border: 2px solid #0f9d58;
-  border-top: none;
-  border-left: none;
-  opacity: 0;
-  z-index: 888;
-  -webkit-transform: scale(1) rotate(45deg);
-  -moz-transform: scale(1) rotate(45deg);
-  transform: scale(1) rotate(45deg);
-}
-.ng-menu a{
-  /*padding-left: 10px;*/
-  cursor: pointer;
-  padding: 6px 0 6px 7px;
-}
-.checkFilterMenu{
-  width:17.5px !important;
-  margin-right: 2px; 
-}
-@media(max-width: 768px){
-  .settingsTd{
-    width: inherit !important;
-  }
-  .appTd{
-    width: inherit !important;
-    padding-left: 0px; padding-right: 0px;
-  }
-  .settingsTd .hide_sm{
-    margin: 0px;
-  }
-  .middleHeaderTd{
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-.input-without-border{
-  margin-bottom: 0px;
-}
-.input-without-border .input-icon i{
-  margin-left: 1px;
-  margin-top: 5px;
-}
-.input-without-border .input-icon input  {
-  height: 20px;
-  padding-left: 21px !important;
-}
-.past-position-title{
-  font-size: 15px;
-  line-height: 18px;
-  color: #000;
-  text-decoration: none;
-}
-.past-position-company{
-  font-size: 13px;
-  font-weight: normal;
-  line-height: 16px;
-}
-.past-position-duration{
-     font-size: 11px;
-  vertical-align: baseline;
-}
-.linkedin-item-name a{
-  font-size: 17px !important;
-  color: rgb(25, 133, 188) !important;
-  padding-bottom: 5px !important;
-}
-.linkedin-item-title{
-  font-size: 15px;
-  color: rgb(73, 73, 73);
-  padding-bottom: 2px;
-}
-.linkedin-item-location{
-  font-size: 13px;
-}
-.linkedin-item-on-list{
- /*margin-bottom: 10px;*/
-  padding-left: 10px; 
-}
-.linkedin-item-on-list:hover{
-   background-color: rgb(226, 226, 215);
-}
-.grayBackground{
-  background-color: rgb(226, 226, 215);
-}
-.selectLinkedinButton{
-  display: none;
-}
-.blank-card-gray{
-    border-top-color: rgb(190, 190, 190);
-}
-.blank-card-twitter{
-    border-top-color:  rgb(85, 172, 238);
-}
-.blank-card-black{
-    border-top-color:  #000;
-}
-.margin-none{
-  margin:0px;
-}
-.customPopUp .modal-header i{
-  font-size: 25px;
-}
-.customPopUp .modal-body p{
-  font-size: 16px;
-  text-align: center;
-}
-.linkedInLoader{
-  padding-top: 0px !important;
-}
-.leadInfos .editable-empty, .leadInfos .editable-empty:focus,  .leadInfos .editable-empty:hover, .leadInfos a.editable-empty, .leadInfos a.editable-empty:focus, .leadInfos a.editable-empty:hover{
-  color: rgb(150, 150, 150);
-  font-style: normal;
-}
-/******start of cuustom show ****/
-.btn-none{
-    border: none;
-}
-.btn-none:hover,.btn-none:focus,.btn-none:active{
-  background-color: white
-}
-.btn-none i{
-  color: rgb(96, 96, 96);
-}
-.btn-none i:hover,.btn-none i:focus{
-  color: rgb(33, 151, 241);
-}
-.socialLiknsAbsolute{
-  position: absolute;
-}
-.contactListOnEdit{
-  padding-right: 40px;
-}
-.showOnEditForm{
-  margin-right: 5px;
-}
-.showOnEditForm button{
-  opacity: 1;
-}
-.xdsoft_datetimepicker{
-  z-index: 99999 !important;
-}
-.subHeaderActions a {
-  text-decoration: none !important;
-}
-.sideWithoutText{
-  display: none;
-}
-td .over{
-  background-color: rgb(206, 206, 200);
-  border: none !important;
-}
-.endStages .over{
-  border: none !important;
-  width: 250px;
-  line-height: 50px;
-  opacity: 1 !important; 
-}
-
-.opportunitiesTable{
-  overflow-x: auto; 
-}
-.over td{
-  border: 2px solid gray;
-  opacity: 0.6;
-  opacity: 0.5;
-}
-.opportunitiesTable .over{
-    background-color: rgb(201, 201, 191);
-    border: none;
-}
-.trashDiv .over{
-  height: 80px !important;
-  width: 80px !important;
-  /* top: 5px; */
-  margin-top: -27px !important; 
-}
-.opportunitiesTable td ,.opportunitiesTable th{
-    min-width: 227px;
-    max-width: 227px;
-}
-.news-blocks h3{
-  margin-top: 5px !important;
-}
-.news-blocks{
-  margin-bottom: 15px !important;
-}
-.relatedContactsonAccount:first-child{
-      border-top: 1px solid rgb(216, 216, 216);
-      padding-top: 5px;
-}
-.relatedContactsonAccount:hover{
-  background-color: #EEE;
-}
-.newRelatedContact:hover{
-  text-decoration: underline;
-}
-.blockonEdit{
-  width: 100% !important;
-  /*float: none !important;*/
-}
-.DivSpace{
-  display: block;
-  clear: both;
-  margin-bottom: 10px;
-}
-.bigCover{
-   overflow:hidden;
-    height: 170px;
-}
-.bigCover img{
-  height:291px;
-  position: absolute;
-  bottom: -50%;
-}
-@media (min-width: 992px){
- .mainHeader{
-  padding-right: 3px !important;
- } 
-}
-@media (min-width: 768px){
-  .hide_sm{display: inline-block;}
-  .show_sm{display: none;}
-  .app_icon{
-    display: none !important;
-  }
-}
-.endStages{
-  margin-top: 0px !important;
-}
-.endStages span{
-  width: 155px;
-}
-
-/*****wizzzzzard *****/
-.custom_wizard .form-wizard .steps{
-  margin-bottom: 0px !important;
-}
-.custom_wizard .form-wizard .progress{
-  margin-bottom: 0px !important;
-}
-.custom_wizard .number{
-    padding: 6px 10px 13px !important;
-  margin-right: 3px !important;
-  height: 35px !important;
-  width: 35px !important;
-}
-.custom_wizard .form-body{
-  padding:0px !important;
-}
-.custom_wizard .form-wizard .done .step .number{
-  background-color: #c6f6ce !important;
-}
-.custom_wizard .form-wizard .lost .step .number{
-  background-color: #ED4E2A !important;
-}                                               
-.custom_wizard .nav-pills>li.active>a, .custom_wizard .nav-pills>li.active>a:focus, .custom_wizard .nav-pills>li.active>a:hover{
-  background-color: #fff !important;
-}
-.custom_wizard .desc{
-  font-size: 14px !important;
-}
-.custom_wizard .desc i{
-  font-size: 16px !important;
-  color: rgb(53, 170, 71) !important;
-}
-.decisioncheck{
-    font-weight: 500;
-   color: rgb(40, 183, 121);
-}
-
-.settingsTd div {
-    /*padding-left: 8px !important;*/
-}
-
-.filterSelected {
-    padding: 5px;
-    background-color: #EAEAEA;
-}
-
-.filterSelected i {
-    color: #4B8EFA;
-}
-
-.sourceFilter button, .sourceFilter li a {
-    padding-left: 10px;
-}
-
-.sourceFilter a {
-    cursor: pointer;
-}
-
-.fa-twitter-square {
-    color: #55ACEE;
-}
-
-.asyncSearch .spinner {
-    background-position: right 5px !important;
-}
-
-.fa-linkedin-square {
-    color: #1E87BD;
-}
-
-.typeahead li a {
-    cursor: pointer;
-}
-/* space before number in custom field add options when length < 2*/
-.optionSpace{
-      padding-left: 18px;
-}
-.disabledBlock{
-      background-color: #F1F1F1;
-}
-.elementToShow{
-   transform:scale(0);   
-   width:0px;
-   height: 0px;
-}
-.showBlock{
-   width:100%;
-   height: auto;
-   transform:scale(1) ;
-   transition:transform .4s cubic-bezier(0.340, 0.370, 0.655, 0.600);
-}
-.sv-candidate{
-      /*box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);*/
-}
-.currentSelection{
-      background-color: #F4F4F4;
-}
-.settingsNav .nav-tabs>li.active>a, .settingsNav .nav-tabs>li.active>a:focus, .settingsNav .nav-tabs>li.active>a:hover{
-  background-color:#FAFAFA !important;
-  font-weight: 600;
-}
-.child-elements {
-  pointer-events: none;
-}
-/****** display scrollbar***/
-/*.slimScrollBar{
-  display:block !important;
-}
-.slimScrollRail{
-  display: block !important;
-}*/
-/**** end custom wizzard*******/
-.disabled-input{
-  background-color:white !important;
-  cursor: not-allowed !important;
-}
-.metaDataList li{
-  padding: 3px 0px;
-}
-.metaDataList .title{
-    font-size: 14px;
-    font-weight: 500;
-    color: #737373;
-}
-.metaDataList span i{ 
-  color: #737373;
-  font-size: 15px;
-}
-.cardPlaceholder{
-  display: none;
-}
-.over .cusCardElement:last-child{
-  margin-bottom:200px !important;
-}
-.documentimgsize{
-  height: 60px !important;
-    margin-top: 8px;
-    margin-left: 8px;
-}
-.placeholder-left{
-  height: 90px;
-  border: 2px solid black;
-  background-color: gray;
-}
-.headerBtn .hide_sm{
-  margin-left: 0px;
-}
-.hiddenfirstitem{
-     margin-right: 0px !important;
-    position: relative !important;
-    margin-bottom: 5px !important;
-    margin: 0px !important;
-    padding: 0px !important;
-    width: 0px !important;
-    height: 1px !important;
-    min-height: 0px !important; 
-}
-.hiddenfirstitem *{
-  display: none;
-  margin: 0px !important;
-}
-.cardElement .placeholder-left{
-  display: none;
-}
-#assigeeList{
-  max-height: 160px;
-} 
-.lead_related_events,.slim-linkedin,#slimList,#assigeeList1,.scrollList{
-  max-height: 195px;
-} 
-.scrollList2{
-  max-height: 205px;
-}
-#slimRelated{
-  max-hieght:250px;
-}
-#collaborators{
-  max-height: 192px;
-} 
-#slimtest1,#contactScroll{
-  max-height: 200px;
-}
-@media (min-width: 992px){
-  .hide_md{display: inline-block !important;}
-  .show_md{display: none !important;}
-  .newAccountBtnOnscroll{
-    width: 155px;
-  }
-  .oppNewBtn{
-    margin-right: 10px;
-    width: 145px;
-  }
-}
 .onelineItem{
   white-space: nowrap;
   overflow: hidden;
@@ -4497,4 +3865,6 @@ height: 0px;
     height: 100%;
     display: none;
 }​
+
+
 
