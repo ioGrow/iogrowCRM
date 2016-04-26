@@ -34,7 +34,6 @@
     "select2": "3.4.1",
     "wysihtml5": "0.3.0",
     "bootstrap-wysihtml5": "*",
-    "jquery-slimscroll": "1.3.7",
     "jquery.uniform": "2.1.0",
     "jquery-textfill": "0.4.0",
     "jquery-simple-datetimepicker": "1.12.0",

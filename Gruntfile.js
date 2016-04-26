@@ -68,7 +68,6 @@ module.exports = function (grunt) {
               'angular-xeditable',
               'wysihtml5',
               'bootstrap-wysihtml5',
-              'jquery-slimscroll',
               'jquery.uniform',
               'jquery-simple-datetimepicker',
               'bootstrap-datepicker',
