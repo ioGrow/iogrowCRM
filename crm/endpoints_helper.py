@@ -140,7 +140,7 @@ class EndpointsHelper:
         Returns:
           An object containing a base64 encoded email object.
         """
-        message_html += '<p>Sent from my <a href="http://goo.gl/a5S8xZ">ioGrow account </a></p>'
+        message_html += '<p>Sent from my <a href="http://www.iogrow.com/">ioGrow account </a></p>'
         message = MIMEText(smart_str(message_html), 'html')
         message['to'] = to
         message['cc'] = cc
@@ -169,7 +169,7 @@ class EndpointsHelper:
         message['bcc'] = bcc
         message['from'] = sender
         message['subject'] = subject
-        message_html += '<p>Sent from my <a href="http://goo.gl/a5S8xZ">ioGrow account </a></p>'
+        message_html += '<p>Sent from my <a href="http://www.iogrow.com/">ioGrow account </a></p>'
         msg = MIMEText(smart_str(message_html), 'html')
         message.attach(msg)
         for file_id in files:
@@ -200,15 +200,15 @@ class EndpointsHelper:
         message['bcc'] = bcc
         message['from'] = sender
         message['subject'] = subject
-        message_html += '<p>Sent from my <a href="http://goo.gl/a5S8xZ">ioGrow account </a></p>'
+        message_html += '<p>Sent from my <a href="http://www.iogrow.com/">ioGrow account </a></p>'
         msg = MIMEText(smart_str(message_html), 'html')
         message.attach(msg)
-        path = os.path.join('mail_images', 'sm-iogrow-true.png')
+        path = os.path.join('static/src/img/mail_images', 'sm-iogrow-true.png')
         content_type, encoding = mimetypes.guess_type(path)
-        path2 = os.path.join('mail_images', 'Logo-iogrow.png')
+        path2 = os.path.join('static/src/img/mail_images', 'Logo-iogrow.png')
         content_type2, encoding2 = mimetypes.guess_type(path2)
         main_type, sub_type = content_type.split('/', 1)
-        main_type2, sub_type2 = content_type.split('/', 1)
+        main_type2, sub_type2 = content_type2.split('/', 1)
 
         if main_type == 'image':
             fp = open(path, 'rb')

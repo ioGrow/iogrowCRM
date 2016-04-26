@@ -138,12 +138,13 @@
             font-weight: 800;
             font-size: 32px;
         }
-        .subscribe-btn{
-            background:#168EEA !important;
+
+        .subscribe-btn {
+            background: #168EEA !important;
             border-color: #168EEA !important;
-            -webkit-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.35);
-            -moz-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.35);
-            box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.35);
+            -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+            -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+            box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
         }
     </style>
     <meta charset="UTF-8">
@@ -155,6 +156,7 @@
 </head>
 <body>
 <div class="container">
+
     <div class="page-header">
         <img src="/static/src/img/iogrow-logo-app.png" alt="logo" class="img-responsive">
     </div>
@@ -163,21 +165,21 @@
         <h1 style="text-align: center;margin-bottom: 40px">
             Pay securely With Your Credit Card
         </h1>
-        <!--</div>-->
         <div class="panel-body">
-            <div class="demo-container row">
-                <!-- CREDIT CARD FORM STARTS HERE -->
-                <div class="panel panel-default col-md-4 col-md-offset-1 credit-card-box " style="padding: 0px">
-                    <div class="panel-heading display-table">
-                        <div class="row display-tr">
-                            <h3 class="panel-title display-td">Payment Details</h3>
-                            <div class="display-td">
-                                <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png">
+            <form role="form" id="payment-form">
+                <div class="demo-container row">
+                    <!-- CREDIT CARD FORM STARTS HERE -->
+                    <div class="panel panel-default col-md-4 col-md-offset-1 credit-card-box " style="padding: 0px">
+                        <div class="panel-heading display-table">
+                            <div class="row display-tr">
+                                <h3 class="panel-title display-td">Payment Details</h3>
+                                <div class="display-td">
+                                    <img class="img-responsive pull-right"
+                                         src="http://i76.imgup.net/accepted_c22e0.png">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="panel-body">
-                        <form role="form" id="payment-form">
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="form-group">
@@ -244,61 +246,50 @@
                                     <p class="payment-errors"></p>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
-                <!-- CREDIT CARD FORM ENDS HERE -->
-                <div class="col-md-4 col-md-offset-2">
-                    <div class="card-wrapper"></div>
-                    <div class="checkout-plan-select" style="margin-top: 10px">
-                        <div class="plan-option">
-                            <input id="month" name="interval" type="radio" value="month">
-                            <label for="month">
-                                <i class="fa fa-check-circle"></i>
-                                ${{ month_price }}/user/mo
-                                <div class="plan-note">
+                    <!-- CREDIT CARD FORM ENDS HERE -->
+                    <div class="col-md-4 col-md-offset-2">
+                        <div class="card-wrapper"></div>
+                        <div class="checkout-plan-select" style="margin-top: 10px">
+                            <div class="plan-option">
+                                <input id="month" name="interval" type="radio" value="month">
+                                <label for="month">
+                                    <i class="fa fa-check-circle"></i>
+                                    ${{ month_price }}/user/mo
+                                    <div class="plan-note">
 
-                                </div>
-                            </label>
-                        </div>
-                        <div class="plan-option">
-                            <input id="year" name="interval" type="radio" value="year" checked="checked">
-                            <label for="year">
-                                <i class="fa fa-check-circle"></i>
-                                ${{ year_price }}/user/yr
-                                <div class="plan-note">
-                                    Save 16.66% vs. paying monthly
-                                </div>
-                            </label>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="plan-option">
+                                <input id="year" name="interval" type="radio" value="year" checked="checked">
+                                <label for="year">
+                                    <i class="fa fa-check-circle"></i>
+                                    ${{ year_price }}/user/yr
+                                    <div class="plan-note">
+                                        Save 16.66% vs. paying monthly
+                                    </div>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
             <div class="row cost-box">
                 <div class="row">
-                    <!--<p>You have {{ users_count }} user{% if users_count != 1 %}s{% endif %} in your organization</p>-->
-                    <p>How match of licences you want to buy </p>
+                    <!--<p>You have {{ users_count }} user{% if users_count != 1 %}
+                            s{% endif %} in your organization</p>-->
+                    <p>How much of licences you want to buy </p>
                     <div class="col-sm-4 col-sm-offset-4">
                         <input type="number" class="form-control" name="quantity" id="quantity"
-                               placeholder="How match of licences you want to buy" value="{{ users_count }}"
+                               placeholder="How match of licenses you want to buy" value="{{ users_count }}"
                                style="text-align: center;font-size: 18px">
                     </div>
                 </div>
                 <hr>
-                <span class="cost-message">Total cost : <span id="total-cost"></span>$</span>
+                <span class="cost-message">{{ _('Total cost:')  }} <span id="total-cost"></span>$</span>
             </div>
-            <!--<div class="page-header">
-                <h3 style="text-align: center;">Or Pay Using Your PayPal Account.
-                </h3>
-            </div>
-            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                <div style="text-align: center;"><input type="hidden" name="cmd" value="_s-xclick">
-                    <input type="hidden" name="hosted_button_id" value="2M6ZKGY85V4PY">
-                    <input type="image" src="https://www.paypalobjects.com/en_US/FR/i/btn/btn_subscribeCC_LG.gif"
-                           border="0"
-                           name="submit" alt="PayPal - The safer, easier way to pay online!"></div>
-            </form>-->
-
         </div>
     </div>
 
@@ -316,7 +307,6 @@
     new Card({
         form: '#payment-form',
         container: '.card-wrapper', // *required*
-
         formSelectors: {
             numberInput: 'input#cardNumber', // optional — default input[name="number"]
             expiryInput: 'input#cardExpiry', // optional — default input[name="expiry"]
@@ -370,25 +360,36 @@
                 $form.find('.payment-errors').closest('.row').hide();
                 $form.find('.payment-errors').text("");
                 var token = response.id;
-                $.post('/stripe/subscription', {
-                            token: token,
-                            interval: $('input:radio:checked[name=interval]').val(),
-                            plane: 'premium',
-                            quantity: parseInt($('#quantity').val())
-                        })
-                        .done(function (data, textStatus, jqXHR) {
-                            $form.find('[type=submit]').html('Payment successful <i class="fa fa-check"></i>').prop('disabled', true);
-                            window.location.replace('/#/leads/new')
-                        })
-                        .fail(function (jqXHR, textStatus, errorThrown) {
-                            $form.find('[type=submit]').html('There was a problem').removeClass('success').addClass('error');
-                            /* Show Stripe errors on the form */
-                            $form.find('.payment-errors').text(jqXHR.responseText);
-                            $form.find('.payment-errors').closest('.row').show();
-                        });
+
+                var quantity = parseInt($('#quantity').val());
+                if (quantity > 0) {
+                    $.post('/stripe/subscription', {
+                        token: token,
+                        interval: $('input:radio:checked[name=interval]').val(),
+                        plane: 'premium',
+                        quantity: quantity
+                    })
+                            .done(function (data, textStatus, jqXHR) {
+                                $form.find('[type=submit]').html('Payment successful <i class="fa fa-check"></i>').prop('disabled', true);
+                                window.location.replace('/#/leads/new')
+                            })
+                            .fail(function (jqXHR, textStatus, errorThrown) {
+                                $form.find('[type=submit]').html('There was a problem').removeClass('success').addClass('error');
+                                /* Show Stripe errors on the form */
+                                $form.find('.payment-errors').text(jqXHR.responseText);
+                                $form.find('.payment-errors').closest('.row').show();
+                            });
+                } else {
+                    $("#quantity").closest('.form-control').removeClass('success').addClass('error');
+                    $form.find('[type=submit]').html('Try again');
+                    $form.find('.payment-errors').text("Quantity must be greater then 0");
+                    $form.find('.payment-errors').closest('.row').show();
+                }
+
             }
         });
     }
+
     jQuery.validator.addMethod("cardNumber", function (value, element) {
         return this.optional(element) || Stripe.card.validateCardNumber(value);
     }, "Please specify a valid credit card number.");
@@ -401,6 +402,10 @@
     }, "Invalid CVC.");
     validator = $form.validate({
         rules: {
+            quantity: {
+                min: 1,
+                required: true
+            },
             cardNumber: {
                 required: true,
                 cardNumber: true
