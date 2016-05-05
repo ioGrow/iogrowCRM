@@ -18,6 +18,7 @@ info | _
 - [nodejs](https://nodejs.org/en/)
 - [pip](https://github.com/pypa/pip)
 - [pyinvoke](http://www.pyinvoke.org/)
+- [wget](https://www.gnu.org/software/wget/)
 
 ### Tasks
  1. Install dependencies: 

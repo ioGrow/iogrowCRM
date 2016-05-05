@@ -21,6 +21,11 @@ def install():
     run("npm up")
     print "Updating python libraries ..."
     run("pip install -r requirements.txt --upgrade --target ./libx")  #python
+    #install endpoints
+    endpoints_proto_datastore="https://github.com/GoogleCloudPlatform/endpoints-proto-datastore/blob/zipfile-branch/endpoints_proto_datastore.zip?raw=true"
+    run('wget  "%s" -O "endpoints_proto_datastore.zip" ' % endpoints_proto_datastore)
+    run("unzip endpoints_proto_datastore.zip -d ./libx")
+    run("rm endpoints_proto_datastore.zip")
     print "Updating js libraries ..."
     run("bower install")  #js
 
