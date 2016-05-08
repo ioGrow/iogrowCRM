@@ -1,11 +1,10 @@
 {
-  "name": "ioGrow",
+  "name": "iogrow",
   "description": "CRM for Startups",
-  "main": "handlers.py",
   "authors": [
     "Tedj"
   ],
-  "license": "ISC",
+  "license": "AGPL",
   "keywords": [
     "CRM",
     "social",

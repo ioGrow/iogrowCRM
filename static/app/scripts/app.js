@@ -292,19 +292,6 @@ $(window).scroll(function(){
   } else {
     $(".subHeader").removeClass("header-bottom-shadow");
   }
-  /*if(y > 48){
-         if ($(window).width()>992) {
-          $(".afterScrollBtn").removeClass("hidden");
-          $(".newAccountBtnOnscroll").removeClass( "hidden" );
-          $(".newAccountBtnOnscroll").fadeIn( "slow" );
-         };
-
-  }else{
-    if ($(window).width()>992) {
-       $(".afterScrollBtn").addClass("hidden");
-       $(".newAccountBtnOnscroll").hide();
-     }
-  }*/
  });
 app.constant('angularMomentConfig', {
     preprocess: 'unix', // optional

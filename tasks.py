@@ -35,13 +35,22 @@ def clean():
         run("git clean -xfd")
 
 @task
-def start(gae_path="../google_appengine/"):
-    run(gae_path + "dev_appserver.py ./ --port 8090")
+def start():
+    if not find_executable("dev_appserver.py"):
+        print "Add Google App engine SDK to PATH:"
+        print "$ export PATH=$PATH:/path/to/google_appengine"
+    else:
+        run("dev_appserver.py ./ --port 8090")
+
 
 
 @task
-def deploy(gae_path="../google_appengine/"):
-	run(gae_path + "appcfg.py update ./")
+def deploy():
+    if not find_executable("appcfg.py"):
+        print "Add Google App engine SDK to PATH"
+        print "$ export PATH=$PATH:/path/to/google_appengine"
+    else:
+        run("appcfg.py update ./")
 
 
 
