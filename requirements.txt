@@ -6,7 +6,7 @@ beautifulsoup4==4.3.2
 bson==0.4.2
 GoogleAppEngineCloudStorageClient==1.9.21.0
 detectlanguage==1.0.1
-#endpoints_proto_datastore
+# endpoints_proto_datastore
 gdata==2.0.18
 geopy==0.99
 google-api-python-client==1.4.1
