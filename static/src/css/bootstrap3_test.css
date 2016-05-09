@@ -3238,9 +3238,10 @@ margin-top: 20px;
   width: 100% !important;
 }
 .wysihtml5-toolbar{
-  height: 30px !important;
+  height: 40px !important;
   width: 100% !important;
   padding-bottom:0px !important; 
+  overflow: hidden !important;
 }
 .emailModal .modal-dialog .modal-footer{
   text-align: left !important;

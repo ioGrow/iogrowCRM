@@ -288,12 +288,6 @@
                                                         ng-click="deleteInfos(addresses,$index)"
                                                         data-dismiss="alert"></button>
                                             </li>
-                                            <!-- <a href="#addressmodal"
-                                               class="btn-link addAnotherPhone"
-                                               data-toggle="modal">
-                                               <i class="icon-plus"></i>{{_('Add a new address')}}
-                                             </a>
-                                             </li>-->
                                         </ul>
                                         <div class="row">
                                             <div class="col-md-12">
@@ -304,10 +298,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div id="gmap_canvas" style="width:100%;height:300px;"></div>
-                                         end address -->
-
-
                                     </div>
                                     <div class="news-blocks blank-card blank-card-gray relatedBlock">
                                     <span class="page-meta pull-right" ng-show="!isEmptyArray(contacts.customfields)">
@@ -358,28 +348,14 @@
                                         <h3>{{_('Social links')}} <i class="fa fa-twitter"></i>
                                             <i class="fa fa-facebook-square"></i>
                                             <i class="fa fa-linkedin-square"></i></h3>
-                                        <!--<ul class="list-unstyled contact-infos infoslist" >
-                                          <li ng-repeat="sociallink in sociallinks">
-
-                                            <a  href="<%=prepareUrl(sociallink.url)%>" target="_blank">    <i class="fa fa-globe"></i> <%=sociallink.url%> </a>
-
-                                            <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(sociallinks,$index)" data-dismiss="alert"></button>
-                                          </li>
-                                        </ul>
-                                        <form class="form-inline newLeadForm" role="form">
-                                              <div class="" style="">
-                                                <label class="sr-only" >{{_('Social link')}}</label>
-                                                <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"  ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"  class="form-control"  ng-model='sociallink.url' placeholder="{{_('Add a social link')}}" required>
-                                              </div>
-                                        </form>-->
                                         <ul ng-hide="isEmptyArray(sociallinks)" class="socialLinkssocialLiknsAbsolute"
                                             style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;">
                                             <li ng-repeat="sociallink in sociallinks" class="socialItem"
                                                 style="padding-bottom: 5px;">
                                                 <div class="cont">
                                                     <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
-                                                       style="display: inline-block;   float: left;"><img width="28"
-                                                                                                          ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                       style="display: inline-block;   float: left;">
+                                                       <img width="28" ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                             <span onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                   title="<%= sociallink.url%>"
                                                   style="line-height: 25px;font-size: 15px;padding-left: 20px; display: inline-block; float: left; cursor:pointer">
@@ -436,15 +412,6 @@
                                             </ul>
                                             <div class="row">
                                                 <div class="col-md-12  margin-bottom-10">
-                                                    <!--<p class⁼"lead"="">
-                                                       {{_('To add an outside email to this account, forward or BCC to:')}}
-                                                       <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                            111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                                        </a>
-                                                        <br>
-                                                        {{_('Or just add notes to remember what\'s important.')}}
-                                                        <br>
-                                                    </p>-->
                                                     <form id="addNote" class="ng-pristine ng-valid">
                                                         <div class="form-group">
                                                             <input class="form-control ng-pristine ng-valid"
@@ -714,7 +681,6 @@
                             </div>
                             <div class="linkedin-details" ng-hide="isEmpty(twProfile)">
                                 <div class="news-block-tags">
-                                    <!--<strong>{{_('Profession')}}</strong>-->
                                 </div>
                                 <div style="margin-bottom:10px">
                                     <div class="details" style="padding-left: 15px; padding-top: 5px;">
@@ -886,115 +852,6 @@
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
-</div>
-<div id="addressmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">{{_("Add Address")}}</h3>
-            </div>
-            <div class="modal-body">
-                <form id="addAddress" name="addemail" class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">{{_("Street")}} </label>
-
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="id_street" ng-model="address.street">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">{{_("City")}} </label>
-
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="id_city" ng-model="address.city">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">{{_("State/Province")}} </label>
-
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="id_state" ng-model="address.state">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">{{_("Postal Code")}} </label>
-
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="id_postal" ng-model="address.postal">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">{{_("Country")}} </label>
-
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="id_country" ng-model="address.country">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_('Cancel')}}</button>
-                <input type="submit" ng-click="pushElement(address,addresses,'addresses')" class="btn green"
-                       value="{{_('Add this address')}}">
-            </div>
-        </div>
-    </div>
-</div>
-<div id="EditTagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">{{_("Edit Lead")}}</h3>
-            </div>
-            <div class="modal-body">
-                <form name="editlead" class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">{{_("Tagline")}} </label>
-
-                        <div class="col-md-9">
-                            <textarea class="form-control ng-pristine ng-valid" rows="3"
-                                      ng-model="contact.tagline"></textarea>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button type="submit" class="btn btn-primary addContactNow" ng-click="updateTagline(contact)">
-                    {{_("Save")}}
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="EditIntroModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">{{_("Edit Contact")}}</h3>
-            </div>
-            <div class="modal-body">
-                <form id="editTagline" name="edittag" ng-submit="updateintro(contact)" class="form-horizontal">
-                    <div class="form-group">
-                        <label class=" col-md-3 control-label">{{_("Introduction")}} </label>
-
-                        <div class="col-md-9">
-                            <textarea class="form-control ng-pristine ng-valid" rows="3"
-                                      ng-model="contact.introduction"></textarea>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button type="submit" class="btn btn-primary addContactNow">{{_("Save")}}</button>
-            </div>
-        </div>
-    </div>
 </div>
 <div class="modal fade" id="sameContactModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
