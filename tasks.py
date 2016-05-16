@@ -76,7 +76,7 @@ def babel(extract=False, init =False, compile=False, update=False):
         lang = raw_input("language to initialize?")
         run("pybabel init -l %s -d ./locale -i ./locale/messages.pot" % lang)
     if extract:
-        run("pybabel extract -F ./babel.cfg -o ./locale/messages.pot ./")
+        run("pybabel extract -F ./locale/babel.cfg -o ./locale/messages.pot ./")
     if compile:
         run("pybabel compile -f -d ./locale")
     if update:
