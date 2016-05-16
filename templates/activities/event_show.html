@@ -115,7 +115,7 @@
                 <%=event.starts_at | date:'yyyy-MM-dd - HH:mm:ss '%></span>
                 <div ng-show="showStartsCalendar" class="input-icon">
                      <i class="fa fa-calendar"></i>
-                     <input cusdatetimepicker data-model="event.starts_at" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
+                     <input cdatetimepicker data-model="event.starts_at" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
                </div>
               </div>
               <div class="col-md-2 event-schedule">
@@ -127,7 +127,7 @@
                <div ng-show="showEndsCalendar" class="input-icon">
                      <i class="fa fa-calendar"></i>
 
-                     <input cusdatetimepicker close-on-selected=false data-model="event.ends_at" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
+                     <input cdatetimepicker close-on-selected=false data-model="event.ends_at" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
 
                </div>
               </div>

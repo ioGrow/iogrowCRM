@@ -332,13 +332,6 @@
                       <div ng-hide="opportunity.duration_unit=='fixed'" class="col-md-3 margin-bottom-10">
                          <input ng-click="showPriceForm=true"  type="text" pattern="\d*"  required id="" class="form-control" ng-model="opportunity.duration" ng-blur="updateOpportunityPrice()">
                       </div>
-                      <!-- <div class="col-md-3 margin-bottom-10">
-                        <div class="">
-                         <button class="btn blue btn-sm" ng-click="updateOpportunityPrice()" style="  height: 34px;">{{_("Ok")}}</button>
-                         <button class="btn btn-sm" ng-click="showPriceForm=falsee" style="height: 34px;">{{_("Cancel")}}</button>
-                        </div>
-
-                      </div> -->
                       <div class="clearfix"></div>
                   </div>
                   <p style="font-size: 13px;color: gray;padding-right: 15px;">
@@ -419,12 +412,6 @@
                     <a ng-click="selectedTab = 2;renderMaps();">
                     <i class="fa fa-home"></i>{{ _(' About')}}</a>
                   </li>
-                  <!--<li class="ng-tab" ng-class="{active: selectedTab == 1}">
-                    <a ng-click="selectedTab = 1;">{{ _('Notes')}}</a>
-                  </li>-->
-                  <!--<li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
-                    <a ng-click="selectedTab = 8;">{{ _('Send an Email')}}</a>
-                  </li>-->
                   <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
                     <a ng-click="waterfallTrigger();selectedTab = 7;">
                     <i class="fa fa-folder-open"></i>{{ _(' Documents')}}</a>
@@ -447,55 +434,6 @@
           <div class="row">
             <div class="">
               <div class="tab-content">
-                <div class="tab-pane active" id="tab_1_1" ng-show="selectedTab == 1">
-                  <div class="showPage">
-                    <div class="row">
-                      <div class="col-md-12  margin-bottom-10">
-                        <p class⁼"lead"="">
-                          {{ _('To add an outside email to this account, forward or BCC to:')}}
-                          <a href="mailto:{{ME}}@gcdc2013-iogrow.appspotmail.com">
-                            {{ME}}@gcdc2013-iogrow.appspotmail.com
-                          </a>
-                          <br>
-                          {{ _('Or just add notes to remember what\'s important.')}}
-                          <br>
-                        </p>
-                        <form id="addNote"class="ng-pristine ng-valid">
-                          <div class="form-group">
-                            <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Add a new subject')}}" id="messageSubject" ng-model="note.title">
-                          </div>
-                          <div class="form-group">
-                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                          </div>
-                          <div class="pull-right">
-                            <input ng-disabled="isLoading"  ng-click="addNote(note)"  type="submit" class="btn green" value="Add this note">
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    <ul class="chats">
-                      <li class="in" ng-repeat="topic in topics" id="topic_<%=$index%>">
-                        <img class="avatar" alt="" ng-src="<%= topic.last_updater.photo%>" />
-                        <div class="message">
-                          <span class="arrow"></span>
-                          <a  class="name">
-                            <%= topic.last_updater.display_name%>
-                          </a>
-                          <span class="datetime">
-                            at <%=topic.updated_at | date:'yyyy-MM-dd - HH:mm:ss '  %>
-                          </span>
-                          <span class="body">
-                            <a href="<%=getTopicUrl(topic.topic_kind,topic.id)%>" class="discussion-content"><strong class="ng-binding">
-                              <%= topic.title%></strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="topic.excerpt"></span><span class="chat-meta pull-right" ng-show="topic.comments"><i class="icon-comment"></i> <%= topic.comments%> comments</span>
-                            </a>
-                          </span>
-                        </div>
-                      </li>
-                    </ul>
-
-                  </div>
-                </div>
-
                       <!--HKA 06.03.2014 About -->
                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
                   <div class="row">
@@ -527,15 +465,12 @@
                                 <textarea  ng-blur="updateOpportunity({'id':opportunity.id,'need':opportunity.need})" ng-model="opportunity.need"class="form-control ng-pristine ng-valid" rows="3" ></textarea>
                               </div>
                             </div>
-                          </div>
-
+                          </div>    
 
                                 <div class="news-block-tags">
                                   <div class="form-group row">
                                     <label class="control-label col-md-4"><i class="fa fa-group"></i>{{ _(' Competitors')}}</label>
-                                      <!--<div class="col-md-8">
-                                        <textarea id="noteBody"  ng-model="opportunity.competitor" class="form-control ng-pristine ng-valid" rows="3" ></textarea>
-                                      </div>-->
+
                                     <div class="col-md-8">
                                         <div class="" ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }"
                                              style="margin-bottom:15px">
@@ -982,15 +917,6 @@
                     </ul>
                         <div class="row">
                         <div class="col-md-12  margin-bottom-10">
-                            <!--<p class⁼"lead"="">
-                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                </a>
-                                <br>
-                                {{_('Or just add notes to remember what\'s important.')}}
-                                <br>
-                            </p>-->
                             <form id="addNote" class="ng-pristine ng-valid">
                                 <div class="form-group">
                                     <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Title')}}" id="messageSubject" ng-model="note.title">
@@ -1069,47 +995,6 @@
                                   </div>
 
                             </div>
-                <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 8">
-
-                         <div class="showPage">
-                           <div class="row">
-                             <div class="col-md-12  margin-bottom-10">
-                          <p class⁼"lead"=""><strong>{{ _('Send an Email to :')}}</strong> </p>
-                          <form  class="ng-pristine ng-valid">
-                                            <div class="form-group">
-                                            <input required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{_('To')}}" id="messageSubject" ng-model="email.to">
-                                            </div>
-                                            <div class="form-group">
-                                            <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{_('CC')}}" id="messageSubject" ng-model="email.cc">
-                                            </div>
-                                            <div class="form-group">
-                                            <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{_('BCC')}}" id="messageSubject" ng-model="email.bcc">
-                                            </div>
-                                            <div class="form-group">
-                                             <input  required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{_('Add a subject')}}" id="messageSubject" ng-model="email.subject">
-                                             </div>
-                                            <div class="form-group">
-                                            <textarea id="some-textarea" placeholder="{{_('Enter text ...')}}" id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
-                                             </div>
-                                             <div class="form-group">
-                                                        <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa fa-file"></i> {{_('Attach files')}}</a>
-                                                        <ul class="list-unstyled">
-                                                            <li ng-repeat="file in sendWithAttachments">
-                                                                <%= file.title %>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                         <div class="pull-right">
-
-                                            <input   ng-click="sendEmail(email)" ng-disabled="isLoading" type="submit" class="btn green" value="{{_('Send')}}">
-
-
-                                          </div>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
                 </div>
 
               </div>
@@ -1118,9 +1003,6 @@
           </div>
         </div>
       </div>
-
-
-
 <!-- tasks cards -->
 
    <div class="col-md-3 tasks-col">
@@ -1261,22 +1143,6 @@
                             </span>
                           </div>
                           <div class="moreDetails row" ng-show="showDetails">
-                          <!--  <div class="col-md-6 col-xs-6 event-schedule">
-                                <span class=""><i class="fa fa-calendar"></i>
-                                 <%= task.due | date:'dd MMM'%> </span>
-                            </div>
-                            <div class="col-md-6 col-xs-6 event-schedule">
-                               <span class="">
-                                  <i class="fa fa-bell-o"></i>
-                                  <%= task.reminder | date:'dd MMM'%>
-                                </span>
-                            </div>
-                            <div class="col-md-12">
-                               <span class="">
-                                  <i class="fa fa-map-marker"></i>
-                                  <%= event.where %>-->
-                                <!--</span>
-                            </div>-->
                           </div>
                         </div>
                       </li>
@@ -1380,55 +1246,11 @@
                       </li>
                   </ul>
                   <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
-             <!--      <div class="formElements newEventToLead" ng-show="newEventform">
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="{{_('Event tilte')}}">
-                              </div>
-                              
-                            </div>
-                            {{_('All day')}} <input type="checkbox" ng-model="allday"/>
-                              
-                              <div class="row" ng-show="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                       <div class="input-icon ">
-                                        <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="{{_('When?')}}" value="" id="leadEventStartsAt">
-                                      </div>
-                                </div>
-                            </div>
-                              
-
-                            <div class="row" ng-hide="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                      <div class="input-icon">
-                                        <i class="fa fa-calendar"></i>
-                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="{{_('From')}}" value="" id="leadEventStartsAt">
-                                      </div>
-
-                                </div>
-                            </div>
-                            <div class="row" ng-hide="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                       <div class="input-icon ">
-                                        <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="{{_('To')}}" value="" id="leadEventStartsAt">
-                                      </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="{{_('Where ?')}}">
-                              </div>
-                             
-                            </div>
-                  </div> -->
+           
                   <div class="row">
                       <div class="col-md-12 margin-top-10">
                           <p class="newEventText"><span ng-hide="newEventform">{{_('Add New Event')}}</span>
                           <button type="button" ng-click="showAddEventPopup()" class="btn red btn-sm pull-right btn-inline">{{_('Add')}}</button>
-                      <!--     <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{_('Cancel')}}</button> -->
                           </p>
                       </div>
                   </div>
@@ -1446,80 +1268,7 @@
       </script>
         </div>
     </div>
-             <div id="EditCaseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-             <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Edit Case")}}</h3>
-              </div>
-
-              <div class="modal-body">
-                 <form id="editCase" name="editlead" ng-submit="updatCasetHeader(casee)" class="form-horizontal">
-
-
-                  <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Name")}} </label>
-
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" required id="id_lastname" ng-model="casee.name">
-
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Priority")}}</label>
-
-                        <div class="col-md-9">
-                          <select class="form-control" ng-model="casee.priority">
-                            <option value="1">1 - {{ _('Low')}}</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10 - {{ _('Critical')}}</option>
-                          </select>
-
-                        </div>
-                    </div>
-                    <!--div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-
-                        <div class="col-md-9">
-                          <input type="text"  class="form-control"  id="id_type_case" ng-model="casee.type_case">
-
-                        </div>
-                    </div-->
-                 <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Status")}} </label>
-
-                        <div class="col-md-9">
-                          <select ng-model="status_selected" ng-options="stat.status for stat in casesatuses" class="form-control">
-                            <option value=""><%=casee.status%> </option>
-
-                          </select>
-
-                        </div>
-
-                   </div>
-
-
-
-
-
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-              </div>
-               </form>
-              </div>
-        </div>
       <!-- END PAGE CONTAINER-->
-</div>
 <div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -1607,7 +1356,6 @@
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
                 <input  ng-click="deleteopportunity()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
               </div>
                </form>
           </div>
@@ -1620,10 +1368,6 @@
 
                     <p ng-show="sending">{{ _('Sending...')}}</p>
                     <p ng-show="emailSent">{{ _('Your email has been sent')}}</p>
-
-
-
-
                     </fieldset>
 
               </div>
@@ -1689,41 +1433,6 @@
         </div>
     </div>
 </div>
- <div id="EditCloseDate" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Edit Case")}}</h3>
-              </div>
-
-              <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updateClosedate(casee)" class="form-horizontal">
-
-
-                  <div class="form-group">
-
-
-                        <div class="col-md-12">
-
-                           <p><strong>{{_("Close Date")}}</strong></p>
-                                                  <center>
-                                                    <datetimepicker data-ng-model="casee.closed_date"
-                                                    data-datetimepicker-config="{ startView:'day', minView:'day' }" />
-                                                  </center>
-
-                        </div>
-                    </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-              </div>
-               </form>
-               </div>
-               </div>
-            </div>
-
         <!--HKA 06.03.2014 Main Competitor Modal -->
             <div id="EditCompetitor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -1821,71 +1530,6 @@
                </div>
                </div>
             </div>
-
-            <!--HKA 06.03.2014 Type Modal -->
-            <div id="EditType" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Edit Case")}}</h3>
-              </div>
-
-              <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updateType(casee)" class="form-horizontal">
-
-
-                  <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("Type")}} </label>
-
-                        <div class="col-md-9">
-                          <select ng-model="casee.type_case" class="form-control"><option value="">--{{ _('None')}}--</option><option value="Mechanical">{{ _('Mechanical')}}</option><option value="Electrical">{{ _('Electrical')}}</option><option value="Electronic">{{ _('Electronic')}}</option><option value="New Customer">{{ _('New Customer')}}</option><option value="Other">{{ _('Other')}}</option></select>
-
-
-                        </div>
-                    </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-              </div>
-               </form>
-               </div>
-               </div>
-            </div>
-
-            <!--HKA 06.03.2014 source Modal -->
-            <div id="EditOrigin" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Edit Case")}}</h3>
-              </div>
-
-              <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updatcaseorigin(casee)" class="form-horizontal">
-
-
-                  <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("Case Origin")}} </label>
-
-                        <div class="col-md-9">
-                          <select ng-model="casee.case_origin" class="form-control"><option value="">--{{ _('None')}}--</option><option value="Email">{{ _('Email')}}</option><option value="Social Media">{{ _('Social Media')}}</option><option value="Web Source">{{ _('Web Site')}}</option><option value="Phone">{{ _('Phone Inquiry')}}</option><option value="Other">{{ _('Other')}}</option></select>
-
-
-                        </div>
-                    </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-              </div>
-               </form>
-               </div>
-               </div>
-            </div>
-
             <!--HKA 06.03.2014 Custom fields Modal -->
 
             <div id="customfields" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -1948,27 +1592,6 @@
 
                         </div>
                     </div>
-                  <!--div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_( "Amount")}} </label>
-
-                        <div class="col-md-9">
-                          <input type="text" class="form-control"  id="id_amount" ng-model="opportunity.amount">
-
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Stage")}} </label>
-
-                        <div class="col-md-9">
-                          <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true" class="form-control" >
-                            <option value=""><%=opportunity.stagename%> </option>
-
-
-                          </select>
-
-                        </div>
-                    </div-->
-
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
@@ -1979,79 +1602,6 @@
               </div>
             </div>
         </div>
-<div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-  <div class="modal-content">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel" class="modal-title">{{_("New Event")}}</h3>
-  </div>
-  <div class="modal-body">
-           <div class="controls controls-row">
-                  <form id="addTask"  class="ng-pristine ng-valid">
-                                        <input class="form-control" autofocus type="text" placeholder="{{_('Add a new event')}}" id="taskTitle" ng-model="ioevent.title">
-                                        <p><strong>{{_("When?")}}</strong></p>
-                                      <div class="row">
-                                        <div class="col-md-6">
-                                          <p> <strong>{{_("Starts")}}</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy, HH:mm'%></p>
-                                              <datetimepicker data-ng-model="ioevent.starts_at"
-                                          data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
-                                        </div>
-                                        <div class="col-md-6">
-                                        <p><strong>{{_("Ends")}}</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%></p>
-                                              <datetimepicker data-ng-model="ioevent.ends_at"
-                                          data-datetimepicker-config="{ startView:'day', minView:'minute' }" />
-                                        </div>
-                                      </div>
-                                          <input class="form-control" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where">
-                                      </div>
-                                      </form>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-     <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this event')}}" ng-click="addEvent(ioevent)">
-      <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
-
-
-  </div>
-  </div>
-  </div>
-</div>
-
-              <!-- Modal -->
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-    <div class="modal-content">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel" class="modal-title">{{_("Add a new Task")}}</h3>
-  </div>
-  <div class="modal-body pickerin">
-           <div class="controls controls-row">
-                                <form id="addTask"  class="ng-pristine ng-valid">
-                                        <input class="form-control" autofocus type="text" placeholder="{{_('Add a new task')}}" id="taskTitle" ng-model="task.title">
-
-                                        <p><strong>{{_("When's it due?")}}</strong></p>
-                                        <center>
-                                          <datetimepicker data-ng-model="task.due"
-                                          data-datetimepicker-config="{ startView:'day', minView:'day' }" />
-                                        </center>
-        </div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-     <input ng-hide="isLoading" type="submit" ng-click="addTask(task)" class="btn green" value="Add this task">
-      <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-
-  </form>
-  </div>
-  </div>
-  </div>
-</div>
-
-
 <!--Event Modal -->
           <div id="newEventModalForm" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
@@ -2104,15 +1654,11 @@
                                          <div class="row"  ng-hide="allday">
                                                    <div> <strong style="float: left;">{{_("Starts")}}</strong><span style="float: left;">:</span>
                                                      <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                    <!--  <input id="datetimepickerjquery" type="text" > -->
-                                           
-
                                     <span ng-hide="showStartsCalendar||showEventInput" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
                                                    <%=ioevent.starts_at| date:'dd MMMM yyyy, HH:mm'%></span>
                                    <div ng-show="showStartsCalendar||showEventInput" class="input-icon">
                                               <i class="fa fa-calendar"></i>
                                     <input  cdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="leadEventStartsAt">
-                                          <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
                                            </div>
                                                     </div>
                                                                 
@@ -2126,8 +1672,6 @@
                                             <div ng-show="showEndsCalendar||showEventInput" class="input-icon">
                                                            <i class="fa fa-calendar"></i>
                                         <input  cdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="leadEventEndsAt">
-
-                                                <!--   <input cusdatetimepicker data-model="" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt"> -->
                                             </div>
                                                     </div>
                                        </div>  
@@ -2449,7 +1993,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
                 <input ng-click="disassociateItem()" type="submit" class="btn red" value="Disassociate">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -2463,9 +2006,6 @@ function wizz(){
       var handleTitle = function(tab, navigation, index) {
           var total = navigation.find('li').length;
           var current = index + 1;
-          // set wizard title
-         // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
-          // set done steps
           jQuery('li', $('#form_wizard_1')).removeClass("done");
           var li_list = navigation.find('li');
           for (var i = 0; i < index; i++) {
@@ -2486,10 +2026,7 @@ function wizz(){
               $('#form_wizard_1').find('.button-next').show();
               $('#form_wizard_1').find('.button-submit').hide();
           }
-        //  App.scrollTo($('.page-title'));
       }
-
-      // default form wizard
       $('#form_wizard_1').bootstrapWizard({
           'nextSelector': '.button-next',
           'previousSelector': '.button-previous',
