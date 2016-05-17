@@ -1,4 +1,3 @@
-import csv
 import datetime
 import json
 import logging
@@ -15,7 +14,6 @@ import sfoauth2
 import stripe
 import webapp2
 from apiclient.discovery import build
-from google.appengine._internal.django.utils.encoding import smart_str
 from google.appengine.api import mail
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
@@ -35,7 +33,6 @@ from oauth2client.appengine import OAuth2Decorator
 from oauth2client.client import FlowExchangeError
 from oauth2client.client import flow_from_clientsecrets
 from requests.auth import HTTPBasicAuth
-from simple_salesforce import Salesforce
 from webapp2_extras import i18n
 from webapp2_extras import sessions
 
@@ -45,7 +42,7 @@ from crm.iomodels.cases import Case
 from endpoints_helper import EndpointsHelper
 from iograph import Edge
 from iomodels import config as app_config
-from model import Application, STANDARD_TABS, ADMIN_TABS, User, Organization
+from model import Application, STANDARD_TABS, ADMIN_TABS, Organization
 
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
@@ -115,32 +112,6 @@ FOLDERS = {
 }
 folders = {}
 
-COPYLEAD_SF_MIXPANEL_ID = '09f72c87a9660ac31031b2221705afff'
-
-
-def track_mp_action(project_id, user_id, action, params=None):
-    mp = Mixpanel(project_id)
-    if params:
-        mp.track(user_id, action, params)
-    else:
-        mp.track(user_id, action)
-
-
-def people_set_mp(project_id, user_id, params):
-    mp = Mixpanel(project_id)
-    mp.people_set(user_id, params)
-
-
-def track_with_intercom(api, params):
-    return requests.post(
-        api,
-        auth=HTTPBasicAuth('a1tdujgo', 'c1ba3b4060accfdfcbeb0c0b8d38c8bfa8753daf'),
-        headers={
-            'Accept': 'application/json',
-            'content-type': 'application/json'
-        },
-        data=json.dumps(params)
-    )
 
 
 class BaseHandler(webapp2.RequestHandler):
