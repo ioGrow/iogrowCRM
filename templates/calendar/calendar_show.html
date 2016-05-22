@@ -1,120 +1,137 @@
 <div class="row subHeader actionsBar">
     <table style="width:100%;height: 55px;">
-          <tbody><tr>
+        <tbody>
+        <tr>
             <td class="appTd">
-            <div class="btn-group">
-                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
-                  {% if active_app.label =="Relationships" %}
-                      <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
-                      {% else%}
-                      <img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">
-                  {% endif %}
-                  <span class="hide_sm">{{_(active_app.label)}}</span>   
-                  <i class="icon-angle-down fa fa-angle-down"></i>
-                 </a>
-                 <ul class="dropdown-menu">
-                  {%for application in apps %}
-                        {% if application.label =="Relationships" %}
-                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
-                          {% else%}
-                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
-                        
-                          {% endif %}
-                       
+                <div class="btn-group">
+                    <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
+                        {% if active_app.label =="Relationships" %}
+                            <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png"
+                                 style="display:inline-block;height: 20px;margin-right: 3px;">
+                        {% else %}
+                            <img class="app_icon" src="../../static/src/img/admin_min.png"
+                                 style="display:inline-block;height: 20px;margin-right: 3px;">
+                        {% endif %}
+                        <span class="hide_sm">{{ _(active_app.label) }}</span>
+                        <i class="icon-angle-down fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for application in apps %}
+                            {% if application.label =="Relationships" %}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
+                                                                                                        src="../../static/src/img/sm-iogrow-true.png"
+                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                </a></li>
+                            {% else %}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
+                                                                                                        src="../../static/src/img/admin_min.png"
+                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                </a></li>
 
-                  {%endfor%}
-                 </ul>
-             </div>
-          </td>
-      <td class="middleHeaderTd">
-        <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">
-              <h2 class="page-title" style="margin-left: 5px; font-size:20px;float: left;vertical-align: middle;">
-                {{ _("Calendar")}}
-              </h2>
-              <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
-                <a class="headerBtn" title="Refresh" ng-click="refreshCurrent();"> 
-                      <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>
+                            {% endif %}
+
+
+                        {% endfor %}
+                    </ul>
                 </div>
-        </div>
-            <a  id="new_event" class="btn red newAccountBtnOnscroll pull-right"  data-toggle="modal" ng-click="newEventisClicked()">
-             <i class="fa fa-calendar"></i>{{ _(" New ")}}<span class="hidden-xs hiddenOnxs">{{ _(" Event")}}</span>
-           </a>
-                 
-      </td> 
-      <td class="settingsTd">
-            <div style=" padding-left: 10px;" class="pull-right">
-              <div class="btn-group">
-                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
-                    <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
-                  </a>
-                   <ul class="dropdown-menu drp-dwn-right">
-                   
-                     <li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Show tips ') }}</a></li>
-                      <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
-                          <li><a target="new" href="http://blog.iogrow.com/iogrow-faq">{{ _('Faq') }}</a></li> 
-                    
-                  </ul>
-               </div>
-               {%for application in apps %}
-                 {%if application.label =="Settings" %}
-                  <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
-                      <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                  </a>
-                 {%endif%}
-               {%endfor%}  
-              <div class="btn-group show_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
-                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
-                      <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
-                  </a>
-                  <ul class="dropdown-menu drp-dwn-right">
-                    <li>
-                        <a class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;" ng-click="switchShow()"> 
-                            <i class="fa fa-question-circle" style="padding-top: 6px; font-size: 16px;"></i>
+            </td>
+            <td class="middleHeaderTd">
+                <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">
+                    <h2 class="page-title" style="margin-left: 5px; font-size:20px;float: left;vertical-align: middle;">
+                        {{ _("Calendar") }}
+                    </h2>
+                    <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
+                        <a class="headerBtn" title="Refresh" ng-click="refreshCurrent();">
+                            <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
-                    </li> 
-                    {%for application in apps %}
-                       {%if application.label =="Settings" %}
-                        <li>
-                        <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
-                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                            {{ _("Settings")}}
-                        </a>
-                        </li> 
-                       {%endif%}
-                    {%endfor%}  
-                  </ul>
-              </div>           
-          </div>
-      </td>
-          </tr>
-          
-        </tbody>
-  </table>
-</div>
-<input  type="hidden" value='{{ME}}' id="user_id"/>
+                    </div>
+                </div>
+                <a id="new_event" class="btn red newAccountBtnOnscroll pull-right" data-toggle="modal"
+                   ng-click="newEventisClicked()">
+                    <i class="fa fa-calendar"></i>{{ _(" New ") }}<span
+                        class="hidden-xs hiddenOnxs">{{ _(" Event") }}</span>
+                </a>
 
-<div  class="page-content">
-  <div class="loader-container row" ng-show="isLoading">
-    <div class="loader-dialog col-md-4 col-md-offset-4 ">
-      <div class="loader-content">
-        {{ _('Loading...')}}
-      </div>
+            </td>
+            <td class="settingsTd">
+                <div style=" padding-left: 10px;" class="pull-right">
+                    <div class="btn-group">
+                        <a class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"
+                           href="#" data-toggle="dropdown">
+                            <i class="fa fa-question-circle"
+                               style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
+                        </a>
+                        <ul class="dropdown-menu drp-dwn-right">
+
+                            <li><a ng-click="wizard()" href="#" data-toggle="modal">{{ _('Show tips ') }}</a></li>
+                            <li><a target="new"
+                                   href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    {% for application in apps %}
+                        {% if application.label =="Settings" %}
+                            <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
+                               style="margin-left: 20px; margin-right: 12px;">
+                                <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="btn-group show_sm"
+                         style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                        <a class="headerBtn" title="More" data-toggle="dropdown">
+                            <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
+                        </a>
+                        <ul class="dropdown-menu drp-dwn-right">
+                            <li>
+                                <a class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"
+                                   ng-click="switchShow()">
+                                    <i class="fa fa-question-circle" style="padding-top: 6px; font-size: 16px;"></i>
+                                </a>
+                            </li>
+                            {% for application in apps %}
+                                {% if application.label =="Settings" %}
+                                    <li>
+                                        <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
+                                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                                            {{ _("Settings") }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+<input type="hidden" value='{{ ME }}' id="user_id"/>
+
+<div class="page-content">
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                {{ _('Loading...') }}
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="container" ng-show="immediateFailed">
-    <div class="col-md-12">
+    <div class="container" ng-show="immediateFailed">
+        <div class="col-md-12">
 
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
+        </div>
     </div>
-  </div>
     <!--<div class="row subHeaderContainer">
         <div class=" col-md-4 col-sm-4 col-xs-4 subHeaderContent">
            <div class="row">
               <!-- <h2 class="page-title">{{ _("Contacts") }} </h2> -->
-          <!--  </div>
+    <!--  </div>
         </div>
      <div class="col-md-8 col-sm-8 col-xs-8">
         <div class="row">
@@ -129,63 +146,68 @@
          </div>
     </div>
   </div>-->
-  <input type="hidden" value="{{user.timezone}}" id="timezone"/>
+    <input type="hidden" value="{{ user.timezone }}" id="timezone"/>
 
-  <div ng-show="isContentLoaded" class="row" style="margin-top: 16px;">
-    <div class="col-md-12 showPage">
-        <div id="calendar" class="has-toolbar">
-    </div>
-  </div>
-
-
-<!-- here folks -->
- <div id="effect" class="ui-widget-content ui-corner-all">
-    <h3 class="ui-widget-header ui-corner-all">Show</h3>
-    <p>
-      Etiam libero neque, luctus a, eleifend nec, semper at, lorem. Sed pede. Nulla lorem metus, adipiscing ut, luctus sed, hendrerit vitae, mi.
-    </p>
-  </div>
-<!-- here it ends -->
-
-            <!--HKA 11.10.2013 Edit Contact -->
-             <div id="EditContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-              <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Edit Contact")}}</h3>
-              </div>
-
-              <div class="modal-body">
-                 <form id="editAccount" name="editlead" ng-submit="updatecontact(contact)" class="form-horizontal">
+    <div ng-show="isContentLoaded" class="row" style="margin-top: 16px;">
+        <div class="col-md-12 showPage">
+            <div id="calendar" class="has-toolbar">
+            </div>
+        </div>
 
 
-                  <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("First Name")}} </label>
+        <!-- here folks -->
+        <div id="effect" class="ui-widget-content ui-corner-all">
+            <h3 class="ui-widget-header ui-corner-all">Show</h3>
+            <p>
+                Etiam libero neque, luctus a, eleifend nec, semper at, lorem. Sed pede. Nulla lorem metus, adipiscing
+                ut, luctus sed, hendrerit vitae, mi.
+            </p>
+        </div>
+        <!-- here it ends -->
 
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" required id="id_firstname" ng-model="contact.firstname">
+        <!--HKA 11.10.2013 Edit Contact -->
+        <div id="EditContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
 
-                        </div>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel" class="modal-title">{{ _("Edit Contact") }}</h3>
                     </div>
-                    <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Last Name")}}</label>
 
-                        <div class="col-md-9">
-                          <input type="text" class="form-control"  id="id_type" ng-model="contact.lastname">
+                    <div class="modal-body">
+                        <form id="editAccount" name="editlead" ng-submit="updatecontact(contact)"
+                              class="form-horizontal">
 
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Tittle")}} </label>
 
-                        <div class="col-md-9">
-                          <input type="text" class="form-control"  required id="id_Title" ng-model="contact.title">
+                            <div class="form-group">
+                                <label class="required col-md-3 control-label">{{ _("First Name") }} </label>
 
-                        </div>
-                    </div>
-                    <!--div class="control-group">
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" required id="id_firstname"
+                                           ng-model="contact.firstname">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="required col-md-3 control-label">{{ _("Last Name") }}</label>
+
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="id_type" ng-model="contact.lastname">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="required col-md-3 control-label">{{ _("Tittle") }} </label>
+
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" required id="id_Title"
+                                           ng-model="contact.title">
+
+                                </div>
+                            </div>
+                            <!--div class="control-group">
                         <label  class="required col-md-3 control-label">{{_("Company")}} </label>
 
                         <div class="col-md-9">
@@ -195,647 +217,691 @@
                     </div-->
 
 
-
-
-
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-              </div>
-               </form>
-               </div>
-               </div>
-              </div>
-          <!--HKA 24.12.2013 Modal before Deleting Contact-->
-  <div id="BeforedeleteContact" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Contact')}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal">
-
-
-                  <p>{{_("Are you sure you want to delete")}} :  <%=contact.firstname%> <%=contact.lastname%>  .</p>
-
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                <input  ng-click="deletecontact()" type="submit" class="btn red" value="Delete this Contact">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-              </div>
-               </form>
-               </div>
-               </div>
-       </div>
-
-      <!--HKA 11.10.2013 Edit Tagline -->
-             <div id="EditTagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Edit Contact")}}</h3>
-              </div>
-
-              <div class="modal-body">
-                 <form id="editTagline" name="editlead" ng-submit="updateTagline(account)" class="form-horizontal">
-
-
-                  <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("Tagline")}} </label>
-
-                        <div class="col-md-9">
-                          <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
-                           <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="account.tagline"></textarea>
-
-                        </div>
                     </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-              </div>
-               </form>
-               </div>
-               </div>
-            </div>
-
-  <!--HKA 11.10.2013 Edit Introduction  -->
-             <div id="EditIntroModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Edit Account")}}</h3>
-              </div>
-
-              <div class="modal-body">
-                 <form id="editTagline" name="edittag" ng-submit="updateintro(account)" class="form-horizontal">
-
-
-                  <div class="form-group">
-                        <label  class=" col-md-3 control-label">{{_("Introduction")}} </label>
-
-                        <div class="col-md-9">
-
-                           <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="account.introduction"></textarea>
-
-                        </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
+                        <button type="submit" class="btn btn-primary addContactNow">{{ _("Save") }} </button>
                     </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-              </div>
-               </form>
-               </div>
-               </div>
+                    </form>
+                </div>
             </div>
-
-      <!--HKA 18.11.2013 Add Phone Modal -->
-
-
-    <div id="phonemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Add Phone")}}</h3>
-            </div>
-            <div class="modal-body">
-                  <form id="addPhone" name="addphone" class="form-horizontal">
-                    <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("Type")}} </label>
-                        <div class="col-md-9">
-                          <!--input type="text" placeholder="{{_('home')}},{{_('work')}},{{_('mobile')}},{{_('other')}} ..." required id="id_name" ng-model="phone.type_number"-->
-                          <select ng-model="phone.type_number" class="form-control">
-                            <option value="home" selected="selected" >{{_('home')}}</option>
-                            <option>{{_('work')}}</option>
-                            <option>{{_('mobile')}}</option>
-                            <option>{{_('other')}}</option>
-
-                          </select>
-                        </div>
-                     </div>
-                     <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Number")}}</label>
-
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" id="id_name" ng-model="phone.number">
-
-                        </div>
-                     </div>
-              </div>
-              <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                 <input ng-hide="isLoading" ng-click="addPhone(phone)" ng-disabled="!(phone.number)" type="submit" class="btn green" value="{{_('Add this phone')}}">
-
-                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
-              </div>
-                </form>
-            </div>
-            </div>
-    </div>
-
-
- <!--HKA 18.11.2013 Add Email -->
-
-     <div id="emailmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Add Email")}}</h3>
-            </div>
-            <div class="modal-body">
-                  <form id="addEmail" name="addemail"  class="form-horizontal">
-                    <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("Email")}} </label>
-                        <div class="col-md-9">
-                          <input type="text" placeholder="{{_('Email')}}" required id="id_email" ng-model="emaill.email" ng-pattern="/^[\w\.\_]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}/"  class="form-control">
-                        </div>
-                     </div>
-              </div>
-              <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                  <input ng-hide="isLoading" ng-click="addEmail(emaill)"   ng-disabled="!(emaill.email)"  type="submit" class="btn green" value="Add this email">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-              </div>
-                </form>
-              </div>
-              </div>
         </div>
-
-      <!--HKA 18.11.2013  Addresse Modal  -->
-
-    <div id="addressmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <!--HKA 24.12.2013 Modal before Deleting Contact-->
+        <div id="BeforedeleteContact" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog">
-              <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Add Address")}}</h3>
-            </div>
-            <div class="modal-body">
-                  <form id="addAddress" name="addemail"  class="form-horizontal">
-                    <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("Street")}} </label>
-                        <div class="col-md-9">
-                          <input type="text"   class="form-control" id="id_street" ng-model="address.street">
-                        </div>
-                     </div>
-                     <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("City")}} </label>
-                        <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_city" ng-model="address.city">
-                        </div>
-                     </div>
-                     <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("State/Province")}} </label>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" id="id_state" ng-model="address.state">
-                        </div>
-                     </div>
-                     <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("Postal Code")}} </label>
-                        <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_postal" ng-model="address.postal_code">
-                        </div>
-                     </div>
-                     <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("Country")}} </label>
-                        <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_country" ng-model="address.country">
-                        </div>
-                     </div>
-              </div>
-              <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel" class="modal-title">{{ _('Delete Contact') }}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form id="seletesho" name="deletesho" class="form-horizontal">
 
-                  <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="!(address.country || address.postal_code || address.state || address.city || address.street)" type="submit" class="btn green" value="{{_('Add this address')}}">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
-              </div>
-                </form>
-            </div>
+
+                            <p>{{ _("Are you sure you want to delete") }} : <%=contact.firstname%> <%=contact.lastname%>
+                                .</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                        <input ng-click="deletecontact()" type="submit" class="btn red" value="Delete this Contact">
+                        <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+                    </div>
+                    </form>
+                </div>
             </div>
         </div>
 
-
-     <div id="customfields" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <!--HKA 11.10.2013 Edit Tagline -->
+        <div id="EditTagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog">
-              <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
-            </div>
-            <div class="modal-body">
-                  <form id="addWebsite" name="addwebsite"  class="form-horizontal">
-                    <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("Custom Field")}} </label>
-                        <div class="col-md-9">
-                          <div class="form-group">
-                               <input type="text" class="form-control" placeholder="{{ _('Field')}}"  ng-model="customField.field">
-                          </div>
-                          <div class="form-group">
-                               <input type="text" class="form-control" placeholder="{{ _('Value')}}"  ng-model="customField.value">
-                          </div>
-                        </div>
-                     </div>
-              </div>
-              <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel" class="modal-title">{{ _("Edit Contact") }}</h3>
+                    </div>
 
-                  <input ng-hide="isLoading" ng-click="addCustomField(customField)" ng-disabled="!(customField.field && customField.value)" type="submit" class="btn green" value="{{_('Add this custom field')}}">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
-              </div>
-                </form>
-                </div>
-                </div>
-        </div>
-    <!--HKA 18.11.2013 Website Modal -->
+                    <div class="modal-body">
+                        <form id="editTagline" name="editlead" ng-submit="updateTagline(account)"
+                              class="form-horizontal">
 
 
-    <div id="websitemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
-            </div>
-            <div class="modal-body">
-                  <form id="addWebsite" name="addwebsite"  class="form-horizontal">
-                    <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("Website")}} </label>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" placeholder="Website" required id="id_website" ng-model="website.website" >
-                        </div>
-                     </div>
-              </div>
-              <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                  <input ng-hide="isLoading" ng-click="addWebsite(website)" ng-disabled="!(website.website)" type="submit"  class="btn green" value="{{_('Add this Website')}}">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
-              </div>
-                </form>
-                </div>
-                </div>
-        </div>
-
-    <!--HKA 18.11.2013 Social modal -->
-
-
-    <div id="socialmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Add Social link")}}</h3>
-            </div>
-             <div class="modal-body">
-                  <form id="addSocial" name="addsocial"  class="form-horizontal">
-                    <div class="form-group">
-                        <label  class="col-md-3 control-label">{{_("Social link")}} </label>
-                        <div class="col-md-9">
-                          <input type="text" placeholder="{{_('Social link')}}"  required id="id_social" ng-model="social.sociallink" class="form-control" >
-                        </div>
-                     </div>
-              </div>
-              <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                  <input ng-hide="isLoading" ng-click="addSocial(social)" ng-disabled="!(social.sociallink)" type="submit" class="btn green" value="{{ _('Add this social link') }}">
-                  <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-              </div>
-                </form>
-                </div>
-                </div>
-        </div>
-
-    </div>
-      <!-- END PAGE CONTAINER-->
-</div>
- <!--HKA 18.11.2013 Add Contact modal -->
-
-                    <div id="addContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                          <h3 id="myModalLabel" class="modal-title">{{_("New Contact")}}</h3>
-                        </div>
-                        <div class="modal-body">
-                            <form id="addContact" name="addcontact"   class="form-horizontal" role="form">
                             <div class="form-group">
-                              <label  class="required col-md-3 control-label">{{_("First Name")}} </label>
+                                <label class="col-md-3 control-label">{{ _("Tagline") }} </label>
 
-                              <div class="col-md-9">
-                              <input class="form-control" type="text" required id="id_firstname" ng-model="contact.firstname">
+                                <div class="col-md-9">
+                                    <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
+                                    <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3"
+                                              ng-model="account.tagline"></textarea>
 
-                               </div>
+                                </div>
                             </div>
-                           <div class="form-group">
-                              <label  class="required col-md-3 control-label">{{_("Last Name")}}</label>
-                              <div class="col-md-9">
-                              <input class="form-control" type="text"  id="id_lastname" ng-model="contact.lastname">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
+                        <button type="submit" class="btn btn-primary addContactNow">{{ _("Save") }} </button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-                              </div>
-                           </div>
-                           <div class="form-group">
-                             <label  class="required col-md-3 control-label">{{_("Tittle")}} </label>
+        <!--HKA 11.10.2013 Edit Introduction  -->
+        <div id="EditIntroModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel" class="modal-title">{{ _("Edit Account") }}</h3>
+                    </div>
 
-                             <div class="col-md-9">
-                              <input class="form-control" type="text"  id="id_account" ng-model="contact.title">
-
-                              </div>
-                           </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn green addContactNow" ng-click="savecontact(contact)">{{_("Add Contact")}}</button>
-              </div>
-               </form>
-             </div>
-           </div>
-       </div>
+                    <div class="modal-body">
+                        <form id="editTagline" name="edittag" ng-submit="updateintro(account)" class="form-horizontal">
 
 
-<div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-           <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
+                            <div class="form-group">
+                                <label class=" col-md-3 control-label">{{ _("Introduction") }} </label>
+
+                                <div class="col-md-9">
+
+                                    <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3"
+                                              ng-model="account.introduction"></textarea>
+
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
+                        <button type="submit" class="btn btn-primary addContactNow">{{ _("Save") }} </button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--HKA 18.11.2013 Add Phone Modal -->
+
+
+        <div id="phonemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel" class="modal-title">{{ _("Add Phone") }}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addPhone" name="addphone" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ _("Type") }} </label>
+                                <div class="col-md-9">
+                                    <!--input type="text" placeholder="{{_('home')}},{{_('work')}},{{_('mobile')}},{{_('other')}} ..." required id="id_name" ng-model="phone.type_number"-->
+                                    <select ng-model="phone.type_number" class="form-control">
+                                        <option value="home" selected="selected">{{ _('home') }}</option>
+                                        <option>{{ _('work') }}</option>
+                                        <option>{{ _('mobile') }}</option>
+                                        <option>{{ _('other') }}</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="required col-md-3 control-label">{{ _("Number") }}</label>
+
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="id_name" ng-model="phone.number">
+
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                        <input ng-hide="isLoading" ng-click="addPhone(phone)" ng-disabled="!(phone.number)"
+                               type="submit" class="btn green" value="{{ _('Add this phone') }}">
+
+                        <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}"
+                               disabled>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!--HKA 18.11.2013 Add Email -->
+
+        <div id="emailmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel" class="modal-title">{{ _("Add Email") }}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addEmail" name="addemail" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ _("Email") }} </label>
+                                <div class="col-md-9">
+                                    <input type="text" placeholder="{{ _('Email') }}" required id="id_email"
+                                           ng-model="emaill.email" ng-pattern="/^[\w\.\_]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}/"
+                                           class="form-control">
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                        <input ng-hide="isLoading" ng-click="addEmail(emaill)" ng-disabled="!(emaill.email)"
+                               type="submit" class="btn green" value="Add this email">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--HKA 18.11.2013  Addresse Modal  -->
+
+        <div id="addressmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel" class="modal-title">{{ _("Add Address") }}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addAddress" name="addemail" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ _("Street") }} </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="id_street" ng-model="address.street">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ _("City") }} </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="id_city" ng-model="address.city">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ _("State/Province") }} </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="id_state" ng-model="address.state">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ _("Postal Code") }} </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="id_postal"
+                                           ng-model="address.postal_code">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ _("Country") }} </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="id_country" ng-model="address.country">
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                        <input ng-hide="isLoading" ng-click="addAddress(address)"
+                               ng-disabled="!(address.country || address.postal_code || address.state || address.city || address.street)"
+                               type="submit" class="btn green" value="{{ _('Add this address') }}">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}"
+                               disabled>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="customfields" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel" class="modal-title">{{ _("Add Website") }}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addWebsite" name="addwebsite" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ _("Custom Field") }} </label>
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="{{ _('Field') }}"
+                                               ng-model="customField.field">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="{{ _('Value') }}"
+                                               ng-model="customField.value">
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                        <input ng-hide="isLoading" ng-click="addCustomField(customField)"
+                               ng-disabled="!(customField.field && customField.value)" type="submit" class="btn green"
+                               value="{{ _('Add this custom field') }}">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}"
+                               disabled>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--HKA 18.11.2013 Website Modal -->
+
+
+        <div id="websitemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel" class="modal-title">{{ _("Add Website") }}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addWebsite" name="addwebsite" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ _("Website") }} </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="Website" required
+                                           id="id_website" ng-model="website.website">
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                        <input ng-hide="isLoading" ng-click="addWebsite(website)" ng-disabled="!(website.website)"
+                               type="submit" class="btn green" value="{{ _('Add this Website') }}">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}"
+                               disabled>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--HKA 18.11.2013 Social modal -->
+
+
+        <div id="socialmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel" class="modal-title">{{ _("Add Social link") }}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addSocial" name="addsocial" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ _("Social link") }} </label>
+                                <div class="col-md-9">
+                                    <input type="text" placeholder="{{ _('Social link') }}" required id="id_social"
+                                           ng-model="social.sociallink" class="form-control">
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                        <input ng-hide="isLoading" ng-click="addSocial(social)" ng-disabled="!(social.sociallink)"
+                               type="submit" class="btn green" value="{{ _('Add this social link') }}">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}"
+                               disabled>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- END PAGE CONTAINER-->
+</div>
+<!--HKA 18.11.2013 Add Contact modal -->
+
+<div id="addContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 id="myModalLabel" class="modal-title">{{ _("New Contact") }}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="addContact" name="addcontact" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="required col-md-3 control-label">{{ _("First Name") }} </label>
+
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" required id="id_firstname"
+                                   ng-model="contact.firstname">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="required col-md-3 control-label">{{ _("Last Name") }}</label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="id_lastname" ng-model="contact.lastname">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="required col-md-3 control-label">{{ _("Tittle") }} </label>
+
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="id_account" ng-model="contact.title">
+
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                <button type="submit" class="btn green addContactNow"
+                        ng-click="savecontact(contact)">{{ _("Add Contact") }}</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal">
+                <h3 id="myModalLabel" class="modal-title">{{ _("Sharing Settings") }}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal">
 
                     <p>{{ _("Who has access:") }}</p>
                     <div class="radio-list">
 
-                            <label >
-                            <input type="radio" name="optionRadio" value="public" ng-model="contact.access" />
+                        <label>
+                            <input type="radio" name="optionRadio" value="public" ng-model="contact.access"/>
                             {{ _("public: Anyone within your organization can access and find") }}
-                            </label>
-                            <label >
-                            <input type="radio" name="optionRadio"  value="private" ng-model="contact.access" />
+                        </label>
+                        <label>
+                            <input type="radio" name="optionRadio" value="private" ng-model="contact.access"/>
                             {{ _("private: only you and your collaborators") }}
-                            </label>
+                        </label>
                     </div>
                     <hr/>
                     <div class=''>
-                    <p>{{ _("Collaborators:") }}</p>
+                        <p>{{ _("Collaborators:") }}</p>
                         <div ng-repeat="collaborator in contact.collaborators_list" class="invitation">
-                          <img class="google-avatar" ng-src="<%=collaborator.photo%>"/>
-                           <%=collaborator.display_name%> < <%=collaborator.email%> >
+                            <img class="google-avatar" ng-src="<%=collaborator.photo%>"/>
+                            <%=collaborator.display_name%> < <%=collaborator.email%> >
                         </div>
 
                     </div>
                     <hr/>
 
                     <div class=''>
-                    <p>{{ _("Invited user:") }}</p>
-                    <div class="invitation" ng-repeat="invited in sharing_with">
-                      <img class="google-avatar" ng-src="invited.google_public_profile_photo_url"/>
-                        <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
-                      <hr/>
+                        <p>{{ _("Invited user:") }}</p>
+                        <div class="invitation" ng-repeat="invited in sharing_with">
+                            <img class="google-avatar" ng-src="invited.google_public_profile_photo_url"/>
+                            <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
+                            <hr/>
+                        </div>
+
+                        <p>{{ _("Invite collaborators:") }}</p>
+                        <div class="form-group">
+                            <input type="text" ng-model="user"
+                                   typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
+                                   typeahead-on-select="selectMember()" class="form-control"
+                                   placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                        </div>
+
                     </div>
-
-                    <p>{{ _("Invite collaborators:") }}</p>
-                    <div class="form-group">
-                      <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
-                    </div>
-
-                      </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn blue addContactNow">{{_("Share")}}</button>
-              </div>
-               </form>
-               </div>
-               </div>
-
-       </div>
-
-<div id="BeforedeleteAccount" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Account')}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal">
-                  <p>{{_("Are you sure you want to delete")}} :  <%=account.name %> .</p>
-              </div>
-                <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                  <input  ng-click="deleteaccount()" type="submit" class="btn red" value="Delete this Account">
-                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-                </div>
-            </form>
-          </div>
-        </div>
-       </div>
-         <!-- BEFORE DELETE MODEL END-->
-           <!--HKA 24.12.2013 Modal before Deleting Account-->
-          <!-- BEFORE DELETE MODEL-->
-         <div id="BeforedeleteInfonode" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Information')}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal">
-                  <p>{{_("Are you sure you want to delete")}} :  <%=account.name %> .</p>
-              </div>
-                <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                  <input  ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Information">
-                  <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-                </div>
-            </form>
-          </div>
-        </div>
-       </div>
-
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-              <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">{{_("Add a new Task")}}</h3>
-            </div>
-            <div class="modal-body pickerin">
-                     <div class="controls controls-row">
-                                          <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
-
-                                                  <p><strong>{{_("When's it due?")}}</strong></p>
-                                                  <center>
-                                                    <datetimepicker data-ng-model="task.due"
-                                                    data-datetimepicker-config="{ startView:'day', minView:'day' }" />
-                                                  </center>
-                  </div>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-               <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
-                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                <button type="submit" class="btn blue addContactNow">{{ _("Share") }}</button>
+            </div>
             </form>
-            </div>
-            </div>
-            </div>
-          </div>
+        </div>
+    </div>
 
-<div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
+</div>
+
+<div id="BeforedeleteAccount" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">{{_("Create a new")}} <%=mimeType%></h3>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Account') }}</h3>
             </div>
             <div class="modal-body">
-                     <div class="controls controls-row">
-                                          <form id="addTask"  class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
-
-
-                     </div>
+                <form id="seletesho" name="deletesho" class="form-horizontal">
+                    <p>{{ _("Are you sure you want to delete") }} : <%=account.name %> .</p>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
-               <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Create this document')}}" ng-click="createDocument(newdocument)">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...')}}" disabled>
-
+                <input ng-click="deleteaccount()" type="submit" class="btn red" value="Delete this Account">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+            </div>
             </form>
+        </div>
+    </div>
+</div>
+<!-- BEFORE DELETE MODEL END-->
+<!--HKA 24.12.2013 Modal before Deleting Account-->
+<!-- BEFORE DELETE MODEL-->
+<div id="BeforedeleteInfonode" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Information') }}</h3>
             </div>
+            <div class="modal-body">
+                <form id="seletesho" name="deletesho" class="form-horizontal">
+                    <p>{{ _("Are you sure you want to delete") }} : <%=account.name %> .</p>
             </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                <input ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Information">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
-          </div>
-    <!--End Contact Modal -->
+            </form>
+        </div>
+    </div>
+</div>
 
-     <!--HKA 19.11.2013 Opportunity Modal -->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{ _("Add a new Task") }}</h3>
+            </div>
+            <div class="modal-body pickerin">
+                <div class="controls controls-row">
+                    <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
+                        <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle"
+                               ng-model="task.title">
 
-              <div id="addOpportunityModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-              <div class="modal-content">
-                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                     <h3 id="myModalLabel" class="modal-title">{{_("New Opportunity")}}</h3>
-                  </div>
-                 <div class="modal-body">
-                     <form id="addOpportunity" name="addOpportunity" ng-submit="saveOpp(opportunity)" class="form-horizontal">
-                     <fieldset>
-                      <div class="form-group">
-                          <label  class="required col-md-3 control-label">{{_("Name")}} *</label>
+                        <p><strong>{{ _("When's it due?") }}</strong></p>
+                        <center>
+                            <datetimepicker data-ng-model="task.due"
+                                            data-datetimepicker-config="{ startView:'day', minView:'day' }"/>
+                        </center>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
-                          <div class="col-md-9">
-                          <input type="text" class="form-control" required id="id_name" ng-model="opportunity.name">
-                          </div>
-                      </div>
-                      <!--div class="form-group">
+                <input ng-hide="isLoading" type="submit" class="btn green" value="Add this task">
+                <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{ _("Create a new") }} <%=mimeType%></h3>
+            </div>
+            <div class="modal-body">
+                <div class="controls controls-row">
+                    <form id="addTask" class="ng-pristine ng-valid">
+                        <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name"
+                               id="taskTitle" ng-model="newdocument.title" required>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</button>
+
+                <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Create this document') }}"
+                       ng-click="createDocument(newdocument)">
+                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Contact Modal -->
+
+<!--HKA 19.11.2013 Opportunity Modal -->
+
+<div id="addOpportunityModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{ _("New Opportunity") }}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="addOpportunity" name="addOpportunity" ng-submit="saveOpp(opportunity)"
+                      class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="required col-md-3 control-label">{{ _("Name") }} *</label>
+
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" required id="id_name"
+                                       ng-model="opportunity.name">
+                            </div>
+                        </div>
+                        <!--div class="form-group">
                         <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
 
                         <div class="col-md-9">
                           <input type="text"  class="form-control" id="id_label" ng-model="opportunity.description">
                         </div>
                       </div-->
-                    <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Amount")}} </label>
-                        <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_amount" ng-model="opportunity.amount">
+                        <div class="form-group">
+                            <label class="required col-md-3 control-label">{{ _("Amount") }} </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" id="id_amount" ng-model="opportunity.amount">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Stage")}} </label>
-                        <div class="col-md-9">
-                          <select ng-model="stage_selected" class="form-control" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true"  >
-                            <option value="">-- {{ _('choose Stage')}} --</option>
+                        <div class="form-group">
+                            <label class="required col-md-3 control-label">{{ _("Stage") }} </label>
+                            <div class="col-md-9">
+                                <select ng-model="stage_selected" class="form-control"
+                                        ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true">
+                                    <option value="">-- {{ _('choose Stage') }} --</option>
 
-                          </select>
+                                </select>
 
 
+                            </div>
                         </div>
-                    </div>
                     </fieldset>
 
-              </div>
-                    <div class="modal-footer">
-                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                      <button  type="submit" class="btn green addContactNow">{{_("Add Opportunity")}}</button>
-                     </div>
-                   </form>
-                   </div>
-                   </div>
-          </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                <button type="submit" class="btn green addContactNow">{{ _("Add Opportunity") }}</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-                <!--HKA 19.11.2013 End Of Opportunity Modal -->
-                   <!--HKA 19.11.2013 Case Modal -->
-                <div id="addCaseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
+<!--HKA 19.11.2013 End Of Opportunity Modal -->
+<!--HKA 19.11.2013 Case Modal -->
+<div id="addCaseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("New Case")}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="addCase" name="addCase" ng-submit="saveCase(casee)" class="form-horizontal">
-
-
-
+                <h3 id="myModalLabel" class="modal-title">{{ _("New Case") }}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="addCase" name="addCase" ng-submit="saveCase(casee)" class="form-horizontal">
 
 
                     <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Name")}} </label>
+                        <label class="required col-md-3 control-label">{{ _("Name") }} </label>
 
                         <div class="col-md-9">
-                          <input type="text" class="form-control"  id="id_name" ng-model="casee.name">
+                            <input type="text" class="form-control" id="id_name" ng-model="casee.name">
 
                         </div>
                     </div>
                     <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
+                        <label class="required col-md-3 control-label">{{ _("Priority") }} </label>
 
                         <div class="col-md-9">
-                           <select class="form-control" ng-model="casee.priority">
-                            <option value="1">1 - {{ _('Low')}}</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10 - {{ _('Critical')}}</option>
-                          </select>
+                            <select class="form-control" ng-model="casee.priority">
+                                <option value="1">1 - {{ _('Low') }}</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10 - {{ _('Critical') }}</option>
+                            </select>
 
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Status")}}</label>
+                        <label class="required col-md-3 control-label">{{ _("Status") }}</label>
 
                         <div class="col-md-9">
-                            <select  class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
-                            <option value="">{{ _('Choose Status')}}</option>
-                            <!--option value=""><%=status_selected.status%></option-->
-                          </select>
+                            <select class="form-control" ng-model="status_selected"
+                                    ng-options="stat.status for stat in casesatuses">
+                                <option value="">{{ _('Choose Status') }}</option>
+                                <!--option value=""><%=status_selected.status%></option-->
+                            </select>
 
                         </div>
 
@@ -850,554 +916,855 @@
                     </div-->
 
 
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                <button type="submit" class="btn green addContactNow">{{ _("Add Case") }}</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button  type="submit" class="btn green addContactNow">{{_("Add Case")}}</button>
-              </div>
-               </form>
-               </div>
-               </div>
-          </div>
-
-                      <!--HKA 19.11.2013  End Case Modal -->
+<!--HKA 19.11.2013  End Case Modal -->
 
 <!--Event Modal -->
-          <div id="newEventModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-          
+<div id="newEventModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
             <div class="modal-body">
-                     <div class="controls controls-row">
-                            <form id="addTask"  class="ng-pristine ng-valid">
+                <div class="controls controls-row">
+                    <form id="addTask" class="ng-pristine ng-valid">
 
-                            <div class="inner-addon left-addon" >
-                                 <i class="glyphicon glyphicon-pencil" style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
-                                     <input class="form-control calendar-form-controle" autofocus type="text" placeholder="{{_('Event title')}}" id="taskTitle" ng-model="ioevent.title" style="padding-bottom: 20px;">
-                                 
-                              
-                                     
-                             </div>
+                        <div class="inner-addon left-addon">
+                            <i class="glyphicon glyphicon-pencil"
+                               style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
+                            <input class="form-control calendar-form-controle" autofocus type="text"
+                                   placeholder="{{ _('Event title') }}" id="taskTitle" ng-model="ioevent.title"
+                                   style="padding-bottom: 20px;">
 
-                              <div class="" >
-                                  <i class="glyphicon glyphicon-calendar" style="color: rgba(0, 26, 131, 0.61); margin-left:10px;  margin-top: -5px;"></i>
-                                    <div class="row" style="margin-left:80px">
-                                    <div class="col-md-2" style="border-right: 1px solid #C5C2C2;margin-right: 36px;height: 53px;">
+
+                        </div>
+
+                        <div class="">
+                            <i class="glyphicon glyphicon-calendar"
+                               style="color: rgba(0, 26, 131, 0.61); margin-left:10px;  margin-top: -5px;"></i>
+                            <div class="row" style="margin-left:80px">
+                                <div class="col-md-2"
+                                     style="border-right: 1px solid #C5C2C2;margin-right: 36px;height: 53px;">
                                     <div style="margin-top:15px">
-                                      all day <div class="customCheckbox " class="form-group" style="
+                                        all day
+                                        <div class="customCheckbox " class="form-group" style="
     margin-top: -14px;
     margin-left: 41px;
-">  
-                            <input title="Select allday" type="checkbox" ng-model="alldaybox" ng-click="checkallday()" id="allday">             
-                              <label for="allday" class="labelElement">
-                                <span class="check" style="  height: 17px !important;width: 8px !important;   margin-top: -4px;"></span>
-                                <span class="box" style="  height: 15px !important;width: 15px !important;   margin-top: -13px;"></span>
-                              </label>  
-                          </div>
+">
+                                            <input title="Select allday" type="checkbox" ng-model="alldaybox"
+                                                   ng-click="checkallday()" id="allday">
+                                            <label for="allday" class="labelElement">
+                                                <span class="check"
+                                                      style="  height: 17px !important;width: 8px !important;   margin-top: -4px;"></span>
+                                                <span class="box"
+                                                      style="  height: 15px !important;width: 15px !important;   margin-top: -13px;"></span>
+                                            </label>
+                                        </div>
                                     </div>
-                                         
-                                    </div>
-                                    <div class="col-md-8">
-                                          <div class="row" ng-show="alldaybox" style="margin-top: 20px;">
-                                            
-                                                     <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                      <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
+
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row" ng-show="alldaybox" style="margin-top: 20px;">
+
+                                        <div class="oppEstDate"
+                                             style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
+                                                      <span ng-hide="showStartsCalendar"
+                                                            ng-click="showStartsCalendar=true"><i
+                                                              class="fa fa-calendar"></i>
                                                        <%=start_event_draw| date:'dd MMMM yyyy'%></span>
-                                                      <div ng-show="showStartsCalendar" class="input-icon">
-                                                           <i class="fa fa-calendar"></i>
-                                                           <input lang="de" cdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="">
-                                                      </div>
-                                                    </div>
-                                                                
-                                                    
-                                          </div>
-                                         <div class="row"  ng-hide="alldaybox">
-                                                   <div> <strong style="float: left;">{{_("Starts")}}</strong><span style="float: left;">:</span>
-                                                     <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                    <!--  <input id="datetimepickerjquery" type="text" > -->
+                                            <div ng-show="showStartsCalendar" class="input-icon">
+                                                <i class="fa fa-calendar"></i>
+                                                <input lang="de" cdatetimepicker data-model="start_event_draw"
+                                                       type="text" class="form-control calendar-form-controle"
+                                                       placeholder="{{ _('Click to change the estimated date') }}"
+                                                       value="" id="">
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row" ng-hide="alldaybox">
+                                        <div><strong style="float: left;">{{ _("Starts") }}</strong><span
+                                                style="float: left;">:</span>
+                                            <div class="oppEstDate"
+                                                 style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
+                                                <!--  <input id="datetimepickerjquery" type="text" > -->
                                            
 
-                                    <span ng-hide="showStartsCalendar||showEventInput" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
+                                    <span ng-hide="showStartsCalendar||showEventInput"
+                                          ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
                                                    <%=start_event_draw| date:'dd MMMM yyyy, HH:mm'%></span>
-                                   <div ng-show="showStartsCalendar||showEventInput" class="input-icon">
-                                              <i class="fa fa-calendar"></i>
-                                    <input  cdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="leadEventStartsAt">
-                                          <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
-                                           </div>
-                                                    </div>
-                                                                
-                                                    </div>
-                                       </div>
-                                       <div class="row" style="margin-top:10px;" ng-hide="alldaybox">
-                                              <div> <strong style="float: left;">{{_("Ends  ")}}</strong><span style="float: left;">  :</span>
-                                          <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%; margin-left:8px">
-                                              <span ng-hide="showEndsCalendar||showEventInput" ng-click="showEndsCalendar=true"><i class="fa fa-calendar"></i>
-                                                       <%=end_event_draw| date:'dd MMMM yyyy, HH:mm'%></span>
-                                            <div ng-show="showEndsCalendar||showEventInput" class="input-icon">
-                                                           <i class="fa fa-calendar"></i>
-                                        <input  cdatetimepicker data-model="end_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="leadEventEndsAt">
-
-                                                <!--   <input cusdatetimepicker data-model="" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt"> -->
+                                                <div ng-show="showStartsCalendar||showEventInput" class="input-icon">
+                                                    <i class="fa fa-calendar"></i>
+                                                    <input cdatetimepicker data-model="start_event_draw" type="text"
+                                                           class="form-control calendar-form-controle"
+                                                           placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
+                                                           id="leadEventStartsAt">
+                                                    <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
+                                                </div>
                                             </div>
-                                                    </div>
-                                       </div>  
+
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top:10px;" ng-hide="alldaybox">
+                                        <div><strong style="float: left;">{{ _("Ends  ") }}</strong><span
+                                                style="float: left;">  :</span>
+                                            <div class="oppEstDate"
+                                                 style="display: inline-block; float: left; padding-left: 15px; max-width: 75%; margin-left:8px">
+                                              <span ng-hide="showEndsCalendar||showEventInput"
+                                                    ng-click="showEndsCalendar=true"><i class="fa fa-calendar"></i>
+                                                       <%=end_event_draw| date:'dd MMMM yyyy, HH:mm'%></span>
+                                                <div ng-show="showEndsCalendar||showEventInput" class="input-icon">
+                                                    <i class="fa fa-calendar"></i>
+                                                    <input cdatetimepicker data-model="end_event_draw" type="text"
+                                                           class="form-control calendar-form-controle"
+                                                           placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
+                                                           id="leadEventEndsAt">
+
+                                                    <!--   <input cusdatetimepicker data-model="" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt"> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row" style="margin-top:15px">
-                                    <a ng-click="timezonepicker=true" href="" ng-hide="timezonepicker">Timezone</a>
-  <select id="timeZone" ng-show="timezonepicker" style="width: 100px;">
-  <option timeZoneId="1" gmtAdjustment="GMT-12:00" useDaylightTime="0" value="-12:00">(GMT-12:00) International Date Line West</option>
-  <option timeZoneId="2" gmtAdjustment="GMT-11:00" useDaylightTime="0" value="-11:00">(GMT-11:00) Midway Island, Samoa</option>
-  <option timeZoneId="3" gmtAdjustment="GMT-10:00" useDaylightTime="0" value="-10:00">(GMT-10:00) Hawaii</option>
-  <option timeZoneId="4" gmtAdjustment="GMT-09:00" useDaylightTime="1" value="-09:00">(GMT-09:00) Alaska</option>
-  <option timeZoneId="5" gmtAdjustment="GMT-08:00" useDaylightTime="1" value="-08:00">(GMT-08:00) Pacific Time (US & Canada)</option>
-  <option timeZoneId="6" gmtAdjustment="GMT-08:00" useDaylightTime="1" value="-08:00">(GMT-08:00) Tijuana, Baja California</option>
-  <option timeZoneId="7" gmtAdjustment="GMT-07:00" useDaylightTime="0" value="-07:00">(GMT-07:00) Arizona</option>
-  <option timeZoneId="8" gmtAdjustment="GMT-07:00" useDaylightTime="1" value="-07:00">(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
-  <option timeZoneId="9" gmtAdjustment="GMT-07:00" useDaylightTime="1" value="-07:00">(GMT-07:00) Mountain Time (US & Canada)</option>
-  <option timeZoneId="10" gmtAdjustment="GMT-06:00" useDaylightTime="0" value="-06:00">(GMT-06:00) Central America</option>
-  <option timeZoneId="11" gmtAdjustment="GMT-06:00" useDaylightTime="1" value="-06:00">(GMT-06:00) Central Time (US & Canada)</option>
-  <option timeZoneId="12" gmtAdjustment="GMT-06:00" useDaylightTime="1" value="-06:00">(GMT-06:00) Guadalajara, Mexico City, Monterrey</option>
-  <option timeZoneId="13" gmtAdjustment="GMT-06:00" useDaylightTime="0" value="-06:00">(GMT-06:00) Saskatchewan</option>
-  <option timeZoneId="14" gmtAdjustment="GMT-05:00" useDaylightTime="0" value="-05:00">(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
-  <option timeZoneId="15" gmtAdjustment="GMT-05:00" useDaylightTime="1" value="-05:00">(GMT-05:00) Eastern Time (US & Canada)</option>
-  <option timeZoneId="16" gmtAdjustment="GMT-05:00" useDaylightTime="1" value="-05:00">(GMT-05:00) Indiana (East)</option>
-  <option timeZoneId="17" gmtAdjustment="GMT-04:00" useDaylightTime="1" value="-04:00">(GMT-04:00) Atlantic Time (Canada)</option>
-  <option timeZoneId="18" gmtAdjustment="GMT-04:00" useDaylightTime="0" value="-04:00">(GMT-04:00) Caracas, La Paz</option>
-  <option timeZoneId="19" gmtAdjustment="GMT-04:00" useDaylightTime="0" value="-04:00">(GMT-04:00) Manaus</option>
-  <option timeZoneId="20" gmtAdjustment="GMT-04:00" useDaylightTime="1" value="-04:00">(GMT-04:00) Santiago</option>
-  <option timeZoneId="21" gmtAdjustment="GMT-03:30" useDaylightTime="1" value="-03.30">(GMT-03:30) Newfoundland</option>
-  <option timeZoneId="22" gmtAdjustment="GMT-03:00" useDaylightTime="1" value="-03:00">(GMT-03:00) Brasilia</option>
-  <option timeZoneId="23" gmtAdjustment="GMT-03:00" useDaylightTime="0" value="-03:00">(GMT-03:00) Buenos Aires, Georgetown</option>
-  <option timeZoneId="24" gmtAdjustment="GMT-03:00" useDaylightTime="1" value="-03:00">(GMT-03:00) Greenland</option>
-  <option timeZoneId="25" gmtAdjustment="GMT-03:00" useDaylightTime="1" value="-03:00">(GMT-03:00) Montevideo</option>
-  <option timeZoneId="26" gmtAdjustment="GMT-02:00" useDaylightTime="1" value="-02:00">(GMT-02:00) Mid-Atlantic</option>
-  <option timeZoneId="27" gmtAdjustment="GMT-01:00" useDaylightTime="0" value="-01:00">(GMT-01:00) Cape Verde Is.</option>
-  <option timeZoneId="28" gmtAdjustment="GMT-01:00" useDaylightTime="1" value="-01:00">(GMT-01:00) Azores</option>
-  <option timeZoneId="29" gmtAdjustment="GMT+00:00" useDaylightTime="0" value="+00:00">(GMT+00:00) Casablanca, Monrovia, Reykjavik</option>
-  <option timeZoneId="30" gmtAdjustment="GMT+00:00" useDaylightTime="1" value="+00:00">(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London</option>
-  <option timeZoneId="31" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</option>
-  <option timeZoneId="32" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>
-  <option timeZoneId="33" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) Brussels, Copenhagen, Madrid, Paris</option>
-  <option timeZoneId="34" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb</option>
-  <option timeZoneId="35" gmtAdjustment="GMT+01:00" useDaylightTime="1" value="+01:00">(GMT+01:00) West Central Africa</option>
-  <option timeZoneId="36" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Amman</option>
-  <option timeZoneId="37" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Athens, Bucharest, Istanbul</option>
-  <option timeZoneId="38" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Beirut</option>
-  <option timeZoneId="39" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Cairo</option>
-  <option timeZoneId="40" gmtAdjustment="GMT+02:00" useDaylightTime="0" value="+02:00">(GMT+02:00) Harare, Pretoria</option>
-  <option timeZoneId="41" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
-  <option timeZoneId="42" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Jerusalem</option>
-  <option timeZoneId="43" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Minsk</option>
-  <option timeZoneId="44" gmtAdjustment="GMT+02:00" useDaylightTime="1" value="+02:00">(GMT+02:00) Windhoek</option>
-  <option timeZoneId="45" gmtAdjustment="GMT+03:00" useDaylightTime="0" value="+03:00">(GMT+03:00) Kuwait, Riyadh, Baghdad</option>
-  <option timeZoneId="46" gmtAdjustment="GMT+03:00" useDaylightTime="1" value="+03:00">(GMT+03:00) Moscow, St. Petersburg, Volgograd</option>
-  <option timeZoneId="47" gmtAdjustment="GMT+03:00" useDaylightTime="0" value="+03:00">(GMT+03:00) Nairobi</option>
-  <option timeZoneId="48" gmtAdjustment="GMT+03:00" useDaylightTime="0" value="+03:00">(GMT+03:00) Tbilisi</option>
-  <option timeZoneId="49" gmtAdjustment="GMT+03:30" useDaylightTime="1" value="+03:30">(GMT+03:30) Tehran</option>
-  <option timeZoneId="50" gmtAdjustment="GMT+04:00" useDaylightTime="0" value="+04:00">(GMT+04:00) Abu Dhabi, Muscat</option>
-  <option timeZoneId="51" gmtAdjustment="GMT+04:00" useDaylightTime="1" value="+04:00">(GMT+04:00) Baku</option>
-  <option timeZoneId="52" gmtAdjustment="GMT+04:00" useDaylightTime="1" value="+04:00">(GMT+04:00) Yerevan</option>
-  <option timeZoneId="53" gmtAdjustment="GMT+04:30" useDaylightTime="0" value="+04:30">(GMT+04:30) Kabul</option>
-  <option timeZoneId="54" gmtAdjustment="GMT+05:00" useDaylightTime="1" value="+05:00">(GMT+05:00) Yekaterinburg</option>
-  <option timeZoneId="55" gmtAdjustment="GMT+05:00" useDaylightTime="0" value="+05:00">(GMT+05:00) Islamabad, Karachi, Tashkent</option>
-  <option timeZoneId="56" gmtAdjustment="GMT+05:30" useDaylightTime="0" value="+05:30">(GMT+05:30) Sri Jayawardenapura</option>
-  <option timeZoneId="57" gmtAdjustment="GMT+05:30" useDaylightTime="0" value="+05:30">(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi</option>
-  <option timeZoneId="58" gmtAdjustment="GMT+05:45" useDaylightTime="0" value="+05:45">(GMT+05:45) Kathmandu</option>
-  <option timeZoneId="59" gmtAdjustment="GMT+06:00" useDaylightTime="1" value="+06:00">(GMT+06:00) Almaty, Novosibirsk</option>
-  <option timeZoneId="60" gmtAdjustment="GMT+06:00" useDaylightTime="0" value="+06:00">(GMT+06:00) Astana, Dhaka</option>
-  <option timeZoneId="61" gmtAdjustment="GMT+06:30" useDaylightTime="0" value="+06:30">(GMT+06:30) Yangon (Rangoon)</option>
-  <option timeZoneId="62" gmtAdjustment="GMT+07:00" useDaylightTime="0" value="+07:00">(GMT+07:00) Bangkok, Hanoi, Jakarta</option>
-  <option timeZoneId="63" gmtAdjustment="GMT+07:00" useDaylightTime="1" value="+07:00">(GMT+07:00) Krasnoyarsk</option>
-  <option timeZoneId="64" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
-  <option timeZoneId="65" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Kuala Lumpur, Singapore</option>
-  <option timeZoneId="66" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Irkutsk, Ulaan Bataar</option>
-  <option timeZoneId="67" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Perth</option>
-  <option timeZoneId="68" gmtAdjustment="GMT+08:00" useDaylightTime="0" value="+08:00">(GMT+08:00) Taipei</option>
-  <option timeZoneId="69" gmtAdjustment="GMT+09:00" useDaylightTime="0" value="+09:00">(GMT+09:00) Osaka, Sapporo, Tokyo</option>
-  <option timeZoneId="70" gmtAdjustment="GMT+09:00" useDaylightTime="0" value="+09:00">(GMT+09:00) Seoul</option>
-  <option timeZoneId="71" gmtAdjustment="GMT+09:00" useDaylightTime="1" value="+09:00">(GMT+09:00) Yakutsk</option>
-  <option timeZoneId="72" gmtAdjustment="GMT+09:30" useDaylightTime="0" value="+09:30">(GMT+09:30) Adelaide</option>
-  <option timeZoneId="73" gmtAdjustment="GMT+09:30" useDaylightTime="0" value="+09:30">(GMT+09:30) Darwin</option>
-  <option timeZoneId="74" gmtAdjustment="GMT+10:00" useDaylightTime="0" value="+10:00">(GMT+10:00) Brisbane</option>
-  <option timeZoneId="75" gmtAdjustment="GMT+10:00" useDaylightTime="1" value="+10:00">(GMT+10:00) Canberra, Melbourne, Sydney</option>
-  <option timeZoneId="76" gmtAdjustment="GMT+10:00" useDaylightTime="1" value="+10:00">(GMT+10:00) Hobart</option>
-  <option timeZoneId="77" gmtAdjustment="GMT+10:00" useDaylightTime="0" value="+10:00">(GMT+10:00) Guam, Port Moresby</option>
-  <option timeZoneId="78" gmtAdjustment="GMT+10:00" useDaylightTime="1" value="+10:00">(GMT+10:00) Vladivostok</option>
-  <option timeZoneId="79" gmtAdjustment="GMT+11:00" useDaylightTime="1" value="+11:00">(GMT+11:00) Magadan, Solomon Is., New Caledonia</option>
-  <option timeZoneId="80" gmtAdjustment="GMT+12:00" useDaylightTime="1" value="+12:00">(GMT+12:00) Auckland, Wellington</option>
-  <option timeZoneId="81" gmtAdjustment="GMT+12:00" useDaylightTime="0" value="+12:00">(GMT+12:00) Fiji, Kamchatka, Marshall Is.</option>
-  <option timeZoneId="82" gmtAdjustment="GMT+13:00" useDaylightTime="0" value="+13:00">(GMT+13:00) Nuku'alofa</option>
-</select>  
+                                        <a ng-click="timezonepicker=true" href="" ng-hide="timezonepicker">Timezone</a>
+                                        <select id="timeZone" ng-show="timezonepicker" style="width: 100px;">
+                                            <option timeZoneId="1" gmtAdjustment="GMT-12:00" useDaylightTime="0"
+                                                    value="-12:00">(GMT-12:00) International Date Line West
+                                            </option>
+                                            <option timeZoneId="2" gmtAdjustment="GMT-11:00" useDaylightTime="0"
+                                                    value="-11:00">(GMT-11:00) Midway Island, Samoa
+                                            </option>
+                                            <option timeZoneId="3" gmtAdjustment="GMT-10:00" useDaylightTime="0"
+                                                    value="-10:00">(GMT-10:00) Hawaii
+                                            </option>
+                                            <option timeZoneId="4" gmtAdjustment="GMT-09:00" useDaylightTime="1"
+                                                    value="-09:00">(GMT-09:00) Alaska
+                                            </option>
+                                            <option timeZoneId="5" gmtAdjustment="GMT-08:00" useDaylightTime="1"
+                                                    value="-08:00">(GMT-08:00) Pacific Time (US & Canada)
+                                            </option>
+                                            <option timeZoneId="6" gmtAdjustment="GMT-08:00" useDaylightTime="1"
+                                                    value="-08:00">(GMT-08:00) Tijuana, Baja California
+                                            </option>
+                                            <option timeZoneId="7" gmtAdjustment="GMT-07:00" useDaylightTime="0"
+                                                    value="-07:00">(GMT-07:00) Arizona
+                                            </option>
+                                            <option timeZoneId="8" gmtAdjustment="GMT-07:00" useDaylightTime="1"
+                                                    value="-07:00">(GMT-07:00) Chihuahua, La Paz, Mazatlan
+                                            </option>
+                                            <option timeZoneId="9" gmtAdjustment="GMT-07:00" useDaylightTime="1"
+                                                    value="-07:00">(GMT-07:00) Mountain Time (US & Canada)
+                                            </option>
+                                            <option timeZoneId="10" gmtAdjustment="GMT-06:00" useDaylightTime="0"
+                                                    value="-06:00">(GMT-06:00) Central America
+                                            </option>
+                                            <option timeZoneId="11" gmtAdjustment="GMT-06:00" useDaylightTime="1"
+                                                    value="-06:00">(GMT-06:00) Central Time (US & Canada)
+                                            </option>
+                                            <option timeZoneId="12" gmtAdjustment="GMT-06:00" useDaylightTime="1"
+                                                    value="-06:00">(GMT-06:00) Guadalajara, Mexico City, Monterrey
+                                            </option>
+                                            <option timeZoneId="13" gmtAdjustment="GMT-06:00" useDaylightTime="0"
+                                                    value="-06:00">(GMT-06:00) Saskatchewan
+                                            </option>
+                                            <option timeZoneId="14" gmtAdjustment="GMT-05:00" useDaylightTime="0"
+                                                    value="-05:00">(GMT-05:00) Bogota, Lima, Quito, Rio Branco
+                                            </option>
+                                            <option timeZoneId="15" gmtAdjustment="GMT-05:00" useDaylightTime="1"
+                                                    value="-05:00">(GMT-05:00) Eastern Time (US & Canada)
+                                            </option>
+                                            <option timeZoneId="16" gmtAdjustment="GMT-05:00" useDaylightTime="1"
+                                                    value="-05:00">(GMT-05:00) Indiana (East)
+                                            </option>
+                                            <option timeZoneId="17" gmtAdjustment="GMT-04:00" useDaylightTime="1"
+                                                    value="-04:00">(GMT-04:00) Atlantic Time (Canada)
+                                            </option>
+                                            <option timeZoneId="18" gmtAdjustment="GMT-04:00" useDaylightTime="0"
+                                                    value="-04:00">(GMT-04:00) Caracas, La Paz
+                                            </option>
+                                            <option timeZoneId="19" gmtAdjustment="GMT-04:00" useDaylightTime="0"
+                                                    value="-04:00">(GMT-04:00) Manaus
+                                            </option>
+                                            <option timeZoneId="20" gmtAdjustment="GMT-04:00" useDaylightTime="1"
+                                                    value="-04:00">(GMT-04:00) Santiago
+                                            </option>
+                                            <option timeZoneId="21" gmtAdjustment="GMT-03:30" useDaylightTime="1"
+                                                    value="-03.30">(GMT-03:30) Newfoundland
+                                            </option>
+                                            <option timeZoneId="22" gmtAdjustment="GMT-03:00" useDaylightTime="1"
+                                                    value="-03:00">(GMT-03:00) Brasilia
+                                            </option>
+                                            <option timeZoneId="23" gmtAdjustment="GMT-03:00" useDaylightTime="0"
+                                                    value="-03:00">(GMT-03:00) Buenos Aires, Georgetown
+                                            </option>
+                                            <option timeZoneId="24" gmtAdjustment="GMT-03:00" useDaylightTime="1"
+                                                    value="-03:00">(GMT-03:00) Greenland
+                                            </option>
+                                            <option timeZoneId="25" gmtAdjustment="GMT-03:00" useDaylightTime="1"
+                                                    value="-03:00">(GMT-03:00) Montevideo
+                                            </option>
+                                            <option timeZoneId="26" gmtAdjustment="GMT-02:00" useDaylightTime="1"
+                                                    value="-02:00">(GMT-02:00) Mid-Atlantic
+                                            </option>
+                                            <option timeZoneId="27" gmtAdjustment="GMT-01:00" useDaylightTime="0"
+                                                    value="-01:00">(GMT-01:00) Cape Verde Is.
+                                            </option>
+                                            <option timeZoneId="28" gmtAdjustment="GMT-01:00" useDaylightTime="1"
+                                                    value="-01:00">(GMT-01:00) Azores
+                                            </option>
+                                            <option timeZoneId="29" gmtAdjustment="GMT+00:00" useDaylightTime="0"
+                                                    value="+00:00">(GMT+00:00) Casablanca, Monrovia, Reykjavik
+                                            </option>
+                                            <option timeZoneId="30" gmtAdjustment="GMT+00:00" useDaylightTime="1"
+                                                    value="+00:00">(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh,
+                                                Lisbon, London
+                                            </option>
+                                            <option timeZoneId="31" gmtAdjustment="GMT+01:00" useDaylightTime="1"
+                                                    value="+01:00">(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm,
+                                                Vienna
+                                            </option>
+                                            <option timeZoneId="32" gmtAdjustment="GMT+01:00" useDaylightTime="1"
+                                                    value="+01:00">(GMT+01:00) Belgrade, Bratislava, Budapest,
+                                                Ljubljana, Prague
+                                            </option>
+                                            <option timeZoneId="33" gmtAdjustment="GMT+01:00" useDaylightTime="1"
+                                                    value="+01:00">(GMT+01:00) Brussels, Copenhagen, Madrid, Paris
+                                            </option>
+                                            <option timeZoneId="34" gmtAdjustment="GMT+01:00" useDaylightTime="1"
+                                                    value="+01:00">(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb
+                                            </option>
+                                            <option timeZoneId="35" gmtAdjustment="GMT+01:00" useDaylightTime="1"
+                                                    value="+01:00">(GMT+01:00) West Central Africa
+                                            </option>
+                                            <option timeZoneId="36" gmtAdjustment="GMT+02:00" useDaylightTime="1"
+                                                    value="+02:00">(GMT+02:00) Amman
+                                            </option>
+                                            <option timeZoneId="37" gmtAdjustment="GMT+02:00" useDaylightTime="1"
+                                                    value="+02:00">(GMT+02:00) Athens, Bucharest, Istanbul
+                                            </option>
+                                            <option timeZoneId="38" gmtAdjustment="GMT+02:00" useDaylightTime="1"
+                                                    value="+02:00">(GMT+02:00) Beirut
+                                            </option>
+                                            <option timeZoneId="39" gmtAdjustment="GMT+02:00" useDaylightTime="1"
+                                                    value="+02:00">(GMT+02:00) Cairo
+                                            </option>
+                                            <option timeZoneId="40" gmtAdjustment="GMT+02:00" useDaylightTime="0"
+                                                    value="+02:00">(GMT+02:00) Harare, Pretoria
+                                            </option>
+                                            <option timeZoneId="41" gmtAdjustment="GMT+02:00" useDaylightTime="1"
+                                                    value="+02:00">(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn,
+                                                Vilnius
+                                            </option>
+                                            <option timeZoneId="42" gmtAdjustment="GMT+02:00" useDaylightTime="1"
+                                                    value="+02:00">(GMT+02:00) Jerusalem
+                                            </option>
+                                            <option timeZoneId="43" gmtAdjustment="GMT+02:00" useDaylightTime="1"
+                                                    value="+02:00">(GMT+02:00) Minsk
+                                            </option>
+                                            <option timeZoneId="44" gmtAdjustment="GMT+02:00" useDaylightTime="1"
+                                                    value="+02:00">(GMT+02:00) Windhoek
+                                            </option>
+                                            <option timeZoneId="45" gmtAdjustment="GMT+03:00" useDaylightTime="0"
+                                                    value="+03:00">(GMT+03:00) Kuwait, Riyadh, Baghdad
+                                            </option>
+                                            <option timeZoneId="46" gmtAdjustment="GMT+03:00" useDaylightTime="1"
+                                                    value="+03:00">(GMT+03:00) Moscow, St. Petersburg, Volgograd
+                                            </option>
+                                            <option timeZoneId="47" gmtAdjustment="GMT+03:00" useDaylightTime="0"
+                                                    value="+03:00">(GMT+03:00) Nairobi
+                                            </option>
+                                            <option timeZoneId="48" gmtAdjustment="GMT+03:00" useDaylightTime="0"
+                                                    value="+03:00">(GMT+03:00) Tbilisi
+                                            </option>
+                                            <option timeZoneId="49" gmtAdjustment="GMT+03:30" useDaylightTime="1"
+                                                    value="+03:30">(GMT+03:30) Tehran
+                                            </option>
+                                            <option timeZoneId="50" gmtAdjustment="GMT+04:00" useDaylightTime="0"
+                                                    value="+04:00">(GMT+04:00) Abu Dhabi, Muscat
+                                            </option>
+                                            <option timeZoneId="51" gmtAdjustment="GMT+04:00" useDaylightTime="1"
+                                                    value="+04:00">(GMT+04:00) Baku
+                                            </option>
+                                            <option timeZoneId="52" gmtAdjustment="GMT+04:00" useDaylightTime="1"
+                                                    value="+04:00">(GMT+04:00) Yerevan
+                                            </option>
+                                            <option timeZoneId="53" gmtAdjustment="GMT+04:30" useDaylightTime="0"
+                                                    value="+04:30">(GMT+04:30) Kabul
+                                            </option>
+                                            <option timeZoneId="54" gmtAdjustment="GMT+05:00" useDaylightTime="1"
+                                                    value="+05:00">(GMT+05:00) Yekaterinburg
+                                            </option>
+                                            <option timeZoneId="55" gmtAdjustment="GMT+05:00" useDaylightTime="0"
+                                                    value="+05:00">(GMT+05:00) Islamabad, Karachi, Tashkent
+                                            </option>
+                                            <option timeZoneId="56" gmtAdjustment="GMT+05:30" useDaylightTime="0"
+                                                    value="+05:30">(GMT+05:30) Sri Jayawardenapura
+                                            </option>
+                                            <option timeZoneId="57" gmtAdjustment="GMT+05:30" useDaylightTime="0"
+                                                    value="+05:30">(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi
+                                            </option>
+                                            <option timeZoneId="58" gmtAdjustment="GMT+05:45" useDaylightTime="0"
+                                                    value="+05:45">(GMT+05:45) Kathmandu
+                                            </option>
+                                            <option timeZoneId="59" gmtAdjustment="GMT+06:00" useDaylightTime="1"
+                                                    value="+06:00">(GMT+06:00) Almaty, Novosibirsk
+                                            </option>
+                                            <option timeZoneId="60" gmtAdjustment="GMT+06:00" useDaylightTime="0"
+                                                    value="+06:00">(GMT+06:00) Astana, Dhaka
+                                            </option>
+                                            <option timeZoneId="61" gmtAdjustment="GMT+06:30" useDaylightTime="0"
+                                                    value="+06:30">(GMT+06:30) Yangon (Rangoon)
+                                            </option>
+                                            <option timeZoneId="62" gmtAdjustment="GMT+07:00" useDaylightTime="0"
+                                                    value="+07:00">(GMT+07:00) Bangkok, Hanoi, Jakarta
+                                            </option>
+                                            <option timeZoneId="63" gmtAdjustment="GMT+07:00" useDaylightTime="1"
+                                                    value="+07:00">(GMT+07:00) Krasnoyarsk
+                                            </option>
+                                            <option timeZoneId="64" gmtAdjustment="GMT+08:00" useDaylightTime="0"
+                                                    value="+08:00">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi
+                                            </option>
+                                            <option timeZoneId="65" gmtAdjustment="GMT+08:00" useDaylightTime="0"
+                                                    value="+08:00">(GMT+08:00) Kuala Lumpur, Singapore
+                                            </option>
+                                            <option timeZoneId="66" gmtAdjustment="GMT+08:00" useDaylightTime="0"
+                                                    value="+08:00">(GMT+08:00) Irkutsk, Ulaan Bataar
+                                            </option>
+                                            <option timeZoneId="67" gmtAdjustment="GMT+08:00" useDaylightTime="0"
+                                                    value="+08:00">(GMT+08:00) Perth
+                                            </option>
+                                            <option timeZoneId="68" gmtAdjustment="GMT+08:00" useDaylightTime="0"
+                                                    value="+08:00">(GMT+08:00) Taipei
+                                            </option>
+                                            <option timeZoneId="69" gmtAdjustment="GMT+09:00" useDaylightTime="0"
+                                                    value="+09:00">(GMT+09:00) Osaka, Sapporo, Tokyo
+                                            </option>
+                                            <option timeZoneId="70" gmtAdjustment="GMT+09:00" useDaylightTime="0"
+                                                    value="+09:00">(GMT+09:00) Seoul
+                                            </option>
+                                            <option timeZoneId="71" gmtAdjustment="GMT+09:00" useDaylightTime="1"
+                                                    value="+09:00">(GMT+09:00) Yakutsk
+                                            </option>
+                                            <option timeZoneId="72" gmtAdjustment="GMT+09:30" useDaylightTime="0"
+                                                    value="+09:30">(GMT+09:30) Adelaide
+                                            </option>
+                                            <option timeZoneId="73" gmtAdjustment="GMT+09:30" useDaylightTime="0"
+                                                    value="+09:30">(GMT+09:30) Darwin
+                                            </option>
+                                            <option timeZoneId="74" gmtAdjustment="GMT+10:00" useDaylightTime="0"
+                                                    value="+10:00">(GMT+10:00) Brisbane
+                                            </option>
+                                            <option timeZoneId="75" gmtAdjustment="GMT+10:00" useDaylightTime="1"
+                                                    value="+10:00">(GMT+10:00) Canberra, Melbourne, Sydney
+                                            </option>
+                                            <option timeZoneId="76" gmtAdjustment="GMT+10:00" useDaylightTime="1"
+                                                    value="+10:00">(GMT+10:00) Hobart
+                                            </option>
+                                            <option timeZoneId="77" gmtAdjustment="GMT+10:00" useDaylightTime="0"
+                                                    value="+10:00">(GMT+10:00) Guam, Port Moresby
+                                            </option>
+                                            <option timeZoneId="78" gmtAdjustment="GMT+10:00" useDaylightTime="1"
+                                                    value="+10:00">(GMT+10:00) Vladivostok
+                                            </option>
+                                            <option timeZoneId="79" gmtAdjustment="GMT+11:00" useDaylightTime="1"
+                                                    value="+11:00">(GMT+11:00) Magadan, Solomon Is., New Caledonia
+                                            </option>
+                                            <option timeZoneId="80" gmtAdjustment="GMT+12:00" useDaylightTime="1"
+                                                    value="+12:00">(GMT+12:00) Auckland, Wellington
+                                            </option>
+                                            <option timeZoneId="81" gmtAdjustment="GMT+12:00" useDaylightTime="0"
+                                                    value="+12:00">(GMT+12:00) Fiji, Kamchatka, Marshall Is.
+                                            </option>
+                                            <option timeZoneId="82" gmtAdjustment="GMT+13:00" useDaylightTime="0"
+                                                    value="+13:00">(GMT+13:00) Nuku'alofa
+                                            </option>
+                                        </select>
                                     </div>
-                                    </div>
-                                    
-                                      
-                             </div>
-                          <div class=" inner-addon left-addon" style="margin-top:30px">
-                                                       <i class="glyphicon glyphicon-map-marker" style="color: rgba(0, 26, 131, 0.61); margin-top: -5px;"></i>
-                                                    <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Where?')}}" id="pac-input" ng-model="ioevent.where" style="margin-top:15px">
-                                                     <a ng-show="locationShosen" href="" ng-click="lunchMaps()" style="margin-left: 31px;" >
-                                                   see on map</a>
-                                                   
+                                </div>
+
+
+                            </div>
+                            <div class=" inner-addon left-addon" style="margin-top:30px">
+                                <i class="glyphicon glyphicon-map-marker"
+                                   style="color: rgba(0, 26, 131, 0.61); margin-top: -5px;"></i>
+                                <input class="form-control calendar-form-controle" autofocus="" type="text"
+                                       placeholder="{{ _('Where?') }}" id="pac-input" ng-model="ioevent.where"
+                                       style="margin-top:15px">
+                                <a ng-show="locationShosen" href="" ng-click="lunchMaps()" style="margin-left: 31px;">
+                                    see on map</a>
+
                             </div>
 
                             <div class=" inner-addon left-addon">
-                                        <i class="fa fa-group" style="color: rgba(0, 26, 131, 0.61);
+                                <i class="fa fa-group" style="color: rgba(0, 26, 131, 0.61);
   margin-top: 7px !important;
   position: absolute;
   margin-left: 9px;"></i>
-      <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"  typeahead="inviteResult as inviteResult.emails for inviteResult in inviteResults | filter:$viewValue | limitTo:20" typeahead-on-select="selectInviteResult()">
-                                                       
-                         </div>
-                                                   <ul  style="list-style:none">
-                                                       <li ng-repeat="inv in invites" style="margin-top: 5px;">
-                                                       <span  style="  border: 1px solid rgba(10, 18, 168, 0.258824);
+                                <input class="form-control calendar-form-controle" autofocus="" type="text"
+                                       placeholder="{{ _('add emails of guests') }}" id="taskTitle" ng-model="invite"
+                                       style="margin-top:15px" ng-keyup="$event.keyCode == 13&& addInvite(invite)"
+                                       typeahead="inviteResult as inviteResult.emails for inviteResult in inviteResults | filter:$viewValue | limitTo:20"
+                                       typeahead-on-select="selectInviteResult()">
+
+                            </div>
+                            <ul style="list-style:none">
+                                <li ng-repeat="inv in invites" style="margin-top: 5px;">
+                                                       <span style="  border: 1px solid rgba(10, 18, 168, 0.258824);
   padding: 3px;
   color: rgb(108, 108, 108);
   border-radius: 3px !important;
-  background-color: rgba(154, 157, 205, 0.258824);"><i class="fa fa-user" style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i> <%=inv%> <a href="" ng-click="deleteInvite($index)" class=" calendar-close-invite"  style=" top: 2px !important;"></a>
+  background-color: rgba(154, 157, 205, 0.258824);"><i class="fa fa-user"
+                                                       style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i> <%=inv%> <a
+                                                               href="" ng-click="deleteInvite($index)"
+                                                               class=" calendar-close-invite"
+                                                               style=" top: 2px !important;"></a>
   </span></li>
-                                                   </ul>
-                                               <ul style="list-style:none" ng-show="Guest_params">
-                                                 <li> <strong> Guests can:</strong> </li>
-                                                 <li><input type="checkbox" ng-checked="false"  ng-model="guest_modify" > modify event</li> 
-                                                 <li><input type="checkbox" ng-checked="true" ng-model="guest_invite" ng-disabled="guest_modify">invite others</li>
-                                                 <li><input type="checkbox" ng-disabled="guest_modify" ng-checked="true" ng-model="guest_list">see guest list</li>
-                                               </ul>
+                            </ul>
+                            <ul style="list-style:none" ng-show="Guest_params">
+                                <li><strong> Guests can:</strong></li>
+                                <li><input type="checkbox" ng-checked="false" ng-model="guest_modify"> modify event</li>
+                                <li><input type="checkbox" ng-checked="true" ng-model="guest_invite"
+                                           ng-disabled="guest_modify">invite others
+                                </li>
+                                <li><input type="checkbox" ng-disabled="guest_modify" ng-checked="true"
+                                           ng-model="guest_list">see guest list
+                                </li>
+                            </ul>
 
-                         
-                         
-                            <div class="row"  style="margin-top: 16px;">
-                             <i class="glyphicon glyphicon-bell" style="color: rgba(0, 26, 131, 0.61); margin-left:24px;  margin-top: -5px;"></i>
-                               <div style=" margin-left:46px;margin-top:-16px ">
-                               <div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="  border: none !important;
+
+                            <div class="row" style="margin-top: 16px;">
+                                <i class="glyphicon glyphicon-bell"
+                                   style="color: rgba(0, 26, 131, 0.61); margin-left:24px;  margin-top: -5px;"></i>
+                                <div style=" margin-left:46px;margin-top:-16px ">
+                                    <div class="dropdown">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                                data-toggle="dropdown" aria-expanded="true" style="  border: none !important;
   color: rgba(0, 0, 0, 0.44);">
-    Remind me  
-    <span class="caret"></span>
-  </button> <span ng-show="something_picked" style="  border: 1px solid rgba(10, 18, 168, 0.258824);
+                                            Remind me
+                                            <span class="caret"></span>
+                                        </button> <span ng-show="something_picked" style="  border: 1px solid rgba(10, 18, 168, 0.258824);
   padding: 3px;
   color: rgb(108, 108, 108);
   border-radius: 3px !important;
-  background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()" class=" calendar-close-invite"  style=" top: 2px !important;"></a></span> 
-<!--      <ul  class="list-inline"style="list-style:none" ng-show="remindmeby">
-                                                 <li> <strong> By:</strong> </li>
-                                                 <li><input type="radio"  name="by" ng-model="method" value="email"> Email</li> 
-                                                 <li><input type="radio" ng- name="by" ng-model="method" value="sms">SMS</li>
-                                                
-                                               </ul> -->
-  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(0)">No notification</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(1)"> At time of event</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(2)">30 minutes before</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(3)">1 hour </a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(4)">1 day </a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(5)">1 week </a></li>
+  background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()"
+                                                                           class=" calendar-close-invite"
+                                                                           style=" top: 2px !important;"></a></span>
+                                        <!--      <ul  class="list-inline"style="list-style:none" ng-show="remindmeby">
+                                                                                         <li> <strong> By:</strong> </li>
+                                                                                         <li><input type="radio"  name="by" ng-model="method" value="email"> Email</li>
+                                                                                         <li><input type="radio" ng- name="by" ng-model="method" value="sms">SMS</li>
 
-  </ul>
-</div>
-                      <!--       <span> remind me  <div class="customCheckbox " class="form-group" style="
-    margin-top: -14px;
-    margin-left: 72px;
-">  
-                            <input title="Select Lead" type="checkbox" ng-checked="checkReminder()" ng-click="selectCardwithCheck($event,$index)" id="reminder">             
-                              <label for="reminder" class="labelElement">
-                                <span class="check" style="  height: 17px !important;width: 8px !important;   margin-top: -4px;"></span>
-                                <span class="box" style="  height: 15px !important;width: 15px !important;   margin-top: -13px;"></span>
-                              </label>  
-                          </div></span> -->
-                        
+                                                                                       </ul> -->
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                       ng-click="Remindme(0)">No notification</a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                       ng-click="Remindme(1)"> At time of event</a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                       ng-click="Remindme(2)">30 minutes before</a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                       ng-click="Remindme(3)">1 hour </a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                       ng-click="Remindme(4)">1 day </a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                       ng-click="Remindme(5)">1 week </a></li>
 
-                               </div>                            
+                                        </ul>
+                                    </div>
+                                    <!--       <span> remind me  <div class="customCheckbox " class="form-group" style="
+                  margin-top: -14px;
+                  margin-left: 72px;
+              ">
+                                          <input title="Select Lead" type="checkbox" ng-checked="checkReminder()" ng-click="selectCardwithCheck($event,$index)" id="reminder">
+                                            <label for="reminder" class="labelElement">
+                                              <span class="check" style="  height: 17px !important;width: 8px !important;   margin-top: -4px;"></span>
+                                              <span class="box" style="  height: 15px !important;width: 15px !important;   margin-top: -13px;"></span>
+                                            </label>
+                                        </div></span> -->
+
+
+                                </div>
                             </div>
 
-                          <div class=" inner-addon left-addon" style="margin-top:10px">
-                                                       <i class="glyphicon glyphicon-align-left" style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i>
-                                                    <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Add note')}}" id="note" ng-model="ioevent.note" style="margin-top:15px">
+                            <div class=" inner-addon left-addon" style="margin-top:10px">
+                                <i class="glyphicon glyphicon-align-left"
+                                   style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i>
+                                <input class="form-control calendar-form-controle" autofocus="" type="text"
+                                       placeholder="{{ _('Add note') }}" id="note" ng-model="ioevent.note"
+                                       style="margin-top:15px">
                             </div>
                             <div class=" inner-addon left-addon" style="margin-top:10px">
-                                                       <i class="glyphicon glyphicon-pushpin" style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i>
-                     <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Related to (Account, Contact or Lead)')}}" id="note" ng-model="searchRelatedQuery" style="margin-top:15px" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()">
+                                <i class="glyphicon glyphicon-pushpin"
+                                   style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i>
+                                <input class="form-control calendar-form-controle" autofocus="" type="text"
+                                       placeholder="{{ _('Related to (Account, Contact or Lead)') }}" id="note"
+                                       ng-model="searchRelatedQuery" style="margin-top:15px"
+                                       typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8"
+                                       typeahead-on-select="selectResult()">
                             </div>
                              <span ng-show="picked_related" style="  border: 1px solid rgba(10, 18, 168, 0.258824);
   padding: 3px;
   color: rgb(108, 108, 108);
   border-radius: 3px !important;
-  background-color: rgba(154, 157, 205, 0.258824);"> <%=show_choice %> <a href="" ng-click="deleteRelated()" class=" calendar-close-invite"  style=" top: 2px !important;" ></a></span>
+  background-color: rgba(154, 157, 205, 0.258824);"> <%=show_choice %> <a href="" ng-click="deleteRelated()"
+                                                                          class=" calendar-close-invite"
+                                                                          style=" top: 2px !important;"></a></span>
 
                         </div>
-               
-                                                </form>
-            </div>
-            <div class="modal-footer " style="border-top:none!important;">
-              <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="cancelAddOperation()">{{_("Cancel")}}</button>
 
-               <input ng-hide="isLoading" type="submit" class="btn red" value="{{_('Add event')}}" ng-click="addEvent(ioevent)">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+                    </form>
+                </div>
+                <div class="modal-footer " style="border-top:none!important;">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true"
+                            ng-click="cancelAddOperation()">{{ _("Cancel") }}</button>
+
+                    <input ng-hide="isLoading" type="submit" class="btn red" value="{{ _('Add event') }}"
+                           ng-click="addEvent(ioevent)">
+                    <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
 
 
+                </div>
             </div>
-            </div>
-            </div>
-          </div>
+        </div>
+    </div>
 
-                        <!-- Modal -->
-          <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-              <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">{{_("Add a new Task")}}</h3>
-            </div>
-            <div class="modal-body pickerin">
-                     <div class="controls controls-row">
-                                          <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Add a new task" id="taskTitle" ng-model="task.title">
-
-                                                  <p><strong>{{_("When's it due?")}}</strong></p>
-                                                  <center>
-                                                    <datetimepicker data-ng-model="task.due"
-                                                    data-datetimepicker-config="{ startView:'day', minView:'day' }" />
-                                                  </center>
-                  </div>
-            </div>
-            <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-               <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Add this task')}}">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...')}}" disabled>
-
-            </form>
-            </div>
-            </div>
-            </div>
-          </div>
-          <div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">{{_("Create a new")}} <%=mimeType%></h3>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel" class="modal-title">{{ _("Add a new Task") }}</h3>
+                </div>
+                <div class="modal-body pickerin">
+                    <div class="controls controls-row">
+                        <form id="addTask" ng-submit="addTask(task)" class="ng-pristine ng-valid">
+                            <input class="form-control" autofocus type="text" placeholder="Add a new task"
+                                   id="taskTitle" ng-model="task.title">
+
+                            <p><strong>{{ _("When's it due?") }}</strong></p>
+                            <center>
+                                <datetimepicker data-ng-model="task.due"
+                                                data-datetimepicker-config="{ startView:'day', minView:'day' }"/>
+                            </center>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                    <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Add this task') }}">
+                    <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
+
+                    </form>
+                </div>
             </div>
-            <div class="modal-body">
-                     <div class="controls controls-row">
-                                          <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="Enter a new <%=mimeType%> name" id="taskTitle" ng-model="newdocument.title" required>
-
-
-                     </div>
-            </div>
-            <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
-
-               <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Create this document')}}">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...')}}" disabled>
-
-            </form>
-            </div>
-            </div>
-            </div>
-          </div>
-
-
-
-
-
-<!-- new event button -->
-<!--Event Modal -->
-          <div id="newEventModal2" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
+        </div>
+    </div>
+    <div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
-          
-            <div class="modal-body">
-                     <div class="controls controls-row">
-                            <form id="addTask"  class="ng-pristine ng-valid">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel" class="modal-title">{{ _("Create a new") }} <%=mimeType%></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="controls controls-row">
+                        <form id="addTask" ng-submit="createDocument(newdocument)" class="ng-pristine ng-valid">
+                            <input class="form-control" autofocus type="text"
+                                   placeholder="Enter a new <%=mimeType%> name" id="taskTitle"
+                                   ng-model="newdocument.title" required>
 
-                            <div class="inner-addon left-addon" >
-                                 <i class="glyphicon glyphicon-pencil" style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
-                                     <input class="form-control calendar-form-controle" autofocus type="text" placeholder="{{_('Event title')}}" id="taskTitle" ng-model="ioevent.title" style="padding-bottom: 20px;">
-                                 
-                              
-                                     
-                             </div>
 
-                              <div class="" >
-                                  <i class="glyphicon glyphicon-calendar" style="color: rgba(0, 26, 131, 0.61); margin-left:10px;  margin-top: -5px;"></i>
-                                    <div class="row" style="margin-left:80px">
-                                    <div class="col-md-2" style="border-right: 1px solid #C5C2C2;margin-right: 36px;height: 53px;">
-                                    <div style="margin-top:15px">
-                                      {{ _('all day')}} <div class="customCheckbox " class="form-group" style="
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</button>
+
+                    <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Create this document') }}">
+                    <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- new event button -->
+    <!--Event Modal -->
+    <div id="newEventModal2" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <div class="controls controls-row">
+                        <form id="addTask" class="ng-pristine ng-valid">
+
+                            <div class="inner-addon left-addon">
+                                <i class="glyphicon glyphicon-pencil"
+                                   style="color: rgba(0, 26, 131, 0.61);   margin-top: -10px;"></i>
+                                <input class="form-control calendar-form-controle" autofocus type="text"
+                                       placeholder="{{ _('Event title') }}" id="taskTitle" ng-model="ioevent.title"
+                                       style="padding-bottom: 20px;">
+
+
+                            </div>
+
+                            <div class="">
+                                <i class="glyphicon glyphicon-calendar"
+                                   style="color: rgba(0, 26, 131, 0.61); margin-left:10px;  margin-top: -5px;"></i>
+                                <div class="row" style="margin-left:80px">
+                                    <div class="col-md-2"
+                                         style="border-right: 1px solid #C5C2C2;margin-right: 36px;height: 53px;">
+                                        <div style="margin-top:15px">
+                                            {{ _('all day') }}
+                                            <div class="customCheckbox " class="form-group" style="
     margin-top: -14px;
     margin-left: 41px;
-">  
-                            <input title="Select allday" type="checkbox" ng-model="alldaybox" ng-click="checkallday()" id="allday">             
-                              <label for="allday" class="labelElement">
-                                <span class="check" style="  height: 17px !important;width: 8px !important;   margin-top: -4px;"></span>
-                                <span class="box" style="  height: 15px !important;width: 15px !important;   margin-top: -13px;"></span>
-                              </label>  
-                          </div>
-                                    </div>
-                                         
+">
+                                                <input title="Select allday" type="checkbox" ng-model="alldaybox"
+                                                       ng-click="checkallday()" id="allday">
+                                                <label for="allday" class="labelElement">
+                                                    <span class="check"
+                                                          style="  height: 17px !important;width: 8px !important;   margin-top: -4px;"></span>
+                                                    <span class="box"
+                                                          style="  height: 15px !important;width: 15px !important;   margin-top: -13px;"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+
                                     </div>
                                     <div class="col-md-8">
-                                          <div class="row" ng-show="alldaybox" style="margin-top: 20px;">
-                                            
-                                                     <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                      <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
+                                        <div class="row" ng-show="alldaybox" style="margin-top: 20px;">
+
+                                            <div class="oppEstDate"
+                                                 style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
+                                                      <span ng-hide="showStartsCalendar"
+                                                            ng-click="showStartsCalendar=true"><i
+                                                              class="fa fa-calendar"></i>
                                                        <%=start_event_draw| date:'dd MMMM yyyy'%></span>
-                                                      <div ng-show="showStartsCalendar" class="input-icon">
-                                                           <i class="fa fa-calendar"></i>
-                                                           <input lang="de" cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="">
-                                                      </div>
-                                                    </div>
-                                                                
-                                                    
-                                          </div>
-                                         <div class="row"  ng-hide="alldaybox">
-                                                   <div> <strong style="float: left;">{{_("Starts")}}</strong><span style="float: left;">:</span>
-                                                     <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
+                                                <div ng-show="showStartsCalendar" class="input-icon">
+                                                    <i class="fa fa-calendar"></i>
+                                                    <input lang="de" cusdatetimepicker data-model="start_event_draw"
+                                                           type="text" class="form-control calendar-form-controle"
+                                                           placeholder="{{ _('Click to change the estimated date') }}"
+                                                           value="" id="">
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="row" ng-hide="alldaybox">
+                                            <div><strong style="float: left;">{{ _("Starts") }}</strong><span
+                                                    style="float: left;">:</span>
+                                                <div class="oppEstDate"
+                                                     style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
                                                     <!--  <input id="datetimepickerjquery" type="text" > -->
                                            
 
-                                           <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
+                                           <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i
+                                                   class="fa fa-calendar"></i>
                                                    <%=start_event_draw| date:'dd MMMM yyyy, HH:mm'%></span>
-                                          <div ng-show="showStartsCalendar" class="input-icon">
-                                              <i class="fa fa-calendar"></i>
-                                    <input  cdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="leadEventStartsAt">
-                                          <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
-                                           </div>
+                                                    <div ng-show="showStartsCalendar" class="input-icon">
+                                                        <i class="fa fa-calendar"></i>
+                                                        <input cdatetimepicker data-model="start_event_draw" type="text"
+                                                               class="form-control calendar-form-controle"
+                                                               placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
+                                                               id="leadEventStartsAt">
+                                                        <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
                                                     </div>
-                                                                
-                                                    </div>
-                                       </div>
-                                       <div class="row" style="margin-top:10px;" ng-hide="alldaybox">
-                                              <div> <strong style="float: left;">{{_("Ends  ")}}</strong><span style="float: left;">  :</span>
-                                          <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%; margin-left:8px">
-                                              <span ng-hide="showEndsCalendar" ng-click="showEndsCalendar=true"><i class="fa fa-calendar"></i>
-                                                       <%=end_event_draw| date:'dd MMMM yyyy, HH:mm'%></span>
-                                            <div ng-show="showEndsCalendar" class="input-icon">
-                                                           <i class="fa fa-calendar"></i>
-                                        <input  cdatetimepicker data-model="end_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('mm/dd/yyyy hh:mm am')}}" value="" id="leadEventEndsAt">
+                                                </div>
 
-                                                <!--   <input cusdatetimepicker data-model="" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt"> -->
                                             </div>
-                                                    </div>
-                                       </div>  
-                                    </div>
-                                    </div>
-                                    
-                                      
-                             </div>
-                              <div class=" inner-addon left-addon" style="margin-top:30px">
-                                                       <i class="glyphicon glyphicon-map-marker" style="color: rgba(0, 26, 131, 0.61); margin-top: -5px;"></i>
-                              <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Where?')}}" id="pac-input" ng-model="ioevent.where" style="margin-top:15px">
-                              </div>
+                                        </div>
+                                        <div class="row" style="margin-top:10px;" ng-hide="alldaybox">
+                                            <div><strong style="float: left;">{{ _("Ends  ") }}</strong><span
+                                                    style="float: left;">  :</span>
+                                                <div class="oppEstDate"
+                                                     style="display: inline-block; float: left; padding-left: 15px; max-width: 75%; margin-left:8px">
+                                              <span ng-hide="showEndsCalendar" ng-click="showEndsCalendar=true"><i
+                                                      class="fa fa-calendar"></i>
+                                                       <%=end_event_draw| date:'dd MMMM yyyy, HH:mm'%></span>
+                                                    <div ng-show="showEndsCalendar" class="input-icon">
+                                                        <i class="fa fa-calendar"></i>
+                                                        <input cdatetimepicker data-model="end_event_draw" type="text"
+                                                               class="form-control calendar-form-controle"
+                                                               placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
+                                                               id="leadEventEndsAt">
 
-                            <div class=" inner-addon left-addon">
-                                        <i class="fa fa-group" style="color: rgba(0, 26, 131, 0.61);
+                                                        <!--   <input cusdatetimepicker data-model="" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt"> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class=" inner-addon left-addon" style="margin-top:30px">
+                                    <i class="glyphicon glyphicon-map-marker"
+                                       style="color: rgba(0, 26, 131, 0.61); margin-top: -5px;"></i>
+                                    <input class="form-control calendar-form-controle" autofocus="" type="text"
+                                           placeholder="{{ _('Where?') }}" id="pac-input" ng-model="ioevent.where"
+                                           style="margin-top:15px">
+                                </div>
+
+                                <div class=" inner-addon left-addon">
+                                    <i class="fa fa-group" style="color: rgba(0, 26, 131, 0.61);
   margin-top: 7px !important;
   position: absolute;
   margin-left: 9px;"></i>
-                                    <input class="form-control calendar-form-controle" autofocus="" type="email" placeholder="{{_('add emails of guests')}}" id="taskTitle" ng-model="invite" style="margin-top:15px"  ng-keyup="$event.keyCode == 13&& addInvite(invite)"
-                                    typeahead="result as result.email  for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectEmailResult()">
-                                                       
-                         </div>
-                                                   <ul  style="list-style:none">
-                                                       <li ng-repeat="inv in invites" style="margin-top: 5px;">
-                                                       <span  style="  border: 1px solid rgba(10, 18, 168, 0.258824);
+                                    <input class="form-control calendar-form-controle" autofocus="" type="email"
+                                           placeholder="{{ _('add emails of guests') }}" id="taskTitle"
+                                           ng-model="invite" style="margin-top:15px"
+                                           ng-keyup="$event.keyCode == 13&& addInvite(invite)"
+                                           typeahead="result as result.email  for result in results | filter:$viewValue | limitTo:8"
+                                           typeahead-on-select="selectEmailResult()">
+
+                                </div>
+                                <ul style="list-style:none">
+                                    <li ng-repeat="inv in invites" style="margin-top: 5px;">
+                                                       <span style="  border: 1px solid rgba(10, 18, 168, 0.258824);
   padding: 3px;
   color: rgb(108, 108, 108);
   border-radius: 3px !important;
-  background-color: rgba(154, 157, 205, 0.258824);"><i class="fa fa-user" style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i> <%=inv%> <a href="" ng-click="deleteInvite($index)" class=" calendar-close-invite"  style=" top: 2px !important;"></a>
+  background-color: rgba(154, 157, 205, 0.258824);"><i class="fa fa-user"
+                                                       style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i> <%=inv%> <a
+                                                               href="" ng-click="deleteInvite($index)"
+                                                               class=" calendar-close-invite"
+                                                               style=" top: 2px !important;"></a>
   </span></li>
-                                                   </ul>
-                                               <ul style="list-style:none" ng-show="Guest_params">
-                                                 <li> <strong> {{ _('Guests can')}}:</strong> </li>
-                                                 <li><input type="checkbox" ng-checked="false"  ng-model="guest_modify" > {{ _('modify event')}}</li> 
-                                                 <li><input type="checkbox" ng-checked="true" ng-model="guest_invite" ng-disabled="guest_modify">{{ _('invite others')}}</li>
-                                                 <li><input type="checkbox" ng-disabled="guest_modify" ng-checked="true" ng-model="guest_list">{{ _('see guest list')}}</li>
-                                               </ul>
+                                </ul>
+                                <ul style="list-style:none" ng-show="Guest_params">
+                                    <li><strong> {{ _('Guests can') }}:</strong></li>
+                                    <li><input type="checkbox" ng-checked="false"
+                                               ng-model="guest_modify"> {{ _('modify event') }}</li>
+                                    <li><input type="checkbox" ng-checked="true" ng-model="guest_invite"
+                                               ng-disabled="guest_modify">{{ _('invite others') }}</li>
+                                    <li><input type="checkbox" ng-disabled="guest_modify" ng-checked="true"
+                                               ng-model="guest_list">{{ _('see guest list') }}</li>
+                                </ul>
 
-                         
-                         
-                            <div class="row"  style="margin-top: 16px;">
-                             <i class="glyphicon glyphicon-bell" style="color: rgba(0, 26, 131, 0.61); margin-left:24px;  margin-top: -5px;"></i>
-                               <div style=" margin-left:46px;margin-top:-16px ">
-                               <div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="  border: none !important;
+
+                                <div class="row" style="margin-top: 16px;">
+                                    <i class="glyphicon glyphicon-bell"
+                                       style="color: rgba(0, 26, 131, 0.61); margin-left:24px;  margin-top: -5px;"></i>
+                                    <div style=" margin-left:46px;margin-top:-16px ">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" type="button"
+                                                    id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"
+                                                    style="  border: none !important;
   color: rgba(0, 0, 0, 0.44);">
-    {{ _('Remind me')}}  
-    <span class="caret"></span>
-  </button> <span ng-show="something_picked" style="  border: 1px solid rgba(10, 18, 168, 0.258824);
+                                                {{ _('Remind me') }}
+                                                <span class="caret"></span>
+                                            </button> <span ng-show="something_picked" style="  border: 1px solid rgba(10, 18, 168, 0.258824);
   padding: 3px;
   color: rgb(108, 108, 108);
   border-radius: 3px !important;
-  background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()" class=" calendar-close-invite"  style=" top: 2px !important;"></a></span> 
-     <ul  class="list-inline"style="list-style:none" ng-show="remindmeby">
-                                                 <li> <strong> By:</strong> </li>
-                                                 <li><input type="radio"  name="by" ng-model="method" value="email"> {{ _('Email')}}</li> 
-                                                 <li><input type="radio" ng- name="by" ng-model="method" value="sms">{{ _('SMS')}}</li>
-                                                
-                                               </ul>
-  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(0)">{{ _('No notification')}}</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(1)"> {{ _('At time of event')}}</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(2)">30 {{ _('minutes before')}}</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(3)">1 {{ _('hour')}} </a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(4)">1 {{ _('day')}} </a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="Remindme(5)">1 {{ _('week')}} </a></li>
+  background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()"
+                                                                           class=" calendar-close-invite"
+                                                                           style=" top: 2px !important;"></a></span>
+                                            <ul class="list-inline" style="list-style:none" ng-show="remindmeby">
+                                                <li><strong> By:</strong></li>
+                                                <li><input type="radio" name="by" ng-model="method"
+                                                           value="email"> {{ _('Email') }}</li>
+                                                <li><input type="radio" ng- name="by" ng-model="method"
+                                                           value="sms">{{ _('SMS') }}</li>
 
-  </ul>
-</div>
-                      <!--       <span> remind me  <div class="customCheckbox " class="form-group" style="
-    margin-top: -14px;
-    margin-left: 72px;
-">  
-                            <input title="Select Lead" type="checkbox" ng-checked="checkReminder()" ng-click="selectCardwithCheck($event,$index)" id="reminder">             
-                              <label for="reminder" class="labelElement">
-                                <span class="check" style="  height: 17px !important;width: 8px !important;   margin-top: -4px;"></span>
-                                <span class="box" style="  height: 15px !important;width: 15px !important;   margin-top: -13px;"></span>
-                              </label>  
-                          </div></span> -->
-                        
+                                            </ul>
+                                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                           ng-click="Remindme(0)">{{ _('No notification') }}</a>
+                                                </li>
+                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                           ng-click="Remindme(1)"> {{ _('At time of event') }}</a>
+                                                </li>
+                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                           ng-click="Remindme(2)">30 {{ _('minutes before') }}</a>
+                                                </li>
+                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                           ng-click="Remindme(3)">1 {{ _('hour') }} </a>
+                                                </li>
+                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                           ng-click="Remindme(4)">1 {{ _('day') }} </a>
+                                                </li>
+                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                           ng-click="Remindme(5)">1 {{ _('week') }} </a>
+                                                </li>
 
-                               </div>                            
-                            </div>
+                                            </ul>
+                                        </div>
+                                        <!--       <span> remind me  <div class="customCheckbox " class="form-group" style="
+                      margin-top: -14px;
+                      margin-left: 72px;
+                  ">
+                                              <input title="Select Lead" type="checkbox" ng-checked="checkReminder()" ng-click="selectCardwithCheck($event,$index)" id="reminder">
+                                                <label for="reminder" class="labelElement">
+                                                  <span class="check" style="  height: 17px !important;width: 8px !important;   margin-top: -4px;"></span>
+                                                  <span class="box" style="  height: 15px !important;width: 15px !important;   margin-top: -13px;"></span>
+                                                </label>
+                                            </div></span> -->
 
-                          <div class=" inner-addon left-addon" style="margin-top:10px">
-                                                       <i class="glyphicon glyphicon-align-left" style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i>
-                                                    <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Add note')}}" id="note" ng-model="ioevent.note" style="margin-top:15px">
-                            </div>
-                            <div class=" inner-addon left-addon" style="margin-top:10px">
-                                                       <i class="glyphicon glyphicon-pushpin" style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i>
-                     <input class="form-control calendar-form-controle" autofocus="" type="text" placeholder="{{_('Related to (Account, Contact or Lead)')}}" id="note" ng-model="searchRelatedQuery" style="margin-top:15px" typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8" typeahead-on-select="selectResult()">
-                            </div>
+
+                                    </div>
+                                </div>
+
+                                <div class=" inner-addon left-addon" style="margin-top:10px">
+                                    <i class="glyphicon glyphicon-align-left"
+                                       style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i>
+                                    <input class="form-control calendar-form-controle" autofocus="" type="text"
+                                           placeholder="{{ _('Add note') }}" id="note" ng-model="ioevent.note"
+                                           style="margin-top:15px">
+                                </div>
+                                <div class=" inner-addon left-addon" style="margin-top:10px">
+                                    <i class="glyphicon glyphicon-pushpin"
+                                       style="color: rgba(0, 26, 131, 0.61);  margin-top: -5px;"></i>
+                                    <input class="form-control calendar-form-controle" autofocus="" type="text"
+                                           placeholder="{{ _('Related to (Account, Contact or Lead)') }}" id="note"
+                                           ng-model="searchRelatedQuery" style="margin-top:15px"
+                                           typeahead="result as result.title + ' (' + result.type + ')' for result in results | filter:$viewValue | limitTo:8"
+                                           typeahead-on-select="selectResult()">
+                                </div>
                              <span ng-show="picked_related" style="  border: 1px solid rgba(10, 18, 168, 0.258824);
   padding: 3px;
   color: rgb(108, 108, 108);
   border-radius: 3px !important;
-  background-color: rgba(154, 157, 205, 0.258824);"> <%=show_choice %> <a href="" ng-click="deleteRelated()" class=" calendar-close-invite"  style=" top: 2px !important;" ></a></span>
+  background-color: rgba(154, 157, 205, 0.258824);"> <%=show_choice %> <a href="" ng-click="deleteRelated()"
+                                                                          class=" calendar-close-invite"
+                                                                          style=" top: 2px !important;"></a></span>
 
-                        </div>
-               
-                                                </form>
-            </div>
-            <div class="modal-footer " style="border-top:none!important;">
-              <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="cancelAddOperation()">{{_("Cancel")}}</button>
+                            </div>
 
-               <input ng-hide="isLoading" type="submit" class="btn red" value="{{_('Add event')}}" ng-click="addEvent(ioevent)">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
+                        </form>
+                    </div>
+                    <div class="modal-footer " style="border-top:none!important;">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true"
+                                ng-click="cancelAddOperation()">{{ _("Cancel") }}</button>
+
+                        <input ng-hide="isLoading" type="submit" class="btn red" value="{{ _('Add event') }}"
+                               ng-click="addEvent(ioevent)">
+                        <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}"
+                               disabled>
 
 
+                    </div>
+                </div>
             </div>
-            </div>
-            </div>
-          </div>
-<!-- end of new event  -->
-<!-- event modal -->
-<!--           <div id="newEventModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        </div>
+        <!-- end of new event  -->
+        <!-- event modal -->
+        <!--           <div id="newEventModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
@@ -1456,58 +1823,52 @@
             </div>
             </div>
           </div> -->
-          <!-- the end of the modal -->
+        <!-- the end of the modal -->
 
 
+        <script type="text/javascript">
 
 
-
-
-
-
-<script type="text/javascript">
-
-
-  $(function() {
-    $('#datetimepicker2').datetimepicker({
-      language: 'fr',
-      pickTime: false
-    });
-  });
-        var originalLeave = $.fn.popover.Constructor.prototype.leave;
-      $.fn.popover.Constructor.prototype.leave = function(obj){
-        var self = obj instanceof this.constructor ?
-          obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type)
-        var container, timeout;
-
-        originalLeave.call(this, obj);
-
-        if(obj.currentTarget) {
-          container = $(obj.currentTarget).siblings('.popover')
-          timeout = self.timeout;
-          container.one('mouseenter', function(){
-            //We entered the actual popover – call off the dogs
-            clearTimeout(timeout);
-            //Let's monitor popover content instead
-            container.one('mouseleave', function(){
-              $.fn.popover.Constructor.prototype.leave.call(self, self);
+            $(function () {
+                $('#datetimepicker2').datetimepicker({
+                    language: 'fr',
+                    pickTime: false
+                });
             });
-          })
-        }
-      };
- /* $('body').popover({ selector: '[data-popover]', trigger: 'click hover', placement: 'left', delay: {show: 50, hide: 400}});*/
-          $('#assigeeList').lionbars({});
-</script>
+            var originalLeave = $.fn.popover.Constructor.prototype.leave;
+            $.fn.popover.Constructor.prototype.leave = function (obj) {
+                var self = obj instanceof this.constructor ?
+                        obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type)
+                var container, timeout;
+
+                originalLeave.call(this, obj);
+
+                if (obj.currentTarget) {
+                    container = $(obj.currentTarget).siblings('.popover')
+                    timeout = self.timeout;
+                    container.one('mouseenter', function () {
+                        //We entered the actual popover – call off the dogs
+                        clearTimeout(timeout);
+                        //Let's monitor popover content instead
+                        container.one('mouseleave', function () {
+                            $.fn.popover.Constructor.prototype.leave.call(self, self);
+                        });
+                    })
+                }
+            };
+            /* $('body').popover({ selector: '[data-popover]', trigger: 'click hover', placement: 'left', delay: {show: 50, hide: 400}});*/
+            $('#assigeeList').lionbars({});
+        </script>
 
 
-<script type="text/javascript">
-$(function() {
-   // run the currently selected effect
-   
+        <script type="text/javascript">
+            $(function () {
+                // run the currently selected effect
 
-   $( "#effect" ).hide();
-   });
-</script>
+
+                $("#effect").hide();
+            });
+        </script>
 
 
 

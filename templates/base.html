@@ -18,64 +18,64 @@
     <meta name="MobileOptimized" content="320">
     <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eafcehcahfabjibkmffekmcnlnnopkni">
     <!-- web fonts -->
-        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab|Ubuntu:300,400,500,700|Exo+2:300,400,500,600,700'
-                  rel='stylesheet' type='text/css'>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab|Ubuntu:300,400,500,700|Exo+2:300,400,500,600,700'
+          rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- end of web fonts-->
     <!--  GLOBAL CSS Sync Files -->
-     <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-     <link href="/static/build/css/_sync.css" rel="stylesheet" type="text/css"/>
-     <link href="static/vendor/css/style-metronic.css" rel="stylesheet" type="text/css"/>
-     <link href="static/vendor/css/style.css" rel="stylesheet" type="text/css"/>
-     <link href="static/vendor/css/style-responsive.css" rel="stylesheet" type="text/css"/>
-     <link href="static/vendor/css/plugins.css" rel="stylesheet" type="text/css"/>
-     <link href="static/vendor/css/light.css" rel="stylesheet" type="text/css"/>
-     <link href="static/vendor/css/select2_metro.css" rel="stylesheet" type="text/css"/>
-     <link href="static/vendor/css/lionbars.css" rel="stylesheet" type="text/css"/>
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/build/css/_sync.css" rel="stylesheet" type="text/css"/>
+    <link href="static/vendor/css/style-metronic.css" rel="stylesheet" type="text/css"/>
+    <link href="static/vendor/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="static/vendor/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+    <link href="static/vendor/css/plugins.css" rel="stylesheet" type="text/css"/>
+    <link href="static/vendor/css/light.css" rel="stylesheet" type="text/css"/>
+    <link href="static/vendor/css/select2_metro.css" rel="stylesheet" type="text/css"/>
+    <link href="static/vendor/css/lionbars.css" rel="stylesheet" type="text/css"/>
     <link href="/static/src/css/custom.css" rel="stylesheet" type="text/css"/>
     <link href="/static/src/css/admin.css" rel="stylesheet">
     <!--  end GLOBAL CSS Sync Files -->
     <!-- start Mixpanel -->
     <script type="text/javascript">(function (e, b) {
-            if (!b.__SV) {
-                var a, f, i, g;
-                window.mixpanel = b;
-                b._i = [];
-                b.init = function (a, e, d) {
-                    function f(b, h) {
-                        var a = h.split(".");
-                        2 == a.length && (b = b[a[0]], h = a[1]);
-                        b[h] = function () {
-                            b.push([h].concat(Array.prototype.slice.call(arguments, 0)))
-                        }
+        if (!b.__SV) {
+            var a, f, i, g;
+            window.mixpanel = b;
+            b._i = [];
+            b.init = function (a, e, d) {
+                function f(b, h) {
+                    var a = h.split(".");
+                    2 == a.length && (b = b[a[0]], h = a[1]);
+                    b[h] = function () {
+                        b.push([h].concat(Array.prototype.slice.call(arguments, 0)))
                     }
+                }
 
-                    var c = b;
-                    "undefined" !== typeof d ? c = b[d] = [] : d = "mixpanel";
-                    c.people = c.people || [];
-                    c.toString = function (b) {
-                        var a = "mixpanel";
-                        "mixpanel" !== d && (a += "." + d);
-                        b || (a += " (stub)");
-                        return a
-                    };
-                    c.people.toString = function () {
-                        return c.toString(1) + ".people (stub)"
-                    };
-                    i = "disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
-                    for (g = 0; g < i.length; g++)f(c, i[g]);
-                    b._i.push([a, e, d])
+                var c = b;
+                "undefined" !== typeof d ? c = b[d] = [] : d = "mixpanel";
+                c.people = c.people || [];
+                c.toString = function (b) {
+                    var a = "mixpanel";
+                    "mixpanel" !== d && (a += "." + d);
+                    b || (a += " (stub)");
+                    return a
                 };
-                b.__SV = 1.2;
-                a = e.createElement("script");
-                a.type = "text/javascript";
-                a.async = !0;
-                a.src = "undefined" !== typeof MIXPANEL_CUSTOM_LIB_URL ? MIXPANEL_CUSTOM_LIB_URL : "file:" === e.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";
-                f = e.getElementsByTagName("script")[0];
-                f.parentNode.insertBefore(a, f)
-            }
-        })(document, window.mixpanel || []);
-        mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
+                c.people.toString = function () {
+                    return c.toString(1) + ".people (stub)"
+                };
+                i = "disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+                for (g = 0; g < i.length; g++)f(c, i[g]);
+                b._i.push([a, e, d])
+            };
+            b.__SV = 1.2;
+            a = e.createElement("script");
+            a.type = "text/javascript";
+            a.async = !0;
+            a.src = "undefined" !== typeof MIXPANEL_CUSTOM_LIB_URL ? MIXPANEL_CUSTOM_LIB_URL : "file:" === e.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";
+            f = e.getElementsByTagName("script")[0];
+            f.parentNode.insertBefore(a, f)
+        }
+    })(document, window.mixpanel || []);
+    mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 </head>
 <body class="page-header-fixed gray-body">
 <!-- BEGIN HEADER -->
@@ -393,37 +393,37 @@
 </div>
 <!-- END CONTAINER -->
 <!-- BEGIN FOOTER -->
-    <input type="hidden" id="userEmail" value="{{ user.email }}">
-    <input type="hidden" id="userId" value="{{ user.id }}">
-    <input type="hidden" id="completedTour" value="{{ user.completed_tour }}">
+<input type="hidden" id="userEmail" value="{{ user.email }}">
+<input type="hidden" id="userId" value="{{ user.id }}">
+<input type="hidden" id="completedTour" value="{{ user.completed_tour }}">
 
-    <input type="hidden" id="license_is_expired" value="{{ license_is_expired }}"/>
-    <input type="hidden" id="user_suspended" value="{{ user_suspended }}"/>
-    <input type="hidden" id="active_app" value="{{ active_app.key.id() }}"/>
-    <input type="hidden" value="{{ user.emailSignature |e }}" id="signature"/>
-    <input type="hidden" id="userDisplayname" value="{{ user.google_display_name }}">
-    <input type="hidden" id="usercreated_at" value="{{ user.created_at }}">
-    <input type="hidden" id="userorganization" value="{{ organization_name }}">
-    <input type="hidden" id="userLanguage" value="{{ user.language }}">
+<input type="hidden" id="license_is_expired" value="{{ license_is_expired }}"/>
+<input type="hidden" id="user_suspended" value="{{ user_suspended }}"/>
+<input type="hidden" id="active_app" value="{{ active_app.key.id() }}"/>
+<input type="hidden" value="{{ user.emailSignature |e }}" id="signature"/>
+<input type="hidden" id="userDisplayname" value="{{ user.google_display_name }}">
+<input type="hidden" id="usercreated_at" value="{{ user.created_at }}">
+<input type="hidden" id="userorganization" value="{{ organization_name }}">
+<input type="hidden" id="userLanguage" value="{{ user.language }}">
 <div class="clearfix"></div>
 <!-- END FOOTER -->
 <!-- BEGIN CORE PLUGINS -->
 <!-- first_sync_scripts replacement -->
 
 
-          <script src="/static/build/js/_first.js" type="text/javascript"></script>
+<script src="/static/build/js/_first.js" type="text/javascript"></script>
 
 <script>
-        window.uuser={
-                     email:"{{user.email}}",
-                     name:"{{user.google_display_name}}",
-                     created:"{{user.created_at}}",
-                     updated_at:"{{user.updated_at}}",
-                     language:"{{user.language}}",
-                     google_user_id:"{{user.google_user_id}}",
-                     completed_tour:"{{user.completed_tour}}",
-                     organization_name:"{{organization_name}}"
-        };
+    window.uuser = {
+        email: "{{user.email}}",
+        name: "{{user.google_display_name}}",
+        created: "{{user.created_at}}",
+        updated_at: "{{user.updated_at}}",
+        language: "{{user.language}}",
+        google_user_id: "{{user.google_user_id}}",
+        completed_tour: "{{user.completed_tour}}",
+        organization_name: "{{organization_name}}"
+    };
 </script>
 <script src="/static/src/js/base.js" type="text/javascript"></script>
 <script src="https://apis.google.com/js/client.js?onload=loadGapi">
@@ -431,20 +431,20 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 
-          <script type="text/javascript" src="/static/build/js/_sync.js"></script>
+<script type="text/javascript" src="/static/build/js/_sync.js"></script>
 
 <script type="text/javascript" src="static/vendor/js/jquery.waterfall.js"></script>
 
 
-          <script type="text/javascript" src="/static/build/js/_async.js"></script>
+<script type="text/javascript" src="/static/build/js/_async.js"></script>
 
 <script type="text/javascript" src="static/vendor/js/jquery.caret.js"></script>
 <script type="text/javascript" src="static/vendor/js/lionbars.js"></script>
 <!-- end async_scripts.js replacement -->
 
 
-          <script type="text/javascript" src="static/build/js/_servs.js"></script>
-          <script type="text/javascript" src="static/build/js/_ctrls.js"></script>
+<script type="text/javascript" src="static/build/js/_servs.js"></script>
+<script type="text/javascript" src="static/build/js/_ctrls.js"></script>
 
 <!-- /End of ioGrow controllers -->
 <!--[if lt IE 9]>

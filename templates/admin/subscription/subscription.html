@@ -288,7 +288,7 @@
                     </div>
                 </div>
                 <hr>
-                <span class="cost-message">{{ _('Total cost:')  }} <span id="total-cost"></span>$</span>
+                <span class="cost-message">{{ _('Total cost:') }} <span id="total-cost"></span>$</span>
             </div>
         </div>
     </div>
@@ -364,11 +364,11 @@
                 var quantity = parseInt($('#quantity').val());
                 if (quantity > 0) {
                     $.post('/stripe/subscription', {
-                        token: token,
-                        interval: $('input:radio:checked[name=interval]').val(),
-                        plane: 'premium',
-                        quantity: quantity
-                    })
+                                token: token,
+                                interval: $('input:radio:checked[name=interval]').val(),
+                                plane: 'premium',
+                                quantity: quantity
+                            })
                             .done(function (data, textStatus, jqXHR) {
                                 $form.find('[type=submit]').html('Payment successful <i class="fa fa-check"></i>').prop('disabled', true);
                                 window.location.replace('/#/leads/new')

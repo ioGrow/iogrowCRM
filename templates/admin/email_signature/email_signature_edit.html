@@ -1,13 +1,13 @@
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}} </span>
+            <span class="active-app"><i class="fa fa-cog"></i> {{ _(active_app.label) }} </span>
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
-            {%for application in apps %}
-            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
-            {%endfor%}
+            {% for application in apps %}
+                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
+            {% endfor %}
         </ul>
     </div>
     <div class="subHeaderContent" style="border-right-width: 0;">
@@ -15,7 +15,7 @@
             {{ _('Email Signature') }}
         </div>
         <a class="btn red save-btn pull-right" id="customButton" ng-click="addSignature()">
-            <i class="fa fa-floppy-o"></i> {{_("Save")}}
+            <i class="fa fa-floppy-o"></i> {{ _("Save") }}
         </a>
     </div>
 </div>
@@ -38,16 +38,16 @@
         <div class="col-md-8 col-md-offset-2 panel panel-primary">
 
             <div class="modal-body">
-                <h3 style="display: inline">{{ _('Signature')}} </h3>
+                <h3 style="display: inline">{{ _('Signature') }} </h3>
                 <i class="material-icons" style="font-size: 19px">edit</i>
 
                 <p> {{ _('This signature will appear in all mail you send from iogrow') }} <br>
-                    {{ _("You've connected ioGrow to") }} <b> {{user.email}}</b>
+                    {{ _("You've connected ioGrow to") }} <b> {{ user.email }}</b>
                     .</p>
-                <p><b>{{ _('Signature')}}</b></p>
+                <p><b>{{ _('Signature') }}</b></p>
                 <form class="ng-pristine ng-invalid ng-invalid-required">
                     <div class="form-group text-form-group">
-                        <textarea id="signature_textarea" placeholder="{{_('Enter text ...')}}" class="form-control"
+                        <textarea id="signature_textarea" placeholder="{{ _('Enter text ...') }}" class="form-control"
                                   rows="7">
                         </textarea>
                     </div>

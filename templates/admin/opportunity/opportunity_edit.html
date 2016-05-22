@@ -1,12 +1,12 @@
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}}</span>
+            <span class="active-app"><i class="fa fa-cog"></i> {{ _(active_app.label) }}</span>
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
             {% for application in apps %}
-            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
+                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
             {% endfor %}
         </ul>
     </div>
@@ -35,7 +35,7 @@
     </div>
     <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
         <div ng-repeat="stage in notEditableStatus"
-                class="col-md-8" class="well grid">
+             class="col-md-8" class="well grid">
             <div class="detailsSection stageCard">
                 <div class="head">
                     <div class="text">
@@ -67,7 +67,7 @@
                                        data-toggle="modal"> <i class="fa fa-pencil-square-o"></i>
                                     </a>
                                 <button data-toggle="modal" class="btn default addAnotherPhone"
-                                data-target="#confirm-deletion" ng-click="showDeletionModal(stage)" >
+                                        data-target="#confirm-deletion" ng-click="showDeletionModal(stage)">
                                     <i class="fa fa-trash-o"></i><%= slectedStage %>
                                 </button>
 
@@ -88,20 +88,20 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3>{{_("New Opportunity Stage")}}</h3>
+                <h3>{{ _("New Opportunity Stage") }}</h3>
             </div>
             <form name="addOppStage" ng-submit="saveOppStage(oppstage)" class="form-horizontal">
                 <div class="modal-body">
                     <fieldset>
                         <div class="form-group">
-                            <label class="required control-label">{{_("Name")}} *</label>
+                            <label class="required control-label">{{ _("Name") }} *</label>
                             <input type="text" class="form-control" required ng-model="oppstage.name">
                         </div>
                     </fieldset>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                    <button type="submit" class="btn green">{{_("Add a new Opportunity stage")}}
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                    <button type="submit" class="btn green">{{ _("Add a new Opportunity stage") }}
                     </button>
                 </div>
             </form>
@@ -115,20 +115,20 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3>{{_("Edit Opportunity Stage")}}</h3>
+                <h3>{{ _("Edit Opportunity Stage") }}</h3>
             </div>
             <form name="addOppStage" class="form-horizontal" ng-submit="updateOppStage(oppstageedit)">
                 <div class="modal-body">
                     <fieldset>
                         <div class="form-group">
-                            <label class="required control-label">{{_("Name")}} *</label>
+                            <label class="required control-label">{{ _("Name") }} *</label>
                             <input type="text" class="form-control" required ng-model="oppstageedit.name">
                         </div>
                     </fieldset>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                    <button type="submit" class="btn green" >{{_("save")}}
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                    <button type="submit" class="btn green">{{ _("save") }}
                     </button>
                 </div>
             </form>
@@ -140,17 +140,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                 <h3>{{_("Confirm deletion")}}</h3>
+                <h3>{{ _("Confirm deletion") }}</h3>
             </div>
 
-                <div class="modal-body">
-                   <h3>{{_("You will delete the")}} <b> <%= selectedStage.name %> </b>{{_("stage")}}</h3>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-red" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                    <button class="btn green" ng-click="deleteOppStage(selectedStage)"
-                    data-dismiss="modal" aria-hidden="true">{{_("Delete")}} </button>
-                </div>
+            <div class="modal-body">
+                <h3>{{ _("You will delete the") }} <b> <%= selectedStage.name %> </b>{{ _("stage") }}</h3>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-red" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                <button class="btn green" ng-click="deleteOppStage(selectedStage)"
+                        data-dismiss="modal" aria-hidden="true">{{ _("Delete") }} </button>
+            </div>
         </div>
     </div>
 </div>

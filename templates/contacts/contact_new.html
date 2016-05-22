@@ -4,11 +4,12 @@
         display: inline-flex;
         padding-top: 4px;
     }
+
     .or_separator > span {
         margin: 10px;
     }
 </style>
- <div class="row subHeader actionsBar">
+<div class="row subHeader actionsBar">
     <table style="width:100%;height: 55px;">
         <tbody>
         <tr>
@@ -16,28 +17,34 @@
                 <div class="btn-group">
                     <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
                         {% if active_app.label =="Relationships" %}
-                        <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png"
-                             style="display:inline-block;height: 20px;margin-right: 3px;">
-                        {% else%}
-                        <img class="app_icon" src="../../static/src/img/admin_min.png"
-                             style="display:inline-block;height: 20px;margin-right: 3px;">
+                            <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png"
+                                 style="display:inline-block;height: 20px;margin-right: 3px;">
+                        {% else %}
+                            <img class="app_icon" src="../../static/src/img/admin_min.png"
+                                 style="display:inline-block;height: 20px;margin-right: 3px;">
                         {% endif %}
-                        <span class="hide_sm">{{_(active_app.label)}}</span>
+                        <span class="hide_sm">{{ _(active_app.label) }}</span>
                         <i class="icon-angle-down fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu">
-                        {%for application in apps %}
-                        {% if application.label =="Relationships" %}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
-                        </li>
-                        {% else%}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
-                        </li>
+                        {% for application in apps %}
+                            {% if application.label =="Relationships" %}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
+                                                                                                        src="../../static/src/img/sm-iogrow-true.png"
+                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                </a>
+                                </li>
+                            {% else %}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
+                                                                                                        src="../../static/src/img/admin_min.png"
+                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                </a>
+                                </li>
 
-                        {% endif %}
+                            {% endif %}
 
 
-                        {%endfor%}
+                        {% endfor %}
                     </ul>
                 </div>
             </td>
@@ -57,35 +64,35 @@
                         <span><i class="fa fa-save"></i> Save</span>
                     </a>
                     <button class="btn btn-default newAccountBtn pull-right" ng-click="clearContact()"
-                            style="margin-right:5px"><i class="fa fa-trash-o"></i>{{ _(' Clear')}}
+                            style="margin-right:5px"><i class="fa fa-trash-o"></i>{{ _(' Clear') }}
                     </button>
                 </div>
                 <div class="col-md-3">
                     <div style=" padding-left: 10px;" class="pull-right">
-                        {%for application in apps %}
-                        {%if application.label =="Settings" %}
-                        <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
-                           style="margin-left: 20px; margin-right: 12px;">
-                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>
-                        {%endif%}
-                        {%endfor%}
+                        {% for application in apps %}
+                            {% if application.label =="Settings" %}
+                                <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
+                                   style="margin-left: 20px; margin-right: 12px;">
+                                    <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
                         <div class="btn-group show_sm"
                              style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                             <a class="headerBtn" title="More" data-toggle="dropdown">
                                 <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
                             </a>
                             <ul class="dropdown-menu drp-dwn-right">
-                                {%for application in apps %}
-                                {%if application.label =="Settings" %}
-                                <li>
-                                    <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
-                                        <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                                        Settings
-                                    </a>
-                                </li>
-                                {%endif%}
-                                {%endfor%}
+                                {% for application in apps %}
+                                    {% if application.label =="Settings" %}
+                                        <li>
+                                            <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
+                                                <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                                                Settings
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
@@ -95,18 +102,18 @@
 
         </tbody>
     </table>
-</div> 
+</div>
 <div class="page-content" style="margin-top: 45px;">
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
             <div class="loader-content">
-                {{ _('Loading...')}}
+                {{ _('Loading...') }}
             </div>
         </div>
     </div>
     <div class="" ng-show="immediateFailed">
         <div class="col-md-12">
-            <h1>{{ _('Sign-in Button;')}}</h1>
+            <h1>{{ _('Sign-in Button;') }}</h1>
           <span id="signin">
               <span id="myGsignin"></span>
           </span>
@@ -141,10 +148,11 @@
                                     <form class="form-horizontal ">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group" ng-class="{ 'has-error': contact_err.firstname}">
-                                                    <label class="control-label col-md-4">{{ _('First Name')}}</label>
+                                                <div class="form-group"
+                                                     ng-class="{ 'has-error': contact_err.firstname}">
+                                                    <label class="control-label col-md-4">{{ _('First Name') }}</label>
 
-                                                    <div class="col-md-8" >
+                                                    <div class="col-md-8">
                                                         <input type="text" required id="id_firstname"
                                                                ng-blur="getLinkedinProfile();getTwitterProfile()"
                                                                class="form-control" ng-model="contact.firstname">
@@ -153,7 +161,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group" ng-class="{ 'has-error': contact_err.lastname}">
-                                                    <label class="control-label col-md-4">{{ _('Last Name')}}</label>
+                                                    <label class="control-label col-md-4">{{ _('Last Name') }}</label>
 
                                                     <div class="col-md-8">
                                                         <input type="text"
@@ -167,7 +175,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-4">{{ _('Title')}}</label>
+                                                    <label class="control-label col-md-4">{{ _('Title') }}</label>
 
                                                     <div class="col-md-8">
                                                         <input type="text" class="form-control"
@@ -178,17 +186,17 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group asyncSearch">
-                                                    <label class="control-label col-md-4">{{ _('Company')}}</label>
+                                                    <label class="control-label col-md-4">{{ _('Company') }}</label>
 
                                                     <div class="col-md-8">
-                                                          <input ng-blur="getLinkedinProfile();"
-                                                                 typeahead-loading="accSearchLoading"
-                                                                 ng-class="{'spinner':accSearchLoading}"
-                                                                 type="text"
-                                                                 ng-model="searchAccountQuery"
-                                                                 typeahead="result as result.name  for result in getResults($viewValue,'/crmengine/v1/accounts/search') | filter:$viewValue | limitTo:10"
-                                                                 typeahead-on-select="selectAccount()"
-                                                                 class="form-control">
+                                                        <input ng-blur="getLinkedinProfile();"
+                                                               typeahead-loading="accSearchLoading"
+                                                               ng-class="{'spinner':accSearchLoading}"
+                                                               type="text"
+                                                               ng-model="searchAccountQuery"
+                                                               typeahead="result as result.name  for result in getResults($viewValue,'/crmengine/v1/accounts/search') | filter:$viewValue | limitTo:10"
+                                                               typeahead-on-select="selectAccount()"
+                                                               class="form-control">
                                                     </div>
                                                 </div>
                                             </div>
@@ -199,7 +207,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="news-blocks blank-card blank-card-green">
-                                        <h3>{{ _('Contact details')}}</h3>
+                                        <h3>{{ _('Contact details') }}</h3>
 
                                         <ul class="list-unstyled contact-infos infoslist">
                                             <li ng-repeat="phone in phones">
@@ -219,8 +227,8 @@
                                                         ng-enter="pushElement(phone,phones,'phones')"
                                                         ng-blur="pushElement(phone,phones,'phones')"
                                                         ng-model="phone.number"
-                                                        placeholder="{{_('Add a number')}}"
-                                                        >
+                                                        placeholder="{{ _('Add a number') }}"
+                                                >
                                             </div>
                                         </form>
                                         <ul class="list-unstyled contact-infos infoslist">
@@ -239,7 +247,7 @@
                                                     <input ng-blur="pushElement(email,emails,'emails')"
                                                            ng-enter="pushElement(email,emails,'emails')"
                                                            type="email" class="form-control"
-                                                           ng-model="email.email" placeholder="{{_('Add an email')}}">
+                                                           ng-model="email.email" placeholder="{{ _('Add an email') }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -259,7 +267,7 @@
                                                     <input ng-blur="pushElement(website,websites,'websites')"
                                                            ng-enter="pushElement(website,websites,'websites')"
                                                            ng-model="website.url" class="form-control"
-                                                           placeholder="{{_('Add a Website')}}">
+                                                           placeholder="{{ _('Add a Website') }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -311,38 +319,67 @@
                                     </div>
                                     <div class="news-blocks blank-card blank-card-gray relatedBlock">
                                     <span class="page-meta pull-right" ng-show="!isEmptyArray(contacts.customfields)">
-                                               <a href="/#/admin/custom_fields/3"  class="btn-link addAnotherPhone" data-toggle="modal" style="color:gray;"><i class="fa fa-pencil"></i> {{_('Edit Custom fields')}} </a>
+                                               <a href="/#/admin/custom_fields/3" class="btn-link addAnotherPhone"
+                                                  data-toggle="modal" style="color:gray;"><i
+                                                       class="fa fa-pencil"></i> {{ _('Edit Custom fields') }} </a>
                                              </span>
-                                    <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
+                                        <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt"
+                                                                       style="font-size:24px"></i>{{ _(' Custom Fields') }}
+                                        </h3>
                                         <div ng-show="isEmptyArray(contacts.customfields)" style="text-align:center">
-                                                  <a href="/#/admin/custom_fields/3" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
-                                                    + <i class="fa fa-list-alt"></i>  Add Custom fields
-                                                  </a> 
+                                            <a href="/#/admin/custom_fields/3" class=" newRelatedContact"
+                                               style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                + <i class="fa fa-list-alt"></i> Add Custom fields
+                                            </a>
                                         </div>
-                                        <ul ng-show="!isEmptyArray(contacts.customfields)" style="list-style: none;padding-left: 0px;">
-                                            <li ng-repeat="cusfield in contacts.customfields"  style="padding: 5px;">
+                                        <ul ng-show="!isEmptyArray(contacts.customfields)"
+                                            style="list-style: none;padding-left: 0px;">
+                                            <li ng-repeat="cusfield in contacts.customfields" style="padding: 5px;">
                                                 <div class="form-group" style="margin-bottom: 5px;">
                                                     <div class="row">
-                                                        <label ng-model="cusfield.field" class="control-label col-md-12">
+                                                        <label ng-model="cusfield.field"
+                                                               class="control-label col-md-12">
                                                             <%=cusfield.name%>
                                                         </label>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-12" id="elementContainer" >
-                                                            <select class="form-control" ng-show="cusfield.field_type=='list'" ng-change="addCustomField(cusfield)"  ng-model="cusfield.value" ng-options="option for option in cusfield.options">
+                                                        <div class="col-md-12" id="elementContainer">
+                                                            <select class="form-control"
+                                                                    ng-show="cusfield.field_type=='list'"
+                                                                    ng-change="addCustomField(cusfield)"
+                                                                    ng-model="cusfield.value"
+                                                                    ng-options="option for option in cusfield.options">
                                                             </select>
-                                                            <div ng-show="cusfield.field_type=='radio'" role="radiogroup" ng-repeat="option in cusfield.options">
-                                                                <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>" type="radio" ng-model="cusfield.value" value="<%=option%>"  ng-click="addCustomField(cusfield)">
-                                                                <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>" ng-click="addCustomField(cusfield)"> <%=option%></label>
-                                                                <br>        
+                                                            <div ng-show="cusfield.field_type=='radio'"
+                                                                 role="radiogroup"
+                                                                 ng-repeat="option in cusfield.options">
+                                                                <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>"
+                                                                       type="radio" ng-model="cusfield.value"
+                                                                       value="<%=option%>"
+                                                                       ng-click="addCustomField(cusfield)">
+                                                                <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>"
+                                                                       ng-click="addCustomField(cusfield)">
+                                                                    <%=option%></label>
+                                                                <br>
                                                             </div>
-                                                            <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
-                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
-                                                                <label for="<%=option%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
-                                                                <br>        
+                                                            <div ng-show="cusfield.field_type=='checkbox'"
+                                                                 role="radiogroup"
+                                                                 ng-repeat="option in cusfield.options">
+                                                                <input type="checkbox" value="<%=option%>"
+                                                                       ng-click="addCustomField(cusfield,option)"
+                                                                       ng-checked="cusfield.value.indexOf(option) > -1">
+                                                                <label for="<%=option%>">
+                                                                    <%=option%></label ng-click="addCustomField(cusfield,option)">
+                                                                <br>
                                                             </div>
-                                                            <input ng-blur="addCustomField(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">
-                                                            <textarea ng-model="cusfield.value" ng-blur="addCustomField(cusfield)" class="form-control" ng-show="cusfield.field_type=='paragraph'"></textarea>
+                                                            <input ng-blur="addCustomField(cusfield)"
+                                                                   ng-model="cusfield.value" type="text"
+                                                                   class="form-control"
+                                                                   ng-show="cusfield.field_type=='text'">
+                                                            <textarea ng-model="cusfield.value"
+                                                                      ng-blur="addCustomField(cusfield)"
+                                                                      class="form-control"
+                                                                      ng-show="cusfield.field_type=='paragraph'"></textarea>
 
                                                         </div>
 
@@ -350,12 +387,12 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                    <div class="clearfix"></div>
-                                </div>
+                                        <div class="clearfix"></div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="news-blocks blank-card blank-card-bluep  relatedBlock">
-                                        <h3>{{_('Social links')}} <i class="fa fa-twitter"></i>
+                                        <h3>{{ _('Social links') }} <i class="fa fa-twitter"></i>
                                             <i class="fa fa-facebook-square"></i>
                                             <i class="fa fa-linkedin-square"></i></h3>
                                         <!--<ul class="list-unstyled contact-infos infoslist" >
@@ -410,25 +447,25 @@
                                     </div>
                                     <div class="news-blocks blank-card blank-card-yellow ">
                                         <h3 style="margin-top:0px; margin-bottom: 20px;">
-                                            <i class="fa fa-edit" style="  font-size: 24px;"></i>{{_(' Notes')}}
+                                            <i class="fa fa-edit" style="  font-size: 24px;"></i>{{ _(' Notes') }}
                                         </h3>
 
                                         <div class="news-block-tags">
                                             <ul class="chats">
                                                 <li class="in" ng-repeat="note in notes" id="topic_<%=$index%>">
                                                     <img class="avatar" alt=""
-                                                         ng-src="{{user.google_public_profile_photo_url}}"/>
+                                                         ng-src="{{ user.google_public_profile_photo_url }}"/>
 
                                                     <div class="message">
                                                         <span class="arrow"></span>
                                                         <a href="#" class="name">
-                                                            {{user.google_display_name}}
+                                                            {{ user.google_display_name }}
                                                         </a>
                                   <span class="body">
                                     <strong style="color: #2D85B5;" class="ng-binding">
                                         <%= note.title%></strong> - <span class="excerpt ng-binding"
                                                                           ng-bind-html-unsafe="note.excerpt"></span><span
-                                          class="chat-meta" ng-show="note.content"><i class="icon-comment"></i>  <%= note.content%> {{_('content')}}</span>
+                                          class="chat-meta" ng-show="note.content"><i class="icon-comment"></i>  <%= note.content%> {{ _('content') }}</span>
                                    
                                   </span>
                                                     </div>
@@ -448,14 +485,15 @@
                                                     <form id="addNote" class="ng-pristine ng-valid">
                                                         <div class="form-group">
                                                             <input class="form-control ng-pristine ng-valid"
-                                                                   autofocus="" type="text" placeholder="{{_('Title')}}"
+                                                                   autofocus="" type="text"
+                                                                   placeholder="{{ _('Title') }}"
                                                                    id="messageSubject" ng-model="newnote.title">
                                                         </div>
                                                         <div class="form-group">
                                                             <textarea id="noteBody"
                                                                       class="form-control ng-pristine ng-valid" rows="3"
                                                                       ng-model="newnote.content"
-                                                                      placeholder="{{_('Note ...')}}"></textarea>
+                                                                      placeholder="{{ _('Note ...') }}"></textarea>
                                                         </div>
                                                         <div class="pull-right">
                                                             <input ng-disabled="!newnote.title" ng-click="addNote()"
@@ -502,10 +540,11 @@
                             <div>
                                 <div class="news-block-tags" ng-show="inProfile.experiences['current-position']"
                                      style="margin-bottom:10px;">
-                                    <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{_('We
-                                        found diffrent possible matches. Click the one you want :')}}</strong>
+                                    <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{ _('We
+                                        found diffrent possible matches. Click the one you want :') }}</strong>
                                 </div>
-                                <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px" ng-show="inList.length > 0">
+                                <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px"
+                                    ng-show="inList.length > 0">
                                     <li ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)"
                                         title="Select" class="linkedin-item-on-list" ng-repeat="profile in inList"
                                         style="margin-bottom:10px padding-left:10px;cursor:pointer"
@@ -544,8 +583,8 @@
                          ng-show="inCList.length > 0||linkedListLoader">
                         <div class="portlet-title line">
                             <div class="caption"><i class="fa fa-linkedin" style='color:#169ef4'></i>
-                                <span ng-hide="linkedListLoader">{{_('Do you mean...')}}</span><span
-                                        ng-show="linkedListLoader">{{_('Searching...')}}</span>
+                                <span ng-hide="linkedListLoader">{{ _('Do you mean...') }}</span><span
+                                        ng-show="linkedListLoader">{{ _('Searching...') }}</span>
 
                             </div>
                             <span ng-hide="isEmpty(inCProfile)" class="pull-right" ng-click="clearLinkedin()"> <i
@@ -562,8 +601,8 @@
                             <div>
                                 <div class="news-block-tags" ng-show="inCProfile.experiences['current-position']"
                                      style="margin-bottom:10px;">
-                                    <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{_('We
-                                        found diffrent possible matches. Click the one you want :')}}</strong>
+                                    <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{ _('We
+                                        found diffrent possible matches. Click the one you want :') }}</strong>
                                 </div>
 
                                 <ul ng-show="inCList.length >= 4&&isEmptyArray(inCShortProfiles)"
@@ -634,7 +673,7 @@
                     <div class="portlet showPage rightCardContent" ng-show="twList.length > 0||twIsSearching">
                         <div class="portlet-title line">
                             <div class="caption"><i class="fa fa-twitter" style='color:#169ef4;font-size: 21px;'></i>
-                                {{_('Twitter')}}
+                                {{ _('Twitter') }}
 
                             </div>
                             <span ng-hide="isEmpty(twProfile)" class="pull-right" ng-click="clearLinkedin()"> <i
@@ -733,7 +772,7 @@
                                 <div ng-hide="isEmptyArray(twProfile.experiences['current-position'])"
                                      class="news-block-tags" style="margin-bottom:10px;">
                                     <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i
-                                            class="fa fa-male"></i> {{_('current positions')}}</strong>
+                                            class="fa fa-male"></i> {{ _('current positions') }}</strong>
                                 </div>
 
                                 <ul ng-hide="isEmptyArray(twProfile.experiences['current-position'])"
@@ -771,7 +810,7 @@
                                 <div ng-hide="isEmptyArray(twProfile.formations)" ng-show="" class="news-block-tags"
                                      style="margin-bottom:10px;  ">
                                     <strong style="font-size: 17px;color: rgb(25, 133, 188);"><i
-                                            class="fa fa-briefcase"></i>{{_(' education')}}</strong>
+                                            class="fa fa-briefcase"></i>{{ _(' education') }}</strong>
                                 </div>
                                 <ul class="list-unstyled contact-infos" style="padding-left:10px">
                                     <li ng-repeat="formation in twProfile.formations" style="margin-bottom:10px">
@@ -782,7 +821,7 @@
                                 </ul>
                                 <div ng-show="twProfile.resume" class="news-block-tags" style="margin-bottom:10px;">
                                     <strong style="   font-size: 17px;color: rgb(25, 133, 188);"><i
-                                            class="fa fa-comment"></i>{{_(' Summary')}}
+                                            class="fa fa-comment"></i>{{ _(' Summary') }}
                                     </strong>
                                 </div>
                                 <div class="news-block-tags">
@@ -796,7 +835,7 @@
                                 <div class="news-block-tags" ng-show="twProfile.experiences['past-position']"
                                      style="margin-bottom:10px;">
                                     <strong style="  color: rgb(25, 133, 188);font-size: 17px;"><i
-                                            class="fa fa-bookmark"></i>{{_(' past positions')}}</strong>
+                                            class="fa fa-bookmark"></i>{{ _(' past positions') }}</strong>
                                 </div>
                                 <ul class="list-unstyled contact-infos" style="padding-left:10px;">
                                     <li style="margin-bottom:10px"
@@ -841,17 +880,17 @@
                     <div class="portlet showPage rightCardContent">
                         <div class="portlet-title line">
                             <div class="caption">
-                                <i class="fa fa-lock"></i>{{_('Who can access ?')}}
+                                <i class="fa fa-lock"></i>{{ _('Who can access ?') }}
                             </div>
                         </div>
                         <div class="portlet-body">
                             <label class="radio line">
                                 <input type="radio" value="public" ng-model="contact.access"/>
-                                {{_('public: Anyone within your organization can access and find')}}
+                                {{ _('public: Anyone within your organization can access and find') }}
                             </label>
                             <label class="radio line">
                                 <input type="radio" value="private" ng-model="contact.access"/>
-                                {{_('private: only you and your collaborators')}}
+                                {{ _('private: only you and your collaborators') }}
                             </label>
                         </div>
                     </div>
@@ -865,22 +904,25 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="lunchWindow()"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        ng-click="lunchWindow()"></button>
                 <h3 id="myModalLabel" style="text-align:center; ">{{ _("Install chrome extension") }}</h3>
             </div>
             <div class="modal-body">
                 <div ng-show="browser=='chrome'" class="row" style="text-align: center;">
-                     <p style="margin: 25px; font-size: 18px;text-align: center;">  Click to install ioGrow extension to get all linkedin informations of your lead with one click ! </p>
-                      <button type="button" class="btn red" onclick="chrome.webstore.install()">
-                          Install chrome extension
-                      </button>
+                    <p style="margin: 25px; font-size: 18px;text-align: center;"> Click to install ioGrow extension to
+                        get all linkedin informations of your lead with one click ! </p>
+                    <button type="button" class="btn red" onclick="chrome.webstore.install()">
+                        Install chrome extension
+                    </button>
                 </div>
                 <div ng-show="browser=='other'" class="row" style="padding:25px; text-align: center; font-size: 18px">
-                    <p>  Use chrome browser to get  all linkedin informations of your lead with one click ! </p>
+                    <p> Use chrome browser to get all linkedin informations of your lead with one click ! </p>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="lunchWindow()">{{ _('Cancel') }}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true"
+                        ng-click="lunchWindow()">{{ _('Cancel') }}</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -892,40 +934,40 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">{{_("Add Address")}}</h3>
+                <h3 class="modal-title">{{ _("Add Address") }}</h3>
             </div>
             <div class="modal-body">
                 <form id="addAddress" name="addemail" class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-md-3 control-label">{{_("Street")}} </label>
+                        <label class="col-md-3 control-label">{{ _("Street") }} </label>
 
                         <div class="col-md-9">
                             <input type="text" class="form-control" id="id_street" ng-model="address.street">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label">{{_("City")}} </label>
+                        <label class="col-md-3 control-label">{{ _("City") }} </label>
 
                         <div class="col-md-9">
                             <input type="text" class="form-control" id="id_city" ng-model="address.city">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label">{{_("State/Province")}} </label>
+                        <label class="col-md-3 control-label">{{ _("State/Province") }} </label>
 
                         <div class="col-md-9">
                             <input type="text" class="form-control" id="id_state" ng-model="address.state">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label">{{_("Postal Code")}} </label>
+                        <label class="col-md-3 control-label">{{ _("Postal Code") }} </label>
 
                         <div class="col-md-9">
                             <input type="text" class="form-control" id="id_postal" ng-model="address.postal">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label">{{_("Country")}} </label>
+                        <label class="col-md-3 control-label">{{ _("Country") }} </label>
 
                         <div class="col-md-9">
                             <input type="text" class="form-control" id="id_country" ng-model="address.country">
@@ -934,9 +976,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_('Cancel')}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</button>
                 <input type="submit" ng-click="pushElement(address,addresses,'addresses')" class="btn green"
-                       value="{{_('Add this address')}}">
+                       value="{{ _('Add this address') }}">
             </div>
         </div>
     </div>
@@ -946,12 +988,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">{{_("Edit Lead")}}</h3>
+                <h3 class="modal-title">{{ _("Edit Lead") }}</h3>
             </div>
             <div class="modal-body">
                 <form name="editlead" class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-md-3 control-label">{{_("Tagline")}} </label>
+                        <label class="col-md-3 control-label">{{ _("Tagline") }} </label>
 
                         <div class="col-md-9">
                             <textarea class="form-control ng-pristine ng-valid" rows="3"
@@ -961,9 +1003,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
                 <button type="submit" class="btn btn-primary addContactNow" ng-click="updateTagline(contact)">
-                    {{_("Save")}}
+                    {{ _("Save") }}
                 </button>
             </div>
         </div>
@@ -975,12 +1017,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">{{_("Edit Contact")}}</h3>
+                <h3 class="modal-title">{{ _("Edit Contact") }}</h3>
             </div>
             <div class="modal-body">
                 <form id="editTagline" name="edittag" ng-submit="updateintro(contact)" class="form-horizontal">
                     <div class="form-group">
-                        <label class=" col-md-3 control-label">{{_("Introduction")}} </label>
+                        <label class=" col-md-3 control-label">{{ _("Introduction") }} </label>
 
                         <div class="col-md-9">
                             <textarea class="form-control ng-pristine ng-valid" rows="3"
@@ -990,8 +1032,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button type="submit" class="btn btn-primary addContactNow">{{_("Save")}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
+                <button type="submit" class="btn btn-primary addContactNow">{{ _("Save") }}</button>
             </div>
         </div>
     </div>
@@ -1002,7 +1044,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h3 id="myModalLabel" style="text-align: center;font-size: 24px;margin-top: 10px;">{{ _("A contact with this name already exist") }}</h3>
+                <h3 id="myModalLabel"
+                    style="text-align: center;font-size: 24px;margin-top: 10px;">{{ _("A contact with this name already exist") }}</h3>
             </div>
             <div class="modal-body">
                 <div ng-repeat="sContact in similarContacts" class="row">
@@ -1011,15 +1054,16 @@
                              class="img-responsive  profile-photo-large">
                         <h3 class="text-center"><%= sContact.firstname %> <%= sContact.lastname %></h3>
 
-                        <h3 class="text-center"><%= sContact.title %> <%= (sContact.company) ? "at " + sContact.company : ""
+                        <h3 class="text-center"><%= sContact.title %> <%= (sContact.company) ? "at " + sContact.company
+                            : ""
                             %></h3>
                         <div style="text-align: center;height: 25px;margin-top: 10px;margin-bottom: 10px;">
-                                <a class="btn btn-primary" ng-disabled="sContact.isMerged"
-                                   ng-click="mergeContact(sContact, contact);sContact.isMerged=true">{{ _("Merge this Contact") }}</a>
-                                <a class="btn btn-default"
-                                   ng-click="openContactDetailView(sContact.id)">{{ _("Detail") }}</a>
+                            <a class="btn btn-primary" ng-disabled="sContact.isMerged"
+                               ng-click="mergeContact(sContact, contact);sContact.isMerged=true">{{ _("Merge this Contact") }}</a>
+                            <a class="btn btn-default"
+                               ng-click="openContactDetailView(sContact.id)">{{ _("Detail") }}</a>
                         </div>
-                        
+
                     </div>
                 </div>
                 <span class="or_separator">
@@ -1027,7 +1071,8 @@
                 </span>
 
                 <div style="text-align: center;">
-                    <a class="btn btn-success" ng-click="save(contact, true);endError()">{{ _("Create a new contact") }}</a>
+                    <a class="btn btn-success"
+                       ng-click="save(contact, true);endError()">{{ _("Create a new contact") }}</a>
                     <button type="button" class="btn default" data-dismiss="modal"
                             ng-click="endError()">{{ _("Close") }}
                     </button>

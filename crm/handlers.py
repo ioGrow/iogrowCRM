@@ -1,4 +1,3 @@
-import csv
 import datetime
 import json
 import logging
@@ -15,7 +14,6 @@ import sfoauth2
 import stripe
 import webapp2
 from apiclient.discovery import build
-from google.appengine._internal.django.utils.encoding import smart_str
 from google.appengine.api import mail
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
@@ -35,7 +33,6 @@ from oauth2client.appengine import OAuth2Decorator
 from oauth2client.client import FlowExchangeError
 from oauth2client.client import flow_from_clientsecrets
 from requests.auth import HTTPBasicAuth
-from simple_salesforce import Salesforce
 from webapp2_extras import i18n
 from webapp2_extras import sessions
 
@@ -45,7 +42,7 @@ from crm.iomodels.cases import Case
 from endpoints_helper import EndpointsHelper
 from iograph import Edge
 from iomodels import config as app_config
-from model import Application, STANDARD_TABS, ADMIN_TABS, User, Organization
+from model import Application, STANDARD_TABS, ADMIN_TABS, Organization
 
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
@@ -115,29 +112,6 @@ FOLDERS = {
 }
 folders = {}
 
-def track_mp_action(project_id, user_id, action, params=None):
-    mp = Mixpanel(project_id)
-    if params:
-        mp.track(user_id, action, params)
-    else:
-        mp.track(user_id, action)
-
-
-def people_set_mp(project_id, user_id, params):
-    mp = Mixpanel(project_id)
-    mp.people_set(user_id, params)
-
-
-def track_with_intercom(api, params):
-    return requests.post(
-        api,
-        auth=HTTPBasicAuth('a1tdujgo', 'c1ba3b4060accfdfcbeb0c0b8d38c8bfa8753daf'),
-        headers={
-            'Accept': 'application/json',
-            'content-type': 'application/json'
-        },
-        data=json.dumps(params)
-    )
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -295,7 +269,7 @@ class WelcomeHandler(BaseHandler, SessionEnabledHandler):
                 }
             except:
                 print 'an error has occured'
-        template = jinja_environment.get_template('templates/new_web_site/index.html')
+        template = jinja_environment.get_template('templates/landing/index.html')
         self.response.out.write(template.render(template_values))
 
 
@@ -320,7 +294,7 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
                     'CLIENT_ID': CLIENT_ID,
                     'ID': user_id
                 }
-                template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
+                template = jinja_environment.get_template('templates/landing/sign-in.html')
                 self.response.out.write(template.render(template_values))
             except:
                 print 'an error has occured'
@@ -335,7 +309,7 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
                 'CLIENT_ID': CLIENT_ID,
                 'ID': user_id
             }
-            template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
+            template = jinja_environment.get_template('templates/landing/sign-in.html')
             self.response.out.write(template.render(template_values))
 
 
@@ -344,42 +318,35 @@ class SignInWithioGrow(BaseHandler, SessionEnabledHandler):
         template_values = {
             'CLIENT_ID': CLIENT_ID
         }
-        template = jinja_environment.get_template('templates/new_web_site/sign-in-from-chrome.html')
-        self.response.out.write(template.render(template_values))
-
-
-class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/chrome.html')
+        template = jinja_environment.get_template('templates/landing/sign-in-from-chrome.html')
         self.response.out.write(template.render(template_values))
 
 
 class TermsOfServicesHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/terms-of-services.html')
+        template = jinja_environment.get_template('templates/landing/terms-of-services.html')
         self.response.out.write(template.render(template_values))
 
 
 class PartnersHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/partners.html')
+        template = jinja_environment.get_template('templates/landing/partners.html')
         self.response.out.write(template.render(template_values))
 
 
 class PrivacyHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/privacy-policy.html')
+        template = jinja_environment.get_template('templates/landing/privacy-policy.html')
         self.response.out.write(template.render(template_values))
 
 
 class SecurityInformationsHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/security-informations.html')
+        template = jinja_environment.get_template('templates/landing/security-informations.html')
         self.response.out.write(template.render(template_values))
 
 
@@ -520,21 +487,6 @@ class ChangeActiveAppHandler(SessionEnabledHandler):
                     self.redirect('/error')
             else:
                 self.redirect('/')
-        else:
-            self.redirect('/sign-in')
-
-class SignUpHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-            user = self.get_user_from_session()
-            if model.CountryCurrency.get_by_code('US') is None:
-                model.CountryCurrency.init()
-            model.User.set_default_currency(user, self.request.headers.get('X-AppEngine-Country'))
-            template_values = {
-                'userinfo': user,
-                'CLIENT_ID': CLIENT_ID}
-            template = jinja_environment.get_template('templates/new_web_site/sign-up.html')
-            self.response.out.write(template.render(template_values))
         else:
             self.redirect('/sign-in')
 
@@ -2075,13 +2027,11 @@ routes = [
     (r'/apps/(\d+)', ChangeActiveAppHandler),
 
     ('/welcome/', WelcomeHandler),
-    ('/chrome-extension/', ChromeExtensionHandler),
     ('/terms-of-services/', TermsOfServicesHandler),
     ('/privacy/', PrivacyHandler),
     ('/security/', SecurityInformationsHandler),
     # Authentication Handlers
     ('/sign-in', SignInHandler),
-    ('/sign-up', SignUpHandler),
     ('/gconnect', GooglePlusConnect),
     ('/install', InstallFromDecorator),
     (decorator.callback_path, decorator.callback_handler()),

@@ -45,7 +45,7 @@ def start():
         print "Add Google App engine SDK to PATH:"
         print "$ export PATH=$PATH:/path/to/google_appengine"
     else:
-        run("dev_appserver.py ./ --port 8090")
+        run("dev_appserver.py ./ --port 8090 --datastore_path=iogrow_local.datastore")
 
 
 
@@ -68,13 +68,18 @@ def babel(extract=False, init =False, compile=False, update=False):
     if not find_executable("pybabel"):
         print "Installing babel ..."
         run("sudo pip install babel")
+
+    if not (init or extract or compile or update ):
+        print "Please choose a command: \n --init, -i \n --extract, -e \n --compile, -c \n --update, -u"
+
     if init:
         lang = raw_input("language to initialize?")
         run("pybabel init -l %s -d ./locale -i ./locale/messages.pot" % lang)
     if extract:
-        run("pybabel extract -F ./babel.cfg -o ./locale/messages.pot ./")
+        run("pybabel extract -F ./locale/babel.cfg -o ./locale/messages.pot ./")
     if compile:
         run("pybabel compile -f -d ./locale")
     if update:
-        lang = raw_input("language to update?")
-        run("pybabel update -l %s -d ./locale -i ./locale/messages.pot" % lang)
+        LANGS = ["ar", "en", "es_ES", "fr", "pt_BR" ]
+        for lang in LANGS:
+            run("pybabel update -l %s -d ./locale -i ./locale/messages.pot" % lang)
