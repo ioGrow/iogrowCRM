@@ -1,5 +1,13 @@
 <style>
- .or_separator > hr { width: 40%;display: inline-flex; padding-top: 4px;}.or_separator > span {margin: 10px;}
+    .or_separator > hr {
+        width: 40%;
+        display: inline-flex;
+        padding-top: 4px;
+    }
+
+    .or_separator > span {
+        margin: 10px;
+    }
 </style>
 <div class="row subHeader actionsBar">
     <table style="width:100%;height: 55px;">
@@ -9,29 +17,31 @@
                 <div class="btn-group">
                     <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
                         {% if active_app.label =="Relationships" %}
-                        <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png"
-                             style="display:inline-block;height: 20px;margin-right: 3px;">
+                            <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png"
+                                 style="display:inline-block;height: 20px;margin-right: 3px;">
                         {% else %}
-                        <img class="app_icon" src="../../static/src/img/admin_min.png"
-                             style="display:inline-block;height: 20px;margin-right: 3px;">
+                            <img class="app_icon" src="../../static/src/img/admin_min.png"
+                                 style="display:inline-block;height: 20px;margin-right: 3px;">
                         {% endif %}
                         <span class="hide_sm">{{ _(active_app.label) }}</span>
                         <i class="icon-angle-down fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu">
                         {% for application in apps %}
-                        {% if application.label =="Relationships" %}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{
-                            _(application.label) }}
-                        </a>
-                        </li>
-                        {% else %}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{
-                            _(application.label) }}
-                        </a>
-                        </li>
+                            {% if application.label =="Relationships" %}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
+                                                                                                        src="../../static/src/img/sm-iogrow-true.png"
+                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                </a>
+                                </li>
+                            {% else %}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
+                                                                                                        src="../../static/src/img/admin_min.png"
+                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                </a>
+                                </li>
 
-                        {% endif %}
+                            {% endif %}
 
 
                         {% endfor %}
@@ -60,12 +70,12 @@
 
                     <div style=" padding-left: 10px;" class="pull-right">
                         {% for application in apps %}
-                        {% if application.label =="Settings" %}
-                        <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
-                           style="margin-left: 20px; margin-right: 12px;">
-                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>
-                        {% endif %}
+                            {% if application.label =="Settings" %}
+                                <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
+                                   style="margin-left: 20px; margin-right: 12px;">
+                                    <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                                </a>
+                            {% endif %}
                         {% endfor %}
                         <div class="btn-group show_sm"
                              style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
@@ -74,14 +84,14 @@
                             </a>
                             <ul class="dropdown-menu drp-dwn-right">
                                 {% for application in apps %}
-                                {% if application.label =="Settings" %}
-                                <li>
-                                    <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
-                                        <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                                        Settings
-                                    </a>
-                                </li>
-                                {% endif %}
+                                    {% if application.label =="Settings" %}
+                                        <li>
+                                            <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
+                                                <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                                                Settings
+                                            </a>
+                                        </li>
+                                    {% endif %}
                                 {% endfor %}
                             </ul>
                         </div>
@@ -214,7 +224,7 @@
 
                                                         ng-model="phone.number"
                                                         placeholder="{{ _('Add a number') }}"
-                                                        >
+                                                >
                                             </div>
                                         </form>
                                         <ul class="list-unstyled contact-infos infoslist">
@@ -312,7 +322,7 @@
                                                 <div class="form-group  col-md-12 margin-bottom-10">
                                                     <select class="form-control" ng-model="status_selected"
                                                             ng-options="leadstat.status for leadstat in leadstatuses |   orderBy: 'status':true">
-                                                            <option value="" disabled selected>{{ _('Select lead
+                                                        <option value="" disabled selected>{{ _('Select lead
                                                             Status') }}:
                                                         </option>
                                                         <option value=""><%=lead.status%></option>
@@ -354,7 +364,8 @@
                                                 style="padding-bottom: 5px;">
                                                 <div class="cont">
                                                     <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
-                                                       style="display: inline-block;   float: left;"><img width="28" ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                       style="display: inline-block;   float: left;"><img width="28"
+                                                                                                          ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                             <span onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                   title="<%= sociallink.url%>"
                                                   style="line-height: 25px;font-size: 15px;padding-left: 20px; display: inline-block; float: left; cursor:pointer">
@@ -438,40 +449,69 @@
                                         </div>
 
                                     </div>
-                                <div class="news-blocks blank-card blank-card-gray relatedBlock">
+                                    <div class="news-blocks blank-card blank-card-gray relatedBlock">
                                 <span class="page-meta pull-right" ng-show="!isEmptyArray(leads.customfields)">
-                                               <a href="/#/admin/custom_fields/1"  class="btn-link addAnotherPhone" data-toggle="modal" style="color:gray;"><i class="fa fa-pencil"></i> {{_('Edit Custom fields')}} </a>
+                                               <a href="/#/admin/custom_fields/1" class="btn-link addAnotherPhone"
+                                                  data-toggle="modal" style="color:gray;"><i
+                                                       class="fa fa-pencil"></i> {{ _('Edit Custom fields') }} </a>
                                              </span>
-                                    <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
+                                        <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt"
+                                                                       style="font-size:24px"></i>{{ _(' Custom Fields') }}
+                                        </h3>
                                         <div ng-show="isEmptyArray(leads.customfields)" style="text-align:center">
-                                                  <a href="/#/admin/custom_fields/1" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
-                                                    + <i class="fa fa-list-alt"></i>  Add Custom fields
-                                                  </a>
+                                            <a href="/#/admin/custom_fields/1" class=" newRelatedContact"
+                                               style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                + <i class="fa fa-list-alt"></i> Add Custom fields
+                                            </a>
                                         </div>
-                                        <ul ng-show="!isEmptyArray(leads.customfields)" style="list-style: none;padding-left: 0px;">
-                                            <li ng-repeat="cusfield in leads.customfields"  style="padding: 5px;">
+                                        <ul ng-show="!isEmptyArray(leads.customfields)"
+                                            style="list-style: none;padding-left: 0px;">
+                                            <li ng-repeat="cusfield in leads.customfields" style="padding: 5px;">
                                                 <div class="form-group" style="margin-bottom: 5px;">
                                                     <div class="row">
-                                                        <label ng-model="cusfield.field" class="control-label col-md-12">
+                                                        <label ng-model="cusfield.field"
+                                                               class="control-label col-md-12">
                                                             <%=cusfield.name%>
                                                         </label>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-12" id="elementContainer" >
-                                                            <select class="form-control" ng-show="cusfield.field_type=='list'" ng-change="addCustomField(cusfield)"  ng-model="cusfield.value" ng-options="option for option in cusfield.options">
+                                                        <div class="col-md-12" id="elementContainer">
+                                                            <select class="form-control"
+                                                                    ng-show="cusfield.field_type=='list'"
+                                                                    ng-change="addCustomField(cusfield)"
+                                                                    ng-model="cusfield.value"
+                                                                    ng-options="option for option in cusfield.options">
                                                             </select>
-                                                            <div ng-show="cusfield.field_type=='radio'" role="radiogroup" ng-repeat="option in cusfield.options">
-                                                                <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>" type="radio" ng-model="cusfield.value" value="<%=option%>"  ng-click="addCustomField(cusfield)">
-                                                                <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>" ng-click="addCustomField(cusfield)"> <%=option%></label>
+                                                            <div ng-show="cusfield.field_type=='radio'"
+                                                                 role="radiogroup"
+                                                                 ng-repeat="option in cusfield.options">
+                                                                <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>"
+                                                                       type="radio" ng-model="cusfield.value"
+                                                                       value="<%=option%>"
+                                                                       ng-click="addCustomField(cusfield)">
+                                                                <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>"
+                                                                       ng-click="addCustomField(cusfield)">
+                                                                    <%=option%></label>
                                                                 <br>
                                                             </div>
-                                                            <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
-                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
-                                                                <label for="<%=option%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
+                                                            <div ng-show="cusfield.field_type=='checkbox'"
+                                                                 role="radiogroup"
+                                                                 ng-repeat="option in cusfield.options">
+                                                                <input type="checkbox" value="<%=option%>"
+                                                                       ng-click="addCustomField(cusfield,option)"
+                                                                       ng-checked="cusfield.value.indexOf(option) > -1">
+                                                                <label for="<%=option%>">
+                                                                    <%=option%></label ng-click="addCustomField(cusfield,option)">
                                                                 <br>
                                                             </div>
-                                                            <input ng-blur="addCustomField(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">
-                                                            <textarea ng-model="cusfield.value" ng-blur="addCustomField(cusfield)" class="form-control" ng-show="cusfield.field_type=='paragraph'"></textarea>
+                                                            <input ng-blur="addCustomField(cusfield)"
+                                                                   ng-model="cusfield.value" type="text"
+                                                                   class="form-control"
+                                                                   ng-show="cusfield.field_type=='text'">
+                                                            <textarea ng-model="cusfield.value"
+                                                                      ng-blur="addCustomField(cusfield)"
+                                                                      class="form-control"
+                                                                      ng-show="cusfield.field_type=='paragraph'"></textarea>
 
                                                         </div>
 
@@ -479,8 +519,8 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                    <div class="clearfix"></div>
-                                </div>
+                                        <div class="clearfix"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -827,22 +867,25 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="lunchWindow()"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        ng-click="lunchWindow()"></button>
                 <h3 id="myModalLabel" style="text-align:center; ">{{ _("Install chrome extension") }}</h3>
             </div>
             <div class="modal-body">
                 <div ng-show="browser=='chrome'" class="row" style="text-align: center;">
-                     <p style="margin: 25px; font-size: 18px;text-align: center;">  Click to install ioGrow extension to get all linkedin informations of your lead with one click ! </p>
-                      <button type="button" class="btn red" onclick="chrome.webstore.install()">
-                          Install chrome extension
-                      </button>
+                    <p style="margin: 25px; font-size: 18px;text-align: center;"> Click to install ioGrow extension to
+                        get all linkedin informations of your lead with one click ! </p>
+                    <button type="button" class="btn red" onclick="chrome.webstore.install()">
+                        Install chrome extension
+                    </button>
                 </div>
                 <div ng-show="browser=='other'" class="row" style="padding:25px; text-align: center; font-size: 18px">
-                    <p>  Use chrome browser to get  all linkedin informations of your lead with one click ! </p>
+                    <p> Use chrome browser to get all linkedin informations of your lead with one click ! </p>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="lunchWindow()">{{ _('Cancel') }}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true"
+                        ng-click="lunchWindow()">{{ _('Cancel') }}</button>
             </div>
         </div>
         <!-- /.modal-content -->

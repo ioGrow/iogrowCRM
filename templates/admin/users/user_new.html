@@ -1,34 +1,37 @@
 <div class="row subHeader">
     <div class="currentApp">
-         <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown">
+                {{ _(active_app.label) }}
+                <i class="icon-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                {% for application in apps %}
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
+                    <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a>
+                    </li>
 
-            {%endfor%}
-           </ul>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 
     <div class=" subHeaderContent">
-      <h2 class="page-title">
-                <a href="/#/admin/users" data-toggle="tooltip" data-placement="bottom" title="Back to users">
-                    <img onload="this.__gwtLastUnhandledEvent = & quot;
+        <h2 class="page-title">
+            <a href="/#/admin/users" data-toggle="tooltip" data-placement="bottom" title="Back to users">
+                <img onload="this.__gwtLastUnhandledEvent = & quot;
                             load & quot;
-                            ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
-                </a>
-                {{_("Users")}} >
-                
-            </h2>
+                            ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif"
+                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;"
+                     border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
+            </a>
+            {{ _("Users") }} >
+
+        </h2>
     </div>
 
 </div>
-<div  class="page-content">
+<div class="page-content">
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
             <div class="loader-content">
@@ -44,84 +47,99 @@
             </span>
         </div>
     </div>
-    <div class="row" >
+    <div class="row">
         <div class="col-md-9">
             <div class="row">
-                
+
                 <div class="showPage slimForm col-md-12">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-9">
-                                   
-                                        <div class="row">
-                                            <div class="col-md-9">
-                                                <div class="form-group">
-                                                    <span>{{_('Invite people from your team and start working together in seconds.')}} {{_('Everyone you invite will receive a welcome email.')}}</span>
-                                                    <br>
-                                                    <br>
-                                                    <div class="col-md-12">
 
-                                                      <ul class="list-unstyled contact-infos">
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <div class="form-group">
+                                                <span>{{ _('Invite people from your team and start working together in seconds.') }} {{ _('Everyone you invite will receive a welcome email.') }}</span>
+                                                <br>
+                                                <br>
+                                                <div class="col-md-12">
+
+                                                    <ul class="list-unstyled contact-infos">
                                                         <li ng-show="showEmailForm">
                                                             <div class="row">
                                                                 <form class="form-inline newLeadForm" role="form">
                                                                     <div class="form-group lg-group" style="">
                                                                         <label class="sr-only" for="exampleInputEmail2">Email</label>
-                                                                        <input type="email" class="form-control" id="exampleInputEmail2" ng-model="email.email" placeholder="exp@gmail.com" required>
+                                                                        <input type="email" class="form-control"
+                                                                               id="exampleInputEmail2"
+                                                                               ng-model="email.email"
+                                                                               placeholder="exp@gmail.com" required>
                                                                     </div>
-                                                                    <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(email, emails, 'emails')" >{{_('Add')}}</button>
-                                                                    <button type="submit" ng-click="showEmailForm = false" class="btn btn-default">X</button>
+                                                                    <button type="submit"
+                                                                            class="btn blue jfk-button jfk-button-action"
+                                                                            ng-click="pushElement(email, emails, 'emails')">{{ _('Add') }}</button>
+                                                                    <button type="submit"
+                                                                            ng-click="showEmailForm = false"
+                                                                            class="btn btn-default">X
+                                                                    </button>
                                                                 </form>
                                                             </div>
                                                         </li>
                                                         <li ng-repeat="email in emails">
-                                                            <a editoptions editdataattr="deleteInfos(emails,$index)"  editable-text="email.email" >
+                                                            <a editoptions editdataattr="deleteInfos(emails,$index)"
+                                                               editable-text="email.email">
                                                                 <%=email.email %>
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a class="btn-link addAnotherPhone" ng-hide="showEmailForm" ng-click="showEmailForm = true">
-                                                                <i class="icon-plus"></i> {{_('Add a new email address')}} </a>
+                                                            <a class="btn-link addAnotherPhone" ng-hide="showEmailForm"
+                                                               ng-click="showEmailForm = true">
+                                                                <i class="icon-plus"></i> {{ _('Add a new email address') }}
+                                                            </a>
                                                         </li>
                                                     </ul>
 
-                                                  <br>
-                                                  <div class="form-group">
-                                                    <textarea id="some-textarea" placeholder="{{_('Hi i want to add you to this project ...')}}" id="noteBody" class="form-control ng-pristine ng-valid " rows="7" ng-model="message"></textarea>
-                                                     </div>
-                                                        
-                                                  </div>
+                                                    <br>
+                                                    <div class="form-group">
+                                                        <textarea id="some-textarea"
+                                                                  placeholder="{{ _('Hi i want to add you to this project ...') }}"
+                                                                  id="noteBody"
+                                                                  class="form-control ng-pristine ng-valid " rows="7"
+                                                                  ng-model="message"></textarea>
+                                                    </div>
+
                                                 </div>
                                             </div>
-
-                                 
                                         </div>
-                                       
+
+
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                 <a class="btn red newBtn pull-right" href="/#/admin/users" ng-click="addNewUser(message)"  >
-                                              {{_('Invite')}}    
-                                            </a>
+                                <a class="btn red newBtn pull-right" href="/#/admin/users"
+                                   ng-click="addNewUser(message)">
+                                    {{ _('Invite') }}
+                                </a>
                             </div>
-                        
+
                         </div>
                     </div>
                 </div>
             </div>
 
-           
+
         </div>
-        
-   
+
+
     </div>
 </div>
 
 
-
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         $('#datetimepicker2').datetimepicker({
             language: 'fr',
             pickTime: false

@@ -1,136 +1,143 @@
 <div class="row subHeader">
-  <div class="currentApp">
-    <h2 class="page-title">
-      {{_(active_app.label)}}
-    </h2>
-  </div>
-  <div class=" subHeaderContent">
-    <!-- <div class="pull-right sharebuttonDiv">
+    <div class="currentApp">
+        <h2 class="page-title">
+            {{ _(active_app.label) }}
+        </h2>
+    </div>
+    <div class=" subHeaderContent">
+        <!-- <div class="pull-right sharebuttonDiv">
       <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
         <i class="icon-lock"></i>
         {{ _("Share") }}
       </a>
     </div> -->
-    <h2 class="page-title" >
-      <a href="<%=uri%>" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
-        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/src/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
-      </a>
-      <%=note.about.kind%> > <%=note.about.name%>
-    </h2>
-  </div>
-</div>
-<div  class="page-content">
-  <div class="loader-container row" ng-show="isLoading">
-    <div class="loader-dialog col-md-4 col-md-offset-4 ">
-      <div class="loader-content">
-        {{_('Loading...')}}
-      </div>
+        <h2 class="page-title">
+            <a href="<%=uri%>" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
+                <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/src/img/clear.cache.gif"
+                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;"
+                     border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
+            </a>
+            <%=note.about.kind%> > <%=note.about.name%>
+        </h2>
     </div>
-  </div>
-  <div class="container" ng-show="immediateFailed">
-    <div class="col-md-12">
+</div>
+<div class="page-content">
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                {{ _('Loading...') }}
+            </div>
+        </div>
+    </div>
+    <div class="container" ng-show="immediateFailed">
+        <div class="col-md-12">
 
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
+        </div>
     </div>
-  </div>
-<div  class="row">
-  <div class="col-md-9">
     <div class="row">
+        <div class="col-md-9">
+            <div class="row">
 
-      <div class="showPage custom-show margin-bottom-15  col-md-12">
+                <div class="showPage custom-show margin-bottom-15  col-md-12">
         <span class="page-meta pull-right">
           <i class="icon-pencil">
-            <a ng-click="editNote()" class="btn-link addAnotherPhone" data-toggle="modal">
-              {{_('Edit')}}
-            </a>
+              <a ng-click="editNote()" class="btn-link addAnotherPhone" data-toggle="modal">
+                  {{ _('Edit') }}
+              </a>
           </i>
            |
           <i class="icon-trash">
-            <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{_('Delete')}}
-            </a>
+              <a ng-click="editbeforedelete()" class="btn-link addAnotherPhone">  {{ _('Delete') }}
+              </a>
           </i>
         </span>
-        <h2 class="note-title">
-          <a  editable-text=" note.title" onbeforesave="inlinePatch('Note','', 'title',note.id,$data)">
-            <%= note.title%>
-          </a>
-        </h2>
-        <p>{{_('Posted by')}} <%=note.created_by.display_name%></p>
+                    <h2 class="note-title">
+                        <a editable-text=" note.title" onbeforesave="inlinePatch('Note','', 'title',note.id,$data)">
+                            <%= note.title%>
+                        </a>
+                    </h2>
+                    <p>{{ _('Posted by') }} <%=note.created_by.display_name%></p>
 
-        <div class="row margin-bottom-10">
-          <div class="col-md-2">
-            <div class="pic">
-                <img alt="<%=note.created_by.display_name%>" class="note-photo-creator" ng-src="<%=note.created_by.photo%>">
-             </div>
-             <a ng-show="showUpload" ng-click="createPickerUploader()" href="" class="btn btn-default btn-upload" data-toggle="modal" style="display: none;">
-               <img src="/static/src/img/upload_logo.png">
-             </a>
-          </div>
-          <div class="col-md-10">
-             <div class="row">
+                    <div class="row margin-bottom-10">
+                        <div class="col-md-2">
+                            <div class="pic">
+                                <img alt="<%=note.created_by.display_name%>" class="note-photo-creator"
+                                     ng-src="<%=note.created_by.photo%>">
+                            </div>
+                            <a ng-show="showUpload" ng-click="createPickerUploader()" href=""
+                               class="btn btn-default btn-upload" data-toggle="modal" style="display: none;">
+                                <img src="/static/src/img/upload_logo.png">
+                            </a>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="row">
                
                 <span class="topic-content" ng-bind-html-unsafe="note.content">
 
-                </span>  
-             </div>
-             <div class="row comments-block">
-              <div class="col-md-12">
-                <p class⁼"lead"><strong>{{ _("Discuss this message") }}</strong> </p>
-                  <form id="addComment" class="ng-pristine ng-valid">
-                    <div class="form-group">
-                      <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
-                    </div>
-                    <div class="pull-right">
-                      <input  ng-click="addComment(comment)" ng-disabled="!comment.content"  type="submit" class="btn green" value="{{_('Add comment')}}">
+                </span>
+                            </div>
+                            <div class="row comments-block">
+                                <div class="col-md-12">
+                                    <p class⁼"lead"><strong>{{ _("Discuss this message") }}</strong> </p>
+                                    <form id="addComment" class="ng-pristine ng-valid">
+                                        <div class="form-group">
+                                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3"
+                                                      ng-model="comment.content"></textarea>
+                                        </div>
+                                        <div class="pull-right">
+                                            <input ng-click="addComment(comment)" ng-disabled="!comment.content"
+                                                   type="submit" class="btn green" value="{{ _('Add comment') }}">
 
-                    </div>
-                  </form>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
 
-                <ul class="chats">
-                  <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
-                    <img class="avatar" alt="" ng-src="<%=comment.author.photo%>" />
-                    <div class="message">
-                      <span class="arrow"></span>
-                      <a href="#" class="name"><%=comment.author.display_name%></a>
+                                    <ul class="chats">
+                                        <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
+                                            <img class="avatar" alt="" ng-src="<%=comment.author.photo%>"/>
+                                            <div class="message">
+                                                <span class="arrow"></span>
+                                                <a href="#" class="name"><%=comment.author.display_name%></a>
                       <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%>
                        <a ng-click="commentDelete('<%=comment.id%>')"><i class="fa fa-trash-o"></i></a>
                       </span>
                       <span class="body">
-                      <a  editable-text="comment.content" onbeforesave="inlinePatch('Comment','', 'content',comment.id,$data)">
-                      <%=comment.content%>
+                      <a editable-text="comment.content"
+                         onbeforesave="inlinePatch('Comment','', 'content',comment.id,$data)">
+                          <%=comment.content%>
                       </a>
                       </span>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
-                  </li>
-                </ul>
 
-              </div>
+                </div>
+                <!-- END PAGE HEADER-->
+                <!-- BEGIN PAGE CONTENT-->
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="">
+                            <!-- $ tabs -->
+
+                        </div>
+                    </div>
+                </div>
             </div>
-         
-          </div>
         </div>
-
-      </div>
-      <!-- END PAGE HEADER-->
-      <!-- BEGIN PAGE CONTENT-->
-      <div class="col-md-12">
-        <div class="row">
-          <div class="">
-            <!-- $ tabs -->
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- tasks cards -->
-  <!-- <div class="col-md-3 tasks-col">
+        <!-- tasks cards -->
+        <!-- <div class="col-md-3 tasks-col">
     <div class="row">
       <div class="col-md-12">
         <div class="portlet showCard">
@@ -166,56 +173,59 @@
       </div> -->
     </div>
 
-  </div>
 </div>
-               <!--HKA 03.12.2013 Add new Contributors -->
+</div>
+<!--HKA 03.12.2013 Add new Contributors -->
 
-    <!--HKA 19.11.2013 END row-fluid-2 Span who is involved -->
+<!--HKA 19.11.2013 END row-fluid-2 Span who is involved -->
 
 
+</div>
+</div>
+<div id="addContributor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">{{ _("Involve new contributors") }}</h3>
+    </div>
+    <div class="modal-body">
+        <form id="addAccount" name="addaccount" ng-submit="addNewContributor(slected_memeber,role)"
+              class="form-horizontal">
+            <fieldset>
 
+                <p>{{ _("Invite people from your team and start working together on this task. Everyone you invite will receive an email.") }}</p>
+
+                <div>
+                    <div class="invitation" ng-show="slected_memeber">
+                        <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
+                        <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
+                    </div>
+                    <div class="control-group">
+                        <input type="text" ng-model="user"
+                               typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
+                               typeahead-on-select="selectMember()" class="input-block-level"
+                               placeholder="{{ _('Enter name or email addresse to involve people in this discussion') }}">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">{{ _("Add as:") }}</label>
+                        <div class="controls">
+                            <select class="medium m-wrap" tabindex="1" ng-model="role">
+                                <option value="responsible">{{ _("Responsible") }}</option>
+                                <option value="participant">{{ _("Participant") }}</option>
+                                <option value="invited">{{ _("Invited") }}/option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
 
     </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+        <button type="submit" class="btn blue addContactNow">{{ _("Involve") }}</button>
     </div>
-<div id="addContributor" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-       <h3 id="myModalLabel">{{_("Involve new contributors")}}</h3>
-     </div>
-     <div class="modal-body">
-        <form id="addAccount" name="addaccount" ng-submit="addNewContributor(slected_memeber,role)" class="form-horizontal">
-         <fieldset>
-
-           <p>{{ _("Invite people from your team and start working together on this task. Everyone you invite will receive an email.") }}</p>
-
-           <div>
-           <div class="invitation" ng-show="slected_memeber">
-             <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
-               <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
-           </div>
-           <div class="control-group">
-             <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="{{_('Enter name or email addresse to involve people in this discussion')}}">
-           </div>
-           <div class="control-group">
-                 <label class="control-label">{{ _("Add as:") }}</label>
-                 <div class="controls">
-                   <select class="medium m-wrap" tabindex="1" ng-model="role">
-                     <option value="responsible">{{ _("Responsible") }}</option>
-                     <option value="participant">{{ _("Participant") }}</option>
-                     <option value="invited">{{ _("Invited") }}/option>
-
-                   </select>
-                 </div>
-               </div>
-             </div>
-           </fieldset>
-
-     </div>
-     <div class="modal-footer">
-       <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-       <button  type="submit" class="btn blue addContactNow">{{_("Involve")}}</button>
-     </div>
-      </form>
+    </form>
 </div>
 
 
@@ -223,21 +233,22 @@
 <!--HKA 19.11.2013 END Span who is involved -->
 
 <!-- lebdiri arezki 28-06-2013 add edit modale added -->
-<div id="EditNoteModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="EditNoteModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
 
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Edit Note")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _("Edit Note") }}</h3>
             </div>
             <div class="modal-body">
-                <form id="editNote" name="editnote"  class="form-horizontal">
+                <form id="editNote" name="editnote" class="form-horizontal">
                     <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Title")}} *</label>
+                        <label class="required col-md-3 control-label">{{ _("Title") }} *</label>
 
                         <div class="col-md-9">
-                          <input type="text" class="form-control" required id="id_note.title"  ng-model="NewTitle">
+                            <input type="text" class="form-control" required id="id_note.title" ng-model="NewTitle">
 
                         </div>
                     </div>
@@ -245,34 +256,39 @@
                 </form>
             </div>
             <div class="modal-footer">
-                    <button class="btn" ng-click="NoteNotUpdated()" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                    <button  type="submit" ng-click="NoteUpdatedFromModal('Note','', 'title',note.id,NewTitle)" class="btn btn-primary addContactNow" data-dismiss="modal" aria-hidden="true">{{_("Save")}} </button>
+                <button class="btn" ng-click="NoteNotUpdated()" data-dismiss="modal"
+                        aria-hidden="true">{{ _("Close") }}</button>
+                <button type="submit" ng-click="NoteUpdatedFromModal('Note','', 'title',note.id,NewTitle)"
+                        class="btn btn-primary addContactNow" data-dismiss="modal"
+                        aria-hidden="true">{{ _("Save") }} </button>
             </div>
         </div>
     </div>
 </div>
 <!-- arezki lebdiri 29-06-2014  delete note-->
-<div id="BeforedeleteNote" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-  <div class="modal-content">
-      <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">{{_('Delete Note')}}</h3>
+<div id="BeforedeleteNote" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Note') }}</h3>
             </div>
             <div class="modal-body">
-               <form id="seletesho" name="deletesho" class="form-horizontal">
+                <form id="seletesho" name="deletesho" class="form-horizontal">
 
 
-                <p>{{_("Are you sure you want to delete")}} :  <%=note.title%>  .</p>
-               </form>
+                    <p>{{ _("Are you sure you want to delete") }} : <%=note.title%> .</p>
+                </form>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
-              <input  ng-click="deletenote()" type="submit" class="btn red" value="Delete this note" data-dismiss="modal" aria-hidden="true">
-              <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+                <input ng-click="deletenote()" type="submit" class="btn red" value="Delete this note"
+                       data-dismiss="modal" aria-hidden="true">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
 
-             </div>
-             </div>
-     </div>
+        </div>
+    </div>
+</div>

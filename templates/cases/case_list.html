@@ -1,84 +1,101 @@
 <div class="row subHeader actionsBar">
     <table style="width:100%;height: 55px;">
-          <tbody><tr>
+        <tbody>
+        <tr>
             <td class="appTd">
-            <div class="btn-group">
-                 <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
-                  {% if active_app.label =="Relationships" %}
-                      <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">
-                      {% else%}
-                      <img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">
-                  {% endif %}
-                  <span class="hide_sm">{{_(active_app.label)}}</span>   
-                  <i class="icon-angle-down fa fa-angle-down"></i>
-                 </a>
-                 <ul class="dropdown-menu">
-                  {%for application in apps %}
-                        {% if application.label =="Relationships" %}
-                          <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
-                          {% else%}
-                           <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a></li>
-                        
-                          {% endif %}
-                       
+                <div class="btn-group">
+                    <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
+                        {% if active_app.label =="Relationships" %}
+                            <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png"
+                                 style="display:inline-block;height: 20px;margin-right: 3px;">
+                        {% else %}
+                            <img class="app_icon" src="../../static/src/img/admin_min.png"
+                                 style="display:inline-block;height: 20px;margin-right: 3px;">
+                        {% endif %}
+                        <span class="hide_sm">{{ _(active_app.label) }}</span>
+                        <i class="icon-angle-down fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for application in apps %}
+                            {% if application.label =="Relationships" %}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
+                                                                                                        src="../../static/src/img/sm-iogrow-true.png"
+                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                </a></li>
+                            {% else %}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
+                                                                                                        src="../../static/src/img/admin_min.png"
+                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                </a></li>
 
-                  {%endfor%}
-                 </ul>
-             </div>
-          </td>
-      <td class="middleHeaderTd">
-        <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">
-               <div class="customCheckbox customCheckboxOnHeader " style="display: inline-block; float: left;">  
-                  <input ng-show="leads" title="Select lead" style="padding-top: 4px;" type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox" id="leadCheckAll">
-                  <label for="leadCheckAll" class="labelElement">
-                    <span class="check"></span>
-                    <span class="box"></span>
-                  </label>  
-              </div>
-              <h2 class="page-title" style="margin-left: 5px; font-size:20px;float: left;vertical-align: middle;">
-                {{ _("Cases")}}
-              </h2>
-              <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
-                <a class="headerBtn" title="Refresh" ng-click="runTheProcess();"> 
-                      <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>
-                <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                      <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>
-                <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                      <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>
-                <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                      <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>-->
-                  <a class="headerBtn hide_md" title="{{_('Export')}}" id="sample_editable_1_new_export" ng-click="ExportCsvFile()">
-                      <i class="fa fa-cloud-download"></i>
-                </a>
-                <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0" ng-click="checkPermissions({{ME}})"> 
-                      <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>
-                <a class="headerBtn" title="Add tags" ng-click="showAssigneeTags()" ng-hide=" selectedCards.length==0"> 
-                      + <i class="fa fa-tags"></i>
-                </a>
-                <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                      <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>-->
-              <!--  <a class="headerBtn hide_md" title="Upload" ng-click="showImportModal()"> 
-                      <i class="fa fa-cloud-upload"></i>
-                </a>
-                <a class="headerBtn hide_md" title="Download"  ng-click="ExportCsvFile()"> 
-                      <i class="fa fa-cloud-download"></i>
-                </a>-->
-                <a class="headerBtn" title="Delete"  ng-hide=" selectedCards.length==0" ng-click="editbeforedeleteselection()"> 
-                      <i class="fa fa-trash-o"></i>
-                </a>
-                <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()"> 
-                      <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>-->
-               <!-- <div class="btn-group show_md" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
-                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
-                     <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
-                   <!--  {{ _("More")}}
+                            {% endif %}
+
+
+                        {% endfor %}
+                    </ul>
+                </div>
+            </td>
+            <td class="middleHeaderTd">
+                <div class="subheadContient" style="padding-top: 5px;float: left;vertical-align: middle;">
+                    <div class="customCheckbox customCheckboxOnHeader " style="display: inline-block; float: left;">
+                        <input ng-show="leads" title="Select lead" style="padding-top: 4px;" type="checkbox"
+                               ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox"
+                               id="leadCheckAll">
+                        <label for="leadCheckAll" class="labelElement">
+                            <span class="check"></span>
+                            <span class="box"></span>
+                        </label>
+                    </div>
+                    <h2 class="page-title" style="margin-left: 5px; font-size:20px;float: left;vertical-align: middle;">
+                        {{ _("Cases") }}
+                    </h2>
+                    <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
+                        <a class="headerBtn" title="Refresh" ng-click="runTheProcess();">
+                            <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
+                        </a>
+                        <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
+                              <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
+                        </a>
+                        <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
+                              <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
+                        </a>
+                        <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
+                              <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
+                        </a>-->
+                        <a class="headerBtn hide_md" title="{{ _('Export') }}" id="sample_editable_1_new_export"
+                           ng-click="ExportCsvFile()">
+                            <i class="fa fa-cloud-download"></i>
+                        </a>
+                        <a class="" title="Share"
+                           style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;"
+                           href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0"
+                           ng-click="checkPermissions({{ ME }})">
+                            <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
+                        </a>
+                        <a class="headerBtn" title="Add tags" ng-click="showAssigneeTags()"
+                           ng-hide=" selectedCards.length==0">
+                            + <i class="fa fa-tags"></i>
+                        </a>
+                        <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
+                              <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
+                        </a>-->
+                        <!--  <a class="headerBtn hide_md" title="Upload" ng-click="showImportModal()">
+                                <i class="fa fa-cloud-upload"></i>
+                          </a>
+                          <a class="headerBtn hide_md" title="Download"  ng-click="ExportCsvFile()">
+                                <i class="fa fa-cloud-download"></i>
+                          </a>-->
+                        <a class="headerBtn" title="Delete" ng-hide=" selectedCards.length==0"
+                           ng-click="editbeforedeleteselection()">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                        <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
+                              <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
+                        </a>-->
+                        <!-- <div class="btn-group show_md" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                           <a class="headerBtn" title="More" data-toggle="dropdown">
+                              <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
+                        <!--  {{ _("More")}}
                   </a>
                   <ul class="dropdown-menu drp-dwn-right">
                     <li>
@@ -93,99 +110,127 @@
                     </li>                                                         
                   </ul>
               </div> -->
-              </div>
-              <div class="clearfix"></div>
-        </div>
-            <a href="/#/cases/new" id="new_case" class="btn red newAccountBtnOnscroll pull-right">
-             <i class="fa fa-suitcase"></i>{{ _(" New ")}}<span class="hidden-xs hiddenOnxs">{{ _("case ")}}</span>
-           </a>
-                 
-      </td> 
-      <td class="settingsTd">
-            <div style=" padding-left: 10px;" class="pull-right">
-              <div class="btn-group hide_sm" ng-class="{'filterSelected': casesfilter!='all'}" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;padding-left: 0px;padding-right: 0px;">
-                  <a class="headerBtn" title="Filter/Sort options" data-toggle="dropdown"> 
-                      <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
-                  </a>
-                  <ul class="dropdown-menu drp-dwn-right">
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
-                    <li  class="ng-menu">
-                      <a ng-click="caseFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': casesfilter == 'all'}"></i>{{ _("All Cases")}}</a>
-                    </li>
-                    <li  class="ng-menu">
-                       <a ng-click="caseFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': casesfilter == 'my'}"></i>{{ _("My  Cases")}}</a>
-                    </li>
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
-                    <li class="ng-menu">
-                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{ _("Last modified")}}</a>
-                    </li>    
-                    <li class="ng-menu">
-                      <a ng-click="orderBy('name')" href="" ><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'name'}"></i>{{ _("Name")}}</a>
-                    </li>                
-                  </ul>
-              </div>
-              <div class="btn-group">
-                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
-                    <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
-                  </a>
-                   <ul class="dropdown-menu drp-dwn-right">
-                   
-                    <li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Show tips ') }}</a></li>
-                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <a href="/#/cases/new" id="new_case" class="btn red newAccountBtnOnscroll pull-right">
+                    <i class="fa fa-suitcase"></i>{{ _(" New ") }}<span
+                        class="hidden-xs hiddenOnxs">{{ _("case ") }}</span>
+                </a>
 
-                  </ul>
-               </div>
-               {%for application in apps %}
-                 {%if application.label =="Settings" %}
-                  <a  href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings" style="margin-left: 20px; margin-right: 12px;" > 
-                      <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                  </a>
-                 {%endif%}
-               {%endfor%}  
-              <div class="btn-group show_sm" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
-                  <a class="headerBtn" title="More" data-toggle="dropdown"> 
-                      <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
-                  </a>
-                  <ul class="dropdown-menu drp-dwn-right">
-                    <li>
-                      <a class="" title="View"> 
-                        <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;" ng-show="show=='list'"></i>
-                        <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i> Help
-                      </a>
-                    </li>
-                    {%for application in apps %}
-                       {%if application.label =="Settings
-                       " %}
-                        <li>
-                        <a  href="/apps/{{ application.key.id() }}" class="" title="Settings" > 
-                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                            {{ _("Settings")}}
+            </td>
+            <td class="settingsTd">
+                <div style=" padding-left: 10px;" class="pull-right">
+                    <div class="btn-group hide_sm" ng-class="{'filterSelected': casesfilter!='all'}"
+                         style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;padding-left: 0px;padding-right: 0px;">
+                        <a class="headerBtn" title="Filter/Sort options" data-toggle="dropdown">
+                            <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
-                        </li> 
-                       {%endif%}
-                    {%endfor%}  
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Filter by")}}</li>
-                    <li  class="ng-menu">
-                      <a ng-click="caseFilterBy('all');"><i class=" checkFilterMenu fa"  ng-class="{'fa-check': casesfilter == 'all'}"></i>{{ _("All Cases")}}</a>
-                    </li>
-                    <li  class="ng-menu">
-                       <a ng-click="caseFilterBy('my','{{ME}}');"> <i class="checkFilterMenu fa" ng-class="{'fa-check': casesfilter == 'my'}"></i>{{ _("My  Cases")}}</a>
-                    </li>
-                    <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by")}}</li>
-                    <li class="ng-menu">
-                      <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{ _("Last modified")}}</a>
-                    </li>    
-                    <li class="ng-menu">
-                      <a ng-click="orderBy('name')" href="" ><i class=" checkFilterMenu fa"  ng-class="{'fa-check': order == 'name'}"></i>{{ _("Name")}}</a>
-                    </li>                                       
-                  </ul>
-              </div>           
-          </div>
-      </td>
-          </tr>
-          
+                        <ul class="dropdown-menu drp-dwn-right">
+                            <li role="presentation"
+                                class="dropdown-header cus-dropdown-header">{{ _("Filter by") }}</li>
+                            <li class="ng-menu">
+                                <a ng-click="caseFilterBy('all');"><i class=" checkFilterMenu fa"
+                                                                      ng-class="{'fa-check': casesfilter == 'all'}"></i>{{ _("All Cases") }}
+                                </a>
+                            </li>
+                            <li class="ng-menu">
+                                <a ng-click="caseFilterBy('my','{{ ME }}');"> <i class="checkFilterMenu fa"
+                                                                                 ng-class="{'fa-check': casesfilter == 'my'}"></i>{{ _("My  Cases") }}
+                                </a>
+                            </li>
+                            <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by") }}</li>
+                            <li class="ng-menu">
+                                <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"
+                                                                                ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{ _("Last modified") }}
+                                </a>
+                            </li>
+                            <li class="ng-menu">
+                                <a ng-click="orderBy('name')" href=""><i class=" checkFilterMenu fa"
+                                                                         ng-class="{'fa-check': order == 'name'}"></i>{{ _("Name") }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <a class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"
+                           href="#" data-toggle="dropdown">
+                            <i class="fa fa-question-circle"
+                               style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
+                        </a>
+                        <ul class="dropdown-menu drp-dwn-right">
+
+                            <li><a ng-click="wizard()" href="#" data-toggle="modal">{{ _('Show tips ') }}</a></li>
+                            <li><a target="new"
+                                   href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    {% for application in apps %}
+                        {% if application.label =="Settings" %}
+                            <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
+                               style="margin-left: 20px; margin-right: 12px;">
+                                <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="btn-group show_sm"
+                         style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                        <a class="headerBtn" title="More" data-toggle="dropdown">
+                            <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
+                        </a>
+                        <ul class="dropdown-menu drp-dwn-right">
+                            <li>
+                                <a class="" title="View">
+                                    <i class="fa fa-th-large" style="padding-top: 6px; font-size: 16px; display: none;"
+                                       ng-show="show=='list'"></i>
+                                    <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;"
+                                       ng-show="show=='cards'"></i> Help
+                                </a>
+                            </li>
+                            {% for application in apps %}
+                                {% if application.label =="Settings
+                       " %}
+                                    <li>
+                                        <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
+                                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                                            {{ _("Settings") }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            <li role="presentation"
+                                class="dropdown-header cus-dropdown-header">{{ _("Filter by") }}</li>
+                            <li class="ng-menu">
+                                <a ng-click="caseFilterBy('all');"><i class=" checkFilterMenu fa"
+                                                                      ng-class="{'fa-check': casesfilter == 'all'}"></i>{{ _("All Cases") }}
+                                </a>
+                            </li>
+                            <li class="ng-menu">
+                                <a ng-click="caseFilterBy('my','{{ ME }}');"> <i class="checkFilterMenu fa"
+                                                                                 ng-class="{'fa-check': casesfilter == 'my'}"></i>{{ _("My  Cases") }}
+                                </a>
+                            </li>
+                            <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by") }}</li>
+                            <li class="ng-menu">
+                                <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"
+                                                                                ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{ _("Last modified") }}
+                                </a>
+                            </li>
+                            <li class="ng-menu">
+                                <a ng-click="orderBy('name')" href=""><i class=" checkFilterMenu fa"
+                                                                         ng-class="{'fa-check': order == 'name'}"></i>{{ _("Name") }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </td>
+        </tr>
+
         </tbody>
-  </table>
+    </table>
 </div>
 
 <!--<div class="row subHeader">
@@ -231,10 +276,10 @@
             <li><a  ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a></li>
             <li><a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a></li>
             <!--li><a ng-click="orderBy('-priority')" href="#" data-toggle="modal">{{ _('Priority') }}</a></li-->
-            <!--<li><a ng-click="orderBy('status')" href="#" data-toggle="modal">{{ _('Status') }}</a></li>
+<!--<li><a ng-click="orderBy('status')" href="#" data-toggle="modal">{{ _('Status') }}</a></li>
             <!--li><a ng-click="orderBy('contact_name')" href="#" data-toggle="modal">{{ _('Contact') }}</a></li>
             <li><a ng-click="orderBy('casee_name')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
-             <!-- </ul>
+<!-- </ul>
         </div>
          <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{_('Filter by')}} </span> {{_('Tags')}}</span>
         </div>
@@ -254,8 +299,8 @@
                 </a>
                 <ul class="dropdown-menu drp-dwn-xs-left">
                   <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
-                  <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
-                  <!--<li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
+<!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
+<!--<li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
                   <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
                   
                 </ul>
@@ -267,52 +312,52 @@
     </div>
     </div>
 </div>-->
-<div  class="page-content">
-  <div class="loader-container row" ng-show="isLoading">
-      <div class="loader-dialog col-md-4 col-md-offset-4 ">
-        <div class="loader-content">
-          {{ _('Loading...')}}
+<div class="page-content">
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                {{ _('Loading...') }}
+            </div>
         </div>
-      </div>
-  </div>
-  <div class="dropOut"  ng-show="showUntag" >
-    <div class="trash">
-      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png" >
     </div>
-</div>
-      <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-      <!-- BEGIN PAGE CONTAINER-->
-  <div class="container-fluid"ng-show="immediateFailed">
-    <div class="col-md-12">
-      <h1>{{ _('Sign-in Button;')}}</h1>
+    <div class="dropOut" ng-show="showUntag">
+        <div class="trash">
+            <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png">
+        </div>
+    </div>
+    <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+    <!-- BEGIN PAGE CONTAINER-->
+    <div class="container-fluid" ng-show="immediateFailed">
+        <div class="col-md-12">
+            <h1>{{ _('Sign-in Button;') }}</h1>
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
+        </div>
     </div>
-  </div>
-  <div ng-show="isSignedIn" class="listContainer">
+    <div ng-show="isSignedIn" class="listContainer">
 
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-  <div class="row">
-    <div class="col-md-12">
-      <div class="row subHeaderContainer">
-        <!--<div class="task-actions taskCard list-group-item task-actions">
-           <div class="row">
-           <div class="col-md-12">
-             <form id="task_actions" class="form-inline ng-pristine ng-valid" role="form">
-             <div class="row">
-             <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                 <input ng-show="cases" title="Select case" style="padding-top: 4px;" type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox">
-             </label>
-             <div class="col-xs-10 col-sm-11 col-md-11 actionsbtnDiv">
-                 <!-- <button ng-show="opportunities"  title="Reopen Task" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selectedCards.length==0}">
-                  <i class="fa fa-unlock"></i>
-                  <span class="btn-text">
-                    Export
-                  </span>
-                  </button>-->
-                 <!-- <button ng-show="cases" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selectedCards.length==0}">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row subHeaderContainer">
+                    <!--<div class="task-actions taskCard list-group-item task-actions">
+                       <div class="row">
+                       <div class="col-md-12">
+                         <form id="task_actions" class="form-inline ng-pristine ng-valid" role="form">
+                         <div class="row">
+                         <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
+                             <input ng-show="cases" title="Select case" style="padding-top: 4px;" type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox">
+                         </label>
+                         <div class="col-xs-10 col-sm-11 col-md-11 actionsbtnDiv">
+                             <!-- <button ng-show="opportunities"  title="Reopen Task" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selectedCards.length==0}">
+                              <i class="fa fa-unlock"></i>
+                              <span class="btn-text">
+                                Export
+                              </span>
+                              </button>-->
+                    <!-- <button ng-show="cases" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selectedCards.length==0}">
                   <i class="fa fa-tags"></i>
                    <span class="btn-text">
                     {{ _(' Tags')}}
@@ -324,7 +369,7 @@
                     Send mail
                      </span>
                   </button>-->
-                  <!--<button ng-show="cases" title="Delete cases" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action  disabled" ng-class="{disabled: selectedCards.length==0}">
+                    <!--<button ng-show="cases" title="Delete cases" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action  disabled" ng-class="{disabled: selectedCards.length==0}">
                     <i class="fa fa-trash-o"></i>
                      <span class="btn-text">
                      {{ _(' Delete')}}
@@ -342,30 +387,31 @@
      </div>
    </div>
   </div>-->
-  </div>
-  <div class="row">
-  <div class="col-md-12">
-     <div class="row">
-      <div class="tab-pane">
-      <div class="row">
-            <div class="col-md-12" ng-show="show=='list'">
-            <div class="table-responsive showPage" ng-show="cases">
-                <table class="table contactstable">
-                <thead>
-                    <tr>
-                        <th>
-                        </th>
-                        <th >                          
-                            <a href="" ng-click="filterBy('priority')"> {{ _(' Priority')}}</a>
-                            <i class="fa fa-caret-up" ng-show="fltby == '-priority'"></i>
-                            <i class="fa fa-caret-down" ng-show="fltby == 'priority'"></i>
-                        </th>
-                        <th >                          
-                            <a href="" ng-click="filterBy('name')"> {{ _(' Subject')}}</a>
-                            <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
-                            <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
-                        </th>
-                       <!-- <th >                          
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="tab-pane">
+                                <div class="row">
+                                    <div class="col-md-12" ng-show="show=='list'">
+                                        <div class="table-responsive showPage" ng-show="cases">
+                                            <table class="table contactstable">
+                                                <thead>
+                                                <tr>
+                                                    <th>
+                                                    </th>
+                                                    <th>
+                                                        <a href=""
+                                                           ng-click="filterBy('priority')"> {{ _(' Priority') }}</a>
+                                                        <i class="fa fa-caret-up" ng-show="fltby == '-priority'"></i>
+                                                        <i class="fa fa-caret-down" ng-show="fltby == 'priority'"></i>
+                                                    </th>
+                                                    <th>
+                                                        <a href="" ng-click="filterBy('name')"> {{ _(' Subject') }}</a>
+                                                        <i class="fa fa-caret-up" ng-show="fltby == '-name'"></i>
+                                                        <i class="fa fa-caret-down" ng-show="fltby == 'name'"></i>
+                                                    </th>
+                                                    <!-- <th >
                             <a href="" ng-click="filterBy('contact.firstname')"> {{ _(' Contact')}}</a>
                              <i class="fa fa-caret-up" ng-show="fltby == '-contact.firstname'"></i>
                             <i class="fa fa-caret-down" ng-show="fltby == 'contact.firstname'"></i>
@@ -377,423 +423,532 @@
                           <i class="fa fa-caret-up" ng-show="fltby == '-account.name'"></i>
                           <i class="fa fa-caret-down" ng-show="fltby == 'account.name'"></i>
                         </th>-->
-                        <th style=" width: 100px; ">                          
-                            <a href=""ng-click="filterBy('status')" > {{ _('Status')}}</a>
-                             <i class="fa fa-caret-up" ng-show="fltby == '-status'"></i>
-                             <i class="fa fa-caret-down" ng-show="fltby == 'status'"></i>
-                        </th>
-                        <th style=" width: 100px; ">                          
-                            <a href=""  ng-click="filterBy('updated_at')"> {{ _(' Last update')}}</a>
-                            <i class="fa fa-caret-up" ng-show="fltby == '-updated_at'"></i>
-                            <i class="fa fa-caret-down" ng-show="fltby == 'updated_at'"></i>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="casee in cases | orderBy:fltby:reverse" droppable ng-drop="dropTag(casee,$index)" >
-                        <td>
-                          <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(casee)" ng-click="selectCardwithCheck($event,$index,casee)" >
-                        </td>
-                        <td style="word-wrap: break-word;max-width:200px">
-                             <span class="badge badge-roundless badge-danger priority ng-binding" style="background-color:  <%=priorityColor(casee.priority)%>;color:<%=idealTextColor(priorityColor(casee.priority))%>;" ><%= casee.priority %></span>
-                        </td>
-                        <td>
-                          <div class="nameContainer" style="max-width:210px font-size:15px">
-                            <a href="/#/cases/show/<%= casee.id %>" style=" font-size: 15px; " class="profile-link">
-                               <%= casee.name %>
-                            </a>
-                          </div>
+                                                    <th style=" width: 100px; ">
+                                                        <a href="" ng-click="filterBy('status')"> {{ _('Status') }}</a>
+                                                        <i class="fa fa-caret-up" ng-show="fltby == '-status'"></i>
+                                                        <i class="fa fa-caret-down" ng-show="fltby == 'status'"></i>
+                                                    </th>
+                                                    <th style=" width: 100px; ">
+                                                        <a href=""
+                                                           ng-click="filterBy('updated_at')"> {{ _(' Last update') }}</a>
+                                                        <i class="fa fa-caret-up" ng-show="fltby == '-updated_at'"></i>
+                                                        <i class="fa fa-caret-down" ng-show="fltby == 'updated_at'"></i>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-repeat="casee in cases | orderBy:fltby:reverse" droppable
+                                                    ng-drop="dropTag(casee,$index)">
+                                                    <td>
+                                                        <input title="Select all Users" type="checkbox"
+                                                               ng-checked="isSelectedCard(casee)"
+                                                               ng-click="selectCardwithCheck($event,$index,casee)">
+                                                    </td>
+                                                    <td style="word-wrap: break-word;max-width:200px">
+                                                        <span class="badge badge-roundless badge-danger priority ng-binding"
+                                                              style="background-color:  <%=priorityColor(casee.priority)%>;color:<%=idealTextColor(priorityColor(casee.priority))%>;"><%= casee.priority %></span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="nameContainer"
+                                                             style="max-width:210px font-size:15px">
+                                                            <a href="/#/cases/show/<%= casee.id %>"
+                                                               style=" font-size: 15px; " class="profile-link">
+                                                                <%= casee.name %>
+                                                            </a>
+                                                        </div>
 
-                          <div class="tagsContainer relatedTags" style='margin-top:5px'>
-                             <span ng-repeat="tag in casee.tags"  draggable  ng-drag="dragTagItem(tag,account)" class="pull-right task-label task-tag badge" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,casee)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %>  </span>
+                                                        <div class="tagsContainer relatedTags" style='margin-top:5px'>
+                                                            <span ng-repeat="tag in casee.tags" draggable
+                                                                  ng-drag="dragTagItem(tag,account)"
+                                                                  class="pull-right task-label task-tag badge"
+                                                                  style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a
+                                                                    href="" ng-click="removeTag(tag,casee)"
+                                                                    class="removeRelatedTag select2-search-choice-close"></a> <%= tag.name %>  </span>
 
-                             <div class="clearfix"></div>
-                          </div>
-                        </td>
-                       <!-- <td>
-                            <%= casee.contact.name %>
-                        </td>
-                        
-                        <td>
-                            <%= casee.account.name %>
-                        </td>-->
-                         <td>
-                            <span style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>
-                        </td>
-                        <td style=" font-size: 11px; ">
-                          <%=fromNow(casee.updated_at)%>
-                        </td>
-                    </tr>                    
-                </tbody>
-                </table>
-                <div class="loaderList" ng-show="isMoreItemLoading">
-                      <div class="loaderCardContent">
-                         <img class="img-responsive " src="/static/src/img/gloader.gif">
-                         <span> {{ _('Loading...')}}</span>
-                      </div>
-                </div>
-            </div>
-        </div>
-      <div class="waterfall col-md-12" ng-show="show=='cards'">
-          <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
-              <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
-              <ul class="list-group tags-list">
-              <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
-                <div class="row">
-                  <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </td>
+                                                    <!-- <td>
+                                                         <%= casee.contact.name %>
+                                                     </td>
+
+                                                     <td>
+                                                         <%= casee.account.name %>
+                                                     </td>-->
+                                                    <td>
+                                                        <span style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>
+                                                    </td>
+                                                    <td style=" font-size: 11px; ">
+                                                        <%=fromNow(casee.updated_at)%>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="loaderList" ng-show="isMoreItemLoading">
+                                                <div class="loaderCardContent">
+                                                    <img class="img-responsive " src="/static/src/img/gloader.gif">
+                                                    <span> {{ _('Loading...') }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="waterfall col-md-12" ng-show="show=='cards'">
+                                        <div class="labelsCardElement cardElement" data-span="all"
+                                             ng-show="showTagsFilter">
+                                            <button type="button" class="close" aria-hidden="true"
+                                                    ng-click="hideTagFilterCard()"></button>
+                                            <ul class="list-group tags-list">
+                                                <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
+                                                    <div class="row">
+                  <span ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)"
+                        ng-show="(tag_item!=edited_tag)||(!manage_tags)"
+                        style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                       <%= tag_item.name %>
                   </span>
-                   <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-                  <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                    <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-                  </form>
-                  <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-                </div>
-              </li>
-              <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
-                <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
-                </a>
-              </li>
-            </ul>
-            <form class="well newTagForm" role="form" ng-show="showNewTag">
-              <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
-              <div class="row">
-                <div class="col-md-12 form-group">
-                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-8">
-                  <ul class="color_pallet_menu">
-                    <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-md-4">
-                  <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-                </div>
-              </div>
-            </form>
-            <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
-              </button>
-            </div>
-        </div>
-        <div ng-repeat="casee in cases" droppable id="card_<%=$index%>" class="cardElement caseCard" ng-drop="dropTag(casee,$index)" >
-        <div class="caseContainer" style="border-right: 2px solid <%=priorityColor(casee.priority)%>;">
-            <div class="btn-group inCardOptionsBtn">
-              <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-               <i class="fa fa-ellipsis-vertical"></i>
-              </button>
-              <ul class="dropdown-menu drp-dwn-right " role="menu">
-                <li>
-                 <a href="" ng-click="showAssigneeTags(casee)">
-                     <i class='fa fa-tags'></i> {{_('Add tags')}} </a>
-                </li>
-                <li>
-                 <a href="" ng-click="editbeforedelete(casee)">
-                     <i class='fa fa-trash-o'></i> {{_('Delete')}} </a>
-                </li>
-              </ul>
-            </div>
-          <div class="detailsSection row">
-          <input  class="checkboxOnSmallScreen" title="Select Case" style="top: -1px;position: absolute;left: 4px;z-index: 999;" type="checkbox" ng-checked="isSelectedCard(casee)" ng-click="selectCardwithCheck($event,$index,casee)" >
-          <div class="caseContent">
-              <div class="col-md-3 col-xs-3 col-pic">
-                  <a href="/#/cases/show/<%= casee.id %>" class="startup-link" title="<%= casee.name %>"><img
-                          ng-hide="casee.logo_img_id" alt="casee.name" class="img-responsive img-thumbnail account-img"
-                          src="/static/src/img/default_company.png">
-                <img ng-show="casee.logo_img_id" alt="casee.name" class="img-responsive img-thumbnail account-img" ng-src="https://docs.google.com/uc?id=<%= casee.logo_img_id %>" data-hasqtip="2">
-                </a>
-              </div>
-              <div class="col-md-9 col-xs-9">             
-                <div class="row">
-                  <div class="col-md-2 col-xs-2">
-                    <div class="pic">
-                      <a href="/#/contacts/show/6509108836433920" class="startup-link" title="Ilyes BOUDJELTHIA">
-                        <img ng-hide="contact.profile_img_url" class="img-responsive profile-photo" height="40" width="40" src="/static/src/img/avatar_contact.jpg">
-                        <img ng-show="contact.profile_img_url" class="img-responsive profile-photo" ng-src="https://docs.google.com/uc?id=" data-hasqtip="2" src="https://docs.google.com/uc?id=" style="display: none;">
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-md-10 col-xs-10">
-                   <div class="name">
-                    <a href="/#/cases/show/<%= casee.id %>" class="profile-link" data-id="126085" data-type="Startup"><%= casee.name %>
-                    </a>
-                  </div>
-                  <div class="pitch">
-                      <p class="status  ng-binding">
+                                                        <input type="checkbox" ng-show="!manage_tags"
+                                                               ng-click="selectTag(tag_item,$index,$event)"
+                                                               style="margin-right: 10px;"
+                                                               class="pull-right customCheck" ng-checked="isSelected()">
+                                                        <form ng-submit="doneEditTag(tag_item)"
+                                                              ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                                            <input ng-blur="doneEditTag(tag_item)" type="text"
+                                                                   class="col-md-offset-1 col-md-7 form-control inlineEditTag "
+                                                                   ng-model="tag_item.name">
+                                                        </form>
+                                                        <button ng-click="deleteTag(tag_item)"
+                                                                class="close_tag close pull-right"
+                                                                ng-show="manage_tags"></button>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item tags-list-item" ng-hide="showNewTag"
+                                                    ng-click="showNewTagForm()">
+                                                    <a ng-click="" class="btn-link addAnotherPhone">
+                                                        <i class="fa fa-tags"></i> {{ _('Add a new label') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                                <button type="button" class="close" aria-hidden="true"
+                                                        ng-click="hideNewTagForm()"></button>
+                                                <div class="row">
+                                                    <div class="col-md-12 form-group">
+                                                        <input type="text" ng-model="tag.name" class="form-control"
+                                                               id="tag_name" placeholder="New label">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <ul class="color_pallet_menu">
+                                                            <li ng-repeat="color in color_pallet"
+                                                                ng-click="checkColor(color)"
+                                                                class="color-<%=color.name%>"
+                                                                ng-class='{colorChecked: color.name==tag.color.name}'>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input type="submit" ng-click="addNewtag(tag)"
+                                                               class="btn green pull-right" value="Add">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div class="form-group btn-manage-tags" ng-show="tags">
+                                                <button class="btn btn-default pull-right"
+                                                        ng-click="manage_tags=!manage_tags;manage()"> Manage Tags
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div ng-repeat="casee in cases" droppable id="card_<%=$index%>"
+                                             class="cardElement caseCard" ng-drop="dropTag(casee,$index)">
+                                            <div class="caseContainer"
+                                                 style="border-right: 2px solid <%=priorityColor(casee.priority)%>;">
+                                                <div class="btn-group inCardOptionsBtn">
+                                                    <button class="btn btn-default btn-xs dropdown-toggle" type="button"
+                                                            data-toggle="dropdown">
+                                                        <i class="fa fa-ellipsis-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                        <li>
+                                                            <a href="" ng-click="showAssigneeTags(casee)">
+                                                                <i class='fa fa-tags'></i> {{ _('Add tags') }} </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="" ng-click="editbeforedelete(casee)">
+                                                                <i class='fa fa-trash-o'></i> {{ _('Delete') }} </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="detailsSection row">
+                                                    <input class="checkboxOnSmallScreen" title="Select Case"
+                                                           style="top: -1px;position: absolute;left: 4px;z-index: 999;"
+                                                           type="checkbox" ng-checked="isSelectedCard(casee)"
+                                                           ng-click="selectCardwithCheck($event,$index,casee)">
+                                                    <div class="caseContent">
+                                                        <div class="col-md-3 col-xs-3 col-pic">
+                                                            <a href="/#/cases/show/<%= casee.id %>" class="startup-link"
+                                                               title="<%= casee.name %>"><img
+                                                                    ng-hide="casee.logo_img_id" alt="casee.name"
+                                                                    class="img-responsive img-thumbnail account-img"
+                                                                    src="/static/src/img/default_company.png">
+                                                                <img ng-show="casee.logo_img_id" alt="casee.name"
+                                                                     class="img-responsive img-thumbnail account-img"
+                                                                     ng-src="https://docs.google.com/uc?id=<%= casee.logo_img_id %>"
+                                                                     data-hasqtip="2">
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-md-9 col-xs-9">
+                                                            <div class="row">
+                                                                <div class="col-md-2 col-xs-2">
+                                                                    <div class="pic">
+                                                                        <a href="/#/contacts/show/6509108836433920"
+                                                                           class="startup-link"
+                                                                           title="Ilyes BOUDJELTHIA">
+                                                                            <img ng-hide="contact.profile_img_url"
+                                                                                 class="img-responsive profile-photo"
+                                                                                 height="40" width="40"
+                                                                                 src="/static/src/img/avatar_contact.jpg">
+                                                                            <img ng-show="contact.profile_img_url"
+                                                                                 class="img-responsive profile-photo"
+                                                                                 ng-src="https://docs.google.com/uc?id="
+                                                                                 data-hasqtip="2"
+                                                                                 src="https://docs.google.com/uc?id="
+                                                                                 style="display: none;">
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-10 col-xs-10">
+                                                                    <div class="name">
+                                                                        <a href="/#/cases/show/<%= casee.id %>"
+                                                                           class="profile-link" data-id="126085"
+                                                                           data-type="Startup"><%= casee.name %>
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="pitch">
+                                                                        <p class="status  ng-binding">
 
-                      <span  class="contact-title" style="font-size: 12px;
+                      <span class="contact-title" style="font-size: 12px;
                         ">
-                            <span class="">{{ _('Date:')}}</span> <span class=""> <%=casee.updated_at | date:'MMMM dd, yyyy- HH:mm:ss'%> </span>
+                            <span class="">{{ _('Date:') }}</span> <span class=""> <%=casee.updated_at | date:'MMMM dd, yyyy- HH:mm:ss'%> </span>
                             </span>
 
                       
-                      <span  class="contact-title" style="font-size: 12px;">
-                            <span class="">{{_('Last updated:') }} <%=fromNow(casee.updated_at)%></span>
+                      <span class="contact-title" style="font-size: 12px;">
+                            <span class="">{{ _('Last updated:') }} <%=fromNow(casee.updated_at)%></span>
                       </span>
 
-                      <span class="pull-right" style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>
-                        </p>
-                  </div>
-                <div class="tagsSection " ng-class="{hidden: casee.tags==null}">
-                  <div class="">
-                    <div class="sectionContent relatedTags">
-                     <span ng-repeat="tag in casee.tags" draggable  ng-drag="dragTagItem(tag,account)" class=" task-label task-tag badge ng-scope ng-binding" style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a href="" ng-click="removeTag(tag,casee)" class="removeRelatedTag select2-search-choice-close" ></a> <%= tag.name %></span>
-                      
+                                                                            <span class="pull-right"
+                                                                                  style="color:<%=getStatusColor(casee.current_status.name)%>"><%= casee.current_status.name %></span>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="tagsSection "
+                                                                         ng-class="{hidden: casee.tags==null}">
+                                                                        <div class="">
+                                                                            <div class="sectionContent relatedTags">
+                                                                                <span ng-repeat="tag in casee.tags"
+                                                                                      draggable
+                                                                                      ng-drag="dragTagItem(tag,account)"
+                                                                                      class=" task-label task-tag badge ng-scope ng-binding"
+                                                                                      style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;"> <a
+                                                                                        href=""
+                                                                                        ng-click="removeTag(tag,casee)"
+                                                                                        class="removeRelatedTag select2-search-choice-close"></a> <%= tag.name %></span>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div>
+
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                                <span class="badge badge-roundless badge-danger pull-right priority ng-binding"
+                                                      style="background-color:  <%=priorityColor(casee.priority)%>;color:<%=idealTextColor(priorityColor(casee.priority))%>;"><%= casee.priority %></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-show="blankStatecase" data-span="3" class="col-md-12 responsive"
+                                         data-tablet="span6" data-desktop="span12">
+                                        <div class="dashboard-stat cards">
+                                            <div class="blank_slate_arrow"></div>
+                                            <div class="thumbnail blank_slate_body">
+                                                <img class="img-responsive" src="/static/src/img/cases_blank.png">
+                                                <p class="lead">{{ _('cases  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div><!--/inner-cards-container-->
+                                <div ng-show="isFiltering * !cases" class="col-md-12 " ng-show="blankStateaccount">
+                                    <div data-span="3" class="dashboard-stat cards" data-tablet="span6"
+                                         data-desktop="span12">
+                                        <div class="">
+                                            <div class="blank_slate_arrow"></div>
+                                            <div class="thumbnail blank_slate_body">
+                                                <p class="lead">{{ _('No results found, try with another filter') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div><!--/inner-cards-container-->
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                  </div>
-                  </div>
                 </div>
-
-
-              </div>
-
-              <div class="clearfix"></div>
             </div>
-            </div>
-             <span class="badge badge-roundless badge-danger pull-right priority ng-binding" style="background-color:  <%=priorityColor(casee.priority)%>;color:<%=idealTextColor(priorityColor(casee.priority))%>;" ><%= casee.priority %></span>
-            <div class="clearfix"></div>
-        </div>
-        </div>
-        </div>
-        <div ng-show="blankStatecase" data-span="3" class="col-md-12 responsive" data-tablet="span6" data-desktop="span12">
-          <div class="dashboard-stat cards">
-            <div class="blank_slate_arrow"></div>
-              <div class="thumbnail blank_slate_body">
-                <img class="img-responsive" src="/static/src/img/cases_blank.png">
-                  <p class="lead">{{_('cases  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.')}}
-                  </p>
-              </div>
-          </div>
-        </div>
-        <div class="clearfix"></div>
-      </div><!--/inner-cards-container-->
-      <div ng-show="isFiltering * !cases"  class="col-md-12 " ng-show="blankStateaccount">
-          <div  data-span="3" class="dashboard-stat cards" data-tablet="span6" data-desktop="span12">
-            <div class="">
-              <div class="blank_slate_arrow"></div>
-              <div class="thumbnail blank_slate_body">
-                <p class="lead">{{ _('No results found, try with another filter') }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="clearfix"></div>
-        </div><!--/inner-cards-container-->
-    </div>
-    </div>
-    </div>
-    </div>
-  </div>
 
-    <div class="col-xs-12 col-sm-12 visible-xs visible-sm ">
-    <div class="row">
-    <div class="col-md-12">
-      <div class="portlet showCard fixedCard ">
-        <div class="portlet-title">
-          <div class="caption">
-              <!-- class="fa fa-reorder"--><i class="fa fa-tags" style="font-size: 16px;"></i>{{ _('Tags')}}
-          </div>
-        </div>
-        <div class="portlet-body">
-          <ul class="list-group tags-list" id="slimList" >
-            <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
-              <div class="row">
-                <span editable-text="tag_item.name" ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
-                ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
+            <div class="col-xs-12 col-sm-12 visible-xs visible-sm ">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet showCard fixedCard ">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <!-- class="fa fa-reorder"--><i class="fa fa-tags"
+                                                                    style="font-size: 16px;"></i>{{ _('Tags') }}
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <ul class="list-group tags-list" id="slimList">
+                                    <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
+                                        <div class="row">
+                <span editable-text="tag_item.name" ng-drag="dragTag(tag_item)" draggable class="with-color"
+                      ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"
+                      style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
+                      ng-model='tag_item.name' onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
 
                     <%= tag_item.name %>
                 </span>
 
-                 <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-                <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                  <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-                </form>
-                <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-              </div>
-            </li>
-            <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
-              <a ng-click="" class="btn-link addAnotherPhone">
+                                            <input type="checkbox" ng-show="!manage_tags"
+                                                   ng-click="selectTag(tag_item,$index,$event)"
+                                                   style="margin-right: 10px;" class="pull-right customCheck"
+                                                   ng-checked="isSelected()">
+                                            <form ng-submit="doneEditTag(tag_item)"
+                                                  ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                                <input ng-blur="doneEditTag(tag_item)" type="text"
+                                                       class="col-md-offset-1 col-md-7 form-control inlineEditTag "
+                                                       ng-model="tag_item.name">
+                                            </form>
+                                            <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right"
+                                                    ng-show="manage_tags"></button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item tags-list-item" ng-hide="showNewTag"
+                                        ng-click="showNewTag=true">
+                                        <a ng-click="" class="btn-link addAnotherPhone">
 
-                <i class="fa fa-tags"></i>  {{ _('Add a new label')}} 
+                                            <i class="fa fa-tags"></i> {{ _('Add a new label') }}
 
-              </a>
-            </li>
-          </ul>
-          <form class="well newTagForm" role="form" ng-show="showNewTag">
-            <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
-            <div class="row">
-              <div class="col-md-12 form-group">
-                <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New label')}}">
-              </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                    <button type="button" class="close" aria-hidden="true"
+                                            ng-click="showNewTag=false"></button>
+                                    <div class="row">
+                                        <div class="col-md-12 form-group">
+                                            <input type="text" ng-model="tag.name" class="form-control" id="tag_name"
+                                                   placeholder="{{ _('New label') }}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <ul class="color_pallet_menu">
+                                                <li ng-repeat="color in color_pallet" ng-click="checkColor(color)"
+                                                    class="color-<%=color.name%>"
+                                                    ng-class='{colorChecked: color.name==tag.color.name}'>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="submit" ng-click="addNewtag(tag)" class="btn green pull-right"
+                                                   value="{{ _('Add') }}">
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="form-group btn-manage-tags" ng-show="tags">
+
+                                    <button class="btn btn-default btn-block "
+                                            ng-click="manage_tags=!manage_tags;manage()">        {{ _('Manage Tags') }}
+
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="row">
-              <div class="col-md-8">
-                <ul class="color_pallet_menu">
-                  <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                  </li>
-                </ul>
-              </div>
-              <div class="col-md-4">
-                <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
-              </div>
-            </div>
-          </form>
-          <div class="form-group btn-manage-tags" ng-show="tags">
 
-            <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        {{ _('Manage Tags')}} 
-
-            </button>
-          </div>
         </div>
-      </div>
+        <!-- END PAGE CONTAINER-->
     </div>
-    </div>
-  </div>
+    <div class="fixed-labelsCard visible-md visible-lg">
 
-    </div>
-      <!-- END PAGE CONTAINER-->
-</div>
-<div class="fixed-labelsCard visible-md visible-lg">
-
-  <div class="row">
-  <div class="col-md-12">
-    <div class="portlet showCard customPortlet">
-      <div class="portlet-title">
-        <div class="caption">
-                <!-- class="fa fa-reorder"--><i class="fa fa-tags"></i>{{ _('Tags')}}
-        </div>
-      </div>
-      <div class="portlet-body">
-      <div class="row">
-        <ul class="list-group tags-list relatedTags scrollList" id="slimList">
-          <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
-           <div class="row">
-            <div class="with-color" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;display: inline-block;float: left;" id="tag_<%=$index%>" >
-             <a href="" ng-click="deleteTag(tag_item)" class="removeRelatedTag select2-search-choice-close"  id="closy_<%=$index%>"></a> 
-              <span editable-text="tag_item.name"  ng-drag="dragTag(tag_item)" id="iii"  draggable  ng-click="editTag(tag_item,<%=$index%>)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
-               ng-model='tag_item.name'  onhide="hideEditable(<%=$index%>,<%=tag_item%>)" onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet showCard customPortlet">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <!-- class="fa fa-reorder"--><i class="fa fa-tags"></i>{{ _('Tags') }}
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="row">
+                            <ul class="list-group tags-list relatedTags scrollList" id="slimList">
+                                <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
+                                    <div class="row">
+                                        <div class="with-color"
+                                             style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;display: inline-block;float: left;"
+                                             id="tag_<%=$index%>">
+                                            <a href="" ng-click="deleteTag(tag_item)"
+                                               class="removeRelatedTag select2-search-choice-close"
+                                               id="closy_<%=$index%>"></a>
+              <span editable-text="tag_item.name" ng-drag="dragTag(tag_item)" id="iii" draggable
+                    ng-click="editTag(tag_item,<%=$index%>)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"
+                    style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
+                    ng-model='tag_item.name' onhide="hideEditable(<%=$index%>,<%=tag_item%>)"
+                    onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                   <%= tag_item.name %>
               </span>
-              </div>
-          <div class="customCheckbox CustomSmallCheck pull-right"  style="margin-right:8px" id="checky_<%=$index%>">  
-              <input   title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelected()"  class="checkbox" id="caseTag_<%=$index%>"  ng-click="selectTag(tag_item,$index,$event)" >             
-              <label for="caseTag_<%=$index%>" class="labelElement">
-                <span class="check"></span>
-                <span class="box"></span>
-              </label>  
-          </div>
-             <!--  <input type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()"> -->
-              <!--<span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                  <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-              </span>-->
-              <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-              </form>
-              <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-            
-          </li>
-        </ul>
-        </div>
-        </div>
+                                        </div>
+                                        <div class="customCheckbox CustomSmallCheck pull-right" style="margin-right:8px"
+                                             id="checky_<%=$index%>">
+                                            <input title="Select Task" style=" padding-top: 4px; " type="checkbox"
+                                                   ng-checked="isSelected()" class="checkbox" id="caseTag_<%=$index%>"
+                                                   ng-click="selectTag(tag_item,$index,$event)">
+                                            <label for="caseTag_<%=$index%>" class="labelElement">
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                            </label>
+                                        </div>
+                                        <!--  <input type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()"> -->
+                                        <!--<span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
+                                            <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
+                                        </span>-->
+                                        <form ng-submit="doneEditTag(tag_item)"
+                                              ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                            <input ng-blur="doneEditTag(tag_item)" type="text"
+                                                   class="col-md-offset-1 col-md-7 form-control inlineEditTag "
+                                                   ng-model="tag_item.name">
+                                        </form>
+                                        <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right"
+                                                ng-show="manage_tags"></button>
 
-     <form class=" newTagForm" role="form" >
-       <!--    <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button> -->
-          <div class="row">
-            <div class="col-md-12 form-group">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
-              <input type="text" ng-model="tag.name" class="form-control" id="add_tag" placeholder="{{ _('Add a Tag')}}">
+                    <form class=" newTagForm" role="form">
+                        <!--    <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button> -->
+                        <div class="row">
+                            <div class="col-md-12 form-group">
 
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <ul class="color_pallet_menu">
-                <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-6">
-              <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
-            </div>
-          </div>
-        </form>
- <!--        <div class="form-group btn-manage-tags" ng-show="tags">
+                                <input type="text" ng-model="tag.name" class="form-control" id="add_tag"
+                                       placeholder="{{ _('Add a Tag') }}">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="color_pallet_menu">
+                                    <li ng-repeat="color in color_pallet" ng-click="checkColor(color)"
+                                        class="color-<%=color.name%>"
+                                        ng-class='{colorChecked: color.name==tag.color.name}'>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="submit" ng-click="addNewtag(tag)" class="btn green pull-right"
+                                       value="{{ _('Add') }}">
+                            </div>
+                        </div>
+                    </form>
+                    <!--        <div class="form-group btn-manage-tags" ng-show="tags">
           <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">        {{ _('Manage Tags')}}
           </button>
         </div> -->
-      </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  </div>
 </div>
 
 <div id="addCaseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("New Case")}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="addCase" name="addCase" ng-keyup="addCaseOnKey(casee)" class="form-horizontal">
+                <h3 id="myModalLabel" class="modal-title">{{ _("New Case") }}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="addCase" name="addCase" ng-keyup="addCaseOnKey(casee)" class="form-horizontal">
 
                     <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Contact")}}</label>
+                        <label class="required col-md-3 control-label">{{ _("Contact") }}</label>
 
-                         <div class="col-md-9">
-                          <input type="text" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="{{ _('Search')}}">
+                        <div class="col-md-9">
+                            <input type="text" required ng-model="searchContactQuery"
+                                   typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in contactsResults | filter:$viewValue | limitTo:10"
+                                   typeahead-on-select="selectContact()" class="form-control"
+                                   placeholder="{{ _('Search') }}">
 
                         </div>
                     </div>
                     <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Account")}} </label>
+                        <label class="required col-md-3 control-label">{{ _("Account") }} </label>
 
                         <div class="col-md-9">
-                          <input type="text" required  ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10" typeahead-on-select="selectcasee()" class="form-control" placeholder="{{ _('Search')}}">
-
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Subject")}} </label>
-
-                        <div class="col-md-9">
-                          <input type="text"  id="id_name" required class="form-control" ng-model="casee.name">
+                            <input type="text" required ng-model="searchAccountQuery"
+                                   typeahead="accountResult as accountResult.name  for accountResult in accountsResults | filter:$viewValue | limitTo:10"
+                                   typeahead-on-select="selectcasee()" class="form-control"
+                                   placeholder="{{ _('Search') }}">
 
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
+                        <label class="required col-md-3 control-label">{{ _("Subject") }} </label>
 
                         <div class="col-md-9">
-                          <select class="form-control" ng-model="casee.priority">
-                            <option value="1">1 - {{ _('Low')}}</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10 - {{ _('Critical')}}</option>
-                          </select>
+                            <input type="text" id="id_name" required class="form-control" ng-model="casee.name">
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required col-md-3 control-label">{{ _("Priority") }} </label>
+
+                        <div class="col-md-9">
+                            <select class="form-control" ng-model="casee.priority">
+                                <option value="1">1 - {{ _('Low') }}</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10 - {{ _('Critical') }}</option>
+                            </select>
 
                         </div>
 
                     </div>
                     <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Status")}} </label>
+                        <label class="required col-md-3 control-label">{{ _("Status") }} </label>
 
                         <div class="col-md-9">
-                           <select class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
-                            <option value="">-- {{ _('choose a status')}} --</option>
-                          </select>
+                            <select class="form-control" ng-model="status_selected"
+                                    ng-options="stat.status for stat in casesatuses">
+                                <option value="">-- {{ _('choose a status') }} --</option>
+                            </select>
 
                         </div>
 
@@ -810,148 +965,154 @@
                     </div-->
 
                     <hr/>
-                    <p>{{ _('Who can access?')}}</p>
-                     <div class="radio-list">
+                    <p>{{ _('Who can access?') }}</p>
+                    <div class="radio-list">
 
 
-
-                            <label >
-                            <input type="radio" name="optionsRadios" value="public" ng-model="casee.access" checked />
-                            {{ _('public: Anyone within your organization')}}
-                            </label>
-                            <label >
-                            <input type="radio" name="optionsRadios"  value="private" ng-model="casee.access" />
-                            {{ _('private: only you and your collaborators')}}
-                            </label>
-
+                        <label>
+                            <input type="radio" name="optionsRadios" value="public" ng-model="casee.access" checked/>
+                            {{ _('public: Anyone within your organization') }}
+                        </label>
+                        <label>
+                            <input type="radio" name="optionsRadios" value="private" ng-model="casee.access"/>
+                            {{ _('private: only you and your collaborators') }}
+                        </label>
 
 
                     </div>
 
 
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
-
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                <input  ng-click="save(casee)" type="submit" class="btn green" value="Add this case">
+                <input ng-click="save(casee)" type="submit" class="btn green" value="Add this case">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-              </div>
-               </form>
-                </div>
-                  <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-     </div>
- <div id="BeforedeleteSelectedCases" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button ng-click="selectedCards=[]" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Case</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal">
-                  <fieldset>
-                    <p ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <%=selectedCards.length %> cases .</p>
-                    <p ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :   <%=selectedCards[0].name%>  .</p>                   
-                    </fieldset>
-
-              </div>
-              <div class="modal-footer">
-                <button ng-click="selectedCards=[]" class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                <input  ng-click="deleteSelection()" type="submit" class="btn red" value="Delete this Case">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-              </div>
-               </form>
-          </div>
+            </div>
+            </form>
         </div>
-       </div> 
-
-       <div id="Beforedelete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">Delete Case</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal">
-                  <fieldset>
-                    <p ng-show="selectedCards.length > 1">{{_("Are you sure you want to delete")}} :  <%=selectedCards.length %> cases .</p>
-                    <p ng-show="selectedCards.length==1">{{_("Are you sure you want to delete")}} :   <%=selectedCards[0].name%>  .</p>                   
-                    </fieldset>
-
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                <input  ng-click="deletecase()" type="submit" class="btn red" value="Delete this Case">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-              </div>
-               </form>
-          </div>
-        </div>
-       </div>
-      <!--assign tags model-->
-   <div id="assigneeTagsToCases" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div id="BeforedeleteSelectedCases" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+                <button ng-click="selectedCards=[]" type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    ×
+                </button>
+                <h3 id="myModalLabel" class="modal-title">Delete Case</h3>
             </div>
             <div class="modal-body">
-               <form id="seletesho" name="deletesho" class="form-horizontal">
-               <div class="form-group">
-                    <select id="select2_sample2" class="form-control select2" multiple>
-                      <option ng-repeat="tag in tags"
-                      value='<%=tag.entityKey%>'>
-                        <%=tag.name%>
-                      </option>
-                    </select>
-                </div>
-              </form>
+                <form id="seletesho" name="deletesho" class="form-horizontal">
+                    <fieldset>
+                        <p ng-show="selectedCards.length > 1">{{ _("Are you sure you want to delete") }} :
+                            <%=selectedCards.length %> cases .</p>
+                        <p ng-show="selectedCards.length==1">{{ _("Are you sure you want to delete") }} :
+                            <%=selectedCards[0].name%> .</p>
+                    </fieldset>
+
             </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <input ng-hide="isLoadingTask" ng-click="addTagstoCases()" type="submit" class="btn green" value="Add">
-                <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
-              </div>
-        
+            <div class="modal-footer">
+                <button ng-click="selectedCards=[]" class="btn" data-dismiss="modal"
+                        aria-hidden="true">{{ _("Cancel") }}</button>
+
+                <input ng-click="deleteSelection()" type="submit" class="btn red" value="Delete this Case">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+            </div>
+            </form>
         </div>
-      </div>
-  </div>
- <!-- sharring setting -->
-  <div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    </div>
+</div>
+
+<div id="Beforedelete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">Delete Case</h3>
+            </div>
+            <div class="modal-body">
+                <form id="seletesho" name="deletesho" class="form-horizontal">
+                    <fieldset>
+                        <p ng-show="selectedCards.length > 1">{{ _("Are you sure you want to delete") }} :
+                            <%=selectedCards.length %> cases .</p>
+                        <p ng-show="selectedCards.length==1">{{ _("Are you sure you want to delete") }} :
+                            <%=selectedCards[0].name%> .</p>
+                    </fieldset>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                <input ng-click="deletecase()" type="submit" class="btn red" value="Delete this Case">
+                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--assign tags model-->
+<div id="assigneeTagsToCases" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">Add Tags </h3>
+            </div>
+            <div class="modal-body">
+                <form id="seletesho" name="deletesho" class="form-horizontal">
+                    <div class="form-group">
+                        <select id="select2_sample2" class="form-control select2" multiple>
+                            <option ng-repeat="tag in tags"
+                                    value='<%=tag.entityKey%>'>
+                                <%=tag.name%>
+                            </option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                <input ng-hide="isLoadingTask" ng-click="addTagstoCases()" type="submit" class="btn green" value="Add">
+                <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- sharring setting -->
+<div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{ _("Sharing Settings") }}</h3>
             </div>
             <div class="modal-body">
                 <form id="addMember" name="addaccount" class="form-horizontal">
-                    <p ng-show="selectedPermisssions">{{ _("Who has access:")}}</p>
-                    <div  class="radio-list" ng-show="selectedPermisssions">
+                    <p ng-show="selectedPermisssions">{{ _("Who has access:") }}</p>
+                    <div class="radio-list" ng-show="selectedPermisssions">
                         <label>
-                            <input type="radio" name="optionRadio" value="public" ng-model="selected_access" />
-                            {{ _("public: Anyone within your organization can access and find")}}
+                            <input type="radio" name="optionRadio" value="public" ng-model="selected_access"/>
+                            {{ _("public: Anyone within your organization can access and find") }}
                         </label>
-                        <label >
-                            <input type="radio" name="optionRadio"  value="private" ng-model="selected_access"/>
-                            {{ _("private: only you and your collaborators")}}
+                        <label>
+                            <input type="radio" name="optionRadio" value="private" ng-model="selected_access"/>
+                            {{ _("private: only you and your collaborators") }}
                         </label>
                     </div>
                     <div ng-hide="selectedPermisssions">
 
-                        <label style="font-size:17px !important">{{ _("You can not share")}} 
-                            <span ng-show="selectedCards.length == 1">{{ _("this case")}}</span>
-                            <span ng-show="selectedCards.length > 1">{{ _("these cases")}}</span>
-                          {{ _(" : you are not the owner")}} </label> <br>
-                        <label ng-show="selectedPermisssions">{{ _("The owner is:")}}</label>
+                        <label style="font-size:17px !important">{{ _("You can not share") }}
+                            <span ng-show="selectedCards.length == 1">{{ _("this case") }}</span>
+                            <span ng-show="selectedCards.length > 1">{{ _("these cases") }}</span>
+                            {{ _(" : you are not the owner") }} </label> <br>
+                        <label ng-show="selectedPermisssions">{{ _("The owner is:") }}</label>
                     </div>
                     <hr ng-show="selected_access!='public' && selectedPermisssions"/>
                     <!--<div ng-show="selectedPermisssions" class='' id="collaborators" ng-hide="lead.access=='public'">
@@ -966,35 +1127,41 @@
                     <hr ng-show="selectedPermisssions"/>-->
 
                     <div ng-show="selected_access!='public' && selectedPermisssions">
-                        <p>{{ _("Invite collaborators:")}}</p>
+                        <p>{{ _("Invite collaborators:") }}</p>
                         <div class="form-group" style="margin-left: 0px; margin-right: 0px;">
-                            <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
+                            <input type="text" ng-model="user"
+                                   typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
+                                   typeahead-on-select="selectMember()" class="form-control"
+                                   placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
                         </div>
                         <div id="assigeeList1" class="list-group">
-                        <div  class="taskAssigneList invitation list-group-item" ng-repeat="selected_us in sharing_with" style="padding: 5px;">
-                          <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
-                          <div class="photo">
-                            <img class="google-avatar" ng-src="selected_us.google_public_profile_photo_url"/>
-                          </div>
-                          <div class="details">
-                            <p>
+                            <div class="taskAssigneList invitation list-group-item"
+                                 ng-repeat="selected_us in sharing_with" style="padding: 5px;">
+                                <button type="button" class="close" ng-click="unselectMember($index)"
+                                        data-dismiss="alert"></button>
+                                <div class="photo">
+                                    <img class="google-avatar" ng-src="selected_us.google_public_profile_photo_url"/>
+                                </div>
+                                <div class="details">
+                                    <p>
                               <span>
                                 <strong><%= selected_us.google_display_name %></strong>
                               </span> 
                               <span>
                                 <strong><%=selected_us.email%></strong>
                               </span>
-                            </p>
-                          </div>
-                          <div class="clearfix"></div>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
                         </div>
-                      </div>
 
                     </div>
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <button ng-show="selectedPermisssions"  type="submit"  ng-click="share({{ME}})" data-dismiss="modal" aria-hidden="true" class="btn blue addContactNow">{{_("Share")}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                <button ng-show="selectedPermisssions" type="submit" ng-click="share({{ ME }})" data-dismiss="modal"
+                        aria-hidden="true" class="btn blue addContactNow">{{ _("Share") }}</button>
             </div>
             </form>
         </div>
@@ -1004,45 +1171,45 @@
 
 <!-- export data on csv file -->
 <div class="modal fade customPopUp" id="TakesFewMinutes" tabindex="-1" role="dialog"
-             aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h3 id="myModalLabel">
-                            <i class="fa fa-cloud-download"></i>{{_(" Export Cases")}}</h3>
-                    </div>
-                    <div class="modal-body">
-
-                        <p>  <%=msg%></p>
-
-                        <p>{{_("Note : you will receive an email ")}}</p>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn default" data-dismiss="modal" id="close_btn">{{_("NO")}}
-                        </button>
-                        <button ng-click="LoadCsvFile()" type="submit" class="btn green btn-primary addContactNow"
-                                id="load_btn">{{_("YES")}}
-                        </button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 id="myModalLabel">
+                    <i class="fa fa-cloud-download"></i>{{ _(" Export Cases") }}</h3>
             </div>
-            <!-- /.modal-dialog -->
+            <div class="modal-body">
+
+                <p> <%=msg%></p>
+
+                <p>{{ _("Note : you will receive an email ") }}</p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal" id="close_btn">{{ _("NO") }}
+                </button>
+                <button ng-click="LoadCsvFile()" type="submit" class="btn green btn-primary addContactNow"
+                        id="load_btn">{{ _("YES") }}
+                </button>
+            </div>
         </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 <!-- end of modal -->
 <script type="text/javascript">
-  $("#select2_sample2").select2({
+    $("#select2_sample2").select2({
         placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
     });
-  $('.waterfall').waterfall({
+    $('.waterfall').waterfall({
         colMinWidth: 315,
         defaultContainerWidth: 870,
         autoresize: true
-      });
-  var handleUniform = function () {
+    });
+    var handleUniform = function () {
         if (!jQuery().uniform) {
             return;
         }
@@ -1057,8 +1224,8 @@
         }
     }
     handleUniform();
-    $('.scrollList').lionbars({height:'193px'});
-$('.textfill').textfill({debug: true, maxFontPixels: 16});
-$('#slimList').lionbars({});
+    $('.scrollList').lionbars({height: '193px'});
+    $('.textfill').textfill({debug: true, maxFontPixels: 16});
+    $('#slimList').lionbars({});
 </script>
 

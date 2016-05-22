@@ -1,1181 +1,1528 @@
 <div class="row subHeader">
     <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
+        <div class="btn-group">
+            <a class="filterItem" href="#" data-toggle="dropdown">
+                {{ _(active_app.label) }}
+                <i class="icon-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                {% for application in apps %}
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
+                    <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a>
+                    </li>
 
-            {%endfor%}
-           </ul>
+                {% endfor %}
+            </ul>
         </div>
     </div>
-  <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv">
+    <div class=" subHeaderContent">
+        <div class="pull-right sharebuttonDiv">
 
-                  <!-- <button class="btn jfk-button jfk-button-action" ng-click="save(account)">
-                    <i class="fa-cog"></i>
-                  </button> -->
-    </div>
+            <!-- <button class="btn jfk-button jfk-button-action" ng-click="save(account)">
+              <i class="fa-cog"></i>
+            </button> -->
+        </div>
 
-    <h2 class="page-title">
-      <a href="/#/admin/users" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
-                <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;" src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>
-    {{ _("Team") }} > <%=user_acc.google_display_name %> </h2>
-  </div>
-</div>
-<div  class="page-content">
-  <div class="loader-container row" ng-show="isLoading">
-    <div class="loader-dialog col-md-4 col-md-offset-4 ">
-      <div class="loader-content">
-          Loading...
-      </div>
-    </div>
-  </div>
-  <div class="dropOut"  ng-show="showUntag" >
-    <div class="trash">
-      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png" >
-    </div>
-  </div>
-
-  <div class="dropOut"  ng-show="showUntag" >
-    <div class="trash">
-      <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png" >
+        <h2 class="page-title">
+            <a href="/#/admin/users" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
+                <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;"
+                     src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif"
+                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;"
+                     border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>
+            {{ _("Team") }} > <%=user_acc.google_display_name %> </h2>
     </div>
 </div>
+<div class="page-content">
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                Loading...
+            </div>
+        </div>
+    </div>
+    <div class="dropOut" ng-show="showUntag">
+        <div class="trash">
+            <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png">
+        </div>
+    </div>
 
-      <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-      <!-- BEGIN PAGE CONTAINER-->
-  <div class="" ng-show="immediateFailed">
-    <div class="col-md-12">
+    <div class="dropOut" ng-show="showUntag">
+        <div class="trash">
+            <img alt="delete tag" droppable ng-drop="dropOutTag()" class="" src="/static/src/img/iotrash.png">
+        </div>
+    </div>
+
+    <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+    <!-- BEGIN PAGE CONTAINER-->
+    <div class="" ng-show="immediateFailed">
+        <div class="col-md-12">
 
       <span id="signin">
         <span id="myGsignin"></span>
       </span>
+        </div>
     </div>
-  </div>
-  <div ng-show="isSignedIn" class="listContainer">
+    <div ng-show="isSignedIn" class="listContainer">
 
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->
-    <div class="row">
-    <div class="col-md-12">
-      <div class="row">
-        <div class="showPage newTaskShow custom-show margin-bottom-15  col-md-12">
-          <div class="row">
-               <div class="col-md-11">
-                <form ng-submit="addNewTask()" class="newTaskForm">
-                    <div class="form-group">
-                      <div class="input-icon right">
-                        <input taggable taggabledata="taggableOptions" ng-model="newTask.title" id="new_task_text" class="form-control"  placeholder="{{ _('Add new task ...')}}" autofocus/>
-                      </div>
-                    </div>
-                </form>
-                <div>
-                  <div class="newTask-meta pull-right">
-                    <div class=" event-schedule">
-                    <p class="dueDatep"ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
-                    <%=newTask.due | date:'yy-MM-dd HH:mm'%>
-                    <span ng-hide="newTask.due" class="placeHolderSmScreen">{{ _('Due date')}}</span></p>
-                    <div ng-show="showStartsCalendar" class="input-icon">
-                         <i class="fa fa-calendar"></i>
-                         <input cusdatetimepicker data-model="newTask.due" type="text" class="form-control dueDateInput" placeholder="{{ _('Due date')}}" value="" id="leadEventStartsAt">
-                   </div>
-                  </div>
-                  <div class="btn-group">
-                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-                     <i class="fa fa-exclamation-circle"></i>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li>
-                        <p class="indication-item">{{ _('Use')}} <span>#</span> {{ _('to add labels')}}</p>
-                      </li>
-                      <li>
-                        <p class="indication-item">{{ _('Use')}}<span>@</span> {{ _('to assign the task')}}</p>
-                      </li>
-                    </ul>
-                  </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-1">
-                <button type="button" ng-click="addNewTask()" class="btn red  pull-right btn-inline">{{ _('Add')}}</button>
-                </div>
-          </div>
-          <div class="row">
+        <div class="row">
             <div class="col-md-12">
-              <div class="tabbable tabbable-custom">
-                <ul class="nav nav-tabs">
-                  <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;openTasks();">{{ _("Open Tasks") }}</a></li>
-                  <!-- <li class="ng-tab" ng-class="{active: selectedTab == 22}"><a ng-click="selectedTab = 22; completedTasks();" >{{ _("Completed Tasks") }}</a></li> -->
-                  <li class="ng-tab sm-menu hidden-lg hidden-md"><a ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>                   
-                  <li class="dropdown sm-menu-inv">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                      More <i class="fa fa-angle-down"></i>
-                    </a>
-                    <ul class="dropdown-menu drp-dwn-xs-right" role="menu">
-                      <li class="ng-tab sm-menu-inv"><a ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="row">
-                    <div class="tab-content">
-                      <div class="tab-pane active " id="tab_1_1" ng-show="selectedTab == 1">
-                          <div class="row tasksList">
-                            <div class="col-md-12">
-                                <ul class="list-group">
-                                  <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
-                                       <div class="row">
-                                       <div class="col-md-12">
-                                             <p class="taskNoresult">{{ _('No tasks found') }}</p>
-                                        </div>
-                                      </div>
-                                    </li>
-                                    <li ng-show="tasks" class="task-actions taskCard list-group-item task-actions">
-                                     <div class="row">
-                                     <div class="col-md-12">
-                                       <form id="task_actions" class="form-inline" role="form">
-                                       <div class="row">
-                                       <label class="col-xs-1  col-md-1">
-                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label>
-                                       <div class="col-xs-10  col-md-10">
-                                        <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-lock"></i>
-                                          <span class="btn-text">
-                                            {{ _('Close')}}
-                                          </span>
-                                        </button>
-                                         <button  class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-unlock"></i>
-                                        <span class="btn-text">
-                                        {{ _('Reopen')}}
-                                        </span>
-                                        </button>
-                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-tags"></i>
-                                         <span class="btn-text">
-                                            {{ _('Tags')}}
-                                         </span>
-                                        </button>
-                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-mail-forward"></i>
-                                           <span class="btn-text">
-                                            {{ _('Assignee')}}
-                                           </span>
-                                        </button>
-                                        <button ng-click="editbeforedelete()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="icon-trash"></i>
-                                           <span class="btn-text">
-                                            {{ _('Delete')}}
-                                           </span>
-                                        </button>
-                                        </div>
-                                      </form>
+                <div class="row">
+                    <div class="showPage newTaskShow custom-show margin-bottom-15  col-md-12">
+                        <div class="row">
+                            <div class="col-md-11">
+                                <form ng-submit="addNewTask()" class="newTaskForm">
+                                    <div class="form-group">
+                                        <div class="input-icon right">
+                                            <input taggable taggabledata="taggableOptions" ng-model="newTask.title"
+                                                   id="new_task_text" class="form-control"
+                                                   placeholder="{{ _('Add new task ...') }}" autofocus/>
                                         </div>
                                     </div>
-                                  </li>
-                                  <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
-                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
-                                      <ul class="list-group tags-list">
-                                      <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
-                                        <div class="row">
-                                          <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                </form>
+                                <div>
+                                    <div class="newTask-meta pull-right">
+                                        <div class=" event-schedule">
+                                            <p class="dueDatep" ng-hide="showStartsCalendar"
+                                               ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
+                                                <%=newTask.due | date:'yy-MM-dd HH:mm'%>
+                                                <span ng-hide="newTask.due"
+                                                      class="placeHolderSmScreen">{{ _('Due date') }}</span></p>
+                                            <div ng-show="showStartsCalendar" class="input-icon">
+                                                <i class="fa fa-calendar"></i>
+                                                <input cusdatetimepicker data-model="newTask.due" type="text"
+                                                       class="form-control dueDateInput"
+                                                       placeholder="{{ _('Due date') }}" value=""
+                                                       id="leadEventStartsAt">
+                                            </div>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button class="btn btn-default btn-xs dropdown-toggle" type="button"
+                                                    data-toggle="dropdown">
+                                                <i class="fa fa-exclamation-circle"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <p class="indication-item">{{ _('Use') }}
+                                                        <span>#</span> {{ _('to add labels') }}</p>
+                                                </li>
+                                                <li>
+                                                    <p class="indication-item">{{ _('Use') }}<span>@</span> {{ _('to assign the task') }}
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" ng-click="addNewTask()"
+                                        class="btn red  pull-right btn-inline">{{ _('Add') }}</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="tabbable tabbable-custom">
+                                    <ul class="nav nav-tabs">
+                                        <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a
+                                                ng-click="selectedTab = 1;openTasks();">{{ _("Open Tasks") }}</a></li>
+                                        <!-- <li class="ng-tab" ng-class="{active: selectedTab == 22}"><a ng-click="selectedTab = 22; completedTasks();" >{{ _("Completed Tasks") }}</a></li> -->
+                                        <li class="ng-tab sm-menu hidden-lg hidden-md"><a
+                                                ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>
+                                        <li class="dropdown sm-menu-inv">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                More <i class="fa fa-angle-down"></i>
+                                            </a>
+                                            <ul class="dropdown-menu drp-dwn-xs-right" role="menu">
+                                                <li class="ng-tab sm-menu-inv"><a
+                                                        ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="tab-content">
+                                <div class="tab-pane active " id="tab_1_1" ng-show="selectedTab == 1">
+                                    <div class="row tasksList">
+                                        <div class="col-md-12">
+                                            <ul class="list-group">
+                                                <li ng-hide="tasks"
+                                                    class="task-actions taskCard list-group-item task-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <p class="taskNoresult">{{ _('No tasks found') }}</p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li ng-show="tasks"
+                                                    class="task-actions taskCard list-group-item task-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <form id="task_actions" class="form-inline" role="form">
+                                                                <div class="row">
+                                                                    <label class="col-xs-1  col-md-1">
+                                                                        <input type="checkbox"
+                                                                               ng-checked="isSelectedAll"
+                                                                               ng-click="select_all_tasks($event)">
+                                                                    </label>
+                                                                    <div class="col-xs-10  col-md-10">
+                                                                        <button class="btn btn-sm btn-default task_action"
+                                                                                ng-click="beforecloseTask()"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-lock"></i>
+                                          <span class="btn-text">
+                                            {{ _('Close') }}
+                                          </span>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-default task_action"
+                                                                                ng-click="reopenTask()"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-unlock"></i>
+                                        <span class="btn-text">
+                                        {{ _('Reopen') }}
+                                        </span>
+                                                                        </button>
+                                                                        <button ng-click="showAssigneeTags()"
+                                                                                class="btn btn-sm btn-default task_action"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-tags"></i>
+                                         <span class="btn-text">
+                                            {{ _('Tags') }}
+                                         </span>
+                                                                        </button>
+                                                                        <button ng-click="assigneeModal()"
+                                                                                class="btn btn-sm btn-default task_action"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-mail-forward"></i>
+                                           <span class="btn-text">
+                                            {{ _('Assignee') }}
+                                           </span>
+                                                                        </button>
+                                                                        <button ng-click="editbeforedelete()"
+                                                                                class="btn btn-sm btn-default task_action"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="icon-trash"></i>
+                                           <span class="btn-text">
+                                            {{ _('Delete') }}
+                                           </span>
+                                                                        </button>
+                                                                    </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="labelsCardElement taskCard list-group-item"
+                                                    ng-show="showTagsFilter">
+                                                    <button type="button" class="close" aria-hidden="true"
+                                                            ng-click="hideTagFilterCard()"></button>
+                                                    <ul class="list-group tags-list">
+                                                        <li ng-repeat="tag_item in tags"
+                                                            class="list-group-item tags-list-item">
+                                                            <div class="row">
+                                          <span ng-drag="dragTag(tag_item)" draggable class="with-color"
+                                                ng-dblclick="editTag(tag_item)"
+                                                ng-show="(tag_item!=edited_tag)||(!manage_tags)"
+                                                style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                                               <%= tag_item.name %>
                                           </span>
-                                           <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-                                          <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                                            <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-                                          </form>
-                                          <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-                                        </div>
-                                      </li>
-                                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
-                                        <a ng-click="" class="btn-link addAnotherPhone">
-                                          <i class="fa fa-tags"></i>  Add a new label
-                                        </a>
-                                      </li>
-                                    </ul>
-                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
-                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
-                                      <div class="row">
-                                        <div class="col-md-12 form-group">
-                                          <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
-                                        </div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="col-md-8">
-                                          <ul class="color_pallet_menu">
-                                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                                            </li>
-                                          </ul>
-                                        </div>
-                                        <div class="col-md-4">
-                                          <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-                                        </div>
-                                      </div>
-                                    </form>
-                                    <div class="form-group btn-manage-tags" ng-show="tags">
-                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
-                                      </button>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                                   <li  ng-repeat="task in tasks" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;"  ng-mouseover="deletetask=true" ng-init="deletetask=false" ng-mouseleave="deletetask=false">
-                                    <div class="btn-group inCardOptionsBtn">
-                                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-                                       <i class="fa fa-ellipsis-vertical"></i>
-                                      </button>
-                                      <ul class="dropdown-menu drp-dwn-right " role="menu">
-                                       <li>
-                                         <a href="" ng-click="showAssigneeTags(task)">
-                                             <i class='fa fa-tags'></i> Add tags </a>
-                                        </li>
-                                        <li>
-                                         <a href="" ng-click="deleteThisTask(task.entityKey)">
-                                             <i class='fa fa-trash-o'></i> Delete </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                     <div class="row">
-                                        <label class="col-md-1 col-xs-1">
-                                            <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">
-                                        </label>
-                                       <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
-                                       ng-class= "{task_closed: task.status=='closed'}">
-                                          <a href="/#/tasks/show/<%= task.id %>"> <%= task.title %></a>
-                                          <%=task.due%>
-                                       </h4>
+                                                                <input type="checkbox" ng-show="!manage_tags"
+                                                                       ng-click="selectTag(tag_item,$index,$event)"
+                                                                       style="margin-right: 10px;"
+                                                                       class="pull-right customCheck"
+                                                                       ng-checked="isSelected()">
+                                                                <form ng-submit="doneEditTag(tag_item)"
+                                                                      ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                                                    <input ng-blur="doneEditTag(tag_item)" type="text"
+                                                                           class="col-md-offset-1 col-md-7 form-control inlineEditTag "
+                                                                           ng-model="tag_item.name">
+                                                                </form>
+                                                                <button ng-click="deleteTag(tag_item)"
+                                                                        class="close_tag close pull-right"
+                                                                        ng-show="manage_tags"></button>
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item tags-list-item" ng-hide="showNewTag"
+                                                            ng-click="showNewTagForm()">
+                                                            <a ng-click="" class="btn-link addAnotherPhone">
+                                                                <i class="fa fa-tags"></i> Add a new label
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                                        <button type="button" class="close" aria-hidden="true"
+                                                                ng-click="hideNewTagForm()"></button>
+                                                        <div class="row">
+                                                            <div class="col-md-12 form-group">
+                                                                <input type="text" ng-model="tag.name"
+                                                                       class="form-control" id="tag_name"
+                                                                       placeholder="New label">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <ul class="color_pallet_menu">
+                                                                    <li ng-repeat="color in color_pallet"
+                                                                        ng-click="checkColor(color)"
+                                                                        class="color-<%=color.name%>"
+                                                                        ng-class='{colorChecked: color.name==tag.color.name}'>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="submit" ng-click="addNewtag(tag)"
+                                                                       class="btn green pull-right" value="Add">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    <div class="form-group btn-manage-tags" ng-show="tags">
+                                                        <button class="btn btn-default pull-right"
+                                                                ng-click="manage_tags=!manage_tags;manage()"> Manage
+                                                            Tags
+                                                        </button>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </li>
+                                                <li ng-repeat="task in tasks" class="taskCard list-group-item" droppable
+                                                    ng-drop="dropTag(task)" id="task_<%=$index%>"
+                                                    title="<%= task.status_label %>"
+                                                    style="border-left: 3px solid <%= task.status_color%>;"
+                                                    ng-mouseover="deletetask=true" ng-init="deletetask=false"
+                                                    ng-mouseleave="deletetask=false">
+                                                    <div class="btn-group inCardOptionsBtn">
+                                                        <button class="btn btn-default btn-xs dropdown-toggle"
+                                                                type="button" data-toggle="dropdown">
+                                                            <i class="fa fa-ellipsis-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                            <li>
+                                                                <a href="" ng-click="showAssigneeTags(task)">
+                                                                    <i class='fa fa-tags'></i> Add tags </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="" ng-click="deleteThisTask(task.entityKey)">
+                                                                    <i class='fa fa-trash-o'></i> Delete </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-md-1 col-xs-1">
+                                                            <input type="checkbox"
+                                                                   ng-click="select_task(task,$index,$event)"
+                                                                   ng-checked="isSelected()">
+                                                        </label>
+                                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task"
+                                                            class="col-md-6 col-xs-10 list-group-item-heading"
+                                                            ng-class="{task_closed: task.status=='closed'}">
+                                                            <a href="/#/tasks/show/<%= task.id %>"> <%= task.title
+                                                                %></a>
+                                                            <%=task.due%>
+                                                        </h4>
 
-                                       <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
-                                       <form ng-submit="done_edit_task(task)">
-                                          <input ng-type="text" class="form-control inlineEditTask" ng-blur="done_edit_task(task)" ng-model="task.title">
-                                       </form>
-                                       </div>
-                                        <div class="col-md-5 col-xs-12">
-                                            <span draggable  ng-drag="dragTagItem(task_tag.edgeKey)"  ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
+                                                            <form ng-submit="done_edit_task(task)">
+                                                                <input ng-type="text"
+                                                                       class="form-control inlineEditTask"
+                                                                       ng-blur="done_edit_task(task)"
+                                                                       ng-model="task.title">
+                                                            </form>
+                                                        </div>
+                                                        <div class="col-md-5 col-xs-12">
+                                            <span draggable ng-drag="dragTagItem(task_tag.edgeKey)"
+                                                  ng-repeat="task_tag in task.tags"
+                                                  class="pull-right task-label task-tag badge"
+                                                  style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
-                                               <a href="/#/admin/users/show/<%= assignee.google_user_id %>"> <%= assignee.display_name %></a>
-                                               <img alt="" ng-src="assignee.photo" class="user-photo" />
+                                               <a href="/#/admin/users/show/<%= assignee.google_user_id %>"> <%=
+                                                   assignee.display_name %></a>
+                                               <img alt="" ng-src="assignee.photo" class="user-photo"/>
                                             </span>
-                                        </div>
-                                    </div>
-                                     <div class="row">
-                                      <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                                         <span ng-show="task.created_by">{{ _('Opened by:')}}<a href="/#/admin/users/show/<%=task.created_by.google_user_id %>" > <%= task.created_by.display_name %></a></span>
-                                          <span ng-show="task.about">{{ _('related to') }}<a href="<%= getUrl(task.about.kind,task.about.id); %>"> <%= task.about.name %></a> </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                                                            <span ng-show="task.created_by">{{ _('Opened by:') }}<a
+                                                                    href="/#/admin/users/show/<%=task.created_by.google_user_id %>">
+                                                                <%= task.created_by.display_name %></a></span>
+                                                            <span ng-show="task.about">{{ _('related to') }}<a
+                                                                    href="<%= getUrl(task.about.kind,task.about.id); %>">
+                                                                <%= task.about.name %></a> </span>
                                           <span ng-show="deletetask">
                                              <!-- to delete task -->
-                                                <a  ng-click="deleteThisTask(task.entityKey)" class="btn-link addAnotherPhone"><i class="icon-trash"></i>
-                                             </a>
-                                           <!-- end  -->
+                                                <a ng-click="deleteThisTask(task.entityKey)"
+                                                   class="btn-link addAnotherPhone"><i class="icon-trash"></i>
+                                                </a>
+                                              <!-- end  -->
                                           </span>
-                                      </p>
-                                      </div>
-                                  </li>
-                                </ul>
-                              </div><!-- / col-md-12-->
-                          </div> <!-- / tasksList-->
-                      </div>
-                       <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
-                          <div class="row tasksList">
-                            <div class="col-md-12">
-                                <ul class="list-group">
-                                    <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
-                                       <div class="row">
-                                       <div class="col-md-12">
-                                             <p class="taskNoresult">{{ _('No results found') }}</p>
-                                        </div>
-                                      </div>
-                                    </li>
-                                    <li ng-show="tasks" class="task-actions taskCard list-group-item task-actions">
-                                     <div class="row">
-                                     <div class="col-md-12">
-                                       <form id="task_actions" class="form-inline" role="form">
-                                       <div class="row">
-                                       <label class="col-xs-1  col-md-1">
-                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label>
-                                     <div class="col-xs-10  col-md-10">
-                                        <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-lock"></i>
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div><!-- / col-md-12-->
+                                    </div> <!-- / tasksList-->
+                                </div>
+                                <div class="tab-pane active" id="tab_1_2" ng-show="selectedTab == 2">
+                                    <div class="row tasksList">
+                                        <div class="col-md-12">
+                                            <ul class="list-group">
+                                                <li ng-hide="tasks"
+                                                    class="task-actions taskCard list-group-item task-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <p class="taskNoresult">{{ _('No results found') }}</p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li ng-show="tasks"
+                                                    class="task-actions taskCard list-group-item task-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <form id="task_actions" class="form-inline" role="form">
+                                                                <div class="row">
+                                                                    <label class="col-xs-1  col-md-1">
+                                                                        <input type="checkbox"
+                                                                               ng-checked="isSelectedAll"
+                                                                               ng-click="select_all_tasks($event)">
+                                                                    </label>
+                                                                    <div class="col-xs-10  col-md-10">
+                                                                        <button class="btn btn-sm btn-default task_action"
+                                                                                ng-click="beforecloseTask()"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-lock"></i>
                                           <span class="btn-text">
-                                            {{ _('Close')}}
+                                            {{ _('Close') }}
                                           </span>
-                                        </button>
-                                         <button   class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-unlock"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-default task_action"
+                                                                                ng-click="reopenTask()"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
-                                        {{ _('Reopen')}}
+                                        {{ _('Reopen') }}
                                         </span>
-                                        </button>
-                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-tags"></i>
+                                                                        </button>
+                                                                        <button ng-click="showAssigneeTags()"
+                                                                                class="btn btn-sm btn-default task_action"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-tags"></i>
                                          <span class="btn-text">
-                                            {{ _('Tags')}}
+                                            {{ _('Tags') }}
                                          </span>
-                                        </button>
-                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-mail-forward"></i>
+                                                                        </button>
+                                                                        <button ng-click="assigneeModal()"
+                                                                                class="btn btn-sm btn-default task_action"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-mail-forward"></i>
                                            <span class="btn-text">
-                                            {{ _('Assignee')}}
+                                            {{ _('Assignee') }}
                                            </span>
-                                        </button>
-                                        </div>
-                                      </form>
-                                        </div>
-                                    </div>
-                                  </li>
-                                  <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
-                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
-                                      <ul class="list-group tags-list">
-                                      <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
-                                        <div class="row">
-                                          <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                                                        </button>
+                                                                    </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="labelsCardElement taskCard list-group-item"
+                                                    ng-show="showTagsFilter">
+                                                    <button type="button" class="close" aria-hidden="true"
+                                                            ng-click="hideTagFilterCard()"></button>
+                                                    <ul class="list-group tags-list">
+                                                        <li ng-repeat="tag_item in tags"
+                                                            class="list-group-item tags-list-item">
+                                                            <div class="row">
+                                          <span ng-drag="dragTag(tag_item)" draggable class="with-color"
+                                                ng-dblclick="editTag(tag_item)"
+                                                ng-show="(tag_item!=edited_tag)||(!manage_tags)"
+                                                style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                                               <%= tag_item.name %>
                                           </span>
-                                           <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-                                          <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                                            <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-                                          </form>
-                                          <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-                                        </div>
-                                      </li>
-                                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
-                                        <a ng-click="" class="btn-link addAnotherPhone">
-                                          <i class="fa fa-tags"></i>  Add a new label
-                                        </a>
-                                      </li>
-                                    </ul>
-                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
-                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
-                                      <div class="row">
-                                        <div class="col-md-12 form-group">
-                                          <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
-                                        </div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="col-md-8">
-                                          <ul class="color_pallet_menu">
-                                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                                            </li>
-                                          </ul>
-                                        </div>
-                                        <div class="col-md-4">
-                                          <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-                                        </div>
-                                      </div>
-                                    </form>
-                                    <div class="form-group btn-manage-tags" ng-show="tags">
-                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
-                                      </button>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                                   <li  ng-repeat="task in tasks" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
-                                    <div class="btn-group inCardOptionsBtn">
-                                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-                                       <i class="fa fa-ellipsis-vertical"></i>
-                                      </button>
-                                      <ul class="dropdown-menu drp-dwn-right " role="menu">
-                                         <li>
-                                         <a href="" ng-click="showAssigneeTags(task)">
-                                             <i class='fa fa-tags'></i> Add tags </a>
-                                        </li>
-                                        <li>
-                                         <a href="" ng-click="deleteThisTask(task.entityKey)">
-                                             <i class='fa fa-trash-o'></i> Delete </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                     <div class="row">
-                                        <label class="col-md-1 col-xs-1">
-                                            <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">
-                                        </label>
-                                       <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
-                                       ng-class= "{task_closed: task.status=='closed'}">
-                                        <a href="/#/tasks/show/<%= task.id %>" > <%= task.title %></a>
-                                       </h4>
-                                       <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
-                                       <form ng-submit="done_edit_task(task)">
-                                          <input ng-type="text" class="form-control inlineEditTask" ng-blur="done_edit_task(task)" ng-model="task.title">
-                                       </form>
+                                                                <input type="checkbox" ng-show="!manage_tags"
+                                                                       ng-click="selectTag(tag_item,$index,$event)"
+                                                                       style="margin-right: 10px;"
+                                                                       class="pull-right customCheck"
+                                                                       ng-checked="isSelected()">
+                                                                <form ng-submit="doneEditTag(tag_item)"
+                                                                      ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                                                    <input ng-blur="doneEditTag(tag_item)" type="text"
+                                                                           class="col-md-offset-1 col-md-7 form-control inlineEditTag "
+                                                                           ng-model="tag_item.name">
+                                                                </form>
+                                                                <button ng-click="deleteTag(tag_item)"
+                                                                        class="close_tag close pull-right"
+                                                                        ng-show="manage_tags"></button>
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item tags-list-item" ng-hide="showNewTag"
+                                                            ng-click="showNewTagForm()">
+                                                            <a ng-click="" class="btn-link addAnotherPhone">
+                                                                <i class="fa fa-tags"></i> Add a new label
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                                        <button type="button" class="close" aria-hidden="true"
+                                                                ng-click="hideNewTagForm()"></button>
+                                                        <div class="row">
+                                                            <div class="col-md-12 form-group">
+                                                                <input type="text" ng-model="tag.name"
+                                                                       class="form-control" id="tag_name"
+                                                                       placeholder="New label">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <ul class="color_pallet_menu">
+                                                                    <li ng-repeat="color in color_pallet"
+                                                                        ng-click="checkColor(color)"
+                                                                        class="color-<%=color.name%>"
+                                                                        ng-class='{colorChecked: color.name==tag.color.name}'>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="submit" ng-click="addNewtag(tag)"
+                                                                       class="btn green pull-right" value="Add">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    <div class="form-group btn-manage-tags" ng-show="tags">
+                                                        <button class="btn btn-default pull-right"
+                                                                ng-click="manage_tags=!manage_tags;manage()"> Manage
+                                                            Tags
+                                                        </button>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </li>
+                                                <li ng-repeat="task in tasks" class="taskCard list-group-item" droppable
+                                                    ng-drop="dropTag(task)" id="task_<%=$index%>"
+                                                    title="<%= task.status_label %>"
+                                                    style="border-left: 3px solid <%= task.status_color%>;">
+                                                    <div class="btn-group inCardOptionsBtn">
+                                                        <button class="btn btn-default btn-xs dropdown-toggle"
+                                                                type="button" data-toggle="dropdown">
+                                                            <i class="fa fa-ellipsis-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                            <li>
+                                                                <a href="" ng-click="showAssigneeTags(task)">
+                                                                    <i class='fa fa-tags'></i> Add tags </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="" ng-click="deleteThisTask(task.entityKey)">
+                                                                    <i class='fa fa-trash-o'></i> Delete </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-md-1 col-xs-1">
+                                                            <input type="checkbox"
+                                                                   ng-click="select_task(task,$index,$event)"
+                                                                   ng-checked="isSelected()">
+                                                        </label>
+                                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task"
+                                                            class="col-md-6 col-xs-10 list-group-item-heading"
+                                                            ng-class="{task_closed: task.status=='closed'}">
+                                                            <a href="/#/tasks/show/<%= task.id %>"> <%= task.title
+                                                                %></a>
+                                                        </h4>
+                                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
+                                                            <form ng-submit="done_edit_task(task)">
+                                                                <input ng-type="text"
+                                                                       class="form-control inlineEditTask"
+                                                                       ng-blur="done_edit_task(task)"
+                                                                       ng-model="task.title">
+                                                            </form>
 
-                                       </div>
-                                        <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                                        </div>
+                                                        <div class="col-md-5 col-xs-12">
+                                            <span ng-repeat="task_tag in task.tags"
+                                                  class="pull-right task-label task-tag badge"
+                                                  style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
-                                               <a href="/#/admin/users/show/<%= assignee.google_user_id %>" > @<%= assignee.display_name %></a>
+                                               <a href="/#/admin/users/show/<%= assignee.google_user_id %>"> @<%=
+                                                   assignee.display_name %></a>
                                             </span>
-                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                                                            <span ng-show="task.created_by">{{ _('Opened by:') }}<a
+                                                                    href="/#/admin/users/show/<%=task.created_by.google_user_id %>">
+                                                                <%= task.created_by.display_name %></a></span> <span
+                                                                ng-show="task.about">{{ _('related to') }}<a href="#">
+                                                            <%= task.about.name %></a></span>
+                                                            <!--<span>Closed by:<a href="#">Transline</a></span>-->
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div><!-- / col-md-12-->
                                     </div>
-                                     <div class="row">
-                                      <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                                         <span ng-show="task.created_by">{{ _('Opened by:')}}<a  href="/#/admin/users/show/<%=task.created_by.google_user_id %>" > <%= task.created_by.display_name %></a></span> <span ng-show="task.about">{{ _('related to') }}<a href="#"> <%= task.about.name %></a></span>
-                                         <!--<span>Closed by:<a href="#">Transline</a></span>-->
-                                      </p>
-                                      </div>
-                                  </li>
-                                </ul>
-                              </div><!-- / col-md-12-->
-                          </div>
-                      </div>
-                       <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
-                            <div class="row tasksList">
-                            <div class="col-md-12">
-                                <ul class="list-group">
-                                  <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
-                                       <div class="row">
-                                       <div class="col-md-12">
-                                             <p class="taskNoresult">{{ _('No results found') }}</p>
-                                        </div>
-                                      </div>
-                                    </li>
-                                    <li ng-show="tasks"  class="task-actions taskCard list-group-item task-actions">
-                                     <div class="row">
-                                     <div class="col-md-12">
-                                       <form id="task_actions" class="form-inline" role="form">
-                                       <div class="row">
-                                       <label class="col-xs-1  col-md-1">
-                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label>
-                                        <div class="col-xs-10  col-md-10">
-                                        <button  class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-lock"></i>
+                                </div>
+                                <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3">
+                                    <div class="row tasksList">
+                                        <div class="col-md-12">
+                                            <ul class="list-group">
+                                                <li ng-hide="tasks"
+                                                    class="task-actions taskCard list-group-item task-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <p class="taskNoresult">{{ _('No results found') }}</p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li ng-show="tasks"
+                                                    class="task-actions taskCard list-group-item task-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <form id="task_actions" class="form-inline" role="form">
+                                                                <div class="row">
+                                                                    <label class="col-xs-1  col-md-1">
+                                                                        <input type="checkbox"
+                                                                               ng-checked="isSelectedAll"
+                                                                               ng-click="select_all_tasks($event)">
+                                                                    </label>
+                                                                    <div class="col-xs-10  col-md-10">
+                                                                        <button class="btn btn-sm btn-default task_action"
+                                                                                ng-click="beforecloseTask()"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-lock"></i>
                                           <span class="btn-text">
-                                            {{ _('Close')}}
+                                            {{ _('Close') }}
                                           </span>
-                                        </button>
-                                         <button  class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-unlock"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-default task_action"
+                                                                                ng-click="reopenTask()"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
-                                        {{ _('Reopen')}}
+                                        {{ _('Reopen') }}
                                         </span>
-                                        </button>
-                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-tags"></i>
+                                                                        </button>
+                                                                        <button ng-click="showAssigneeTags()"
+                                                                                class="btn btn-sm btn-default task_action"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-tags"></i>
                                          <span class="btn-text">
-                                            {{ _('Tags')}}
+                                            {{ _('Tags') }}
                                          </span>
-                                        </button>
-                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-mail-forward"></i>
+                                                                        </button>
+                                                                        <button ng-click="assigneeModal()"
+                                                                                class="btn btn-sm btn-default task_action"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-mail-forward"></i>
                                            <span class="btn-text">
-                                            {{ _('Assignee')}}
+                                            {{ _('Assignee') }}
                                            </span>
-                                        </button>
-                                        </div>
-                                      </form>
-                                        </div>
-                                    </div>
-                                  </li>
-                                  <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
-                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
-                                      <ul class="list-group tags-list">
-                                      <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
-                                        <div class="row">
-                                          <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                                                        </button>
+                                                                    </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="labelsCardElement taskCard list-group-item"
+                                                    ng-show="showTagsFilter">
+                                                    <button type="button" class="close" aria-hidden="true"
+                                                            ng-click="hideTagFilterCard()"></button>
+                                                    <ul class="list-group tags-list">
+                                                        <li ng-repeat="tag_item in tags"
+                                                            class="list-group-item tags-list-item">
+                                                            <div class="row">
+                                          <span ng-drag="dragTag(tag_item)" draggable class="with-color"
+                                                ng-dblclick="editTag(tag_item)"
+                                                ng-show="(tag_item!=edited_tag)||(!manage_tags)"
+                                                style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                                               <%= tag_item.name %>
                                           </span>
-                                           <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-                                          <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                                            <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-                                          </form>
-                                          <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-                                        </div>
-                                      </li>
-                                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
-                                        <a ng-click="" class="btn-link addAnotherPhone">
-                                          <i class="fa fa-tags"></i>  Add a new label
-                                        </a>
-                                      </li>
-                                    </ul>
-                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
-                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
-                                      <div class="row">
-                                        <div class="col-md-12 form-group">
-                                          <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
-                                        </div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="col-md-8">
-                                          <ul class="color_pallet_menu">
-                                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                                            </li>
-                                          </ul>
-                                        </div>
-                                        <div class="col-md-4">
-                                          <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-                                        </div>
-                                      </div>
-                                    </form>
-                                    <div class="form-group btn-manage-tags" ng-show="tags">
-                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
-                                      </button>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                                   <li  ng-repeat="task in tasks" class=" taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
-                                    <div class="btn-group inCardOptionsBtn">
-                                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-                                       <i class="fa fa-ellipsis-vertical"></i>
-                                      </button>
-                                      <ul class="dropdown-menu drp-dwn-right " role="menu">
-                                         <li>
-                                         <a href="" ng-click="showAssigneeTags(task)">
-                                             <i class='fa fa-tags'></i> Add tags </a>
-                                        </li>
-                                        <li>
-                                         <a href="" ng-click="deleteThisTask(task.entityKey)">
-                                             <i class='fa fa-trash-o'></i> Delete </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                     <div class="row">
-                                        <label class="col-md-1 col-xs-1">
-                                            <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">
-                                        </label>
-                                       <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
-                                       ng-class= "{task_closed: task.status=='closed'}">
-                                        <%= task.title %>
-                                       </h4>
-                                       <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
-                                       <form ng-submit="done_edit_task(task)">
-                                          <input ng-type="text" class="form-control inlineEditTask" ng-blur="done_edit_task(task)" ng-model="task.title">
-                                       </form>
+                                                                <input type="checkbox" ng-show="!manage_tags"
+                                                                       ng-click="selectTag(tag_item,$index,$event)"
+                                                                       style="margin-right: 10px;"
+                                                                       class="pull-right customCheck"
+                                                                       ng-checked="isSelected()">
+                                                                <form ng-submit="doneEditTag(tag_item)"
+                                                                      ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                                                    <input ng-blur="doneEditTag(tag_item)" type="text"
+                                                                           class="col-md-offset-1 col-md-7 form-control inlineEditTag "
+                                                                           ng-model="tag_item.name">
+                                                                </form>
+                                                                <button ng-click="deleteTag(tag_item)"
+                                                                        class="close_tag close pull-right"
+                                                                        ng-show="manage_tags"></button>
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item tags-list-item" ng-hide="showNewTag"
+                                                            ng-click="showNewTagForm()">
+                                                            <a ng-click="" class="btn-link addAnotherPhone">
+                                                                <i class="fa fa-tags"></i> Add a new label
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                                        <button type="button" class="close" aria-hidden="true"
+                                                                ng-click="hideNewTagForm()"></button>
+                                                        <div class="row">
+                                                            <div class="col-md-12 form-group">
+                                                                <input type="text" ng-model="tag.name"
+                                                                       class="form-control" id="tag_name"
+                                                                       placeholder="New label">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <ul class="color_pallet_menu">
+                                                                    <li ng-repeat="color in color_pallet"
+                                                                        ng-click="checkColor(color)"
+                                                                        class="color-<%=color.name%>"
+                                                                        ng-class='{colorChecked: color.name==tag.color.name}'>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="submit" ng-click="addNewtag(tag)"
+                                                                       class="btn green pull-right" value="Add">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    <div class="form-group btn-manage-tags" ng-show="tags">
+                                                        <button class="btn btn-default pull-right"
+                                                                ng-click="manage_tags=!manage_tags;manage()"> Manage
+                                                            Tags
+                                                        </button>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </li>
+                                                <li ng-repeat="task in tasks" class=" taskCard list-group-item"
+                                                    droppable ng-drop="dropTag(task)" id="task_<%=$index%>"
+                                                    title="<%= task.status_label %>"
+                                                    style="border-left: 3px solid <%= task.status_color%>;">
+                                                    <div class="btn-group inCardOptionsBtn">
+                                                        <button class="btn btn-default btn-xs dropdown-toggle"
+                                                                type="button" data-toggle="dropdown">
+                                                            <i class="fa fa-ellipsis-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                            <li>
+                                                                <a href="" ng-click="showAssigneeTags(task)">
+                                                                    <i class='fa fa-tags'></i> Add tags </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="" ng-click="deleteThisTask(task.entityKey)">
+                                                                    <i class='fa fa-trash-o'></i> Delete </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-md-1 col-xs-1">
+                                                            <input type="checkbox"
+                                                                   ng-click="select_task(task,$index,$event)"
+                                                                   ng-checked="isSelected()">
+                                                        </label>
+                                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task"
+                                                            class="col-md-6 col-xs-10 list-group-item-heading"
+                                                            ng-class="{task_closed: task.status=='closed'}">
+                                                            <%= task.title %>
+                                                        </h4>
+                                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
+                                                            <form ng-submit="done_edit_task(task)">
+                                                                <input ng-type="text"
+                                                                       class="form-control inlineEditTask"
+                                                                       ng-blur="done_edit_task(task)"
+                                                                       ng-model="task.title">
+                                                            </form>
 
-                                       </div>
-                                        <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
-                                                <%= task_tag.name %>
-                                            </span>
-                                            <span ng-repeat="assignee in task.assignees" class="pull-right">
-                                               <a href="#"> @<%= assignee.display_name %></a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                     <div class="row">
-                                      <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                                         <span ng-show="task.created_by">Opened by:<a href="#"> <%= task.created_by.display_name %></a></span> <span ng-show="task.about">{{ _('related to') }}<a href="#"> <%= task.about.name %></a></span>
-                                         <!--<span>Closed by:<a href="#">Transline</a></span>-->
-                                      </p>
-                                      </div>
-                                  </li>
-                                </ul>
-                              </div><!-- / col-md-12-->
-                          </div>
-                      </div>
-                       <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
-                            <div class="row tasksList">
-                            <div class="col-md-12">
-                                <ul class="list-group">
-                                   <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
-                                       <div class="row">
-                                       <div class="col-md-12">
-                                             <p class="taskNoresult">{{ _('No results found') }}</p>
-                                        </div>
-                                      </div>
-                                    </li>
-                                    <li ng-show="tasks"  class="task-actions taskCard list-group-item task-actions">
-                                     <div class="row">
-                                     <div class="col-md-12">
-                                       <form id="task_actions" class="form-inline" role="form">
-                                       <div class="row">
-                                       <label class="col-xs-1  col-md-1">
-                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label>
-                                        <div class="col-xs-10  col-md-10">
-                                        <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-lock"></i>
-                                          <span class="btn-text">
-                                            {{ _('Close')}}
-                                          </span>
-                                        </button>
-                                         <button  class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-unlock"></i>
-                                        <span class="btn-text">
-                                        {{ _('Reopen')}}
-                                        </span>
-                                        </button>
-                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-tags"></i>
-                                         <span class="btn-text">
-                                            {{ _('Tags')}}
-                                         </span>
-                                        </button>
-                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-mail-forward"></i>
-                                           <span class="btn-text">
-                                            {{ _('Assignee')}}
-                                           </span>
-                                        </button>
-                                        </div>
-                                      </form>
-                                        </div>
-                                    </div>
-                                  </li>
-                                  <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
-                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
-                                      <ul class="list-group tags-list">
-                                      <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
-                                        <div class="row">
-                                          <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
-                                              <%= tag_item.name %>
-                                          </span>
-                                           <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-                                          <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                                            <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-                                          </form>
-                                          <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-                                        </div>
-                                      </li>
-                                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
-                                        <a ng-click="" class="btn-link addAnotherPhone">
-                                          <i class="fa fa-tags"></i>  Add a new label
-                                        </a>
-                                      </li>
-                                    </ul>
-                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
-                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
-                                      <div class="row">
-                                        <div class="col-md-12 form-group">
-                                          <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
-                                        </div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="col-md-8">
-                                          <ul class="color_pallet_menu">
-                                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                                            </li>
-                                          </ul>
-                                        </div>
-                                        <div class="col-md-4">
-                                          <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-                                        </div>
-                                      </div>
-                                    </form>
-                                    <div class="form-group btn-manage-tags" ng-show="tags">
-                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
-                                      </button>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                                   <li  ng-repeat="task in tasks" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
-                                    <div class="btn-group inCardOptionsBtn">
-                                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-                                       <i class="fa fa-ellipsis-vertical"></i>
-                                      </button>
-                                      <ul class="dropdown-menu drp-dwn-right " role="menu">
-                                       <li>
-                                         <a href="" ng-click="showAssigneeTags(task)">
-                                             <i class='fa fa-tags'></i> Add tags </a>
-                                        </li>
-                                        <li>
-                                         <a href="" ng-click="deleteThisTask(task.entityKey)">
-                                             <i class='fa fa-trash-o'></i> Delete </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                     <div class="row">
-                                        <label class="col-md-1 col-xs-1">
-                                            <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">
-                                        </label>
-                                       <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
-                                       ng-class= "{task_closed: task.status=='closed'}">
-                                        <%= task.title %>
-                                       </h4>
-                                       <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
-                                       <form ng-submit="done_edit_task(task)">
-                                          <input ng-type="text" class="form-control inlineEditTask" ng-blur="done_edit_task(task)" ng-model="task.title">
-                                       </form>
-
-                                       </div>
-                                        <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags" class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                                        </div>
+                                                        <div class="col-md-5 col-xs-12">
+                                            <span ng-repeat="task_tag in task.tags"
+                                                  class="pull-right task-label task-tag badge"
+                                                  style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
                                                <a href="#"> @<%= assignee.display_name %></a>
                                             </span>
-                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                                                            <span ng-show="task.created_by">Opened by:<a href="#"> <%=
+                                                                task.created_by.display_name %></a></span> <span
+                                                                ng-show="task.about">{{ _('related to') }}<a href="#">
+                                                            <%= task.about.name %></a></span>
+                                                            <!--<span>Closed by:<a href="#">Transline</a></span>-->
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div><!-- / col-md-12-->
                                     </div>
-                                     <div class="row">
-                                      <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                                         <span ng-show="task.created_by">Opened by:<a href="#"> <%= task.created_by.display_name %></a></span> <span ng-show="task.about">{{ _('related to') }}<a href="#"> <%= task.about.name %></a></span>
-                                         <!--<span>Closed by:<a href="#">Transline</a></span>-->
-                                      </p>
-                                      </div>
-                                  </li>
-                                </ul>
-                              </div><!-- / col-md-12-->
-                          </div>
-                      </div>
-                       <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
-                            <div class="row tasksList">
-                            <div class="col-md-12">
-                                <ul class="list-group">
-                                   <li ng-hide="tasks" class="task-actions taskCard list-group-item task-actions">
-                                       <div class="row">
-                                       <div class="col-md-12">
-                                             <p class="taskNoresult">{{ _('No results found') }}</p>
-                                        </div>
-                                      </div>
-                                    </li>
-                                    <li ng-show="tasks"  class="task-actions taskCard list-group-item task-actions">
-                                     <div class="row">
-                                     <div class="col-md-12">
-                                       <form id="task_actions" class="form-inline" role="form">
-                                       <div class="row">
-                                       <label class="col-xs-1  col-md-1">
-                                           <input type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label>
-                                        <div class="col-xs-10  col-md-10">
-                                        <button   class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-lock"></i>
+                                </div>
+                                <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 4">
+                                    <div class="row tasksList">
+                                        <div class="col-md-12">
+                                            <ul class="list-group">
+                                                <li ng-hide="tasks"
+                                                    class="task-actions taskCard list-group-item task-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <p class="taskNoresult">{{ _('No results found') }}</p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li ng-show="tasks"
+                                                    class="task-actions taskCard list-group-item task-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <form id="task_actions" class="form-inline" role="form">
+                                                                <div class="row">
+                                                                    <label class="col-xs-1  col-md-1">
+                                                                        <input type="checkbox"
+                                                                               ng-checked="isSelectedAll"
+                                                                               ng-click="select_all_tasks($event)">
+                                                                    </label>
+                                                                    <div class="col-xs-10  col-md-10">
+                                                                        <button class="btn btn-sm btn-default task_action"
+                                                                                ng-click="beforecloseTask()"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-lock"></i>
                                           <span class="btn-text">
-                                            {{ _('Close')}}
+                                            {{ _('Close') }}
                                           </span>
-                                        </button>
-                                         <button   class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-unlock"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-default task_action"
+                                                                                ng-click="reopenTask()"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-unlock"></i>
                                         <span class="btn-text">
-                                        {{ _('Reopen')}}
+                                        {{ _('Reopen') }}
                                         </span>
-                                        </button>
-                                        <button ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-tags"></i>
+                                                                        </button>
+                                                                        <button ng-click="showAssigneeTags()"
+                                                                                class="btn btn-sm btn-default task_action"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-tags"></i>
                                          <span class="btn-text">
-                                            {{ _('Tags')}}
+                                            {{ _('Tags') }}
                                          </span>
-                                        </button>
-                                        <button ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-mail-forward"></i>
+                                                                        </button>
+                                                                        <button ng-click="assigneeModal()"
+                                                                                class="btn btn-sm btn-default task_action"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-mail-forward"></i>
                                            <span class="btn-text">
-                                            {{ _('Assignee')}}
+                                            {{ _('Assignee') }}
                                            </span>
-                                        </button>
-                                        </div>
-                                      </form>
-                                        </div>
-                                    </div>
-                                  </li>
-                                  <li class="labelsCardElement taskCard list-group-item" ng-show="showTagsFilter">
-                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideTagFilterCard()"></button>
-                                      <ul class="list-group tags-list">
-                                      <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item"  >
-                                        <div class="row">
-                                          <span  ng-drag="dragTag(tag_item)" draggable class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                                                        </button>
+                                                                    </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="labelsCardElement taskCard list-group-item"
+                                                    ng-show="showTagsFilter">
+                                                    <button type="button" class="close" aria-hidden="true"
+                                                            ng-click="hideTagFilterCard()"></button>
+                                                    <ul class="list-group tags-list">
+                                                        <li ng-repeat="tag_item in tags"
+                                                            class="list-group-item tags-list-item">
+                                                            <div class="row">
+                                          <span ng-drag="dragTag(tag_item)" draggable class="with-color"
+                                                ng-dblclick="editTag(tag_item)"
+                                                ng-show="(tag_item!=edited_tag)||(!manage_tags)"
+                                                style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
                                               <%= tag_item.name %>
                                           </span>
-                                           <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-                                          <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                                            <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-                                          </form>
-                                          <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-                                        </div>
-                                      </li>
-                                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTagForm()">
-                                        <a ng-click="" class="btn-link addAnotherPhone">
-                                          <i class="fa fa-tags"></i>  Add a new label
-                                        </a>
-                                      </li>
-                                    </ul>
-                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
-                                      <button type="button" class="close"  aria-hidden="true" ng-click="hideNewTagForm()"></button>
-                                      <div class="row">
-                                        <div class="col-md-12 form-group">
-                                          <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="New label">
-                                        </div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="col-md-8">
-                                          <ul class="color_pallet_menu">
-                                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                                            </li>
-                                          </ul>
-                                        </div>
-                                        <div class="col-md-4">
-                                          <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="Add">
-                                        </div>
-                                      </div>
-                                    </form>
-                                    <div class="form-group btn-manage-tags" ng-show="tags">
-                                      <button class="btn btn-default pull-right" ng-click="manage_tags=!manage_tags;manage()">        Manage Tags
-                                      </button>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </lif>
-                                   <li  ng-repeat="task in tasks" class="taskCard list-group-item" droppable ng-drop="dropTag(task)" id="task_<%=$index%>" title="<%= task.status_label %>" style="border-left: 3px solid <%= task.status_color%>;">
-                                    <div class="btn-group inCardOptionsBtn">
-                                      <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-                                       <i class="fa fa-ellipsis-vertical"></i>
-                                      </button>
-                                      <ul class="dropdown-menu drp-dwn-right " role="menu">
-                                       <li>
-                                         <a href="" ng-click="showAssigneeTags(task)">
-                                             <i class='fa fa-tags'></i> Add tags </a>
-                                        </li>
-                                        <li>
-                                         <a href="" ng-click="deleteThisTask(task.entityKey)">
-                                             <i class='fa fa-trash-o'></i> Delete </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                     <div class="row">
-                                        <label class="col-md-1 col-xs-1">
-                                            <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">
-                                        </label>
-                                       <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task" class="col-md-6 col-xs-10 list-group-item-heading"
-                                       ng-class= "{task_closed: task.status=='closed'}">
-                                        <%= task.title %>
-                                       </h4>
-                                       <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
-                                       <form ng-submit="done_edit_task(task)">
-                                          <input ng-type="text" class="form-control inlineEditTask" ng-blur="done_edit_task(task)" ng-model="task.title">
-                                       </form>
+                                                                <input type="checkbox" ng-show="!manage_tags"
+                                                                       ng-click="selectTag(tag_item,$index,$event)"
+                                                                       style="margin-right: 10px;"
+                                                                       class="pull-right customCheck"
+                                                                       ng-checked="isSelected()">
+                                                                <form ng-submit="doneEditTag(tag_item)"
+                                                                      ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                                                    <input ng-blur="doneEditTag(tag_item)" type="text"
+                                                                           class="col-md-offset-1 col-md-7 form-control inlineEditTag "
+                                                                           ng-model="tag_item.name">
+                                                                </form>
+                                                                <button ng-click="deleteTag(tag_item)"
+                                                                        class="close_tag close pull-right"
+                                                                        ng-show="manage_tags"></button>
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item tags-list-item" ng-hide="showNewTag"
+                                                            ng-click="showNewTagForm()">
+                                                            <a ng-click="" class="btn-link addAnotherPhone">
+                                                                <i class="fa fa-tags"></i> Add a new label
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                                        <button type="button" class="close" aria-hidden="true"
+                                                                ng-click="hideNewTagForm()"></button>
+                                                        <div class="row">
+                                                            <div class="col-md-12 form-group">
+                                                                <input type="text" ng-model="tag.name"
+                                                                       class="form-control" id="tag_name"
+                                                                       placeholder="New label">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <ul class="color_pallet_menu">
+                                                                    <li ng-repeat="color in color_pallet"
+                                                                        ng-click="checkColor(color)"
+                                                                        class="color-<%=color.name%>"
+                                                                        ng-class='{colorChecked: color.name==tag.color.name}'>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="submit" ng-click="addNewtag(tag)"
+                                                                       class="btn green pull-right" value="Add">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    <div class="form-group btn-manage-tags" ng-show="tags">
+                                                        <button class="btn btn-default pull-right"
+                                                                ng-click="manage_tags=!manage_tags;manage()"> Manage
+                                                            Tags
+                                                        </button>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </li>
+                                                <li ng-repeat="task in tasks" class="taskCard list-group-item" droppable
+                                                    ng-drop="dropTag(task)" id="task_<%=$index%>"
+                                                    title="<%= task.status_label %>"
+                                                    style="border-left: 3px solid <%= task.status_color%>;">
+                                                    <div class="btn-group inCardOptionsBtn">
+                                                        <button class="btn btn-default btn-xs dropdown-toggle"
+                                                                type="button" data-toggle="dropdown">
+                                                            <i class="fa fa-ellipsis-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                            <li>
+                                                                <a href="" ng-click="showAssigneeTags(task)">
+                                                                    <i class='fa fa-tags'></i> Add tags </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="" ng-click="deleteThisTask(task.entityKey)">
+                                                                    <i class='fa fa-trash-o'></i> Delete </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-md-1 col-xs-1">
+                                                            <input type="checkbox"
+                                                                   ng-click="select_task(task,$index,$event)"
+                                                                   ng-checked="isSelected()">
+                                                        </label>
+                                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task"
+                                                            class="col-md-6 col-xs-10 list-group-item-heading"
+                                                            ng-class="{task_closed: task.status=='closed'}">
+                                                            <%= task.title %>
+                                                        </h4>
+                                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
+                                                            <form ng-submit="done_edit_task(task)">
+                                                                <input ng-type="text"
+                                                                       class="form-control inlineEditTask"
+                                                                       ng-blur="done_edit_task(task)"
+                                                                       ng-model="task.title">
+                                                            </form>
 
-                                       </div>
-                                        <div class="col-md-5 col-xs-12">
-                                            <span ng-repeat="task_tag in task.tags"  class="pull-right task-label task-tag badge" style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                                        </div>
+                                                        <div class="col-md-5 col-xs-12">
+                                            <span ng-repeat="task_tag in task.tags"
+                                                  class="pull-right task-label task-tag badge"
+                                                  style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
                                                 <%= task_tag.name %>
                                             </span>
                                             <span ng-repeat="assignee in task.assignees" class="pull-right">
                                                <a href="#"> @<%= assignee.display_name %></a>
                                             </span>
-                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                                                            <span ng-show="task.created_by">Opened by:<a href="#"> <%=
+                                                                task.created_by.display_name %></a></span> <span
+                                                                ng-show="task.about">{{ _('related to') }}<a href="#">
+                                                            <%= task.about.name %></a></span>
+                                                            <!--<span>Closed by:<a href="#">Transline</a></span>-->
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div><!-- / col-md-12-->
                                     </div>
-                                     <div class="row">
-                                      <p class="col-md-11 col-md-offset-1 list-group-item-text">
-                                         <span ng-show="task.created_by">Opened by:<a href="#"> <%= task.created_by.display_name %></a></span> <span ng-show="task.about">{{ _('related to') }}<a href="#"> <%= task.about.name %></a></span>
-                                         <!--<span>Closed by:<a href="#">Transline</a></span>-->
-                                      </p>
-                                      </div>
-                                  </li>
-                                </ul>
-                              </div><!-- / col-md-12-->
-                          </div>
-                      </div>
-                  </div>
-          </div>
-        </div>
-          </div>
-          </div>
+                                </div>
+                                <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5">
+                                    <div class="row tasksList">
+                                        <div class="col-md-12">
+                                            <ul class="list-group">
+                                                <li ng-hide="tasks"
+                                                    class="task-actions taskCard list-group-item task-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <p class="taskNoresult">{{ _('No results found') }}</p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li ng-show="tasks"
+                                                    class="task-actions taskCard list-group-item task-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <form id="task_actions" class="form-inline" role="form">
+                                                                <div class="row">
+                                                                    <label class="col-xs-1  col-md-1">
+                                                                        <input type="checkbox"
+                                                                               ng-checked="isSelectedAll"
+                                                                               ng-click="select_all_tasks($event)">
+                                                                    </label>
+                                                                    <div class="col-xs-10  col-md-10">
+                                                                        <button class="btn btn-sm btn-default task_action"
+                                                                                ng-click="beforecloseTask()"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-lock"></i>
+                                          <span class="btn-text">
+                                            {{ _('Close') }}
+                                          </span>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-default task_action"
+                                                                                ng-click="reopenTask()"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-unlock"></i>
+                                        <span class="btn-text">
+                                        {{ _('Reopen') }}
+                                        </span>
+                                                                        </button>
+                                                                        <button ng-click="showAssigneeTags()"
+                                                                                class="btn btn-sm btn-default task_action"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-tags"></i>
+                                         <span class="btn-text">
+                                            {{ _('Tags') }}
+                                         </span>
+                                                                        </button>
+                                                                        <button ng-click="assigneeModal()"
+                                                                                class="btn btn-sm btn-default task_action"
+                                                                                ng-class="{disabled: selected_tasks.length==0}">
+                                                                            <i class="fa fa-mail-forward"></i>
+                                           <span class="btn-text">
+                                            {{ _('Assignee') }}
+                                           </span>
+                                                                        </button>
+                                                                    </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="labelsCardElement taskCard list-group-item"
+                                                    ng-show="showTagsFilter">
+                                                    <button type="button" class="close" aria-hidden="true"
+                                                            ng-click="hideTagFilterCard()"></button>
+                                                    <ul class="list-group tags-list">
+                                                        <li ng-repeat="tag_item in tags"
+                                                            class="list-group-item tags-list-item">
+                                                            <div class="row">
+                                          <span ng-drag="dragTag(tag_item)" draggable class="with-color"
+                                                ng-dblclick="editTag(tag_item)"
+                                                ng-show="(tag_item!=edited_tag)||(!manage_tags)"
+                                                style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;">
+                                              <%= tag_item.name %>
+                                          </span>
+                                                                <input type="checkbox" ng-show="!manage_tags"
+                                                                       ng-click="selectTag(tag_item,$index,$event)"
+                                                                       style="margin-right: 10px;"
+                                                                       class="pull-right customCheck"
+                                                                       ng-checked="isSelected()">
+                                                                <form ng-submit="doneEditTag(tag_item)"
+                                                                      ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                                                    <input ng-blur="doneEditTag(tag_item)" type="text"
+                                                                           class="col-md-offset-1 col-md-7 form-control inlineEditTag "
+                                                                           ng-model="tag_item.name">
+                                                                </form>
+                                                                <button ng-click="deleteTag(tag_item)"
+                                                                        class="close_tag close pull-right"
+                                                                        ng-show="manage_tags"></button>
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item tags-list-item" ng-hide="showNewTag"
+                                                            ng-click="showNewTagForm()">
+                                                            <a ng-click="" class="btn-link addAnotherPhone">
+                                                                <i class="fa fa-tags"></i> Add a new label
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                                        <button type="button" class="close" aria-hidden="true"
+                                                                ng-click="hideNewTagForm()"></button>
+                                                        <div class="row">
+                                                            <div class="col-md-12 form-group">
+                                                                <input type="text" ng-model="tag.name"
+                                                                       class="form-control" id="tag_name"
+                                                                       placeholder="New label">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <ul class="color_pallet_menu">
+                                                                    <li ng-repeat="color in color_pallet"
+                                                                        ng-click="checkColor(color)"
+                                                                        class="color-<%=color.name%>"
+                                                                        ng-class='{colorChecked: color.name==tag.color.name}'>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="submit" ng-click="addNewtag(tag)"
+                                                                       class="btn green pull-right" value="Add">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    <div class="form-group btn-manage-tags" ng-show="tags">
+                                                        <button class="btn btn-default pull-right"
+                                                                ng-click="manage_tags=!manage_tags;manage()"> Manage
+                                                            Tags
+                                                        </button>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    </lif>
+                                                <li ng-repeat="task in tasks" class="taskCard list-group-item" droppable
+                                                    ng-drop="dropTag(task)" id="task_<%=$index%>"
+                                                    title="<%= task.status_label %>"
+                                                    style="border-left: 3px solid <%= task.status_color%>;">
+                                                    <div class="btn-group inCardOptionsBtn">
+                                                        <button class="btn btn-default btn-xs dropdown-toggle"
+                                                                type="button" data-toggle="dropdown">
+                                                            <i class="fa fa-ellipsis-vertical"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu drp-dwn-right " role="menu">
+                                                            <li>
+                                                                <a href="" ng-click="showAssigneeTags(task)">
+                                                                    <i class='fa fa-tags'></i> Add tags </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="" ng-click="deleteThisTask(task.entityKey)">
+                                                                    <i class='fa fa-trash-o'></i> Delete </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-md-1 col-xs-1">
+                                                            <input type="checkbox"
+                                                                   ng-click="select_task(task,$index,$event)"
+                                                                   ng-checked="isSelected()">
+                                                        </label>
+                                                        <h4 ng-dblclick="edit_task(task)" ng-show="edited_task!=task"
+                                                            class="col-md-6 col-xs-10 list-group-item-heading"
+                                                            ng-class="{task_closed: task.status=='closed'}">
+                                                            <%= task.title %>
+                                                        </h4>
+                                                        <div ng-show="edited_task==task" class="col-md-6 col-xs-7">
+                                                            <form ng-submit="done_edit_task(task)">
+                                                                <input ng-type="text"
+                                                                       class="form-control inlineEditTask"
+                                                                       ng-blur="done_edit_task(task)"
+                                                                       ng-model="task.title">
+                                                            </form>
+
+                                                        </div>
+                                                        <div class="col-md-5 col-xs-12">
+                                            <span ng-repeat="task_tag in task.tags"
+                                                  class="pull-right task-label task-tag badge"
+                                                  style="background-color: <%=task_tag.color%>;color:<%=idealTextColor(task_tag.color)%>;">
+                                                <%= task_tag.name %>
+                                            </span>
+                                            <span ng-repeat="assignee in task.assignees" class="pull-right">
+                                               <a href="#"> @<%= assignee.display_name %></a>
+                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <p class="col-md-11 col-md-offset-1 list-group-item-text">
+                                                            <span ng-show="task.created_by">Opened by:<a href="#"> <%=
+                                                                task.created_by.display_name %></a></span> <span
+                                                                ng-show="task.about">{{ _('related to') }}<a href="#">
+                                                            <%= task.about.name %></a></span>
+                                                            <!--<span>Closed by:<a href="#">Transline</a></span>-->
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div><!-- / col-md-12-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="col-xs-12 col-sm-12 visible-xs visible-sm">
-           <div class="row">
-            <div class="col-md-12">
-              <div class="portlet showCard">
-                <div class="portlet-title">
-                  <div class="caption">
-                    <i class="fa fa-reorder"></i>{{ _('Tags')}}
-                  </div>
-                  <!--div class="tools">
-                      <a href="javascript:;" class="collapse">
-                      </a>
-                      <a href="#portlet-config" data-toggle="modal" class="config">
-                      </a>
-                      <a href="javascript:;" class="reload">
-                      </a>
-                      <a href="javascript:;" class="remove">
-                    </a>
-                  </div-->
-                </div>
-                <div class="portlet-body">
-                <ul class="list-group tags-list">
-                  <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
-                  <div class="row">
-                    <span editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"
-                    ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet showCard">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="fa fa-reorder"></i>{{ _('Tags') }}
+                                </div>
+                                <!--div class="tools">
+                                    <a href="javascript:;" class="collapse">
+                                    </a>
+                                    <a href="#portlet-config" data-toggle="modal" class="config">
+                                    </a>
+                                    <a href="javascript:;" class="reload">
+                                    </a>
+                                    <a href="javascript:;" class="remove">
+                                  </a>
+                                </div-->
+                            </div>
+                            <div class="portlet-body">
+                                <ul class="list-group tags-list">
+                                    <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
+                                        <div class="row">
+                    <span editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)"
+                          style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);"
+                          class="with-color" ng-dblclick="editTag(tag_item)"
+                          ng-show="(tag_item!=edited_tag)||(!manage_tags)"
+                          ng-model='tag_item.name' onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                     <%= tag_item.name %>
 
                      </span>
-                    <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-                   <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                      <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-                    </span>-->
+                                            <input type="checkbox" ng-show="!manage_tags"
+                                                   ng-click="selectTag(tag_item,$index,$event)"
+                                                   style="margin-right: 10px;" class="pull-right customCheck"
+                                                   ng-checked="isSelected()">
+                                            <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
+                                               <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
+                                             </span>-->
 
-                    <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                      <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-                    </form>
-                    <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-                    </div>
-                  </li>
-                  <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
-                       <a ng-click="" class="btn-link addAnotherPhone">
-                        <i class="fa fa-tags"></i>  {{ _('Add a new tag')}}</a>
-                  </li>
+                                            <form ng-submit="doneEditTag(tag_item)"
+                                                  ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                                <input ng-blur="doneEditTag(tag_item)" type="text"
+                                                       class="col-md-offset-1 col-md-7 form-control inlineEditTag "
+                                                       ng-model="tag_item.name">
+                                            </form>
+                                            <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right"
+                                                    ng-show="manage_tags"></button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item tags-list-item" ng-hide="showNewTag"
+                                        ng-click="showNewTag=true">
+                                        <a ng-click="" class="btn-link addAnotherPhone">
+                                            <i class="fa fa-tags"></i> {{ _('Add a new tag') }}</a>
+                                    </li>
 
-                </ul>
+                                </ul>
 
-                <form class="well newTagForm" role="form" ng-show="showNewTag">
-                 <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
-                <div class="row">
-                  <div class="col-md-12 form-group">
-                    <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New tag name')}}">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-8">
-                      <!-- <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">-->
-                      <ul class="color_pallet_menu">
-                        <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                        </li>
-                      </ul>
+                                <form class="well newTagForm" role="form" ng-show="showNewTag">
+                                    <button type="button" class="close" aria-hidden="true"
+                                            ng-click="showNewTag=false"></button>
+                                    <div class="row">
+                                        <div class="col-md-12 form-group">
+                                            <input type="text" ng-model="tag.name" class="form-control" id="tag_name"
+                                                   placeholder="{{ _('New tag name') }}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <!-- <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">-->
+                                            <ul class="color_pallet_menu">
+                                                <li ng-repeat="color in color_pallet" ng-click="checkColor(color)"
+                                                    class="color-<%=color.name%>"
+                                                    ng-class='{colorChecked: color.name==tag.color.name}'>
+                                                </li>
+                                            </ul>
 
-                  </div>
-                  <div class="col-md-4">
-                    <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
-                    <!--input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}"-->
-                  </div>
-                  </div>
-                </form>
-                <div class="form-group" ng-show="tags">
-                  <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> {{ _('Manage Tags')}}
-                  </button>
-                </div>
-                </div>
-              </div>
-          </div>
-
-          <div class="row">
-            <div class="pagination pull-right" ng-hide="isLoading">
-
-                  <ul>
-                    <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
-                    {{_("Prev")}}
-                    </button></li>
-                    <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
-                    <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
-                    {{_("Next")}}
-                    </button></li>
-                  </ul>
-                </div>
-                <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
-          </div>
-        <!-- END PAGE CONTENT-->
-      </div>
-      <!-- END PAGE CONTAINER-->
-</div>
-
-<div id="beforecloseTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h3 id="myModalLabel" class="modal-title">{{ _('Close Task')}}</h3>
-                    </div>
-                    <div class="modal-body">
-                       <form id="seletesho" name="deletesho" class="form-horizontal">
-                        <p>{{_("Are you sure you want to close selected tasks")}} .</p>
-                    </div>
-                      <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                        <input ng-hide="isLoading" ng-click="closeTask()" type="submit" class="btn red" value="Close">
-                        <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
-                      </div>
-                  </form>
-                </div>
-              </div>
-             </div>
-<div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                      <h3 id="myModalLabel" class="modal-title">{{ _('Add Tags')}} </h3>
-                    </div>
-                    <div class="modal-body">
-                       <form id="seletesho" name="deletesho" class="form-horizontal">
-                       <div class="form-group">
-                            <select id="select2_sample2" class="form-control select2" multiple>
-                              <option ng-repeat="tag in tags"
-                              value='<%=tag.entityKey%>'>
-                                <%=tag.name%>
-                              </option>
-                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="submit" ng-click="addNewtag(tag)" class="btn green pull-right"
+                                                   value="{{ _('Add') }}">
+                                            <!--input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}"-->
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="form-group" ng-show="tags">
+                                    <button class="btn btn-default btn-block"
+                                            ng-click="manage_tags=!manage_tags;manage()"> {{ _('Manage Tags') }}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        
                     </div>
-                      <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                        <input ng-hide="isLoadingTask" ng-click="addTags()" type="submit" class="btn green" value="Add">
-                        <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+
+                    <div class="row">
+                        <div class="pagination pull-right" ng-hide="isLoading">
+
+                            <ul>
+                                <li ng-show="pagination.prev">
+                                    <button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                                        {{ _("Prev") }}
+                                    </button>
+                                </li>
+                                <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a
+                                        href="#/accounts/"><%= page.id %></a></li>
+                                <li ng-show="pagination.next">
+                                    <button ng-click="listNextPageItems()" class="btn">
+                                        {{ _("Next") }}
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
+                    </div>
+                    <!-- END PAGE CONTENT-->
+                </div>
+                <!-- END PAGE CONTAINER-->
+            </div>
+
+            <div id="beforecloseTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="myModalLabel" class="modal-title">{{ _('Close Task') }}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <form id="seletesho" name="deletesho" class="form-horizontal">
+                                <p>{{ _("Are you sure you want to close selected tasks") }} .</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+
+                            <input ng-hide="isLoading" ng-click="closeTask()" type="submit" class="btn red"
+                                   value="Close">
+                            <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
+                        </div>
                         </form>
-                      </div>
-                  
+                    </div>
                 </div>
             </div>
-</div>
-<div id="assigneeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-           <div class="modal-dialog">
-              <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">
-                <i class="fa fa-tasks"></i>
-                   {{_("Assign someone to this task")}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)" class="form-horizontal">
-                    <div class=''>
-                        <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="form-control" placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
-                      <div id="assigeeList" class="list-group">
-                        <div class="invitation list-group-item" ng-repeat="selected_us in slected_members">
-                          <button type="button" class="close" ng-click="unselectMember($index)" data-dismiss="alert"></button>
-                          <img class="google-avatar" ng-src="selected_us.google_public_profile_photo_url"/>
-                            <strong> <%= selected_us.google_display_name %> < <%=selected_us.email%> ></strong>
+            <div id="assigneeTagsToTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="myModalLabel" class="modal-title">{{ _('Add Tags') }} </h3>
                         </div>
-                      </div>
+                        <div class="modal-body">
+                            <form id="seletesho" name="deletesho" class="form-horizontal">
+                                <div class="form-group">
+                                    <select id="select2_sample2" class="form-control select2" multiple>
+                                        <option ng-repeat="tag in tags"
+                                                value='<%=tag.entityKey%>'>
+                                            <%=tag.name%>
+                                        </option>
+                                    </select>
+                                </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                            <input ng-hide="isLoadingTask" ng-click="addTags()" type="submit" class="btn green"
+                                   value="Add">
+                            <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
+                            </form>
+                        </div>
+
                     </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-
-                <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green" value="{{ _('Add this account') }}">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-              </div>
-               </form>
-               </div>
-               </div>
                 </div>
-               </div>
-               </div>
+            </div>
+            <div id="assigneeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="myModalLabel" class="modal-title">
+                                <i class="fa fa-tasks"></i>
+                                {{ _("Assign someone to this task") }}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)"
+                                  class="form-horizontal">
+                                <div class=''>
+                                    <input type="text" ng-model="user"
+                                           typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
+                                           typeahead-on-select="selectMember()" class="form-control"
+                                           placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
+                                    <div id="assigeeList" class="list-group">
+                                        <div class="invitation list-group-item"
+                                             ng-repeat="selected_us in slected_members">
+                                            <button type="button" class="close" ng-click="unselectMember($index)"
+                                                    data-dismiss="alert"></button>
+                                            <img class="google-avatar"
+                                                 ng-src="selected_us.google_public_profile_photo_url"/>
+                                            <strong> <%= selected_us.google_display_name %> < <%=selected_us.email%>
+                                                ></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
-       </div>
-             <div class="fixed-labelsCard visible-md visible-lg">
-           <div class="row">
-            <div class="col-md-12">
-              <div class="portlet showCard">
+                            <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green"
+                                   value="{{ _('Add this account') }}">
+                            <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}"
+                                   disabled>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="fixed-labelsCard visible-md visible-lg">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet showCard">
                 <div class="portlet-title">
-                  <div class="caption">
-                    <i class="fa fa-reorder"></i>{{ _('Tags')}}
-                  </div>
+                    <div class="caption">
+                        <i class="fa fa-reorder"></i>{{ _('Tags') }}
+                    </div>
                 </div>
                 <div class="portlet-body">
                     <div class="row">
-                    <ul class="list-group tags-list" id="slimList">
-                      <li  ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
-                        <span  editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)" style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);" class="with-color" ng-dblclick="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)"
-                         ng-model='tag_item.name'  onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
+                        <ul class="list-group tags-list" id="slimList">
+                            <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
+                        <span editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)"
+                              style="background-color:<%=tag_item.color%>;color:idealTextColor(<%=tag_item.color%>);"
+                              class="with-color" ng-dblclick="editTag(tag_item)"
+                              ng-show="(tag_item!=edited_tag)||(!manage_tags)"
+                              ng-model='tag_item.name' onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                         <%= tag_item.name %> 
                         </span>
-                        <input type="checkbox" ng-show="!manage_tags" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()">
-                       <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                          <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-                        </span>-->
+                                <input type="checkbox" ng-show="!manage_tags"
+                                       ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;"
+                                       class="pull-right customCheck" ng-checked="isSelected()">
+                                <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
+                                   <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
+                                 </span>-->
 
 
-                        <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                          <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-                        </form>
-                        <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-                      </li>
-                      <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
-                           <a ng-click="" class="btn-link addAnotherPhone">
-                            <i class="fa fa-tags"></i>  {{ _('Add a new tag')}}</a>
-                      </li>
+                                <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
+                                    <input ng-blur="doneEditTag(tag_item)" type="text"
+                                           class="col-md-offset-1 col-md-7 form-control inlineEditTag "
+                                           ng-model="tag_item.name">
+                                </form>
+                                <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right"
+                                        ng-show="manage_tags"></button>
+                            </li>
+                            <li class="list-group-item tags-list-item" ng-hide="showNewTag" ng-click="showNewTag=true">
+                                <a ng-click="" class="btn-link addAnotherPhone">
+                                    <i class="fa fa-tags"></i> {{ _('Add a new tag') }}</a>
+                            </li>
 
-                    </ul>
+                        </ul>
                     </div>
                     <form class="well newTagForm" role="form" ng-show="showNewTag">
-                     <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
-                    <div class="row">
-                      <div class="col-md-12 form-group">
-                        <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New tag name')}}">
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-8">
-                          <!-- <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">-->
-                          <ul class="color_pallet_menu">
-                            <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                            </li>
-                          </ul>
+                        <button type="button" class="close" aria-hidden="true" ng-click="showNewTag=false"></button>
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <input type="text" ng-model="tag.name" class="form-control" id="tag_name"
+                                       placeholder="{{ _('New tag name') }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <!-- <input id="tag-col-pick" type="text" class="colorpicker-default form-control" value="#8fff00">-->
+                                <ul class="color_pallet_menu">
+                                    <li ng-repeat="color in color_pallet" ng-click="checkColor(color)"
+                                        class="color-<%=color.name%>"
+                                        ng-class='{colorChecked: color.name==tag.color.name}'>
+                                    </li>
+                                </ul>
 
-                      </div>
-                      <div class="col-md-4">
-                        <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
-                        <!--input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}"-->
-                      </div>
-                      </div>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="submit" ng-click="addNewtag(tag)" class="btn green pull-right"
+                                       value="{{ _('Add') }}">
+                                <!--input type="submit" ng-show="isLoading" class="btn green pull-right" value="{{ _('Loading...') }}"-->
+                            </div>
+                        </div>
                     </form>
                     <div class="form-group" ng-show="tags">
-                      <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> {{ _('Manage Tags')}}
-                      </button>
+                        <button class="btn btn-default btn-block"
+                                ng-click="manage_tags=!manage_tags;manage()"> {{ _('Manage Tags') }}
+                        </button>
                     </div>
-                    </div>
-                  </div>
-              </div>
-              </div>
-              <div class="row">
-                <div class="pagination pull-right" ng-hide="isLoading">
-
-                      <ul>
-                        <li ng-show="pagination.prev"><button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
-                        {{_("Prev")}}
-                        </button></li>
-                        <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a  href="#/accounts/"><%= page.id %></a></li>
-                        <li  ng-show="pagination.next"><button ng-click="listNextPageItems()"  class="btn">
-                        {{_("Next")}}
-                        </button></li>
-                      </ul>
                 </div>
-                    <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
-              </div>
-            <!-- END PAGE CONTENT-->
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="pagination pull-right" ng-hide="isLoading">
 
-      <!-- END PAGE CONTAINER-->
+            <ul>
+                <li ng-show="pagination.prev">
+                    <button ng-click="listPrevPageItems()" id="sample_editable_1_new" class="btn">
+                        {{ _("Prev") }}
+                    </button>
+                </li>
+                <li ng-repeat="page in pagination.pages" ng-class='{active: page.isCurrent}'><a href="#/accounts/"><%=
+                    page.id %></a></li>
+                <li ng-show="pagination.next">
+                    <button ng-click="listNextPageItems()" class="btn">
+                        {{ _("Next") }}
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
+    </div>
+    <!-- END PAGE CONTENT-->
+
+    <!-- END PAGE CONTAINER-->
 </div>
 
- <!-- hadji hicham 08-07-2014. ask before delete task -->
-    <div id="BeforedeleteTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
+<!-- hadji hicham 08-07-2014. ask before delete task -->
+<div id="BeforedeleteTask" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Task')}}</h3>
-              </div>
-              <div class="modal-body">
-                 <form id="seletesho" name="deletesho" class="form-horizontal">
+                <h3 id="myModalLabel" class="modal-title">{{ _('Delete Task') }}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="seletesho" name="deletesho" class="form-horizontal">
 
 
-                  <p>{{_("Are you sure you want to delete those tasks")}} :  <%=selected_task.title%>.</p>
+                    <p>{{ _("Are you sure you want to delete those tasks") }} : <%=selected_task.title%>.</p>
 
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                <input  ng-click="deleteTaskonList()" type="submit" class="btn red" value="Delete this Task">
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                <input ng-click="deleteTaskonList()" type="submit" class="btn red" value="Delete this Task">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-              </div>
-               </form>
-               </div>
-               </div>
-       </div>
-    <!-- -->
-       <script type="text/javascript">
-          $('#assigeeList').lionbars({});
-       </script>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- -->
+<script type="text/javascript">
+    $('#assigeeList').lionbars({});
+</script>
 
 <script type="text/javascript">
-  $("#select2_sample2").select2({
+    $("#select2_sample2").select2({
         placeholder: "{{ _('Click to Select a label')}}",
         allowClear: false
     });
-  var handleUniform = function () {
+    var handleUniform = function () {
         if (!jQuery().uniform) {
             return;
         }
@@ -1190,5 +1537,5 @@
         }
     }
     handleUniform();
-        $('#slimList').lionbars({});
+    $('#slimList').lionbars({});
 </script>

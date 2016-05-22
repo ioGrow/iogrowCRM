@@ -2,15 +2,16 @@
     <div class="currentApp">
         <div class="btn-group">
             <a class="filterItem" href="#" data-toggle="dropdown">
-                {{_(active_app.label)}}
+                {{ _(active_app.label) }}
                 <i class="icon-angle-down fa fa-angle-down"></i>
             </a>
             <ul class="dropdown-menu">
-                {%for application in apps %}
+                {% for application in apps %}
 
-                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
+                    <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a>
+                    </li>
 
-                {%endfor%}
+                {% endfor %}
             </ul>
         </div>
     </div>
@@ -27,7 +28,7 @@
                 <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;"
                      src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif"
                      style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;"
-                     border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a> {{_("Tasks")}}  </a>
+                     border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a> {{ _("Tasks") }}  </a>
         </h2>
 
 
@@ -40,7 +41,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _('Add Tags')}} </h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _('Add Tags') }} </h3>
             </div>
             <div class="modal-body">
                 <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -54,7 +55,7 @@
                     </div>
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
                 <input ng-hide="isLoadingTask" ng-click="addTags(task)" type="submit" class="btn green" value="Add">
                 <input ng-show="isLoadingTask" type="submit" class="btn green" value="Loading..." disabled>
             </div>
@@ -68,7 +69,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Edit Task")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _("Edit Task") }}</h3>
             </div>
 
             <div class="modal-body">
@@ -79,21 +80,21 @@
                         <input class="form-control" autofocus type="text" placeholder="Add a new task"
                                ng-model="task.title">
 
-                        <p><strong>{{ _('When\'s it due?')}}</strong></p>
+                        <p><strong>{{ _('When\'s it due?') }}</strong></p>
                         <center>
                             <datetimepicker data-ng-model="task.due"
                                             data-datetimepicker-config="{ startView:'day', minView:'day' }"/>
                         </center>
 
                         <div class="form-group">
-                            <label class="required col-md-3 control-label">{{_("Status")}} </label>
+                            <label class="required col-md-3 control-label">{{ _("Status") }} </label>
 
                             <div class="col-md-9">
                                 <select class="form-control" ng-model="task.status">
 
-                                    <option value="pending">{{ _('Pending')}}</option>
-                                    <option value="working">{{ _('Working')}}</option>
-                                    <option value="closed">{{ _('Closed')}}</option>
+                                    <option value="pending">{{ _('Pending') }}</option>
+                                    <option value="working">{{ _('Working') }}</option>
+                                    <option value="closed">{{ _('Closed') }}</option>
 
                                 </select>
 
@@ -105,15 +106,15 @@
 
                     <div class="form-group">
                         <input class="form-control" autofocus type="text"
-                               placeholder="{{ _('Add labels to categorize your tasks')}}" id="taskTitle"
+                               placeholder="{{ _('Add labels to categorize your tasks') }}" id="taskTitle"
                                ng-model="task.tags">
                     </div>
 
 
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-                <button type="submit" class="btn btn-primary addContactNow green">{{_("Save")}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
+                <button type="submit" class="btn btn-primary addContactNow green">{{ _("Save") }}</button>
             </div>
             </form>
         </div>
@@ -124,8 +125,8 @@
     <ul class="page-sidebar-menu">
 
         {% for tab in tabs %}
-        <li id="id_{{tab.name}}"><a href="{{ tab.url }}"><i class="icon-cogs"></i><span
-                class="title">{{tab.label}}</span></a></li>
+            <li id="id_{{ tab.name }}"><a href="{{ tab.url }}"><i class="icon-cogs"></i><span
+                    class="title">{{ tab.label }}</span></a></li>
         {% endfor %}
 
     </ul>
@@ -135,13 +136,13 @@
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
             <div class="loader-content">
-                {{ _('Loading...')}}
+                {{ _('Loading...') }}
             </div>
         </div>
     </div>
     <div class="" ng-show="immediateFailed">
         <div class="col-md-12">
-            <h1>{{ _('Sign-in Button;')}}</h1>
+            <h1>{{ _('Sign-in Button;') }}</h1>
               <span id="signin">
                   <span id="myGsignin"></span>
               </span>
@@ -177,7 +178,7 @@
                                         ng-click="closeTask(task)">
                                     <i class="fa fa-lock"></i>
                       <span class="btn-text">
-                        {{ _('Close')}}
+                        {{ _('Close') }}
                       </span>
                                 </button>
                                 <button ng-show="task.status=='closed'"
@@ -185,39 +186,39 @@
                                         ng-click="reopenTask(task)">
                                     <i class="fa fa-unlock"></i>
                     <span class="btn-text">
-                    {{ _('Reopen')}}
+                    {{ _('Reopen') }}
                     </span>
                                 </button>
                                 <button ng-click="showAssigneeTags()"
                                         class="btn btn-sm  btn-unstyled btn-default task_action">
                                     <i class="fa fa-tags"></i>
                      <span class="btn-text">
-                        {{ _('Tags')}}
+                        {{ _('Tags') }}
                      </span>
                                 </button>
                                 <button ng-click="editbeforedelete()"
                                         class="btn btn-sm  btn-unstyled btn-default task_action">
                     <span class="page-meta pull-right">
                       <i class="icon-trash">
-                        <span class="btn-text">  {{ _('Delete')}}
+                        <span class="btn-text">  {{ _('Delete') }}
                         </span>
                       </i>
                     </span>
                                 </button>
                                 <div class="taskShowDue">
                      <span ng-hide="showDueCalendar" ng-click="showDueCalendar=true" class="ng-binding">
-                     <i class="fa fa-calendar"></i>  {{ _("<%=task.due | date:'yyyy-MM-dd'%>")}}</span>
+                     <i class="fa fa-calendar"></i> {{ _("<%=task.due | date:'yyyy-MM-dd'%>") }}</span>
                                     <div ng-show="showDueCalendar" class="input-icon" style="display: none;">
                                         <i class="fa fa-calendar"></i>
 
                                         <input cusdatetimepicker data-model="task.due" type="text" class="form-control"
-                                               placeholder="{{ _('Due Date')}}" value="" id="leadEventStartsAt">
+                                               placeholder="{{ _('Due Date') }}" value="" id="leadEventStartsAt">
 
                                     </div>
                                 </div>
                             </form>
                             <ul class="relatedTags list-unstyled showTagsList">
-                                <li ng-show="task.tags" class="inline-tags">{{ _('Tags:')}}</li>
+                                <li ng-show="task.tags" class="inline-tags">{{ _('Tags:') }}</li>
                                 <li ng-repeat="tag in task.tags" class="inline-tags">
                         <span class="pull-left task-label task-tag badge ng-scope ng-binding"
                               style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">
@@ -233,7 +234,7 @@
                     <div class="row margin-bottom-15">
                         <div class="col-md-12">
                             <ul class="list-unstyled showTagsList relatedTags">
-                                <li ng-show="task.assignees" class="inline-tags">{{ _('Assignees:')}}</li>
+                                <li ng-show="task.assignees" class="inline-tags">{{ _('Assignees:') }}</li>
                                 <li ng-repeat="assignee in task.assignees" class="inline-tags">
                                     <span ng-click="deleteassignee('<%= assignee.edgeKey %>')"
                                           class="pull-left removeRelatedTag select2-search-choice-close"> </span>
@@ -250,7 +251,7 @@
                                 <li class="inline-tags addNewAssigneeLi">
                                     <a class="pull-left task-label task-tag" ng-click="assigneeModal()">
                         <span class="" style="cursor:pointer;">
-                          {{ _("+ Add new colaborator")}}                                                     
+                          {{ _("+ Add new colaborator") }}
                         </span>
                                         <div class="clearfix"></div>
                                     </a>
@@ -260,7 +261,7 @@
                     </div>
                     <div class="row">
                         <p class="col-md-11  list-group-item-text" style="  margin-left: 10px; margin-top: -20px;">
-                            <span ng-show="task.created_by">{{ _('Opened by:')}}<a
+                            <span ng-show="task.created_by">{{ _('Opened by:') }}<a
                                     href="/#/admin/users/show/<%=task.created_by.google_user_id %>"> <%=
                                 task.created_by.display_name %></a></span>
                             <span ng-show="task.about">{{ _('related to') }}<a
@@ -271,26 +272,26 @@
                     <!-- HADJI HICHAM HH-21/10/2014 Attach files ! -->
                     <!-- begin -->
                     <div class="form-group">
-                        <p class⁼"lead"=""><strong>{{ _('Attach files')}}</strong> </p>
+                        <p class⁼"lead"=""><strong>{{ _('Attach files') }}</strong> </p>
                         <div class="btn-group">
                             <a class="btn red" href="#" data-toggle="dropdown">
-                                {{ _('Create')}}
+                                {{ _('Create') }}
                                 <i class="icon-angle-down"></i>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
                                     <img src="/static/src/img/google_drive/text/plain.png" class="">
-                                    {{ _('Document')}}
+                                    {{ _('Document') }}
                                 </a>
                                 </li>
                                 <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
                                     <img src="/static/src/img/google_drive/presentation.png" class="">
-                                    {{ _('Presentation')}}
+                                    {{ _('Presentation') }}
                                 </a>
                                 </li>
                                 <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
                                     <img src="/static/src/img/google_drive/spreadsheet.png" class="">
-                                    {{ _('Spreadsheet')}}
+                                    {{ _('Spreadsheet') }}
                                 </a>
                                 </li>
 
@@ -319,7 +320,7 @@
 
                                     <form id="addComment" class=" ng-pristine ng-valid">
                                         <div class="form-group">
-                                            <textarea placeholder='{{ _("Add a comment")}}' id="noteBody"
+                                            <textarea placeholder='{{ _("Add a comment") }}' id="noteBody"
                                                       class="form-control ng-pristine ng-valid" rows="3"
                                                       ng-model="comment.content"></textarea>
 
@@ -329,7 +330,7 @@
 
                                             <input ng-disabled="isLoading || !comment.content"
                                                    ng-click="addComment(comment)" type="submit" class="btn green"
-                                                   value="{{_('Add comment')}}">
+                                                   value="{{ _('Add comment') }}">
 
                                         </div>
                                         <div class="clearfix"></div>
@@ -339,7 +340,7 @@
                             </div>
                             <div class="portlet">
                                 <div class="portlet-title line">
-                                    <div class="caption"><i class="icon-comments"></i>{{ _('Comments')}}</div>
+                                    <div class="caption"><i class="icon-comments"></i>{{ _('Comments') }}</div>
                                 </div>
                                 <div class="portlet-body">
                                     <ul class="chats">
@@ -385,7 +386,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                <h3 id="myModalLabel" class="modal-title">{{_("Involve new contributors")}}</h3>
+                                <h3 id="myModalLabel" class="modal-title">{{ _("Involve new contributors") }}</h3>
                             </div>
                             <div class="modal-body">
                                 <form id="addAccount" name="addaccount"
@@ -393,7 +394,7 @@
 
 
                                     <p>{{ _('Invite people from your team and start working together on this task.
-                                        Everyone you invite will receive an email.')}}</p>
+                                        Everyone you invite will receive an email.') }}</p>
 
                                     <div class=''>
                                         <div class="invitation" ng-show="slected_memeber">
@@ -406,15 +407,15 @@
                                             <input type="text" ng-model="user"
                                                    typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
                                                    typeahead-on-select="selectMember()" class="form-control"
-                                                   placeholder="{{ _('Enter name or email addresse to involve people in this discussion')}}">
+                                                   placeholder="{{ _('Enter name or email addresse to involve people in this discussion') }}">
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-3 control-label">{{ _('Add as:')}}</label>
+                                            <label class="col-md-3 control-label">{{ _('Add as:') }}</label>
                                             <div class="col-md-9">
                                                 <select class="form-control medium m-wrap" tabindex="1" ng-model="role">
-                                                    <option value="responsible">{{ _('Responsible')}}</option>
-                                                    <option value="participant">{{ _('Participant')}}</option>
-                                                    <option value="invited">{{ _('Invited')}}</option>
+                                                    <option value="responsible">{{ _('Responsible') }}</option>
+                                                    <option value="participant">{{ _('Participant') }}</option>
+                                                    <option value="invited">{{ _('Invited') }}</option>
 
                                                 </select>
                                             </div>
@@ -424,8 +425,8 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                                <button type="submit" class="btn blue addContactNow">{{_("Involve")}}</button>
+                                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                                <button type="submit" class="btn blue addContactNow">{{ _("Involve") }}</button>
                             </div>
                             </form>
                         </div>
@@ -446,12 +447,12 @@
                     <div class="portlet showCard">
                         <div class="portlet-title line">
                             <div class="caption">
-                                {{ _("Add Tasks directly from Gmail")}}
+                                {{ _("Add Tasks directly from Gmail") }}
                             </div>
                         </div>
                         <div class="portlet-body">
                             <input type="submit" onclick="chrome.webstore.install()"
-                                   class="btn blue btn-block pull-right" value="{{_('Install chrome extension')}}"
+                                   class="btn blue btn-block pull-right" value="{{ _('Install chrome extension') }}"
                                    style="padding-left:5px;padding-right:5px;">
                             <div class="clearfix"></div>
                         </div>
@@ -467,7 +468,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h3 id="myModalLabel" class="modal-title">
                             <i class="fa fa-tasks"></i>
-                            {{_("Assign someone to this task")}}</h3>
+                            {{ _("Assign someone to this task") }}</h3>
                     </div>
                     <div class="modal-body">
                         <form id="addMember" name="addaccount" ng-submit="share(slected_memeber)"
@@ -502,14 +503,14 @@
                                 <div class="newUser">
                                     <a href="/#/admin/users/" target="new" ng-click="gotoNewUser()">
                                         <i class="fa fa-user"></i>
-                                        {{ _("Add new User")}}
+                                        {{ _("Add new User") }}
                                     </a>
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                         <input ng-hide="isLoading" ng-click="addNewContributors()" type="submit" class="btn green"
                                value="{{ _('Assign') }}">
@@ -530,20 +531,21 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="myModalLabel" class="modal-title">{{ _('Delete Task')}}</h3>
+                        <h3 id="myModalLabel" class="modal-title">{{ _('Delete Task') }}</h3>
                     </div>
                     <div class="modal-body">
                         <form id="seletesho" name="deletesho" class="form-horizontal">
 
 
-                            <p>{{_("Are you sure you want to delete this task")}} : <%=task.title%>.</p>
+                            <p>{{ _("Are you sure you want to delete this task") }} : <%=task.title%>.</p>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
 
-                        <input ng-click="deleteTask()" type="submit" class="btn red" value="{{ _('Delete this Task')}}">
+                        <input ng-click="deleteTask()" type="submit" class="btn red"
+                               value="{{ _('Delete this Task') }}">
 
                         <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                     </div>
@@ -561,27 +563,27 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Sharing Settings")}}</h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _("Sharing Settings") }}</h3>
             </div>
             <div class="modal-body">
                 <form id="addMember" name="addaccount" class="form-horizontal">
-                    <p>{{ _("Who has access:")}}</p>
-                    <div class="radio-list" ng-show="task.owner.google_user_id=={{ME}}">
+                    <p>{{ _("Who has access:") }}</p>
+                    <div class="radio-list" ng-show="task.owner.google_user_id=={{ ME }}">
                         <label>
                             <input type="radio" name="optionRadio" value="public" ng-model="task.access"
                                    ng-click="share();"/>
-                            {{ _("public: Anyone within your organization can access and find")}}
+                            {{ _("public: Anyone within your organization can access and find") }}
                         </label>
                         <label>
                             <input type="radio" name="optionRadio" value="private" ng-model="task.access"
                                    ng-click="share();"/>
-                            {{ _("private: only you and your collaborators")}}
+                            {{ _("private: only you and your collaborators") }}
                         </label>
                     </div>
-                    <div ng-hide="task.owner.google_user_id=={{ME}}">
+                    <div ng-hide="task.owner.google_user_id=={{ ME }}">
 
-                        <label>{{ _("you can't edit this you are not the owner")}} </label> <br>
-                        <label>{{ _("The owner is:")}}</label>
+                        <label>{{ _("you can't edit this you are not the owner") }} </label> <br>
+                        <label>{{ _("The owner is:") }}</label>
                         <div class="invitation">
                             <img class="google-avatar" ng-src="<%=task.owner.google_public_profile_photo_url%>"/>
                             <%=task.owner.display_name%> < <a> <%=task.owner.email%> </a> >
@@ -589,12 +591,12 @@
                     </div>
                     <hr/>
                     <div class='' id="collaborators">
-                        <p>{{ _("Collaborators:")}}</p>
+                        <p>{{ _("Collaborators:") }}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                             <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
                             <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
                             <button class="btn"
-                                    ng-hide="task.owner.google_user_id==collaborator.google_user_id || task.access=='public' || task.owner.google_user_id!={{ME}}"
+                                    ng-hide="task.owner.google_user_id==collaborator.google_user_id || task.access=='public' || task.owner.google_user_id!={{ ME }}"
                                     ng-click="DeleteCollaborator(collaborator.entityKey)">x
                             </button>
                         </div>
@@ -602,28 +604,28 @@
                     </div>
                     <hr/>
 
-                    <div ng-show="task.owner.google_user_id=={{ME}}">
-                        <p>{{ _("Invited user:")}}</p>
+                    <div ng-show="task.owner.google_user_id=={{ ME }}">
+                        <p>{{ _("Invited user:") }}</p>
                         <div class="invitation" ng-repeat="invited in sharing_with">
                             <img class="google-avatar" ng-src="invited.google_public_profile_photo_url"/>
                             <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
                             <hr/>
                         </div>
 
-                        <p>{{ _("Invite collaborators:")}}</p>
+                        <p>{{ _("Invite collaborators:") }}</p>
                         <div class="form-group">
                             <input type="text" ng-model="user"
                                    typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
                                    typeahead-on-select="selectMember()" class="form-control"
-                                   placeholder="{{ _('Enter name or email addresse to add people to this group')}}">
+                                   placeholder="{{ _('Enter name or email addresse to add people to this group') }}">
                         </div>
 
                     </div>
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
                 <button type="submit" ng-click="share()" data-dismiss="modal" aria-hidden="true"
-                        class="btn blue addContactNow">{{_("Share")}}
+                        class="btn blue addContactNow">{{ _("Share") }}
                 </button>
             </div>
             </form>
@@ -652,20 +654,20 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{_("Create a new")}} <%=mimeType%></h3>
+                <h3 id="myModalLabel" class="modal-title">{{ _("Create a new") }} <%=mimeType%></h3>
             </div>
             <div class="modal-body">
                 <div class="controls controls-row">
                     <form id="addTask" class="ng-pristine ng-valid">
                         <input class="form-control" autofocus type="text"
-                               placeholder="{{ _('Enter a new')}} <%=mimeType%> {{ _('name')}}" id="taskTitle"
+                               placeholder="{{ _('Enter a new') }} <%=mimeType%> {{ _('name') }}" id="taskTitle"
                                ng-model="newdocument.title" required>
 
 
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</button>
 
                 <input ng-hide="isLoading" type="submit" class="btn green" value="Create this document"
                        ng-click="createDocument(newdocument)">

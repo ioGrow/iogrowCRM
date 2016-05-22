@@ -1,13 +1,13 @@
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}}</span>
+            <span class="active-app"><i class="fa fa-cog"></i> {{ _(active_app.label) }}</span>
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
-            {%for application in apps %}
-            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
-            {%endfor%}
+            {% for application in apps %}
+                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
+            {% endfor %}
         </ul>
     </div>
     <div class="subHeaderContent" style="border-right-width: 0;">
@@ -16,10 +16,10 @@
         </div>
 
         <a class="btn red save-btn pull-right" id="customButton" ng-click="saveUser()">
-            <i class="fa fa-floppy-o"></i> {{_("Save")}}
+            <i class="fa fa-floppy-o"></i> {{ _("Save") }}
         </a>
         <a class="btn default pull-right" ng-click="resetToDefault()" style="margin-right: 10px">
-            <i class="fa fa-reply"></i> {{_("Default")}}
+            <i class="fa fa-reply"></i> {{ _("Default") }}
         </a>
 
     </div>
@@ -57,10 +57,10 @@
             <div><i class="material-icons" style="font-size: 14px;">translate</i> {{ _('Language') }} </div>
             <div class="col-md-5  " style="padding: 0px">
                 <select name="" id="language_picker" class="form-control select2 no-icon">
-                    <option value="en">{{_('English')}}</option>
-                    <option value="ar">{{_('Arabic')}}</option>
-                    <option value="fr">{{_('French')}}</option>
-                    <option value="pt_BR">{{_('Portuguese/Brazil')}}</option>
+                    <option value="en">{{ _('English') }}</option>
+                    <option value="ar">{{ _('Arabic') }}</option>
+                    <option value="fr">{{ _('French') }}</option>
+                    <option value="pt_BR">{{ _('Portuguese/Brazil') }}</option>
                 </select>
             </div>
         </div>
