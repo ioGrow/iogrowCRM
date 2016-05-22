@@ -1,4 +1,3 @@
-
 /*------------------------------------*\
     CONTENTS
 \*------------------------------------*/
@@ -4447,6 +4446,24 @@ td .over{
 }
 .cardElement .placeholder-left{
   display: none;
+}
+#assigeeList{
+  max-height: 160px;
+} 
+.lead_related_events,.slim-linkedin,#slimList,#assigeeList1,.scrollList{
+  max-height: 195px;
+} 
+.scrollList2{
+  max-height: 205px;
+}
+#slimRelated{
+  max-hieght:250px;
+}
+#collaborators{
+  max-height: 192px;
+} 
+#slimtest1,#contactScroll{
+  max-height: 200px;
 }
 @media (min-width: 992px){
   .hide_md{display: inline-block !important;}

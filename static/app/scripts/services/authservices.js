@@ -56,12 +56,7 @@ accountservices.factory('Auth', function($http) {
       // render Google+ sign-in
       }else{
               Auth.$scope.immediateFailed = true;
-               Auth.$scope.apply();  
-             /* if (typeof  Auth.$scope.apply() == 'function') { 
-                  Auth.$scope.apply()
-              }else{
-               
-              }*/
+               Auth.$scope.apply();
               gapi.signin.render('myGsignin', {
                 'callback': Auth.signIn,
                 'clientid': '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com',

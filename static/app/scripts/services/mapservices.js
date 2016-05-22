@@ -106,52 +106,18 @@ mapservices.factory('Map', function($http) {
       };*/
   };
   Map.autocomplete=function($scope,inputId){
-        /* var mapOptions = {
-                  center: new google.maps.LatLng(0, 0),
-                  zoom: 01
-      };*/
-     /* $map=$('#gmap_canvas');
-      mapCanvas = new google.maps.Map(document.getElementById('gmap_canvas'),mapOptions);
-      google.maps.event.addListener(mapCanvas, 'tilesloaded', function() {
-         $map.find('a').attr('tabindex', 999);
-      });*/
-      var input = /** @type {HTMLInputElement} */(document.getElementById(inputId));
+      var input = (document.getElementById(inputId));
       var autocomplete = new google.maps.places.Autocomplete(input);
-      /*autocomplete.bindTo('bounds', mapCanvas);*/
-     /* var marker = new google.maps.Marker({
-        map: mapCanvas,
-        anchorPoint: new google.maps.Point(0, 0)
-      });*/
        google.maps.event.addListener(autocomplete, 'place_changed', function() {
-        /*infowindow.close();
-        marker.setVisible(false);*/
         if (inputId=="relatedaddressInput") {
           $scope.isRelatedAddress=true;
         };
         var place = autocomplete.getPlace();
         if (!place.geometry) {
-          /*input.value="";*/
+
           $scope.notFoundAddress(place,inputId);
           return;
         }
-
-        // If the place has a geometry, then present it on a map.
-        if (place.geometry.viewport) {
-          /*mapCanvas.fitBounds(place.geometry.viewport);*/
-        } else {
-          /*mapCanvas.setCenter(place.geometry.location);
-          mapCanvas.setZoom(17);  // Why 17? Because it looks good.*/
-        }
-        /*marker.setIcon(/** @type {google.maps.Icon} *//*({
-          url: place.icon,
-          size: new google.maps.Size(71, 71),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(17, 34),
-          scaledSize: new google.maps.Size(35, 35)
-        }));
-        marker.setPosition(place.geometry.location);
-        marker.setVisible(true);*/
-
         var address = '';
         var add = {};
         add.lat=place.geometry.location.lat();
@@ -179,59 +145,21 @@ mapservices.factory('Map', function($http) {
         }
            input.value = "";
         $scope.addGeo(add);
-       /* infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-        infowindow.open(mapCanvas, marker);*/
-
       });
   }
 
   Map.autocompleteCalendar=function($scope,inputId){
-       
-        /* var mapOptions = {
-                  center: new google.maps.LatLng(0, 0),
-                  zoom: 01autocompleteCalendar
-      };*/
-     /* $map=$('#gmap_canvas');
-      mapCanvas = new google.maps.Map(document.getElementById('gmap_canvas'),mapOptions);
-      google.maps.event.addListener(mapCanvas, 'tilesloaded', function() {
-         $map.find('a').attr('tabindex', 999);
-      });*/
-      var input = /** @type {HTMLInputElement} */(document.getElementById(inputId));
+      var input = (document.getElementById(inputId));
       var autocomplete = new google.maps.places.Autocomplete(input);
-      /*autocomplete.bindTo('bounds', mapCanvas);*/
-     /* var marker = new google.maps.Marker({
-        map: mapCanvas,
-        anchorPoint: new google.maps.Point(0, 0)
-      });*/
        google.maps.event.addListener(autocomplete, 'place_changed', function() {
-        /*infowindow.close();
-        marker.setVisible(false);*/
         if (inputId=="relatedaddress") {
           $scope.isRelatedAddress=true;
         };
         var place = autocomplete.getPlace();
         if (!place.geometry) {
-          /*input.value="";*/
           $scope.notFoundAddress(place,inputId);
           return;
         }
-
-        // If the place has a geometry, then present it on a map.
-        if (place.geometry.viewport) {
-          /*mapCanvas.fitBounds(place.geometry.viewport);*/
-        } else {
-          /*mapCanvas.setCenter(place.geometry.location);
-          mapCanvas.setZoom(17);  // Why 17? Because it looks good.*/
-        }
-        /*marker.setIcon(/** @type {google.maps.Icon} *//*({
-          url: place.icon,
-          size: new google.maps.Size(71, 71),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(17, 34),
-          scaledSize: new google.maps.Size(35, 35)
-        }));
-        marker.setPosition(place.geometry.location);
-        marker.setVisible(true);*/
 
         var address = '';
         var add = {};
@@ -259,10 +187,6 @@ mapservices.factory('Map', function($http) {
           }         
         }
         $scope.addGeoCalendar(add);
-       /* infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-        infowindow.open(mapCanvas, marker);*/
-     // input.value="";
-
       });
   }
 
@@ -289,18 +213,10 @@ mapservices.factory('Map', function($http) {
 
         var place = autocomplete.getPlace();
         if (!place.geometry) {
-          /*input.value="";*/
           $scope.notFoundAddress(place,inputId);
           return;
         }
 
-        // If the place has a geometry, then present it on a map.
-        if (place.geometry.viewport) {
-          //mapCanvas.fitBounds(place.geometry.viewport);
-        } else {
-         /* mapCanvas.setCenter(place.geometry.location);
-          mapCanvas.setZoom(17);  // Why 17? Because it looks good.*/
-        }
         var address = '';
         var add = {};
         add.lat=place.geometry.location.lat();

@@ -158,83 +158,6 @@ class Coupon(ndb.Model):
         return cls.query(cls.code == code).get()
 
 
-class SFuser(ndb.Model):
-    firstname = ndb.StringProperty()
-    lastname = ndb.StringProperty()
-    email = ndb.StringProperty(required=True)
-    stripe_id = ndb.StringProperty()
-    active_until = ndb.DateTimeProperty()
-    created_at = ndb.DateTimeProperty(auto_now_add=True)
-    updated_at = ndb.DateTimeProperty(auto_now=True)
-
-
-class SFinvitation(ndb.Model):
-    user_email = ndb.StringProperty()
-    user_key = ndb.KeyProperty()
-    partner_email = ndb.StringProperty()
-    partner_key = ndb.KeyProperty()
-    invitee_email = ndb.StringProperty()
-    invitee_name = ndb.StringProperty()
-    status = ndb.StringProperty(default='pending')
-    opened = ndb.IntegerProperty(default=0)
-    clicked = ndb.IntegerProperty(default=0)
-    invited_at = ndb.DateTimeProperty(auto_now_add=True)
-    subscription_started_at = ndb.DateTimeProperty()
-    subscription_ended_at = ndb.DateTimeProperty()
-
-    @classmethod
-    def list_by_partner(cls, partner_key):
-        response = {
-            'pending': [],
-            'active': [],
-            'paying': [],
-            'all': []
-        }
-        invitees = cls.query(cls.partner_key==partner_key).fetch()
-        for invitee in invitees:
-            invitee_dict = {
-                'invitee_email': invitee.invitee_email,
-                'status': invitee.status
-            }
-            if invitee.status =='active':
-                response['active'].append(invitee_dict)
-            elif invitee.status =='paying':
-                response['paying'].append(invitee_dict)
-            else:
-                response['pending'].append(invitee_dict)
-        response['all'] = response['pending'] + response['active'] + response['paying']
-        return response
-
-
-
-class SFpartner(ndb.Model):
-    firstname = ndb.StringProperty()
-    lastname = ndb.StringProperty()
-    email = ndb.StringProperty()
-    phone = ndb.StringProperty()
-    country = ndb.StringProperty()
-
-
-class SFLead(ndb.Model):
-    firstname = ndb.StringProperty()
-    lastname = ndb.StringProperty()
-    sf_id = ndb.StringProperty(required=True)
-    photo_url = ndb.StringProperty()
-    linkedin_url = ndb.StringProperty()
-    created_at = ndb.DateTimeProperty(auto_now_add=True)
-    created_by = ndb.KeyProperty()
-
-
-class ZohoLead(ndb.Model):
-    firstname = ndb.StringProperty()
-    lastname = ndb.StringProperty()
-    zoho_id = ndb.StringProperty(required=True)
-    photo_url = ndb.StringProperty()
-    linkedin_url = ndb.StringProperty()
-    created_at = ndb.DateTimeProperty(auto_now_add=True)
-    created_by = ndb.KeyProperty()
-
-
 class PaypalPayedUser(ndb.Model):
     txn_type = ndb.StringProperty()
     subscr_id = ndb.StringProperty()
@@ -256,11 +179,6 @@ class PaypalPayedUser(ndb.Model):
     option_selection1 = ndb.StringProperty()
     option_name1 = ndb.StringProperty()
     active_until = ndb.DateTimeProperty()
-
-
-class ZohoUser(ndb.Model):
-    email = ndb.StringProperty()
-    created_at = ndb.DateTimeProperty(auto_now_add=True)
 
 
 class Application(ndb.Model):
@@ -1874,23 +1792,6 @@ class ProxyServer(ndb.Model):
         else:
             server.status = 'problem'
             server.put()
-
-
-
-
-
-class CopyLeadSfSession(ndb.Model):
-    access_token = ndb.StringProperty()
-    user = ndb.KeyProperty()
-    created_at = ndb.DateTimeProperty(auto_now_add=True)
-
-    @classmethod
-    def get_by_access_token(cls, access_token):
-        response = cls.query(cls.access_token == access_token).fetch(1)
-        if response:
-            session = response[0]
-            return session.user
-        return None
 
 
 def is_locale():

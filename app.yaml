@@ -18,7 +18,7 @@ libraries:
 
 builtins:
 - remote_api: on
-- appstats: on #/_ah/stats/
+- appstats: on
 
 handlers:
 - url: /admin/.*
