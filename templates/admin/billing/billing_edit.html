@@ -62,7 +62,7 @@
                     </div>
                     <div class="form-group" ng-show="subscription.quantity">
                         <label class="col-sm-4 control-label"
-                               style="text-align: left">{{ _('Puchased Licences') }}:</label>
+                               style="text-align: left">{{ _('Puchased Licenses') }}:</label>
                         <div class="col-sm-6">
                             <p class="form-control-static"> <%= subscription.quantity%></p>
                         </div>
@@ -92,15 +92,15 @@
             </div>
             <div class="row" style="padding: 0px 7%;margin-bottom: 40px;" ng-show="org_subscription.plan.name == 'premium'">
                 <h3 class="billingTitle">
-                    <i class="fa fa-building" style="font-size: 21px;"></i>{{ _('Buy new licences') }}</h3>
+                    <i class="fa fa-building" style="font-size: 21px;"></i>{{ _('Buy new licenses') }}</h3>
                 <hr>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <input type="number" class="form-control" placeholder="Number of licences"
+                        <input type="number" class="form-control" placeholder="Number of licenses"
                                ng-model="quantity" style="text-align: center; font-size: 16px">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary" ng-click="byNewLicences(quantity)">Buy now</button>
+                <button type="submit" class="btn btn-primary" ng-click="byNewLicences(quantity)">{{ _('Buy now') }}</button>
             </div>
         </div>
     </div>

@@ -41,10 +41,10 @@ Intercom.app_id = 's9iirr8w'
 Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 
 CLIENT_ID = json.loads(
-    open('client_secrets.json').read())['web']['client_id']
+    open('config/client_secrets.json').read())['web']['client_id_online']
 
 CLIENT_SECRET = json.loads(
-    open('client_secrets.json').read())['web']['client_secret']
+    open('config/client_secrets.json').read())['web']['client_secret']
 
 SCOPES = [
     'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
@@ -657,7 +657,7 @@ class Organization(ndb.Model):
         if org_subscription.quantity - assigned_licenses < 1:
             raise endpoints.UnauthorizedException('you need more licenses')
         if user_subscription.key == org_subscription.key:
-            raise endpoints.BadRequestException('this user already have an activated licences')
+            raise endpoints.BadRequestException('this user already have an activated licenses')
         if user.organization != org_key:
             raise endpoints.UnauthorizedException('The user is not withing your organization')
         user.set_subscription(org_subscription)
@@ -673,7 +673,7 @@ class Organization(ndb.Model):
         if user_subscription.plan.get().name != config.PREMIUM:
             raise endpoints.BadRequestException('You have to upgrade')
         if user_subscription.key != org_subscription.key:
-            raise endpoints.BadRequestException('this user already have an activated licences')
+            raise endpoints.BadRequestException('this user already have an activated licenses')
         if user.organization != org_key:
             raise endpoints.UnauthorizedException('The user is not withing your organization')
         user.set_subscription(Subscription.create_freemium_subscription())
@@ -1267,7 +1267,7 @@ class User(EndpointsModel):
           FlowExchangeException Failed to exchange code (code invalid).
         """
         oauth_flow = flow_from_clientsecrets(
-            'offline_client_secrets.json',
+            'config/client_secrets.json',
             scope=SCOPES
         )
         oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
