@@ -1,244 +1,622 @@
-<!DOCTYPE html><html class="google-js js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang=en><head><meta http-equiv=Content-Type content="text/html; charset=UTF-8"><meta content="IE=edge" http-equiv=X-UA-Compatible><meta http-equiv=content-language content=en><meta charset=utf-8><meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" name=viewport><meta name=description content="CRM for social selling on Google. organize your sales process, Lead generation from Linkedin, Twitter and Gmail"><meta content="ioGrow - A smart social CRM for small businesses on Google" property=og:title><meta content=http://storage.googleapis.com/iogrow-gs/Logo-iogrow-gray.png property=og:image><meta content="Lead generation and sales process organization" property=og:description><title>CRM for social selling on Google, leads from linkedIn | ioGrow</title><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic" rel=stylesheet><link href=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/maia.experimental.css.gz rel=stylesheet><link href="/static/landing/site.min.css" rel=stylesheet><script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/modernizr.js.gz></script>
-<script src=https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js></script>
-<link href=http://storage.googleapis.com/iogrow-gs/Logo-iogrow.ico rel="shortcut icon"><style type=text/css>.heading{font-size:48px}.section-download .one-whole img,.section-intro .one-whole img{height:125px;margin:0 auto 20px auto}.try-iogrow{padding-left:50px;padding-right:50px}.google-signin{padding-top:15px}.together{font-size:47px}.hr-style{width:200px;height:2px;border:0;border-top:1px solid #0d0641}.same-color{color:#0d0641;font-weight:700}.video-webm{width:100%;text-align:center}</style><script type=text/javascript>!function(){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://plus.google.com/js/client:plusone.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)}();</script><script type=text/javascript>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-if (window.location.host != "localhost")
-{
-  {%if user %}
-    ga('create', 'UA-52188380-1', { 'userId': {{user.google_user_id}} });
-    ga('send', 'pageview');
-  {% else %}
-        ga('create', 'UA-52188380-1', 'auto');
-        ga('send', 'pageview');
-  {% endif %}
-}</script><script type="text/javascript">
-  $( document ).ajaxStart(function() {
-       $('#loading').show();
-  });
-  $.urlParam = function(name){
-      var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-      if (results)
-        return results[1] || 0;
-      return 0;
-  }
-var helper = (function() {
-  var authResult = undefined;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+    <meta content="IE=edge" http-equiv=X-UA-Compatible>
+    <meta http-equiv=content-language content=en>
+    <meta charset=utf-8>
+    <meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" name=viewport>
+    <meta name=description
+          content="CRM for social selling on Google. organize your sales process, Lead generation from Linkedin, Twitter and Gmail">
+    <meta content="ioGrow - A smart social CRM for small businesses on Google" property=og:title>
+    <meta content=http://storage.googleapis.com/iogrow-gs/Logo-iogrow-gray.png property=og:image>
+    <meta content="Lead generation and sales process organization" property=og:description>
+    <title>CRM for social selling on Google, leads from linkedIn | ioGrow</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic"
+          rel=stylesheet>
+    <link href=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/maia.experimental.css.gz rel=stylesheet>
+    <link href="/static/landing/site.css" rel=stylesheet>
+    <script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/modernizr.js.gz></script>
+    <script src=https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js></script>
+    <link href=http://storage.googleapis.com/iogrow-gs/Logo-iogrow.ico rel="shortcut icon">
+    <style type=text/css>.heading {
+        font-size: 48px
+    }
 
-  return {
-    /**
-     * Hides the sign-in button and connects the server-side app after
-     * the user successfully signs in.
-     *
-     * @param {Object} authResult An Object which contains the access token and
-     *   other authentication information.
-     */
-    onSignInCallback: function(authResult) {
-      $('#authResult').html('Auth Result:<br/>');
+    .section-download .one-whole img, .section-intro .one-whole img {
+        height: 125px;
+        margin: 0 auto 20px auto
+    }
 
-      if (authResult['access_token']) {
-        // The user is signed in
-        this.authResult = authResult;
-        if (typeof(Storage) != "undefined") {
-          localStorage['is_signed_in'] = true;
-          localStorage['access_token']=authResult.access_token;
-          localStorage['authResultexpiration'] = authResult.expires_at;
-        }
-        helper.connectServer();
-        // After we load the Google+ API, render the profile data from Google+.
-        //gapi.client.load('plus','v1',this.renderProfile);
+    .try-iogrow {
+        padding-left: 50px;
+        padding-right: 50px
+    }
 
+    .google-signin {
+        padding-top: 15px
+    }
 
-      } else if (authResult['error']) {
-        // There was an error, which means the user is not signed in.
-        // As an example, you can troubleshoot by writing to the console:
-        $('#authResult').append('Logged out');
-        $('#authOps').hide('slow');
-        $('#gConnect').show();
-      }
-    },
-    /**
-     * Retrieves and renders the authenticated user's Google+ profile.
-     */
-    renderProfile: function() {
-      var request = gapi.client.plus.people.get( {'userId' : 'me'} );
-      request.execute( function(profile) {
-          $('#profile').empty();
-          if (profile.error) {
-            $('#profile').append(profile.error);
-            return;
-          }
-          $('#profile').append(
-              $('<p><img src=\"' + profile.image.url + '\"></p>'));
-          $('#profile').append(
-              $('<p>Hello ' + profile.displayName + '!<br />Tagline: ' +
-              profile.tagline + '<br />About: ' + profile.aboutMe + '</p>'));
-          if (profile.cover && profile.coverPhoto) {
-            $('#profile').append(
-                $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
-          }
+    .together {
+        font-size: 47px
+    }
+
+    .hr-style {
+        width: 200px;
+        height: 2px;
+        border: 0;
+        border-top: 1px solid #0d0641
+    }
+
+    .same-color {
+        color: #0d0641;
+        font-weight: 700
+    }
+
+    .video-webm {
+        width: 100%;
+        text-align: center
+    }</style>
+    <script type=text/javascript>!function () {
+        var e = document.createElement("script");
+        e.type = "text/javascript", e.async = !0, e.src = "https://plus.google.com/js/client:plusone.js";
+        var t = document.getElementsByTagName("script")[0];
+        t.parentNode.insertBefore(e, t)
+    }();</script>
+    <script type=text/javascript>(function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    if (window.location.host != "localhost") {
+        {%if user %}
+            ga('create', 'UA-52188380-1', {'userId': {{user.google_user_id}}});
+            ga('send', 'pageview');
+        {% else %}
+            ga('create', 'UA-52188380-1', 'auto');
+            ga('send', 'pageview');
+        {% endif %}
+    }</script>
+    <script type="text/javascript">
+        $(document).ajaxStart(function () {
+            $('#loading').show();
         });
-      $('#authOps').show('slow');
-      $('#gConnect').hide();
-    },
-    /**
-     * Calls the server endpoint to disconnect the app for the user.
-     */
-    disconnectServer: function() {
-      // Revoke the server tokens
-      $.ajax({
-        type: 'POST',
-        url: window.location.href + '/disconnect',
-        async: false,
-        success: function(result) {
-          $('#authOps').hide();
-          $('#profile').empty();
-          $('#visiblePeople').empty();
-          $('#authResult').empty();
-          $('#gConnect').show();
-        },
-        error: function(e) {
-          console.log(e);
+        $.urlParam = function (name) {
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            if (results)
+                return results[1] || 0;
+            return 0;
         }
-      });
-    },
-    /**
-     * Calls the server endpoint to connect the app for the user. The client
-     * sends the one-time authorization code to the server and the server
-     * exchanges the code for its own tokens to use for offline API access.
-     * For more information, see:
-     *   https://developers.google.com/+/web/signin/server-side-flow
-     */
-    connectServer: function() {
-      var userId = '{{ID}}';
-      $.ajax({
-        type: 'POST',
-        url: '/gconnect',
-        success: function(result) {
-            var urlParam = $.urlParam('continue_url');
+        var helper = (function () {
+            var authResult = undefined;
 
-            if(urlParam) window.location.replace('/#/'+ urlParam);
-            else window.location.replace('/');
-        },
-        data: {code:this.authResult.code, id: userId}
-      });
-    },
-    /**
-     * Calls the server endpoint to get the list of people visible to this app.
-     */
-    people: function() {
-      $.ajax({
-        type: 'GET',
-        url: window.location.href + '/people',
-        contentType: 'application/octet-stream; charset=utf-8',
-        success: function(result) {
-          helper.appendCircled(result);
-        },
-        processData: false
-      });
-    },
-    /**
-     * Displays visible People retrieved from server.
-     *
-     * @param {Object} people A list of Google+ Person resources.
-     */
-    appendCircled: function(people) {
-      $('#visiblePeople').empty();
+            return {
+                /**
+                 * Hides the sign-in button and connects the server-side app after
+                 * the user successfully signs in.
+                 *
+                 * @param {Object} authResult An Object which contains the access token and
+                 *   other authentication information.
+                 */
+                onSignInCallback: function (authResult) {
+                    $('#authResult').html('Auth Result:<br/>');
 
-      $('#visiblePeople').append('Number of people visible to this app: ' +
-          people.totalItems + '<br/>');
-      for (var personIndex in people.items) {
-        person = people.items[personIndex];
-        $('#visiblePeople').append('<img src="' + person.image.url + '">');
-      }
-    },
-  };
-})();
-
-/**
- * Perform jQuery initialization and check to ensure that you up dated your
- * client ID.
- */
-
-function onSignInCallback(authResult) {
-  helper.onSignInCallback(authResult);
-  mixpanel.track("SIGNIN_CLICK");
-}
-/**
- * Calls the helper method that handles the authentication flow.
- *
- * @param {Object} authResult An Object which contains the access token and
- *   other authentication information.
- */
+                    if (authResult['access_token']) {
+                        // The user is signed in
+                        this.authResult = authResult;
+                        if (typeof(Storage) != "undefined") {
+                            localStorage['is_signed_in'] = true;
+                            localStorage['access_token'] = authResult.access_token;
+                            localStorage['authResultexpiration'] = authResult.expires_at;
+                        }
+                        helper.connectServer();
+                        // After we load the Google+ API, render the profile data from Google+.
+                        //gapi.client.load('plus','v1',this.renderProfile);
 
 
+                    } else if (authResult['error']) {
+                        // There was an error, which means the user is not signed in.
+                        // As an example, you can troubleshoot by writing to the console:
+                        $('#authResult').append('Logged out');
+                        $('#authOps').hide('slow');
+                        $('#gConnect').show();
+                    }
+                },
+                /**
+                 * Retrieves and renders the authenticated user's Google+ profile.
+                 */
+                renderProfile: function () {
+                    var request = gapi.client.plus.people.get({'userId': 'me'});
+                    request.execute(function (profile) {
+                        $('#profile').empty();
+                        if (profile.error) {
+                            $('#profile').append(profile.error);
+                            return;
+                        }
+                        $('#profile').append(
+                                $('<p><img src=\"' + profile.image.url + '\"></p>'));
+                        $('#profile').append(
+                                $('<p>Hello ' + profile.displayName + '!<br />Tagline: ' +
+                                        profile.tagline + '<br />About: ' + profile.aboutMe + '</p>'));
+                        if (profile.cover && profile.coverPhoto) {
+                            $('#profile').append(
+                                    $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
+                        }
+                    });
+                    $('#authOps').show('slow');
+                    $('#gConnect').hide();
+                },
+                /**
+                 * Calls the server endpoint to disconnect the app for the user.
+                 */
+                disconnectServer: function () {
+                    // Revoke the server tokens
+                    $.ajax({
+                        type: 'POST',
+                        url: window.location.href + '/disconnect',
+                        async: false,
+                        success: function (result) {
+                            $('#authOps').hide();
+                            $('#profile').empty();
+                            $('#visiblePeople').empty();
+                            $('#authResult').empty();
+                            $('#gConnect').show();
+                        },
+                        error: function (e) {
+                            console.log(e);
+                        }
+                    });
+                },
+                /**
+                 * Calls the server endpoint to connect the app for the user. The client
+                 * sends the one-time authorization code to the server and the server
+                 * exchanges the code for its own tokens to use for offline API access.
+                 * For more information, see:
+                 *   https://developers.google.com/+/web/signin/server-side-flow
+                 */
+                connectServer: function () {
+                    var userId = '{{ID}}';
+                    $.ajax({
+                        type: 'POST',
+                        url: '/gconnect',
+                        success: function (result) {
+                            var urlParam = $.urlParam('continue_url');
 
-function playIlyesVideo(){
-   var ilyesVideo = $('.video-webm');
-   if($('.video-webm').get(0).paused){
-       $('.video-webm').get(0).play();
-   }
-  
- }
- window.IlyesVideoPlayed = false;
- // $(window).scroll(function() {
+                            if (urlParam) window.location.replace('/#/' + urlParam);
+                            else window.location.replace('/');
+                        },
+                        data: {code: this.authResult.code, id: userId}
+                    });
+                },
+                /**
+                 * Calls the server endpoint to get the list of people visible to this app.
+                 */
+                people: function () {
+                    $.ajax({
+                        type: 'GET',
+                        url: window.location.href + '/people',
+                        contentType: 'application/octet-stream; charset=utf-8',
+                        success: function (result) {
+                            helper.appendCircled(result);
+                        },
+                        processData: false
+                    });
+                },
+                /**
+                 * Displays visible People retrieved from server.
+                 *
+                 * @param {Object} people A list of Google+ Person resources.
+                 */
+                appendCircled: function (people) {
+                    $('#visiblePeople').empty();
 
- //   var y = $(window).scrollTop();
- //   if(y>410){
- //     if(!window.IlyesVideoPlayed){
- //       window.IlyesVideoPlayed=true;
- //       playIlyesVideo();
- //     }
-    
- //   }
-  
- // });
- if ($("html").hasClass("mobile-device")) {
-  $("body").css("padding-top","600px");
-  $(".section-centered").css("margin-top","-279.5px");
-    $(".section-headline").css("font-size","30px");
-    $(".icon-mobile-close").click(function() {
-      if ($(".icon-mobile-close").hasClass("to-close")) {
-        $("body").removeClass("nav-dark");
-        $(".icon-mobile-close").removeClass("to-close");
-        $("body").addClass("nav-light");
-        $("body").attr("style","padding-top:600px;");
-        $("header").removeClass("is-active");
-        $("header").attr("style","");
-      }else{
-        $(".icon-mobile-close").addClass("to-close");
-      };
-  });
- };
- </script></head>   <!-- start Mixpanel --><script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
-for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,e,d])};b.__SV=1.2;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f)}})(document,window.mixpanel||[]);
-mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel --><body class="index nav-light"><header class=header role=banner><div class="header-item with-site-logo"><span itemscope itemtype=http://schema.org/LocalBusiness><a class="site-logo site-logo-link" data-g-action=Header data-g-event=Drive data-g-label="Drive logo" href="/welcome/"><div class="site-logo-image icon icon-google-logo"><span itemscope itemtype=http://schema.org/LocalBusiness>ioGrow</span></div></a></span></div><nav class=nav-site data-nav-name=mobile><img alt="Drive logo" title="CRM and Lead generation" src=http://storage.googleapis.com/iogrow-gs/Logo-iogrow.png><ul><li>
-<a id="extension-iogrow" class=using-drive data-g-action=Header data-g-event=Drive data-g-label="Using Drive" href=https://chrome.google.com/webstore/detail/iogrow-chrome-extension/eafcehcahfabjibkmffekmcnlnnopkni target=_blank rel=nofollow>Collect leads from linkedin and gmail</a></li><li class="mobile-is-hidden float-in"><a class="go-to-drive get-started" data-g-action=Header data-g-event=Drive data-g-label="Go to ioGrow" href=/sign-in>Try ioGrow</a></li></ul></nav><div class="mobile-nav-toggle js-mobilenav"><div class="icon icon-mobile-open toggle-nav-open js-mobilenav-toggle" data-target-nav=mobile></div><div id=close-mobile-btn class="icon icon-mobile-close toggle-nav-closed js-mobilenav-toggle-close" data-target-nav=mobile></div></div></header><section class="section-intro section-panel-fullscreen js-fullscreen" style=height:682px;opacity:1><div class="section-photo-fullscreen section-photo js-parallax-image js-responsive-image loaded" data-breakpoints=320,768,1024,1200,1600 data-known-dimensions=false data-origin=0 data-preserve-aspect-ratio=false data-reverse-parallax=true data-src=http://storage.googleapis.com/iogrow-cdn/opt_files/intro.jpg style=height:882px;background-image:url(http://storage.googleapis.com/iogrow-cdn/opt_files/intro-1600.jpg)></div><div class="section-centered section-vertical-align js-vertical-align js-parallax-image" data-origin=0 data-parallax-fade=true data-parallax-speed=3 data-reverse-parallax=true style=margin-top:-165px;opacity:1><div class=one-whole><img alt="Drive logo logo-heading" title=ioGrow src=http://storage.googleapis.com/iogrow-gs/Logo-iogrow.png height=125><h1 class="section-headline section-headline-large section-headline-white heading together">CRM for Social Selling,Integrated with Linkedin, Twitter and Gmail </h1><div class=google-signin>{%if user %} <button class=g-signin data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose" data-requestvisibleactions=http://schemas.google.com/AddActivity data-clientid="{{ CLIENT_ID }}" data-callback=onSignInCallback data-theme=dark data-cookiepolicy=single_host_origin data-width=wide data-height=tall></button> {%else%} <button class=g-signin data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose" data-requestvisibleactions=http://schemas.google.com/AddActivity data-clientid="{{ CLIENT_ID }}" data-callback=onSignInCallback data-accesstype=offline data-approvalprompt=force data-theme=dark data-cookiepolicy=single_host_origin data-width=wide data-height=tall></button> {%endif%}<h3 class=same-color>Get your Freemium Account!: increase productivity and avoid data entry</h3></div>
-    <div class="mobile-is-visible mobile-button-selector"><a class="maia-button button-download download-mobile get-started try-iogrow" href=/sign-in style=display:inline-block>Try ioGrow</a></div></div></div><div class=arrow-hint><a class=gweb-smoothscroll-control href=#startDiscovery><div class="icon icon-arrow-hint animated-arrow-1"></div><div class="icon icon-arrow-hint animated-arrow-2"></div></a></div></section><div class=unfixed-wrapper id=start style=opacity:1><div id=nav-tick style=top:-68px></div><section class="section-filetypes js-hinted-fullscreen" style=min-height:400px;padding-bottom:0><div class=content><div class="column column-left with-example"><img title=Startups src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/organize.png width=100%></div><div class="column column-right with-copy"><div class="copy text-left"><h2 class=heading-headline>Organize your sales process & close more deals</h2><p class="section-body allow-orphan">Whether you're completing your daily tasks, scheduling your events with your customers or closing a sales opportunity, getting everything related to the job on one page, instantly makes collaboration easier. Attach files, add notes and comments-everything's updated in real time.</p><br><div class=google-signin>{%if user %} <button class=g-signin data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose" data-requestvisibleactions=http://schemas.google.com/AddActivity data-clientid="{{ CLIENT_ID }}" data-callback=onSignInCallback data-theme=dark data-cookiepolicy=single_host_origin data-width=wide data-height=tall></button> {%else%} <button class=g-signin data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose" data-requestvisibleactions=http://schemas.google.com/AddActivity data-clientid="{{ CLIENT_ID }}" data-callback=onSignInCallback data-accesstype=offline data-approvalprompt=force data-theme=dark data-cookiepolicy=single_host_origin data-width=wide data-height=tall></button> {%endif%}</div><br></div></div></div></section><section class="section-filetypes js-hinted-fullscreen" style=min-height:400px><div class=content><div class="column column-left with-example"><img title=Startups src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/1Linkedin.png width=100%></div><div class="column column-right with-copy"><div class="copy text-left"><h2 class=heading-headline>Lead generation from Linkedin</h2><p class="section-body allow-orphan">With just one click you can automatically add a new lead from Linkedin to ioGrow. No need to spend time on data entry. Focus on what matters: serving your customers and closing more deals.</p></div></div></div></section><section class="section-filesanywhere js-hinted-fullscreen" style=height:407px><div class=content><div class="column column-right with-example"><img title="Linkedin CRM" src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/gmail.png width=100%></div><div class="column column-left with-copy"><div class="copy text-left"><h2 class=heading-headline>Lead generation from Gmail</h2><p class=section-body>Using ioGrow Chrome Extension, you can Convert your contacts into leads and manage tasks, right from your Gmail inbox.</p><br><a class="maia-button button-download download-mobile get-started" href=https://chrome.google.com/webstore/detail/iogrow-chrome-extension/eafcehcahfabjibkmffekmcnlnnopkni style="display:inline-block;font-size:20px;vertical-align:text-top;border:1px solid #DaDaDa;border-radius:4px;padding:10px 15px;color:gray!important;background-color:#f9f9f9" target=_blank><img title="ioGrow chrome extension" src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/download.png width=25px style=margin-right:0;vertical-align:middle;margin-right:8px> Install ioGrow Chrome extension</a></div></div></div></section><div class=photo-wrapper><div class="section-photo section-photo-pack js-parallax-image js-responsive-image loaded" data-breakpoints=320,768,1024,1200,1600,2200 data-known-dimensions=false data-parallax-speed=4 data-preserve-aspect-ratio=false data-src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/2.jpg style=transform:matrix(1,0,0,1,0,54.921875);background-image:url(http://storage.googleapis.com/iogrow-cdn/img/welcome_img/2.jpg)></div></div></section><section class="section-share js-hinted-fullscreen" style=height:316px;padding-bottom:0;padding-top:50px><div class=content><div style=padding-top:40px><div class="googleAppsImg copy section-centered text-center" style=width:50%><img title=Startups src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/price_icon.png width=100%></div></div></div></section><section class="section-share js-hinted-fullscreen" style=height:307px;padding-top:0><div class=content><div class="column column-full-width with-copy"><div class="copy section-centered text-center"><h2 class=heading-headline>Built on top of Google</h2><p class=section-body>i/o Grow is designed to work with Google tools you already use and love, built specifically for Google Apps, to help companies organize and track sales opportunities and customer relationships.<br>"Technology should make work easier and faster, not harder. When we use the tools that make our lives easier, we can do our best work." Dr.Eric Schmidt</p></div></div></div></section><section class="section-share js-hinted-fullscreen" style=height:307px;padding-top:0><div class=content><div class="column column-full-width with-copy"><div class=col4 style=width:33.33333333333333%;display:inline-block;float:left;text-align:center;padding-bottom:15px><img src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/gmail_icon.png><p class=section-body>Chrome Extension for Gmail</p></div><div class=col4 style=width:33.33333333333333%;display:inline-block;float:left;text-align:center;padding-bottom:15px><img src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/drive.png><p class=section-body>Manage files with Google Drive</p></div><div class=col4 style=width:33.33333333333333%;display:inline-block;float:left;text-align:center;padding-bottom:15px><img src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/calendar.png><p class=section-body>Synced with Google Calendar</p></div><div style=width:100%;display:inline-block;float:left;text-align:center><img src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/hangouts.png><p class=section-body>Video calls powered by Google Hangouts</p><h2 class="section-headline section-headline-large section-headline-gray heading-headline">Start using ioGrow for free</h2><p style=color:gray>No credit card required. Get your freemium account now!</p><br><div class=google-signin style=text-align:center;display:table;margin:auto><div style=float:left;display:inline-block>{%if user %} <button class=g-signin data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose" data-requestvisibleactions=http://schemas.google.com/AddActivity data-clientid="{{ CLIENT_ID }}" data-callback=onSignInCallback data-theme=dark data-cookiepolicy=single_host_origin data-width=wide data-height=tall></button> {%else%} <button class=g-signin data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose" data-requestvisibleactions=http://schemas.google.com/AddActivity data-clientid="{{ CLIENT_ID }}" data-callback=onSignInCallback data-accesstype=offline data-approvalprompt=force data-theme=dark data-cookiepolicy=single_host_origin data-width=wide data-height=tall></button> {%endif%}</div><div style=display:inline-block;float:left;height:43px;margin-left:10px;margin-right:10px><span style=color:gray;height:43px;vertical-align:-webkit-baseline-middle;font-size:24px>&amp;</span></div><a class="maia-button button-download download-mobile get-started" href=https://chrome.google.com/webstore/detail/iogrow-chrome-extension/eafcehcahfabjibkmffekmcnlnnopkni style="display:inline-block;font-size:20px;vertical-align:text-top;border:1px solid #DaDaDa;border-radius:4px;padding:10px 15px;color:gray!important;background-color:#f9f9f9;float:left;display:inline-block;margin-top:0;padding-top:7px;padding-bottom:8px;font-size:15px" target=_blank><img title="ioGrow chrome extension" src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/download.png width=25px style=margin-right:0;vertical-align:middle;margin-right:8px;height:24px;margin-bottom:3px> Install Chrome extension</a></div></div></div></div></div></section></div></div>
+                    $('#visiblePeople').append('Number of people visible to this app: ' +
+                            people.totalItems + '<br/>');
+                    for (var personIndex in people.items) {
+                        person = people.items[personIndex];
+                        $('#visiblePeople').append('<img src="' + person.image.url + '">');
+                    }
+                },
+            };
+        })();
 
-<div class=signature-wrapper><div id="maia-signature"></div></div><div class=maia-footer id="maia-footer"><div id="maia-footer-global"><div class=maia-aux><ul style="text-align: center;"><li>228 Hamilton Avenue, Palo Alto, CA 94301</li><li>Tel : +1 (650) 353-2399</li><li><a  id="emailus" href=mailto:contact@iogrow.com rel=nofollow>Email us</a>, or join us on Twitter <a id="twitter" href=https://twitter.com/iogrow rel=nofollow>@ioGrow</a>, <a id="facebook" href=https://www.facebook.com/iogrow rel=nofollow>Facebook</a></li><li><a id="blog" href="http://blog.iogrow.com/">ioGrow Blog</a></li></ul><ul style="text-align: center;"><li><a id="partners" rel="nofollow" href="/partners/">Partners</a></li><li><a id="salesforce" rel="nofollow" href="http://www.copylead.com">Salesforce</a></li><li><a id="terms" href="/terms-of-services/">Terms of service</a></li><li><a id="privacy" href="/privacy/">Privacy policy</a></li><li><a id="security" href="/security/">Security information</a></li><li><a id="api" href=https://gcdc2013-iogrow.appspot.com/_ah/api/explorer rel=nofollow>API&DOCS</a></li><li><a href="https://mixpanel.com/f/partner"><img style="height: 27px;" src=//cdn.mxpnl.com/site_media/images/partner/badge_light.png alt=Mobile Analytics /></a></li><li style="clear:both;"></li></ul></div></div></div>
+        /**
+         * Perform jQuery initialization and check to ensure that you up dated your
+         * client ID.
+         */
+
+        function onSignInCallback(authResult) {
+            helper.onSignInCallback(authResult);
+            mixpanel.track("SIGNIN_CLICK");
+        }
+        /**
+         * Calls the helper method that handles the authentication flow.
+         *
+         * @param {Object} authResult An Object which contains the access token and
+         *   other authentication information.
+         */
 
 
-<script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/TweenMax.min.js.gz></script><script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/morlock.min.js.gz></script><script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/drive-site.min.js.gz></script><script>var manageParams=new drive.QueryParamManager;</script><script>var home=new drive.SetUp("home");</script>
- <script>
-  window.intercomSettings = {
-    app_id: "s9iirr8w"
-  };
+
+        function playIlyesVideo() {
+            var ilyesVideo = $('.video-webm');
+            if ($('.video-webm').get(0).paused) {
+                $('.video-webm').get(0).play();
+            }
+
+        }
+        window.IlyesVideoPlayed = false;
+        // $(window).scroll(function() {
+
+        //   var y = $(window).scrollTop();
+        //   if(y>410){
+        //     if(!window.IlyesVideoPlayed){
+        //       window.IlyesVideoPlayed=true;
+        //       playIlyesVideo();
+        //     }
+
+        //   }
+
+        // });
+        if ($("html").hasClass("mobile-device")) {
+            $("body").css("padding-top", "600px");
+            $(".section-centered").css("margin-top", "-279.5px");
+            $(".section-headline").css("font-size", "30px");
+            $(".icon-mobile-close").click(function () {
+                if ($(".icon-mobile-close").hasClass("to-close")) {
+                    $("body").removeClass("nav-dark");
+                    $(".icon-mobile-close").removeClass("to-close");
+                    $("body").addClass("nav-light");
+                    $("body").attr("style", "padding-top:600px;");
+                    $("header").removeClass("is-active");
+                    $("header").attr("style", "");
+                } else {
+                    $(".icon-mobile-close").addClass("to-close");
+                }
+                ;
+            });
+        }
+        ;
+    </script>
+</head>   <!-- start Mixpanel -->
+<script type="text/javascript">(function (e, b) {
+    if (!b.__SV) {
+        var a, f, i, g;
+        window.mixpanel = b;
+        b._i = [];
+        b.init = function (a, e, d) {
+            function f(b, h) {
+                var a = h.split(".");
+                2 == a.length && (b = b[a[0]], h = a[1]);
+                b[h] = function () {
+                    b.push([h].concat(Array.prototype.slice.call(arguments, 0)))
+                }
+            }
+
+            var c = b;
+            "undefined" !== typeof d ? c = b[d] = [] : d = "mixpanel";
+            c.people = c.people || [];
+            c.toString = function (b) {
+                var a = "mixpanel";
+                "mixpanel" !== d && (a += "." + d);
+                b || (a += " (stub)");
+                return a
+            };
+            c.people.toString = function () {
+                return c.toString(1) + ".people (stub)"
+            };
+            i = "disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+            for (g = 0; g < i.length; g++)f(c, i[g]);
+            b._i.push([a, e, d])
+        };
+        b.__SV = 1.2;
+        a = e.createElement("script");
+        a.type = "text/javascript";
+        a.async = !0;
+        a.src = "undefined" !== typeof MIXPANEL_CUSTOM_LIB_URL ? MIXPANEL_CUSTOM_LIB_URL : "file:" === e.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";
+        f = e.getElementsByTagName("script")[0];
+        f.parentNode.insertBefore(a, f)
+    }
+})(document, window.mixpanel || []);
+mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
+<body class="index nav-light">
+<header class=header role=banner>
+    <div class="header-item with-site-logo"><span itemscope itemtype=http://schema.org/LocalBusiness><a
+            class="site-logo site-logo-link" data-g-action=Header data-g-event=Drive data-g-label="Drive logo"
+            href="/welcome/">
+        <div class="site-logo-image icon icon-google-logo"><span itemscope itemtype=http://schema.org/LocalBusiness>ioGrow</span>
+        </div>
+    </a></span></div>
+    <nav class=nav-site data-nav-name=mobile><img alt="Drive logo" title="CRM and Lead generation"
+                                                  src=http://storage.googleapis.com/iogrow-gs/Logo-iogrow.png>
+        <ul>
+            <li>
+                <a id="extension-iogrow" class=using-drive data-g-action=Header data-g-event=Drive
+                   data-g-label="Using Drive"
+                   href=https://chrome.google.com/webstore/detail/iogrow-chrome-extension/eafcehcahfabjibkmffekmcnlnnopkni
+                   target=_blank rel=nofollow>Collect leads from linkedin and gmail</a></li>
+            <li class="mobile-is-hidden float-in"><a class="go-to-drive get-started" data-g-action=Header
+                                                     data-g-event=Drive data-g-label="Go to ioGrow" href=/sign-in>Try
+                ioGrow</a></li>
+        </ul>
+    </nav>
+    <div class="mobile-nav-toggle js-mobilenav">
+        <div class="icon icon-mobile-open toggle-nav-open js-mobilenav-toggle" data-target-nav=mobile></div>
+        <div id=close-mobile-btn class="icon icon-mobile-close toggle-nav-closed js-mobilenav-toggle-close"
+             data-target-nav=mobile></div>
+    </div>
+</header>
+<section class="section-intro section-panel-fullscreen js-fullscreen" style=height:682px;opacity:1>
+    <div class="section-photo-fullscreen section-photo js-parallax-image js-responsive-image loaded"
+         data-breakpoints=320,768,1024,1200,1600 data-known-dimensions=false data-origin=0
+         data-preserve-aspect-ratio=false data-reverse-parallax=true
+         data-src=http://storage.googleapis.com/iogrow-cdn/opt_files/intro.jpg
+         style=height:882px;background-image:url(http://storage.googleapis.com/iogrow-cdn/opt_files/intro-1600.jpg)></div>
+    <div class="section-centered section-vertical-align js-vertical-align js-parallax-image" data-origin=0
+         data-parallax-fade=true data-parallax-speed=3 data-reverse-parallax=true style=margin-top:-165px;opacity:1>
+        <div class=one-whole><img alt="Drive logo logo-heading" title=ioGrow
+                                  src=http://storage.googleapis.com/iogrow-gs/Logo-iogrow.png height=125>
+            <h1 class="section-headline section-headline-large section-headline-white heading together">CRM for Social
+                Selling,Integrated with Linkedin, Twitter and Gmail </h1>
+            <div class=google-signin>{% if user %}
+                <button class=g-signin
+                        data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                        data-requestvisibleactions=http://schemas.google.com/AddActivity data-clientid="{{ CLIENT_ID }}"
+                        data-callback=onSignInCallback data-theme=dark data-cookiepolicy=single_host_origin
+                        data-width=wide data-height=tall></button> {% else %}
+                <button class=g-signin
+                        data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                        data-requestvisibleactions=http://schemas.google.com/AddActivity data-clientid="{{ CLIENT_ID }}"
+                        data-callback=onSignInCallback data-accesstype=offline data-approvalprompt=force data-theme=dark
+                        data-cookiepolicy=single_host_origin data-width=wide data-height=tall></button> {% endif %}<h3
+                    class=same-color>Get your Freemium Account!: increase productivity and avoid data entry</h3></div>
+            <div class="mobile-is-visible mobile-button-selector"><a
+                    class="maia-button button-download download-mobile get-started try-iogrow" href=/sign-in
+                    style=display:inline-block>Try ioGrow</a></div>
+        </div>
+    </div>
+    <div class=arrow-hint><a class=gweb-smoothscroll-control href=#startDiscovery>
+        <div class="icon icon-arrow-hint animated-arrow-1"></div>
+        <div class="icon icon-arrow-hint animated-arrow-2"></div>
+    </a></div>
+</section>
+<div class=unfixed-wrapper id=start style=opacity:1>
+    <div id=nav-tick style=top:-68px></div>
+    <section class="section-filetypes js-hinted-fullscreen" style=min-height:400px;padding-bottom:0>
+        <div class=content>
+            <div class="column column-left with-example"><img title=Startups
+                                                              src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/organize.png
+                                                              width=100%></div>
+            <div class="column column-right with-copy">
+                <div class="copy text-left"><h2 class=heading-headline>Organize your sales process & close more
+                    deals</h2>
+                    <p class="section-body allow-orphan">Whether you're completing your daily tasks, scheduling your
+                        events with your customers or closing a sales opportunity, getting everything related to the job
+                        on one page, instantly makes collaboration easier. Attach files, add notes and
+                        comments-everything's updated in real time.</p><br>
+                    <div class=google-signin>{% if user %}
+                        <button class=g-signin
+                                data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                                data-requestvisibleactions=http://schemas.google.com/AddActivity
+                                data-clientid="{{ CLIENT_ID }}" data-callback=onSignInCallback data-theme=dark
+                                data-cookiepolicy=single_host_origin data-width=wide
+                                data-height=tall></button> {% else %}
+                        <button class=g-signin
+                                data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                                data-requestvisibleactions=http://schemas.google.com/AddActivity
+                                data-clientid="{{ CLIENT_ID }}" data-callback=onSignInCallback data-accesstype=offline
+                                data-approvalprompt=force data-theme=dark data-cookiepolicy=single_host_origin
+                                data-width=wide data-height=tall></button> {% endif %}</div>
+                    <br></div>
+            </div>
+        </div>
+    </section>
+    <section class="section-filetypes js-hinted-fullscreen" style=min-height:400px>
+        <div class=content>
+            <div class="column column-left with-example"><img title=Startups
+                                                              src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/1Linkedin.png
+                                                              width=100%></div>
+            <div class="column column-right with-copy">
+                <div class="copy text-left"><h2 class=heading-headline>Lead generation from Linkedin</h2>
+                    <p class="section-body allow-orphan">With just one click you can automatically add a new lead from
+                        Linkedin to ioGrow. No need to spend time on data entry. Focus on what matters: serving your
+                        customers and closing more deals.</p></div>
+            </div>
+        </div>
+    </section>
+    <section class="section-filesanywhere js-hinted-fullscreen" style=height:407px>
+        <div class=content>
+            <div class="column column-right with-example"><img title="Linkedin CRM"
+                                                               src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/gmail.png
+                                                               width=100%></div>
+            <div class="column column-left with-copy">
+                <div class="copy text-left"><h2 class=heading-headline>Lead generation from Gmail</h2>
+                    <p class=section-body>Using ioGrow Chrome Extension, you can Convert your contacts into leads and
+                        manage tasks, right from your Gmail inbox.</p><br><a
+                            class="maia-button button-download download-mobile get-started"
+                            href=https://chrome.google.com/webstore/detail/iogrow-chrome-extension/eafcehcahfabjibkmffekmcnlnnopkni
+                            style="display:inline-block;font-size:20px;vertical-align:text-top;border:1px solid #DaDaDa;border-radius:4px;padding:10px 15px;color:gray!important;background-color:#f9f9f9"
+                            target=_blank><img title="ioGrow chrome extension"
+                                               src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/download.png
+                                               width=25px style=margin-right:0;vertical-align:middle;margin-right:8px>
+                        Install ioGrow Chrome extension</a></div>
+            </div>
+        </div>
+    </section>
+    <div class=photo-wrapper>
+        <div class="section-photo section-photo-pack js-parallax-image js-responsive-image loaded"
+             data-breakpoints=320,768,1024,1200,1600,2200 data-known-dimensions=false data-parallax-speed=4
+             data-preserve-aspect-ratio=false data-src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/2.jpg
+             style=transform:matrix(1,0,0,1,0,54.921875);background-image:url(http://storage.googleapis.com/iogrow-cdn/img/welcome_img/2.jpg)></div>
+    </div>
+    </section>
+    <section class="section-share js-hinted-fullscreen" style=height:316px;padding-bottom:0;padding-top:50px>
+        <div class=content>
+            <div style=padding-top:40px>
+                <div class="googleAppsImg copy section-centered text-center" style=width:50%><img title=Startups
+                                                                                                  src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/price_icon.png
+                                                                                                  width=100%></div>
+            </div>
+        </div>
+    </section>
+    <section class="section-share js-hinted-fullscreen" style=height:307px;padding-top:0>
+        <div class=content>
+            <div class="column column-full-width with-copy">
+                <div class="copy section-centered text-center"><h2 class=heading-headline>Built on top of Google</h2>
+                    <p class=section-body>i/o Grow is designed to work with Google tools you already use and love, built
+                        specifically for Google Apps, to help companies organize and track sales opportunities and
+                        customer relationships.<br>"Technology should make work easier and faster, not harder. When we
+                        use the tools that make our lives easier, we can do our best work." Dr.Eric Schmidt</p></div>
+            </div>
+        </div>
+    </section>
+    <section class="section-share js-hinted-fullscreen" style=height:307px;padding-top:0>
+        <div class=content>
+            <div class="column column-full-width with-copy">
+                <div class=col4
+                     style=width:33.33333333333333%;display:inline-block;float:left;text-align:center;padding-bottom:15px>
+                    <img src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/gmail_icon.png>
+                    <p class=section-body>Chrome Extension for Gmail</p></div>
+                <div class=col4
+                     style=width:33.33333333333333%;display:inline-block;float:left;text-align:center;padding-bottom:15px>
+                    <img src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/drive.png>
+                    <p class=section-body>Manage files with Google Drive</p></div>
+                <div class=col4
+                     style=width:33.33333333333333%;display:inline-block;float:left;text-align:center;padding-bottom:15px>
+                    <img src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/calendar.png>
+                    <p class=section-body>Synced with Google Calendar</p></div>
+                <div style=width:100%;display:inline-block;float:left;text-align:center><img
+                        src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/hangouts.png>
+                    <p class=section-body>Video calls powered by Google Hangouts</p>
+                    <h2 class="section-headline section-headline-large section-headline-gray heading-headline">Start
+                        using ioGrow for free</h2>
+                    <p style=color:gray>No credit card required. Get your freemium account now!</p><br>
+                    <div class=google-signin style=text-align:center;display:table;margin:auto>
+                        <div style=float:left;display:inline-block>{% if user %}
+                            <button class=g-signin
+                                    data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                                    data-requestvisibleactions=http://schemas.google.com/AddActivity
+                                    data-clientid="{{ CLIENT_ID }}" data-callback=onSignInCallback data-theme=dark
+                                    data-cookiepolicy=single_host_origin data-width=wide
+                                    data-height=tall></button> {% else %}
+                            <button class=g-signin
+                                    data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                                    data-requestvisibleactions=http://schemas.google.com/AddActivity
+                                    data-clientid="{{ CLIENT_ID }}" data-callback=onSignInCallback
+                                    data-accesstype=offline data-approvalprompt=force data-theme=dark
+                                    data-cookiepolicy=single_host_origin data-width=wide
+                                    data-height=tall></button> {% endif %}</div>
+                        <div style=display:inline-block;float:left;height:43px;margin-left:10px;margin-right:10px><span
+                                style=color:gray;height:43px;vertical-align:-webkit-baseline-middle;font-size:24px>&amp;</span>
+                        </div>
+                        <a class="maia-button button-download download-mobile get-started"
+                           href=https://chrome.google.com/webstore/detail/iogrow-chrome-extension/eafcehcahfabjibkmffekmcnlnnopkni
+                           style="display:inline-block;font-size:20px;vertical-align:text-top;border:1px solid #DaDaDa;border-radius:4px;padding:10px 15px;color:gray!important;background-color:#f9f9f9;float:left;display:inline-block;margin-top:0;padding-top:7px;padding-bottom:8px;font-size:15px"
+                           target=_blank><img title="ioGrow chrome extension"
+                                              src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/download.png
+                                              width=25px
+                                              style=margin-right:0;vertical-align:middle;margin-right:8px;height:24px;margin-bottom:3px>
+                            Install Chrome extension</a></div>
+                </div>
+            </div>
+        </div>
+</div>
+</section></div></div>
+
+<div class=signature-wrapper>
+    <div id="maia-signature"></div>
+</div>
+<div class=maia-footer id="maia-footer">
+    <div id="maia-footer-global">
+        <div class=maia-aux>
+            <ul style="text-align: center;">
+                <li>228 Hamilton Avenue, Palo Alto, CA 94301</li>
+                <li>Tel : +1 (650) 353-2399</li>
+                <li><a id="emailus" href=mailto:contact@iogrow.com rel=nofollow>Email us</a>, or join us on Twitter <a
+                        id="twitter" href=https://twitter.com/iogrow rel=nofollow>@ioGrow</a>, <a id="facebook"
+                                                                                                  href=https://www.facebook.com/iogrow
+                                                                                                  rel=nofollow>Facebook</a>
+                </li>
+                <li><a id="blog" href="http://blog.iogrow.com/">ioGrow Blog</a></li>
+            </ul>
+            <ul style="text-align: center;">
+                <li><a id="partners" rel="nofollow" href="/partners/">Partners</a></li>
+                <li><a id="salesforce" rel="nofollow" href="http://www.copylead.com">Salesforce</a></li>
+                <li><a id="terms" href="/terms-of-services/">Terms of service</a></li>
+                <li><a id="privacy" href="/privacy/">Privacy policy</a></li>
+                <li><a id="security" href="/security/">Security information</a></li>
+                <li><a id="api" href=https://gcdc2013-iogrow.appspot.com/_ah/api/explorer rel=nofollow>API&DOCS</a></li>
+                <li><a href="https://mixpanel.com/f/partner"><img style="height: 27px;"
+                                                                  src=//cdn.mxpnl.com/site_media/images/partner/badge_light.png
+                                                                  alt=Mobile Analytics/></a></li>
+                <li style="clear:both;"></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/TweenMax.min.js.gz></script>
+<script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/morlock.min.js.gz></script>
+<script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/drive-site.min.js.gz></script>
+<script>var manageParams = new drive.QueryParamManager;</script>
+<script>var home = new drive.SetUp("home");</script>
+<script>
+    window.intercomSettings = {
+        app_id: "s9iirr8w"
+    };
 </script>
 <script type="text/javascript">
-  mixpanel.track("WELCOME_PAGE_VISIT");
-  mixpanel.track_links("#blog", "BLOG_CLICKED");
-  mixpanel.track_links("#emailus", "EMAIL_US_CLICKED");
-  mixpanel.track_links("#twitter", "TWITTER_CLICKED");
-  mixpanel.track_links("#facebook", "FACEBOOK_CLICKED");
-  mixpanel.track_links("#partners", "PARTNERS_CLICKED");
-  mixpanel.track_links("#salesforce", "SALESFORCE_CLICKED");
-  mixpanel.track_links("#terms", "TERMS_CLICKED");
-  mixpanel.track_links("#privacy", "PRIVACY_CLICKED");
-  mixpanel.track_links("#security", "SECURITY_CLICKED");
-  mixpanel.track_links("#api", "API_CLICKED");
-  mixpanel.track_links("#extension-iogrow", "EXTENSION_CLICKED");
+    mixpanel.track("WELCOME_PAGE_VISIT");
+    mixpanel.track_links("#blog", "BLOG_CLICKED");
+    mixpanel.track_links("#emailus", "EMAIL_US_CLICKED");
+    mixpanel.track_links("#twitter", "TWITTER_CLICKED");
+    mixpanel.track_links("#facebook", "FACEBOOK_CLICKED");
+    mixpanel.track_links("#partners", "PARTNERS_CLICKED");
+    mixpanel.track_links("#salesforce", "SALESFORCE_CLICKED");
+    mixpanel.track_links("#terms", "TERMS_CLICKED");
+    mixpanel.track_links("#privacy", "PRIVACY_CLICKED");
+    mixpanel.track_links("#security", "SECURITY_CLICKED");
+    mixpanel.track_links("#api", "API_CLICKED");
+    mixpanel.track_links("#extension-iogrow", "EXTENSION_CLICKED");
 </script>
-<script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/dhasdzez';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()</script>
- </body></html>
+<script>(function () {
+    var w = window;
+    var ic = w.Intercom;
+    if (typeof ic === "function") {
+        ic('reattach_activator');
+        ic('update', intercomSettings);
+    } else {
+        var d = document;
+        var i = function () {
+            i.c(arguments)
+        };
+        i.q = [];
+        i.c = function (args) {
+            i.q.push(args)
+        };
+        w.Intercom = i;
+        function l() {
+            var s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'https://widget.intercom.io/widget/dhasdzez';
+            var x = d.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+        }
+
+        if (w.attachEvent) {
+            w.attachEvent('onload', l);
+        } else {
+            w.addEventListener('load', l, false);
+        }
+    }
+})()</script>
+</body>
+</html>
