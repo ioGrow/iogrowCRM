@@ -45,7 +45,7 @@ def start():
         print "Add Google App engine SDK to PATH:"
         print "$ export PATH=$PATH:/path/to/google_appengine"
     else:
-        run("dev_appserver.py ./ --port 8090")
+        run("dev_appserver.py ./ --port 8090 --datastore_path=iogrow_local.datastore")
 
 
 
