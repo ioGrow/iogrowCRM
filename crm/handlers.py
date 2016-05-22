@@ -322,13 +322,6 @@ class SignInWithioGrow(BaseHandler, SessionEnabledHandler):
         self.response.out.write(template.render(template_values))
 
 
-class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        template_values = {}
-        template = jinja_environment.get_template('templates/landing/chrome.html')
-        self.response.out.write(template.render(template_values))
-
-
 class TermsOfServicesHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
@@ -494,21 +487,6 @@ class ChangeActiveAppHandler(SessionEnabledHandler):
                     self.redirect('/error')
             else:
                 self.redirect('/')
-        else:
-            self.redirect('/sign-in')
-
-class SignUpHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-            user = self.get_user_from_session()
-            if model.CountryCurrency.get_by_code('US') is None:
-                model.CountryCurrency.init()
-            model.User.set_default_currency(user, self.request.headers.get('X-AppEngine-Country'))
-            template_values = {
-                'userinfo': user,
-                'CLIENT_ID': CLIENT_ID}
-            template = jinja_environment.get_template('templates/landing/sign-up.html')
-            self.response.out.write(template.render(template_values))
         else:
             self.redirect('/sign-in')
 
@@ -2049,13 +2027,11 @@ routes = [
     (r'/apps/(\d+)', ChangeActiveAppHandler),
 
     ('/welcome/', WelcomeHandler),
-    ('/chrome-extension/', ChromeExtensionHandler),
     ('/terms-of-services/', TermsOfServicesHandler),
     ('/privacy/', PrivacyHandler),
     ('/security/', SecurityInformationsHandler),
     # Authentication Handlers
     ('/sign-in', SignInHandler),
-    ('/sign-up', SignUpHandler),
     ('/gconnect', GooglePlusConnect),
     ('/install', InstallFromDecorator),
     (decorator.callback_path, decorator.callback_handler()),
