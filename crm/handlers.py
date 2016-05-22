@@ -269,7 +269,7 @@ class WelcomeHandler(BaseHandler, SessionEnabledHandler):
                 }
             except:
                 print 'an error has occured'
-        template = jinja_environment.get_template('templates/new_web_site/index.html')
+        template = jinja_environment.get_template('templates/landing/index.html')
         self.response.out.write(template.render(template_values))
 
 
@@ -294,7 +294,7 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
                     'CLIENT_ID': CLIENT_ID,
                     'ID': user_id
                 }
-                template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
+                template = jinja_environment.get_template('templates/landing/sign-in.html')
                 self.response.out.write(template.render(template_values))
             except:
                 print 'an error has occured'
@@ -309,7 +309,7 @@ class SignInHandler(BaseHandler, SessionEnabledHandler):
                 'CLIENT_ID': CLIENT_ID,
                 'ID': user_id
             }
-            template = jinja_environment.get_template('templates/new_web_site/sign-in.html')
+            template = jinja_environment.get_template('templates/landing/sign-in.html')
             self.response.out.write(template.render(template_values))
 
 
@@ -318,42 +318,42 @@ class SignInWithioGrow(BaseHandler, SessionEnabledHandler):
         template_values = {
             'CLIENT_ID': CLIENT_ID
         }
-        template = jinja_environment.get_template('templates/new_web_site/sign-in-from-chrome.html')
+        template = jinja_environment.get_template('templates/landing/sign-in-from-chrome.html')
         self.response.out.write(template.render(template_values))
 
 
 class ChromeExtensionHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/chrome.html')
+        template = jinja_environment.get_template('templates/landing/chrome.html')
         self.response.out.write(template.render(template_values))
 
 
 class TermsOfServicesHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/terms-of-services.html')
+        template = jinja_environment.get_template('templates/landing/terms-of-services.html')
         self.response.out.write(template.render(template_values))
 
 
 class PartnersHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/partners.html')
+        template = jinja_environment.get_template('templates/landing/partners.html')
         self.response.out.write(template.render(template_values))
 
 
 class PrivacyHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/privacy-policy.html')
+        template = jinja_environment.get_template('templates/landing/privacy-policy.html')
         self.response.out.write(template.render(template_values))
 
 
 class SecurityInformationsHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         template_values = {}
-        template = jinja_environment.get_template('templates/new_web_site/security-informations.html')
+        template = jinja_environment.get_template('templates/landing/security-informations.html')
         self.response.out.write(template.render(template_values))
 
 
@@ -507,7 +507,7 @@ class SignUpHandler(BaseHandler, SessionEnabledHandler):
             template_values = {
                 'userinfo': user,
                 'CLIENT_ID': CLIENT_ID}
-            template = jinja_environment.get_template('templates/new_web_site/sign-up.html')
+            template = jinja_environment.get_template('templates/landing/sign-up.html')
             self.response.out.write(template.render(template_values))
         else:
             self.redirect('/sign-in')
