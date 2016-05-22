@@ -334,7 +334,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 $scope.show = localStorage['leadShow'];
 
             };
-            window.Intercom('update');
         };
         $scope.refreshCurrent = function () {
             $scope.runTheProcess();
@@ -645,7 +644,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                     }
                 ],
                 onEnd: function () {
-                    $scope.saveIntercomEvent('completed Tour');
                     var userId = document.getElementById("userId").value;
 
                     if (userId) {
@@ -706,9 +704,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             hopscotch.startTour(tour);
         };
 
-        $scope.saveIntercomEvent = function (eventName) {
-            Intercom('trackEvent', eventName);
-        }
         $scope.fromNow = function (fromDate) {
             return moment(fromDate, "YYYY-MM-DD HH:mm Z").fromNow();
         }
@@ -2062,7 +2057,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             Tag.list($scope, paramsTag);
             $scope.mapAutocomplete();
             ga('send', 'pageview', '/leads/show');
-            window.Intercom('update');
             $scope.mapAutocompleteCalendar()
         };
         $scope.messageFromSocialLinkCallback = function(event){
@@ -4488,7 +4482,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             Leadstatus.list($scope, {});
             $scope.mapAutocomplete();
             ga('send', 'pageview', '/leads/new');
-            window.Intercom('update');
 
         };
         $scope.messageFromSocialLinkCallback = function(event){

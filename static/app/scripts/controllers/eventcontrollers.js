@@ -68,7 +68,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
             Event.get($scope, eventid);
             User.list($scope, {});
             ga('send', 'pageview', '/events/show');
-            window.Intercom('update');
             $scope.mapAutocomplete();
         };
 
@@ -678,7 +677,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
             // Event.list($scope);
             User.list($scope, {});
             ga('send', 'pageview', '/calendar');
-            window.Intercom('update');
 
             $scope.mapAutocomplete();
         };

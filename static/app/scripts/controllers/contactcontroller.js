@@ -215,7 +215,6 @@ $scope.SynchronizeWithGoogle=function(){
             if (localStorage['contactShow']!=undefined) { 
                      $scope.show=localStorage['contactShow'];
                   };
-                  window.Intercom('update');
 
        };
        $scope.messageFromSocialLinkCallback = function(event){
@@ -2129,7 +2128,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             Tag.list($scope, paramsTag);
 
             ga('send', 'pageview', '/contacts/show');
-           window.Intercom('update');
        $scope.mapAutocompleteCalendar();
       };
      $scope.messageFromSocialLinkCallback = function(event){
@@ -4390,7 +4388,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
         $scope.mapAutocomplete();
         //Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
         ga('send', 'pageview', '/contacts/new');
-        window.Intercom('update');
        };
 
        //newLinkedin

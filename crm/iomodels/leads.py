@@ -15,7 +15,6 @@ from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
-from intercom import Intercom
 from iomodels.accounts import Account
 from iomodels.documents import Document, DocumentListResponse
 from iomodels.events import Event, EventListResponse
@@ -34,8 +33,6 @@ from crm.iomodels.contacts import Contact, ContactInsertRequest
 from endpoints_helper import EndpointsHelper
 from iograph import Node, Edge, InfoNodeListResponse
 
-Intercom.app_id = 's9iirr8w'
-Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 
 ATTRIBUTES_MATCHING = {
     'firstname': ['First Name', 'Given Name', 'First name'],
@@ -1027,11 +1024,6 @@ class Lead(EndpointsModel):
             cover_image=lead.cover_image,
             linkedin_url=lead.linkedin_url
         )
-        if request.source:
-            Intercom.create_event(
-                event_name='mark as lead from ' + request.source,
-                email=user_from_email.email
-            )
         return lead_schema
 
     @classmethod

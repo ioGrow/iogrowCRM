@@ -149,7 +149,6 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
               /*if (localStorage['caseShow']!=undefined) {
                   $scope.show=localStorage['caseShow'];
               };*/
-             window.Intercom('update');
        };
 
 $scope.selectMember = function(){  
@@ -1195,7 +1194,6 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
           Tag.list($scope, paramsTag);
           $( window ).trigger( "resize" );
           ga('send', 'pageview', '/cases/show');
-          window.Intercom('update');
           $scope.mapAutocompleteCalendar();
        };
        $scope.getCustomFields=function(related_object){
@@ -2477,7 +2475,6 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
           $scope.getCustomFields("cases");
           Casestatus.list($scope,{});
           ga('send', 'pageview', '/cases/new');
-          window.Intercom('update');
       };
        $scope.getCustomFields=function(related_object){
             Customfield.list($scope,{related_object:related_object});

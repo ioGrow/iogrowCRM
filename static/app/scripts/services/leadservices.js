@@ -60,7 +60,6 @@ leadservices.factory('Lead', function ($rootScope) {
                 }
             ],
             onEnd: function () {
-                $scope.saveIntercomEvent('completed Tour');
                 var userId = document.getElementById("userId").value;
 
                 if (userId) {

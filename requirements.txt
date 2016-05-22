@@ -13,7 +13,6 @@ google-api-python-client==1.4.1
 graphy==1.0
 pyrise
 httplib2==0.7.6
-python-intercom==0.2.13
 mechanize==0.2.5
 mixpanel==4.1.0
 oauth2client==1.4.11

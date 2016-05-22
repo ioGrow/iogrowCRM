@@ -399,7 +399,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
               $scope.show=localStorage['oppShow'];
 
           };
-         window.Intercom('update');
        };
     
        $(window).resize(function() {
@@ -1566,7 +1565,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
            var paramsTag = {'about_kind': 'Opportunity'};
           Tag.list($scope, paramsTag);
           ga('send', 'pageview', '/opportunities/show');
-          window.Intercom('update');
            $scope.mapAutocomplete();
      
        };
@@ -3196,7 +3194,6 @@ app.controller('OpportunityNewCtrl', ['$scope', '$http', '$filter', '$q', 'Auth'
            $scope.getCustomFields("opportunities");
            Opportunitystage.list($scope,{'order':'stage_number'});
            ga('send', 'pageview', '/opportunities/new');
-           window.Intercom('update');
        };
         // We need to call this to refresh token when user credentials are invalid
        $scope.refreshToken = function() {

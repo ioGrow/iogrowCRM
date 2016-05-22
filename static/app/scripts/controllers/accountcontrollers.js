@@ -211,7 +211,6 @@
               if (localStorage['accountShow']!=undefined) {
                  $scope.show=localStorage['accountShow'];
               };
-              window.Intercom('update');
 
         };
 
@@ -2261,7 +2260,6 @@ app.controller('AccountShowCtrl', ['$scope','$http', '$filter', '$route', 'Auth'
             var paramsTag = {'about_kind': 'Account'};
             Tag.list($scope, paramsTag);
             ga('send', 'pageview', '/accounts/show');
-            window.Intercom('update');
             $scope.mapAutocompleteCalendar();
             $scope.mapAutocomplete();
             Map.autocomplete ($scope,"relatedaddressInput");
@@ -5838,7 +5836,6 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
             $scope.mapAutocomplete();
             Map.justAutocomplete($scope,"relatedContactAddress",$scope.currentContact.address);
             ga('send', 'pageview', '/accounts/new');
-            window.Intercom('update');
 
         };
         $scope.getCustomFields=function(related_object){

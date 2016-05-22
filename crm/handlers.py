@@ -9,7 +9,6 @@ import time
 import endpoints
 import httplib2
 import jinja2
-import requests
 import sfoauth2
 import stripe
 import webapp2
@@ -19,7 +18,6 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
-from intercom import Intercom
 from iomodels.accounts import Account
 from iomodels.contacts import Contact
 from iomodels.documents import Document
@@ -32,7 +30,6 @@ from mixpanel import Mixpanel
 from oauth2client.appengine import OAuth2Decorator
 from oauth2client.client import FlowExchangeError
 from oauth2client.client import flow_from_clientsecrets
-from requests.auth import HTTPBasicAuth
 from webapp2_extras import i18n
 from webapp2_extras import sessions
 
@@ -47,8 +44,6 @@ from model import Application, STANDARD_TABS, ADMIN_TABS, Organization
 mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'libs'))
-Intercom.app_id = 's9iirr8w'
-Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.getcwd()),
     extensions=['jinja2.ext.i18n'], cache_size=0)
@@ -712,22 +707,7 @@ class GooglePlusConnect(SessionEnabledHandler):
             organ_name = user_email.partition("@")[2]
             model.Organization.create_instance(organ_name, user)
             is_new_user = True
-            try:
-                Intercom.create_user(email=user.email, name=user.google_display_name,
-                                     created_at=time.mktime(user.created_at.timetuple()))
-            except:
-                pass
             mp.track(user.id, 'SIGNIN_SUCCESS')
-            # mp.identify(user.id)
-            # mp.people_set(user.id,{
-            # "$email": user.email,
-            # "$name":user.google_display_name,
-            # "$created": user.created_at,
-            # "$organization": user.organization,
-            # "$language": user.language
-            # });
-        # if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-        #     user = self.get_user_from_session()
         # Store the user ID in the session for later use.
         json_resp = json.dumps({'is_new_user': is_new_user, 'email': user.email})
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
