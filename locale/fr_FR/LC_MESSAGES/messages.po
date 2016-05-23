@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-23 14:30+0100\n"
+"POT-Creation-Date: 2016-05-23 21:47+0100\n"
 "PO-Revision-Date: 2014-07-26 11:01+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -259,15 +259,28 @@ msgstr ""
 msgid "+ Add new colaborator"
 msgstr "Utilisateur invité"
 
+msgid "1 day"
+msgstr ""
+
+msgid "1 hour"
+msgstr ""
+
+msgid "1 week"
+msgstr ""
+
 msgid "1- Select the CSV file you want to import."
 msgstr ""
 
-msgid ""
-"2- Match your data with fields in\n"
-"                        ioGrow"
+msgid "1. Billing details"
 msgstr ""
 
 msgid "2- Match your data with fields in ioGrow"
+msgstr ""
+
+msgid "2. Billing cycle"
+msgstr ""
+
+msgid "30 minutes before"
 msgstr ""
 
 msgid "A contact with this name already exist"
@@ -565,6 +578,9 @@ msgstr "Toutes les opportunités"
 msgid "All Tasks"
 msgstr "Toutes les Tâches"
 
+msgid "All accounts"
+msgstr ""
+
 msgid "All contacts"
 msgstr "Tous les contacts"
 
@@ -692,8 +708,7 @@ msgstr ""
 
 msgid ""
 "By deleting your organization, all your data will be deleted and you will"
-" be automaticly\n"
-"                            logging out !"
+" be automatically logging out!"
 msgstr ""
 
 msgid "CC"
@@ -1117,6 +1132,9 @@ msgstr "Anglais"
 msgid "Enter a Website"
 msgstr "Ajouter un siteweb"
 
+msgid "Enter a email"
+msgstr ""
+
 #, fuzzy
 msgid "Enter a new"
 msgstr "Créer un nouveau"
@@ -1258,6 +1276,9 @@ msgstr "Gouvernement"
 msgid "Guests can"
 msgstr ""
 
+msgid "Guests can:"
+msgstr ""
+
 msgid "Header Logo"
 msgstr ""
 
@@ -1296,6 +1317,9 @@ msgstr "Importer"
 #, fuzzy
 msgid "Import as a custom field"
 msgstr "Ajouter un champ personalisé"
+
+msgid "Import your leads"
+msgstr ""
 
 msgid "Industry"
 msgstr "Industrie"
@@ -1527,6 +1551,9 @@ msgstr "Mes contacts"
 msgid "My Opportunities"
 msgstr "Mes Opportunités"
 
+msgid "My accounts"
+msgstr ""
+
 msgid "My contacts"
 msgstr "Mes contacts"
 
@@ -1581,14 +1608,23 @@ msgstr "Ajouter événement"
 msgid "New Lead status"
 msgstr "Nouveau Piste"
 
+msgid "New Message"
+msgstr ""
+
 msgid "New Opportunity"
 msgstr "Nouvelle Opportunité"
 
 msgid "New Opportunity Stage"
 msgstr "Nouvelle étape d'opportunité"
 
+msgid "New case"
+msgstr ""
+
 msgid "New label"
 msgstr "Nouvelle étiquette"
+
+msgid "New opportunity"
+msgstr ""
 
 msgid "New tag name"
 msgstr "Nouveau nom du tag"
@@ -1876,7 +1912,13 @@ msgstr ""
 msgid "Save"
 msgstr "Sauvegarder"
 
+msgid "Save Case"
+msgstr ""
+
 msgid "Save Signature "
+msgstr ""
+
+msgid "Save opportunity"
 msgstr ""
 
 msgid "Schedule"
@@ -2135,9 +2177,6 @@ msgstr ""
 msgid "Time zone"
 msgstr "Fuseau horaire"
 
-msgid "TimeZone"
-msgstr ""
-
 msgid "Title"
 msgstr "Titre"
 
@@ -2203,6 +2242,12 @@ msgstr "Mise à jour"
 #, fuzzy
 msgid "Updated:"
 msgstr "Mise à jour"
+
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade Now"
+msgstr ""
 
 msgid "Upload"
 msgstr ""

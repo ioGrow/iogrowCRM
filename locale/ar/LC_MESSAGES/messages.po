@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-23 14:30+0100\n"
-"PO-Revision-Date: 2016-05-23 14:29+0100\n"
+"POT-Creation-Date: 2016-05-23 21:47+0100\n"
+"PO-Revision-Date: 2016-05-23 17:54+0100\n"
 "Last-Translator: assem\n"
 "Language: ar\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -257,15 +257,28 @@ msgstr "المناصب السابقة"
 msgid "+ Add new colaborator"
 msgstr "ادعو متعاونين :"
 
+msgid "1 day"
+msgstr ""
+
+msgid "1 hour"
+msgstr ""
+
+msgid "1 week"
+msgstr ""
+
 msgid "1- Select the CSV file you want to import."
 msgstr "إختر ملف CSV الذي تريد تصديره."
 
-msgid ""
-"2- Match your data with fields in\n"
-"                        ioGrow"
+msgid "1. Billing details"
 msgstr ""
 
 msgid "2- Match your data with fields in ioGrow"
+msgstr "2- وافق بياناتك بحقول في ioGrow"
+
+msgid "2. Billing cycle"
+msgstr ""
+
+msgid "30 minutes before"
 msgstr ""
 
 msgid "A contact with this name already exist"
@@ -359,7 +372,7 @@ msgid "Add Tags"
 msgstr "اضف وسم "
 
 msgid "Add Tasks directly from Gmail"
-msgstr ""
+msgstr "أضف مهام مباشرة من Gmail"
 
 msgid "Add Website"
 msgstr "اضف موقع"
@@ -450,7 +463,7 @@ msgid "Add an email"
 msgstr "ارسل بريد الكتروني "
 
 msgid "Add an existing contact ..."
-msgstr ""
+msgstr "أضف إتصالا..."
 
 msgid "Add as:"
 msgstr "إضافة على النحو التالي:"
@@ -468,7 +481,7 @@ msgid "Add field name"
 msgstr "ادخل اسم الحقل"
 
 msgid "Add labels to categorize your tasks"
-msgstr ""
+msgstr "أضف ملصقات لتصنيف مهامك"
 
 #, fuzzy
 msgid "Add new User"
@@ -531,7 +544,7 @@ msgid "Address"
 msgstr "عنوان"
 
 msgid "Address not found do you want to save it ?"
-msgstr ""
+msgstr "العنوان غير موجود، هل تريد حفظه؟"
 
 msgid "Administrator"
 msgstr "مستعمل خاص"
@@ -556,6 +569,9 @@ msgstr "كل الفرص"
 
 msgid "All Tasks"
 msgstr "جميع المهام"
+
+msgid "All accounts"
+msgstr ""
 
 msgid "All contacts"
 msgstr "كل الاتصالات"
@@ -619,7 +635,7 @@ msgid "Assign"
 msgstr "اسندت"
 
 msgid "Assign Task to someone"
-msgstr ""
+msgstr "أضف مهمة إلى شخص"
 
 #, fuzzy
 msgid "Assign someone to Task"
@@ -647,10 +663,10 @@ msgid "Attach Documents"
 msgstr "ارفق ملفات "
 
 msgid "Attach files"
-msgstr ""
+msgstr "إدمج المهام"
 
 msgid "Auto renew"
-msgstr ""
+msgstr "تجديد تلقائي"
 
 msgid "BCC"
 msgstr "نسخة سرية إلى"
@@ -666,7 +682,7 @@ msgid "Beverage"
 msgstr "شراب"
 
 msgid "Billing & Subscription Settings"
-msgstr ""
+msgstr "إعدادات الدفع والتسجيل"
 
 msgid "Billing address"
 msgstr "عنوان إرسال الفواتير"
@@ -679,12 +695,11 @@ msgid "Buy new licenses"
 msgstr "رخصة"
 
 msgid "Buy now"
-msgstr ""
+msgstr "إشتر الآن"
 
 msgid ""
 "By deleting your organization, all your data will be deleted and you will"
-" be automaticly\n"
-"                            logging out !"
+" be automatically logging out!"
 msgstr ""
 
 msgid "CC"
@@ -700,7 +715,7 @@ msgid "Cancel"
 msgstr "إلغاء"
 
 msgid "Card changed successfully"
-msgstr ""
+msgstr "البطاقة تم تغييرها بنجاح"
 
 msgid "Case"
 msgstr "حالة"
@@ -709,7 +724,7 @@ msgid "Case Informations"
 msgstr "معلومات حول الحالة"
 
 msgid "Case Origin"
-msgstr ""
+msgstr "أصل الحالة"
 
 msgid "Case Status"
 msgstr "وضعية الحالة"
@@ -721,7 +736,7 @@ msgid "Cases Status Settings"
 msgstr "اعدادات وضعية الحالة"
 
 msgid "Checkboxes"
-msgstr ""
+msgstr "خانات الإختيار"
 
 msgid "Chemicals"
 msgstr "المواد الكيميائية"
@@ -751,7 +766,7 @@ msgid "Click to Select a label"
 msgstr "انقر لتحديد تسمية"
 
 msgid "Click to change the estimated date"
-msgstr ""
+msgstr "إنقر لتغير التاريخ المقدّر"
 
 msgid "Close"
 msgstr "اغلاق"
@@ -771,7 +786,7 @@ msgid "Collaborators:"
 msgstr "المتعاونين:"
 
 msgid "Collect Leads from LinkedIn and Gmail"
-msgstr ""
+msgstr "إجمع المبادرات من Linkedin و Gmail"
 
 #, fuzzy
 msgid "Comments"
@@ -810,7 +825,7 @@ msgid "Completed Tasks"
 msgstr "حذف المهمة"
 
 msgid "Confirm deletion"
-msgstr ""
+msgstr "تأكيد الحذف"
 
 msgid "Construction"
 msgstr "إنشاءات"
@@ -883,7 +898,7 @@ msgid "Currency Format"
 msgstr "صيغة العمله"
 
 msgid "Current position"
-msgstr ""
+msgstr "المنصب الحالي"
 
 msgid "Custom Field"
 msgstr "حقل مخصص"
@@ -892,7 +907,7 @@ msgid "Custom Fields"
 msgstr "حقل مخصص"
 
 msgid "Custom Fields Builder"
-msgstr ""
+msgstr "صانع الحقول المخصصة"
 
 msgid "Custom Logo"
 msgstr "الشعار الخاص"
@@ -952,7 +967,7 @@ msgid "Delete this Task"
 msgstr "اضف هذه المهمة "
 
 msgid "Descision Maker ?"
-msgstr ""
+msgstr "صانع القرارات؟"
 
 msgid "Description"
 msgstr "شرح"
@@ -970,16 +985,16 @@ msgid "Details"
 msgstr "بيع بالتجزئة"
 
 msgid "Details of Lead"
-msgstr ""
+msgstr "تفاصيل الزبون المحتمل"
 
 msgid "Disabled"
-msgstr ""
+msgstr "معطل"
 
 msgid "Disassociate a"
-msgstr ""
+msgstr "فصل "
 
 msgid "Disassociate contact from this account"
-msgstr ""
+msgstr "فصل الإتصال من الحساب"
 
 msgid "Discuss this message"
 msgstr "اضف تعليقاتك حول هاته الملاحظة"
@@ -991,7 +1006,7 @@ msgid "Do you mean..."
 msgstr "هل تقصد ..."
 
 msgid "Document"
-msgstr ""
+msgstr "مستند"
 
 #, fuzzy
 msgid "Documents"
@@ -1043,7 +1058,7 @@ msgid "Edit Lead status"
 msgstr "تحرير وضعية مدخل البيع"
 
 msgid "Edit Note"
-msgstr ""
+msgstr "تحرير الملاحظة"
 
 #, fuzzy
 msgid "Edit Opportunity"
@@ -1088,7 +1103,7 @@ msgid "Empty"
 msgstr "فارغ"
 
 msgid "Enabled"
-msgstr ""
+msgstr "مفعّل"
 
 msgid "Ends"
 msgstr "تاريخ الانتهاء"
@@ -1108,6 +1123,9 @@ msgstr "الانجليزبة"
 
 msgid "Enter a Website"
 msgstr "ادخل موقع جديد"
+
+msgid "Enter a email"
+msgstr ""
 
 #, fuzzy
 msgid "Enter a new"
@@ -1149,18 +1167,17 @@ msgstr "العنون"
 msgid "Event title"
 msgstr "العنون"
 
-#, fuzzy
 msgid "Events"
-msgstr ""
+msgstr "الأحداث"
 
 msgid "Everyone you invite will receive a welcome email."
-msgstr ""
+msgstr "كل من تدعوه يستقبل رسالة استقبال."
 
 msgid "Experiences"
-msgstr ""
+msgstr "خبرات"
 
 msgid "Expiration date"
-msgstr ""
+msgstr "تاريخ إنتهاء الصلاحية"
 
 msgid "Expire"
 msgstr "تاريخ الانتهاء"
@@ -1195,7 +1212,7 @@ msgid "Filter by Tags"
 msgstr "تنقيح بواسطة"
 
 msgid "Filter by assignee"
-msgstr ""
+msgstr "تصفية حسب المعهود إليه"
 
 #, fuzzy
 msgid "Filter by source"
@@ -1218,7 +1235,7 @@ msgid "Fixed bid"
 msgstr "مناقصة ثابتة"
 
 msgid "Followers :"
-msgstr ""
+msgstr "المتابعين:"
 
 msgid "Food"
 msgstr "غذاء"
@@ -1230,26 +1247,29 @@ msgid "From"
 msgstr "من"
 
 msgid "From : mm/dd/yyyy hh:mm am"
-msgstr ""
+msgstr "من:"
 
 msgid "General Informations from Twitter"
-msgstr ""
+msgstr "المعلومات العامة من تويتر"
 
 #, fuzzy
 msgid "Gmail"
 msgstr "البريد الالكتروني"
 
 msgid "Gmail Synchronization"
-msgstr ""
+msgstr "مزامنة جيمايل"
 
 msgid "Government"
 msgstr "حكومة"
 
 msgid "Guests can"
+msgstr "الضيوف يستطيعون"
+
+msgid "Guests can:"
 msgstr ""
 
 msgid "Header Logo"
-msgstr ""
+msgstr "شعار الرأسية "
 
 msgid "Healthcare"
 msgstr "الرعاية الصحية"
@@ -1263,13 +1283,13 @@ msgid "Help ?"
 msgstr "مساعدة?"
 
 msgid "Here will be a configuration form"
-msgstr ""
+msgstr "هنا ستكون  صفحة الإعدادات"
 
 msgid "Hi"
 msgstr "مرحبا"
 
 msgid "Hi i want to add you to this project ..."
-msgstr ""
+msgstr "أهلا اريد أن أضيفك إلى هذا المشروع"
 
 msgid "Hospitality"
 msgstr "ضيافة"
@@ -1277,7 +1297,7 @@ msgstr "ضيافة"
 msgid ""
 "Immediately start building your leads database by kickstarting ioGrow "
 "with an import."
-msgstr ""
+msgstr "فورا إبدأ بناء قاعدة بيانات زبائنك المحتملين عبر  استيراد."
 
 #, fuzzy
 msgid "Import"
@@ -1286,6 +1306,9 @@ msgstr "حمل"
 #, fuzzy
 msgid "Import as a custom field"
 msgstr "اضف حقل مخصص"
+
+msgid "Import your leads"
+msgstr ""
 
 msgid "Industry"
 msgstr "صناعة"
@@ -1312,10 +1335,10 @@ msgid "Introduction"
 msgstr "مقدمة"
 
 msgid "Invalid CVC"
-msgstr ""
+msgstr "CVC غير صالح"
 
 msgid "Invalid expiration date"
-msgstr ""
+msgstr "تاريخ انتهاء صلاحية غير صالح"
 
 msgid "Investor"
 msgstr "مستثمر"
@@ -1360,16 +1383,16 @@ msgid "Invited"
 msgstr "مدعو"
 
 msgid "Invited at"
-msgstr ""
+msgstr "تمت الدعوة على"
 
 msgid "Invited by"
-msgstr ""
+msgstr "تمت الدعوة بواسطة"
 
 msgid "Invited user:"
 msgstr "ادعو مستخدم"
 
 msgid "Involve"
-msgstr ""
+msgstr "تنطوي"
 
 msgid "Involve new contributors"
 msgstr "اشرك مساههين جدد"
@@ -1400,13 +1423,13 @@ msgid "Last Stage"
 msgstr "اللقب"
 
 msgid "Last Tweet:"
-msgstr ""
+msgstr "أخر تغريدة"
 
 msgid "Last modified"
 msgstr "تاريخ اخر تحرير"
 
 msgid "Last tweet :"
-msgstr ""
+msgstr "أخر تغريدة"
 
 msgid "Last updated:"
 msgstr "تاريخ اخر تحرير"
@@ -1416,7 +1439,7 @@ msgid "Lastname"
 msgstr "اللقب"
 
 msgid "Launch Wizard "
-msgstr ""
+msgstr "معالج الإطلاق"
 
 msgid "Lead"
 msgstr "مدخل البيع"
@@ -1425,10 +1448,10 @@ msgid "Lead Status"
 msgstr "وضعية مدخل البيع"
 
 msgid "Lead scoring"
-msgstr ""
+msgstr "تقييم الزبائن"
 
 msgid "Lead scoring builder"
-msgstr ""
+msgstr "صانع تقييمات الزبائ"
 
 msgid "Leads"
 msgstr "مداخيل البيع"
@@ -1444,7 +1467,7 @@ msgid "License type"
 msgstr "نوع الرخصة"
 
 msgid "Linkedin"
-msgstr ""
+msgstr "Linkedin"
 
 msgid "Loading"
 msgstr "تحميل"
@@ -1480,7 +1503,7 @@ msgid "Manufacturing"
 msgstr "تصنيع"
 
 msgid "Mechanical"
-msgstr ""
+msgstr "آلي"
 
 msgid "Media"
 msgstr "وسائل الإعلام"
@@ -1504,7 +1527,7 @@ msgid "My"
 msgstr "خاصة بي"
 
 msgid "My  Cases"
-msgstr ""
+msgstr "حالاتي"
 
 #, fuzzy
 msgid "My  Opportunities"
@@ -1521,6 +1544,9 @@ msgstr "اتصالاتي"
 #, fuzzy
 msgid "My Opportunities"
 msgstr "الفرص الخاصة بي "
+
+msgid "My accounts"
+msgstr ""
 
 msgid "My contacts"
 msgstr "اتصالاتي"
@@ -1543,7 +1569,7 @@ msgid "NO"
 msgstr "لا"
 
 msgid "NO MATCH, SELECT..."
-msgstr ""
+msgstr "لا توافق، إختر ..."
 
 msgid "Name"
 msgstr "اسم"
@@ -1576,14 +1602,23 @@ msgstr "انشئ حدث"
 msgid "New Lead status"
 msgstr "وضعية جديدة لمدخل البيع"
 
+msgid "New Message"
+msgstr ""
+
 msgid "New Opportunity"
 msgstr "فرصة جديدة"
 
 msgid "New Opportunity Stage"
 msgstr "مرحلة الفرصة"
 
+msgid "New case"
+msgstr ""
+
 msgid "New label"
 msgstr "تسمية جديدة"
+
+msgid "New opportunity"
+msgstr ""
 
 msgid "New tag name"
 msgstr "اسم جديد"
@@ -1592,7 +1627,7 @@ msgid "Next"
 msgstr "التالي"
 
 msgid "No"
-msgstr ""
+msgstr "لا"
 
 #, fuzzy
 msgid "No notification"
@@ -1628,20 +1663,20 @@ msgid "Number"
 msgstr "رقم"
 
 msgid "Number of favorites:"
-msgstr ""
+msgstr "عدد المفضلة:"
 
 msgid "Number of followers"
-msgstr ""
+msgstr "عدد المتابعين"
 
 #, fuzzy
 msgid "Number of friends"
 msgstr "اخبرني المزيد عن الزبون"
 
 msgid "Number of retweets:"
-msgstr ""
+msgstr "عدد إعادة التغريدات"
 
 msgid "Number of tweets"
-msgstr ""
+msgstr "عدد التغريدات"
 
 #, fuzzy
 msgid "Ok"
@@ -1655,7 +1690,7 @@ msgid "Open Tasks"
 msgstr "مهام عاجلة"
 
 msgid "Open with Google Drive"
-msgstr ""
+msgstr "افتح بغوغل درايف"
 
 msgid "Opened by:"
 msgstr "فتحت عن طريق: "
@@ -1694,7 +1729,7 @@ msgid "Other details"
 msgstr "اتصالاتي"
 
 msgid "Overview"
-msgstr ""
+msgstr "نظرة عامة"
 
 msgid "Owner"
 msgstr "مالك"
@@ -1720,14 +1755,14 @@ msgid "Partner Referral"
 msgstr "احالة الى شريك "
 
 msgid "Past position"
-msgstr ""
+msgstr "المنصب السابق"
 
 #, fuzzy
 msgid "Payment information"
 msgstr "حذف معلومات :"
 
 msgid "Pending"
-msgstr ""
+msgstr "انتظار"
 
 #, fuzzy
 msgid "Per day"
@@ -1757,7 +1792,7 @@ msgid "Phone number"
 msgstr "ادخل رقم الهاتف"
 
 msgid "Please specify a valid credit card number"
-msgstr ""
+msgstr "الرجاء تعيين رقم بطاقة إئتمان صالح"
 
 #, fuzzy
 msgid "Portuguese/Brazil"
@@ -1791,16 +1826,16 @@ msgid "Probability"
 msgstr "احتمال"
 
 msgid "Processing"
-msgstr ""
+msgstr "معالجة"
 
 msgid "Profession"
-msgstr ""
+msgstr "مهنة"
 
 msgid "Prospect"
 msgstr "إمكانية"
 
 msgid "Public"
-msgstr ""
+msgstr "عامة"
 
 #, fuzzy
 msgid "Puchased Licenses"
@@ -1817,7 +1852,7 @@ msgid "Qualification"
 msgstr "تعليم"
 
 msgid "Reason Lost"
-msgstr ""
+msgstr "سبب فاشل"
 
 msgid "Recreation"
 msgstr "استجمام"
@@ -1836,7 +1871,7 @@ msgid "Related contacts"
 msgstr "حذف اتصال"
 
 msgid "Related to (Account, Contact or Lead)"
-msgstr ""
+msgstr "لها علاقة (حساب، إتصال أو زبون محتمل)"
 
 #, fuzzy
 msgid "Relation"
@@ -1846,7 +1881,7 @@ msgid "Relationships"
 msgstr "العلاقات"
 
 msgid "Remind me"
-msgstr ""
+msgstr "ذكّرني"
 
 msgid "Reopen"
 msgstr "إعادة فتح"
@@ -1868,29 +1903,35 @@ msgid "Retail"
 msgstr "بيع بالتجزئة"
 
 msgid "SMS"
-msgstr ""
+msgstr "SMS"
 
 msgid "Save"
 msgstr "حفظ التغييرات"
+
+msgid "Save Case"
+msgstr ""
 
 #, fuzzy
 msgid "Save Signature "
 msgstr "توقيع البريد الالكتروني"
 
-msgid "Schedule"
+msgid "Save opportunity"
 msgstr ""
 
+msgid "Schedule"
+msgstr "جدولة"
+
 msgid "Score ?"
-msgstr ""
+msgstr "تقييم؟"
 
 msgid "Search"
 msgstr "ابحث"
 
 msgid "Search for an existing competitor ..."
-msgstr ""
+msgstr "بحث عن منافس موجود ..."
 
 msgid "Search for an existing contact ..."
-msgstr ""
+msgstr "بحث عن إتصال موجود ..."
 
 msgid "Search for an existing contact..."
 msgstr "البحث عن اتصال موجود..."
@@ -1910,16 +1951,16 @@ msgid "Select Type"
 msgstr "اختر نوع"
 
 msgid "Select all Invitees"
-msgstr ""
+msgstr "اختر كل المدعوين"
 
 msgid "Select all Users"
-msgstr ""
+msgstr "اختر كل المستخدمين"
 
 msgid "Select lead Source"
-msgstr ""
+msgstr "اختر مصدر الزبون المحتمل"
 
 msgid "Select lead Status"
-msgstr ""
+msgstr "اختر حالة الزبون المحتمل"
 
 msgid "Send"
 msgstr " ارسل"
@@ -1946,7 +1987,7 @@ msgid "Share with your collaborators:"
 msgstr "ادعو متعاونين :"
 
 msgid "Sharing Rule"
-msgstr ""
+msgstr "قاعدة المشاركة"
 
 msgid "Sharing Settings"
 msgstr "نشر الاعدادات"
@@ -1955,7 +1996,7 @@ msgid "Shipping"
 msgstr "الشحن"
 
 msgid "Show more..."
-msgstr ""
+msgstr "عرض أكثر ..."
 
 #, fuzzy
 msgid "Show tips"
@@ -1974,7 +2015,7 @@ msgid "Signature"
 msgstr "توقيع"
 
 msgid "Skills"
-msgstr ""
+msgstr "الخبرات"
 
 msgid "Social Media"
 msgstr "وسائل الإعلام الاجتماعية"
@@ -2008,7 +2049,7 @@ msgid "Specialties"
 msgstr "خدمات"
 
 msgid "Spreadsheet"
-msgstr ""
+msgstr "جدول"
 
 msgid "Stage"
 msgstr "المرحلة"
@@ -2027,7 +2068,7 @@ msgid "State/Province"
 msgstr "دولة/مقاطعة"
 
 msgid "Stats from Twitter"
-msgstr ""
+msgstr "إحصاءات من تويتر"
 
 msgid "Status"
 msgstr "وضعية"
@@ -2047,21 +2088,21 @@ msgid "Subscription type"
 msgstr "شرح"
 
 msgid "Summary"
-msgstr ""
+msgstr "ملخص"
 
 msgid "Supplier"
 msgstr "مزود"
 
 msgid "Synchronize my contact with google"
-msgstr ""
+msgstr "زامن اتصالاتي مع غوغل"
 
 msgid "Synchronize my contacts with google contacts "
-msgstr ""
+msgstr "زامن اتصالاتي مع اتصالات غوغل"
 
 msgid ""
 "Synchronize your ioGrow Contacts with Google Contacts, , it takes some "
 "time, please refresh your browser to see your contacts"
-msgstr ""
+msgstr "زامن اتصالاتك مع اتصلات غوغل"
 
 msgid "Tagline"
 msgstr "مقدمة"
@@ -2077,7 +2118,7 @@ msgid "Tasks"
 msgstr "مهام"
 
 msgid "Team"
-msgstr ""
+msgstr "الفريق"
 
 msgid "Technology"
 msgstr "تكنولوجيا"
@@ -2093,7 +2134,7 @@ msgid "Text:"
 msgstr "التالي"
 
 msgid "The created_by is:"
-msgstr ""
+msgstr "created_by هي:"
 
 msgid "The image file should be in PNG or GIF format, up to 144 x 32 pixels"
 msgstr "يجب أن يكون امتداد الملف PNG أو GIF الشكل، و بمقاس 144 × 32 بكسل"
@@ -2109,7 +2150,7 @@ msgid "The owner is:"
 msgstr "المالك هو:"
 
 msgid "There was a problem"
-msgstr ""
+msgstr "كان هناك مشكل"
 
 msgid "This signature will appear in all mail you send from iogrow"
 msgstr "سيظهر هذا التوقيع في جميع الرسائل التي ترسلها من iogrow"
@@ -2119,16 +2160,13 @@ msgid "Tilte"
 msgstr "منقح"
 
 msgid "Time Zone"
-msgstr ""
+msgstr "منطقة زمنية"
 
 msgid "Time scale title"
-msgstr ""
+msgstr "عنوان المقياس الزمني"
 
 msgid "Time zone"
 msgstr "المنطقة الزمنية"
-
-msgid "TimeZone"
-msgstr ""
 
 msgid "Title"
 msgstr "عنوان"
@@ -2138,7 +2176,7 @@ msgid "Title ..."
 msgstr "ادخل نص ..."
 
 msgid "Tittle"
-msgstr ""
+msgstr "عنوان"
 
 msgid "To"
 msgstr "إلى"
@@ -2147,13 +2185,13 @@ msgid "To add an outside email to this account, forward or BCC to:"
 msgstr "لإضافة بريد الكتروني خارجي  عن هذا الحساب أو القيام بعملية التحويل   "
 
 msgid "To: mm/dd/yyyy hh:mm am"
-msgstr ""
+msgstr "إلى:"
 
 msgid "Transportation"
 msgstr "نقل"
 
 msgid "Try again"
-msgstr ""
+msgstr "جرب ثانية"
 
 #, fuzzy
 msgid "Tweets"
@@ -2164,7 +2202,7 @@ msgid "Twitter"
 msgstr "منقح"
 
 msgid "Twitter Link"
-msgstr ""
+msgstr "رابط تويتر"
 
 msgid "Type"
 msgstr "النوع"
@@ -2189,7 +2227,7 @@ msgid "Update your Logo"
 msgstr "حمل علامتك التجارية"
 
 msgid "Update your Logo and make your brand your culture."
-msgstr ""
+msgstr "حدث شعارك وإجعل علامتك التجارية ثقافتك."
 
 #, fuzzy
 msgid "Updated"
@@ -2198,6 +2236,12 @@ msgstr "تاريخ اخر تحرير"
 #, fuzzy
 msgid "Updated:"
 msgstr "تاريخ اخر تحرير"
+
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade Now"
+msgstr ""
 
 msgid "Upload"
 msgstr "رفع"
@@ -2239,7 +2283,7 @@ msgid "View more"
 msgstr "مشاهدة المزيد"
 
 msgid "We found diffrent possible matches. Click the one you want :"
-msgstr ""
+msgstr "وجدنا عدة توافقات ممكنة، أنقر  التوافق الذي تريده:"
 
 msgid "Web Site"
 msgstr "موقع"
@@ -2299,22 +2343,22 @@ msgid "Who's involved ?"
 msgstr "هل تود المشاركة"
 
 msgid "Working"
-msgstr ""
+msgstr "يعمل"
 
 msgid "YES"
 msgstr "نعم"
 
 msgid "Yes"
-msgstr ""
+msgstr "نعم"
 
 msgid "You can not share"
 msgstr "لا يمكنك المشاركة"
 
 msgid "You can't share"
-msgstr ""
+msgstr "لا يمكنك المشاركة"
 
 msgid "You will delete the"
-msgstr ""
+msgstr "ستحذف "
 
 msgid "You've connected ioGrow to"
 msgstr "قمت بتوصيل ioGrow ب"
@@ -2323,7 +2367,7 @@ msgid "Your custom logo will be displayed for all services in the header"
 msgstr "سيتم عرض هذا الشعار في جميع الخدمات في أعلى الصفحة"
 
 msgid "Your email has been sent"
-msgstr ""
+msgstr "بريدك تم إرساله"
 
 msgid "Your logo here"
 msgstr "شعارك هنا"
@@ -2332,14 +2376,14 @@ msgid "Your message has been sent."
 msgstr "تم إرسال رسالتك."
 
 msgid "add emails of guests"
-msgstr ""
+msgstr "إضف عناوين البريد للضيوف"
 
 #, fuzzy
 msgid "all day"
 msgstr "اليوم باكمله"
 
 msgid "allday"
-msgstr ""
+msgstr "كل اليوم"
 
 msgid "assigned licenses"
 msgstr "التراخيص التي تم تعيينها"
@@ -2375,7 +2419,7 @@ msgid "choose a status"
 msgstr "اختر وضعية"
 
 msgid "choose your timezone"
-msgstr ""
+msgstr "اختر منطقتك الزمانية"
 
 #, fuzzy
 msgid "comments"
@@ -2394,7 +2438,7 @@ msgid "content"
 msgstr "حسابات"
 
 msgid "current positions"
-msgstr ""
+msgstr "المواقع الحالية"
 
 #, fuzzy
 msgid "day"
@@ -2416,10 +2460,10 @@ msgid "from"
 msgstr "من"
 
 msgid "from this opportunity"
-msgstr ""
+msgstr "من هذه الفرصة"
 
 msgid "from this opportunity?"
-msgstr ""
+msgstr "من هذه الفرصة؟"
 
 msgid "home"
 msgstr "الرئيسية"
@@ -2429,7 +2473,7 @@ msgid "hour"
 msgstr "كل ساعة"
 
 msgid "import your leads from Gmail:"
-msgstr ""
+msgstr "تصدير زبائنك المحتملين من جيمايل:"
 
 #, fuzzy
 msgid "industry"
@@ -2443,13 +2487,13 @@ msgid "ioGrow Field"
 msgstr "حقل ioGrow"
 
 msgid "ioGrow Live"
-msgstr ""
+msgstr "ioGrow Live"
 
 msgid "licenses bought"
 msgstr "التراخيص المشترات"
 
 msgid "minutes before"
-msgstr ""
+msgstr "دقائق قبل"
 
 msgid "mm/dd/yyyy hh:mm am"
 msgstr ""
@@ -2481,7 +2525,7 @@ msgid "other"
 msgstr "اخرى"
 
 msgid "past positions"
-msgstr ""
+msgstr "المناصب السابقة"
 
 msgid "portlet Settings"
 msgstr "إعدادات المدخل"
@@ -2490,7 +2534,7 @@ msgid "private: only you and your collaborators"
 msgstr "خصوصي : فقط انت و المتعاونين معك يمنهم الاستعمال"
 
 msgid "profession"
-msgstr ""
+msgstr "المهنة"
 
 msgid "public: Anyone within your organization"
 msgstr "عمومي : اي شخص داخل امؤسسة يمكنه الاستعمال"
@@ -2509,28 +2553,28 @@ msgid "save"
 msgstr "حفظ"
 
 msgid "see guest list"
-msgstr ""
+msgstr "أنظر لائحة الضيوف"
 
 #, fuzzy
 msgid "stage"
 msgstr "المرحلة"
 
 msgid "synchronize your Gmail contact  with ioGrow"
-msgstr ""
+msgstr "زامن إتصالات جيمايل مع ioGrow"
 
 #, fuzzy
 msgid "these accounts"
 msgstr "إضافة هذا الحساب"
 
 msgid "these cases"
-msgstr ""
+msgstr "هذه الحالات"
 
 #, fuzzy
 msgid "these contacts"
 msgstr "اتصالاتي"
 
 msgid "these leads"
-msgstr ""
+msgstr "هؤلاء الزبائن المحتملين"
 
 #, fuzzy
 msgid "these opportunities"
@@ -2567,10 +2611,10 @@ msgid "to assign the task"
 msgstr "لتعيين المهمة"
 
 msgid "turn off  "
-msgstr ""
+msgstr "عطّل"
 
 msgid "turn on"
-msgstr ""
+msgstr "فعّل"
 
 #, fuzzy
 msgid "week"
@@ -2580,14 +2624,14 @@ msgid "work"
 msgstr "عمل"
 
 msgid "you are not the owner"
-msgstr ""
+msgstr "لست المالك"
 
 msgid "you can't edit this  you are not the created_by"
-msgstr ""
+msgstr "لا يمكنك التحرير ، لست الcreated_by"
 
 msgid "you can't edit this !"
-msgstr ""
+msgstr "لا يمكنك التحرير"
 
 msgid "you can't edit this, you are not the owner"
-msgstr ""
+msgstr "لا يمكنك التحرير ، لست المالك"
 

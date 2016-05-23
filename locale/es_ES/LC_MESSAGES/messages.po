@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-23 14:30+0100\n"
+"POT-Creation-Date: 2016-05-23 21:47+0100\n"
 "PO-Revision-Date: 2014-07-24 18:00+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es_ES\n"
@@ -208,15 +208,28 @@ msgstr ""
 msgid "+ Add new colaborator"
 msgstr ""
 
+msgid "1 day"
+msgstr ""
+
+msgid "1 hour"
+msgstr ""
+
+msgid "1 week"
+msgstr ""
+
 msgid "1- Select the CSV file you want to import."
 msgstr ""
 
-msgid ""
-"2- Match your data with fields in\n"
-"                        ioGrow"
+msgid "1. Billing details"
 msgstr ""
 
 msgid "2- Match your data with fields in ioGrow"
+msgstr ""
+
+msgid "2. Billing cycle"
+msgstr ""
+
+msgid "30 minutes before"
 msgstr ""
 
 msgid "A contact with this name already exist"
@@ -477,6 +490,9 @@ msgstr ""
 msgid "All Tasks"
 msgstr ""
 
+msgid "All accounts"
+msgstr ""
+
 msgid "All contacts"
 msgstr ""
 
@@ -590,8 +606,7 @@ msgstr ""
 
 msgid ""
 "By deleting your organization, all your data will be deleted and you will"
-" be automaticly\n"
-"                            logging out !"
+" be automatically logging out!"
 msgstr ""
 
 msgid "CC"
@@ -978,6 +993,9 @@ msgstr ""
 msgid "Enter a Website"
 msgstr ""
 
+msgid "Enter a email"
+msgstr ""
+
 msgid "Enter a new"
 msgstr ""
 
@@ -1108,6 +1126,9 @@ msgstr ""
 msgid "Guests can"
 msgstr ""
 
+msgid "Guests can:"
+msgstr ""
+
 msgid "Header Logo"
 msgstr ""
 
@@ -1141,6 +1162,9 @@ msgid "Import"
 msgstr ""
 
 msgid "Import as a custom field"
+msgstr ""
+
+msgid "Import your leads"
 msgstr ""
 
 msgid "Industry"
@@ -1349,6 +1373,9 @@ msgstr ""
 msgid "My Opportunities"
 msgstr ""
 
+msgid "My accounts"
+msgstr ""
+
 msgid "My contacts"
 msgstr ""
 
@@ -1400,13 +1427,22 @@ msgstr ""
 msgid "New Lead status"
 msgstr ""
 
+msgid "New Message"
+msgstr ""
+
 msgid "New Opportunity"
 msgstr ""
 
 msgid "New Opportunity Stage"
 msgstr ""
 
+msgid "New case"
+msgstr ""
+
 msgid "New label"
+msgstr ""
+
+msgid "New opportunity"
 msgstr ""
 
 msgid "New tag name"
@@ -1673,7 +1709,13 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+msgid "Save Case"
+msgstr ""
+
 msgid "Save Signature "
+msgstr ""
+
+msgid "Save opportunity"
 msgstr ""
 
 msgid "Schedule"
@@ -1908,9 +1950,6 @@ msgstr ""
 msgid "Time zone"
 msgstr ""
 
-msgid "TimeZone"
-msgstr ""
-
 msgid "Title"
 msgstr ""
 
@@ -1969,6 +2008,12 @@ msgid "Updated"
 msgstr ""
 
 msgid "Updated:"
+msgstr ""
+
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade Now"
 msgstr ""
 
 msgid "Upload"
