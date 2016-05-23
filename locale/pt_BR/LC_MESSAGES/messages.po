@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-23 13:33+0100\n"
+"POT-Creation-Date: 2016-05-23 14:30+0100\n"
 "PO-Revision-Date: 2015-06-19 12:40-0300\n"
 "Last-Translator: \n"
 "Language: pt_BR\n"
@@ -21,9 +21,6 @@ msgstr ""
 #, fuzzy
 msgid "  Add a competitor..."
 msgstr "Adicionar um comentário"
-
-msgid " : you are not the owner"
-msgstr " : Você não é o proprietário"
 
 #, fuzzy
 msgid " About"
@@ -75,11 +72,6 @@ msgstr "Contato"
 msgid " Custom Fields"
 msgstr "Campos Personalizados"
 
-msgid ""
-" Custom Fields\n"
-"                                    Builder"
-msgstr ""
-
 msgid " Decision process Timeline"
 msgstr ""
 
@@ -100,14 +92,6 @@ msgstr ""
 #, fuzzy
 msgid " Details"
 msgstr "Varejo"
-
-msgid ""
-" Disassociate a\n"
-"                    <%=itemToDisassociate.type%> from this opportunity"
-msgstr ""
-
-msgid " Disassociate contact from this account"
-msgstr "Desassociar contato desta conta"
 
 #, fuzzy
 msgid " Documents"
@@ -285,13 +269,6 @@ msgstr ""
 msgid "2- Match your data with fields in ioGrow"
 msgstr ""
 
-msgid ": you are not the owner"
-msgstr ": você não é o proprietário"
-
-#, fuzzy
-msgid "<%=task.due | date:'yyyy-MM-dd'%>"
-msgstr "<%=task.due | date:'yyyy-MM-dd  HH:mm '%>"
-
 msgid "A contact with this name already exist"
 msgstr ""
 
@@ -340,11 +317,6 @@ msgstr "Adicionar Campanha"
 
 msgid "Add Case"
 msgstr "Adiciona Caso"
-
-msgid ""
-"Add Case\n"
-"                        Status"
-msgstr ""
 
 msgid "Add Case Status"
 msgstr "Adicionar Status de Novo Caso"
@@ -414,12 +386,6 @@ msgstr "Adiciona uma data de vencimento:"
 
 msgid "Add a location"
 msgstr "Adicionar uma localização"
-
-#, fuzzy
-msgid ""
-"Add a new Opportunity\n"
-"                    stage"
-msgstr "Adicionar um novo estágio de oportunidade"
 
 msgid "Add a new Opportunity stage"
 msgstr "Adicionar um novo estágio de oportunidade"
@@ -637,10 +603,6 @@ msgstr "Tem certeza que quer deletar aquelas tarefas"
 
 #, fuzzy
 msgid "Are you sure you want to disassociate"
-msgstr "Você tem certea que quer desassociar"
-
-#, fuzzy
-msgid "Are you sure you want to disassociate "
 msgstr "Você tem certea que quer desassociar"
 
 msgid "Assign"
@@ -991,6 +953,12 @@ msgid "Details of Lead"
 msgstr "Detalhes do Lead"
 
 msgid "Disabled"
+msgstr ""
+
+msgid "Disassociate a"
+msgstr ""
+
+msgid "Disassociate contact from this account"
 msgstr ""
 
 msgid "Discuss this message"
@@ -1360,14 +1328,10 @@ msgstr "Convidar pessoas para participar desta discussão"
 msgid "Invited"
 msgstr "Convidado"
 
-msgid ""
-"Invited\n"
-"                                at"
+msgid "Invited at"
 msgstr ""
 
-msgid ""
-"Invited\n"
-"                                by"
+msgid "Invited by"
 msgstr ""
 
 msgid "Invited user:"
@@ -1913,14 +1877,10 @@ msgstr "Selecione todos os convidados"
 msgid "Select all Users"
 msgstr "Selecione todos os usuários"
 
-msgid ""
-"Select lead\n"
-"                                                            Source"
+msgid "Select lead Source"
 msgstr ""
 
-msgid ""
-"Select lead\n"
-"                                                            Status"
+msgid "Select lead Status"
 msgstr ""
 
 msgid "Send"
@@ -2186,10 +2146,7 @@ msgstr "Atualizar Logo"
 msgid "Update your Logo"
 msgstr "Atualize seu Logo"
 
-msgid ""
-"Update your Logo and make your brand\n"
-"                                                                your "
-"culture."
+msgid "Update your Logo and make your brand your culture."
 msgstr ""
 
 #, fuzzy
@@ -2240,13 +2197,6 @@ msgstr "Aparência"
 
 msgid "View more"
 msgstr "Ver mais"
-
-#, fuzzy
-msgid ""
-"We\n"
-"                                        found diffrent possible matches. "
-"Click the one you want :"
-msgstr "Encontramos diferentes resultados possiveis. Selecione qual desejar:"
 
 #, fuzzy
 msgid "We found diffrent possible matches. Click the one you want :"
@@ -2423,12 +2373,21 @@ msgstr ""
 msgid "from"
 msgstr "De"
 
+msgid "from this opportunity"
+msgstr ""
+
+msgid "from this opportunity?"
+msgstr ""
+
 msgid "home"
 msgstr "casa"
 
 #, fuzzy
 msgid "hour"
 msgstr "hora"
+
+msgid "import your leads from Gmail:"
+msgstr ""
 
 #, fuzzy
 msgid "industry"
@@ -2513,12 +2472,8 @@ msgstr "ver lista de convidados"
 msgid "stage"
 msgstr "Etapa"
 
-msgid ""
-"synchronize your Gmail contact  with ioGrow <b>import your leads from "
-"Gmail :"
+msgid "synchronize your Gmail contact  with ioGrow"
 msgstr ""
-"sincronize o seu contato do Gmail com ioGrow <b>import os seus Leads do "
-"Gmail :"
 
 #, fuzzy
 msgid "these accounts"
@@ -2581,13 +2536,9 @@ msgstr "você não é o proprietário"
 msgid "you can't edit this  you are not the created_by"
 msgstr "Você não pode editar. Você não é o created_by"
 
-msgid "you can't edit this  you are not the owner"
-msgstr "você não pode editar  você não é o proprietário"
-
 msgid "you can't edit this !"
 msgstr "Você não pode editar!"
 
-#, fuzzy
-msgid "you can't edit this you are not the owner"
-msgstr "você não pode editar  você não é o proprietário"
+msgid "you can't edit this, you are not the owner"
+msgstr ""
 

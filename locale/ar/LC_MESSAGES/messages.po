@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-23 13:33+0100\n"
-"PO-Revision-Date: 2016-05-09 10:17+0100\n"
+"POT-Creation-Date: 2016-05-23 14:30+0100\n"
+"PO-Revision-Date: 2016-05-23 14:29+0100\n"
 "Last-Translator: assem\n"
 "Language: ar\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -19,20 +19,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#, fuzzy
 msgid "  Add a competitor..."
-msgstr "حسابات"
-
-msgid " : you are not the owner"
-msgstr " : لست المالك"
+msgstr "أضف منافسا..."
 
 #, fuzzy
 msgid " About"
 msgstr "حول"
 
-#, fuzzy
 msgid " Access : "
-msgstr "تسميات"
+msgstr "سماحية دخول:"
 
 #, fuzzy
 msgid " Account"
@@ -47,7 +42,7 @@ msgid " Amount"
 msgstr "المبلغ"
 
 msgid " Budget"
-msgstr ""
+msgstr "الميزانية"
 
 #, fuzzy
 msgid " Cases"
@@ -77,13 +72,8 @@ msgstr "اتصال"
 msgid " Custom Fields"
 msgstr "حقل مخصص"
 
-msgid ""
-" Custom Fields\n"
-"                                    Builder"
-msgstr ""
-
 msgid " Decision process Timeline"
-msgstr ""
+msgstr "الجدول الزمني لعملية إخذ القرار"
 
 #, fuzzy
 msgid " Delete"
@@ -98,19 +88,11 @@ msgid " Descision Maker"
 msgstr "شرح"
 
 msgid " Descision Process"
-msgstr ""
+msgstr "عملة أخذ القرار"
 
 #, fuzzy
 msgid " Details"
 msgstr "بيع بالتجزئة"
-
-msgid ""
-" Disassociate a\n"
-"                    <%=itemToDisassociate.type%> from this opportunity"
-msgstr ""
-
-msgid " Disassociate contact from this account"
-msgstr ""
 
 #, fuzzy
 msgid " Documents"
@@ -128,7 +110,7 @@ msgid " Export Account"
 msgstr "اتصالاتي"
 
 msgid " Export Cases"
-msgstr ""
+msgstr "تصدير الحالات"
 
 #, fuzzy
 msgid " Export Contact"
@@ -151,7 +133,7 @@ msgid " Field preview"
 msgstr "معاينة الحقل"
 
 msgid " IBM Watson Analysis"
-msgstr ""
+msgstr "تحاليل واتسون IBM"
 
 #, fuzzy
 msgid " Import accounts"
@@ -170,7 +152,7 @@ msgid " Linkedin Informations"
 msgstr "معلومات حول مدخل البيع "
 
 msgid " Linkedin details"
-msgstr ""
+msgstr "تفاصيل لينكدإن"
 
 #, fuzzy
 msgid " Name"
@@ -243,7 +225,7 @@ msgid " Subject"
 msgstr "الموضوع"
 
 msgid " Summary"
-msgstr ""
+msgstr "الملخص"
 
 #, fuzzy
 msgid " Tags"
@@ -269,14 +251,14 @@ msgid " education"
 msgstr "تعليم"
 
 msgid " past positions"
-msgstr ""
+msgstr "المناصب السابقة"
 
 #, fuzzy
 msgid "+ Add new colaborator"
 msgstr "ادعو متعاونين :"
 
 msgid "1- Select the CSV file you want to import."
-msgstr ""
+msgstr "إختر ملف CSV الذي تريد تصديره."
 
 msgid ""
 "2- Match your data with fields in\n"
@@ -286,17 +268,11 @@ msgstr ""
 msgid "2- Match your data with fields in ioGrow"
 msgstr ""
 
-msgid ": you are not the owner"
-msgstr ""
-
-msgid "<%=task.due | date:'yyyy-MM-dd'%>"
-msgstr ""
-
 msgid "A contact with this name already exist"
-msgstr ""
+msgstr "يوجد إتصال بهذا الاسم"
 
 msgid "A lead with this name already exist"
-msgstr ""
+msgstr "توجد مباردة بهذا الاسم"
 
 msgid "About"
 msgstr "حول"
@@ -341,11 +317,6 @@ msgstr "اضف حملة دعاية"
 
 msgid "Add Case"
 msgstr "اضف حالة"
-
-msgid ""
-"Add Case\n"
-"                        Status"
-msgstr ""
 
 msgid "Add Case Status"
 msgstr "اضف وضعية جديدة"
@@ -421,12 +392,6 @@ msgstr "تاريخ الاستحقاق"
 #, fuzzy
 msgid "Add a location"
 msgstr "تعليم"
-
-#, fuzzy
-msgid ""
-"Add a new Opportunity\n"
-"                    stage"
-msgstr "اضف مرحلة جديدة "
 
 msgid "Add a new Opportunity stage"
 msgstr "اضف مرحلة جديدة "
@@ -647,10 +612,6 @@ msgstr "هل أنت متأكد أنك تريد حذف هذه المهمة"
 
 #, fuzzy
 msgid "Are you sure you want to disassociate"
-msgstr "هل أنت متأكد أنك تريد حذف"
-
-#, fuzzy
-msgid "Are you sure you want to disassociate "
 msgstr "هل أنت متأكد أنك تريد حذف"
 
 #, fuzzy
@@ -1012,6 +973,12 @@ msgid "Details of Lead"
 msgstr ""
 
 msgid "Disabled"
+msgstr ""
+
+msgid "Disassociate a"
+msgstr ""
+
+msgid "Disassociate contact from this account"
 msgstr ""
 
 msgid "Discuss this message"
@@ -1392,14 +1359,10 @@ msgstr "ادعوا افراد فريقك للمشاركة في التعليقا�
 msgid "Invited"
 msgstr "مدعو"
 
-msgid ""
-"Invited\n"
-"                                at"
+msgid "Invited at"
 msgstr ""
 
-msgid ""
-"Invited\n"
-"                                by"
+msgid "Invited by"
 msgstr ""
 
 msgid "Invited user:"
@@ -1952,14 +1915,10 @@ msgstr ""
 msgid "Select all Users"
 msgstr ""
 
-msgid ""
-"Select lead\n"
-"                                                            Source"
+msgid "Select lead Source"
 msgstr ""
 
-msgid ""
-"Select lead\n"
-"                                                            Status"
+msgid "Select lead Status"
 msgstr ""
 
 msgid "Send"
@@ -2229,10 +2188,7 @@ msgstr "حمل علامتك التجارية"
 msgid "Update your Logo"
 msgstr "حمل علامتك التجارية"
 
-msgid ""
-"Update your Logo and make your brand\n"
-"                                                                your "
-"culture."
+msgid "Update your Logo and make your brand your culture."
 msgstr ""
 
 #, fuzzy
@@ -2281,12 +2237,6 @@ msgstr "منظر"
 
 msgid "View more"
 msgstr "مشاهدة المزيد"
-
-msgid ""
-"We\n"
-"                                        found diffrent possible matches. "
-"Click the one you want :"
-msgstr ""
 
 msgid "We found diffrent possible matches. Click the one you want :"
 msgstr ""
@@ -2465,12 +2415,21 @@ msgstr "التسجيل الأول"
 msgid "from"
 msgstr "من"
 
+msgid "from this opportunity"
+msgstr ""
+
+msgid "from this opportunity?"
+msgstr ""
+
 msgid "home"
 msgstr "الرئيسية"
 
 #, fuzzy
 msgid "hour"
 msgstr "كل ساعة"
+
+msgid "import your leads from Gmail:"
+msgstr ""
 
 #, fuzzy
 msgid "industry"
@@ -2556,9 +2515,7 @@ msgstr ""
 msgid "stage"
 msgstr "المرحلة"
 
-msgid ""
-"synchronize your Gmail contact  with ioGrow <b>import your leads from "
-"Gmail :"
+msgid "synchronize your Gmail contact  with ioGrow"
 msgstr ""
 
 #, fuzzy
@@ -2628,12 +2585,9 @@ msgstr ""
 msgid "you can't edit this  you are not the created_by"
 msgstr ""
 
-msgid "you can't edit this  you are not the owner"
-msgstr ""
-
 msgid "you can't edit this !"
 msgstr ""
 
-msgid "you can't edit this you are not the owner"
+msgid "you can't edit this, you are not the owner"
 msgstr ""
 

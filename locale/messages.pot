@@ -1,9 +1,6 @@
 msgid "  Add a competitor..."
 msgstr ""
 
-msgid " : you are not the owner"
-msgstr ""
-
 msgid " About"
 msgstr ""
 
@@ -43,11 +40,6 @@ msgstr ""
 msgid " Custom Fields"
 msgstr ""
 
-msgid ""
-" Custom Fields\n"
-"                                    Builder"
-msgstr ""
-
 msgid " Decision process Timeline"
 msgstr ""
 
@@ -64,14 +56,6 @@ msgid " Descision Process"
 msgstr ""
 
 msgid " Details"
-msgstr ""
-
-msgid ""
-" Disassociate a\n"
-"                    <%=itemToDisassociate.type%> from this opportunity"
-msgstr ""
-
-msgid " Disassociate contact from this account"
 msgstr ""
 
 msgid " Documents"
@@ -214,12 +198,6 @@ msgstr ""
 msgid "2- Match your data with fields in ioGrow"
 msgstr ""
 
-msgid ": you are not the owner"
-msgstr ""
-
-msgid "<%=task.due | date:'yyyy-MM-dd'%>"
-msgstr ""
-
 msgid "A contact with this name already exist"
 msgstr ""
 
@@ -263,11 +241,6 @@ msgid "Add Campaign"
 msgstr ""
 
 msgid "Add Case"
-msgstr ""
-
-msgid ""
-"Add Case\n"
-"                        Status"
 msgstr ""
 
 msgid "Add Case Status"
@@ -334,11 +307,6 @@ msgid "Add a due date"
 msgstr ""
 
 msgid "Add a location"
-msgstr ""
-
-msgid ""
-"Add a new Opportunity\n"
-"                    stage"
 msgstr ""
 
 msgid "Add a new Opportunity stage"
@@ -537,9 +505,6 @@ msgid "Are you sure you want to delete those tasks"
 msgstr ""
 
 msgid "Are you sure you want to disassociate"
-msgstr ""
-
-msgid "Are you sure you want to disassociate "
 msgstr ""
 
 msgid "Assign"
@@ -870,6 +835,12 @@ msgid "Details of Lead"
 msgstr ""
 
 msgid "Disabled"
+msgstr ""
+
+msgid "Disassociate a"
+msgstr ""
+
+msgid "Disassociate contact from this account"
 msgstr ""
 
 msgid "Discuss this message"
@@ -1209,14 +1180,10 @@ msgstr ""
 msgid "Invited"
 msgstr ""
 
-msgid ""
-"Invited\n"
-"                                at"
+msgid "Invited at"
 msgstr ""
 
-msgid ""
-"Invited\n"
-"                                by"
+msgid "Invited by"
 msgstr ""
 
 msgid "Invited user:"
@@ -1723,14 +1690,10 @@ msgstr ""
 msgid "Select all Users"
 msgstr ""
 
-msgid ""
-"Select lead\n"
-"                                                            Source"
+msgid "Select lead Source"
 msgstr ""
 
-msgid ""
-"Select lead\n"
-"                                                            Status"
+msgid "Select lead Status"
 msgstr ""
 
 msgid "Send"
@@ -1977,10 +1940,7 @@ msgstr ""
 msgid "Update your Logo"
 msgstr ""
 
-msgid ""
-"Update your Logo and make your brand\n"
-"                                                                your "
-"culture."
+msgid "Update your Logo and make your brand your culture."
 msgstr ""
 
 msgid "Updated"
@@ -2025,12 +1985,6 @@ msgid "View"
 msgstr ""
 
 msgid "View more"
-msgstr ""
-
-msgid ""
-"We\n"
-"                                        found diffrent possible matches. "
-"Click the one you want :"
 msgstr ""
 
 msgid "We found diffrent possible matches. Click the one you want :"
@@ -2189,10 +2143,19 @@ msgstr ""
 msgid "from"
 msgstr ""
 
+msgid "from this opportunity"
+msgstr ""
+
+msgid "from this opportunity?"
+msgstr ""
+
 msgid "home"
 msgstr ""
 
 msgid "hour"
+msgstr ""
+
+msgid "import your leads from Gmail:"
 msgstr ""
 
 msgid "industry"
@@ -2270,9 +2233,7 @@ msgstr ""
 msgid "stage"
 msgstr ""
 
-msgid ""
-"synchronize your Gmail contact  with ioGrow <b>import your leads from "
-"Gmail :"
+msgid "synchronize your Gmail contact  with ioGrow"
 msgstr ""
 
 msgid "these accounts"
@@ -2332,12 +2293,9 @@ msgstr ""
 msgid "you can't edit this  you are not the created_by"
 msgstr ""
 
-msgid "you can't edit this  you are not the owner"
-msgstr ""
-
 msgid "you can't edit this !"
 msgstr ""
 
-msgid "you can't edit this you are not the owner"
+msgid "you can't edit this, you are not the owner"
 msgstr ""
 

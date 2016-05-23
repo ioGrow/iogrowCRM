@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-23 13:33+0100\n"
+"POT-Creation-Date: 2016-05-23 14:30+0100\n"
 "PO-Revision-Date: 2014-07-26 11:01+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -22,9 +22,6 @@ msgstr ""
 #, fuzzy
 msgid "  Add a competitor..."
 msgstr "Commentaires"
-
-msgid " : you are not the owner"
-msgstr ""
 
 #, fuzzy
 msgid " About"
@@ -77,11 +74,6 @@ msgstr "Contact"
 msgid " Custom Fields"
 msgstr "Champs personnalisés"
 
-msgid ""
-" Custom Fields\n"
-"                                    Builder"
-msgstr ""
-
 msgid " Decision process Timeline"
 msgstr ""
 
@@ -103,14 +95,6 @@ msgstr ""
 #, fuzzy
 msgid " Details"
 msgstr "détails"
-
-msgid ""
-" Disassociate a\n"
-"                    <%=itemToDisassociate.type%> from this opportunity"
-msgstr ""
-
-msgid " Disassociate contact from this account"
-msgstr ""
 
 #, fuzzy
 msgid " Documents"
@@ -286,12 +270,6 @@ msgstr ""
 msgid "2- Match your data with fields in ioGrow"
 msgstr ""
 
-msgid ": you are not the owner"
-msgstr ""
-
-msgid "<%=task.due | date:'yyyy-MM-dd'%>"
-msgstr ""
-
 msgid "A contact with this name already exist"
 msgstr ""
 
@@ -343,11 +321,6 @@ msgstr ""
 
 msgid "Add Case"
 msgstr "Ajouter réclamation"
-
-msgid ""
-"Add Case\n"
-"                        Status"
-msgstr ""
 
 msgid "Add Case Status"
 msgstr "Ajouter Réclamation"
@@ -423,12 +396,6 @@ msgstr "Échéance"
 #, fuzzy
 msgid "Add a location"
 msgstr "Ajouter un lieu"
-
-#, fuzzy
-msgid ""
-"Add a new Opportunity\n"
-"                    stage"
-msgstr "Ajouter une nouvelle étape de l'opportunité"
 
 msgid "Add a new Opportunity stage"
 msgstr "Ajouter une nouvelle étape de l'opportunité"
@@ -653,10 +620,6 @@ msgstr "Etes-vous sûr de vouloir supprimer ces tâches"
 
 #, fuzzy
 msgid "Are you sure you want to disassociate"
-msgstr "Etes-vous sûr que vous voulez supprimer"
-
-#, fuzzy
-msgid "Are you sure you want to disassociate "
 msgstr "Etes-vous sûr que vous voulez supprimer"
 
 #, fuzzy
@@ -1018,6 +981,12 @@ msgid "Details of Lead"
 msgstr ""
 
 msgid "Disabled"
+msgstr ""
+
+msgid "Disassociate a"
+msgstr ""
+
+msgid "Disassociate contact from this account"
 msgstr ""
 
 msgid "Discuss this message"
@@ -1394,14 +1363,10 @@ msgstr "Invitez des gens à participer à cette discussion"
 msgid "Invited"
 msgstr "Invité"
 
-msgid ""
-"Invited\n"
-"                                at"
+msgid "Invited at"
 msgstr ""
 
-msgid ""
-"Invited\n"
-"                                by"
+msgid "Invited by"
 msgstr ""
 
 msgid "Invited user:"
@@ -1952,14 +1917,10 @@ msgstr "Sélectionnez tous les invités"
 msgid "Select all Users"
 msgstr "Sélectionner tous les utilisateurs"
 
-msgid ""
-"Select lead\n"
-"                                                            Source"
+msgid "Select lead Source"
 msgstr ""
 
-msgid ""
-"Select lead\n"
-"                                                            Status"
+msgid "Select lead Status"
 msgstr ""
 
 msgid "Send"
@@ -2233,10 +2194,7 @@ msgstr ""
 msgid "Update your Logo"
 msgstr ""
 
-msgid ""
-"Update your Logo and make your brand\n"
-"                                                                your "
-"culture."
+msgid "Update your Logo and make your brand your culture."
 msgstr ""
 
 msgid "Updated"
@@ -2285,12 +2243,6 @@ msgid "View"
 msgstr "Vue"
 
 msgid "View more"
-msgstr ""
-
-msgid ""
-"We\n"
-"                                        found diffrent possible matches. "
-"Click the one you want :"
 msgstr ""
 
 msgid "We found diffrent possible matches. Click the one you want :"
@@ -2472,11 +2424,20 @@ msgstr ""
 msgid "from"
 msgstr "à partir de"
 
+msgid "from this opportunity"
+msgstr ""
+
+msgid "from this opportunity?"
+msgstr ""
+
 msgid "home"
 msgstr "Domicile"
 
 #, fuzzy
 msgid "hour"
+msgstr ""
+
+msgid "import your leads from Gmail:"
 msgstr ""
 
 #, fuzzy
@@ -2563,9 +2524,7 @@ msgstr ""
 msgid "stage"
 msgstr "Etape"
 
-msgid ""
-"synchronize your Gmail contact  with ioGrow <b>import your leads from "
-"Gmail :"
+msgid "synchronize your Gmail contact  with ioGrow"
 msgstr ""
 
 #, fuzzy
@@ -2635,12 +2594,9 @@ msgstr ""
 msgid "you can't edit this  you are not the created_by"
 msgstr ""
 
-msgid "you can't edit this  you are not the owner"
-msgstr ""
-
 msgid "you can't edit this !"
 msgstr ""
 
-msgid "you can't edit this you are not the owner"
+msgid "you can't edit this, you are not the owner"
 msgstr ""
 
