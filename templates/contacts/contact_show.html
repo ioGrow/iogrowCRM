@@ -128,14 +128,14 @@
                     </div>
                     <a ng-show="selectedTab==2" class="btn red newAccountBtnOnscroll pull-right"
                        ng-click="showEdit=!showEdit">
-                        <span ng-hide="showEdit"><i class="fa fa-pencil"></i> Edit</span>
-                        <span ng-show="showEdit"><i class="fa fa-save"></i> Save</span>
+                        <span ng-hide="showEdit"><i class="fa fa-pencil"></i>{{ _('Edit') }}</span>
+                        <span ng-show="showEdit"><i class="fa fa-save"></i>{{ _('Save') }}</span>
                     </a>
                     <a ng-show="selectedTab==5" class="btn red newAccountBtnOnscroll pull-right" ng-click="oppAction()">
             <span ng-hide="showNewOpp">
-                <i class="fa fa-money"></i> New opportunity
+                <i class="fa fa-money"></i> {{ _('New opportunity') }}
             </span>
-                        <span ng-show="showNewOpp"><i class="fa fa-save"></i> Save opportunity</span>
+                        <span ng-show="showNewOpp"><i class="fa fa-save"></i> {{ _('Save opportunity') }}</span>
                     </a>
                     <button ng-show="selectedTab==5&&showNewOpp"
                             class="btn btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewOppForm()"
@@ -146,9 +146,9 @@
                     <a ng-show="selectedTab==6" class="btn red newAccountBtnOnscroll pull-right"
                        ng-click="caseAction()">
             <span ng-hide="showNewCase">
-                <i class="fa fa-suitcase"></i> New case
+                <i class="fa fa-suitcase"></i> {{ _('New case') }}
             </span>
-                        <span ng-show="showNewCase"><i class="fa fa-save"></i> Save Case</span>
+                        <span ng-show="showNewCase"><i class="fa fa-save"></i>{{ _('Save Case') }}</span>
                     </a>
                     <button ng-show="selectedTab==6&&showNewCase"
                             class="btn btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewCaseForm()"
@@ -3725,7 +3725,7 @@
                         <i class="fa" ng-class="{true:'fa-resize-small', false:'fa-resize-full'}[smallModal]"
                            style="color: white;font-size: 11px;"></i>
                     </a>
-                    <h4 class="modal-title" id="myModalLabel">New Message</h4>
+                    <h4 class="modal-title" id="myModalLabel">{{ _('New Message') }}</h4>
                 </div>
                 <div class="modal-body">
                     <form class="ng-pristine ng-invalid ng-invalid-required">

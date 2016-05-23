@@ -138,19 +138,16 @@
                                 class="dropdown-header cus-dropdown-header">{{ _("Filter by") }}</li>
                             <li class="ng-menu">
                                 <a ng-click="contactFilterBy('all');"><i class=" checkFilterMenu fa"
-                                                                         ng-class="{'fa-check': contactsfilter == 'all'}"></i>All
-                                    contacts</a>
+                                                                         ng-class="{'fa-check': contactsfilter == 'all'}"></i>{{ _('All contacts') }}</a>
                             </li>
                             <li class="ng-menu">
                                 <a ng-click="contactFilterBy('my','{{ ME }}');"> <i class="checkFilterMenu fa"
-                                                                                    ng-class="{'fa-check': contactsfilter == 'my'}"></i>My
-                                    contacts</a>
+                                                                                    ng-class="{'fa-check': contactsfilter == 'my'}"></i>{{ _('My contacts') }}</a>
                             </li>
                             <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by") }}</li>
                             <li class="ng-menu">
                                 <a ng-click="orderBy('-updated_at')" href=""><i class=" checkFilterMenu fa"
-                                                                                ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>Last
-                                    modified</a>
+                                                                                ng-class="{'fa-check': order == 'updated_at'||order == '-updated_at'}"></i>{{ _('Last modified') }}</a>
                             </li>
                             <li class="ng-menu">
                                 <a ng-click="orderBy('lastname')" href=""> <i class=" checkFilterMenu fa"
@@ -1231,7 +1228,7 @@
                     <i class="fa" ng-class="{true:'fa-resize-small', false:'fa-resize-full'}[smallModal]"
                        style="color: white;font-size: 11px;"></i>
                 </a>
-                <h4 class="modal-title" id="myModalLabel">New Message</h4>
+                <h4 class="modal-title" id="myModalLabel">{{ _('New Message') }}</h4>
             </div>
             <div class="modal-body">
                 <form class="ng-pristine ng-invalid ng-invalid-required">

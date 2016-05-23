@@ -133,19 +133,17 @@
                             <li class="ng-menu">
 
                                 <a ng-click="selectedTab = 1;taskFilterBy('all');"><i class=" checkFilterMenu fa"
-                                                                                      ng-class="{'fa-check': taskfilter == 'all'}"></i>All
-                                    Tasks</a>
+                                                                                      ng-class="{'fa-check': taskfilter == 'all'}"></i>{{ _('All Tasks') }}</a>
                             </li>
                             <li class="ng-menu">
                                 <a ng-click="selectedTab = 6;taskFilterBy('my','{{ ME }}');"> <i
-                                        class="checkFilterMenu fa" ng-class="{'fa-check': taskfilter == 'my'}"></i>My
-                                    tasks</a>
+                                        class="checkFilterMenu fa" ng-class="{'fa-check': taskfilter == 'my'}"></i>{{ _('My tasks') }}</a>
                             </li>
                             <li class="ng-menu">
 
                                 <a ng-click="selectedTab = 3;taskFilterBy('createdByMe','{{ ME }}');"><i
                                         class=" checkFilterMenu fa"
-                                        ng-class="{'fa-check': taskfilter == 'createdByMe'}"></i>Created by Me</a>
+                                        ng-class="{'fa-check': taskfilter == 'createdByMe'}"></i>{{ _('Created by Me') }}</a>
                             </li>
                             <li class="divider"></li>
                             <li class="ng-menu">

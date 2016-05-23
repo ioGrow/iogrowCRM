@@ -185,7 +185,7 @@
                                         <li>
                                             <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
                                                 <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                                                Settings
+                                                {{ _('Settings') }}
                                             </a>
                                         </li>
                                     {% endif %}
@@ -1883,10 +1883,10 @@
                                 <select ng-model="casee.type_case" class="form-control">
                                     <option value="">--{{ _('None') }}--</option>
                                     <option value="Mechanical">{{ _('Mechanical') }}</option>
-                                    <option value="Electrical">Electrical</option>
-                                    <option value="Electronic">Electronic</option>
-                                    <option value="New Customer">New Customer</option>
-                                    <option value="Other">Other</option>
+                                    <option value="Electrical">{{ _('Electrical') }}</option>
+                                    <option value="Electronic">{{ _('Electronic') }}</option>
+                                    <option value="New Customer">{{ _('New Customer') }}</option>
+                                    <option value="Other">{{ _('Other') }}</option>
                                 </select>
 
 

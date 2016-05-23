@@ -30,10 +30,10 @@
         </a>
         <form style="display: inline">
             <div class="col-sm-6 pull-right" ng-show="showInviteForm" ng-class="{ 'has-error':email_empty}">
-                <label class="sr-only">Email</label>
-                <input type="email" ng-model="email.email" placeholder="Enter a email" class="form-control"
+                <label class="sr-only">{{ _('Email') }}</label>
+                <input type="email" ng-model="email.email" placeholder="{{ _('Enter a email') }}" class="form-control"
                        style="width: 58%;display: inline;">
-                <button class="btn red" ng-click="inviteNewUser(email)">Invite</button>
+                <button class="btn red" ng-click="inviteNewUser(email)">{{ _('Invite') }}</button>
                 <button ng-click="showInviteForm = false" class="btn btn-default">X</button>
             </div>
         <span ng-hide="showInviteForm">

@@ -114,9 +114,9 @@
                     </a>
                     <a ng-show="selectedTab==5" class="btn red newAccountBtnOnscroll pull-right" ng-click="oppAction()">
             <span ng-hide="showNewOpp">
-                <i class="fa fa-money"></i> New opportunity
+                <i class="fa fa-money"></i>{{ _('New opportunity') }}
             </span>
-                        <span ng-show="showNewOpp"><i class="fa fa-save"></i> Save opportunity</span>
+                        <span ng-show="showNewOpp"><i class="fa fa-save"></i>{{ _('Save opportunity') }}</span>
                     </a>
                     <button ng-show="selectedTab==5&&showNewOpp"
                             class="btn btn-default newAccountBtn pull-right closeBtn" ng-click="hideNewOppForm()"
@@ -127,7 +127,7 @@
                     <a ng-show="selectedTab==6" class="btn red newAccountBtnOnscroll pull-right"
                        ng-click="caseAction()">
             <span ng-hide="showNewCase">
-                <i class="fa fa-suitcase"></i> New case
+                <i class="fa fa-suitcase"></i>{{ _('New case') }}
             </span>
                         <span ng-show="showNewCase"><i class="fa fa-save"></i> Save Case</span>
                     </a>
@@ -5761,7 +5761,7 @@
                     <i class="fa" ng-class="{true:'fa-resize-small', false:'fa-resize-full'}[smallModal]"
                        style="color: white;font-size: 11px;"></i>
                 </a>
-                <h4 class="modal-title" id="myModalLabel">New Message</h4>
+                <h4 class="modal-title" id="myModalLabel">{{ _('New Message') }}</h4>
             </div>
             <div class="modal-body">
                 <form class="ng-pristine ng-invalid ng-invalid-required">
@@ -6243,13 +6243,13 @@
   </span></li>
                             </ul>
                             <ul style="list-style:none" ng-show="Guest_params">
-                                <li><strong> Guests can:</strong></li>
+                                <li><strong>{{ _('Guests can:') }}</strong></li>
                                 <li><input type="checkbox" ng-checked="false" ng-model="guest_modify"> modify event</li>
                                 <li><input type="checkbox" ng-checked="true" ng-model="guest_invite"
-                                           ng-disabled="guest_modify">invite others
+                                           ng-disabled="guest_modify">{{ _('invite others') }}
                                 </li>
                                 <li><input type="checkbox" ng-disabled="guest_modify" ng-checked="true"
-                                           ng-model="guest_list">see guest list
+                                           ng-model="guest_list">{{ _('see guest list') }}
                                 </li>
                             </ul>
 
@@ -6271,26 +6271,19 @@
   background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()"
                                                                            class=" calendar-close-invite"
                                                                            style=" top: 2px !important;"></a></span>
-                                        <!--      <ul  class="list-inline"style="list-style:none" ng-show="remindmeby">
-                                                 <li> <strong> By:</strong> </li>
-                                                 <li><input type="radio"  name="by" ng-model="method" value="email"> Email</li>
-                                                 <li><input type="radio" ng- name="by" ng-model="method" value="sms">SMS</li>
-
-                                               </ul> -->
                                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                             <li role="presentation"><a role="menuitem" tabindex="-1"
-                                                                       ng-click="Remindme(0)">No notification</a></li>
+                                                                       ng-click="Remindme(0)">{{ _('No notification') }}</a></li>
                                             <li role="presentation"><a role="menuitem" tabindex="-1"
-                                                                       ng-click="Remindme(1)"> At time of event</a></li>
+                                                                       ng-click="Remindme(1)">{{ _('At time of event') }}</a></li>
                                             <li role="presentation"><a role="menuitem" tabindex="-1"
-                                                                       ng-click="Remindme(2)">30 minutes before</a></li>
+                                                                       ng-click="Remindme(2)">{{ _('30 minutes before') }}</a></li>
                                             <li role="presentation"><a role="menuitem" tabindex="-1"
-                                                                       ng-click="Remindme(3)">1 hour </a></li>
+                                                                       ng-click="Remindme(3)">{{ _('1 hour') }} </a></li>
                                             <li role="presentation"><a role="menuitem" tabindex="-1"
-                                                                       ng-click="Remindme(4)">1 day </a></li>
+                                                                       ng-click="Remindme(4)">{{ _('1 day') }}</a></li>
                                             <li role="presentation"><a role="menuitem" tabindex="-1"
-                                                                       ng-click="Remindme(5)">1 week </a></li>
-
+                                                                       ng-click="Remindme(5)">{{ _('1 week') }}</a></li>
                                         </ul>
                                     </div>
 

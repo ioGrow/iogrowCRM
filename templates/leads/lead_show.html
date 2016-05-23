@@ -206,7 +206,7 @@
                                         <li>
                                             <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
                                                 <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                                                Settings
+                                                {{ _('Settings') }}
                                             </a>
                                         </li>
                                     {% endif %}
@@ -2819,7 +2819,7 @@
                         <i class="fa" ng-class="{true:'fa-resize-small', false:'fa-resize-full'}[smallModal]"
                            style="color: white;font-size: 11px;"></i>
                     </a>
-                    <h4 class="modal-title" id="myModalLabel">New Message</h4>
+                    <h4 class="modal-title" id="myModalLabel">{{ _('New Message') }}</h4>
                 </div>
                 <div class="modal-body">
                     <form class="ng-pristine ng-invalid ng-invalid-required">

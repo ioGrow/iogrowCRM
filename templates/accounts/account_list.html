@@ -135,13 +135,11 @@
                                 class="dropdown-header cus-dropdown-header">{{ _("Filter by") }}</li>
                             <li class="ng-menu">
                                 <a ng-click="accountFilterBy('all');"><i class=" checkFilterMenu fa"
-                                                                         ng-class="{'fa-check': accountsfilter == 'all'}"></i>All
-                                    accounts</a>
+                                                                         ng-class="{'fa-check': accountsfilter == 'all'}"></i>{{ _('All accounts') }}</a>
                             </li>
                             <li class="ng-menu">
                                 <a ng-click="accountFilterBy('my','{{ ME }}');"> <i class="checkFilterMenu fa"
-                                                                                    ng-class="{'fa-check': accountsfilter == 'my'}"></i>My
-                                    accounts</a>
+                                                                                    ng-class="{'fa-check': accountsfilter == 'my'}"></i>{{ _('My accounts') }}</a>
                             </li>
                             <li role="presentation" class="dropdown-header cus-dropdown-header">{{ _("Order by") }}</li>
                             <li class="ng-menu">
@@ -1021,7 +1019,7 @@
                         <i class="fa" ng-class="{true:'fa-resize-small', false:'fa-resize-full'}[smallModal]"
                            style="color: white;font-size: 11px;"></i>
                     </a>
-                    <h4 class="modal-title" id="myModalLabel">New Message</h4>
+                    <h4 class="modal-title" id="myModalLabel">{{ _('New Message') }}</h4>
                 </div>
                 <div class="modal-body">
                     <form class="ng-pristine ng-invalid ng-invalid-required">
@@ -1131,8 +1129,7 @@
             <div class="modal-content" style="width:150%;">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{ _("2- Match your data with fields in
-                        ioGrow") }}</h3>
+                    <h3 id="myModalLabel"><i class="fa fa-cloud-upload"></i>{{ _("2- Match your data with fields in ioGrow") }}</h3>
                 </div>
                 <div class="modal-body">
                     <p style="text-align:left">
