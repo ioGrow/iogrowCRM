@@ -1,18 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' rel='stylesheet' type='text/css'>
     <style>
         body {
             font-family: 'Roboto' !important;
         }
 
+        .form-group label,
+        .form-group input {
+            font-weight: 100;
+        }
+
         /* Plane selctor Style */
-        .checkout-plan-select label:hover {
+        .checkout-plan-select {
+            margin-top: 3px;
+            font-size: 28px
+        }
+
+        .checkout-plan-select label.licence-num {
+            padding: 3px 15px;
+        }
+
+        .checkout-plan-select label.licence-num > i {
+            float: left;
+            color: #168EEA;
+            font-size: 32px;
+            margin-top: 10px;
+        }
+
+        .checkout-plan-select label.licence-num > i:first-child {
+            float: left;
+        }
+
+        .checkout-plan-select label.licence-num > i:last-child {
+            float: right;
+        }
+
+        .checkout-plan-select label.licence-num > input[type=text] {
+            width: 74%;
+            margin-left: 4%;
+            height: 50px;
+            text-align: center;
+        }
+
+        .checkout-plan-select label {
             background: #cbd7df;
-            -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
-            -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
-            box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+            -webkit-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.35);
+            -moz-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.35);
+            box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.35);
+            position: relative;
+            padding: 15px 0px 15px 55px;
+            cursor: pointer;
+            background: #D9E1E5;
+            border-radius: 3px;
+            color: #323b43;
+            font-size: 28px;
+            font-weight: 300;
+            -webkit-font-smoothing: antialiased;
+            width: 100%;
+        }
+
+        .checkout-plan-select span {
+            font-weight: 400;
         }
 
         .checkout-plan-select input[type=radio]:checked + label > i.fa-check-circle {
@@ -22,48 +72,44 @@
         .checkout-plan-select input[type=radio] + label > i.fa-check-circle {
             background: #76b852;
             border-radius: 15px;
-            /* font-size: 11px; */
             height: 18px;
-            left: 11px;
+            left: 18px;
             line-height: 21px;
             opacity: 0;
             pointer-events: none;
             position: absolute;
             text-align: center;
-            top: 22px;
+            top: 30px;
             width: 18px;
             z-index: 1;
         }
 
-        .checkout-plan-select label {
-            position: relative;
-            padding: 4px 15px 8px 45px;
-            margin: 6px 0px;
-            cursor: pointer;
-            background: #eaeff2;
-            border-radius: 3px;
-            color: #323b43;
-            font-size: 24px;
-            font-weight: 400;
-            -webkit-font-smoothing: antialiased;
-            width: 100%;
-        }
-
         .checkout-plan-select .plan-note {
-            display: block;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 400;
+            float: right;
+            padding: 6px;
+            background-color: #76b852;
+            border: 1px solid #76b852;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            margin-top: 6px;
         }
 
         .plan-option > input[type="radio"] {
             position: absolute;
             z-index: 1;
-            margin-top: 31px;
-            margin-left: 12px;
+            margin-top: 30px;
+            margin-left: 20px;
+        }
+
+        .plan-option {
+            margin-top: 15px;
         }
 
         .checkout-plan-select input[type=radio]:checked + label {
-            background-color: #168eea;
+            background-color: #168EEA;
             color: #fff;
             -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
             -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
@@ -71,6 +117,11 @@
         }
 
         /* CSS for Credit Card Payment form */
+        .credit-card-box {
+            padding: 10px 0px 0px;
+            box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.16);
+        }
+
         .credit-card-box .panel-title {
             display: inline;
             font-weight: bold;
@@ -121,6 +172,15 @@
             min-width: 180px;
         }
 
+        .credit-card-box .header-logo {
+            position: absolute;
+            right: 15px
+        }
+
+        .credit-card-box .header-logo img {
+            width: 50%;
+        }
+
         .cost-box {
             text-align: center;
             font-size: 26px;
@@ -135,16 +195,43 @@
         }
 
         .cost-message {
-            font-weight: 800;
+            font-weight: 300;
             font-size: 32px;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .jp-card-container {
+            position: absolute !important;
+            margin: auto !important;
+            top: 0;
+            bottom: 0;
+            border-left: 1px solid #DDD;
+            padding-left: 15px;
+        }
+
+        .card-demo {
+            height: 254px;
+            padding: 0px
         }
 
         .subscribe-btn {
+            text-transform: uppercase;
+            padding: 22px 55px !important;
+            border: none !important;
+            border-radius: 3px !important;
+            font-weight: 400 !important;
+            font-size: 24px !important;
             background: #168EEA !important;
             border-color: #168EEA !important;
             -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
             -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
             box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+        }
+        h4 {
+            margin-top: 20px !important;
+            margin-bottom: 20px !important;
         }
     </style>
     <meta charset="UTF-8">
@@ -155,145 +242,283 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
-<div class="container">
 
+<div class="container-fluid">
     <div class="page-header">
         <img src="/static/src/img/iogrow-logo-app.png" alt="logo" class="img-responsive">
     </div>
-    <div class="panel panel-default">
-        <!--<div class="page-header">-->
-        <h1 style="text-align: center;margin-bottom: 40px">
-            Pay securely With Your Credit Card
-        </h1>
-        <div class="panel-body">
-            <form role="form" id="payment-form">
-                <div class="demo-container row">
-                    <!-- CREDIT CARD FORM STARTS HERE -->
-                    <div class="panel panel-default col-md-4 col-md-offset-1 credit-card-box " style="padding: 0px">
-                        <div class="panel-heading display-table">
-                            <div class="row display-tr">
-                                <h3 class="panel-title display-td">Payment Details</h3>
-                                <div class="display-td">
-                                    <img class="img-responsive pull-right"
-                                         src="http://i76.imgup.net/accepted_c22e0.png">
+    <form role="form" id="payment-form">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2" style="display: flex; justify-content: space-around;">
+                <div class="col-sm-5 checkout-plan-select" style="padding: 0px">
+                    <h4>1. Number of licenses</h4>
+                    <label class="licence-num">
+                        <i class="fa fa-arrow-down " id="minus"></i>
+                        <input type="hidden" name="quantity" id="quantity" value="{{ users_count }}">
+                        <input type="text" value="{{ users_count }} users" id="users">
+                        <i class="fa fa-arrow-up" id="plus"></i>
+                    </label>
+                    <div class="plan-option" style="margin-top: 50px">
+                        <h4>2. Billing cycle</h4>
+                        <input id="month" name="interval" type="radio" value="month">
+                        <label for="month">
+                            <i class="fa fa-check-circle"></i>
+                            <span>${{ month_price }}</span>/user/month
+                        </label>
+                    </div>
+                    <div class="plan-option">
+                        <input id="year" name="interval" type="radio" value="year" checked="checked">
+                        <label for="year">
+                            <i class="fa fa-check-circle"></i>
+                            <span>${{ year_price }}</span>/user/year
+                            <div class="plan-note">SAVE 16.66%</div>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-5" style="padding: 0px">
+                    <h4>3. Payment method</h4>
+                    <div class="checkout-plan-select">
+                        <div class="plan-option col-sm-6" style="margin-top: 0px;padding-left: 0;">
+                            <input type="radio" id="credit" name="payment-method" checked="checked" value="credit"
+                                   style="margin-top: 25px;margin-left: 10px;">
+                            <label for="credit" style="padding: 10px 0px 10px 48px;">
+                                <i class="fa fa-check-circle" style="top: 22px;left: 10px;font-size: 24px;"></i>
+                                <span style="font-size: 22px;">Credit Card</span>
+                            </label>
+                        </div>
+                        <div class="plan-option col-sm-6" style="margin-top: 0px;padding-right: 0;">
+                            <input type="radio" name="payment-method" value="paypal" id="paypal"
+                                   style="margin-top: 25px;margin-left: 10px;">
+                            <label for="paypal" style="padding: 10px 0px 10px 48px;">
+                                <i class="fa fa-check-circle" style="top: 22px;left: 10px;font-size: 24px;"></i>
+                                <span style="font-size: 22px;">Paypal</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        <div class="row" style="">
+                            <div class="col-xs-12" style="
+    margin-top: 28px;
+">
+                                <div class="form-group">
+                                    <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png"
+                                         style="
+    position: absolute;
+    right: 8px;
+    top: 7px;
+"><h4>4. Payment Info</h4>
+                                    <div class="input-group">
+                                        <input type="tel" class="form-control" name="cardNumber" required=""
+                                               id="cardNumber" placeholder="Valid Card Number" autofocus=""
+                                               autocomplete="cc-number">
+                                        <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="cardNumber">CARD NUMBER</label>
-                                        <div class="input-group">
-                                            <input type="tel" class="form-control" name="cardNumber" required
-                                                   id="cardNumber" placeholder="Valid Card Number" autofocus
-                                                   autocomplete="cc-number"/>
-                                            <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                        <div class="row">
+                            <div class="col-xs-7 col-md-7">
+                                <div class="form-group">
+                                    <label for="cardExpiry"><span class="hidden-xs">EXPIRATION</span><span
+                                            class="visible-xs-inline">EXP</span> DATE</label>
+                                    <input type="tel" class="form-control" name="cardExpiry" id="cardExpiry"
+                                           placeholder="MM / YY" autocomplete="cc-exp" required="">
+                                </div>
+                            </div>
+                            <div class="col-xs-5 col-md-5 pull-right">
+                                <div class="form-group">
+                                    <label for="cardCVC">CV CODE</label>
+                                    <input type="tel" class="form-control" name="cardCVC" id="cardCVC" placeholder="CVC"
+                                           autocomplete="cc-csc" required="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+
+                                    <input type="text" class="form-control" name="name" id="name"
+                                           placeholder="First &amp; Last name">
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" value="5629499534213120" id="user-id">
+
+                        <div class="row" style="display:none;">
+                            <div class="col-xs-12">
+                                <p class="payment-errors"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div style="margin: 20px 20.4%;background-color: #f3fbff;width: 59.4%;height: 76px;">
+    <div class="col-md-5 cost-message">Total cost = $<span id="total-cost"></span></div>
+    <button class="subscribe-btn btn btn-success btn-lg pull-right" type="submit">
+        Start Subscription
+    </button>
+</div>
+
+<div class="col-sm-8 col-sm-offset-2" style="display: flex; justify-content: space-around;">
+    <h4>1. Billing details</h4>
+    <div class="col-sm-5 checkout-plan-select" style="padding: 0px">
+
+    </div>
+    <div class="col-sm-5" style="padding: 0px">
+        </div>
+</div>
+{#<div class="container-fluid col-md-offset-2 col-md-8" style="padding: 0;">
+    <div class="panel panel-default" style="border: none;">
+        <div class="panel-body">
+            <form role="form" id="payment-form" >
+                <div class="row">
+                    <div class="checkout-plan-select col-md-6">
+                        <span style="font-size: 18px;font-weight: 900;">1. Number of licenses</span>
+                        <label class="licence-num">
+                            <i class="fa fa-arrow-down " id="minus"></i>
+                            <input type="hidden" name="quantity" id="quantity" value="{{ users_count }}">
+                            <input type="text" value="{{ users_count }} users" id="users">
+                            <i class="fa fa-arrow-up" id="plus"></i>
+                        </label>
+                        <span style="font-size: 18px;font-weight: 900;">1. Billing cycle</span>
+                        <div class="plan-option">
+                            <input id="month" name="interval" type="radio" value="month">
+                            <label for="month">
+                                <i class="fa fa-check-circle"></i>
+                                <span>${{ month_price }}</span>/user/mo
+                            </label>
+                        </div>
+                        <div class="plan-option">
+                            <input id="year" name="interval" type="radio" value="year" checked="checked">
+                            <label for="year">
+                                <i class="fa fa-check-circle"></i>
+                                <span>${{ year_price }}</span>/user/yr
+                                <div class="plan-note">SAVE 16.66%</div>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- CREDIT CARD FORM STARTS HERE -->
+                    <div class="col-md-6" id="credit-card-info">
+                        <span style="font-size: 18px;font-weight: 900;">3. Payment method</span>
+                        <div class="checkout-plan-select">
+                            <div class="plan-option col-sm-6">
+                                <input type="radio" id="credit" name="payment-method" checked="checked" value="credit">
+                                <label for="credit">
+                                    <i class="fa fa-check-circle"></i>
+                                    Credit Card
+                                </label>
+                            </div>
+                            <div class="plan-option col-sm-6">
+                                <input type="radio" name="payment-method" value="paypal" id="paypal">
+                                <label for="paypal">
+                                    <i class="fa fa-check-circle"></i>
+                                    Paypal
+                                </label>
+                            </div>
+                        </div>
+                        <span style="font-size: 18px;font-weight: 900;">3. Payment Info</span>
+                        <div class="credit-card-box">
+                            <div class="col-xs-12 header-logo">
+                                <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png">
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="cardNumber">CARD NUMBER</label>
+                                            <div class="input-group">
+                                                <input type="tel" class="form-control" name="cardNumber" required
+                                                       id="cardNumber" placeholder="Valid Card Number" autofocus
+                                                       autocomplete="cc-number"/>
+                                                <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-7 col-md-7">
-                                    <div class="form-group">
-                                        <label for="cardExpiry"><span class="hidden-xs">EXPIRATION</span><span
-                                                class="visible-xs-inline">EXP</span> DATE</label>
-                                        <input
-                                                type="tel"
-                                                class="form-control"
-                                                name="cardExpiry"
-                                                id="cardExpiry"
-                                                placeholder="MM / YY"
-                                                autocomplete="cc-exp"
-                                                required
-                                        />
+                                <div class="row">
+                                    <div class="col-xs-7 col-md-7">
+                                        <div class="form-group">
+                                            <label for="cardExpiry"><span class="hidden-xs">EXPIRATION</span><span
+                                                    class="visible-xs-inline">EXP</span> DATE</label>
+                                            <input
+                                                    type="tel"
+                                                    class="form-control"
+                                                    name="cardExpiry"
+                                                    id="cardExpiry"
+                                                    placeholder="MM / YY"
+                                                    autocomplete="cc-exp"
+                                                    required
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-5 col-md-5 pull-right">
+                                        <div class="form-group">
+                                            <label for="cardCVC">CV CODE</label>
+                                            <input
+                                                    type="tel"
+                                                    class="form-control"
+                                                    name="cardCVC"
+                                                    id="cardCVC"
+                                                    placeholder="CVC"
+                                                    autocomplete="cc-csc"
+                                                    required/>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-5 col-md-5 pull-right">
-                                    <div class="form-group">
-                                        <label for="cardCVC">CV CODE</label>
-                                        <input
-                                                type="tel"
-                                                class="form-control"
-                                                name="cardCVC"
-                                                id="cardCVC"
-                                                placeholder="CVC"
-                                                autocomplete="cc-csc"
-                                                required/>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="name">Full name</label>
+                                            <input type="text" class="form-control" name="name" id="name"
+                                                   placeholder="First & Last name"/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="name">Full name</label>
-                                        <input type="text" class="form-control" name="name" id="name"
-                                               placeholder="First & Last name"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <button class="subscribe-btn btn btn-success btn-lg btn-block" type="submit">
-                                        Start Subscription
-                                    </button>
-                                </div>
-                            </div>
-                            <input type="hidden" value="{{ user.id }}" id="user-id">
 
-                            <div class="row" style="display:none;">
-                                <div class="col-xs-12">
-                                    <p class="payment-errors"></p>
+                                <input type="hidden" value="{{ user.id }}" id="user-id">
+
+                                <div class="row" style="display:none;">
+                                    <div class="col-xs-12">
+                                        <p class="payment-errors"></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- CREDIT CARD FORM ENDS HERE -->
-                    <div class="col-md-4 col-md-offset-2">
+                    #}{#<div class="col-md-4 card-demo" id="card-demo">
                         <div class="card-wrapper"></div>
-                        <div class="checkout-plan-select" style="margin-top: 10px">
-                            <div class="plan-option">
-                                <input id="month" name="interval" type="radio" value="month">
-                                <label for="month">
-                                    <i class="fa fa-check-circle"></i>
-                                    ${{ month_price }}/user/mo
-                                    <div class="plan-note">
+                    </div>#}{#
+                    <div id="paypal-btn" style="display: none;">
+                        <h1 style="margin-bottom: 60px">Total cost : <span id="paypal-total-cost"></span>$</h1>
+                        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_LG.gif" border="0" name="submit"
+                               alt="PayPal - The safer, easier way to pay online!" onclick="$('#payapl_submit').click();"
+                               id="paypal-btn">
+                    </div>
 
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="plan-option">
-                                <input id="year" name="interval" type="radio" value="year" checked="checked">
-                                <label for="year">
-                                    <i class="fa fa-check-circle"></i>
-                                    ${{ year_price }}/user/yr
-                                    <div class="plan-note">
-                                        Save 16.66% vs. paying monthly
-                                    </div>
-                                </label>
-                            </div>
+                </div>
+                <div class="row" id="credit-total">
+                    <div class="col-md-offset-1 col-md-10 resume-row">
+                        <div class="col-md-6 cost-message">Total cost : <span id="total-cost"></span>$</div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <button class="subscribe-btn btn btn-success btn-lg btn-block" type="submit">
+                                Start Subscription
+                            </button>
                         </div>
                     </div>
                 </div>
             </form>
-            <div class="row cost-box">
-                <div class="row">
-                    <!--<p>You have {{ users_count }} user{% if users_count != 1 %}
-                            s{% endif %} in your organization</p>-->
-                    <p>How much of licences you want to buy </p>
-                    <div class="col-sm-4 col-sm-offset-4">
-                        <input type="number" class="form-control" name="quantity" id="quantity"
-                               placeholder="How match of licenses you want to buy" value="{{ users_count }}"
-                               style="text-align: center;font-size: 18px">
-                    </div>
-                </div>
-                <hr>
-                <span class="cost-message">{{ _('Total cost:') }} <span id="total-cost"></span>$</span>
-            </div>
         </div>
     </div>
-
-</div>
+<div class="card-wrapper" style="display: none;"></div>
+</div>#}
+<div class="card-wrapper" style="display: none;"></div>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/card/1.2.2/js/card.min.js"></script>
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
@@ -314,12 +539,27 @@
             nameInput: 'input#name' // optional - defaults input[name="name"]
         }
     });
-
+    $('#minus').click(function () {
+        var quantity = $('#quantity');
+        if (parseInt(quantity.val()) > 1) {
+            quantity.val(parseInt(quantity.val()) - 1);
+            $('#users').val(quantity.val() + ' users');
+            writeNewTotalCost();
+            $('#paypal_quantity').val(quantity.val())
+        }
+    });
+    $('#plus').click(function () {
+        var quantity = $('#quantity');
+        quantity.val(parseInt(quantity.val()) + 1);
+        $('#users').val(quantity.val() + ' users');
+        writeNewTotalCost();
+        $('#paypal_quantity').val(quantity.val());
+    });
     $form.on('submit', payWithStripe);
     var users_count = parseInt({{ users_count }});
     var month_price = parseInt({{ month_price }});
     var year_price = parseInt({{ year_price }});
-
+    $('#paypal_amount').val(year_price);
     function getTotalCost(interval, quantity) {
         if (interval === 'month') {
             return quantity * month_price;
@@ -330,13 +570,43 @@
     function changeTotalCostValue(interval, quantity) {
         var totalCost = getTotalCost(interval, quantity);
         $('#total-cost').text(totalCost);
+        $('#paypal-total-cost').text(totalCost);
     }
     function writeNewTotalCost() {
         changeTotalCostValue($('input:radio:checked[name=interval]').val(), parseInt($('#quantity').val()));
     }
     writeNewTotalCost();
-    $('input:radio[name=interval]').change(writeNewTotalCost);
-    $('#quantity').change(writeNewTotalCost);
+    $('input:radio[name=interval]').change(function () {
+        writeNewTotalCost();
+        if ($(this).val() === 'month') {
+            $('#paypal_amount').val(month_price);
+            $("select[name=os0]").val("monthly");
+        }
+        else if ($(this).val() === 'year') {
+            $("select[name=os0]").val("yearly");
+        }
+    });
+    $('input:radio[name=payment-method]').change(function () {
+        writeNewTotalCost();
+        if ($(this).val() === 'credit') {
+            $("#credit-card-info").show();
+            $("#card-demo").show();
+            $("#credit-total").show();
+
+            $('#paypal-btn').hide();
+
+        }
+        else if ($(this).val() === 'paypal') {
+            $("#credit-card-info").hide();
+            $("#card-demo").hide();
+            $("#credit-total").hide();
+
+            $('#paypal-btn').show();
+        }
+    });
+    $('#quantity').change(function () {
+        writeNewTotalCost();
+    });
     function payWithStripe(e) {
         e.preventDefault();
         $form.find('[type=submit]').html('Validating <i class="fa fa-spinner fa-pulse"></i>');
@@ -364,11 +634,11 @@
                 var quantity = parseInt($('#quantity').val());
                 if (quantity > 0) {
                     $.post('/stripe/subscription', {
-                                token: token,
-                                interval: $('input:radio:checked[name=interval]').val(),
-                                plane: 'premium',
-                                quantity: quantity
-                            })
+                        token: token,
+                        interval: $('input:radio:checked[name=interval]').val(),
+                        plane: 'premium',
+                        quantity: quantity
+                    })
                             .done(function (data, textStatus, jqXHR) {
                                 $form.find('[type=submit]').html('Payment successful <i class="fa fa-check"></i>').prop('disabled', true);
                                 window.location.replace('/#/leads/new')
@@ -442,5 +712,26 @@
         }
     }, 250);
 </script>
+
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="display: none">
+    <input type="hidden" name="cmd" value="_s-xclick">
+    <input type="hidden" name="hosted_button_id" value="RPFHUHW6DE7JS">
+    <input type="hidden" name="quantity" id="paypal_quantity" value="{{ users_count }}">
+    <table>
+        <tr>
+            <td><input type="hidden" name="on0" value="yearly">yearly</td>
+        </tr>
+        <tr>
+            <td><select name="os0">
+                <option value="yearly">yearly $150.00 USD</option>
+                <option value="monthly">monthly $15.00 USD</option>
+            </select></td>
+        </tr>
+    </table>
+    <input type="hidden" name="currency_code" value="USD">
+    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_LG.gif" border="0" name="submit"
+           alt="PayPal - The safer, easier way to pay online!" id="payapl_submit">
+    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>
 </body>
 </html>

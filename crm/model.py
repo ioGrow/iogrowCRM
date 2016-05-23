@@ -299,8 +299,6 @@ class Organization(ndb.Model):
         return self.subscription.get()
 
     def set_subscription(self, new_subscription):
-        if not isinstance(new_subscription, Subscription):
-            raise ValueError('sub parameter should be of type {} '.format(Subscription.__class__))
         if self.subscription:
             self.subscription.delete()
         self.subscription = new_subscription.key
@@ -886,8 +884,6 @@ class User(EndpointsModel):
         return cls.query(User.organization == org_key).fetch()
 
     def set_subscription(self, new_subscription):
-        if not isinstance(new_subscription, Subscription):
-            raise ValueError('sub parameter should be of type {} '.format(Subscription.__class__))
         if self.subscription:
             if self.subscription != self.organization.get().get_subscription().key:
                 self.subscription.delete()

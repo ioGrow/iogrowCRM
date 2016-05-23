@@ -1,175 +1,235 @@
 .test {
-  -webkit-border-radius: 15;
-  -moz-border-radius: 15;
-  border-radius: 15; }
+    -webkit-border-radius: 15;
+    -moz-border-radius: 15;
+    border-radius: 15;
+}
 
 .admin-sidebar li a {
-  padding-right: 0px; }
-  .admin-sidebar li a i.fa {
-    color: #169DF3 !important; }
+    padding-right: 0px;
+}
+
+.admin-sidebar li a i.fa {
+    color: #169DF3 !important;
+}
+
 .admin-sidebar li.active a i.fa {
-  color: white !important; }
+    color: white !important;
+}
 
 .active-app {
-  font-size: 18px;
-  color: #737373;
-  padding-left: 0px; }
-  .active-app i.fa {
+    font-size: 18px;
+    color: #737373;
+    padding-left: 0px;
+}
+
+.active-app i.fa {
     font-size: 18px !important;
-    margin: 0px; }
+    margin: 0px;
+}
 
 .section-icon {
-  color: #169DF3;
-  font-size: 20px;
-  margin: 10px 15px 0px 25px; }
+    color: #169DF3;
+    font-size: 20px;
+    margin: 10px 15px 0px 25px;
+}
 
 .action-btns {
-  display: inline;
-  padding-left: 8%; }
+    display: inline;
+    padding-left: 8%;
+}
 
 .col-items {
-  border-bottom: 1px double #E9E9E9;
-  padding: 10px; }
-  .col-items i.fa {
+    border-bottom: 1px double #E9E9E9;
+    padding: 10px;
+}
+
+.col-items i.fa {
     padding-right: 10px;
-    font-size: 12px; }
-  .col-items.last-item {
-    border-bottom: none; }
+    font-size: 12px;
+}
+
+.col-items.last-item {
+    border-bottom: none;
+}
 
 .inline {
-  display: inline; }
+    display: inline;
+}
 
 .profile-img {
-  border-radius: 50% !important;
-  height: 50px;
-  margin-right: 15px; }
+    border-radius: 50% !important;
+    height: 50px;
+    margin-right: 15px;
+}
 
 .table-box {
-  padding-top: 22px !important; }
+    padding-top: 22px !important;
+}
 
 .start-icon {
-  padding: 2px;
-  background: #169DF3;
-  border-radius: 50% !important; }
-  .start-icon .glyphicon {
+    padding: 2px;
+    background: #169DF3;
+    border-radius: 50% !important;
+}
+
+.start-icon .glyphicon {
     padding: 0px 2px;
-    color: white; }
+    color: white;
+}
 
 .billing-card {
-  background-color: white;
-  padding: 5px 20px;
-  border-top: 4px solid #169DF3; }
+    background-color: white;
+    padding: 5px 20px;
+    border-top: 4px solid #169DF3;
+}
 
 .action-bar {
-  height: 55px; }
-  .action-bar .subHeaderContent {
+    height: 55px;
+}
+
+.action-bar .subHeaderContent {
     border-right-width: 0px;
-    margin-top: 5px; }
-  .action-bar .currentApp .filterItem {
-    margin-top: 7px; }
+    margin-top: 5px;
+}
+
+.action-bar .currentApp .filterItem {
+    margin-top: 7px;
+}
 
 .admin-content {
-  margin-top: 45px; }
+    margin-top: 45px;
+}
 
 .user-resume {
-  padding: 10px 0px; }
+    padding: 10px 0px;
+}
 
 .logo-box {
-  padding: 10px;
-  height: 330px; }
-  .logo-box .frame {
+    padding: 10px;
+    height: 330px;
+}
+
+.logo-box .frame {
     border: 2px solid #169EF4;
     white-space: nowrap;
     text-align: center;
-    margin: 1em 0; }
-    .logo-box .frame .center-img-vertical img {
-      vertical-align: middle;
-      max-height: 100px; }
-    .logo-box .frame .center-img-vertical span {
-      display: inline-block;
-      height: 100%;
-      vertical-align: middle; }
-    .logo-box .frame .thumbnail {
-      border: none; }
-  .logo-box span {
-    font-size: 14px; }
+    margin: 1em 0;
+}
+
+.logo-box .frame .center-img-vertical img {
+    vertical-align: middle;
+    max-height: 100px;
+}
+
+.logo-box .frame .center-img-vertical span {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.logo-box .frame .thumbnail {
+    border: none;
+}
+
+.logo-box span {
+    font-size: 14px;
+}
 
 .tab-icon {
-  margin-left: 5px; }
+    margin-left: 5px;
+}
 
 .blue-line {
-  border-bottom: #169EF4 solid 2px;
-  padding-bottom: 13px; }
+    border-bottom: #169EF4 solid 2px;
+    padding-bottom: 13px;
+}
 
 .no-radius {
-  -webkit-border-radius: 0px !important;
-  -moz-border-radius: 0px !important;
-  border-radius: 0px !important; }
+    -webkit-border-radius: 0px !important;
+    -moz-border-radius: 0px !important;
+    border-radius: 0px !important;
+}
 
 .save-btn {
-  width: 130px;
-  margin-right: 11%; }
+    width: 130px;
+    margin-right: 11%;
+}
 
 a.select2-choice {
-  padding: 0px !important; }
+    padding: 0px !important;
+}
 
 .select2-chosen img.flag {
-  border-right: #E5E5E5 solid 1px;
-  padding: 0px 10px;
-  height: 32px;
-  margin-right: 11px; }
+    border-right: #E5E5E5 solid 1px;
+    padding: 0px 10px;
+    height: 32px;
+    margin-right: 11px;
+}
 
 .select2-container .select2-choice > .select2-chosen {
-  color: #8A8787;
-  font-weight: 300; }
+    color: #8A8787;
+    font-weight: 300;
+}
 
 .no-icon .select2-choice > .select2-chosen {
-  margin-left: 20px;
-  margin-top: 4px; }
+    margin-left: 20px;
+    margin-top: 4px;
+}
 
 .stageCard {
-  background-color: white;
-  margin-bottom: 10px; }
+    background-color: white;
+    margin-bottom: 10px;
+}
 
 .blue-btn {
-  border-radius: 2px !important;
-  background-color: #169DF3; }
-  .blue-btn i {
+    border-radius: 2px !important;
+    background-color: #169DF3;
+}
+
+.blue-btn i {
     font-size: 28px;
     margin-right: 10px;
     position: absolute;
-    margin-top: -5px; }
+    margin-top: -5px;
+}
 
 .custom-header {
-  text-align: center;
-  margin-bottom: 2px;
-  margin-top: 2px; }
+    text-align: center;
+    margin-bottom: 2px;
+    margin-top: 2px;
+}
 
 .wysihtml5-toolbar {
-  padding-bottom: 100px; }
+    padding-bottom: 100px;
+}
 
 .modal-action-btn {
-  padding: 10px 30px; }
+    padding: 10px 30px;
+}
 
 .credit-card-box .display-td {
-  display: table-cell;
-  vertical-align: middle;
-  width: 50%; }
+    display: table-cell;
+    vertical-align: middle;
+    width: 50%;
+}
 
 .credit-card-box .display-tr {
-  display: table-row; }
+    display: table-row;
+}
 
 .credit-card-box label {
-  display: block; }
+    display: block;
+}
 
 .blue-btn {
-  background: #168EEA; }
+    background: #168EEA;
+}
 
 .subscribe-btn {
-  background: #168EEA !important;
-  border-color: #168EEA !important;
-  -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
-  -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
-  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
-  color: white; }
-
+    background: #168EEA !important;
+    border-color: #168EEA !important;
+    -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+    color: white;
+}

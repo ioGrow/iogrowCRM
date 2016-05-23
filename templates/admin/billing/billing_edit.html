@@ -49,8 +49,7 @@
                         <label class="col-sm-4 control-label"
                                style="text-align: left">{{ _('Subscription type') }}:</label>
                         <div class="col-sm-6">
-                            <p class="form-control-static"> <%= subscription.plan.name
-                                || 'Freemium' %></p>
+                            <p class="form-control-static"> <%= subscription.plan.name || 'Freemium' %></p>
                         </div>
                     </div>
                     <div class="form-group" ng-show="subscription.expiration_date">
