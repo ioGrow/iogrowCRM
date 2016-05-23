@@ -1111,7 +1111,7 @@
                         <label style="font-size:17px !important">{{ _("You can not share") }}
                             <span ng-show="selectedCards.length == 1">{{ _("this case") }}</span>
                             <span ng-show="selectedCards.length > 1">{{ _("these cases") }}</span>
-                            {{ _(" : you are not the owner") }} </label> <br>
+                             : {{ _("you are not the owner") }} </label> <br>
                         <label ng-show="selectedPermisssions">{{ _("The owner is:") }}</label>
                     </div>
                     <hr ng-show="selected_access!='public' && selectedPermisssions"/>

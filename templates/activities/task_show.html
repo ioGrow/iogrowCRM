@@ -207,7 +207,7 @@
                                 </button>
                                 <div class="taskShowDue">
                      <span ng-hide="showDueCalendar" ng-click="showDueCalendar=true" class="ng-binding">
-                     <i class="fa fa-calendar"></i> {{ _("<%=task.due | date:'yyyy-MM-dd'%>") }}</span>
+                     <i class="fa fa-calendar"></i> <%=task.due | date:'yyyy-MM-dd'%> </span>
                                     <div ng-show="showDueCalendar" class="input-icon" style="display: none;">
                                         <i class="fa fa-calendar"></i>
 
@@ -582,7 +582,7 @@
                     </div>
                     <div ng-hide="task.owner.google_user_id=={{ ME }}">
 
-                        <label>{{ _("you can't edit this you are not the owner") }} </label> <br>
+                        <label>{{ _("you can't edit this, you are not the owner") }} </label> <br>
                         <label>{{ _("The owner is:") }}</label>
                         <div class="invitation">
                             <img class="google-avatar" ng-src="<%=task.owner.google_public_profile_photo_url%>"/>

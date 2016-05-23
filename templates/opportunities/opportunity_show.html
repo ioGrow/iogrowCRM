@@ -1857,7 +1857,7 @@
                         </div>
                         <div ng-hide="opportunity.owner.google_user_id=={{ ME }}">
 
-                            <label>{{ _("you can't edit this  you are not the owner") }} </label> <br>
+                            <label>{{ _("you can't edit this, you are not the owner") }} </label> <br>
                             <label>{{ _("The owner is:") }}</label>
                             <div class="invitation">
                                 <img class="google-avatar"
@@ -3024,17 +3024,17 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel" class="modal-title"
                     style="text-align: center;font-size: 22px;font-weight: 500 !important;"><i
-                        class="fa  fa-chain-broken" style="font-size: 18px;"></i>{{ _(" Disassociate a
-                    <%=itemToDisassociate.type%> from this opportunity") }}</h3>
+                        class="fa  fa-chain-broken" style="font-size: 18px;"></i>
+                    {{ _("Disassociate a") }} <%=itemToDisassociate.type%> {{ _("from this opportunity") }}</h3>
             </div>
             <div class="modal-body">
                 <form id="seletesho" name="deletesho" class="form-horizontal">
-                    <p style="font-size: 16px;text-align: center;">{{ _("Are you sure you want to disassociate ") }} <span
-                            style="color:blue"><%= itemToDisassociate.item.firstname ||itemToDisassociate.item.name%> <%= itemToDisassociate.item.lastname || '' %></span>
+                    <p style="font-size: 16px;text-align: center;">{{ _("Are you sure you want to disassociate") }}
+                        <span style="color:blue"> <%= itemToDisassociate.item.firstname ||itemToDisassociate.item.name%> <%= itemToDisassociate.item.lastname || '' %></span>
                     </p>
 
                     <p style="font-size: 16px;text-align: center;">
-                        {{ _("from") }} this opportunity ?
+                        {{ _("from this opportunity?") }}
                     </p>
             </div>
             <div class="modal-footer">

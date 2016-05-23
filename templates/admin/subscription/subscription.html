@@ -662,14 +662,14 @@
 
     jQuery.validator.addMethod("cardNumber", function (value, element) {
         return this.optional(element) || Stripe.card.validateCardNumber(value);
-    }, "Please specify a valid credit card number.");
+    }, "{{ _('Please specify a valid credit card number') }}.");;
     jQuery.validator.addMethod("cardExpiry", function (value, element) {
         value = $.payment.cardExpiryVal(value);
         return this.optional(element) || Stripe.card.validateExpiry(value.month, value.year);
-    }, "Invalid expiration date.");
+    }, "{{ _('Invalid expiration date') }}.");
     jQuery.validator.addMethod("cardCVC", function (value, element) {
         return this.optional(element) || Stripe.card.validateCVC(value);
-    }, "Invalid CVC.");
+    }, "{{ _('Invalid CVC') }}.");
     validator = $form.validate({
         rules: {
             quantity: {
