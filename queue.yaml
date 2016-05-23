@@ -7,14 +7,6 @@ queue:
     min_backoff_seconds: 10
     max_backoff_seconds: 200
     max_doublings: 0
-- name: iogrow-middle   # indefinitely  : 10s ..20s..40s..80s...120...160...200s...200s......ect until it happens
-  rate: 20/s
-  bucket_size: 40
-  max_concurrent_requests: 10
-  retry_parameters:
-    min_backoff_seconds: 10
-    max_backoff_seconds: 200
-    max_doublings: 3
 - name: iogrow-low   # at least seven 5 times in two days.....and than boom desapears 
   rate: 20/s
   bucket_size: 40 # the queue use the algorithem token bucket
@@ -22,13 +14,6 @@ queue:
   retry_parameters:
     task_retry_limit: 5  # number of times 
     task_age_limit: 60s # number of days
-# - name: iogrow-gontact
-#   rate: 20/s
-#   bucket_size: 40
-#   max_concurrent_requests: 40
-#   retry_parameters:
-#     task_retry_limit: 20
-#     task_age_limit: 3600s
 - name: iogrow-low-event   # at least seven 5 times in two days.....and than boom desapears 
   rate: 20/s
   bucket_size: 40 # the queue use the algorithem token bucket
@@ -43,10 +28,3 @@ queue:
   retry_parameters:
     task_retry_limit: 5  # number of times 
     task_age_limit: 60s # number of days
-- name: iogrow-low-nodeio   # at least seven 5 times in two days.....and than boom desapears 
-  rate: 20/s
-  bucket_size: 40 # the queue use the algorithem token bucket
-  max_concurrent_requests: 10 # how many requests the queue can listen to !
-  retry_parameters:
-    task_retry_limit: 1  # number of times 
-    task_age_limit: 30s # number of days

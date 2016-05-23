@@ -1,0 +1,5 @@
+cron:
+- description: weekly backup
+  url: /_ah/datastore_admin/backup.create?name=BackupToCloud&kind=LogTitle&kind=EventLog&filesystem=gs&gs_bucket_name=iogrow-backup
+  schedule: every 7 days
+  target: ah-builtin-python-bundle

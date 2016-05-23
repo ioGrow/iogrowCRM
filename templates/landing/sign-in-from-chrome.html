@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <!-- saved from url=(0037)https://www.google.dz/drive/download/ -->
-<html class=" google-js js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths"
-      lang="en">
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
@@ -19,9 +18,7 @@
     </title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic"
           rel="stylesheet">
-    <link href="/static/new_web_site/google_drive_files/site.min.css" rel="stylesheet">
-    <script src="/static/new_web_site/google_drive_files/modernizr.js">
-    </script>
+    <link href="/static/src/css/landing/site.css" rel="stylesheet">
     <link href="http://storage.googleapis.com/iogrow-gs/Logo-iogrow.ico" rel="shortcut icon">
     <script type="text/javascript">
         (function () {
@@ -61,10 +58,13 @@
         $(document).ajaxStart(function () {
             $('#loading').show();
         });
+
         var helper = (function () {
             var authResult = undefined;
 
             return {
+                authResult: {},
+
                 /**
                  * Hides the sign-in button and connects the server-side app after
                  * the user successfully signs in.
@@ -74,7 +74,7 @@
                  */
                 onSignInCallback: function (authResult) {
                     $('#authResult').html('Auth Result:<br/>');
-
+                    helper.authResult = authResult;
                     if (authResult['access_token']) {
                         // The user is signed in
                         this.authResult = authResult;
@@ -156,11 +156,12 @@
                         url: '/gconnect',
 
                         success: function (result) {
-                            console.log('i am in connectServer show me result please');
+                            window.opener.parent.postMessage(helper.authResult,
+                                    "*");
+                            window.close();
+                        },
+                        error: function (result) {
                             console.log(result);
-
-                            window.location.replace('/subscribe');
-
 
                             // helper.people();
                         },
@@ -225,10 +226,6 @@
            data-g-label="Drive logo">
             <img src="http://storage.googleapis.com/iogrow-gs/Logo-iogrow-gray.png"></a>
     </div>
-    <nav class="nav-site" data-nav-name="mobile">
-        <img alt="Drive logo" src="/static/new_web_site/google_drive_files/logo-drive.png">
-
-    </nav>
 
 </header>
 <section class="section-intro" style="height: 560px; opacity: 1;">
@@ -244,35 +241,18 @@
                 <p>
                     The tools you need, all in one place.
                 </p>
-                <p>Smoothly integrated with Google Apps for Work.</p>
 
-                {% if offline_access_prompt %}
 
-                    <button class="g-signin"
-                            data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
-                            data-requestvisibleactions="http://schemas.google.com/AddActivity"
-                            data-clientId="{{ CLIENT_ID }}"
-                            data-callback="onSignInCallback"
-                            data-accesstype="offline"
-                            data-approvalprompt="force"
-                            data-theme="dark"
-                            data-cookiepolicy="single_host_origin"
-                            data-width="wide"
-                            data-height="tall">
-                    </button>
-
-                {% else %}
-                    <button class="g-signin"
-                            data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
-                            data-requestvisibleactions="http://schemas.google.com/AddActivity"
-                            data-clientId="{{ CLIENT_ID }}"
-                            data-callback="onSignInCallback"
-                            data-theme="dark"
-                            data-cookiepolicy="single_host_origin"
-                            data-width="wide"
-                            data-height="tall">
-                    </button>
-                {% endif %}
+                <button class="g-signin"
+                        data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds https://mail.google.com https://www.googleapis.com/auth/gmail.compose"
+                        data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                        data-clientId="{{ CLIENT_ID }}"
+                        data-callback="onSignInCallback"
+                        data-theme="dark"
+                        data-cookiepolicy="single_host_origin"
+                        data-width="wide"
+                        data-height="tall">
+                </button>
 
 
             </div>
@@ -300,9 +280,6 @@
                 </li>
 
                 <li>
-                    <a href="http://blog.iogrow.com/">ioGrow Blog</a>
-                </li>
-                <li>
                     <a href="/terms-of-services/">Terms of service</a>
                 </li>
                 <li>
@@ -315,26 +292,7 @@
         </div>
     </div>
 </div>
-<script src="/static/new_web_site/google_drive_files/TweenMax.min.js">
-</script>
-<script src="/static/new_web_site/google_drive_files/morlock.min.js">
-</script>
-<script src="/static/new_web_site/google_drive_files/drive-site.min.js">
-
-    var manageParams = new drive.QueryParamManager();
-    var download = new drive.SetUp('download');
-</script>
-
-
-<script src="/static/new_web_site/google_drive_files/TweenMax.min.js">
-</script>
-<script src="/static/new_web_site/google_drive_files/morlock.min.js">
-</script>
-<script src="/static/new_web_site/google_drive_files/drive-site.min.js">
-
-    var manageParams = new drive.QueryParamManager();
-    var download = new drive.SetUp('download');
-
+<script>
     window.intercomSettings = {
         app_id: "s9iirr8w"
     };

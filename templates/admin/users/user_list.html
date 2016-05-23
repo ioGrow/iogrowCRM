@@ -1,14 +1,14 @@
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}} </span>
+            <span class="active-app"><i class="fa fa-cog"></i> {{ _(active_app.label) }} </span>
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
             {% for application in apps %}
-            <li>
-                <a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a>
-            </li>
+                <li>
+                    <a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a>
+                </li>
             {% endfor %}
         </ul>
     </div>
@@ -67,52 +67,53 @@
                     <thead>
                     <tr>
                         {% if is_admin %}
-                        <th>
-                            <input title='{{ _("Select all Users") }}' type="checkbox" ng-checked="isSelectedAll"
-                                   ng-click="selectAllUsers($event)">
-                        </th>
+                            <th>
+                                <input title='{{ _("Select all Users") }}' type="checkbox" ng-checked="isSelectedAll"
+                                       ng-click="selectAllUsers($event)">
+                            </th>
                         {% endif %}
                         <th>
                             <a href="" ng-click="userSortType='google_display_name';userSortReverse=!userSortReverse">
-                                {{_('Name') }}</a>
+                                {{ _('Name') }}</a>
                             <span ng-show="userSortType == 'google_display_name' && !userSortReverse"
                                   class="fa fa-caret-down"></span>
                             <span ng-show="userSortType == 'google_display_name' && userSortReverse"
                                   class="fa fa-caret-up"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="userSortType='email';userSortReverse=!userSortReverse"> {{ _('Email')
-                                }}</a>
+                            <a href=""
+                               ng-click="userSortType='email';userSortReverse=!userSortReverse"> {{ _('Email') }}</a>
                             <span ng-show="userSortType == 'email' && !userSortReverse" class="fa fa-caret-down"></span>
                             <span ng-show="userSortType == 'email' && userSortReverse" class="fa fa-caret-up"></span>
                         </th>
                         <th ng-show="org_subscription.plan.name==='premium'">
                             <a href="" ng-click="userSortType='license_status';userSortReverse=!userSortReverse">
-                                {{_('License status') }}</a>
+                                {{ _('License status') }}</a>
                             <span ng-show="userSortType == 'license_status' && !userSortReverse"
                                   class="fa fa-caret-down"></span>
                             <span ng-show="userSortType == 'license_status' && userSortReverse"
                                   class="fa fa-caret-up"></span>
                         </th>
                         {% if is_admin %}
-                        <th>
-                            <a href="" ng-click="userSortType='is_admin';userSortReverse=!userSortReverse">
-                                {{_('Administrator')}}</a>
+                            <th>
+                                <a href="" ng-click="userSortType='is_admin';userSortReverse=!userSortReverse">
+                                    {{ _('Administrator') }}</a>
                             <span ng-show="userSortType == 'is_admin' && !userSortReverse"
                                   class="fa fa-caret-down"></span>
-                            <span ng-show="userSortType == 'is_admin' && userSortReverse" class="fa fa-caret-up"></span>
-                        </th>
+                                <span ng-show="userSortType == 'is_admin' && userSortReverse"
+                                      class="fa fa-caret-up"></span>
+                            </th>
                         {% endif %}
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="user in users  | orderBy:userSortType:userSortReverse">
                         {% if is_admin %}
-                        <td>
-                            <input type="checkbox" ng-click="select_user(user,$index,$event)"
-                                   ng-checked="isSelected()"
-                                   ng-hide="user.is_super_admin||user.is_admin">
-                        </td>
+                            <td>
+                                <input type="checkbox" ng-click="select_user(user,$index,$event)"
+                                       ng-checked="isSelected()"
+                                       ng-hide="user.is_super_admin||user.is_admin">
+                            </td>
                         {% endif %}
                         <td>
                             <img ng-src="<%= user.google_public_profile_photo_url %>" alt="profile img"
@@ -126,11 +127,11 @@
                             <%= (usersSubscriptions[user.email].plan.name==='premium') ? 'active' :'' %>
                         </td>
                         {% if is_admin %}
-                        <td class="table-box">
-                            <input title='{{ _("Select all Users") }}' type="checkbox" ng-checked="user.is_admin"
-                                   ng-click="setAdmin(user,$index,$event)" ng-hide="user.is_super_admin">
-                            <p ng-show="user.is_super_admin"> super admin </p>
-                        </td>
+                            <td class="table-box">
+                                <input title='{{ _("Select all Users") }}' type="checkbox" ng-checked="user.is_admin"
+                                       ng-click="setAdmin(user,$index,$event)" ng-hide="user.is_super_admin">
+                                <p ng-show="user.is_super_admin"> super admin </p>
+                            </td>
                         {% endif %}
                     </tr>
                     </tbody>
@@ -168,29 +169,30 @@
             </div>
 
             {% if is_not_a_life_time %}
-            {% if is_freemium ==False %}
-            <div class="col-lg">
-                <i class="fa  fa-calendar "></i>
-                {{ _('Expire') }} : <%=org_subscription.expires_on | date:'yyyy-MM-dd'%> <!--ex date>-->
-            </div>
-            <button title='{{ _("Purchase") }}' class="btn btn-sm blue task_action pull-right"
-                    ng-click="showPurchase()">
-                <i class="fa fa-shopping-cart"></i>
+                {% if is_freemium ==False %}
+                    <div class="col-lg">
+                        <i class="fa  fa-calendar "></i>
+                        {{ _('Expire') }} : <%=org_subscription.expires_on | date:'yyyy-MM-dd'%> <!--ex date>-->
+                    </div>
+                    <button title='{{ _("Purchase") }}' class="btn btn-sm blue task_action pull-right"
+                            ng-click="showPurchase()">
+                        <i class="fa fa-shopping-cart"></i>
        <span class="btn-text">
           {{ _('Purchase') }}
        </span>
-            </button>
-            {% endif %}
+                    </button>
+                {% endif %}
             {% endif %}
             <div class="clearfix"></div>
         </div>
         <div class="showPage custom-show margin-bottom-15 col-md-12" ng-show="invitees">
             {% if is_admin %}
-            <button ng-class="{disabled: selected_invitees.length==0}" title=" Delete invitee "
-                    class="btn btn-sm btn-default task_action pull-right" ng-click="deleteInvitedUser()" ng-show="true">
-                <i class="fa fa-trash-o"></i>
-              <span class="btn-text"> Delete invitee </span>
-            </button>
+                <button ng-class="{disabled: selected_invitees.length==0}" title=" Delete invitee "
+                        class="btn btn-sm btn-default task_action pull-right" ng-click="deleteInvitedUser()"
+                        ng-show="true">
+                    <i class="fa fa-trash-o"></i>
+                    <span class="btn-text"> Delete invitee </span>
+                </button>
             {% endif %}
             <h3>Invitees : </h3>
 
@@ -199,29 +201,29 @@
                     <thead>
                     <tr>
                         <th>
-                            <input title='{{ _("Select all Invitees")}}' type="checkbox" ng-checked="allInvitees"
+                            <input title='{{ _("Select all Invitees") }}' type="checkbox" ng-checked="allInvitees"
                                    ng-click="select_all_invitees($event)">
 
                         </th>
                         <th>
-                            <a href="" ng-click="inviteeSortType='invited_mail';inviteeSortReverse=!inviteeSortReverse">{{_('Email')
-                                }}</a>
+                            <a href=""
+                               ng-click="inviteeSortType='invited_mail';inviteeSortReverse=!inviteeSortReverse">{{ _('Email') }}</a>
                             <span ng-show="inviteeSortType == 'invited_mail' && !inviteeSortReverse"
                                   class="fa fa-caret-down"></span>
                             <span ng-show="inviteeSortType == 'invited_mail' && inviteeSortReverse"
                                   class="fa fa-caret-up"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="inviteeSortType='invited_by';inviteeSortReverse=!inviteeSortReverse">{{_('Invited
-                                by')}}</a>
+                            <a href="" ng-click="inviteeSortType='invited_by';inviteeSortReverse=!inviteeSortReverse">{{ _('Invited
+                                by') }}</a>
                             <span ng-show="inviteeSortType == 'invited_by' && !inviteeSortReverse"
                                   class="fa fa-caret-down"></span>
                             <span ng-show="inviteeSortType == 'invited_by' && inviteeSortReverse"
                                   class="fa fa-caret-up"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="inviteeSortType='updated_at';inviteeSortReverse=!inviteeSortReverse">{{_('Invited
-                                at')}}</a>
+                            <a href="" ng-click="inviteeSortType='updated_at';inviteeSortReverse=!inviteeSortReverse">{{ _('Invited
+                                at') }}</a>
                             <span ng-show="inviteeSortType == 'updated_at' && !inviteeSortReverse"
                                   class="fa fa-caret-down"></span>
                             <span ng-show="inviteeSortType == 'updated_at' && inviteeSortReverse"

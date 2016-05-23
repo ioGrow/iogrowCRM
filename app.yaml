@@ -30,8 +30,8 @@ handlers:
 - url: /bower_components
   static_dir: bower_components
 
-- url: /static/new_web_site/google_drive_files
-  static_dir: static/new_web_site/google_drive_files
+- url: /static/landing
+  static_dir: static/landing
   expiration: "30d"
 
 # Endpoints handler

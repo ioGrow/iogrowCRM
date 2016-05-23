@@ -1,12 +1,12 @@
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> {{_(active_app.label)}}</span>
+            <span class="active-app"><i class="fa fa-cog"></i> {{ _(active_app.label) }}</span>
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
             {% for application in apps %}
-            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
+                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
             {% endfor %}
         </ul>
     </div>
@@ -44,7 +44,7 @@
                     <thead>
                     <tr>
                         <th class="col-md-1">
-                            <input type="checkbox"  ng-model="isSelectedAll">
+                            <input type="checkbox" ng-model="isSelectedAll">
                         </th>
                         <th class="col-md-8">
                             <a href="" ng-click="filterByName()"> {{ _('Name') }}</a>
@@ -67,7 +67,8 @@
                         </td>
                         <td style="padding: 20px 5px;">
                             <a class="btn" ng-click="editcasestatus(casestate)"><i class="material-icons">mode_edit</i></a>
-                            <a class="btn" ng-click="deletecasestatus(casestate)"><i class="material-icons">delete</i></a>
+                            <a class="btn" ng-click="deletecasestatus(casestate)"><i
+                                    class="material-icons">delete</i></a>
                         </td>
                     </tr>
                     </tbody>
@@ -111,24 +112,24 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3>{{_("New Case Status")}}</h3>
+                <h3>{{ _("New Case Status") }}</h3>
             </div>
             <!--<form name="addcasestatus" class="form-horizontal">-->
-                <div class="modal-body">
-                    <fieldset>
-                        <div class="form-group">
-                            <label class="required control-label">{{_("Case Status")}} *</label>
-                            <input type="text" class="form-control" required ng-model="casestatus.status">
-                        </div>
-                    </fieldset>
+            <div class="modal-body">
+                <fieldset>
+                    <div class="form-group">
+                        <label class="required control-label">{{ _("Case Status") }} *</label>
+                        <input type="text" class="form-control" required ng-model="casestatus.status">
+                    </div>
+                </fieldset>
 
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                    <button type="submit" class="btn green" ng-click="saveCaseStatus(casestatus)">{{_("Add Case
-                        Status")}}
-                    </button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                <button type="submit" class="btn green" ng-click="saveCaseStatus(casestatus)">{{ _("Add Case
+                        Status") }}
+                </button>
+            </div>
             <!--</form>-->
         </div>
     </div>
@@ -141,23 +142,23 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3>{{_("Edit Case Status")}}</h3>
+                <h3>{{ _("Edit Case Status") }}</h3>
             </div>
             <!--<form name="addcasestatus" class="form-horizontal">-->
-                <div class="modal-body">
+            <div class="modal-body">
 
-                    <fieldset>
-                        <div class="form-group">
-                            <label class="required control-label">{{_("Case Status")}} *</label>
-                            <input type="text" class="form-control" required ng-model="casestatusedit.status">
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
-                    <button type="submit" class="btn green" ng-click="updateCasestatus(casestatusedit)">{{_("Save")}}
-                    </button>
-                </div>
+                <fieldset>
+                    <div class="form-group">
+                        <label class="required control-label">{{ _("Case Status") }} *</label>
+                        <input type="text" class="form-control" required ng-model="casestatusedit.status">
+                    </div>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                <button type="submit" class="btn green" ng-click="updateCasestatus(casestatusedit)">{{ _("Save") }}
+                </button>
+            </div>
             <!--</form>-->
         </div>
     </div>

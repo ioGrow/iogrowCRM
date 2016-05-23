@@ -6,28 +6,34 @@
                 <div class="btn-group">
                     <a class="filterItem" href="#" data-toggle="dropdown" style="margin-right:0">
                         {% if active_app.label =="Relationships" %}
-                        <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png"
-                             style="display:inline-block;height: 20px;margin-right: 3px;">
-                        {% else%}
-                        <img class="app_icon" src="../../static/src/img/admin_min.png"
-                             style="display:inline-block;height: 20px;margin-right: 3px;">
+                            <img class="app_icon" src="../../static/src/img/sm-iogrow-true.png"
+                                 style="display:inline-block;height: 20px;margin-right: 3px;">
+                        {% else %}
+                            <img class="app_icon" src="../../static/src/img/admin_min.png"
+                                 style="display:inline-block;height: 20px;margin-right: 3px;">
                         {% endif %}
-                        <span class="hide_sm">{{_(active_app.label)}}</span>
+                        <span class="hide_sm">{{ _(active_app.label) }}</span>
                         <i class="icon-angle-down fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu">
-                        {%for application in apps %}
-                        {% if application.label =="Relationships" %}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/sm-iogrow-true.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
-                        </li>
-                        {% else%}
-                        <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon" src="../../static/src/img/admin_min.png" style="display:inline-block;height: 20px;margin-right: 3px;">{{_(application.label)}}</a>
-                        </li>
+                        {% for application in apps %}
+                            {% if application.label =="Relationships" %}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
+                                                                                                        src="../../static/src/img/sm-iogrow-true.png"
+                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                </a>
+                                </li>
+                            {% else %}
+                                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal"><img class="app_icon"
+                                                                                                        src="../../static/src/img/admin_min.png"
+                                                                                                        style="display:inline-block;height: 20px;margin-right: 3px;">{{ _(application.label) }}
+                                </a>
+                                </li>
 
-                        {% endif %}
+                            {% endif %}
 
 
-                        {%endfor%}
+                        {% endfor %}
                     </ul>
                 </div>
             </td>
@@ -47,35 +53,35 @@
                         <span><i class="fa fa-save"></i> Save</span>
                     </a>
                     <button class="btn btn-default newAccountBtn pull-right" ng-click="clearCase()"
-                            style="margin-right:5px"><i class="fa fa-trash-o"></i>{{ _(' Clear')}}
+                            style="margin-right:5px"><i class="fa fa-trash-o"></i>{{ _(' Clear') }}
                     </button>
                 </div>
                 <div class="col-md-3">
                     <div style=" padding-left: 10px;" class="pull-right">
-                        {%for application in apps %}
-                        {%if application.label =="Settings" %}
-                        <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
-                           style="margin-left: 20px; margin-right: 12px;">
-                            <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>
-                        {%endif%}
-                        {%endfor%}
+                        {% for application in apps %}
+                            {% if application.label =="Settings" %}
+                                <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
+                                   style="margin-left: 20px; margin-right: 12px;">
+                                    <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
                         <div class="btn-group show_sm"
                              style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                             <a class="headerBtn" title="More" data-toggle="dropdown">
                                 <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
                             </a>
                             <ul class="dropdown-menu drp-dwn-right">
-                                {%for application in apps %}
-                                {%if application.label =="Settings" %}
-                                <li>
-                                    <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
-                                        <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                                        Settings
-                                    </a>
-                                </li>
-                                {%endif%}
-                                {%endfor%}
+                                {% for application in apps %}
+                                    {% if application.label =="Settings" %}
+                                        <li>
+                                            <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
+                                                <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
+                                                Settings
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
@@ -86,128 +92,146 @@
         </tbody>
     </table>
 </div>
-<div  class="page-content" style='margin-top: 45px; margin-left: 190px;'>
-  <div class="loader-container row" ng-show="isLoading">
-    <div class="loader-dialog col-md-4 col-md-offset-4 ">
-      <div class="loader-content">
-        {{ _('Loading...')}}
-      </div>
+<div class="page-content" style='margin-top: 45px; margin-left: 190px;'>
+    <div class="loader-container row" ng-show="isLoading">
+        <div class="loader-dialog col-md-4 col-md-offset-4 ">
+            <div class="loader-content">
+                {{ _('Loading...') }}
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="" ng-show="immediateFailed">
-     <div class="col-md-12">
-      <h1>{{ _('Sign-in Button;')}}</h1>
+    <div class="" ng-show="immediateFailed">
+        <div class="col-md-12">
+            <h1>{{ _('Sign-in Button;') }}</h1>
           <span id="signin">
               <span id="myGsignin"></span>
           </span>
+        </div>
     </div>
-  </div>
-  <div class="row" >
-   <div class="col-md-9">
-      <div class="row">
-    <div class="showPage slimForm col-md-12 margin-bottom-15">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="row">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="row">
+                <div class="showPage slimForm col-md-12 margin-bottom-15">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
 
-            <div class="col-md-12">
-              <form class="form-horizontal ">
+                                <div class="col-md-12">
+                                    <form class="form-horizontal ">
 
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
 
-                      <div class="col-md-12" ng-class="{ 'has-error': case_err.name}">
-                        <input type="text" required id="id_firstname" class="form-control" ng-model="casee.name" placeholder="{{ _('What’s the subject of this issue?')}}" autofocus>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <div class="col-md-12" ng-class="{ 'has-error': case_err.account && case_err.contact}">
-                        <input type="text" required  typeahead-loading="accSearchLoading" ng-class="{'spinner':accSearchLoading}" ng-model="searchAccountQuery" typeahead="accountResult as accountResult.name  for accountResult in getResults($viewValue,'/crmengine/v1/accounts/search') | filter:$viewValue | limitTo:10" typeahead-on-select="selectAccount()" class="form-control" placeholder="{{ _('Account')}}">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Priority")}} </label>
+                                                    <div class="col-md-12" ng-class="{ 'has-error': case_err.name}">
+                                                        <input type="text" required id="id_firstname"
+                                                               class="form-control" ng-model="casee.name"
+                                                               placeholder="{{ _('What’s the subject of this issue?') }}"
+                                                               autofocus>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <div class="col-md-12"
+                                                         ng-class="{ 'has-error': case_err.account && case_err.contact}">
+                                                        <input type="text" required typeahead-loading="accSearchLoading"
+                                                               ng-class="{'spinner':accSearchLoading}"
+                                                               ng-model="searchAccountQuery"
+                                                               typeahead="accountResult as accountResult.name  for accountResult in getResults($viewValue,'/crmengine/v1/accounts/search') | filter:$viewValue | limitTo:10"
+                                                               typeahead-on-select="selectAccount()"
+                                                               class="form-control" placeholder="{{ _('Account') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="required col-md-3 control-label">{{ _("Priority") }} </label>
 
-                        <div class="col-md-9">
-                          <select class="form-control" ng-model="casee.priority">
-                            <option value="">-- {{_("Choose a priority")}} --</option>
-                            <option value="1">1 - {{ _('Low')}}</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10 - {{ _('Critical')}}</option>
-                          </select>
+                                                    <div class="col-md-9">
+                                                        <select class="form-control" ng-model="casee.priority">
+                                                            <option value="">-- {{ _("Choose a priority") }} --</option>
+                                                            <option value="1">1 - {{ _('Low') }}</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                            <option value="6">6</option>
+                                                            <option value="7">7</option>
+                                                            <option value="8">8</option>
+                                                            <option value="9">9</option>
+                                                            <option value="10">10 - {{ _('Critical') }}</option>
+                                                        </select>
 
-                        </div>
+                                                    </div>
 
-                    </div>
-                  </div>
-                </div>
-               </form>
-              </div>
-            </div>
-            <div class="row margin-bottom-15" >
-                    <div class="col-md-12">
-                        <div class="custom_wizard" id="form_wizard_1">
-                          <div class="portlet-body form">
-                            <form action="#" class="form-horizontal" id="submit_form" id="form_wizard_1">
-                              <div class="form-wizard">
-                                <div class="form-body">
-                                  <ul class="nav nav-pills nav-justified steps" >
-                                    <li ng-repeat="stat in casesatuses" id="wizardstep">
-                                      <a ng-click="changeStatus(stat)" ng-href="#<%='tab'+$index%>" data-toggle="tab" class="step">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row margin-bottom-15">
+                                <div class="col-md-12">
+                                    <div class="custom_wizard" id="form_wizard_1">
+                                        <div class="portlet-body form">
+                                            <form action="#" class="form-horizontal" id="submit_form"
+                                                  id="form_wizard_1">
+                                                <div class="form-wizard">
+                                                    <div class="form-body">
+                                                        <ul class="nav nav-pills nav-justified steps">
+                                                            <li ng-repeat="stat in casesatuses" id="wizardstep">
+                                                                <a ng-click="changeStatus(stat)"
+                                                                   ng-href="#<%='tab'+$index%>" data-toggle="tab"
+                                                                   class="step">
                                       <span class="number">
                                         <%=$index%>                          
                                       </span>
                                       <span class="desc">
                                         <i class="fa fa-check"></i> <%=stat.status%>
                                       </span>
-                                      </a>
-                                    </li>
-                                  </ul>
-                                  <div id="bar" class="progress progress-striped" role="progressbar" style="position:relative !important">
-                                    <div class="progress-bar progress-bar-success" style="height:100%!important;">
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                        <div id="bar" class="progress progress-striped"
+                                                             role="progressbar" style="position:relative !important">
+                                                            <div class="progress-bar progress-bar-success"
+                                                                 style="height:100%!important;">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="form-actions fluid" style="display:none">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="col-md-offset-3 col-md-9">
+                                                                    <a href="javascript:;"
+                                                                       class="btn default button-previous">
+                                                                        <i class="m-icon-swapleft"></i> Back </a>
+                                                                    <a href="javascript:;" class="btn blue button-next">
+                                                                        Continue <i
+                                                                            class="m-icon-swapright m-icon-white"></i>
+                                                                    </a>
+                                                                    <a href="javascript:;"
+                                                                       class="btn green button-submit">
+                                                                        Submit <i
+                                                                            class="m-icon-swapright m-icon-white"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
-                                  </div>
-                                  
                                 </div>
-                                <div class="form-actions fluid" style="display:none">
-                                  <div class="row">
-                                    <div class="col-md-12">
-                                      <div class="col-md-offset-3 col-md-9">
-                                        <a href="javascript:;" class="btn default button-previous">
-                                        <i class="m-icon-swapleft"></i> Back </a>
-                                        <a href="javascript:;" class="btn blue button-next">
-                                        Continue <i class="m-icon-swapright m-icon-white"></i>
-                                        </a>
-                                        <a href="javascript:;" class="btn green button-submit">
-                                        Submit <i class="m-icon-swapright m-icon-white"></i>
-                                        </a>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-            <div class="row">
-            <div class="col-md-6">
-             <!--  <div class="news-blocks blank-card blank-card-yellow">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!--  <div class="news-blocks blank-card blank-card-yellow">
                 <h3>{{ _('Case Informations')}}</h3>
                 <div class="row">
                   <div class="form-group selector-margin">
@@ -222,40 +246,69 @@
                   <br>
                 </div>
               </div> -->
-              <div class="news-blocks blank-card blank-card-gray relatedBlock">
+                                    <div class="news-blocks blank-card blank-card-gray relatedBlock">
                                     <span class="page-meta pull-right" ng-show="!isEmptyArray(cases.customfields)">
-                                               <a href="/#/admin/custom_fields/5"  class="btn-link addAnotherPhone" data-toggle="modal" style="color:gray;"><i class="fa fa-pencil"></i> {{_('Edit Custom fields')}} </a>
+                                               <a href="/#/admin/custom_fields/5" class="btn-link addAnotherPhone"
+                                                  data-toggle="modal" style="color:gray;"><i
+                                                       class="fa fa-pencil"></i> {{ _('Edit Custom fields') }} </a>
                                              </span>
-                                    <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt" style="font-size:24px"></i>{{ _(' Custom Fields') }}</h3>
+                                        <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt"
+                                                                       style="font-size:24px"></i>{{ _(' Custom Fields') }}
+                                        </h3>
                                         <div ng-show="isEmptyArray(cases.customfields)" style="text-align:center">
-                                                  <a href="/#/admin/custom_fields/5" class=" newRelatedContact" style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
-                                                    + <i class="fa fa-list-alt"></i>  Add Custom fields
-                                                  </a> 
+                                            <a href="/#/admin/custom_fields/5" class=" newRelatedContact"
+                                               style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
+                                                + <i class="fa fa-list-alt"></i> Add Custom fields
+                                            </a>
                                         </div>
-                                        <ul ng-show="!isEmptyArray(cases.customfields)" style="list-style: none;padding-left: 0px;">
-                                            <li ng-repeat="cusfield in cases.customfields"  style="padding: 5px;">
+                                        <ul ng-show="!isEmptyArray(cases.customfields)"
+                                            style="list-style: none;padding-left: 0px;">
+                                            <li ng-repeat="cusfield in cases.customfields" style="padding: 5px;">
                                                 <div class="form-group" style="margin-bottom: 5px;">
                                                     <div class="row">
-                                                        <label ng-model="cusfield.field" class="control-label col-md-12">
+                                                        <label ng-model="cusfield.field"
+                                                               class="control-label col-md-12">
                                                             <%=cusfield.name%>
                                                         </label>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-12" id="elementContainer" >
-                                                            <select class="form-control" ng-show="cusfield.field_type=='list'" ng-change="addCustomField(cusfield)"  ng-model="cusfield.value" ng-options="option for option in cusfield.options">
+                                                        <div class="col-md-12" id="elementContainer">
+                                                            <select class="form-control"
+                                                                    ng-show="cusfield.field_type=='list'"
+                                                                    ng-change="addCustomField(cusfield)"
+                                                                    ng-model="cusfield.value"
+                                                                    ng-options="option for option in cusfield.options">
                                                             </select>
-                                                            <div ng-show="cusfield.field_type=='radio'" role="radiogroup" ng-repeat="option in cusfield.options">
-                                                                <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>" type="radio" ng-model="cusfield.value" value="<%=option%>"  ng-click="addCustomField(cusfield)">
-                                                                <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>" ng-click="addCustomField(cusfield)"> <%=option%></label>
-                                                                <br>        
+                                                            <div ng-show="cusfield.field_type=='radio'"
+                                                                 role="radiogroup"
+                                                                 ng-repeat="option in cusfield.options">
+                                                                <input id="<%=cusfield.id%>_<%=option%>_<%=$index%>"
+                                                                       type="radio" ng-model="cusfield.value"
+                                                                       value="<%=option%>"
+                                                                       ng-click="addCustomField(cusfield)">
+                                                                <label for="<%=cusfield.id%>_<%=option%>_<%=$index%>"
+                                                                       ng-click="addCustomField(cusfield)">
+                                                                    <%=option%></label>
+                                                                <br>
                                                             </div>
-                                                            <div ng-show="cusfield.field_type=='checkbox'" role="radiogroup" ng-repeat="option in cusfield.options">
-                                                                <input type="checkbox" value="<%=option%>" ng-click="addCustomField(cusfield,option)"  ng-checked="cusfield.value.indexOf(option) > -1">
-                                                                <label for="<%=option%>"> <%=option%></label ng-click="addCustomField(cusfield,option)">
-                                                                <br>        
+                                                            <div ng-show="cusfield.field_type=='checkbox'"
+                                                                 role="radiogroup"
+                                                                 ng-repeat="option in cusfield.options">
+                                                                <input type="checkbox" value="<%=option%>"
+                                                                       ng-click="addCustomField(cusfield,option)"
+                                                                       ng-checked="cusfield.value.indexOf(option) > -1">
+                                                                <label for="<%=option%>">
+                                                                    <%=option%></label ng-click="addCustomField(cusfield,option)">
+                                                                <br>
                                                             </div>
-                                                            <input ng-blur="addCustomField(cusfield)" ng-model="cusfield.value" type="text" class="form-control" ng-show="cusfield.field_type=='text'">
-                                                            <textarea ng-model="cusfield.value" ng-blur="addCustomField(cusfield)" class="form-control" ng-show="cusfield.field_type=='paragraph'"></textarea>
+                                                            <input ng-blur="addCustomField(cusfield)"
+                                                                   ng-model="cusfield.value" type="text"
+                                                                   class="form-control"
+                                                                   ng-show="cusfield.field_type=='text'">
+                                                            <textarea ng-model="cusfield.value"
+                                                                      ng-blur="addCustomField(cusfield)"
+                                                                      class="form-control"
+                                                                      ng-show="cusfield.field_type=='paragraph'"></textarea>
 
                                                         </div>
 
@@ -263,50 +316,64 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                    <div class="clearfix"></div>
+                                        <div class="clearfix"></div>
+                                    </div>
+
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="news-blocks blank-card blank-card-blue">
+                                        <h3><i class="fa fa-user"
+                                               style="font-size: 20px;"></i> {{ _(' Related contacts') }}</h3>
+                                        <div class="news-block-tags">
 
-            </div>
-            <div class="col-md-6">
-              <div class="news-blocks blank-card blank-card-blue">
-                <h3> <i class="fa fa-user" style="font-size: 20px;"></i> {{_(' Related contacts')}}</h3>
-                <div class="news-block-tags">
+                                            <div class="form-group">
+                                                <div class=""
+                                                     ng-class="{ 'has-error': case_err.account && case_err.contact}">
+                                                    <input type="text" typeahead-loading="conSearchLoading"
+                                                           ng-class="{'spinner':conSearchLoading}" required
+                                                           ng-model="searchContactQuery"
+                                                           typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in getResults($viewValue,'/crmengine/v1/contacts/search') | filter:$viewValue | limitTo:10"
+                                                           typeahead-on-select="selectContact()" class="form-control"
+                                                           placeholder="{{ _('Contact') }}">
+                                                </div>
+                                            </div>
+                                        </div>
 
-                    <div class="form-group">
-                      <div class="" ng-class="{ 'has-error': case_err.account && case_err.contact}">
-                        <input type="text" typeahead-loading="conSearchLoading" ng-class="{'spinner':conSearchLoading}" required ng-model="searchContactQuery" typeahead="contactResult as contactResult.firstname + ' '+  contactResult.lastname for contactResult in getResults($viewValue,'/crmengine/v1/contacts/search') | filter:$viewValue | limitTo:10" typeahead-on-select="selectContact()" class="form-control" placeholder="{{ _('Contact')}}">
-                      </div>
-                    </div>
-                </div>
-
-              </div>
-                <div class="news-blocks blank-card blank-card-yellow ">
-                        <h3 style="margin-top:0px; margin-bottom: 20px;">
-                            <i class="fa fa-edit" style="  font-size: 24px;"></i>{{_(' Notes')}}
-                        </h3>
-                          <div class="news-block-tags">
-                           <ul class="chats">
-                            <li class="in" ng-repeat="note in casee.notes" id="topic_<%=$index%>">
-                                <img class="avatar" alt="" ng-src="{{user.google_public_profile_photo_url}}" />
-                                <div class="message">
-                                    <span class="arrow"></span>
-                                    <a href="#" class="name">
-                                        {{user.google_display_name}}
-                                    </a>
+                                    </div>
+                                    <div class="news-blocks blank-card blank-card-yellow ">
+                                        <h3 style="margin-top:0px; margin-bottom: 20px;">
+                                            <i class="fa fa-edit" style="  font-size: 24px;"></i>{{ _(' Notes') }}
+                                        </h3>
+                                        <div class="news-block-tags">
+                                            <ul class="chats">
+                                                <li class="in" ng-repeat="note in casee.notes" id="topic_<%=$index%>">
+                                                    <img class="avatar" alt=""
+                                                         ng-src="{{ user.google_public_profile_photo_url }}"/>
+                                                    <div class="message">
+                                                        <span class="arrow"></span>
+                                                        <a href="#" class="name">
+                                                            {{ user.google_display_name }}
+                                                        </a>
                                     <span class="datetime">
                                         at <%= CurrentDate | date:'MM-dd-yyyy - HH:mm:ss '  %>
                                     </span>
                                     <span class="body">
-                                        <a href="<%=getTopicUrl(note.topic_kind,note.id)%>" class="discussion-content"><strong class="ng-binding">
-                                                <a href="#/notes/show/<%= note.id%>"><%= note.title%></a> </strong> - <span class="excerpt ng-binding" ng-bind-html-unsafe="note.excerpt"></span><span class="chat-meta " ng-show="note.content"><i class="icon-comment"></i> <a href="#/notes/show/<%= note.id%>"> <%= note.content%> </a> {{_('content')}}</span>
+                                        <a href="<%=getTopicUrl(note.topic_kind,note.id)%>"
+                                           class="discussion-content"><strong class="ng-binding">
+                                            <a href="#/notes/show/<%= note.id%>"><%= note.title%></a> </strong> - <span
+                                                class="excerpt ng-binding"
+                                                ng-bind-html-unsafe="note.excerpt"></span><span class="chat-meta "
+                                                                                                ng-show="note.content"><i
+                                                class="icon-comment"></i> <a href="#/notes/show/<%= note.id%>"> <%=
+                                            note.content%> </a> {{ _('content') }}</span>
                                         </a>
                                     </span>
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="row">
-                        <div class="col-md-12  margin-bottom-10">
-                            <!--<p class⁼"lead"="">
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="row">
+                                                <div class="col-md-12  margin-bottom-10">
+                                                    <!--<p class⁼"lead"="">
                                {{_('To add an outside email to this account, forward or BCC to:')}}
                                <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
                                     111054727630979006769@gcdc2013-iogrow.appspotmail.com
@@ -315,225 +382,239 @@
                                 {{_('Or just add notes to remember what\'s important.')}}
                                 <br>
                             </p>-->
-                        <form id="addNote" class="ng-pristine ng-valid">
-                            <div class="form-group">
-                                <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Title')}}" id="messageSubject" ng-model="newnote.title">
+                                                    <form id="addNote" class="ng-pristine ng-valid">
+                                                        <div class="form-group">
+                                                            <input class="form-control ng-pristine ng-valid"
+                                                                   autofocus="" type="text"
+                                                                   placeholder="{{ _('Title') }}" id="messageSubject"
+                                                                   ng-model="newnote.title">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <textarea id="noteBody"
+                                                                      class="form-control ng-pristine ng-valid" rows="3"
+                                                                      ng-model="newnote.content"
+                                                                      placeholder="{{ _('Note ...') }}"></textarea>
+                                                        </div>
+                                                        <div class="pull-right">
+                                                            <input ng-disabled="isLoading || !newnote.title"
+                                                                   ng-click="addNote(newnote)" type="submit"
+                                                                   class="btn blue" value="Add this note">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="newnote.content" placeholder="{{_('Note ...')}}"></textarea>
-                            </div>
-                            <div class="pull-right">
-                                <input ng-disabled="isLoading || !newnote.title" ng-click="addNote(newnote)"  type="submit" class="btn blue" value="Add this note">
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                </div>                                                    
                 </div>
-
-            </div> 
-
             </div>
-          </div>
         </div>
+        <div class="col-md-3 ">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet showPage rightCardContent">
+                        <div class="portlet-title line">
+                            <div class="caption">
+                                <i class="fa fa-lock"></i>{{ _('Who can access ?') }}
+                            </div>
+                        </div>
+                        <div class="portlet-body" id="chats">
+                            <label class="radio line">
+                                <input type="radio" value="public" ng-model="casee.access"/>
+                                {{ _('public: Anyone within your organization can access and find') }}
+                            </label>
+                            <label class="radio line">
+                                <input type="radio" value="private" ng-model="casee.access"/>
+                                {{ _('private: only you and your collaborators') }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-      </div>
-    </div>
-    <div class="col-md-3 ">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="portlet showPage rightCardContent">
-            <div class="portlet-title line">
-              <div class="caption">
-                <i class="fa fa-lock"></i>{{ _('Who can access ?')}}
-              </div>
-            </div>
-            <div class="portlet-body" id="chats">
-              <label class="radio line">
-                <input type="radio" value="public" ng-model="casee.access" />
-                  {{ _('public: Anyone within your organization can access and find')}}
-              </label>
-              <label class="radio line">
-                <input type="radio"  value="private" ng-model="casee.access" />
-                {{ _('private: only you and your collaborators')}}
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <div id="addressmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel" class="modal-title">{{_("Add Address")}}</h3>
-      </div>
-      <div class="modal-body">
-        <form id="addAddress" name="addemail"  class="form-horizontal">
-          <div class="form-group">
-            <label  class="col-md-3 control-label">{{_("Street")}} </label>
-            <div class="col-md-9">
-              <input type="text"   class="form-control" id="id_street" ng-model="address.street">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{ _("Add Address") }}</h3>
             </div>
-          </div>
-          <div class="form-group">
-            <label  class="col-md-3 control-label">{{_("City")}} </label>
-            <div class="col-md-9">
-              <input type="text"  class="form-control" id="id_city" ng-model="address.city">
+            <div class="modal-body">
+                <form id="addAddress" name="addemail" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ _("Street") }} </label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="id_street" ng-model="address.street">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ _("City") }} </label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="id_city" ng-model="address.city">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ _("State/Province") }} </label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="id_state" ng-model="address.state">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ _("Postal Code") }} </label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="id_postal" ng-model="address.postal">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ _("Country") }} </label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="id_country" ng-model="address.country">
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div>
-          <div class="form-group">
-            <label  class="col-md-3 control-label">{{_("State/Province")}} </label>
-            <div class="col-md-9">
-              <input type="text" class="form-control"  id="id_state" ng-model="address.state">
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</button>
+                <input type="submit" ng-click="pushElement(address,addresses)" class="btn green"
+                       value="Add this address">
             </div>
-          </div>
-          <div class="form-group">
-            <label  class="col-md-3 control-label">{{_("Postal Code")}} </label>
-            <div class="col-md-9">
-              <input type="text"   class="form-control" id="id_postal" ng-model="address.postal">
-            </div>
-          </div>
-          <div class="form-group">
-            <label  class="col-md-3 control-label">{{_("Country")}} </label>
-            <div class="col-md-9">
-              <input type="text"  class="form-control"  id="id_country" ng-model="address.country">
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-          <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel')}}</button>
-          <input  type="submit" ng-click="pushElement(address,addresses)" class="btn green" value="Add this address">
-      </div>
+        </div>
     </div>
-  </div>
 </div>
 <div id="EditTagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel" class="modal-title">{{_("Edit Lead")}}</h3>
-      </div>
-      <div class="modal-body">
-        <form id="editTagline" name="editlead" class="form-horizontal">
-          <div class="form-group">
-            <label  class="col-md-3 control-label">{{_("Tagline")}} </label>
-            <div class="col-md-9">
-              <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.tagline"></textarea>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{ _("Edit Lead") }}</h3>
             </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-        <button  type="submit" class="btn btn-primary addContactNow" ng-click="updateTagline(lead)">{{_("Save")}} </button>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="EditIntroModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel" class="modal-title">{{_("Edit Lead")}}</h3>
-      </div>
-      <div class="modal-body">
-        <form id="editTagline" name="edittag" ng-submit="updateintro(lead)" class="form-horizontal">
-          <div class="form-group">
-            <label  class=" col-md-3 control-label">{{_("Introduction")}} </label>
-            <div class="col-md-9">
-              <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="lead.introduction"></textarea>
+            <div class="modal-body">
+                <form id="editTagline" name="editlead" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ _("Tagline") }} </label>
+                        <div class="col-md-9">
+                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3"
+                                      ng-model="lead.tagline"></textarea>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Close")}}</button>
-        <button  type="submit" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-      </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
+                <button type="submit" class="btn btn-primary addContactNow"
+                        ng-click="updateTagline(lead)">{{ _("Save") }} </button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-<script type="text/javascript"> 
-  $(function() {
-    $('#datetimepicker2').datetimepicker({
-      language: 'fr',
-      pickTime: false
+<div id="EditIntroModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{ _("Edit Lead") }}</h3>
+            </div>
+            <div class="modal-body">
+                <form id="editTagline" name="edittag" ng-submit="updateintro(lead)" class="form-horizontal">
+                    <div class="form-group">
+                        <label class=" col-md-3 control-label">{{ _("Introduction") }} </label>
+                        <div class="col-md-9">
+                            <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3"
+                                      ng-model="lead.introduction"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
+                <button type="submit" class="btn btn-primary addContactNow">{{ _("Save") }} </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker2').datetimepicker({
+            language: 'fr',
+            pickTime: false
+        });
     });
-  });
-  function wizz(){
-  if (!jQuery().bootstrapWizard) {
-                    return;
-                }
-                var handleTitle = function(tab, navigation, index) {
-                    var total = navigation.find('li').length;
-                    var current = index + 1;
-                    // set wizard title
-                   // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
-                    // set done steps
-                    jQuery('li', $('#form_wizard_1')).removeClass("done");
-                    var li_list = navigation.find('li');
-                    for (var i = 0; i < index; i++) {
-                        jQuery(li_list[i]).addClass("done");
-                    }
+    function wizz() {
+        if (!jQuery().bootstrapWizard) {
+            return;
+        }
+        var handleTitle = function (tab, navigation, index) {
+            var total = navigation.find('li').length;
+            var current = index + 1;
+            // set wizard title
+            // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
+            // set done steps
+            jQuery('li', $('#form_wizard_1')).removeClass("done");
+            var li_list = navigation.find('li');
+            for (var i = 0; i < index; i++) {
+                jQuery(li_list[i]).addClass("done");
+            }
 
-                    if (current == 1) {
-                        $('#form_wizard_1').find('.button-previous').hide();
-                    } else {
-                        $('#form_wizard_1').find('.button-previous').show();
-                    }
-
-                    if (current >= total) {
-                        $('#form_wizard_1').find('.button-next').hide();
-                        $('#form_wizard_1').find('.button-submit').show();
-                       // displayConfirm();
-                    } else {
-                        $('#form_wizard_1').find('.button-next').show();
-                        $('#form_wizard_1').find('.button-submit').hide();
-                    }
-                  //  App.scrollTo($('.page-title'));
-                }
-
-                // default form wizard
-                $('#form_wizard_1').bootstrapWizard({
-                    'nextSelector': '.button-next',
-                    'previousSelector': '.button-previous',
-                    onTabClick: function (tab, navigation, index, clickedIndex) {
-                        handleTitle(tab, navigation, clickedIndex);
-                    },
-                    onNext: function (tab, navigation, index) {
-                        handleTitle(tab, navigation, index);
-                    },
-                    onPrevious: function (tab, navigation, index) {
-                        handleTitle(tab, navigation, index);
-                    },
-                    onTabShow: function (tab, navigation, index) {
-                        var total = navigation.find('li').length;
-                        var current = index + 1;
-                        var $percent = (current / total) * 100;
-                        $('#form_wizard_1').find('.progress-bar').css({
-                            width: $percent + '%'
-                        });
-                    }
-                });
+            if (current == 1) {
                 $('#form_wizard_1').find('.button-previous').hide();
-                $('#form_wizard_1 .button-submit').click(function () {}).hide();
-}
-function waitwizard() {
-      if (jQuery.isEmptyObject(angular.element("#signin").scope().casesatuses)) {
-          setTimeout("waitwizard()", 500);
-      }else{
-                 wizz()// you will need an asynch callback
-    }
+            } else {
+                $('#form_wizard_1').find('.button-previous').show();
+            }
 
-}
- waitwizard();
+            if (current >= total) {
+                $('#form_wizard_1').find('.button-next').hide();
+                $('#form_wizard_1').find('.button-submit').show();
+                // displayConfirm();
+            } else {
+                $('#form_wizard_1').find('.button-next').show();
+                $('#form_wizard_1').find('.button-submit').hide();
+            }
+            //  App.scrollTo($('.page-title'));
+        }
+
+        // default form wizard
+        $('#form_wizard_1').bootstrapWizard({
+            'nextSelector': '.button-next',
+            'previousSelector': '.button-previous',
+            onTabClick: function (tab, navigation, index, clickedIndex) {
+                handleTitle(tab, navigation, clickedIndex);
+            },
+            onNext: function (tab, navigation, index) {
+                handleTitle(tab, navigation, index);
+            },
+            onPrevious: function (tab, navigation, index) {
+                handleTitle(tab, navigation, index);
+            },
+            onTabShow: function (tab, navigation, index) {
+                var total = navigation.find('li').length;
+                var current = index + 1;
+                var $percent = (current / total) * 100;
+                $('#form_wizard_1').find('.progress-bar').css({
+                    width: $percent + '%'
+                });
+            }
+        });
+        $('#form_wizard_1').find('.button-previous').hide();
+        $('#form_wizard_1 .button-submit').click(function () {
+        }).hide();
+    }
+    function waitwizard() {
+        if (jQuery.isEmptyObject(angular.element("#signin").scope().casesatuses)) {
+            setTimeout("waitwizard()", 500);
+        } else {
+            wizz()// you will need an asynch callback
+        }
+
+    }
+    waitwizard();
 </script>
 

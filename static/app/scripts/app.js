@@ -314,13 +314,7 @@ function trackMixpanelAction (actionName){
     //"$updated_at": user.,
     "$organization": user.organization,
     "$language": user.language
-    
-    // "$created": "2011-03-16 16:53:54",
-    // "$last_login": new Date(),         // properties can be dates...
-    
-    // "credits": 150,                    // ...or numbers
-    
-    // "gender": "{{user.google_display_name}}"                    // feel free to define your own properties
+
       });
   mixpanel.track(actionName,{"Displayname":user.name,"email":user.email,"organization":user.organization});
   //incrementer(actionName)

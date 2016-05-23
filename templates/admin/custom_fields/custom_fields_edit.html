@@ -168,7 +168,8 @@
                                                                     type="checkbox" disabled
                                                                     style="cursor:pointer"></span>
                                                             <input type="text" placeholder="{{ _('Add new option') }}.."
-                                                                   class="form-control" ng-model="leads.customfield.newOption"
+                                                                   class="form-control"
+                                                                   ng-model="leads.customfield.newOption"
                                                                    ng-click="addOption(leads.customfield.options,leads.customfield)"
                                                                    style="width: 80%;float: left;display: inline-block;cursor: pointer;background-color: #F4F4F4!important;">
                                                         </div>
@@ -181,7 +182,8 @@
                                         <div class="col-md-12">
                                             <div class="pull-right">
                                                 <input ng-click="clearCustomfield('leads')" class="btn btn-default"
-                                                       value="{{ _('Clear') }}" type="button" style="margin-right: 5px;">
+                                                       value="{{ _('Clear') }}" type="button"
+                                                       style="margin-right: 5px;">
                                                 <input ng-hide="leads.customfield.related_object"
                                                        ng-click="addCustomField(leads.customfield,'leads')"
                                                        type="submit" class="btn blue" value="{{ _('Add') }}"
@@ -199,7 +201,8 @@
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  ng-show="leads.customfield.field_type"
                                  style="-webkit-transition: all 0.25s ease-in-out;-moz-transition: all 0.25s ease-in-out;-o-transition: all 0.25s ease-in-out;transition: all 0.25s ease-in-out; margin-bottom:25px !important;position:relative;">
-                                <i class="fa fa-arrow-right" style="display: inline-block;/* float: left; */left: -20px;top: 47%;position: absolute;"></i>
+                                <i class="fa fa-arrow-right"
+                                   style="display: inline-block;/* float: left; */left: -20px;top: 47%;position: absolute;"></i>
                                 <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-eye"
                                                                              style="font-size:22px"></i>{{ _('Field preview') }}
                                 </h3>
@@ -241,7 +244,8 @@
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>
-                                  <i class="fa fa-arrow-down" style="display: inline-block;/* float: left; */bottom: -20px;left: 50%;position: absolute;"></i>
+                                <i class="fa fa-arrow-down"
+                                   style="display: inline-block;/* float: left; */bottom: -20px;left: 50%;position: absolute;"></i>
                             </div>
                             <div class="news-blocks blank-card blank-card-gray newsCard"
                                  ng-class="{'disabledBlock':isEmptyArray(leads.customfields)}">
@@ -325,7 +329,7 @@
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  style="padding: 15px;min-height:initial !important;padding-top: 5px;">
                                 <h3 style="margin-top:0px;font-size:20px">
-                                    <i class="fa fa fa-cogs" style="font-size:18px"></i>  {{_(' Custom Fields
+                                    <i class="fa fa fa-cogs" style="font-size:18px"></i> {{ _(' Custom Fields
                                     Builder') }}
                                 </h3>
 
@@ -445,7 +449,7 @@
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  ng-show="opportunities.customfield.field_type">
                                 <h3 style="margin-top:0px;font-size:20px">
-                                    <i class="fa fa fa-eye" style="font-size:22px"></i>  {{ _(" Field preview") }}
+                                    <i class="fa fa fa-eye" style="font-size:22px"></i> {{ _(" Field preview") }}
                                 </h3>
                                 <div class="col-md-12" ng-show="opportunities.customfield.field_type">
                                     <div class="form-group">
@@ -1035,7 +1039,8 @@
                         <div class="col-md-6">
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  style="padding: 15px;min-height:initial !important;padding-top: 5px;">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-cogs" style="font-size:18px"></i> {{ _('Custom Fields Builder') }}
+                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-cogs"
+                                                                             style="font-size:18px"></i> {{ _('Custom Fields Builder') }}
                                 </h3>
 
                                 <form class="">
@@ -1275,16 +1280,17 @@
                 </h3>
             </div>
             <form id="seletesho" name="deletesho" class="form-horizontal">
-            <div class="modal-body">
+                <div class="modal-body">
                     <p style="font-size: 16px;text-align: center;">{{ _("Are you sure you want to delete the custom field") }}
                         : <span style="font-weight:600"><%=customfieldSelected.name %></span> from <span
                                 style="font-weight:600"><%=customfieldSelected.related_object %></span>.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
-                <input ng-click="delete(customfieldSelected.entityKey)" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+                    <input ng-click="delete(customfieldSelected.entityKey)" type="submit" class="btn red"
+                           value="Delete">
+                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
+                </div>
             </form>
         </div>
     </div>

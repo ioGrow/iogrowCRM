@@ -6,7 +6,7 @@
         </a>
         <ul class="dropdown-menu">
             {% for application in apps %}
-            <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
+                <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{ _(application.label) }}</a></li>
             {% endfor %}
         </ul>
     </div>
@@ -147,8 +147,7 @@
             <div style="font-size: 12px"><b>{{ _('Upload a custom image') }} </b> <br>
                 {{ _('Your custom logo will be displayed for all services in the header') }}. <br/>
                 {{ _('The image file should be in PNG or GIF format, up to 144 x 32 pixels') }}. <br/>
-                {{ _('Uploading a new logo will replace your current one across all iogrow products and for all users')
-                }}.
+                {{ _('Uploading a new logo will replace your current one across all iogrow products and for all users') }}.
             </div>
             <a class="btn default margin-top-10 col-md-offset-4" ng-click="createPickerUploader()">
                 {{ _('Choose a file') }} </a>
@@ -167,14 +166,14 @@
                 <form id="seletesho" name="deletesho" class="form-horizontal">
                     <fieldset>
 
-                        <p>{{_("By deleting your organization, all your data will be deleted and you will be automaticly
-                            logging out !")}}.</p>
+                        <p>{{ _("By deleting your organization, all your data will be deleted and you will be automaticly
+                            logging out !") }}.</p>
 
                     </fieldset>
 
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteOrganization()" type="submit" class="btn red" value="Delete">
                 <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
