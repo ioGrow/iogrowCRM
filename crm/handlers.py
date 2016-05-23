@@ -966,6 +966,7 @@ class UserShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/users/user_show.html')
 
+
 class settingsShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/settings/settings.html')
@@ -993,10 +994,17 @@ class SubscriptionHandler(SessionEnabledHandler):
         if user:
             org_key = user.organization
             organization = org_key.get()
+            first_name = organization.billing_contact_firstname
+            last_name = organization.billing_contact_lastname
+            full_name = None
+            if first_name or last_name:
+                full_name = organization.billing_contact_firstname + ' ' + organization.billing_contact_lastname
             subscription = organization.get_subscription()
             if subscription.plan.get().name == app_config.PREMIUM:
                 self.redirect('/#/admin/billing')
             template_values = {
+                'full_name': full_name,
+                'organization': organization,
                 'user': user,
                 'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
                 'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
@@ -1071,6 +1079,16 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
 
             organization.stripe_customer_id = customer.id
             organization.set_subscription(premium_subscription)
+            organization.name = self.request.get('name')
+            if 'email' in self.request.POST:
+                organization.billing_contact_email = self.request.get('email')
+            if 'address' in self.request.POST:
+                organization.billing_contact_address = self.request.get('address')
+            full_name = str(self.request.get('fullName')).split(' ')
+            if len(full_name):
+                organization.billing_contact_firstname = full_name[0]
+            if len(full_name) > 1:
+                organization.billing_contact_lastname = full_name[1]
             organization.put()
         except stripe.error.CardError, e:
             self.response.headers['Content-Type'] = 'application/json'
@@ -1126,18 +1144,13 @@ class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
                 interval = plan['interval']
                 body = template.render({'invoice': invoice, 'created': created, 'due': due_date, 'org': org,
                                         'last4': last_4, 'interval': interval, 'quantity': line_0['quantity'],
-                                        'amount': plan['amount']/100, 'total':total/100})
+                                        'amount': plan['amount']/100, 'total': total/100})
                 message = mail.EmailMessage()
                 message.sender = 'hakim@iogrow.com'
                 message.to = org.billing_contact_email or email
                 message.subject = 'Invoice'
                 message.html = body
                 message.send()
-
-
-
-
-
 
 
 class ImportJob(BaseHandler, SessionEnabledHandler):
