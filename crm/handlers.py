@@ -9,7 +9,6 @@ import time
 import endpoints
 import httplib2
 import jinja2
-import requests
 import sfoauth2
 import stripe
 import webapp2
@@ -30,11 +29,10 @@ from iomodels.payment import Subscription
 from iomodels.tasks import Task, AssignedGoogleId
 from mixpanel import Mixpanel
 from oauth2client.appengine import OAuth2Decorator
-from oauth2client.client import FlowExchangeError
-from oauth2client.client import flow_from_clientsecrets
-from requests.auth import HTTPBasicAuth
+from oauth2client.client import FlowExchangeError, OAuth2WebServerFlow
 from webapp2_extras import i18n
 from webapp2_extras import sessions
+from crm.config import config
 
 import iomessages
 import model
@@ -44,11 +42,9 @@ from iograph import Edge
 from iomodels import config as app_config
 from model import Application, STANDARD_TABS, ADMIN_TABS, Organization
 
-mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
+mp = Mixpanel(config.get('mp_token'))
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'libs'))
-Intercom.app_id = 's9iirr8w'
-Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.getcwd()),
     extensions=['jinja2.ext.i18n'], cache_size=0)
@@ -58,11 +54,8 @@ sfoauth2.SF_INSTANCE = 'na12'
 
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com', 'hakim@iogrow.com']
 
-CLIENT_ID = json.loads(
-    open('config/client_secrets.json', 'r').read())['web']['client_id_online']
-
-CLIENT_SECRET = json.loads(
-    open('config/client_secrets.json', 'r').read())['web']['client_secret']
+CLIENT_ID = config.get('google_client_id')
+CLIENT_SECRET = config.get('google_client_secret')
 
 SCOPES = [
     'https://mail.google.com https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
@@ -470,6 +463,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
         else:
             self.redirect('/welcome/')
 
+
 # Change the current app for example from sales to customer support
 class ChangeActiveAppHandler(SessionEnabledHandler):
     def get(self, appid):
@@ -547,10 +541,11 @@ class GooglePlusConnect(SessionEnabledHandler):
         Raises:
           FlowExchangeException Failed to exchange code (code invalid).
         """
-        oauth_flow = flow_from_clientsecrets(
-            'config/client_secrets.json',
-            scope=SCOPES
-        )
+        oauth_flow = OAuth2WebServerFlow(client_id=CLIENT_ID,
+                                         client_secret=CLIENT_SECRET,
+                                         scope=SCOPES,
+                                         redirect_uri="%s/postmessage" % os.environ['HTTP_ORIGIN'])
+
         oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
@@ -718,18 +713,6 @@ class GooglePlusConnect(SessionEnabledHandler):
             except:
                 pass
             mp.track(user.id, 'SIGNIN_SUCCESS')
-            # mp.identify(user.id)
-            # mp.people_set(user.id,{
-            # "$email": user.email,
-            # "$name":user.google_display_name,
-            # "$created": user.created_at,
-            # "$organization": user.organization,
-            # "$language": user.language
-            # });
-        # if self.session.get(SessionEnabledHandler.CURRENT_USER_SESSION_KEY) is not None:
-        #     user = self.get_user_from_session()
-        # Store the user ID in the session for later use.
-        json_resp = json.dumps({'is_new_user': is_new_user, 'email': user.email})
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
@@ -2063,11 +2046,4 @@ routes = [
 
 ]
 
-config = {'webapp2_extras.sessions': {
-    'secret_key': 'YOUR_SESSION_SECRET'
-}}
-# to config the local directory the way we want .
-# config['webapp2_extras.i18n'] = {
-#     'translations_path': 'path/to/my/locale/directory',
-# }
 app = webapp2.WSGIApplication(routes, config=config, debug=True)

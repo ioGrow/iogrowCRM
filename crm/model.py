@@ -13,7 +13,7 @@ from crm.iomodels import config
 from crm.iomodels.payment import Subscription
 from oauth2client.appengine import CredentialsNDBProperty
 from apiclient.discovery import build
-from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import flow_from_clientsecrets, OAuth2WebServerFlow
 from oauth2client.client import FlowExchangeError
 
 # Third parties
@@ -27,8 +27,6 @@ from search_helper import tokenize_autocomplete
 
 import iomessages
 
-# hadji hicham 20/08/2014.
-import stripe
 import json
 import re
 import endpoints
@@ -36,15 +34,11 @@ import endpoints
 from intercom import Intercom
 from mixpanel import Mixpanel
 
-mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
-Intercom.app_id = 's9iirr8w'
-Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
+from crm.config import config
+mp = Mixpanel(config.get('mp_token'))
 
-CLIENT_ID = json.loads(
-    open('config/client_secrets.json').read())['web']['client_id_online']
-
-CLIENT_SECRET = json.loads(
-    open('config/client_secrets.json').read())['web']['client_secret']
+CLIENT_ID = config.get('google_client_id')
+CLIENT_SECRET = config.get('google_secret_key')
 
 SCOPES = [
     'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
@@ -83,15 +77,11 @@ ADMIN_TABS = [
     {'name': 'Billing', 'label': 'Billing', 'url': '/#/admin/billing', 'icon': 'credit-card'},
     {'name': 'EmailSignature', 'label': 'Email Signature', 'url': '/#/admin/email_signature', 'icon': 'envelope'},
 
-    # {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'},
     {'name': 'Regional', 'label': 'Regional', 'url': '/#/admin/regional', 'icon': 'globe'},
     {'name': 'LeadStatus', 'label': 'Lead Status', 'url': '/#/admin/lead_status', 'icon': 'road'},
-    # {'name': 'LeadScoring', 'label': 'Lead Scoring', 'url': '/#/admin/lead_scoring', 'icon': ' fa-dashboard'},
     {'name': 'Opportunity', 'label': 'Opportunity', 'url': '/#/admin/opportunity', 'icon': 'money'},
     {'name': 'CaseStatus', 'label': 'Case Status', 'url': '/#/admin/case_status', 'icon': 'suitcase'},
-    # {'name': 'Synchronisation','label': 'Synchronisation','url':'/#/admin/synchronisation','icon':'refresh'},
     {'name': 'CustomFields', 'label': 'Custom Fields', 'url': '/#/admin/custom_fields/1', 'icon': 'list-alt'},
-    # {'name': 'DataTransfer', 'label': 'Data Transfer', 'url': '/#/admin/data_transfer', 'icon': 'cloud'},
     {'name': 'DeleteAllRecords', 'label': 'Delete Records', 'url': '/#/admin/delete_all_records', 'icon': 'trash-o'},
 
 ]
@@ -128,10 +118,6 @@ FOLDERS = {
     'Cases': 'cases_folder'
 }
 folders = {}
-
-# hadji hicham  20/08/2014. our secret api key to auth at stripe .
-# stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-stripe.api_key = config.STRIPE_API_KEY
 
 
 class Tokens(ndb.Model):
@@ -389,10 +375,6 @@ class Organization(ndb.Model):
     # assign the right license for this organization
     @classmethod
     def create_instance(cls, org_name, admin, license_type='freemium', promo_code=None):
-        # customer = stripe.Customer.create(
-        #     plan='freemium_month',
-        #     email=admin.email
-        # )
         organization = cls(
             owner=admin.google_user_id,
             name=org_name,
@@ -400,29 +382,8 @@ class Organization(ndb.Model):
         )
         org_key = organization.put()
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')
-        # mp.identify(admin.id)
-        # mp.people_set(admin.id,{
-        # "$email": admin.email,
-        # "$name":admin.google_display_name,
-        # "$created": admin.created_at,
-        # "$organization": admin.organization,
-        # "$language": admin.language
-        # });
         from iograph import Edge
         Edge.insert(start_node=org_key, end_node=admin.key, kind='admins', inverse_edge='parents')
-        # cust=stripe.Customer.create(
-        #           email= admin.email,
-        #           description=admin.email,
-        #           metadata={"organization_key":org_key.urlsafe(),
-        #                     "user_id":admin.id,
-        #                     "google_display_name":admin.google_display_name,
-        #                     "google_public_profile_photo_url":admin.google_public_profile_photo_url,
-        #                     "google_user_id":admin.google_user_id}
-        #          )
-        # cust.subscriptions.create(plan="iogrow_plan")
-        # admin.stripe_id=cust.id
-
-        # admin.put()
 
         created_tabs = []
         for tab in STANDARD_TABS:
@@ -1180,10 +1141,10 @@ class User(EndpointsModel):
         Raises:
           FlowExchangeException Failed to exchange code (code invalid).
         """
-        oauth_flow = flow_from_clientsecrets(
-            'config/client_secrets.json',
-            scope=SCOPES
-        )
+        oauth_flow = OAuth2WebServerFlow(client_id=CLIENT_ID,
+                                         client_secret=CLIENT_SECRET,
+                                         scope=SCOPES,
+                                         redirect_uri="%s/postmessage" % os.environ['HTTP_ORIGIN'])
         oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
@@ -1320,7 +1281,6 @@ class User(EndpointsModel):
                 event_name='sign-in from ' + request.sign_in_from,
                 email=user.email
             )
-            # mp.track(user.id, 'SIGN_IN_USER')
         return iomessages.UserSignInResponse(is_new_user=isNewUser)
 
     @classmethod
