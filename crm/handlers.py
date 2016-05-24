@@ -350,7 +350,6 @@ class StripeHandler(BaseHandler, SessionEnabledHandler):
         # Get the credit card details submitted by the form
 
         # Set your secret key: remember to change this to your live secret key in production
-        # See your keys here https://dashboard.stripe.com/account
         # stripe.api_key = "sk_test_4ZNpoS4mqf3YVHKVfQF7US1R"
         stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
 
@@ -866,11 +865,6 @@ class CaseShowHandler(BaseHandler, SessionEnabledHandler):
 class NoteShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/accounts/note_show.html')
-
-
-class DocumentShowHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/documents/show.html')
 
 
 class AllTasksHandler(BaseHandler, SessionEnabledHandler):
@@ -1981,7 +1975,6 @@ routes = [
 
     # Notes, Documents, Taks, Events, Search Views
     ('/views/notes/show', NoteShowHandler),
-    ('/views/documents/show', DocumentShowHandler),
 
     ('/views/search/list', SearchListHandler),
     ('/views/tasks/show', TaskShowHandler),
@@ -2022,7 +2015,7 @@ routes = [
     (decorator.callback_path, decorator.callback_handler()),
     ('/paypal_paying_users', PayPalPayingUsers),
     ('/stripe', StripeHandler),
-    # paying with stripe
+    # paying with hstripe
     ('/jj', ImportJob),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),

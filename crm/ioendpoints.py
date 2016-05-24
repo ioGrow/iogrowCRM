@@ -93,10 +93,6 @@ DISCUSSIONS = {
         'title': 'discussion',
 
         'url': '/#/notes/show/'
-    },
-    'Document': {
-        'title': 'Document',
-        'url': '/#/documents/show/'
     }
 }
 
@@ -2026,7 +2022,7 @@ class CrmEngineApi(remote.Service):
         if attachments:
             attachments_notes += '<ul class="list-unstyled">'
             for item in attachments.items:
-                attachments_notes += '<li><a href="/#/documents/show/' + item.id + '">'
+                attachments_notes += '<li><a href="<%= item.embedLink %>">'
                 attachments_notes += item.name
                 attachments_notes += '</a></li>'
             attachments_notes += '</ul>'

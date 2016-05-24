@@ -107,11 +107,6 @@ app.config(['$routeProvider', function($routeProvider) {
       controller : 'AllTasksController',
       templateUrl:'/views/tasks/list'
       }).
-      // Documents
-      when('/documents/show/:documentId',{
-      controller : 'DocumentShowController',
-      templateUrl:'/views/documents/show'
-      }).
       // Search
       when('/search/:q', {
         controller: 'SearchShowController',

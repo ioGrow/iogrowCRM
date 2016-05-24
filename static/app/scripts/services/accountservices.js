@@ -707,9 +707,6 @@ accountservices.factory('Search', function($http) {
                 base_url = '/#/live/shows/show/';
                 base_url = '/#/live/customer_stories/customer_story/';
                 break;
-            case 'Document' :
-                base_url = '#/documents/show/';
-                break;
             case 'Task' :
                 base_url = '#/tasks/show/';
                 break;
@@ -730,9 +727,6 @@ accountservices.factory('Search', function($http) {
             
             case 'Note':
                 base_url = '/#/notes/show/';
-                break;
-            case 'Document' :
-                base_url = '#/documents/show/';
                 break;
             case 'Task' :
                 base_url = '#/tasks/show/';
