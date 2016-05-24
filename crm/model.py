@@ -80,10 +80,8 @@ ADMIN_TABS = [
     {'name': 'Billing', 'label': 'Billing', 'url': '/#/admin/billing', 'icon': 'credit-card'},
     {'name': 'EmailSignature', 'label': 'Email Signature', 'url': '/#/admin/email_signature', 'icon': 'envelope'},
 
-    # {'name': 'Billing','label': 'Billing','url':'/#/billing/','icon':'usd'},
     {'name': 'Regional', 'label': 'Regional', 'url': '/#/admin/regional', 'icon': 'globe'},
     {'name': 'LeadStatus', 'label': 'Lead Status', 'url': '/#/admin/lead_status', 'icon': 'road'},
-    # {'name': 'LeadScoring', 'label': 'Lead Scoring', 'url': '/#/admin/lead_scoring', 'icon': ' fa-dashboard'},
     {'name': 'Opportunity', 'label': 'Opportunity', 'url': '/#/admin/opportunity', 'icon': 'money'},
     {'name': 'CaseStatus', 'label': 'Case Status', 'url': '/#/admin/case_status', 'icon': 'suitcase'},
     # {'name': 'Synchronisation','label': 'Synchronisation','url':'/#/admin/synchronisation','icon':'refresh'},
