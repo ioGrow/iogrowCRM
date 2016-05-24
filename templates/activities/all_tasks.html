@@ -148,7 +148,7 @@
                             <li class="divider"></li>
                             <li class="ng-menu">
                                 <a ng-click="selectedTab = 2;urgentTasks();">
-                                    <i class=" checkFilterMenu fa" ng-class="{'fa-check': taskUrgent}"></i>Urgent Tasks</a>
+                                    <i class=" checkFilterMenu fa" ng-class="{'fa-check': taskUrgent}"></i>{{  _('Urgent Tasks') }}</a>
                             </li>
                             <li class="divider"></li>
 
@@ -1334,11 +1334,11 @@
                                                         <ul class="dropdown-menu drp-dwn-right " role="menu">
                                                             <li>
                                                                 <a href="" ng-click="showAssigneeTags(task)">
-                                                                    <i class='fa fa-tags'></i> Add tags </a>
+                                                                    <i class='fa fa-tags'></i> {{  _('Add tags') }} </a>
                                                             </li>
                                                             <li>
                                                                 <a href="" ng-click="deleteThisTask(task.entityKey)">
-                                                                    <i class='fa fa-trash-o'></i> Delete </a>
+                                                                    <i class='fa fa-trash-o'></i> {{  _('Delete') }} </a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -1466,8 +1466,7 @@
                                                     </form>
                                                     <div class="form-group btn-manage-tags" ng-show="tags">
                                                         <button class="btn btn-default pull-right"
-                                                                ng-click="manage_tags=!manage_tags;manage()"> Manage
-                                                            Tags
+                                                                ng-click="manage_tags=!manage_tags;manage()"> {{  _('Manage Tags') }}
                                                         </button>
                                                     </div>
                                                     <div class="clearfix"></div>

@@ -220,7 +220,7 @@
                             </li>
                             <li class="ng-menu">
                                 <a ng-click="orderBy('name')" href=""> <i class=" checkFilterMenu fa"
-                                                                          ng-class="{'fa-check': order == 'name'}"></i>Name</a>
+                                                                          ng-class="{'fa-check': order == 'name'}"></i>{{  _('Name') }} }}</a>
                             </li>
                         </ul>
                     </div>
@@ -935,7 +935,6 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                     <input ng-click="deleteaccount()" type="submit" class="btn red" value="Delete this Account">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
                 </form>
             </div>

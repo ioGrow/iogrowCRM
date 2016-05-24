@@ -459,7 +459,7 @@
                                         <div ng-show="isEmptyArray(leads.customfields)" style="text-align:center">
                                             <a href="/#/admin/custom_fields/1" class=" newRelatedContact"
                                                style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
-                                                + <i class="fa fa-list-alt"></i> Add Custom fields
+                                                + <i class="fa fa-list-alt"></i> {{  _("Add Custom fields") }}
                                             </a>
                                         </div>
                                         <ul ng-show="!isEmptyArray(leads.customfields)"
@@ -632,8 +632,7 @@
                             </div>
                             <ul ng-show="twNoResults" class="list-unstyled contact-infos" style="padding-left:10px">
                                 <li style="padding-top:15px">
-                                    <p style="font-size: 16px;color: black;text-align: center;">No matching profile
-                                        found</p>
+                                    <p style="font-size: 16px;color: black;text-align: center;">{{  _("No matching profile found") }}</p>
                                 </li>
                             </ul>
                             <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px"
@@ -656,11 +655,11 @@
                                     </div>
                                     <button style="margin-left:10px" type="button"
                                             ng-click="saveTwitterUrl(twShortProfile)"
-                                            class="btn red btn-sm pull-right btn-inline ">Get
+                                            class="btn red btn-sm pull-right btn-inline ">{{  _("Get") }}
                                     </button>
                                     <button type="button" ng-click="cancelSelection('twShortProfiles')"
                                             class="btn btn-default btn-sm pull-right btn-inline "
-                                            style="padding-bottom:3px" ng-hide="twList.length < 4">Cancel
+                                            style="padding-bottom:3px" ng-hide="twList.length < 4">{{  _("Cancel") }}
                                     </button>
                                 </div>
                                 <div class="clearfix"></div>
@@ -716,8 +715,8 @@
                                     <li ng-show="twProfile.experiences['current-position'].length > 1"
                                         style="text-align: center;">
                                         <a href="" ng-click="showMoreCurrent=!showMoreCurrent">
-                                            <span ng-hide="showMoreCurrent">+ Show more...</span>
-                                            <span ng-show="showMoreCurrent">- Show less</span></a>
+                                            <span ng-hide="showMoreCurrent">{{  _("+ Show more...") }}</span>
+                                            <span ng-show="showMoreCurrent">{{  _("- Show less") }}</span></a>
                                     </li>
                                 </ul>
                                 <div ng-hide="isEmptyArray(twProfile.formations)" ng-show="" class="news-block-tags"
@@ -778,8 +777,8 @@
                                     <li ng-show="twProfile.experiences['past-position'].length > 1"
                                         style="text-align: center;">
                                         <a href="" ng-click="showMore=!showMore">
-                                            <span ng-hide="showMore">+ Show more...</span>
-                                            <span ng-show="showMore">- Show less</span></a>
+                                            <span ng-hide="showMore">{{  _("+ Show more...") }}</span>
+                                            <span ng-show="showMore">{{  _("- Show less") }}</span></a>
                                     </li>
                                 </ul>
                             </div>
@@ -871,14 +870,14 @@
             </div>
             <div class="modal-body">
                 <div ng-show="browser=='chrome'" class="row" style="text-align: center;">
-                    <p style="margin: 25px; font-size: 18px;text-align: center;"> Click to install ioGrow extension to
-                        get all linkedin informations of your lead with one click ! </p>
+                    <p style="margin: 25px; font-size: 18px;text-align: center;"> {{  _("Click to install ioGrow extension to
+                        get all linkedin informations of your lead with one click !") }} </p>
                     <button type="button" class="btn red" onclick="chrome.webstore.install()">
-                        Install chrome extension
+                        {{  _("Install chrome extension") }}
                     </button>
                 </div>
                 <div ng-show="browser=='other'" class="row" style="padding:25px; text-align: center; font-size: 18px">
-                    <p> Use chrome browser to get all linkedin informations of your lead with one click ! </p>
+                    <p> {{  _("Use chrome browser to get all linkedin informations of your lead with one click !") }} </p>
                 </div>
             </div>
             <div class="modal-footer">
