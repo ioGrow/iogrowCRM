@@ -1,3 +1,8 @@
+"""
+This file hold your production config values
+this file should be renamed to prod.py before deployment
+"""
+
 config = {
     # Google Login
     # Get you own api key and secret from https://console.developers.google.com
