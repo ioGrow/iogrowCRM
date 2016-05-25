@@ -13,7 +13,7 @@ from crm.iomodels import config
 from crm.iomodels.payment import Subscription
 from oauth2client.appengine import CredentialsNDBProperty
 from apiclient.discovery import build
-from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import flow_from_clientsecrets, OAuth2WebServerFlow
 from oauth2client.client import FlowExchangeError
 
 # Third parties
@@ -27,21 +27,17 @@ from search_helper import tokenize_autocomplete
 
 import iomessages
 
-# hadji hicham 20/08/2014.
-import stripe
 import json
 import re
 import endpoints
 
 from mixpanel import Mixpanel
 
-mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
+from crm.config import config
+mp = Mixpanel(config.get('mp_token'))
 
-CLIENT_ID = json.loads(
-    open('config/client_secrets.json').read())['web']['client_id_online']
-
-CLIENT_SECRET = json.loads(
-    open('config/client_secrets.json').read())['web']['client_secret']
+CLIENT_ID = config.get('google_client_id')
+CLIENT_SECRET = config.get('google_secret_key')
 
 SCOPES = [
     'https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar  https://www.google.com/m8/feeds'
@@ -84,9 +80,7 @@ ADMIN_TABS = [
     {'name': 'LeadStatus', 'label': 'Lead Status', 'url': '/#/admin/lead_status', 'icon': 'road'},
     {'name': 'Opportunity', 'label': 'Opportunity', 'url': '/#/admin/opportunity', 'icon': 'money'},
     {'name': 'CaseStatus', 'label': 'Case Status', 'url': '/#/admin/case_status', 'icon': 'suitcase'},
-    # {'name': 'Synchronisation','label': 'Synchronisation','url':'/#/admin/synchronisation','icon':'refresh'},
     {'name': 'CustomFields', 'label': 'Custom Fields', 'url': '/#/admin/custom_fields/1', 'icon': 'list-alt'},
-    # {'name': 'DataTransfer', 'label': 'Data Transfer', 'url': '/#/admin/data_transfer', 'icon': 'cloud'},
     {'name': 'DeleteAllRecords', 'label': 'Delete Records', 'url': '/#/admin/delete_all_records', 'icon': 'trash-o'},
 
 ]
@@ -123,10 +117,6 @@ FOLDERS = {
     'Cases': 'cases_folder'
 }
 folders = {}
-
-# hadji hicham  20/08/2014. our secret api key to auth at stripe .
-# stripe.api_key = "sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-stripe.api_key = config.STRIPE_API_KEY
 
 
 class Tokens(ndb.Model):
@@ -1134,10 +1124,10 @@ class User(EndpointsModel):
         Raises:
           FlowExchangeException Failed to exchange code (code invalid).
         """
-        oauth_flow = flow_from_clientsecrets(
-            'config/client_secrets.json',
-            scope=SCOPES
-        )
+        oauth_flow = OAuth2WebServerFlow(client_id=CLIENT_ID,
+                                         client_secret=CLIENT_SECRET,
+                                         scope=SCOPES,
+                                         redirect_uri="%s/postmessage" % os.environ['HTTP_ORIGIN'])
         oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)

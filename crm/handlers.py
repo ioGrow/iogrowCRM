@@ -28,10 +28,10 @@ from iomodels.payment import Subscription
 from iomodels.tasks import Task, AssignedGoogleId
 from mixpanel import Mixpanel
 from oauth2client.appengine import OAuth2Decorator
-from oauth2client.client import FlowExchangeError
-from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError, OAuth2WebServerFlow
 from webapp2_extras import i18n
 from webapp2_extras import sessions
+from crm.config import config
 
 import iomessages
 import model
@@ -41,7 +41,7 @@ from iograph import Edge
 from iomodels import config as app_config
 from model import Application, STANDARD_TABS, ADMIN_TABS, Organization
 
-mp = Mixpanel('793d188e5019dfa586692fc3b312e5d1')
+mp = Mixpanel(config.get('mp_token'))
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'libs'))
 jinja_environment = jinja2.Environment(
@@ -53,11 +53,8 @@ sfoauth2.SF_INSTANCE = 'na12'
 
 ADMIN_EMAILS = ['tedj.meabiou@gmail.com', 'hakim@iogrow.com']
 
-CLIENT_ID = json.loads(
-    open('config/client_secrets.json', 'r').read())['web']['client_id_online']
-
-CLIENT_SECRET = json.loads(
-    open('config/client_secrets.json', 'r').read())['web']['client_secret']
+CLIENT_ID = config.get('google_client_id')
+CLIENT_SECRET = config.get('google_client_secret')
 
 SCOPES = [
     'https://mail.google.com https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
@@ -461,6 +458,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
         else:
             self.redirect('/welcome/')
 
+
 # Change the current app for example from sales to customer support
 class ChangeActiveAppHandler(SessionEnabledHandler):
     def get(self, appid):
@@ -538,10 +536,11 @@ class GooglePlusConnect(SessionEnabledHandler):
         Raises:
           FlowExchangeException Failed to exchange code (code invalid).
         """
-        oauth_flow = flow_from_clientsecrets(
-            'config/client_secrets.json',
-            scope=SCOPES
-        )
+        oauth_flow = OAuth2WebServerFlow(client_id=CLIENT_ID,
+                                         client_secret=CLIENT_SECRET,
+                                         scope=SCOPES,
+                                         redirect_uri="%s/postmessage" % os.environ['HTTP_ORIGIN'])
+
         oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
@@ -703,8 +702,6 @@ class GooglePlusConnect(SessionEnabledHandler):
             model.Organization.create_instance(organ_name, user)
             is_new_user = True
             mp.track(user.id, 'SIGNIN_SUCCESS')
-        # Store the user ID in the session for later use.
-        json_resp = json.dumps({'is_new_user': is_new_user, 'email': user.email})
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
@@ -931,6 +928,7 @@ class UserShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/users/user_show.html')
 
+
 class settingsShowHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/settings/settings.html')
@@ -958,10 +956,17 @@ class SubscriptionHandler(SessionEnabledHandler):
         if user:
             org_key = user.organization
             organization = org_key.get()
+            first_name = organization.billing_contact_firstname
+            last_name = organization.billing_contact_lastname
+            full_name = None
+            if first_name or last_name:
+                full_name = organization.billing_contact_firstname + ' ' + organization.billing_contact_lastname
             subscription = organization.get_subscription()
             if subscription.plan.get().name == app_config.PREMIUM:
                 self.redirect('/#/admin/billing')
             template_values = {
+                'full_name': full_name,
+                'organization': organization,
                 'user': user,
                 'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
                 'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
@@ -1036,6 +1041,16 @@ class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
 
             organization.stripe_customer_id = customer.id
             organization.set_subscription(premium_subscription)
+            organization.name = self.request.get('name')
+            if 'email' in self.request.POST:
+                organization.billing_contact_email = self.request.get('email')
+            if 'address' in self.request.POST:
+                organization.billing_contact_address = self.request.get('address')
+            full_name = str(self.request.get('fullName')).split(' ')
+            if len(full_name):
+                organization.billing_contact_firstname = full_name[0]
+            if len(full_name) > 1:
+                organization.billing_contact_lastname = full_name[1]
             organization.put()
         except stripe.error.CardError, e:
             self.response.headers['Content-Type'] = 'application/json'
@@ -1091,18 +1106,13 @@ class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
                 interval = plan['interval']
                 body = template.render({'invoice': invoice, 'created': created, 'due': due_date, 'org': org,
                                         'last4': last_4, 'interval': interval, 'quantity': line_0['quantity'],
-                                        'amount': plan['amount']/100, 'total':total/100})
+                                        'amount': plan['amount']/100, 'total': total/100})
                 message = mail.EmailMessage()
                 message.sender = 'hakim@iogrow.com'
                 message.to = org.billing_contact_email or email
                 message.subject = 'Invoice'
                 message.html = body
                 message.send()
-
-
-
-
-
 
 
 class ImportJob(BaseHandler, SessionEnabledHandler):
@@ -1982,7 +1992,4 @@ routes = [
 
 ]
 
-config = {'webapp2_extras.sessions': {
-    'secret_key': 'YOUR_SESSION_SECRET'
-}}
 app = webapp2.WSGIApplication(routes, config=config, debug=True)
