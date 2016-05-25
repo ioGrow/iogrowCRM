@@ -3,14 +3,17 @@ This configuration file loads environment's specific config settings for the app
 """
 import os
 
-from shared import config as config
+from shared import config
 
 if "SERVER_SOFTWARE" in os.environ:
     if os.environ['SERVER_SOFTWARE'].startswith('Dev'):
         from local import config as app_config
 
     elif os.environ['SERVER_SOFTWARE'].startswith('Google'):
-        from prod import config as app_config
+        try:
+            from prod import config as app_config
+        except ImportError, e:
+            from local import config as app_config
     else:
         raise ValueError("Environment undetected")
 else:
