@@ -231,21 +231,6 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <!--  <div class="news-blocks blank-card blank-card-yellow">
-                <h3>{{ _('Case Informations')}}</h3>
-                <div class="row">
-                  <div class="form-group selector-margin">
-                    <label  class="required col-md-3 control-label">{{_("Status")}} </label>
-                    <div class="col-md-9">
-                             <select class="form-control" ng-model="status_selected" ng-options="stat.status for stat in casesatuses" >
-                              <option value="">-- {{_("Choose a status")}} --</option>
-                            </select>
-
-                    </div>
-                  </div>
-                  <br>
-                </div>
-              </div> -->
                                     <div class="news-blocks blank-card blank-card-gray relatedBlock">
                                     <span class="page-meta pull-right" ng-show="!isEmptyArray(cases.customfields)">
                                                <a href="/#/admin/custom_fields/5" class="btn-link addAnotherPhone"
@@ -373,15 +358,6 @@
                                             </ul>
                                             <div class="row">
                                                 <div class="col-md-12  margin-bottom-10">
-                                                    <!--<p class⁼"lead"="">
-                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                </a>
-                                <br>
-                                {{_('Or just add notes to remember what\'s important.')}}
-                                <br>
-                            </p>-->
                                                     <form id="addNote" class="ng-pristine ng-valid">
                                                         <div class="form-group">
                                                             <input class="form-control ng-pristine ng-valid"
@@ -555,8 +531,6 @@
         var handleTitle = function (tab, navigation, index) {
             var total = navigation.find('li').length;
             var current = index + 1;
-            // set wizard title
-            // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
             // set done steps
             jQuery('li', $('#form_wizard_1')).removeClass("done");
             var li_list = navigation.find('li');
@@ -573,12 +547,10 @@
             if (current >= total) {
                 $('#form_wizard_1').find('.button-next').hide();
                 $('#form_wizard_1').find('.button-submit').show();
-                // displayConfirm();
             } else {
                 $('#form_wizard_1').find('.button-next').show();
                 $('#form_wizard_1').find('.button-submit').hide();
             }
-            //  App.scrollTo($('.page-title'));
         }
 
         // default form wizard

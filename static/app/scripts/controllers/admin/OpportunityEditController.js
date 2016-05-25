@@ -1,7 +1,3 @@
-/**
- * Created by Ghiboub khalid on 9/29/15.
- */
-
 app.controller('OpportunityEditCtrl', ['$scope', 'Auth', 'User', 'Opportunitystage', '$q',
     function ($scope, Auth, User, Opportunitystage, $q) {
         $("ul.page-sidebar-menu li").removeClass("active");

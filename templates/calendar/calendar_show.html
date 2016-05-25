@@ -127,25 +127,6 @@
       </span>
         </div>
     </div>
-    <!--<div class="row subHeaderContainer">
-        <div class=" col-md-4 col-sm-4 col-xs-4 subHeaderContent">
-           <div class="row">
-              <!-- <h2 class="page-title">{{ _("Contacts") }} </h2> -->
-    <!--  </div>
-        </div>
-     <div class="col-md-8 col-sm-8 col-xs-8">
-        <div class="row">
-         <div class="pull-right" >
-           <a  class="btn red newBtn" id="new_event" href="#newEventModal2" data-toggle="modal" ng-click="newEventisClicked()">
-                        {{_('New Event')}}
-          </a>
-            <div class="btn-group newBtn">
-      
-        </div>
-         </div>
-         </div>
-    </div>
-  </div>-->
     <input type="hidden" value="{{ user.timezone }}" id="timezone"/>
 
     <div ng-show="isContentLoaded" class="row" style="margin-top: 16px;">
@@ -207,15 +188,6 @@
 
                                 </div>
                             </div>
-                            <!--div class="control-group">
-                        <label  class="required col-md-3 control-label">{{_("Company")}} </label>
-
-                        <div class="col-md-9">
-                          <input type="text" class="form-control"   id="id_Company" ng-model="contact.company">
-
-                        </div>
-                    </div-->
-
 
                     </div>
                     <div class="modal-footer">
@@ -247,7 +219,6 @@
                         <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                         <input ng-click="deletecontact()" type="submit" class="btn red" value="Delete this Contact">
-                        <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                     </div>
                     </form>
                 </div>
@@ -273,7 +244,6 @@
                                 <label class="col-md-3 control-label">{{ _("Tagline") }} </label>
 
                                 <div class="col-md-9">
-                                    <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
                                     <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3"
                                               ng-model="account.tagline"></textarea>
 
@@ -339,7 +309,6 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">{{ _("Type") }} </label>
                                 <div class="col-md-9">
-                                    <!--input type="text" placeholder="{{_('home')}},{{_('work')}},{{_('mobile')}},{{_('other')}} ..." required id="id_name" ng-model="phone.type_number"-->
                                     <select ng-model="phone.type_number" class="form-control">
                                         <option value="home" selected="selected">{{ _('home') }}</option>
                                         <option>{{ _('work') }}</option>
@@ -699,7 +668,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteaccount()" type="submit" class="btn red" value="Delete this Account">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -724,7 +692,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Information">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -815,13 +782,7 @@
                                        ng-model="opportunity.name">
                             </div>
                         </div>
-                        <!--div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
 
-                        <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_label" ng-model="opportunity.description">
-                        </div>
-                      </div-->
                         <div class="form-group">
                             <label class="required col-md-3 control-label">{{ _("Amount") }} </label>
                             <div class="col-md-9">
@@ -906,15 +867,6 @@
                         </div>
 
                     </div>
-                    <!--div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-
-                        <div class="col-md-9">
-                          <input type="text" class="form-control"  id="id_description" ng-model="casee.type_case">
-
-                        </div>
-                    </div-->
-
 
             </div>
             <div class="modal-footer">
@@ -996,8 +948,7 @@
                                                 style="float: left;">:</span>
                                             <div class="oppEstDate"
                                                  style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                <!--  <input id="datetimepickerjquery" type="text" > -->
-                                           
+
 
                                     <span ng-hide="showStartsCalendar||showEventInput"
                                           ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
@@ -1008,7 +959,6 @@
                                                            class="form-control calendar-form-controle"
                                                            placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
                                                            id="leadEventStartsAt">
-                                                    <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
                                                 </div>
                                             </div>
 
@@ -1029,7 +979,6 @@
                                                            placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
                                                            id="leadEventEndsAt">
 
-                                                    <!--   <input cusdatetimepicker data-model="" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt"> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -1358,12 +1307,6 @@
   background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()"
                                                                            class=" calendar-close-invite"
                                                                            style=" top: 2px !important;"></a></span>
-                                        <!--      <ul  class="list-inline"style="list-style:none" ng-show="remindmeby">
-                                                                                         <li> <strong> By:</strong> </li>
-                                                                                         <li><input type="radio"  name="by" ng-model="method" value="email"> Email</li>
-                                                                                         <li><input type="radio" ng- name="by" ng-model="method" value="sms">SMS</li>
-
-                                                                                       </ul> -->
                                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                             <li role="presentation"><a role="menuitem" tabindex="-1"
                                                                        ng-click="Remindme(0)">No notification</a></li>
@@ -1380,18 +1323,6 @@
 
                                         </ul>
                                     </div>
-                                    <!--       <span> remind me  <div class="customCheckbox " class="form-group" style="
-                  margin-top: -14px;
-                  margin-left: 72px;
-              ">
-                                          <input title="Select Lead" type="checkbox" ng-checked="checkReminder()" ng-click="selectCardwithCheck($event,$index)" id="reminder">
-                                            <label for="reminder" class="labelElement">
-                                              <span class="check" style="  height: 17px !important;width: 8px !important;   margin-top: -4px;"></span>
-                                              <span class="box" style="  height: 15px !important;width: 15px !important;   margin-top: -13px;"></span>
-                                            </label>
-                                        </div></span> -->
-
-
                                 </div>
                             </div>
 
@@ -1570,8 +1501,7 @@
                                                     style="float: left;">:</span>
                                                 <div class="oppEstDate"
                                                      style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                    <!--  <input id="datetimepickerjquery" type="text" > -->
-                                           
+
 
                                            <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i
                                                    class="fa fa-calendar"></i>
@@ -1582,7 +1512,6 @@
                                                                class="form-control calendar-form-controle"
                                                                placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
                                                                id="leadEventStartsAt">
-                                                        <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
                                                     </div>
                                                 </div>
 
@@ -1603,7 +1532,6 @@
                                                                placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
                                                                id="leadEventEndsAt">
 
-                                                        <!--   <input cusdatetimepicker data-model="" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt"> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -1705,17 +1633,6 @@
 
                                             </ul>
                                         </div>
-                                        <!--       <span> remind me  <div class="customCheckbox " class="form-group" style="
-                      margin-top: -14px;
-                      margin-left: 72px;
-                  ">
-                                              <input title="Select Lead" type="checkbox" ng-checked="checkReminder()" ng-click="selectCardwithCheck($event,$index)" id="reminder">
-                                                <label for="reminder" class="labelElement">
-                                                  <span class="check" style="  height: 17px !important;width: 8px !important;   margin-top: -4px;"></span>
-                                                  <span class="box" style="  height: 15px !important;width: 15px !important;   margin-top: -13px;"></span>
-                                                </label>
-                                            </div></span> -->
-
 
                                     </div>
                                 </div>
@@ -1763,67 +1680,6 @@
             </div>
         </div>
         <!-- end of new event  -->
-        <!-- event modal -->
-        <!--           <div id="newEventModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel" class="modal-title">{{_("New Event")}}</h3>
-            </div>
-            <div class="modal-body">
-                     <div class="controls controls-row">
-                            <form id="addTask"  class="ng-pristine ng-valid">
-                                                  <input class="form-control" autofocus type="text" placeholder="{{_('Add a new event')}}" id="taskTitle" ng-model="ioevent.title">
-                                                  <p><strong>{{_("When?")}}</strong></p>
-                                                <div class="row">
-                                                  <div class="col-md-6">
-                                                    <div> <strong style="float: left;">{{_("Starts")}}</strong><span style="float: left;">:</span>
-                                                     <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                     
-                                                      <span ng-hide="showStartsCalendar" ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
-                                                       <%=start_event_new| date:'MMMM dd, yyyy, HH:mm'%></span>
-                                                      <div ng-show="showStartsCalendar" class="input-icon">
-                                                           <i class="fa fa-calendar"></i>
-                                                           <input cusdatetimepicker data-model="start_event_new" type="text" class="form-control" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt">
-                                                      </div>
-                                                    </div>
-                                                    </div>
-                                                  </div>
-                                                  <div class="col-md-6">
-                                                      <div> <strong style="float: left;">{{_("Ends")}}</strong><span style="float: left;">:</span>
-                                                     <div class="oppEstDate" style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                      <span ng-hide="showEndsCalendar" ng-click="showEndsCalendar=true"><i class="fa fa-calendar"></i>
-                                                       <%=end_event_new| date:'MMMM dd, yyyy, HH:mm'%></span>
-                                                      <div ng-show="showEndsCalendar" class="input-icon">
-                                                           <i class="fa fa-calendar"></i>
-                                                           <input cusdatetimepicker data-model="end_event_new" type="text" class="form-control" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt">
-                                                      </div>
-                                                    </div>
-                                                    
-                                                    </div>
-                                                      <div class="clearfix"></div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                  <input class="form-control" autofocus="" type="text" placeholder="{{_('Where?')}}" id="taskTitle" ng-model="ioevent.where" style="margin-top:15px">
-
-                                                </div>
-                                                    
-                                                </div>
-                                                </form>
-            </div>
-            <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="newEventCanceled()">{{_("Cancel")}}</button>
-
-               <input ng-hide="isLoading" type="submit" class="btn green" value="{{_('Add this event')}}" ng-click="addEvent(ioevent)">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled>
-
-
-            </div>
-            </div>
-            </div>
-          </div> -->
-        <!-- the end of the modal -->
 
 
         <script type="text/javascript">
@@ -1856,7 +1712,6 @@
                     })
                 }
             };
-            /* $('body').popover({ selector: '[data-popover]', trigger: 'click hover', placement: 'left', delay: {show: 50, hide: 400}});*/
             $('#assigeeList').lionbars({});
         </script>
 

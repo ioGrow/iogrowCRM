@@ -11,7 +11,6 @@
         </ul>
     </div>
     <div class="subHeaderContent custom-show settingsNav">
-        <!--<i class="material-icons">supervisor_account</i>-->
         <div class="col-md-3 active-app"><i class="fa fa fa-list-alt"></i>
             {{ _('Custom Fields') }}
         </div>
@@ -121,7 +120,6 @@
                                              ng-show="leads.customfield.field_type=='multiple_choice'||leads.customfield.field_type=='list'||leads.customfield.field_type=='radio'||leads.customfield.field_type=='checkbox'">
                                             <div class="form-group">
                                                 <div class="row">
-                                                    <!--  <label class="control-label col-md-4">{{_("Field options")}}</label> -->
                                                     <div class="col-md-offset-3 col-md-9">
                                                         <ul style="padding-left: 0px;padding-top: 5px;list-style: none;"
                                                             sv-root sv-part="leads.customfield.options">
@@ -202,7 +200,7 @@
                                  ng-show="leads.customfield.field_type"
                                  style="-webkit-transition: all 0.25s ease-in-out;-moz-transition: all 0.25s ease-in-out;-o-transition: all 0.25s ease-in-out;transition: all 0.25s ease-in-out; margin-bottom:25px !important;position:relative;">
                                 <i class="fa fa-arrow-right"
-                                   style="display: inline-block;/* float: left; */left: -20px;top: 47%;position: absolute;"></i>
+                                   style="display: inline-block;left: -20px;top: 47%;position: absolute;"></i>
                                 <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-eye"
                                                                              style="font-size:22px"></i>{{ _('Field preview') }}
                                 </h3>
@@ -245,7 +243,7 @@
                                 </div>
                                 <div class="clearfix"></div>
                                 <i class="fa fa-arrow-down"
-                                   style="display: inline-block;/* float: left; */bottom: -20px;left: 50%;position: absolute;"></i>
+                                   style="display: inline-block;bottom: -20px;left: 50%;position: absolute;"></i>
                             </div>
                             <div class="news-blocks blank-card blank-card-gray newsCard"
                                  ng-class="{'disabledBlock':isEmptyArray(leads.customfields)}">
@@ -370,7 +368,6 @@
                                              ng-show="opportunities.customfield.field_type=='multiple_choice'||opportunities.customfield.field_type=='list'||opportunities.customfield.field_type=='radio'||opportunities.customfield.field_type=='checkbox'">
                                             <div class="form-group">
                                                 <div class="row">
-                                                    <!--  <label class="control-label col-md-4">{{_("Field options")}}</label> -->
                                                     <div class="col-md-offset-3 col-md-9">
                                                         <ul style="padding-left: 0px;padding-top: 5px;list-style: none;"
                                                             sv-root sv-part="opportunities.customfield.options">
@@ -606,7 +603,6 @@
                                              ng-show="contacts.customfield.field_type=='multiple_choice'||contacts.customfield.field_type=='list'||contacts.customfield.field_type=='radio'||contacts.customfield.field_type=='checkbox'">
                                             <div class="form-group">
                                                 <div class="row">
-                                                    <!--  <label class="control-label col-md-4">{{_("Field options")}}</label> -->
                                                     <div class="col-md-offset-3 col-md-9">
                                                         <ul style="padding-left: 0px;padding-top: 5px;list-style: none;"
                                                             sv-root sv-part="contacts.customfield.options">
@@ -843,7 +839,6 @@
                                              ng-show="accounts.customfield.field_type=='multiple_choice'||accounts.customfield.field_type=='list'||accounts.customfield.field_type=='radio'||accounts.customfield.field_type=='checkbox'">
                                             <div class="form-group">
                                                 <div class="row">
-                                                    <!--  <label class="control-label col-md-4">{{_("Field options")}}</label> -->
                                                     <div class="col-md-offset-3 col-md-9">
                                                         <ul style="padding-left: 0px;padding-top: 5px;list-style: none;"
                                                             sv-root sv-part="accounts.customfield.options">
@@ -1079,7 +1074,6 @@
                                              ng-show="cases.customfield.field_type=='multiple_choice'||cases.customfield.field_type=='list'||cases.customfield.field_type=='radio'||cases.customfield.field_type=='checkbox'">
                                             <div class="form-group">
                                                 <div class="row">
-                                                    <!--  <label class="control-label col-md-4">{{_("Field options")}}</label> -->
                                                     <div class="col-md-offset-3 col-md-9">
                                                         <ul style="padding-left: 0px;padding-top: 5px;list-style: none;"
                                                             sv-root sv-part="cases.customfield.options">
@@ -1288,7 +1282,6 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
                     <input ng-click="delete(customfieldSelected.entityKey)" type="submit" class="btn red"
                            value="Delete">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
             </form>
         </div>

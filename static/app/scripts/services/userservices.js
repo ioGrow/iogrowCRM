@@ -241,7 +241,6 @@ accountservices.factory('User', function ($http) {
         $scope.isLoading = true;
         gapi.client.crmengine.company.switch_logo().execute(function (resp) {
             if (!resp.code) {
-                //$scope.fileUrl = undefined;
                 window.location.reload();
             } else {
                 if (resp.message == "Invalid grant") {

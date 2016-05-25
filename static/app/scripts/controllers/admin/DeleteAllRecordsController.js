@@ -1,6 +1,4 @@
-/**
- * Created by Ghiboub khalid on 9/29/15.
- */
+
 
 app.controller('DeleteAllRecordsCtrl', ['$scope', 'Auth', 'User','Lead','Account','Contact','Opportunity','Case','Task',
     function ($scope, Auth, User, Lead, Account, Contact, Opportunity, Case, Task) {

@@ -660,9 +660,6 @@
                                                     <div class="form-group row">
                                                         <label class="control-label col-md-4"><i
                                                                 class="fa fa-group"></i>{{ _(' Competitors') }}</label>
-                                                        <!--<div class="col-md-8">
-                                                          <textarea id="noteBody"  ng-model="opportunity.competitor" class="form-control ng-pristine ng-valid" rows="3" ></textarea>
-                                                        </div>-->
                                                         <div class="col-md-8">
                                                             <div class=""
                                                                  ng-class="{ 'has-error': oppo_err.account && oppo_err.contact }"
@@ -1221,15 +1218,6 @@
                                                         </ul>
                                                         <div class="row">
                                                             <div class="col-md-12  margin-bottom-10">
-                                                                <!--<p class⁼"lead"="">
-                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                </a>
-                                <br>
-                                {{_('Or just add notes to remember what\'s important.')}}
-                                <br>
-                            </p>-->
                                                                 <form id="addNote" class="ng-pristine ng-valid">
                                                                     <div class="form-group">
                                                                         <input class="form-control ng-pristine ng-valid"
@@ -1548,24 +1536,6 @@
                                   <%= task.due | date:'dd MMM'%>
                             </span>
                                         </div>
-                                        <div class="moreDetails row" ng-show="showDetails">
-                                            <!--  <div class="col-md-6 col-xs-6 event-schedule">
-                                                  <span class=""><i class="fa fa-calendar"></i>
-                                                   <%= task.due | date:'dd MMM'%> </span>
-                                              </div>
-                                              <div class="col-md-6 col-xs-6 event-schedule">
-                                                 <span class="">
-                                                    <i class="fa fa-bell-o"></i>
-                                                    <%= task.reminder | date:'dd MMM'%>
-                                                  </span>
-                                              </div>
-                                              <div class="col-md-12">
-                                                 <span class="">
-                                                    <i class="fa fa-map-marker"></i>
-                                                    <%= event.where %>-->
-                                            <!--</span>
-                                        </div>-->
-                                        </div>
                                     </div>
                                 </li>
                             </ul>
@@ -1691,57 +1661,12 @@
                                 </li>
                             </ul>
                             <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
-                                <!--      <div class="formElements newEventToLead" ng-show="newEventform">
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="{{_('Event tilte')}}">
-                              </div>
-                              
-                            </div>
-                            {{_('All day')}} <input type="checkbox" ng-model="allday"/>
-                              
-                              <div class="row" ng-show="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                       <div class="input-icon ">
-                                        <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="{{_('When?')}}" value="" id="leadEventStartsAt">
-                                      </div>
-                                </div>
-                            </div>
-                              
-
-                            <div class="row" ng-hide="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                      <div class="input-icon">
-                                        <i class="fa fa-calendar"></i>
-                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="{{_('From')}}" value="" id="leadEventStartsAt">
-                                      </div>
-
-                                </div>
-                            </div>
-                            <div class="row" ng-hide="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                       <div class="input-icon ">
-                                        <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="{{_('To')}}" value="" id="leadEventStartsAt">
-                                      </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="{{_('Where ?')}}">
-                              </div>
-                             
-                            </div>
-                  </div> -->
                                 <div class="row">
                                     <div class="col-md-12 margin-top-10">
                                         <p class="newEventText"><span
                                                 ng-hide="newEventform">{{ _('Add New Event') }}</span>
                                             <button type="button" ng-click="showAddEventPopup()"
                                                     class="btn red btn-sm pull-right btn-inline">{{ _('Add') }}</button>
-                                            <!--     <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{_('Cancel')}}</button> -->
                                         </p>
                                     </div>
                                 </div>
@@ -1930,7 +1855,6 @@
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
                     <input ng-click="deleteopportunity()" type="submit" class="btn red" value="Delete">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
                 </form>
             </div>
@@ -2013,7 +1937,6 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                     <input ng-click="deleteDocs()" type="submit" class="btn red" value="Delete">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
 
             </div>
@@ -2297,7 +2220,6 @@
                                 <select class="form-control" ng-model="ownerSelected"
                                         ng-options="user.google_display_name for user in users">
                                     <option value=""><%=opportunity.owner.google_display_name%></option>
-                                    <!--option value=""><%=stage_selected.name%></option-->
                                 </select>
                             </div>
                         </div>
@@ -2310,26 +2232,6 @@
 
                             </div>
                         </div>
-                        <!--div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_( "Amount")}} </label>
-
-                        <div class="col-md-9">
-                          <input type="text" class="form-control"  id="id_amount" ng-model="opportunity.amount">
-
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Stage")}} </label>
-
-                        <div class="col-md-9">
-                          <select ng-model="stage_selected" ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true" class="form-control" >
-                            <option value=""><%=opportunity.stagename%> </option>
-
-
-                          </select>
-
-                        </div>
-                    </div-->
 
                 </div>
                 <div class="modal-footer">
@@ -3055,8 +2957,6 @@
         var handleTitle = function (tab, navigation, index) {
             var total = navigation.find('li').length;
             var current = index + 1;
-            // set wizard title
-            // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
             // set done steps
             jQuery('li', $('#form_wizard_1')).removeClass("done");
             var li_list = navigation.find('li');

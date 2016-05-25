@@ -197,10 +197,6 @@
                                 <div class="col-md-6">
                                     <div class="news-blocks blank-card blank-card-green margin-bottom-15">
                                         <h3>{{ _('Account Informations') }}</h3>
-                                        <!-- <div class="news-block-tags">
-                                           <strong>{{_('Phone')}}</strong>
-
-                                         </div>-->
                                         <ul class="list-unstyled contact-infos infoslist">
                                             <li ng-repeat="phone in phones">
                                                 <i class="fa fa-phone"></i>
@@ -224,10 +220,6 @@
                                                 >
                                             </div>
                                         </form>
-                                        <!--  <div class="news-block-tags">
-                                           <strong>{{_('Email')}}</strong>
-
-                                         </div>-->
                                         <ul class="list-unstyled contact-infos infoslist">
                                             <li ng-repeat="email in emails">
                                                 <i class="fa fa-envelope"></i>
@@ -248,9 +240,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--  <div class="news-block-tags">
-                                            <strong>{{_('Website')}}</strong>
-                                          </div>-->
                                         <ul class="list-unstyled contact-infos infoslist">
                                             <li ng-repeat="website in websites">
                                                 <a tabindex='-1' href="<%=prepareUrl(website.url)%>" target="_blank">
@@ -271,16 +260,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--<form class="form-inline" role="form">
-                                            <div class="" style="">
-                                              <label class="sr-only" >{{_('Website')}}</label>
-                                              <input ng-blur="pushElement(website,websites,'websites')"  ng-enter="pushElement(website,websites,'websites')" ng-model="website.url" class="form-control"  placeholder="{{_('Enter a Website')}}">
-                                            </div>
-                                        </form>-->
-                                        <!--<div class="news-block-tags">
-                                          <strong>{{_('Address')}}</strong>
-
-                                        </div>-->
                                         <ul class="list-unstyled contact-infos infoslist">
                                             <li ng-repeat="address in addresses">
                                                 <a ng-click="setLocation(address)" ng-show="address.lng" href=""
@@ -304,12 +283,6 @@
                                                         ng-click="deleteInfos(addresses,$index)"
                                                         data-dismiss="alert"></button>
                                             </li>
-                                            <!-- <a href="#addressmodal"
-                                               class="btn-link addAnotherPhone"
-                                               data-toggle="modal">
-                                               <i class="icon-plus"></i>{{_('Add a new address')}}
-                                             </a>
-                                             </li>-->
                                         </ul>
                                         <div class="row">
                                             <div class="col-md-12">
@@ -557,20 +530,6 @@
                                         <h3>{{ _('Social links') }} <i class="fa fa-twitter"></i>
                                             <i class="fa fa-facebook-square"></i>
                                             <i class="fa fa-linkedin-square"></i></h3>
-                                        <!--<ul class="list-unstyled contact-infos infoslist" >
-                                          <li ng-repeat="sociallink in sociallinks">
-
-                                            <a  href="<%=prepareUrl(sociallink.url)%>" target="_blank">    <i class="fa fa-globe"></i> <%=sociallink.url%> </a>
-
-                                            <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(sociallinks,$index)" data-dismiss="alert"></button>
-                                          </li>
-                                        </ul>
-                                        <form class="form-inline newLeadForm" role="form">
-                                              <div class="" style="">
-                                                <label class="sr-only" >{{_('Social link')}}</label>
-                                                <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"  ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"  class="form-control"  ng-model='sociallink.url' placeholder="{{_('Add a social link')}}" required>
-                                              </div>
-                                        </form>-->
                                         <ul ng-hide="isEmptyArray(sociallinks)" class="socialLinkssocialLiknsAbsolute"
                                             style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;">
                                             <li ng-repeat="sociallink in sociallinks" class="socialItem"
@@ -639,15 +598,6 @@
                                             </ul>
                                             <div class="row">
                                                 <div class="col-md-12  margin-bottom-10">
-                                                    <!--<p class⁼"lead"="">
-                                                       {{_('To add an outside email to this account, forward or BCC to:')}}
-                                                       <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                            111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                                        </a>
-                                                        <br>
-                                                        {{_('Or just add notes to remember what\'s important.')}}
-                                                        <br>
-                                                    </p>-->
                                                     <form id="addNote" class="ng-pristine ng-valid">
                                                         <div class="form-group">
                                                             <input class="form-control ng-pristine ng-valid"
@@ -1270,7 +1220,6 @@
 
                         <input type="submit" ng-click="pushElement(address,addresses,'addresses')" class="btn green"
                                ng-disabled="!address.country" value="{{ _('Add this address') }}">
-                        <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                     </div>
                 </form>
             </div>
@@ -1293,7 +1242,6 @@
                             <label class="col-md-3 control-label">{{ _("Tagline") }} </label>
 
                             <div class="col-md-9">
-                                <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
                                 <textarea class="form-control ng-pristine ng-valid" rows="3"
                                           ng-model="lead.tagline"></textarea>
 
@@ -1361,7 +1309,6 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                     <input ng-click="confirmaddress()" type="submit" class="btn green" value="Save">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
             </form>
         </div>

@@ -237,13 +237,6 @@ class SfImporterHelper:
             title=sf_lead['Title'],
             introduction=sf_lead['Description'],
             phones=phones,
-            # addresses = [iomessages.AddressSchema(
-            # 									country=sf_lead['MailingCountry']
-            # 									),
-            # 			iomessages.AddressSchema(
-            # 									country=sf_lead['OtherCountry']
-            # 									)
-            # 			],
             emails=[iomessages.EmailSchema(
                 email=sf_lead['Email']
             )]

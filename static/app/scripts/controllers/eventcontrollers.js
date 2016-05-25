@@ -75,7 +75,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
         $scope.mapAutocomplete = function () {
 
             $scope.addresses = {};
-            /*$scope.billing.addresses;*/
             Map.autocompleteCalendar($scope, "pac-input");
         }
 
@@ -97,7 +96,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         $scope.lunchMaps = function () {
 
-            // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
             window.open('http://www.google.com/maps/search/' + $scope.event.where, 'winname', "width=700,height=550");
 
         }
@@ -230,7 +228,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
         };
 
         $scope.renderMaps = function () {
-            // Map.render($scope);
             Map.destroy();
             if ($scope.event.where)  Map.searchLocation($scope, $scope.event.where);
         };
@@ -271,11 +268,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
 
             Event.patch($scope, params);
             // who is the parent of this event .hadji hicham 21-07-2014.
-
-            // params["parent"]="event";
-            // Event.permission($scope,params);
-            // Task.permission($scope,params);
-
 
             if ($scope.sharing_with.length > 0) {
 
@@ -361,10 +353,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
                 'role': role
 
 
-                // Create Contributor Service
-                // Create contributors.list api
-                //list all contributors after getting the task.
-
 
             }
 
@@ -424,8 +412,7 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
 
             Event.patch($scope, params);
         }
-        /*********************atash file to task *********************/
-        /**********************************************************/
+
 // HADJI HICHAM HH- 20/10/2014 - 10:34 .
 
         $scope.showAttachFilesPicker = function () {
@@ -471,12 +458,10 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
 
                 Attachement.attachfiles($scope, params);
 
-                //         $scope.$apply();
             }
 
         }
         /***************************************/
-//HADJI HICHAM -HH 21/10/2014. list of documents .
 
         $scope.listDocuments = function () {
 
@@ -488,7 +473,6 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
             }
             Event.get_docs($scope, params);
         }
-        /*************************************************************/
 
 
 // HKA 23.06.2014 update description
@@ -583,7 +567,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
 
 
-// var language = window.navigator.userLanguage || window.navigator.language;
 
 
         $scope.inProcess = function (varBool, message) {
@@ -613,7 +596,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
         }
         $scope.$watch('start_event_new', function (newValue, oldValue) {
             if (newValue != oldValue) {
-                // $scope.patchDate(newValue);
                 $scope.showStartsCalendar = false;
             }
 
@@ -621,16 +603,13 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         $scope.$watch('end_event_new', function (newValue, oldValue) {
             if (newValue != oldValue) {
-                // $scope.patchDate(newValue);
                 $scope.showEndsCalendar = false;
             }
 
         });
-        /*************************************************************************************/
 
         $scope.$watch('start_event_draw', function (newValue, oldValue) {
             if (newValue != oldValue) {
-                // $scope.patchDate(newValue);
                 $scope.start_event = moment(newValue).format('YYYY-MM-DDTHH:mm:00.000000');
 
                 $scope.showStartsCalendar = false;
@@ -640,13 +619,11 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         $scope.$watch('end_event_draw', function (newValue, oldValue) {
             if (newValue != oldValue) {
-                // $scope.patchDate(newValue);
                 $scope.end_event = moment(newValue).format('YYYY-MM-DDTHH:mm:00.000000');
                 $scope.showEndsCalendar = false;
             }
 
         });
-        /*************************************************************************************/
         $scope.newEventisClicked = function () {
             $scope.showEventInput = true;
             $scope.start_event = moment(Date.now()).format('YYYY-MM-DDTHH:mm:00.000000')
@@ -657,7 +634,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
             $scope.showEndsCalendar = true;
             $scope.locationShosen = false;
 
-            //$scope.$apply();
             $("#newEventModal").modal('show');
 
             $scope.newEventClicked = true;
@@ -674,7 +650,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
             var eventid = {'id': $route.current.params.eventId};
             var userGId = {'google_user_id': $scope.user_id};
             User.get_user_by_gid($scope, userGId);
-            // Event.list($scope);
             User.list($scope, {});
             ga('send', 'pageview', '/calendar');
 
@@ -684,7 +659,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
         $scope.mapAutocomplete = function () {
 
             $scope.addresses = {};
-            /*$scope.billing.addresses;*/
             Map.autocompleteCalendar($scope, "pac-input");
         };
 
@@ -699,11 +673,9 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         $scope.lunchMaps = function () {
 
-            // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
             window.open('http://www.google.com/maps/search/' + $scope.ioevent.where, 'winname', "width=700,height=550");
 
         }
-        /*************************************************************/
         $scope.refreshCurrent = function () {
             window.location.reload();
         };
@@ -757,7 +729,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                 timeZone: 'Africa/Algiers',
                 eventSources: [{
                     events: function (start, end, timezone, callback) {
-                        // events client table to feed the calendar .  // hadji hicham  08-07-2014 10:40
                         var events = [];
                         var params = {
                             'calendar_feeds_start': moment(start).format('YYYY-MM-DDTH:mm:00.000000'),
@@ -879,7 +850,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
 
                     if ($scope.permet_clicking) {
-                        // $scope.end_event=date.add('hours',1).format('YYYY-MM-DDTHH:mm:00.000000');
                         var eventObject = {
                             title: $scope.title_event
                         };
@@ -1013,7 +983,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                 eventClick: function (calEvent, jsEvent, view) {
 
 
-                    //runEffect();
                 },
 
                 //Triggered when event resizing begins.
@@ -1093,7 +1062,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                 $("#effect:visible").removeAttr("style").fadeOut();
             }, 1000);
         };
-        /*************************************************/
 // under the test
         $scope.listTags = function () {
         };
@@ -1298,7 +1266,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                     if (resp.items) {
                         $scope.filterResult(resp.items);
 
-                        //$scope.results = resp.items;
                         $scope.$apply();
                     }
                     ;
@@ -1382,8 +1349,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
 
 
-                // $scope.start_event=moment($scope.start_event_new).format('YYYY-MM-DDTHH:mm:00.000000');
-                // $scope.end_event=moment($scope.end_event_new).format('YYYY-MM-DDTHH:mm:00.000000');
 
                 var eventObject = {
                     title: ioevent.title
@@ -1393,7 +1358,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
                 eventObject.end = moment($scope.end_event_new)
 
 
-                //eventObject.allDay = $scope.allday;
 
                 eventObject.className = $(this).attr("data-class");
 
@@ -1550,7 +1514,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
             $('#cale0ndar').fullCalendar('updateEvent', events[0]);
 
 
-            ///  $('#calendar').fullCalendar( 'refetchEvents' );
         };
 
 // hadji hicham 14-07-2014 . update the event after we add .
@@ -1647,7 +1610,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
 
         $scope.renderMaps = function () {
             Map.render($scope);
-            //Map.searchLocation($scope,$scope.event.where);
         };
 
 
@@ -1696,8 +1658,6 @@ app.controller('EventListController', ['$scope', '$filter', '$route', 'Auth', 'N
             Contributor.insert($scope, params);
             $('#addContributor').modal('hide');
         };
-//HKA 02.12.2013 Select member
-        ;
 //HKA 02.12.2013 List contributors
         $scope.listContributors = function () {
             var params = {

@@ -53,9 +53,6 @@
                         <a class="headerBtn" title="Refresh" ng-click="runTheProcess();">
                             <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
-                        <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
                         <a class="headerBtn hide_md" title="{{ _('Export') }}" id="sample_editable_1_new_export"
                            ng-click="ExportCsvFile()">
                             <i class="fa fa-cloud-download"></i>
@@ -74,12 +71,6 @@
                            ng-hide=" selected_tasks.length==0">
                             + <i class="fa fa-tags"></i>
                         </a>
-                        <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
-                        <!-- <a class="headerBtn hide_md" title="Upload" ng-click="showImportModal()">
-                               <i class="fa fa-cloud-upload"></i>
-                         </a>-->
                         <a class="headerBtn" ng-hide=" selected_tasks.length==0"
                            title="{{ _('Assign Task to someone') }}" ng-click="assigneeModal()">
                             <i class="fa  fa-mail-forward"></i>
@@ -88,27 +79,6 @@
                            ng-click="editbeforedelete()">
                             <i class="fa fa-trash-o"></i>
                         </a>
-                        <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
-                        <!-- <div class="btn-group show_md" style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
-                          <a class="headerBtn" title="More" data-toggle="dropdown">
-                             <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
-                        <!--   {{ _("More")}}
-                  </a>
-                  <ul class="dropdown-menu drp-dwn-right">
-                    <li>
-                      <a class="hide_md" title="Upload" ng-click="showImportModal()"> 
-                        <i class="fa fa-cloud-upload"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a class="hide_md" title="Download"  ng-click="ExportCsvFile()"> 
-                         <i class="fa fa-cloud-download"></i>
-                      </a>
-                    </li>                                                         
-                  </ul>
-              </div> -->
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -267,47 +237,6 @@
         </tbody>
     </table>
 </div>
-<!--<div class="row subHeader">
-    <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
-
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
-
-            {%endfor%}
-           </ul>
-        </div>
-    </div>
-  <div class=" subHeaderContent">
-    <div class="pull-right sharebuttonDiv">
-
-                  <!-- <button class="btn jfk-button jfk-button-action" ng-click="save(account)">
-                    <i class="fa-cog"></i>
-                  </button> -->
-<!-- </div>
-    <h2 class="page-title">{{ _("Tasks") }} </h2>
-
-    <div class="btn-group pull-right">
-                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
-                  {{ _('Help ?')}}
-                  <i class="icon-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu drp-dwn-xs-left">
-                  <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
-<!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
-<!-- <li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
-                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
-                  
-                </ul>
-          </div>
-          
-  </div>
-</div>-->
 <div class="page-content">
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -401,152 +330,6 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="tabbable tabbable-custom">
-                                    <!--<ul class="nav nav-tabs">
-                  <li class="ng-tab" ng-class="{active: selectedTab == 1}"><a ng-click="selectedTab = 1;allTasks();">{{ _("All Tasks") }}</a></li>
-                  <li class="ng-tab" ng-class="{active: selectedTab == 2}"><a ng-click="selectedTab = 2;urgentTasks();" >{{ _("Urgent Tasks") }}</a></li>
-                  <li class="ng-tab t-md-menu" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
-                  <li class="dropdown ng-tab t-md-menu" id="header_task_bar">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-class="{active: selectedTab == 4}" data-hover="dropdown" data-close-others="true">
-                     {{ _("Assignees") }}
-                    </a>
-                    <ul class="dropdown-menu extended tasks">
-                      <li>
-                        <p>
-                          {{ _("Filter by assignee")}} 
-                        </p>
-                      </li>
-                      <li>
-                        <div ><ul  class="dropdown-menu-list scroller scrollList2">
-                          <li ng-repeat="user in users">
-                            <a ng-click="filterByAssignee('<%= user.google_user_id %>');">
-                              <span class="task">
-                                <span class="desc">
-                                  <%=user.google_display_name%>
-                                </span>
-                              </span>
-                            </a>
-                          </li>
-                        </ul><div class="slimScrollBar" style="background-color: rgb(161, 178, 189); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 171.23287671232876px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
-                      </li>
-                      <li class="external">
-                        <a href="" ng-click="gotoNewUser()">{{_('Add new user')}} <i class="m-icon-swapright"></i></a>
-                      </li>
-                    </ul>
-                </li>
-                 <li class="dropdown ng-tab t-md-menu" id="header_task_bar">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-class="{active: selectedTab == 5}" data-hover="dropdown" data-close-others="true">
-                     {{ _("Sort by") }}
-                    </a>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 90px;">
-                            <ul class="dropdown-menu-list scroller">
-                              <li>
-                                <a ng-click="orderBy('title');">
-                                  <span class="task">
-                                    <span class="desc">
-                                      {{ _("Title")}}
-                                    </span>
-                                  </span>
-                                </a>
-                              </li>
-                              <li>
-                                <a ng-click="orderBy('created_at');">
-                                  <span class="task">
-                                    <span class="desc">
-                                      {{ _("Created date")}}
-                                    </span>
-                                  </span>
-                                </a>
-                              </li>
-                              <li>
-                                <a ng-click="orderBy('due');">
-                                  <span class="task">
-                                    <span class="desc">
-                                      {{ _("Due date")}}
-                                    </span>
-                                  </span>
-                                </a>
-                              </li>
-                            </ul>
-                            <div class="slimScrollBar" style="background-color: rgb(161, 178, 189); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 171.23287671232876px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
-                       </li>
-                    </ul>
-                 </li>
-
-             
-                 <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;filterByAssignee('{{ME}}');">{{ _("My tasks") }}</a></li>
-                  <li class="ng-tab sm-menu hidden-lg hidden-md"><a ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>                   
-                  <li class="dropdown sm-menu-inv">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                      {{_('More')}} <i class="fa fa-angle-down"></i>
-                    </a>
-                    <ul class="dropdown-menu drp-dwn-xs-right" role="menu">
-                      <li class="ng-tab t-md-menu-inv" ng-class="{active: selectedTab == 3}"><a ng-click="selectedTab = 3;createdByMe('{{ME}}');">{{ _("Created by Me") }}</a></li>
-                      <li class="dropdown-submenu t-md-menu-inv"  ng-class="{active: selectedTab == 3}">
-                        <a  ng-click="selectedTab = 4;assignedToMe('{{ME}}');" tabindex="-1" href="#">Assignees</a>
-                        <ul class="dropdown-menu drp-dwn-right">
-                            <li>
-                              <div ><ul  class="dropdown-menu-list scroller scrollList2">
-                                <li ng-repeat="user in users">
-                                  <a ng-click="filterByAssignee('<%= user.google_user_id %>');">
-                                    <span class="task">
-                                      <span class="desc">
-                                        <%=user.google_display_name%>
-                                      </span>
-                                    </span>
-                                  </a>
-                                </li>
-                              </ul><div class="slimScrollBar" style="background-color: rgb(161, 178, 189); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 171.23287671232876px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
-                            </li>
-                            <li class="external">
-                              <a href="" ng-click="gotoNewUser()">{{_('Add new user')}} <i class="m-icon-swapright"></i></a>
-                            </li>
-                        </ul>
-                      </li>
-                       <li class="dropdown-submenu t-md-menu-inv"  ng-class="{active: selectedTab == 3}">
-                        <a  ng-click="selectedTab = 4;assignedToMe('{{ME}}');" tabindex="-1" href="#">{{_('Sort by')}}</a>
-                        <ul class="dropdown-menu drp-dwn-right">
-                            <li>
-                        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 90px;">
-                            <ul class="dropdown-menu-list scroller">
-                             <li>
-                                <a ng-click="orderBy('title');">
-                                  <span class="task">
-                                    <span class="desc">
-                                      {{ _("Title")}}
-                                    </span>
-                                  </span>
-                                </a>
-                              </li>
-                              <li>
-                                <a ng-click="orderBy('created_at');">
-                                  <span class="task">
-                                    <span class="desc">
-                                      {{ _("Created date")}}
-                                    </span>
-                                  </span>
-                                </a>
-                              </li>
-                              <li>
-                                <a ng-click="orderBy('due');">
-                                  <span class="task">
-                                    <span class="desc">
-                                      {{ _("Due date")}}
-                                    </span>
-                                  </span>
-                                </a>
-                              </li>
-                            </ul>
-                            <div class="slimScrollBar" style="background-color: rgb(161, 178, 189); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 171.23287671232876px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
-                         </li>
-                        </ul>
-                      </li>
-                      <li class="ng-tab t-lg-menu-inv" ng-class="{active: selectedTab == 6}"><a ng-click="selectedTab = 6;filterByAssignee('{{ME}}');">{{ _("My tasks") }}</a></li>
-                       <li class="ng-tab t-lg-menu-inv hidden-lg hidden-md"><a ng-click="showTagFilterCard();">{{ _("Filter by Tags") }}</a></li>
-                    </ul>
-                  </li>
-                </ul>-->
                                 </div>
                             </div>
                         </div>
@@ -566,61 +349,6 @@
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <!--<li ng-show="tasks" class="task-actions taskCard list-group-item task-actions">
-                                     <div class="row">
-                                     <div class="col-md-12">
-                                       <form id="task_actions" class="form-inline" role="form">
-                                       <div class="row">
-                                      <!--  <label class="col-xs-1  col-md-1">
-                                           <input title='{{ _("Select Task")}}' type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)">
-                                       </label> -->
-                                                <!-- check box -->
-                                                <!-- <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                                                   <div class="customCheckbox">
-                       <input  title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="isSelectedAll" ng-click="select_all_tasks($event)" class="checkbox" id="taskCheckAll">
-                       <label for="taskCheckAll" class="labelElement">
-                         <span class="check"></span>
-                         <span class="box"></span>
-                       </label>
-                   </div>
-                   </label>
-                                                <!-- end -->
-                                                <!--<div class="col-xs-10  col-md-10">
-                                        <button  title='{{ _("Close Task")}}' class="btn btn-sm btn-default task_action" ng-click="beforecloseTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-lock"></i>
-                                          <span class="btn-text">
-                                            {{_('Close')}}
-                                          </span>
-                                        </button>
-                                         <button  title='{{ _("Reopen Task")}}' class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-unlock"></i>
-                                        <span class="btn-text">
-                                        {{ _('Reopen')}}
-                                        </span>
-                                        </button>
-                                        <button title='{{ _("Add Tags")}}' ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                        <i class="fa fa-tags"></i>
-                                         <span class="btn-text">
-                                            {{ _('Tags')}}
-                                         </span>
-                                        </button>
-                                        <button title='{{ _("Assign someone to Task")}}' ng-click="assigneeModal()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-mail-forward"></i>
-                                           <span class="btn-text">
-                                            {{ _('Assignee')}}
-                                           </span>
-                                        </button>
-                                        <button title='{{ _("Delete Task")}}' ng-click="editbeforedelete()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selected_tasks.length==0}">
-                                          <i class="fa fa-trash-o"></i>
-                                           <span class="btn-text">
-                                            {{ _('Delete')}}
-                                           </span>
-                                        </button>
-                                        </div>
-                                      </form>
-                                        </div>
-                                    </div>
-                                  </li>-->
                                                 <li class="labelsCardElement taskCard list-group-item"
                                                     ng-show="showTagsFilter">
                                                     <button type="button" class="close" aria-hidden="true"
@@ -714,9 +442,7 @@
                                                         </ul>
                                                     </div>
                                                     <div class="row">
-                                                        <!--   <label class="col-md-1 col-xs-1">
-                                                              <input type="checkbox" ng-click="select_task(task,$index,$event)" ng-checked="isSelected()">
-                                                          </label> -->
+
                                                         <label class="col-xs-1  col-md-1"
                                                                style=" text-align: center; padding-left: 23px; ">
                                                             <div class="customCheckbox">
@@ -928,7 +654,6 @@
                                                                 ng-show="task.about">{{ _('related to') }}<a
                                                                 href="<%= getUrl(task.about.kind,task.about.id); %>">
                                                             <%= task.about.name %></a></span>
-                                                            <!--<span>Closed by:<a href="#">Transline</a></span>-->
                                                         </p>
                                                     </div>
                                                 </li>
@@ -1080,7 +805,6 @@
                                                                 ng-show="task.about">{{ _('related to') }}<a
                                                                 href="<%= getUrl(task.about.kind,task.about.id); %>">
                                                             <%= task.about.name %></a></span>
-                                                            <!--<span>Closed by:<a href="#">Transline</a></span>-->
                                                         </p>
                                                     </div>
                                                 </li>
@@ -1232,7 +956,6 @@
                                                                 ng-show="task.about">{{ _('related to') }}<a
                                                                 href="<%= getUrl(task.about.kind,task.about.id); %>">
                                                             <%= task.about.name %></a></span>
-                                                            <!--<span>Closed by:<a href="#">Transline</a></span>-->
                                                         </p>
                                                     </div>
                                                 </li>
@@ -1381,7 +1104,6 @@
                                                                 task.created_by.display_name %></a></span> <span
                                                                 ng-show="task.about">{{ _('related to') }}<a href="#">
                                                             <%= task.about.name %></a></span>
-                                                            <!--<span>Closed by:<a href="#">Transline</a></span>-->
                                                         </p>
                                                     </div>
                                                 </li>
@@ -1532,7 +1254,6 @@
                                                                 <%= task.created_by.display_name %></a></span> <span
                                                                 ng-show="task.about">{{ _('related to') }}<a href="#">
                                                             <%= task.about.name %></a></span>
-                                                            <!--<span>Closed by:<a href="#">Transline</a></span>-->
                                                         </p>
                                                     </div>
                                                 </li>
@@ -1696,7 +1417,6 @@
                   </span>
 
                                     </div>
-                                    <!--    <input type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()"> -->
                                     <div class="customCheckbox CustomSmallCheck pull-right" id="checky_<%=$index%>"
                                          style="margin-right:8px">
                                         <input ng-show="accounts" title="Select Task" style=" padding-top: 4px; "
@@ -1708,9 +1428,6 @@
                                         </label>
                                     </div>
 
-                                    <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                                       <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-                                     </span>-->
 
 
                                     <form ng-submit="doneEditTag(tag_item)"
@@ -1724,14 +1441,9 @@
                                 </div>
                             </li>
                         </ul>
-                        <!--     <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
-                            <a ng-click="" class="btn-link addAnotherPhone">
-                              <i class="fa fa-tags"></i>  {{_('Add a new label')}}
-                            </a>
-                    </li> -->
+
                     </div>
                     <form class=" newTagForm" role="form">
-                        <!--    <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button> -->
                         <div class="row">
                             <div class="col-md-12 form-group">
 
@@ -1755,10 +1467,6 @@
                             </div>
                         </div>
                     </form>
-                    <!--     <div class="form-group" ng-show="tags">
-                      <button class="btn btn-default btn-block" ng-click="manage_tags=!manage_tags;manage()"> {{ _('Manage Tags')}}
-                      </button>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -1781,7 +1489,6 @@
                 </li>
             </ul>
         </div>
-        <!--h3 class="pagination pull-right" ng-show="isLoading">{{ _('Loading') }}...</h3-->
     </div>
     <!-- END PAGE CONTENT-->
 
@@ -1807,14 +1514,10 @@
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
                 <input ng-click="deleteTaskonList()" type="submit" class="btn red" value="{{ _('Delete this Task') }}">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
     </div>
-</div>
-<!-- -->
-<!-- export data on csv file -->
 
 <div class="modal fade customPopUp" id="TakesFewMinutes" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">

@@ -145,7 +145,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         }
 
         document.getElementById("some-textarea").value = $scope.emailSignature;
-        //$scope.showPage=true;
         $scope.tag.color = {'name': 'green', 'color': '#BBE535'};
         $scope.redirectTo = function (url) {
             window.location.replace('/#/search/type:contact tags:' + url);
@@ -288,15 +287,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
         };
         $scope.leadConverted = function (oldId, newId) {
-            // angular.forEach($scope.selectedCards, function (selected_lead) {
-            //     if (selected_lead.id == oldId) {
-                    
-            //         $scope.selectedCards.splice($scope.selectedCards.indexOf(selected_lead), 1);
-            //         $scope.leads.splice($scope.leads.indexOf(selected_lead), 1);
-            //     }
-            //     ;
-            // });
-            // $scope.apply();
             window.location.replace('#/contacts/');
         }
         // What to do after authentication
@@ -311,15 +301,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 
             }
 
-             /*for (var i=0;i<20;i++)
-               {
-                 params={'firstname':'test' + i,
-                         'lastname':'test'+i,
-                           'access':'public'}
-                 Lead.insert($scope,params)
-               }*/
-
-            
             $scope.checkScrollBar();
             var params = {'order': $scope.order, 'limit': 20};
             User.list($scope, {});
@@ -361,29 +342,13 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
 
         $scope.gotosendMail = function (email, lead) {
-            // $scope.email.body=$scope.emailSignature;
             $scope.leadToMail = lead;
             $scope.email.to = email;
             $('#testnonefade').modal("show");
             $scope.smallSendMail();
             document.getElementById("some-textarea").value = $scope.emailSignature;
         };
-        //$('#some-textarea').wysihtml5();
          $('#some-textarea').wysihtml5();
-        // $scope.switchwysihtml = function () {
-        //     if ($(".wysihtml5-toolbar").is(":visible")) {
-
-        //         $(".wysihtml5-toolbar").hide();
-        //         $(".wysihtml5-sandbox").addClass("withoutTools");
-
-        //     } else {
-
-        //         $(".wysihtml5-sandbox").removeClass("withoutTools")
-        //         $(".wysihtml5-toolbar").show();
-
-        //     }
-        //     ;
-        // }
 
         $scope.closeEmailModel = function () {
             $(".modal-backdrop").remove();
@@ -435,7 +400,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             $(".modal-backdrop").remove();
             
             $('#testnonefade').addClass("emailModalOnBottom");
-            //document.getElementById("some-textarea").value=$scope.emailSignature;
         }
         $scope.bigSendMail = function () {
             $('#testnonefade').removeClass("emailModalOnBottom");
@@ -487,15 +451,10 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
 
         $scope.removeTag = function (tag, lead) {
 
-
-            /*var params = {'tag': tag,'index':$index}
-
-             Edge.delete($scope, params);*/
             $scope.dragTagItem(tag, lead);
             $scope.dropOutTag();
         }
 
-        /***********************************************************/
         $scope.switchShow = function () {
             if ($scope.show == 'list') {
 
@@ -526,7 +485,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
             if (element.hasClass('waterfall')) {
                 $scope.selectedCards = [];
             };
-            /*$scope.selectedCards=[];*/
         };
         $scope.selectAll = function ($event) {
 
@@ -963,9 +921,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         };
 
 
-        /***********************************************
-         HKA 19.02.2014  tags
-         ***************************************************************************************/
         $scope.listTags = function () {
             var paramsTag = {'about_kind': 'Lead'}
             Tag.list($scope, paramsTag);
@@ -1031,13 +986,9 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                 var text = element.find(".with-color");
                 if ($scope.selected_tags.indexOf(tag) == -1) {
                     $scope.selected_tags.push(tag);
-                    /*element.css('background-color', tag.color+'!important');
-                     text.css('color',$scope.idealTextColor(tag.color));*/
 
                 } else {
-                    /*element.css('background-color','#ffffff !important');*/
                     $scope.selected_tags.splice($scope.selected_tags.indexOf(tag), 1);
-                    /*text.css('color','#000000');*/
                 }
                 ;
                 $scope.filterByTags($scope.selected_tags);
@@ -1163,7 +1114,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
         $scope.dragTag = function (tag) {
 
             $scope.draggedTag = tag;
-            // $scope.apply();
         };
         $scope.dropTag = function (lead, index) {
 
@@ -1214,7 +1164,6 @@ app.controller('LeadListCtrl', ['$scope', '$filter', 'Auth', 'Lead', 'Leadstatus
                         }
                         ;
                     });
-                    /* $scope.selectedCards=[];*/
                 }
                 ;
                 $scope.apply();
@@ -2388,8 +2337,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                         } else {
                             
                             if (resp.code == 401) {
-                                // $scope.refreshToken();
-                                
+
                                 $scope.isLoading = false;
                                 $scope.apply();
                             }
@@ -2596,7 +2544,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
         };
         $scope.edgeInserted = function () {
-            /* $scope.tags.push()*/
         };
         $scope.removeTag = function (tag, $index) {
 
@@ -2650,7 +2597,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             Task.permission($scope, params);
 
 
-            // $('#sharingSettingsModal').modal('hide');
 
             if ($scope.sharing_with.length > 0) {
 
@@ -2692,7 +2638,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.deleteEvent = function (eventt) {
             var params = {'entityKey': eventt.entityKey};
             Event.delete($scope, params);
-            //$('#addLeadModal').modal('show');
         }
         $scope.eventDeleted = function (resp) {
         };
@@ -2703,7 +2648,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                 $scope.newTaskform = true;
             } else {
                 if (task.title != null) {
-                    //  $('#myModal').modal('hide');
                     if (task.due) {
                         
                         
@@ -2786,11 +2730,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
         }
 
-// HADJI HICHAM 31/05/2015
-//auto complete 
-
-
-//auto complete 
 
         var invitesparams = {};
         $scope.inviteResults = [];
@@ -2878,8 +2817,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         }
 
 
-        /***************reminder**************************/
-
         $scope.deletePicked = function () {
             $scope.something_picked = false;
             $scope.remindme_show = "";
@@ -2920,7 +2857,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             }
 
         }
-        /*******************************************/
         $scope.timezoneChosen = $scope.timezone;
         $('#timeZone').on('change', function () {
 
@@ -2928,11 +2864,8 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             $scope.timezoneChosen = this.value;
         });
 
-        /********************************************/
-        //HKA 10.11.2013 Add event
         $scope.addEvent = function (ioevent) {
 
-            // $scope.allday=$scope.alldaybox;  
 
             if (ioevent.title != null && ioevent.title != "") {
 
@@ -2970,14 +2903,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
                     if (ioevent.starts_at) {
                         if (ioevent.ends_at) {
-                            // params ={'title': ioevent.title,
-                            //         'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                            //         'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                            //         'where': ioevent.where,
-                            //         'parent':$scope.lead.entityKey,
-                            //         'allday':"false",
-                            //         'access':$scope.lead.access
-                            // }
                             params = {
                                 'title': ioevent.title,
                                 'starts_at': $filter('date')(ioevent.starts_at, ['yyyy-MM-ddTHH:mm:00.000000']),
@@ -2998,15 +2923,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                             }
 
                         } else {
-                            // params ={
-                            //   'title': ioevent.title,
-                            //         'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                            //         'where': ioevent.where,
-                            //         'parent':$scope.lead.entityKey,
-                            //         'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
-                            //         'allday':"false",
-                            //         'access':$scope.lead.access
-                            // }
 
                             params = {
                                 'title': ioevent.title,
@@ -3058,7 +2974,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             }
         }
 
-//*************************************************/
         $scope.cancelAddOperation = function () {
             $scope.timezonepicker = false;
             $scope.start_event = "";
@@ -3459,12 +3374,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
                 $.each(data.docs, function (index) {
                     
-                    /*
-                     {'about_kind':'Account',
-                     'about_item': $scope.account.id,
-                     'title':newdocument.title,
-                     'mimeType':mimeType };
-                     */
                     var item = {
                         'id': data.docs[index].id,
                         'title': data.docs[index].name,
@@ -3509,10 +3418,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             }
         }
         $scope.addAddress = function (address) {
-            //Map.render($scope);
-            //renderMaps();
             Map.searchLocation($scope, address);
-            //Map.searchLocation($scope,address);
 
             $('#addressmodal').modal('hide');
             $scope.address = {};
@@ -3567,8 +3473,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
             
             Map.destroy();
 
-            //Map.searchLocation($scope,value);
-            //Map.searchLocation($scope,address);
             if (kind == 'Lead') {
                 if (name == 'firstname') {
                     params = {
@@ -3813,16 +3717,10 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         };
         $scope.editbeforedeleteopp = function () {
             
-            // $scope.selectedOpportunity = opportunity;
             $('#BeforedeleteOpportunity').modal('show');
         };
         $scope.deleteopportunity = function () {
             
-            // $scope.relatedOpp = true;
-            // var params = {'entityKey': $scope.opportunities[$scope.selectedOpportunity].entityKey};
-            // Opportunity.delete($scope, params);
-            // $('#BeforedeleteOpportunity').modal('hide');
-            // $scope.selectedOpportunity = null;
             var params={};
             angular.forEach($scope.selectedOpps, function (opp) {
                     params = {'entityKey': opp.entityKey};
@@ -3849,8 +3747,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
         $scope.waterfallTrigger = function () {
 
 
-            /* $('.waterfall').hide();
-             $('.waterfall').show();*/
             $(window).trigger("resize");
             if ($(".chart").parent().width() == 0) {
                 var leftMargin = 210 - $(".chart").width();
@@ -3964,7 +3860,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                 } else {
 
                     if (resp.code == 401) {
-                        // $scope.refreshToken();
 
                         $scope.linkedLoader = false;
                         $scope.apply();
@@ -4089,7 +3984,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     } else {
                         
                         if (resp.code == 401) {
-                            // $scope.refreshToken();
                             $scope.isLoading = false;
                             $scope.apply();
                         }
@@ -4123,8 +4017,7 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
                     } else {
                         
                         if (resp.code == 401) {
-                            // $scope.refreshToken();
-                            
+
                             $scope.isLoading = false;
                             $scope.$apply();
                         }
@@ -4184,7 +4077,6 @@ app.controller('LeadShowCtrl', ['$scope', '$http','$filter', '$route', 'Auth', '
 
         }
         $scope.saveTwitterUrl = function (shortProfile) {
-            //$scope.clearContact();
             $scope.twList = [];
             $scope.twShortProfiles = [];
             $scope.twProfile = {};
@@ -4491,7 +4383,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         }
         };
         $scope.saveLinkedinData=function(data){
-            //$scope.clearLead();
             $scope.inList=[];
             var params={
               'firstname':data.firstname,
@@ -4589,7 +4480,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             Customfield.list($scope,{related_object:related_object});
         }
         $scope.listResponse=function(items,related_object){
-            //infonodes.customfields
             $scope[related_object].customfields=items;
             var additionalCustomFields=[];
             angular.forEach($scope.infonodes.customfields, function (infonode) {
@@ -4671,7 +4561,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         };
 // for google map
         $scope.mapAutocomplete = function () {
-            //$scope.addresses = $scope.account.addresses;
             Map.autocomplete($scope, "pac-input");
         }
 
@@ -4975,9 +4864,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             $scope.apply();
         }
 
-        /***********************************************
-         HKA 19.02.2014  tags
-         ***************************************************************************************/
         $scope.listTags = function () {
             var paramsTag = {'about_kind': 'Lead'}
             Tag.list($scope, paramsTag);
@@ -5062,13 +4948,9 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 var text = element.find(".with-color");
                 if ($scope.selected_tags.indexOf(tag) == -1) {
                     $scope.selected_tags.push(tag);
-                    /*element.css('background-color', tag.color+'!important');
-                     text.css('color',$scope.idealTextColor(tag.color));*/
 
                 } else {
-                    /* element.css('background-color','#ffffff !important');*/
                     $scope.selected_tags.splice($scope.selected_tags.indexOf(tag), 1);
-                    /* text.css('color','#000000');*/
                 }
                 ;
                 $scope.filterByTags($scope.selected_tags);
@@ -5267,7 +5149,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     } else {
                         
                         if (resp.code == 401) {
-                            // $scope.refreshToken();
                             $scope.isLoading = false;
                             $scope.apply();
                         }
@@ -5302,8 +5183,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                         } else {
                             
                             if (resp.code == 401) {
-                                // $scope.refreshToken();
-                                
+
                                 $scope.isLoading = false;
                                 $scope.$apply();
                             }
@@ -5378,7 +5258,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     } else {
                         
                         if (resp.code == 401) {
-                            // $scope.refreshToken();
                             $scope.isLoading = false;
                             $scope.apply();
                         }
@@ -5412,8 +5291,7 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                     } else {
                         
                         if (resp.code == 401) {
-                            // $scope.refreshToken();
-                            
+
                             $scope.isLoading = false;
                             $scope.$apply();
                         }
@@ -5466,7 +5344,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
         }
         $scope.saveTwitterUrl = function (shortProfile) {
             
-            //$scope.clearContact();
             $scope.twList = [];
             $scope.twShortProfiles = [];
             $scope.twProfile = {};
@@ -5552,7 +5429,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             }
         }
         $scope.saveLinkedinUrl = function (shortProfile) {
-            //$scope.clearContact();
             $scope.inList = [];
             $scope.inShortProfiles = [];
             $scope.inProfile = {};
@@ -5560,10 +5436,8 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
             $scope.sociallink = {'url': $scope.inProfile.url};
             $scope.savedSociallink = $scope.inProfile.url;
             $scope.pushElement($scope.sociallink, $scope.sociallinks, 'sociallinks');
-            /*if (!$scope.imageSrc) {*/
             $scope.imageSrc = $scope.inProfile.profile_picture;
             $scope.profile_img.profile_img_url = $scope.inProfile.profile_picture;
-            /* };                           */
             $scope.lead.source = 'Linkedin';
             $scope.lead.industry = ''
             if (!$scope.lead.title) {
@@ -5576,8 +5450,6 @@ app.controller('LeadNewCtrl', ['$scope', 'Auth', 'Lead', 'Leadstatus', 'Tag', 'E
                 }
             }
             if ($scope.inProfile.locality != '' && $scope.inProfile.locality != null) {
-                //$scope.addressModel=$scope.inProfile.locality;
-                
                 if (!$scope.addressModel) {
                     $scope.addressModel = $scope.inProfile.locality;
                 } else {

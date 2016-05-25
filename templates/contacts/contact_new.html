@@ -296,12 +296,6 @@
                                                         ng-click="deleteInfos(addresses,$index)"
                                                         data-dismiss="alert"></button>
                                             </li>
-                                            <!-- <a href="#addressmodal"
-                                               class="btn-link addAnotherPhone"
-                                               data-toggle="modal">
-                                               <i class="icon-plus"></i>{{_('Add a new address')}}
-                                             </a>
-                                             </li>-->
                                         </ul>
                                         <div class="row">
                                             <div class="col-md-12">
@@ -312,8 +306,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div id="gmap_canvas" style="width:100%;height:300px;"></div>
-                                         end address -->
 
 
                                     </div>
@@ -395,20 +387,7 @@
                                         <h3>{{ _('Social links') }} <i class="fa fa-twitter"></i>
                                             <i class="fa fa-facebook-square"></i>
                                             <i class="fa fa-linkedin-square"></i></h3>
-                                        <!--<ul class="list-unstyled contact-infos infoslist" >
-                                          <li ng-repeat="sociallink in sociallinks">
 
-                                            <a  href="<%=prepareUrl(sociallink.url)%>" target="_blank">    <i class="fa fa-globe"></i> <%=sociallink.url%> </a>
-
-                                            <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(sociallinks,$index)" data-dismiss="alert"></button>
-                                          </li>
-                                        </ul>
-                                        <form class="form-inline newLeadForm" role="form">
-                                              <div class="" style="">
-                                                <label class="sr-only" >{{_('Social link')}}</label>
-                                                <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"  ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"  class="form-control"  ng-model='sociallink.url' placeholder="{{_('Add a social link')}}" required>
-                                              </div>
-                                        </form>-->
                                         <ul ng-hide="isEmptyArray(sociallinks)" class="socialLinkssocialLiknsAbsolute"
                                             style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;">
                                             <li ng-repeat="sociallink in sociallinks" class="socialItem"
@@ -473,15 +452,6 @@
                                             </ul>
                                             <div class="row">
                                                 <div class="col-md-12  margin-bottom-10">
-                                                    <!--<p class⁼"lead"="">
-                                                       {{_('To add an outside email to this account, forward or BCC to:')}}
-                                                       <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                            111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                                        </a>
-                                                        <br>
-                                                        {{_('Or just add notes to remember what\'s important.')}}
-                                                        <br>
-                                                    </p>-->
                                                     <form id="addNote" class="ng-pristine ng-valid">
                                                         <div class="form-group">
                                                             <input class="form-control ng-pristine ng-valid"

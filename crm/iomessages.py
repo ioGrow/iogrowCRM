@@ -119,8 +119,6 @@ class UserPatchRequest(messages.Message):
     week_start = messages.StringField(24)
     emailSignature = messages.StringField(25)
 
-    # LicenseStatus= messages.StringField(10)
-    # nmbrOfLicenses= messages.StringField(11)
 
 
 class UserSignInRequest(messages.Message):
@@ -146,30 +144,12 @@ class InvitedUserSchema(messages.Message):
     invited_by = messages.StringField(2)
     updated_at = messages.StringField(3)
     stripe_id = messages.StringField(4)
-    # LicenseStatus= messages.StringField(4)
-    # nmbrOfLicenses= messages.StringField(5)
 
 
 class customerRequest(messages.Message):
     id = messages.StringField(1)
 
 
-# hadji hicham . 25/08/2014 . charges Schema.
-# class subscriptionSchema(messages.Message):
-#     id = messages.StringField(1)
-#     current_period_start = messages.StringField(2)
-#     current_period_end = messages.StringField(3)
-#     status = messages.StringField(4)
-#     plan = messages.StringField(5)
-
-
-# class customerResponse(messages.Message):
-#     customer_id = messages.StringField(1)
-#     email = messages.StringField(2)
-#     google_public_profile_photo_url = messages.StringField(3)
-#     google_display_name = messages.StringField(4)
-#     google_user_id = messages.StringField(5)
-#     subscriptions = messages.MessageField(subscriptionSchema, 6, repeated=True)
 
 
 class UserListSchema(messages.Message):

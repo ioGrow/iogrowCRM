@@ -59,22 +59,10 @@
                            ng-click="checkPermissions({{ ME }})">
                             <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
-                        <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>
-                        <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>
-                        <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
                         <a class="headerBtn" title="Add tags" ng-click="showAssigneeTags()"
                            ng-hide=" selectedCards.length==0">
                             + <i class="fa fa-tags"></i>
                         </a>
-                        <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
                         <a class="headerBtn hide_md" id="sample_editable_1_new" title="Upload"
                            ng-click="showImportModal()">
                             <i class="fa fa-cloud-upload"></i>
@@ -86,13 +74,9 @@
                            ng-click="editbeforedeleteselection()">
                             <i class="fa fa-trash-o"></i>
                         </a>
-                        <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
                         <div class="btn-group show_md"
                              style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                             <a class="headerBtn" title="More" data-toggle="dropdown">
-                                <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
                                 {{ _("More") }}
                             </a>
                             <ul class="dropdown-menu drp-dwn-right">
@@ -358,14 +342,11 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                     <input ng-click="save(account)" type="submit" class="btn green" value="{{ _('Add this account') }}">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled-->
 
                 </div>
                 </form>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
     </div>
 
     <div ng-show="isSignedIn" class="listContainer">
@@ -376,74 +357,7 @@
             <div class="col-md-12">
 
                 <div class="row subHeaderContainer">
-                    <!--<div  class="task-actions taskCard list-group-item task-actions">
-                         <div class="row">
-                         <div class="col-md-12">
-                           <form id="task_actions" class="form-inline" role="form">
-                           <div class="row">
-                           <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                            <div class="customCheckbox" class="form-group">
-                                <input ng-show="accounts" title="Select Task" style=" padding-top: 4px; " type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox" id="accountCheckAll">
-                                <label for="accountCheckAll" class="labelElement">
-                                  <span class="check"></span>
-                                  <span class="box"></span>
-                                </label>
-                            </div>
-                           </label>
-                           <div class="col-xs-10 col-sm-11 col-md-11 actionsbtnDiv">
-                                 <!-- <button ng-show="accounts"  title="Reopen Task" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selectedCards.length==0}">
-                                  <i class="fa fa-unlock"></i>
-                                  <span class="btn-text">
-                                    Export
-                                  </span>
-                                  </button>-->
-                    <!--  <button ng-show="accounts" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selectedCards.length==0}">
-                      <i class="fa fa-tags"></i>
-                       <span class="btn-text">
-                        Tags
-                       </span>
-                      </button>
-                     <!-- <button title="Assign someone to Task" ng-click="assigneeModal()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selected_tasks.length==0}">
-                        <i class="fa fa-mail-forward"></i>
-                         <span class="btn-text">
-                        Send mail
-                         </span>
-                      </button>-->
-                    <!--<button ng-show="accounts" title="Delete Accounts" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action " ng-class="{disabled: selectedCards.length==0}">
-                  <i class="fa fa-trash-o"></i>
-                   <span class="btn-text">
-                  Delete
-                   </span>
-                </button>
-                <div class="pull-right newbtnactionsbar">
-                     <a href="/#/accounts/new" id="new_account" class="btn red newBtn" style=" margin-bottom: 0px; ">
-                        {{_('New Account')}}
-                     </a>
-                         <div class="btn-group">
-
-                                  <button ng-click="ExportCsvFile()" id="sample_editable_1_new" class="btn red" style="margin-left:3px;">
-                                  <i class="fa fa-download"></i>
-                                </button>
-                           </div>
                 </div>
-        </div>
-        
-      </div>
-    </form>
-   </div>
- </div>
-</div>-->
-                </div>
-                <!-- <form action="/stripe" method="POST">
-                  <script
-                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                    data-key="pk_test_4XcXjg4Qggo2HeVWnGaXwGDB"
-                    data-amount="2000"
-                    data-name="Demo Site"
-                    data-description="2 widgets ($20.00)"
-                    data-image="/128x128.png">
-                  </script>
-                </form> -->
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
@@ -493,15 +407,6 @@
                                                                 <span class="box"></span>
                                                             </label>
                                                         </div>
-                                                        <!-- <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(account)" ng-click="selectCardwithCheck($event,$index,account)" >-->
-                                                        <!-- <div class="customCheck" class="form-group">
-                                                           <input title="Select all Users" type="checkbox" ng-checked="isSelectedCard(account)" ng-click="selectCardwithCheck($event,$index,account)" id="checkMe_<%=$index%>">
-                                                             <label for="check-me" class="labelElement">
-                                                               <span></span>
-                                                               <span class="check"></span>
-                                                               <span class="box"></span>
-                                                             </label>
-                                                         </div>-->
 
                                                     </td>
                                                     <td>
@@ -682,7 +587,6 @@
                                                 </div>
                                                 <div class="head">
                                                     <div class="pic">
-                                                        <!-- <a href="/#/accounts/show/<%= account.id %>" class="startup-link" title="account.name">-->
                                                         <img ng-hide="account.logo_img_id||account.logo_img_url"
                                                              alt="account.name" class="img-resonsive img-thumbnail"
                                                              src="/static/src/img/default_company.png">
@@ -692,7 +596,6 @@
                                                              ng-src="<%=(account.logo_img_id) ? 'https://docs.google.com/uc?id='+account.logo_img_id : account.logo_img_url%>"
                                                              data-hasqtip="2">
 
-                                                        <!--</a>-->
                                                     </div>
                                                     <div class="text">
                                                         <div class="name ">
@@ -710,9 +613,6 @@
                           <a href="/#/search/type:Account <%=account.industry%>"> - <%= account.industry %>
                           </a>
                     </span>
-                                                            <!--<span>
-                                                              <%=fromNow(account.updated_at)%>
-                                                            </span>-->
                                                         </div>
                                                     </div>
                                                     <div class="clearfix"></div>
@@ -800,7 +700,7 @@
                 <div class="portlet showCard customPortlet">
                     <div class="portlet-title">
                         <div class="caption">
-                            <!-- class="fa fa-reorder"--><i class="fa fa-tags"
+                            <i class="fa fa-tags"
                                                             style="font-size: 16px;"></i>{{ _('Tags') }}
                         </div>
                     </div>
@@ -824,8 +724,6 @@
                       <%= tag_item.name %>
                   </span>
                                         </div>
-                                        <!--     <input type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)" ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;" class="pull-right customCheck" ng-checked="isSelected()"> -->
-
                                         <div class="customCheckbox CustomSmallCheck pull-right" style="margin-right:8px"
                                              id="checky_<%=$index%>">
                                             <input ng-show="accounts" title="Select Task" style=" padding-top: 4px; "
@@ -850,13 +748,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <!--          <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
-                <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
-                </a>
-           </li> -->
                         <form class=" newTagForm" role="form">
-                            <!--    <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button> -->
                             <div class="row">
                                 <div class="col-md-12 form-group">
 
@@ -880,11 +772,6 @@
                                 </div>
                             </div>
                         </form>
-                        <!--     <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">
-              {{_('Manage Tags')}}
-              </button>
-        </div> -->
                     </div>
                 </div>
             </div>
@@ -911,14 +798,12 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                     <input ng-click="deleteSelection()" type="submit" class="btn red" value="Delete">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!--     ****************************   -->
     <div id="BeforedeleteAccount" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -1271,16 +1156,6 @@
                             <label ng-show="selectedPermisssions">{{ _("The owner is:") }}</label>
                         </div>
                         <hr ng-show="selected_access!='public' && selectedPermisssions"/>
-                        <!--<div ng-show="selectedPermisssions" class='' id="collaborators" ng-hide="lead.access=='public'">
-                        <p>{{ _("Collaborators:")}}</p>
-                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
-                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
-                            <button class ="btn" ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ME}}" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
-                        </div>
-
-                    </div>
-                    <hr ng-show="selectedPermisssions"/>-->
 
                         <div ng-show="selected_access!='public' && selectedPermisssions">
                             <p>{{ _("Invite collaborators:") }}</p>
@@ -1360,11 +1235,5 @@
                 $('.cardElement').css({'height': '152px'});
             }
         });
-        /*var cw = $('#card_0').width();
-         $('.cardElement').css({'height':(cw/1.618)+'px'});
-
-         */
         $('.textfill').textfill({debug: true, maxFontPixels: 16});
-        /*$('.labelElement').click(function() {
-         }); */
     </script>

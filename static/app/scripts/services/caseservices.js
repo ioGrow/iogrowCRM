@@ -12,8 +12,7 @@ accountservices.factory('Case', function($rootScope) {
             if(!resp.code){
             
                $scope.casee = resp;
-               //$scope.casee.current_status.status = resp.current_status.name;
-               
+
                $scope.isContentLoaded = true;
                // list infonodes
                 var renderMap = false;
@@ -137,16 +136,9 @@ accountservices.factory('Case', function($rootScope) {
                     $scope.events = [];
                   }
 
-               // $scope.listTopics(resp);
-               // $scope.listTasks();
-               // $scope.listEvents();
-               // $scope.listDocuments();
 
                document.title = "Case: " + $scope.casee.name ;
-               // Call the method $apply to make the update on the scope
-                     // $scope.inProcess(false);
-                     // $scope.apply();
-                     $scope.inProcess(false);  
+                     $scope.inProcess(false);
                         $scope.apply();
 
             }else {
@@ -195,7 +187,6 @@ accountservices.factory('Case', function($rootScope) {
                  $scope.casepagination.prev = $scope.caseCurrentPage > 1;
                  if (resp.nextPageToken){
                    var nextPage = $scope.caseCurrentPage + 1;
-                   // Store the nextPageToken
                    $scope.casepages[nextPage] = resp.nextPageToken;
                    $scope.casepagination.next = true;
 
@@ -272,7 +263,6 @@ accountservices.factory('Case', function($rootScope) {
           if (resp.error && resp.error.code == 412){
               $('#payment_modal').modal('show');
               return
-              //window.location.replace($rootScope.subscription_url);
           }
          if(!resp.code){
           if ($scope.cases == undefined){
@@ -360,29 +350,14 @@ accountservices.factory('Case', function($rootScope) {
 };
         Case.export = function ($scope, params) {
           trackMixpanelAction('CASE_EXPORT');
-        //$("#load_btn").attr("disabled", "true");
-        //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
         gapi.client.crmengine.cases.export(params).execute(function (resp) {
-            if (!resp.code) {
-                //$scope.DataLoaded(resp.items)
-
-            } else {
-
-            }
         });
     }
     Case.export_key = function ($scope, params) {
-        //$("#load_btn").attr("disabled", "true");
-        //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
         gapi.client.crmengine.cases.export_keys(params).execute(function (resp) {
-            if (!resp.code) {
-                //$scope.DataLoaded(resp.items)
 
-            } else {
-
-            }
         });
     }
 

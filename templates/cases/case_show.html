@@ -67,8 +67,7 @@
                             <div class="btn-group show_md"
                                  style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                                 <a class="headerBtn" title="More" data-toggle="dropdown">
-                                    <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
-                                    More
+                                    {{ _("More") }}
                                 </a>
                                 <ul class="dropdown-menu drp-dwn-right">
                                     <li>
@@ -119,7 +118,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <a ng-show="selectedTab==2" class="btn red newAccountBtnOnscroll oppNewBtn pull-right"
-                       style="/* margin-top: -4px; */" ng-click="showEdit=!showEdit">
+                       style="" ng-click="showEdit=!showEdit">
                         <span ng-hide="showEdit"><i class="fa fa-pencil"></i> Edit</span>
                         <span ng-show="showEdit"><i class="fa fa-save"></i> Save</span>
                     </a>
@@ -565,12 +564,6 @@
                                         <a ng-click="selectedTab = 2;renderMaps();">
                                             <i class="fa fa-home"></i>{{ _(' About') }}</a>
                                     </li>
-                                    <!--<li class="ng-tab" ng-class="{active: selectedTab == 1}">
-                    <a ng-click="selectedTab = 1;">{{ _('Notes')}}</a>
-                  </li>-->
-                                    <!--<li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
-                    <a ng-click="selectedTab = 8;">{{ _('Send an Email')}}</a>
-                  </li>-->
                                     <li class="ng-tab sm-menu" ng-class="{active: selectedTab == 7}">
                                         <a ng-click="waterfallTrigger();selectedTab = 7;">
                                             <i class="fa fa-folder-open"></i>{{ _(' Documents') }}</a>
@@ -899,15 +892,6 @@
                                                         </ul>
                                                         <div class="row">
                                                             <div class="col-md-12  margin-bottom-10">
-                                                                <!--<p class⁼"lead"="">
-                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                </a>
-                                <br>
-                                {{_('Or just add notes to remember what\'s important.')}}
-                                <br>
-                            </p>-->
                                                                 <form id="addNote" class="ng-pristine ng-valid">
                                                                     <div class="form-group">
                                                                         <input class="form-control ng-pristine ng-valid"
@@ -944,7 +928,6 @@
                                     <div class="row cards-container iodrive">
                                         <div class="col-md-12">
                                             <div class="row">
-                                                <!-- ngRepeat: attachment in documents -->
                                                 <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
                                                     <div ng-repeat="attachment in documents"
                                                          class="cardElement cusCardElement" style="min-height: 76px;">
@@ -1225,24 +1208,7 @@
                                   <%= task.due | date:'dd MMM'%>
                             </span>
                                         </div>
-                                        <div class="moreDetails row" ng-show="showDetails">
-                                            <!--  <div class="col-md-6 col-xs-6 event-schedule">
-                                                  <span class=""><i class="fa fa-calendar"></i>
-                                                   <%= task.due | date:'dd MMM'%> </span>
-                                              </div>
-                                              <div class="col-md-6 col-xs-6 event-schedule">
-                                                 <span class="">
-                                                    <i class="fa fa-bell-o"></i>
-                                                    <%= task.reminder | date:'dd MMM'%>
-                                                  </span>
-                                              </div>
-                                              <div class="col-md-12">
-                                                 <span class="">
-                                                    <i class="fa fa-map-marker"></i>
-                                                    <%= event.where %>-->
-                                            <!--</span>
-                                        </div>-->
-                                        </div>
+
                                     </div>
                                 </li>
                             </ul>
@@ -1368,51 +1334,6 @@
                                 </li>
                             </ul>
                             <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
-                                <!--                   <div class="formElements newEventToLead" ng-show="newEventform">
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="{{ _('Event tilte')}}">
-                              </div>
-                              
-                            </div>
-
-                                   {{ _('allday')}} <input type="checkbox" ng-model="allday"/>
-
-                              <div class="row" ng-show="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                       <div class="input-icon ">
-                                        <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="{{ _('When?')}}" value="" id="leadEventStartsAt">
-                                      </div>
-                                </div>
-                            </div>
-       
-
-                            <div class="row" ng-hide="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                      <div class="input-icon">
-                                        <i class="fa fa-calendar"></i>
-                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
-                                      </div>
-
-                                </div>
-                            </div>
-                            <div class="row" ng-hide="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                       <div class="input-icon ">
-                                        <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="{{ _('To')}}" value="" id="leadEventStartsAt">
-                                      </div>
-                                </div>
-                            </div>
-             
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="{{ _('Where')}} ?">
-                              </div>
-                       
-                            </div>
-                  </div> -->
                                 <div class="row">
                                     <div class="col-md-12 margin-top-10">
                                         <p class="newEventText"><span
@@ -1420,7 +1341,6 @@
                                             <button type="button" ng-click="showAddEventPopup()"
                                                     class="btn red btn-sm pull-right btn-inline">Add
                                             </button>
-                                            <!--                           <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button> -->
                                         </p>
                                     </div>
                                 </div>
@@ -1456,7 +1376,6 @@
                                 <select class="form-control" ng-model="ownerSelected"
                                         ng-options="user.google_display_name for user in users">
                                     <option value=""><%=casee.owner.google_display_name%></option>
-                                    <!--option value=""><%=stage_selected.name%></option-->
                                 </select>
                             </div>
                         </div>
@@ -1487,14 +1406,7 @@
 
                             </div>
                         </div>
-                        <!--div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
 
-                        <div class="col-md-9">
-                          <input type="text"  class="form-control"  id="id_type_case" ng-model="casee.type_case">
-
-                        </div>
-                    </div-->
                         <div class="form-group">
                             <label class="required col-md-3 control-label">{{ _("Status") }} </label>
 
@@ -1632,7 +1544,6 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                     <input ng-click="deletecase()" type="submit" class="btn red" value="Delete this Case">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
                 </form>
             </div>
@@ -1681,7 +1592,6 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                     <input ng-click="deleteDocs()" type="submit" class="btn red" value="Delete">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
 
             </div>
@@ -1974,16 +1884,11 @@
                     <input ng-click="addCustomField(customField)"
                            ng-disabled="!(customField.field && customField.value)" type="submit" class="btn green"
                            value="{{ _('Add this custom field') }}">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled-->
                 </div>
                 </form>
             </div>
         </div>
     </div>
-    <!--
-
-    new timeline modal
-    -->
     <div id="assigneeTagsToCase" class="modal fade customPopUp" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel"
          aria-hidden="true">
@@ -2164,8 +2069,7 @@
                                                     style="float: left;">:</span>
                                                 <div class="oppEstDate"
                                                      style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                    <!--  <input id="datetimepickerjquery" type="text" > -->
-                                           
+
 
                                     <span ng-hide="showStartsCalendar||showEventInput"
                                           ng-click="showStartsCalendar=true"><i class="fa fa-calendar"></i>
@@ -2177,7 +2081,6 @@
                                                                type="text" class="form-control calendar-form-controle"
                                                                placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
                                                                id="leadEventStartsAt">
-                                                        <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
                                                     </div>
                                                 </div>
 
@@ -2198,7 +2101,6 @@
                                                                placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
                                                                id="leadEventEndsAt">
 
-                                                        <!--   <input cusdatetimepicker data-model="" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt"> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -2531,12 +2433,6 @@
   background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()"
                                                                            class=" calendar-close-invite"
                                                                            style=" top: 2px !important;"></a></span>
-                                            <!--      <ul  class="list-inline"style="list-style:none" ng-show="remindmeby">
-                                                                                             <li> <strong> By:</strong> </li>
-                                                                                             <li><input type="radio"  name="by" ng-model="method" value="email"> Email</li>
-                                                                                             <li><input type="radio" ng- name="by" ng-model="method" value="sms">SMS</li>
-
-                                                                                           </ul> -->
                                             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                                 <li role="presentation"><a role="menuitem" tabindex="-1"
                                                                            ng-click="Remindme(0)">No notification</a>
@@ -2598,8 +2494,6 @@
                 var handleTitle = function (tab, navigation, index) {
                     var total = navigation.find('li').length;
                     var current = index + 1;
-                    // set wizard title
-                    // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
                     // set done steps
                     jQuery('li', $('#form_wizard_1')).removeClass("done");
                     var li_list = navigation.find('li');
@@ -2621,7 +2515,6 @@
                         $('#form_wizard_1').find('.button-next').show();
                         $('#form_wizard_1').find('.button-submit').hide();
                     }
-                    //  App.scrollTo($('.page-title'));
                 }
 
                 // default form wizard

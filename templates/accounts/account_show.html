@@ -707,17 +707,6 @@
                                                 {{ _('Or just add notes to remember what\'s important.') }}'
                                                 <br>
                                                 </p>
-                                                <!-- <form id="addNote" class="ng-pristine ng-valid">
-                                                    <div class="form-group">
-                                                        <input class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Add a new subject')}}" id="messageSubject" ng-model="note.title">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="note.content"></textarea>
-                                                    </div>
-                                                    <div class="pull-right">
-                                                        <input ng-disabled="isLoading || !note.title" ng-click="addNote(note)"  type="submit" class="btn green" value="{{_('Add this note')}}">
-                                                    </div>
-                                                </form>-->
                                             </div>
                                         </div>
                                     </div>
@@ -1193,17 +1182,16 @@
                                                       ng-click="showNewContact=true;selectedTab = 3;pushAddressTocontact(infonodes.addresses[0],newcontact.addresses)"
                                                       class="newRelatedContact"
                                                       style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
-                                                    +<i class="fa fa-user"></i> or add a new contact
+                                                    +<i class="fa fa-user"></i> {{ _("or add a new contact") }}
                                                   </span>
                                                     </div>
                                                     <div style="text-align:center" ng-show="isEmptyArray(contacts)">
-                                                        <!--<span style="text-align: center;font-size: 14px;font-weight: 500;color: rgb(77, 191, 217);" ng-show="isEmptyArray(contacts)">
-                                                  No related contacts
+                                                  {{ _("No related contacts")  }}
                                                   </span>-->
                                                   <span ng-click="showNewContact=true;selectedTab = 3;pushAddressTocontact(infonodes.addresses[0],newcontact.addresses)"
                                                         class=" newRelatedContact"
                                                         style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
-                                                    +<i class="fa fa-user"></i> Add Contact
+                                                    +<i class="fa fa-user"></i> {{ _("Add Contact") }}
                                                   </span>
                                                     </div>
 
@@ -1380,15 +1368,6 @@
                                                         </ul>
                                                         <div class="row">
                                                             <div class="col-md-12  margin-bottom-10">
-                                                                <!--<p class⁼"lead"="">
-                                                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                                                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                                                </a>
-                                                                <br>
-                                                                {{_('Or just add notes to remember what\'s important.')}}
-                                                                <br>
-                                                            </p>-->
                                                                 <form id="addNote" class="ng-pristine ng-valid">
                                                                     <div class="form-group">
                                                                         <input class="form-control ng-pristine ng-valid"
@@ -1627,12 +1606,6 @@
                                                                                         ng-click="deleteInfos(newcontact.addresses,$index)"
                                                                                         data-dismiss="alert"></button>
                                                                             </li>
-                                                                            <!-- <a href="#addressmodal"
-                                      class="btn-link addAnotherPhone"
-                                      data-toggle="modal">
-                                      <i class="icon-plus"></i>{{_('Add a new address')}}
-                                    </a>
-                                    </li>-->
                                                                         </ul>
                                                                         <div class="row">
                                                                             <div class="col-md-12">
@@ -1646,8 +1619,6 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <!-- <div id="gmap_canvas" style="width:100%;height:300px;"></div>
-                                 end address -->
 
 
                                                                     </div>
@@ -1685,9 +1656,7 @@
                                                                                        id="exampleInputEmail2"
                                                                                        ng-model="newcustom.value"
                                                                                        placeholder="{{ _('Add a value') }}">
-                                                                            </div>
-                                                                            <!-- <button type="submit" class="btn blue jfk-button jfk-button-action" ng-click="pushElement(customfield,customfields,'customfields')">{{_('Add')}}</button>-->
-                                                                        </form>
+                                                                            </div></form>
                                                                     </div>
 
 
@@ -1698,20 +1667,6 @@
                                                                                 class="fa fa-twitter"></i>
                                                                             <i class="fa fa-facebook-square"></i>
                                                                             <i class="fa fa-linkedin-square"></i></h3>
-                                                                        <!--<ul class="list-unstyled contact-infos infoslist" >
-                                  <li ng-repeat="sociallink in sociallinks">
-
-                                    <a  href="<%=prepareUrl(sociallink.url)%>" target="_blank">    <i class="fa fa-globe"></i> <%=sociallink.url%> </a>
-
-                                    <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(sociallinks,$index)" data-dismiss="alert"></button>
-                                  </li>
-                                </ul>
-                                <form class="form-inline newLeadForm" role="form">
-                                      <div class="" style="">
-                                        <label class="sr-only" for="exampleInputEmail2">{{_('Social link')}}</label>
-                                        <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"  ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"  class="form-control" id="exampleInputEmail2" ng-model='sociallink.url' placeholder="{{_('Add a social link')}}" required>
-                                      </div>
-                                </form>-->
                                                                         <ul ng-hide="isEmptyArray(newcontact.sociallinks)"
                                                                             class="socialLinkssocialLiknsAbsolute"
                                                                             style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;">
@@ -1795,15 +1750,6 @@
                                                                             </ul>
                                                                             <div class="row">
                                                                                 <div class="col-md-12  margin-bottom-10">
-                                                                                    <!--<p class⁼"lead"="">
-                                                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                                                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                                                </a>
-                                                                <br>
-                                                                {{_('Or just add notes to remember what\'s important.')}}
-                                                                <br>
-                                                            </p>-->
                                                                                     <form id="addNote"
                                                                                           class="ng-pristine ng-valid">
                                                                                         <div class="form-group">
@@ -2531,8 +2477,7 @@
                                                                                                 + <i
                                                                                                     class="fa fa-calendar"
                                                                                                     style="font-size:13px"></i>
-                                                                                                Add Time scale</a>
-                                                                                            <!-- <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>-->
+                                                                                                {{ _("Add Time scale") }}</a>
                                                                                             <ul id="tasks"
                                                                                                 class="list-unstyled lead_related_events"
                                                                                                 ng-hide="newEventform">
@@ -2717,15 +2662,6 @@
                                                                             </ul>
                                                                             <div class="row">
                                                                                 <div class="col-md-12  margin-bottom-10">
-                                                                                    <!--<p class⁼"lead"="">
-                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                </a>
-                                <br>
-                                {{_('Or just add notes to remember what\'s important.')}}
-                                <br>
-                            </p>-->
                                                                                     <form id="addNote"
                                                                                           class="ng-pristine ng-valid">
                                                                                         <div class="form-group">
@@ -2851,14 +2787,6 @@
 
                                                             <td>
                                                                 <span style=" font-size: 16px; font-weight:400"><%= opportunity.current_stage.name%></span>
-                                                                <!--<div easypiechart class="chart chartOnList" options="chartOptionsOnList" percent="opportunity.current_stage.probability"></div>
-                            <div class="oppStage">
-                                <div style=" text-align: center;">
-                                  <span style=" font-size: 16px; color: rgb(39, 153, 28); "><%=opportunity.current_stage.probability%> %</span>
-                                  <span style=" font-size: 15px; "><%=opportunity.current_stage.name%></span>
-
-                                </div>
-                             </div>-->
                                                             </td>
                                                             <td style="word-wrap: break-word;max-width:200px;text-align:center">
                                                                 <span> <%= opportunity.closed_date | date:'dd-MM-yyyy' %></span>
@@ -3224,10 +3152,9 @@
                                             <div ng-show="companydetails.name"
                                                  class="news-blocks blank-card blank-card-yellow newsCard"
                                                  ng-class="{active: selectedTab == 9, forceHide: companydetailsEmpty()}">
-                                                <!--<img class="img-responsive" ng-src=" <%=companydetails.top_image%>">-->
                                                 <h3 style="padding-left: 10px;"><i class="fa fa-linkedin-square"
                                                                                    style=" font-size: 25px; color: #1b5480; "></i>
-                                                    Linkedin</h3>
+                                                    {{ _("Linkedin") }}</h3>
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="row">
@@ -3486,73 +3413,6 @@
                                     </div>
 
                                 </div>
-                                <!-- $ send email tab -->
-                                <!-- <div class="tab-pane active" id="tab_1_8" ng-show="selectedTab == 8" style="display: none;">
-                                    <div class="showPage">
-                                        <div class="row">
-                                            <div class="col-md-12 margin-bottom-10">
-                                                <p class⁼"lead"=""><strong>{{_('Send an Email to :')}}</strong> </p>
-                                                <form  class="ng-pristine ng-invalid ng-invalid-required">
-                                                    <div class="form-group">
-
-                                                        <input
-                                                            required=""
-                                                            class="form-control ng-pristine
-                                                            ng-invalid ng-invalid-required" autofocus=""
-                                                            type="text"
-                                                            placeholder="{{_('To')}}"
-                                                            id="messageSubject"
-                                                            ng-model="email.to">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <input
-                                                            class="form-control ng-pristine ng-valid"
-                                                            autofocus=""
-                                                            type="text"
-                                                            placeholder="{{_('CC')}}"
-                                                            id="messageSubject"
-
-                                                            ng-model="email.cc">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <input
-                                                            class="form-control ng-pristine ng-valid"
-                                                            autofocus=""
-                                                            type="text"
-
-                                                            placeholder="{{_('BCC')}}"
-                                                            id="messageSubject"
-                                                            ng-model="email.bcc">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <input
-                                                            required=""
-                                                            class="form-control ng-pristine ng-invalid ng-invalid-required"
-                                                            autofocus=""
-                                                            type="text"
-                                                            placeholder="{{_('Add a subject')}}"
-                                                            id="messageSubject"
-                                                            ng-model="email.subject">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <textarea id="some-textara" placeholder="{{_('Enter text ...')}}" id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa fa-file"></i> {{_('Attach files')}}</a>
-                                                        <ul class="list-unstyled">
-                                                            <li ng-repeat="file in sendWithAttachments">
-                                                                <%= file.title %>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="pull-right">
-                                                        <input ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit" class="btn green" value="{{_('Send')}}">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>  -->
                             </div>
                         </div>
                     </div>
@@ -3797,24 +3657,7 @@
                                   <%= task.due | date:'dd MMM'%>
                             </span>
                                         </div>
-                                        <div class="moreDetails row" ng-show="showDetails">
-                                            <!--  <div class="col-md-6 col-xs-6 event-schedule">
-                                <span class=""><i class="fa fa-calendar"></i>
-                                 <%= task.due | date:'dd MMM'%> </span>
-                            </div>
-                            <div class="col-md-6 col-xs-6 event-schedule">
-                               <span class="">
-                                  <i class="fa fa-bell-o"></i>
-                                  <%= task.reminder | date:'dd MMM'%>
-                                </span>
-                            </div>
-                            <div class="col-md-12">
-                               <span class="">
-                                  <i class="fa fa-map-marker"></i>
-                                  <%= event.where %>-->
-                                            <!--</span>
-                            </div>-->
-                                        </div>
+
                                     </div>
                                 </li>
                             </ul>
@@ -3940,64 +3783,13 @@
                                 </li>
                             </ul>
                             <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
-                                <!--             <div class="formElements newEventToLead" ng-show="newEventform">
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="{{_('Event tilte')}}">
-                              </div>
 
-                            </div>
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input type="checkbox" ng-model="allday"/> {{_('All day')}}
-                              </div>
-
-                            </div>
-
-
-                              <div class="row" ng-show="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                       <div class="input-icon ">
-                                        <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="{{_('When?')}}" value="" id="leadEventStartsAt">
-                                      </div>
-                                </div>
-                            </div>
-
-
-
-                            <div class="row" ng-hide="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                      <div class="input-icon">
-                                        <i class="fa fa-calendar"></i>
-                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="{{_('From')}}" value="" id="leadEventStartsAt">
-                                      </div>
-
-                                </div>
-                            </div>
-                            <div class="row" ng-hide="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                       <div class="input-icon ">
-                                        <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="{{_('To')}}" value="" id="leadEventStartsAt">
-                                      </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="{{_('Where ?')}}">
-                              </div>
-
-                            </div>
-                  </div> -->
                                 <div class="row">
                                     <div class="col-md-12 margin-top-10">
                                         <p class="newEventText"><span
                                                 ng-hide="newEventform">{{ _('Add New Event') }}</span>
                                             <button type="button" ng-click="showAddEventPopup()"
                                                     class="btn blue btn-sm pull-right btn-inline">{{ _('Add') }}</button>
-                                            <!--           <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{_('Cancel')}}</button> -->
                                         </p>
                                     </div>
                                 </div>
@@ -4504,7 +4296,6 @@
                                 <select class="form-control" ng-model="ownerSelected"
                                         ng-options="user.google_display_name for user in users">
                                     <option value=""><%=account.owner.google_display_name%></option>
-                                    <!--option value=""><%=stage_selected.name%></option-->
                                 </select>
                             </div>
                         </div>
@@ -4644,20 +4435,11 @@
                                 <select class="form-control" ng-model="status_selected"
                                         ng-options="stat.status for stat in casesatuses">
                                     <option value="">{{ _('Choose Status') }}</option>
-                                    <!--option value=""><%=status_selected.status%></option-->
                                 </select>
 
                             </div>
 
                         </div>
-                        <!--div class="form-group">
-                            <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-
-                            <div class="col-md-9">
-                              <input type="text" class="form-control"  id="id_description" ng-model="casee.type_case">
-
-                            </div>
-                        </div-->
 
 
                 </div>
@@ -4758,7 +4540,6 @@
                         <div class="form-group">
                             <label class="col-md-3 control-label">{{ _("Type") }} </label>
                             <div class="col-md-9">
-                                <!--input type="text" placeholder="{{_('home')}},{{_('work')}},{{_('mobile')}},{{_('other')}} ..." required id="id_name" ng-model="phone.type_number"-->
                                 <select ng-model="phone.type_number" class="form-control">
                                     <option>{{ _('home') }}</option>
                                     <option>{{ _('work') }}</option>
@@ -5061,7 +4842,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteDocs()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
 
         </div>
@@ -5164,7 +4944,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteItem()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -5190,7 +4969,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="disassociateItem()" type="submit" class="btn red" value="Disassociate">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -5215,7 +4993,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Information">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -5246,7 +5023,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="addTask(task)" type="submit" class="btn green" value="Add this task">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
 
                 </form>
             </div>
@@ -5389,13 +5165,6 @@
                                        ng-model="opportunity.name">
                             </div>
                         </div>
-                        <!--div class="form-group">
-                                  <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-
-                                  <div class="col-md-9">
-                                    <input type="text"  class="form-control" id="id_label" ng-model="opportunity.description">
-                                  </div>
-                                </div-->
                         <div class="form-group">
                             <label class="required col-md-3 control-label">{{ _("Amount") }} </label>
 
@@ -5599,7 +5368,6 @@
 
                 <input ng-hide="isLoading" ng-click="addTask(task)" type="submit" class="btn green"
                        value="Add this task">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
 
                 </form>
             </div>
@@ -5635,7 +5403,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deletecase()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
 
         </div>
@@ -5670,7 +5437,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteopportunity()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
 
         </div>
@@ -5909,7 +5675,6 @@
                                                 style="float: left;">:</span>
                                             <div class="oppEstDate"
                                                  style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                <!--  <input id="datetimepickerjquery" type="text" > -->
 
 
                                     <span ng-hide="showStartsCalendar||showEventInput"
@@ -5921,7 +5686,6 @@
                                                            class="form-control calendar-form-controle"
                                                            placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
                                                            id="leadEventStartsAt">
-                                                    <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
                                                 </div>
                                             </div>
 
@@ -5942,7 +5706,6 @@
                                                            placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
                                                            id="leadEventEndsAt">
 
-                                                    <!--   <input cusdatetimepicker data-model="" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt"> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -6414,8 +6177,6 @@
             var handleTitle = function (tab, navigation, index) {
                 var total = navigation.find('li').length;
                 var current = index + 1;
-                // set wizard title
-                // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
                 // set done steps
                 jQuery('li', $('#form_wizard_1')).removeClass("done");
                 var li_list = navigation.find('li');
@@ -6432,12 +6193,10 @@
                 if (current >= total) {
                     $('#form_wizard_1').find('.button-next').hide();
                     $('#form_wizard_1').find('.button-submit').show();
-                    // displayConfirm();
                 } else {
                     $('#form_wizard_1').find('.button-next').show();
                     $('#form_wizard_1').find('.button-submit').hide();
                 }
-                //  App.scrollTo($('.page-title'));
             }
 
             // default form wizard
@@ -6479,12 +6238,6 @@
             placeholder: "{{_('Click to Select a label')}}",
             allowClear: false
         });
-        /*$("#wysihtmlButton").popover({
-         html : true,
-         content: function() {
-         return $('.wysihtml5-toolbar').html();
-         }
-         });*/
         $(function () {
             $('#datetimepicker2').datetimepicker({
                 language: 'fr',
@@ -6512,7 +6265,6 @@
                 })
             }
         };
-        /* $('body').popover({ selector: '[data-popover]', trigger: 'click hover', placement: 'left', delay: {show: 50, hide: 400}});*/
         $('#assigeeList').lionbars({});
         $('#slimRelated').lionbars({});
         $('#contactScroll').lionbars({});

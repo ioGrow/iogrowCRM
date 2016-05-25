@@ -876,9 +876,6 @@ app.controller('OpportunityListCtrl', ['$scope','$filter','Auth','Account','Oppo
         Opportunity.list($scope,params);
      };
 
-/***********************************************
-      HKA 14.02.2014  tags
-*************************************************/
 $scope.listTags=function(){
       var paramsTag = {'about_kind':'Opportunity'}
       Tag.list($scope,paramsTag);
@@ -1634,7 +1631,7 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
      $scope.showAssigneeTagsToOpportunity=function(){
        $('#assigneeTagsToOpp').modal('show');
      }
-     /************** account and contact update******/
+
      $scope.getResults = function (val, location) {
          var url = ROOT + location + '?alt=json'
          var config = {
@@ -2201,7 +2198,6 @@ app.controller('OpportunityShowCtrl', ['$scope', '$http', '$filter', '$route', '
      };
 
 /******************new event form***********************/
-// HADJI HICHAM 31/05/2015 
 
 $scope.showAddEventPopup=function(){  
 

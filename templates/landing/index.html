@@ -116,8 +116,6 @@
                             localStorage['authResultexpiration'] = authResult.expires_at;
                         }
                         helper.connectServer();
-                        // After we load the Google+ API, render the profile data from Google+.
-                        //gapi.client.load('plus','v1',this.renderProfile);
 
 
                     } else if (authResult['error']) {
@@ -252,18 +250,6 @@
 
         }
         window.IlyesVideoPlayed = false;
-        // $(window).scroll(function() {
-
-        //   var y = $(window).scrollTop();
-        //   if(y>410){
-        //     if(!window.IlyesVideoPlayed){
-        //       window.IlyesVideoPlayed=true;
-        //       playIlyesVideo();
-        //     }
-
-        //   }
-
-        // });
         if ($("html").hasClass("mobile-device")) {
             $("body").css("padding-top", "600px");
             $(".section-centered").css("margin-top", "-279.5px");

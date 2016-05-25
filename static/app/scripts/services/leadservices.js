@@ -92,7 +92,6 @@ leadservices.factory('Lead', function ($rootScope) {
                     } else {
                         $scope.imageSrc = '/static/src/img/avatar_contact.jpg';
                     }
-                    //$scope.renderMaps();
                     var renderMap = false;
                      var past_pos=[];
                      if (!$scope.lead.linkedin_profile) {
@@ -179,7 +178,6 @@ leadservices.factory('Lead', function ($rootScope) {
                                 });
                             }
                         }
-                        // $scope.renderMaps();
                     }
                     $scope.getCustomFields('leads');
                     if (resp.topics) {
@@ -263,14 +261,6 @@ leadservices.factory('Lead', function ($rootScope) {
                     } else {
                         $scope.events = [];
                     }
-                    // $scope.listTopics(resp);
-                    // $scope.listTasks();
-                    // $scope.listEvents();
-                    // $scope.listDocuments();
-                    // $scope.listInfonodes();
-
-                    //$scope.renderMaps();
-                    //$scope.DrawPsychometrics();
 
                     $scope.email.to = '';
 
@@ -299,12 +289,7 @@ leadservices.factory('Lead', function ($rootScope) {
                         $scope.hilightTopic();
                     }
                     ;
-                    // if (resp.tasks){
-                    //     $scope.hilightTask();
-                    // }
-                    // if (resp.events){
-                    //     $scope.hilightEvent();
-                    // }
+
                 } else {
                     if (resp.code == 401) {
                         // $scope.refreshToken();
@@ -388,7 +373,6 @@ leadservices.factory('Lead', function ($rootScope) {
                     $scope.apply();
                 } else {
                     if (resp.code == 401) {
-                        // $scope.refreshToken();
                         $scope.inProcess(false);
                         $scope.apply();
                     }
@@ -572,13 +556,7 @@ leadservices.factory('Lead', function ($rootScope) {
                 $scope.isMoreItemLoading = false;
                 $scope.isFiltering = false;
                  $( '#leadCardsContainer' ).trigger('resize');
-                /*$('#leadCardsContainer').trigger('resize');
-                setTimeout(function () {
-                    var myDiv = $('.autoresizeName');
-                    if (myDiv.length) {
-                        myDiv.css({'height': 'initial', 'maxHeight': '33px'});
-                    }
-                }, 100);*/
+
                 $scope.inProcess(false);
                 $scope.apply();
 
@@ -748,7 +726,6 @@ leadservices.factory('Lead', function ($rootScope) {
                 if (resp.error && resp.error.code == 412){
                     $('#payment_modal').modal('show');
                     return
-                    //window.location.replace($rootScope.subscription_url);
                 } if (!resp.code && resp.id) {
                     $scope.leadInserted(resp.id);
                 } else if (!resp.id) {
@@ -840,12 +817,9 @@ leadservices.factory('Lead', function ($rootScope) {
     };
     Lead.export = function ($scope, params) {
         trackMixpanelAction('LEAD_LIST_EXPORT');
-        //$("#load_btn").attr("disabled", "true");
-        //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
         gapi.client.crmengine.leads.export(params).execute(function (resp) {
             if (!resp.code) {
-                //$scope.DataLoaded(resp.items)
                 console.log("request ssent")
 
             } else {
@@ -854,12 +828,9 @@ leadservices.factory('Lead', function ($rootScope) {
         });
     }
     Lead.export_key = function ($scope, params) {
-        //$("#load_btn").attr("disabled", "true");
-        //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
         gapi.client.crmengine.leads.export_keys(params).execute(function (resp) {
             if (!resp.code) {
-                //$scope.DataLoaded(resp.items)
                 console.log("request ssent")
 
             } else {

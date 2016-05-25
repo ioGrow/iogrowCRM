@@ -47,7 +47,6 @@ app.controller('CustomFieldsEditCtrl', ['$scope','$route', 'Auth', 'User', 'Map'
                         $scope.getCustomFields("cases");
                         break;
                     default:
-                        //$scope.getCustomFields("leads");
                 }
         };
         $scope.getCustomFields=function(related_object){

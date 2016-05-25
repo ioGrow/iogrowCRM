@@ -59,22 +59,11 @@
                            ng-click="checkPermissions({{ ME }})">
                             <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
-                        <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>
-                        <a class="" title="Share" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa fa-share-square-o" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>
-                        <a class="" title="Convert" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa  fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
                         <a class="headerBtn" title="Add tags" ng-click="showAssigneeTags()"
                            ng-hide=" selectedCards.length==0">
                             + <i class="fa fa-tags"></i>
                         </a>
-                        <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
+
                         <a class="headerBtn hide_md" id="sample_editable_1_new" title="Import"
                            ng-click="showImportModal()">
                             <i class="fa fa-cloud-upload"></i>
@@ -85,17 +74,9 @@
                         <a class="headerBtn" title="Delete" ng-hide=" selectedCards.length==0"
                            ng-click="editbeforedeleteselection()">
                             <i class="fa fa-trash-o"></i>
-                            <!-- </a>
-                       <a href="" class="" title="{{_('Synchronize my contact with google')}}" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="GontactModal()" >
-                          <i class="fa fa-refresh" style="padding-top: 6px; font-size: 16px;"></i>
-                    </a> -->
-                            <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                                  <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
-                            </a>-->
                             <div class="btn-group show_md"
                                  style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                                 <a class="headerBtn" title="More" data-toggle="dropdown">
-                                    <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
                                     {{ _("More") }}
                                 </a>
                                 <ul class="dropdown-menu drp-dwn-right">
@@ -233,90 +214,6 @@
         </tbody>
     </table>
 </div>
-<!--<div class="row subHeader">
-    <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu ">
-            {%for application in apps %}
-
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
-
-            {%endfor%}
-           </ul>
-        </div>
-    </div>
-    <div class=" subHeaderContent">
-      <div class="col-md-9">
-      <div class="row">
-      <div class="col-md-10 col-xs-12 filter-content">
-        <div class="filterOptions">
-            <span role="button" class="filterItem activeFilter" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{ _('All')}} <span class="hidden-xs hiddenOnxs">{{ _('Contacts')}}</span> </span>
-            <span role="button" class="filterItem" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">{{ _('My')}} <span class="hidden-xs hiddenOnxs">{{ _('Contacts')}}</span></span>
-            <div class="btn-group visibleOnPhone">
-                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='filter'}" >
-                  {{ _("Filter by")}}
-                  <i class="icon-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu drp-dwn-xs-right">
-                  <li><a  ng-click="filterByOwner();selectedOption ='all'" href="#" data-toggle="modal">{{ _('All Contacts') }}</a></li>
-                  <li><a ng-click="filterByOwner('{{ME}}');selectedOption ='my'" href="#" data-toggle="modal">{{ _('My Contacts') }}</a></li>
-                  <li><a ng-click="showTagFilterCard();selectedOption ='tags'" href="#" data-toggle="modal">{{ _('Tags') }}</a></li>
-                </ul>
-            </div>
-            <div class="btn-group">
-                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
-                  {{ _('Sort by')}}
-                  <i class="icon-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu drp-dwn-xs-right">
-                  <li>
-                    <a ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
-                  </li>
-                  <li>
-                    <a ng-click="orderBy('lastname')" href="#" data-toggle="modal">{{ _('Lastname') }}</a>
-                  </li>
-                  <li>
-                    <a ng-click="orderBy('firstname')" href="#" data-toggle="modal">{{ _('Firstname') }}</a>
-                  </li>
-                </ul>
-          </div>
-            <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">{{ _("Filter by")}} </span> {{ _("Tags")}}</span>
-          </div>
-      </div>
-      <div class="col-md-2 col-xs-2">
-      <a href="/#/contacts/new" class="hidden-sm hidden-xs btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
-           {{ _('New')}} <span class="hidden-xs hiddenOnxs">{{ _('Contact')}}</span>
-         </a>
-      </div>
-      </div>
-    </div>
-    <div class="col-md-3 col-sm-1 col-xs-3 litCardSwitcher"> 
-        
-        <div class="btn-group pull-right">
-                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
-                  {{ _('Help ?')}}
-                  <i class="icon-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu drp-dwn-xs-left">
-                  <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
-<!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
-<!--  <li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
-                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
-                  
-                </ul>
-          </div>
-
-        <a class="pull-right" style="font-size: 16px;color: #737373;cursor: pointer;" ng-click="switchShow()"> 
-            <i class="fa fa-th-large" style=" padding-top: 6px; font-size: 20px;" ng-show="show=='list'"></i>
-            <i class="fa fa-list-ul" style=" padding-top: 6px; font-size: 20px;" ng-show="show=='cards'"></i>
-        </a>
-    </div>
-    </div>
-</div>-->
 <div class="page-content">
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -354,56 +251,6 @@
         <div class="row">
             <div class="col-md-12">
 
-                <div class="row subHeaderContainer">
-                    <!--<div  class="task-actions taskCard list-group-item task-actions">
-             <div class="row">
-             <div class="col-md-12">
-               <form id="task_actions" class="form-inline" role="form">
-               <div class="row">
-               <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                  <div class="customCheckbox" class="form-group">  
-                      <input  ng-show="contacts" title="Select all contacts" style=" padding-top: 4px; " type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" id="contactCheckAll">   <label for="contactCheckAll" class="labelElement">
-                        <span class="check"></span>
-                        <span class="box"></span>
-                      </label>  
-                  </div>
-                   
-               </label>
-               <div class="col-xs-10 col-sm-11 col-md-11 actionsbtnDiv">
-                      <button ng-show="contacts" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action" ng-class="{disabled: selectedCards.length==0}">
-                          <i class="fa fa-tags"></i>
-                          <span class="btn-text">
-                           Tags
-                          </span>
-                      </button>
-                      <button ng-show="contacts" title="Delete contacts" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action " ng-class="{disabled: selectedCards.length==0}">
-                          <i class="fa fa-trash-o"></i>
-                          <span class="btn-text">
-                            Delete
-                          </span>
-                      </button>
-                      <div class="pull-right newbtnactionsbar">
-                           <a href="/#/contacts/new" id="new_contact" class="btn red newBtn" style=" margin-bottom: 0px; ">
-                              {{_('New Contact')}}
-                           </a>
-                                <div class="btn-group">
-                                 <button ng-click="showImportModal()" id="sample_editable_1_new" class="btn red">
-                                  <i class="fa fa-upload"></i>
-                                </button>
-
-                                  <button ng-click="ExportCsvFile()" id="sample_editable_1_new" class="btn red" style="margin-left:3px;">
-                                  <i class="fa fa-download"></i>
-                                </button>
-                           </div>
-                      </div>
-              </div>
-              
-            </div>
-          </form>
-         </div>
-       </div>
-      </div>-->
-                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div>
@@ -774,9 +621,6 @@
                         ng-model='tag_item.name' onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
                       <%= tag_item.name %>
                   </span>
-                                            <!--<span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                                                <i class="fa fa-check-circle-o" style="color:idealTextColor(<%<!--=tag_item.color%>);"></i>
-                                            </span>-->
                                             <input type="checkbox" ng-show="!manage_tags"
                                                    ng-click="selectTag(tag_item,$index,$event)"
                                                    style="margin-right: 10px;" class="pull-right customCheck"
@@ -867,12 +711,6 @@
                       <%= tag_item.name %>
                   </span>
                                         </div>
-                                        <!--  <input
-                                         type="checkbox" ng-show="(tag_item!=edited_tag)&&(!manage_tags)"
-                                         ng-click="selectTag(tag_item,$index,$event)"
-                                         style="margin-right: 10px;"
-                                         class="pull-right customCheck"
-                                         ng-checked="isSelected()"> -->
                                         <div class="customCheckbox CustomSmallCheck pull-right" id="checky_<%=$index%>"
                                              style="margin-right:8px">
                                             <input ng-show="accounts" title="Select Task" style=" padding-top: 4px; "
@@ -897,13 +735,8 @@
                                 </li>
                             </ul>
                         </div>
-                        <!--    <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
-                <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
-                </a>
-           </li> -->
+
                         <form class=" newTagForm" role="form">
-                            <!--    <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button> -->
                             <div class="row">
                                 <div class="col-md-12 form-group">
 
@@ -927,30 +760,7 @@
                                 </div>
                             </div>
                         </form>
-                        <!--             <form class="well newTagForm" role="form" ng-show="showNewTag">
-              <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
-              <div class="row">
-                <div class="col-md-12 form-group">
-                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{ _('New label')}}">
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-8">
-                  <ul class="color_pallet_menu">
-                    <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-md-4">
-                  <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
-                </div>
-              </div>
-            </form> -->
-                        <!--       <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{_('Manage Tags')}}
-              </button>
-            </div> -->
-                    </div>
+                           </div>
                 </div>
             </div>
         </div>
@@ -1121,7 +931,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteSelection()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -1147,7 +956,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deletecontact()" type="submit" class="btn red" value="Delete this Contact">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
 
         </div>
@@ -1326,7 +1134,6 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                     <input ng-click="SynchronizeWithGoogle()" type="submit" class="btn green" value="Synchronize">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
             </form>
         </div>
@@ -1368,16 +1175,6 @@
                         <label ng-show="selectedPermisssions">{{ _("The owner is:") }}</label>
                     </div>
                     <hr ng-show="contact.access!='public' && selectedPermisssions"/>
-                    <!--<div ng-show="selectedPermisssions" class='' id="collaborators" ng-hide="lead.access=='public'">
-                        <p>{{ _("Collaborators:")}}</p>
-                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
-                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
-                            <button class ="btn" ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ME}}" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
-                        </div>
-
-                    </div>
-                    <hr ng-show="selectedPermisssions"/>-->
 
                     <div ng-show="contact.access!='public' && selectedPermisssions">
                         <p>{{ _("Invite collaborators:") }}</p>

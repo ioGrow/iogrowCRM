@@ -258,7 +258,6 @@ class Account(EndpointsModel):
             organization = str(self.organization.id())
             title_autocomplete = ','.join(tokenize_autocomplete(self.name))
 
-            # addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, str(x.postal_code), x.country]) if x else "", self.addresses))
             if data:
                 search_key = ['infos', 'tags', 'collaborators']
                 for key in search_key:
@@ -286,7 +285,6 @@ class Account(EndpointsModel):
                         search.TextField(name='infos', value=data['infos']),
                         search.TextField(name='tags', value=data['tags']),
                         search.TextField(name='title_autocomplete', value=empty_string(title_autocomplete)),
-                        # search.TextField(name='addresses', value = empty_string(addresses)),
                     ])
             else:
                 my_document = search.Document(
@@ -307,7 +305,6 @@ class Account(EndpointsModel):
                         search.TextField(name='tagline', value=empty_string(self.tagline)),
                         search.TextField(name='introduction', value=empty_string(self.introduction)),
                         search.TextField(name='title_autocomplete', value=empty_string(title_autocomplete)),
-                        # search.TextField(name='addresses', value = empty_string(addresses)),
                     ])
             my_index = search.Index(name="GlobalIndex")
             my_index.put(my_document)
@@ -857,9 +854,6 @@ class Account(EndpointsModel):
                     kind='topics',
                     indexed_edge=str(entityKey.id())
                 )
-        # if account:
-        #     data = {'id': account_key_async.id()}
-        #     account.put_index(data)
         if request.logo_img_id:
             taskqueue.add(
                 url='/workers/sharedocument',
@@ -1223,9 +1217,6 @@ class Account(EndpointsModel):
         # read the csv file from Google Drive
         csv_file = EndpointsHelper.import_file(user_from_email, request.file_id)
 
-        # if request.file_type =='outlook':
-        #     cls.import_from_outlook_csv(user_from_email,request,csv_file)
-        # else:
         csvreader = csv.reader(csv_file.splitlines())
         headings = csvreader.next()
         i = 0

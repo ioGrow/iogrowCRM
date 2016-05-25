@@ -53,9 +53,6 @@
                         <a class="headerBtn" title="{{ _('Refresh') }}" ng-click="runTheProcess();">
                             <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
-                        <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
                         <a class="" title="{{ _('Share') }}"
                            style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;"
                            href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0"
@@ -71,9 +68,6 @@
                            ng-hide=" selectedCards.length==0">
                             + <i class="fa fa-tags"></i>
                         </a>
-                        <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
                         <a class="headerBtn hide_md" id="sample_editable_1_new_import" title="{{ _('Import') }}"
                            ng-click="showImportModal()">
                             <i class="fa fa-cloud-upload"></i>
@@ -86,15 +80,8 @@
                            ng-click="editbeforedeleteselection()">
                             <i class="fa fa-trash-o"></i>
                         </a>
-                        <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
                         <div class="btn-group show_md"
                              style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
-                            <!--  <a class="headerBtn" title="More" data-toggle="dropdown">
-                                 <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
-                                More
-                             </a> -->
                             <ul class="dropdown-menu drp-dwn-right">
                                 <li>
                                     <a class="hide_md" title="Upload" ng-click="showImportModal()">
@@ -109,22 +96,10 @@
                             </ul>
                         </div>
                     </div>
-                    <!--<div class="communicationBottons pull-right">
-                         <a class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                           <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
-                         </a>
-                         <a class="" title="Start a Hangout" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                               <i class="fa fa-video-camera" style="padding-top: 6px; font-size: 16px;"></i>
-                         </a>
-                         <a class="" title="Tweet" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                               <i class="fa fa-twitter" style="padding-top: 6px; font-size: 16px;"></i>
-                         </a>
 
-                   </div>-->
                     <div class="clearfix"></div>
                 </div>
-                <a href="/#/leads/new" id="new_lead" class="btn red newAccountBtnOnscroll pull-right"
-                   style="/* margin-top: -4px; */">
+                <a href="/#/leads/new" id="new_lead" class="btn red newAccountBtnOnscroll pull-right">
                     <i class="fa fa-road"></i> {{ _('New') }} <span class="hidden-xs hiddenOnxs">{{ _('Lead') }}</span>
                 </a>
 
@@ -176,9 +151,7 @@
                                style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
                         </a>
                         <ul class="dropdown-menu drp-dwn-right">
-                            <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
-                            <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
-                            <li><a ng-click="lead_wizard()" href="#" data-toggle="modal">{{ _('Show tips ') }}</a></li>
+                             <li><a ng-click="lead_wizard()" href="#" data-toggle="modal">{{ _('Show tips ') }}</a></li>
                             <li><a target="new"
                                    href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a>
                             </li>
@@ -407,11 +380,6 @@
                                                             <%=lead.company%>
                                                         </a>
                                                     </td>
-                                                    <!--<td>
-                                                      <a class="desc" href="/#/search/type:Lead <%=lead.status%>">
-                                                        <%=lead.status %>
-                                                      </a>
-                                                    </td>-->
                                                     <td>
                                                         <%=fromNow(lead.updated_at)%>
                                                     </td>
@@ -549,7 +517,6 @@
                                                         </a>
                                                     </div>
                                                     <div class="text">
-                                                        <!-- <button type="button" class="close deleteLeadBtn" ng-show="showClose" ng-click="editbeforedelete(lead)"></button>-->
                                                         <div class="name">
                                                             <a href="/#/leads/show/<%= lead.id %>" class="profile-link"
                                                                title="<%=lead.firstname%> <%=lead.lastname%> ">
@@ -559,15 +526,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="pitch onelineItem">
-                                                            <!--<span>
-                                                                <%=fromNow(lead.updated_at)%>
-                                                            </span>-->
-                                                            <!--<span ng-show="lead.status" class="contact-title" >
-                                                              Status:
-                                                              <a class="desc" href="/#/search/type:Lead <%=lead.status%>">
-                                                                #<%=lead.status %>
-                                                              </a>
-                                                            </span>-->
+
                         <span ng-show="lead.title">
                           <a title="<%=lead.title%>" class="desc" href="/#/search/type:Lead <%=lead.title%>">
                               <%=lead.title%>
@@ -833,8 +792,7 @@
                                 ng-click="selectedLead={}">{{ _("Cancel") }}</button>
 
                         <input ng-click="deleteSelection()" type="submit" class="btn red" value="Delete">
-                        <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-                    </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -1166,7 +1124,6 @@
                         <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                         <input ng-click="convert(lead)" type="submit" class="btn green" value="Convert">
-                        <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                     </div>
                     </form>
                 </div>
@@ -1205,17 +1162,6 @@
                                 <label ng-show="selectedPermisssions">{{ _("The owner is:") }}</label>
                             </div>
                             <hr ng-show="selected_access!='public' && selectedPermisssions"/>
-                            <!--<div ng-show="selectedPermisssions" class='' id="collaborators" ng-hide="lead.access=='public'">
-                        <p>{{ _("Collaborators:")}}</p>
-                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
-                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
-                            <button class ="btn" ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ME}}" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
-                        </div>
-
-                    </div>
-                    <hr ng-show="selectedPermisssions"/>-->
-
                             <div ng-show="selected_access!='public' && selectedPermisssions">
                                 <p>{{ _("Invite collaborators:") }}</p>
                                 <div class="form-group" style="margin-left: 0px; margin-right: 0px;">

@@ -157,134 +157,12 @@
                     </div>
                 </div>
 
-                <!--  <div class="showPage col-md-12">
-                    <div class="row">
-
-
-             <div class="form-group">
-                <p class⁼"lead"=""><strong>{{ _('Attach files')}}</strong> </p>
-                  <div class="btn-group">
-                                    <a class="btn red" href="#" data-toggle="dropdown">
-                                     {{ _('Create')}}
-                                    <i class="icon-angle-down"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                      <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
-                                           <img src="/static/src/img/google_drive/text/plain.png" class="">
-                                          {{ _('Document')}}
-                                          </a>
-                                      </li>
-                                      <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
-                                           <img src="/static/src/img/google_drive/presentation.png" class="">
-                                          {{ _('Presentation')}}
-                                          </a>
-                                      </li>
-                                      <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
-                                           <img src="/static/src/img/google_drive/spreadsheet.png" class="">
-                                          {{ _('Spreadsheet')}}
-                                          </a>
-                                      </li>
-
-                                    </ul>
-                                </div>
-                                 <div class="btn-group">
-                                    <button ng-click="showAttachFilesPicker()" id="sample_editable_1_new" class="btn red">
-                                    <i class="fa fa-upload"></i>
-                                    </button>
-
-                                </div>
-                <!--         <div class="row">
-        <div class="col-md-12">
-               <div class="portlet">
-                <div class="portlet-body">
-                     <p class⁼"lead"=""><strong>{{ _('Add New Comment :')}}</strong> </p>
-                      <form id="addComment"  class=" ng-pristine ng-valid">
-                      <div class="form-group">
-                                        <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3" ng-model="comment.content"></textarea>
-
-                       </div>
-
-                       <div class="pull-right">
-
-                        <input ng-disabled="isLoading || !comment.content" ng-click="addComment(comment)" type="submit" class="btn green" value="{{_('Add comment')}}">
-
-                        </div>
-                                  <div class="clearfix"></div>
-                  </form>
-                </div>
-
-              </div>
-        </div>
-
-        </div> -->
             </div>
-            <!--    <div class=" col-md-12">
-                  <div class="row">
-        <div class="col-md-12 commentsShow">
-             <div class="portlet">
-                <div class="portlet-title line">
-                  <div class="caption"><i class="icon-comments"></i>{{ _('Comments')}}</div>
-                </div>
-                <div claccoass="portlet-body">
-                      <ul class="chats">
-                        <li class="in" ng-repeat="comment in comments" id="comment_<%=$index%>">
-                          <img class="avatar" alt="" ng-src="<%=comment.author.photo%>" />
-                          <div class="message">
-                            <span class="arrow"></span>
-                            <a href="#" class="name"><%=comment.author.display_name%></a>
-                            <span class="datetime">at <%=comment.updated_at | date:'yyyy-MM-dd - HH:mm:ss '%>
-                           <a ng-click="commentDelete('<%=comment.id%>')"><i class="fa fa-trash-o"></i></a>
-                            </span>
-
-                            <span class="body">
-                             <a  editable-text="comment.content" onbeforesave="inlinePatch('Comment','', 'content',comment.id,$data)">
-                            <%=comment.content%>
-                            </a>
-                            </span>
-                          </div>
-                        </li>
-                      </ul>
-
-                </div>
-
-              </div>
-        </div>
-
-        </div>
-      </div> -->
 
             <!-- END PAGE HEADER-->
             <!-- BEGIN PAGE CONTENT-->
         </div>
     </div>
-    <!-- tasks cards -->
-    <div class="col-md-3 tasks-col">
-        <!--      <div class="row">
-        <div class="col-md-12">
-          <div class="portlet showCard">
-            < <div class="portlet-title line">
-              <div class="caption">
-                <i class="icon-user"></i>{{ _('Who is involved')}}
-              </div>
-            </div> >
-            <div class="portlet-body">
-                <ul class="chats">
-                </ul>
-                 <div class="caption" ng-class="{hidden: attachment.assignees==null}"><i class="fa fa-group"></i>{{ _('Assignees')}}</div>
-                  <ul class="chats">
-
-                       <li  ng-repeat="assigned in event.assignees">
-                            <span class="arrow"><%=assigned.display_name%></span>
-                       </li>
-                       <li><a href="#addContributor"  class="btn-link addAnotherPhone" data-toggle="modal">
-                          <i class="icon-plus"></i>{{ _('Add a new assignee')}}</a>
-                       </li>
-                  </ul>
-            </div>
-          </div>
-        </div> -->
-    </div>
-    <!-- $ Events -->
 </div>
 </div>
 
@@ -311,7 +189,6 @@
 
                 <input ng-click="deleteEvent()" type="submit" class="btn red" value="Delete this Event">
 
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -335,7 +212,6 @@
                         <label class="col-md-3 control-label">{{ _("Tagline") }} </label>
 
                         <div class="col-md-9">
-                            <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
                             <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3"
                                       ng-model="account.tagline"></textarea>
 
@@ -400,7 +276,6 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">{{ _("Type") }} </label>
                         <div class="col-md-9">
-                            <!--input type="text" placeholder="{{_('home')}},{{_('work')}},{{_('mobile')}},{{_('other')}} ..." required id="id_name" ng-model="phone.type_number"-->
                             <select ng-model="phone.type_number" class="form-control">
                                 <option value="home" selected="selected">{{ _('home') }}</option>
                                 <option>{{ _('work') }}</option>
@@ -763,7 +638,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteaccount()" type="submit" class="btn red" value="Delete this Account">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -788,7 +662,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Information">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -880,13 +753,6 @@
                                        ng-model="opportunity.name">
                             </div>
                         </div>
-                        <!--div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-
-                        <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_label" ng-model="opportunity.description">
-                        </div>
-                      </div-->
                         <div class="form-group">
                             <label class="required col-md-3 control-label">{{ _("Amount") }} </label>
                             <div class="col-md-9">
@@ -965,20 +831,11 @@
                             <select class="form-control" ng-model="status_selected"
                                     ng-options="stat.status for stat in casesatuses">
                                 <option value="">{{ _('Choose Status') }}</option>
-                                <!--option value=""><%=status_selected.status%></option-->
                             </select>
 
                         </div>
 
                     </div>
-                    <!--div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-
-                        <div class="col-md-9">
-                          <input type="text" class="form-control"  id="id_description" ng-model="casee.type_case">
-
-                        </div>
-                    </div-->
 
 
             </div>
@@ -1186,7 +1043,6 @@
             })
         }
     };
-    /* $('body').popover({ selector: '[data-popover]', trigger: 'click hover', placement: 'left', delay: {show: 50, hide: 400}});*/
     $('#assigeeList').lionbars({});
     $('#collaborators').lionbars({});
 </script>

@@ -47,13 +47,11 @@ app.controller('SearchFormController', ['$scope','Search','User','$rootScope',
              $scope.iogrowSearch=false;
              localStorage['iogrowSearch']=false;
               $rootScope.iogrowSearch=false;
-            // $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow-des.png");
           };
         }else{
            $scope.iogrowSearch=true;
            localStorage['iogrowSearch']=true;
            $rootScope.iogrowSearch=true;
-          /// $("#iogrowSearchIcon").attr("src","static/img/sm-iogrow.png");
         };
     }
 
@@ -93,54 +91,6 @@ $scope.uploaderCallback=function(data) {
         }
       }
 
-
-
-     // if (annyang) {
-
-     //    // Let's define our first command. First the text we expect, and then the function it should call
-     //    var commands = {
-     //      'go to contacts': function(account) {
-     //        window.location.replace('/#/contacts');
-     //      },
-     //      'go to accounts': function(account) {
-     //        window.location.replace('/#/accounts');
-     //      },
-     //      'go to leads': function(account) {
-     //        window.location.replace('/#/leads');
-     //      },
-     //      'go to opportunities': function(account) {
-     //        window.location.replace('/#/opportunities');
-     //      },
-     //      'go to cases': function(account) {
-     //        window.location.replace('/#/cases');
-     //      },
-     //      'go to tasks': function(account) {
-     //        window.location.replace('/#/tasks');
-     //      },
-     //      'search :account contacts': function(account) {
-     //        $scope.searchQuery = account + ' and type:Contact';
-
-
-     //        $scope.$apply();
-     //        $scope.executeSearch($scope.searchQuery);
-     //      },
-     //      'search *term': function(term) {
-     //        $scope.searchQuery = term;
-
-
-     //        $scope.$apply();
-     //        $scope.executeSearch($scope.searchQuery);
-     //      }
-
-     //    };
-
-
-     //    // Add our commands to annyang
-     //    annyang.addCommands(commands);
-
-     //    // Start listening. You can call this here, or attach this call to an event, button, etc.
-     //    // annyang.start();
-     //  }
      var params ={};
      $scope.results =[];
      $scope.result = undefined;
@@ -182,9 +132,6 @@ $scope.uploaderCallback=function(data) {
      };
 //HKA 25.03.2014 update user language
 $scope.updatelanguage = function(user){
-   //var params = {'id':$scope.user.id,
-   // 'language':user.language};
-   //User.patch($scope,params);
    $('#EditSetting').modal('hide');
 }
 

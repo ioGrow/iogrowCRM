@@ -35,7 +35,6 @@ app.directive('edittooltip',  function() {
           trigger:'click hover',
           content: '<div class="customTip"><span id="inlineDeleteElement" ><i class="fa fa-trash-o"></i></span><span  id="inlineEditElement">edit</span></div>'
       }).parent().on('click', '#inlineEditElement', function() {
-          /*$scope.textBtnForm.$show();*/
           var item=field.attr('e-form');
           $scope[item].$show();
       }).on('click', '#inlineDeleteElement', function() {
@@ -202,20 +201,6 @@ app.directive('amount', function() {
           $(this).val(toFormat(num,2, 3,'.', ','));
           };
         });
-       /* field.focus(function() {
-          var value=$(this).val();
-          if (value!='') {
-            var num=toffloat(value,',', '.')
-          $(this).val(toFormat(num,2, 3,'.', ','));
-          };  
-        });
-      /*field.keyup(function() {
-          var value=$(this).val();
-          if (value!='') {
-            var num=toffloat(value,',', '.')
-          $(this).val(toFormat(num,2, 3,'.', ','));
-          };  
-        });*/
         function toffloat(stringVar,s, c) {
             var regex1 = new RegExp('\\'+s+'', "g");
             var regex1 = new RegExp('\\'+c+'', "g");
@@ -262,12 +247,6 @@ app.directive('draggable', function() {
         el.addEventListener(
             'dragstart',
             function(e) {
-              /* var ell=$(el).closest(".cardElement");
-                var position=$(ell).position();
-                ell.offset({ top: (15-position.top), left: (15-position.left)});
-                var position=$(ell).position();
-                */
-               /* $(el).css({"position":"absolute"});*/
                 e.dataTransfer.effectAllowed = 'move';
                 e.dataTransfer.setData('Text', this.id);
                 this.classList.add('drag');
@@ -291,9 +270,6 @@ app.directive('draggable', function() {
                 if (e.stopPropagation) e.stopPropagation();
 
                 this.classList.remove('over');
-
-                //var item = document.getElementById(e.dataTransfer.getData('Text'));
-                //this.appendChild(item);
 
                 return false;
             },
@@ -344,10 +320,6 @@ app.directive('droppable', function() {
                 if (e.stopPropagation) e.stopPropagation();
 
                 this.classList.remove('over');
-
-                //var item = document.getElementById(e.dataTransfer.getData('Text'));
-                //this.appendChild(item);
-
                 return false;
             },
             false
@@ -490,8 +462,6 @@ app.directive('cdatetimepicker', function($parse) {
           }
          },
          step:5,      
-        /* format:'F dS Y  -  h:i A',
-         formatTime:'g:i A'*/
         format:'m/d/Y h:i a',
         formatTime:'g:i A',
         onChangeDateTime:function(current_time,$input){
@@ -503,8 +473,6 @@ app.directive('cdatetimepicker', function($parse) {
         };
         var model = $parse(attrs.model);
          dp.datetimepicker(params);
-        // $("#leadEventStartsAt").datetimepicker(params);
-        // $("#leadEventEndsAt").datetimepicker(params);
 
        dp.val(null);
        $scope.$watch(attrs.model, function(newValue, oldValue) {
@@ -520,13 +488,9 @@ app.directive('gototext', function($parse) {
       restrict: 'A',
       require:'ngModel',
       link: function($scope, element, attrs,ngModel) {
-          var limit = 100;/* $scope.limit;*/
+          var limit = 100;
           var model = $(element).text();
           var ellipsestext = "...";
-         /*
-          var moretext = attrs.moretext;
-          var lesstext = attrs.lesstext;
-          */
           if (model!=null) {
               if(model.length > limit) {
               var shortText = model.substr(0, limit);
@@ -703,8 +667,6 @@ app.directive('fittext', function($timeout) {
             var shrinkFactor = ratioHeight > ratioWidth ? ratioHeight : ratioWidth;
             fontSize -= shrinkFactor;
             resizeText();
-          }else{
-            /*textContainer.style.visibility = "visible";*/
           }
         }, 0);
       };
@@ -717,7 +679,6 @@ app.directive('fittext', function($timeout) {
         if(oldText !== undefined && newText.length < oldText.length){
           fontSize = maxFontSize;
         }
-        /*textContainer.style.visibility = "hidden";*/
         resizeText();
       });
     }

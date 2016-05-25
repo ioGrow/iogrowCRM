@@ -987,7 +987,6 @@ class CrmEngineApi(remote.Service):
         name='casestatuses.patch'
     )
     def CasestatusPatch(self, my_model):
-        # user_from_email = EndpointsHelper.require_iogrow_user()
         my_model.put()
         return my_model
 
@@ -1009,11 +1008,6 @@ class CrmEngineApi(remote.Service):
         user_from_email = EndpointsHelper.require_iogrow_user()
         parent_key = ndb.Key(urlsafe=request.about)
         parent = parent_key.get()
-        print "----------------that's it ----------------------"
-        print parent.id
-        print "-------------------------------------"
-        print parent_key.kind()
-        print "--------------------------------------"
         # insert topics edge if this is the first comment
         if parent_key.kind() != 'Note' and parent.comments == 0:
             edge_list = Edge.list(
@@ -1139,12 +1133,7 @@ class CrmEngineApi(remote.Service):
         name='comments.patch'
     )
     def CommentPatch(self, my_model):
-        # user_from_email = EndpointsHelper.require_iogrow_user()
         # TODO: Check permissions
-        print "************************"
-        print my_model
-        print "************************"
-
         my_model.put()
         return my_model
 
@@ -1254,21 +1243,6 @@ class CrmEngineApi(remote.Service):
         )
         return message_types.VoidMessage()
 
-    # custom_fields APIs
-    # customfield.insert api
-    # @endpoints.method(ContactSynchronizeRequest, message_types.VoidMessage,
-    #                   path='contacts/synchronize', http_method='POST',
-    #                   name='contacts.synchronize')
-    # def synchronize_google_contact(self, request):
-    #     user_from_email = EndpointsHelper.require_iogrow_user()
-    #     taskqueue.add(
-    #             url='/workers/sync_contact_with_gontacts',
-    #             queue_name='iogrow-gontact',
-    #             params={
-    #                 'key': user_from_email.key.urlsafe()
-    #             }
-    #     )
-    #     return message_types.VoidMessage()
 
     @endpoints.method(iomessages.CustomFieldInsertRequestSchema, iomessages.CustomFieldSchema,
                       path='customfield/insert', http_method='POST',
@@ -1372,9 +1346,6 @@ class CrmEngineApi(remote.Service):
                       name='highrise.import_peoples')
     def highrise_import_peoples(self, request):
         user = EndpointsHelper.require_iogrow_user()
-        ############
-        # store other company == company.all()
-        #############
         accounts_keys = {}
         companies = EndpointsHelper.highrise_import_companies(request)
         for company_details in companies:
@@ -1439,9 +1410,6 @@ class CrmEngineApi(remote.Service):
         contacts_keys = {}
         tasks_id = []
         for person in people:
-            ############
-            # Store company if persone
-            ################
             account_schema = ""
             if person.company_id != 0:
                 company_details = EndpointsHelper.highrise_import_company_details(person.company_id)
@@ -1530,15 +1498,12 @@ class CrmEngineApi(remote.Service):
 
             contact_schema = Contact.insert(user, contact_request)
             contacts_keys[person.id] = ndb.Key(urlsafe=contact_schema.entityKey)
-            # create edge between account and persone
             if account_schema != "":
                 Edge.insert(start_node=ndb.Key(urlsafe=account_schema.entityKey),
                             end_node=ndb.Key(urlsafe=contact_schema.entityKey),
                             kind='contacts',
                             inverse_edge='parents')
 
-            #########
-            # store tasks of person
             tasks = EndpointsHelper.highrise_import_tasks_of_person(person.id)
 
             for task in tasks:
@@ -1560,8 +1525,6 @@ class CrmEngineApi(remote.Service):
                 )
                 task_schema = Task.insert(user, task_request)
 
-            ###########
-            # store notes of persons
             notes = list()
             try:
                 notes = EndpointsHelper.highrise_import_notes_of_person(person.id)
@@ -1593,8 +1556,6 @@ class CrmEngineApi(remote.Service):
                     indexed_edge=str(entityKey.id())
                 )
 
-        #########
-        # store opporutnities of person
         deals = EndpointsHelper.highrise_import_opportunities()
         i = 0
         for deal in deals:
@@ -1619,7 +1580,6 @@ class CrmEngineApi(remote.Service):
                     )
             else:
                 # contact
-                # contact=Contact.get_key_by_name(user,deal)
                 if deal.party_id in contacts_keys.keys():
                     key = contacts_keys[deal.party_id]
                     opportunity_request = OpportunityInsertRequest(
@@ -2507,7 +2467,6 @@ class CrmEngineApi(remote.Service):
         for record in request.fields:
             if record.property_type == 'StringProperty_repeated':
                 junkers = re.compile('[[" \]]')
-                # record_list_of_values = junkers.sub('', record.value).split(',')
                 clean_str = ast.literal_eval(record.value)
                 record_list_of_values = ast.literal_eval(clean_str)
                 prop = ndb.StringProperty(record.field, repeated=True, indexed=False)
@@ -2782,9 +2741,6 @@ class CrmEngineApi(remote.Service):
                       name='opportunities.update_stage')
     def opportunity_update_stage(self, request):
         user_from_email = EndpointsHelper.require_iogrow_user()
-        print "#################((((update stages]]]]]]###########"
-        print ndb.Key(urlsafe=request.entityKey).get()
-        print ndb.Key(urlsafe=request.stage).get()
         Opportunity.update_stage(
             user_from_email=user_from_email,
             request=request
@@ -3319,21 +3275,8 @@ class CrmEngineApi(remote.Service):
                     )
 
                     EndpointsHelper.send_message(service, 'me', message)
-                    # sender_address = user_from_email.google_display_name+" <notifications@gcdc2013-iogrow.appspotmail.com>"
-
-                    # body = """
-                    # Thank you for creating an account! Please confirm your email address by
-                    # clicking on the link below:
-                    # %s
-                    # """ % confirmation_url
-
-                    # body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
-                    # body=user_from_email.google_display_name+"invited you to ioGrow:\n"+"We are using ioGrow to collaborate, discover new customers and grow our business \n"+"It is a website where we have discussions, share files and keep track of everything \n"+"related to our business.\n"+"Accept this invitation to get started : "+confirmation_url+"\n"+"For question and more : \n"+"Contact ioGrow at contact@iogrow.com."
-                    # body="<div >"+"<div style='margin-left:486px'>"+"<img src='/static/src/img/avatar_2x.png'  style='width:130px;border-radius: 69px;'/>"+"</div>"+"<div>"+"<h1 style='margin-left:303px ;font-family: sans-serif;color: #91ACFF;'>"+ "<span style='color:#1C85BB'>"+user_from_email.google_display_name+"</span>"+"has invited you to use ioGrow"+"</h1>"+"<p style='margin-left: 191px;font-family: monospace;color: #5B5D62;font-size: 17px'>"+"We are using ioGrow to collaborate, discover new customers and grow our business ."+"<br>"+"It is a website where we have discussions, share files and keep track of everything"+"<br>"+"<span style='margin-left:237px'>"+"related to our business."+"</span>"+"</p>"+"</div>"+"<div>"+"<a href='"+confirmation_url+"' style='margin-left: 420px;border: 2px solid #91ACFF;padding: 10px;border-radius: 18px;text-decoration: blink;background-color: #91ACFF;color: white;font-family: sans-serif;'>"+"JOIN YOUR TEAM ON IOGROW"+"</a> <br>"+"<hr style=' width: 439px;margin-left: 334px;margin-top: 28px;'>"+"<p style='margin-left:470px;font-family:sans-serif'>"+"<img src='/static/src/img/sm-iogrow-true.png'>"+" ioGrow (c)2015" +"</p>"+"</div>"+"</div>"
-
-                    # mail.send_mail(sender_address, email , subject,body)
         else:
-            print "piracy proccess has failed , ha ha ha !"
+            print "Fail"
         return message_types.VoidMessage()
 
     # organizations.get api v2
@@ -3452,19 +3395,10 @@ class CrmEngineApi(remote.Service):
         invitees_list = []
         invitees = Invitation.list_invitees(user_from_email.organization)
         for invitee in invitees:
-            #     invitenmbrOfLicenses=0
-            #     inviteisLicensed=False
-            #     edgeinvite=Edge.query().filter(Edge.start_node==user.key and Edge.kind=="licenses").fetch()
-            #     if edgeinvite:
-            #            invitenmbrOfLicenses=len(edge)
-            #            inviteLicenseStatus='Active'
-            #     else:
-            #            inviteLicenseStatus='Not active'
             invited_schema = iomessages.InvitedUserSchema(
                 invited_mail=invitee['invited_mail'],
                 invited_by=invitee['invited_by'],
                 updated_at=invitee['updated_at'].strftime("%Y-%m-%dT%H:%M:00.000"),
-                # LicenseStatus= inviteLicenseStatus,
                 stripe_id=invitee['stripe_id']
             )
             invitees_list.append(invited_schema)
@@ -3488,24 +3422,6 @@ class CrmEngineApi(remote.Service):
             user_from_email=user_from_email, request=request
         )
 
-        #  if not my_model.from_datastore:
-        #     raise endpoints.NotFoundException('Account not found.')
-        # patched_model_key = my_model.entityKey
-        # patched_model = ndb.Key(urlsafe=patched_model_key).get()
-        # print "############################################"
-        # properties = User().__class__.__dict__
-        # for p in properties.keys():
-        #     patched_p = eval('patched_model.' + p)
-        #     my_p = eval('my_model.' + p)
-        #     if (patched_p != my_p) \
-        #     and (my_p and not(p in ['put', 'set_perm', 'put_index'])):
-        #         exec('patched_model.' + p + '= my_model.' + p)
-        #         print "************************************************"
-        #         print p
-        # patched_model.put()
-        # memcache.set(user_from_email.email, patched_model)
-        # print patched_model
-        # return patched_model
 
     @endpoints.method(setAdminRequest, message_types.VoidMessage,
                       http_method='POST', path='users/setAdmin', name='users.setadmin')
@@ -3531,50 +3447,6 @@ class CrmEngineApi(remote.Service):
         if not user:
             raise endpoints.NotFoundException('User not found')
         return user
-        # @User.method(
-        #                    request_fields=('id',),
-        #                    path='user/{id}',
-        #                    http_method='GET',
-        #                    name='user.get'
-        #                    )
-        # def UserGet(self,my_model):
-        #     if not my_model.from_datastore:
-        #         raise('Lead status not found')
-        #     return my_model
-        # hadji hicham 11/08/2014. get user by id
-
-    # @endpoints.method(iomessages.customerRequest, iomessages.customerResponse,
-    #                   http_method='GET', path='users/{id}', name='users.customer')
-    # def Customer(self, request):
-    #     user_from_email = EndpointsHelper.require_iogrow_user()
-    #     cust = stripe.Customer.retrieve(request.id)
-    #     charges_list = stripe.Charge.all(customer=request.id)
-    #     subscriptions_list = cust.subscriptions.all()
-    #
-    #     subscriptions = []
-    #     for subscription in subscriptions_list.data:
-    #         kwargsubscription = {
-    #             "id": subscription.id,
-    #             "current_period_start": datetime.datetime.fromtimestamp(
-    #                 int(subscription.current_period_start)).strftime('%Y-%m-%d %H:%M:%S'),
-    #             "current_period_end": datetime.datetime.fromtimestamp(int(subscription.current_period_end)).strftime(
-    #                 '%Y-%m-%d %H:%M:%S'),
-    #             "status": str(subscription.status),
-    #             "plan": subscription.plan.name
-    #         }
-    #         subscriptions.append(kwargsubscription)
-    #
-    #     kwargs = {
-    #         "customer_id": cust.id,
-    #         "email": cust.email,
-    #         "google_public_profile_photo_url": cust.metadata.google_public_profile_photo_url,
-    #         "google_display_name": cust.metadata.google_display_name,
-    #         "google_user_id": cust.metadata.google_user_id,
-    #         "subscriptions": subscriptions
-    #     }
-    #     # user=User.query().filter(User.id==my_model.id).get()
-    #
-    #     return iomessages.customerResponse(**kwargs)
 
     # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
     @endpoints.method(CalendarFeedsRequest, CalendarFeedsResults,
@@ -3597,7 +3469,6 @@ class CrmEngineApi(remote.Service):
             service = build('calendar', 'v3', http=http)
             page_token = None
             while True:
-                # must be improved !! ,timeMin=request.calendar_feeds_start,timeMax=request.calendar_feeds_end
                 eventsG = service.events().list(calendarId='primary', pageToken=page_token, timeMax=timeMax,
                                                 timeMin=timeMin).execute()
                 page_token = events.get('nextPageToken')
@@ -3606,14 +3477,12 @@ class CrmEngineApi(remote.Service):
                     break
         except:
             pass
-            # raise endpoints.UnauthorizedException('Invalid grant' )
         # filter this table
         events = Event.query().filter(Event.organization == user_from_email.organization,
                                       Event.starts_at >= calendar_feeds_start, Event.starts_at <= calendar_feeds_end)
         # filter this table .
         tasks = Task.query().filter(Task.organization == user_from_email.organization)
         feeds_results = []
-        # , ,Task.due>=calendar_feeds_start,Task.due<=calendar_feeds_end
         try:
             for evtG in eventsG['items']:
                 exists = False
@@ -3655,21 +3524,7 @@ class CrmEngineApi(remote.Service):
                     feeds_results.append(CalendarFeedsResult(**kwargs0))
         except:
             pass
-            # # datetime.combine(d, datetime.min.time())
-            # evy=Event( owner = user_from_email.google_user_id,
-            #     organization = user_from_email.organization,
-            #     access = 'public',
-            #     title = evtG['summary'],
-            #     starts_at =datetime.datetime.strptime(start,"%Y-%m-%dT%H:%M:00.000000"),
-            #     ends_at = datetime.datetime.strptime(end,"%Y-%m-%dT%H:%M:00.000000"),
-            #     description = desc,
-            #     author = author,
-            #     event_google_id=evtG['id'],
-            #     allday="false")
-            # evy.put()
-            # print "------------------yeah baby------------------"
-            # print evtG
-            # print "---------------------------------------------"
+
         # get the new list of events.
 
         for event in events:
@@ -3679,7 +3534,6 @@ class CrmEngineApi(remote.Service):
             title = event.title
             for evtG in eventsG['items']:
                 if evtG['id'] == str(event.event_google_id):
-                    print "**********yes i am in**************"
                     if evtG['description'] == event.description:
                         pass
                     else:
@@ -4153,7 +4007,6 @@ class CrmEngineApi(remote.Service):
                 user_key = ndb.Key(urlsafe=request.entityKeys[i])
                 if not user_key.get().is_admin:
                     user_key.delete()
-                    # Invitation.delete_by(request.emails[x])
         else:
             raise endpoints.UnauthorizedException("you are not authorised")
 

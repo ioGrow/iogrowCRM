@@ -155,10 +155,6 @@ class Edge(ndb.Expando):
 
     @classmethod
     def list(cls, start_node, kind, limit=1000, pageToken=None, order='DESC'):
-        # mem_key = start_node.urlsafe()+'_'+kind
-        # # if memcache.get(mem_key) is not None:
-        # #     return memcache.get(mem_key)
-        # # else:
         return cls.list_from_datastore(start_node, kind, limit, pageToken, order)
 
     @classmethod
@@ -419,18 +415,6 @@ class Node(ndb.Expando):
                     structured_data['addresses'] = addresses
                 else:
                     del structured_data['addresses']
-            # customfields=None
-            # if 'customfields' in structured_data.keys():
-            #     customfields=iomessages.customfieldsList()
-            #     for customfield in structured_data['customfields']:
-
-            #         customfield_shema=iomessages.customfieldsShema(name=customfield.keys()[0],
-            #                                                        value=customfield[customfield.keys()[0]])
-            #         customfields.items.append(customfield_shema)
-            #     if customfields.items:
-            #         structured_data['customfields']=customfields
-            #     else:
-            #         del structured_data['customfields']
             social_links = None
             if 'sociallinks' in structured_data.keys():
                 social_links = iomessages.SocialLinkListSchema()
@@ -449,8 +433,6 @@ class Node(ndb.Expando):
             print 'an error on extracting data'
         return structured_data
 
-    # @classmethod
-    # def to_structured_adress(cls,infonodes):
 
     @classmethod
     def insert_info_node(cls, parent_key, request):

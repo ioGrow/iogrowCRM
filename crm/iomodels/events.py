@@ -205,8 +205,6 @@ class Event(EndpointsModel):
                     search.TextField(name='title', value=empty_string(self.title)),
                     search.DateField(name='created_at', value=self.created_at),
                     search.DateField(name='updated_at', value=self.updated_at),
-                    # search.DateField(name='starts_at', value = self.starts_at),
-                    # search.DateField(name='ends_at', value = self.ends_at),
                     search.NumberField(name='comments', value=self.comments),
                     search.TextField(name='about_kind', value=empty_string(self.about_kind)),
                     search.TextField(name='about_item', value=empty_string(self.about_item)),
@@ -501,16 +499,3 @@ class Event(EndpointsModel):
             }
             event_results.append(EventFetchResult(**kwargs))
         return EventFetchResults(items=event_results)
-
-        # @classmethod
-        # def permission(cls,request):
-        #      if request.parent=="contact":
-        #         contact_key=ndb.Key(Contact, int(request.id))
-        #         edges=Edge.query().filter(Edge.kind=="events",Edge.start_node==request.id)
-        #      if edges:
-        #         for edge in edges :
-        #             print "-**-*-*-*-*-*over here -*-*-*-*-*-*-*-*-*"
-        #             print edge
-        #             print "*-*-*-*-*-*-*done *-*-*-*-*-*-*-*-*-*-*-*"
-
-        #      return message_types.VoidMessage()

@@ -16,13 +16,6 @@
         </div>
     </div>
     <div class=" subHeaderContent">
-        <div class="pull-right sharebuttonDiv">
-
-            <!-- <button class="btn jfk-button jfk-button-action" ng-click="save(account)">
-              <i class="fa-cog"></i>
-            </button> -->
-        </div>
-
         <h2 class="page-title">
             <a href="/#/admin/users" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
                 <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;"
@@ -1197,9 +1190,7 @@
                                                    ng-click="selectTag(tag_item,$index,$event)"
                                                    style="margin-right: 10px;" class="pull-right customCheck"
                                                    ng-checked="isSelected()">
-                                            <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                                               <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-                                             </span>-->
+
 
                                             <form ng-submit="doneEditTag(tag_item)"
                                                   ng-show="(tag_item==edited_tag)&&(manage_tags)">
@@ -1404,9 +1395,6 @@
                                 <input type="checkbox" ng-show="!manage_tags"
                                        ng-click="selectTag(tag_item,$index,$event)" style="margin-right: 10px;"
                                        class="pull-right customCheck" ng-checked="isSelected()">
-                                <!-- <span class="pull-right tag-checked" ng-show="selected_tags.indexOf(tag_item) != -1">
-                                   <i class="fa fa-check-circle-o" style="color:idealTextColor(<%=tag_item.color%>);"></i>
-                                 </span>-->
 
 
                                 <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
@@ -1503,13 +1491,12 @@
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
                 <input ng-click="deleteTaskonList()" type="submit" class="btn red" value="Delete this Task">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
     </div>
 </div>
-<!-- -->
+
 <script type="text/javascript">
     $('#assigeeList').lionbars({});
 </script>

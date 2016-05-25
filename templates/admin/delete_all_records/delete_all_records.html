@@ -1,7 +1,7 @@
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i>{{  _('Settings') }}</span> <!--{{_(active_app.label)}}-->
+            <span class="active-app"><i class="fa fa-cog"></i>{{  _('Settings') }}</span>
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
@@ -10,19 +10,6 @@
             {% endfor %}
         </ul>
     </div>
-    <!--  <div class="subHeaderContent" style="border-right-width: 0px;">
-        <div class="col-md-4 active-app"><i class="fa fa-globe section-icon"></i>
-            Regional
-        </div>
-
-        <a class="btn red save-btn pull-right" id="customButton" ng-click="saveUser()">
-            <i class="fa fa-floppy-o"></i> {{_("Save")}}
-        </a>
-        <a class="btn default pull-right" ng-click="resetToDefault()" style="margin-right: 10px">
-            <i class="fa fa-reply"></i> {{_("Default")}}
-        </a>
-
-    </div> -->
 </div>
 
 <div class="page-content admin-content">
@@ -84,8 +71,7 @@
         </div>
 
 
-        <!--<div class="from-group col-md-12" style="padding: 10px 0px;"><a class="btn red" style="padding: 5px 20px;border-radius: 0px !important;"> Save</a></div>-->
-    </div>
+        </div>
 </div>
 <div id="deleteAllRecords" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
@@ -106,7 +92,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="delete()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
 
         </div>

@@ -1,6 +1,4 @@
 var opportunityservices = angular.module('crmEngine.opportunityservices',[]);
- /*****************HKA 20.10.2013 Opportunity services ****************/
-//HKA 20.10.2013   Base service (create, delete, get)
 
 
 opportunityservices.factory('Opportunity', function($rootScope) {

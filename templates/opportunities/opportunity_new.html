@@ -316,26 +316,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!--<div class="row">
-                            <div class="">
-                                <div class="col-md-6">
-                                 <div class="input-icon">
-                                  <i class="fa fa-calendar"></i>
-                                    <input cusdatetimepicker data-model="opportunity.closed_date" type="text" class="form-control" placeholder="{{ _('Due date')}}" value="" id="leadEventStartsAt">
-                                  </div>
-                                </div>
-                                <div class="col-md-6">
-                                   <ul id="slimList" class="list-unstyled contact-infos infoslist">
-                                        <li ng-repeat="contact in contacts"> 
-                                           <img class="contact-photo" src="/static/src/img/avatar_contact.jpg">
-                                            <%= contact.firstname || contact.full_name %> <%= contact.lastname %>
-                                             <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(existingcontacts,$index)" data-dismiss="alert">                                                   
-                                             </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div> -->
                                             </div>
 
 
@@ -404,39 +384,6 @@
                                 </div>
                             </div>
                             <div class="row" style="margin-top:20px">
-                                <!--<div class="col-md-6">
-
-                               <div class="news-blocks blank-card blank-card-yellow">
-                                <h3>{{ _('Opportunity Stage') }}</h3>
-                                <div class="row">
-                                  <div class="col-md-12">
-                                    <div class="form-group">
-
-                                        <div class="">
-                                          <select ng-model="initialStage" ng-options="opps as opps.name + ' - ( ' + opps.probability + '% )'   for opps in opportunitystages track by opps.probability" class="form-control selector-margin" >
-
-                                          </select>
-                                        </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-md-12">
-                                    <p>{{ _('Estimated closed date') }}:</p>
-                                    <div class="form-group row">
-                                        <div class="col-md-12">
-                                            <input cusdatetimepicker data-model="opportunity.closed_date" type="text" class="form-control" placeholder="{{ _('Add a due date')}}" value="" id="leadEventStartsAt">
-                                        </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-
-                              </div>
-
-
-                          </div>-->
-
                                 <div class="col-md-6">
                                     <div class="news-blocks blank-card blank-card-red">
                                         <h3><i class="fa fa-dot-circle-o"
@@ -520,24 +467,6 @@
                                                         <div class="clearfix"></div>
                                                     </div>
                                                 </div>
-                                                <!--<div class="news-block-tags">
-                                    <div class="form-group row">
-                                      <label class="control-label col-md-4"><i class="fa fa-user"></i> {{ _(' Descision Maker')}}</label>
-                                      <div class="col-md-8">
-                                        <div class="row">
-                                          <div class="col-md-4" style="padding-right: 0px;">
-                                            <select ng-model="" class="form-control">
-                                                <option value='true'>{{ _('Yes')}}</option>
-                                                <option value='false'>{{ _('No')}}</option>                                        
-                                            </select> 
-                                          </div>
-                                          <div class="col-md-8"  style="padding-left: 5px;">
-                                             <input ng-model="opportunityAddi.decission_maker"   class="form-control ng-pristine ng-valid" autofocus="" type="text" placeholder="{{_('Descision Maker ?')}}"  >
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>-->
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="news-block-tags">
@@ -878,15 +807,6 @@
                                             </ul>
                                             <div class="row">
                                                 <div class="col-md-12  margin-bottom-10">
-                                                    <!--<p class⁼"lead"="">
-                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                </a>
-                                <br>
-                                {{_('Or just add notes to remember what\'s important.')}}
-                                <br>
-                            </p>-->
                                                     <form id="addNote" class="ng-pristine ng-valid">
                                                         <div class="form-group">
                                                             <input class="form-control ng-pristine ng-valid"
@@ -1582,9 +1502,7 @@
         var handleTitle = function (tab, navigation, index) {
             var total = navigation.find('li').length;
             var current = index + 1;
-            // set wizard title
-            // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
-            // set done steps
+             // set done steps
             jQuery('li', $('#form_wizard_1')).removeClass("done");
             var li_list = navigation.find('li');
             for (var i = 0; i < index; i++) {

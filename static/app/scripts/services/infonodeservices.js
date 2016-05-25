@@ -39,7 +39,6 @@ accountservices.factory('InfoNode', function($http) {
                  $scope.isLoading = false;
               // Call the method $apply to make the update on the scope
                  $scope.$apply();
-                 //$scope.responseCustomFields();
 
               } else {
                  if(resp.message=="Invalid token"){

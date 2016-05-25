@@ -74,34 +74,6 @@
                     </tbody>
                 </table>
             </div>
-            <!--<div ng-repeat="casestate in casesatuses" data-column="<%=getPosition($index)%>" class="cardElement"
-                 ng-drop="dropTag(contact)"
-                 ng-class="{rightcards: getPosition($index)==4}">
-                <div class="detailsSection">
-                    <div class="head">
-
-                        <div class="text">
-                            <div class="name">
-                                <%=casestate.status%>
-                            </div>
-                            <div class="pitch">
-                                <span class="page-meta">
-                                    <i class="icon-pencil">
-                                        <a ng-click="editcasestatus(casestate)" class="btn-link addAnotherPhone"
-                                           data-toggle="modal"> {{_("Edit")}}
-                                        </a>
-                                    </i> |
-                                    <i class="icon-trash"></i>
-                                    <a ng-click="deletecasestatus(casestate)" class="btn-link addAnotherPhone">
-                                        {{_("Delete")}}
-                                    </a>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-            </div>-->
         </div>
     </div>
 </div>
@@ -114,7 +86,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3>{{ _("New Case Status") }}</h3>
             </div>
-            <!--<form name="addcasestatus" class="form-horizontal">-->
+
             <div class="modal-body">
                 <fieldset>
                     <div class="form-group">
@@ -129,7 +101,6 @@
                 <button type="submit" class="btn green" ng-click="saveCaseStatus(casestatus)">{{ _("Add Case Status") }}
                 </button>
             </div>
-            <!--</form>-->
         </div>
     </div>
 </div>
@@ -143,7 +114,6 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3>{{ _("Edit Case Status") }}</h3>
             </div>
-            <!--<form name="addcasestatus" class="form-horizontal">-->
             <div class="modal-body">
 
                 <fieldset>
@@ -158,7 +128,6 @@
                 <button type="submit" class="btn green" ng-click="updateCasestatus(casestatusedit)">{{ _("Save") }}
                 </button>
             </div>
-            <!--</form>-->
         </div>
     </div>
 </div>

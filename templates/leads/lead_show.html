@@ -72,14 +72,11 @@
                                ng-click="editbeforedeleteDoc()">
                                 <i class="fa fa-trash-o"></i>
                             </a>
-                            <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                      <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
-                </a>-->
+
                             <div class="btn-group show_md"
                                  style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                                 <a class="headerBtn" title="More" data-toggle="dropdown">
-                                    <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
-                                    More
+                                    {{ _("More") }}
                                 </a>
                                 <ul class="dropdown-menu drp-dwn-right">
                                     <li>
@@ -1272,8 +1269,7 @@
 
                                                 <input ng-click="deletelead()" type="submit" class="btn red"
                                                        value="Delete">
-                                                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-                                            </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -1911,7 +1907,6 @@
                                                                                                             style="font-size:13px"></i>
                                                                                                         Add Time
                                                                                                         scale</a>
-                                                                                                    <!-- <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>-->
                                                                                                     <ul id="tasks"
                                                                                                         class="list-unstyled lead_related_events"
                                                                                                         ng-hide="newEventform">
@@ -2224,15 +2219,7 @@
 
                                                         <td>
                                                             <span style=" font-size: 16px; font-weight:400"><%= opportunity.current_stage.name%></span>
-                                                            <!--<div easypiechart class="chart chartOnList" options="chartOptionsOnList" percent="opportunity.current_stage.probability"></div>
-                                                            <div class="oppStage">
-                                                                <div style=" text-align: center;">
-                                                                  <span style=" font-size: 16px; color: rgb(39, 153, 28); "><%=opportunity.current_stage.probability%> %</span>
-                                                                  <span style=" font-size: 15px; "><%=opportunity.current_stage.name%></span>
-
-                                                                </div>
-                                                             </div>-->
-                                                        </td>
+                                                            </td>
                                                         <td style="word-wrap: break-word;max-width:200px;text-align:center">
                                                             <span> <%= opportunity.closed_date | date:'dd-MM-yyyy' %></span>
                                                             </span>
@@ -2752,7 +2739,6 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                     <input ng-click="deletelead()" type="submit" class="btn red" value="Delete this Lead">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
                 </form>
             </div>
@@ -3144,7 +3130,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="convert(lead)" type="submit" class="btn green" value="Convert this lead">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -3249,7 +3234,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteaccount()" type="submit" class="btn red" value="Delete this Account">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -3274,7 +3258,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Information">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -3590,7 +3573,6 @@
 
                 <input ng-hide="isLoading" ng-click="addTask(task)" type="submit" class="btn green"
                        value="Add this task">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
 
                 </form>
             </div>
@@ -3618,7 +3600,6 @@
 
                 <input ng-hide="isLoading" ng-click="createDocument(newdocument)" type="submit" class="btn green"
                        value="Create this document">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
 
                 </form>
             </div>
@@ -3655,7 +3636,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteopportunity()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
 
         </div>
@@ -3691,7 +3671,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteDocs()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
 
         </div>
@@ -3770,7 +3749,6 @@
 
                 <input ng-hide="isLoading" ng-click="addEvent(ioevent)" type="submit" class="btn green"
                        value="{{ _('Add this event') }}">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="{{_('Loading...')}}" disabled-->
 
 
             </div>
@@ -3985,7 +3963,6 @@
 
                                             <div class="oppEstDate"
                                                  style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                <!--  <input id="datetimepickerjquery" type="text" > -->
 
 
                                     <span ng-hide="showStartsCalendar||showEventInput"
@@ -3998,7 +3975,6 @@
                                                            class="form-control calendar-form-controle"
                                                            placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
                                                            id="leadEventStartsAt">
-                                                    <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
                                                 </div>
                                             </div>
 
@@ -4021,7 +3997,6 @@
                                                            placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
                                                            id="leadEventEndsAt">
 
-                                                    <!--   <input cusdatetimepicker data-model="" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt"> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -4351,12 +4326,6 @@
   background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()"
                                                                            class=" calendar-close-invite"
                                                                            style=" top: 2px !important;"></a></span>
-                                        <!--      <ul  class="list-inline"style="list-style:none" ng-show="remindmeby">
-                                                 <li> <strong> By:</strong> </li>
-                                                 <li><input type="radio"  name="by" ng-model="method" value="email"> Email</li>
-                                                 <li><input type="radio" ng- name="by" ng-model="method" value="sms">SMS</li>
-
-                                               </ul> -->
                                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                             <li role="presentation"><a role="menuitem" tabindex="-1"
                                                                        ng-click="Remindme(0)">No notification</a></li>
@@ -4425,8 +4394,6 @@
             var handleTitle = function (tab, navigation, index) {
                 var total = navigation.find('li').length;
                 var current = index + 1;
-                // set wizard title
-                // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
                 // set done steps
                 jQuery('li', $('#form_wizard_1')).removeClass("done");
                 var li_list = navigation.find('li');
@@ -4443,12 +4410,10 @@
                 if (current >= total) {
                     $('#form_wizard_1').find('.button-next').hide();
                     $('#form_wizard_1').find('.button-submit').show();
-                    // displayConfirm();
                 } else {
                     $('#form_wizard_1').find('.button-next').show();
                     $('#form_wizard_1').find('.button-submit').hide();
                 }
-                //  App.scrollTo($('.page-title'));
             }
 
             // default form wizard
@@ -4511,7 +4476,6 @@
                 })
             }
         };
-        /* $('body').popover({ selector: '[data-popover]', trigger: 'click hover', placement: 'left', delay: {show: 50, hide: 400}});*/
         $('#assigeeList, .lead_related_events, .slim-linkedin, #collaborators').lionbars({autohide: true});
         $('.waterfall2').waterfall({
             colMinWidth: 210,

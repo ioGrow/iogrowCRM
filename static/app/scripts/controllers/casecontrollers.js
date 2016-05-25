@@ -133,22 +133,9 @@ app.controller('CaseListCtrl', ['$scope','$filter','Auth','Case','Account','Cont
             User.list($scope,{});
             var paramsTag = {'about_kind':'Case'};
             Tag.list($scope,paramsTag);
-              // for (var i=0;i<100;i++)
-              // {
-              // var poww= Math.floor((Math.random() * 10) + 1);
-              //     var addon=Math.pow(10, poww);
-              //     var test=addon.toString();
-              //     var casee = {
-              //               'name':  test + ' Sync',
-              //               'access':'public',
-              //               'account': 'ahNkZXZ-Z2NkYzIwMTMtaW9ncm93chQLEgdBY2NvdW50GICAgICA4OALDA'
-              //             }
-              //     Case.insert($scope,casee);
-              // }
+
               ga('send', 'pageview', '/cases');
-              /*if (localStorage['caseShow']!=undefined) {
-                  $scope.show=localStorage['caseShow'];
-              };*/
+
        };
 
 $scope.selectMember = function(){  
@@ -217,35 +204,10 @@ $scope.selectMember = function(){
 // HADJI HICHAM -04/02/2015
 
    $scope.removeTag = function(tag,casee) {
-            
-
-            /*var params = {'tag': tag,'index':$index}
-
-            Edge.delete($scope, params);*/
             $scope.dragTagItem(tag,casee);
             $scope.dropOutTag();
         }
 
-/***********************************************************/
-       /*$scope.switchShow=function(){
-            if ($scope.show=='list') {      
-
-                 $scope.show = 'cards';
-                 localStorage['caseShow']="cards";
-                 $scope.selectedCards =[];
-                 $( window ).trigger( 'resize' ); 
-
-
-            }else{
-
-              if ($scope.show=='cards') {
-                 $scope.show = 'list';
-                  localStorage['caseShow']="list";
-                  $scope.selectedCards =[];
-              }
-              
-            };
-        }*/
          $scope.isSelectedCard = function(casee) {
             return ($scope.selectedCards.indexOf(casee) >= 0);
           };
@@ -254,7 +216,6 @@ $scope.selectMember = function(){
                if(element.hasClass('waterfall')){
                   $scope.selectedCards=[];
                };
-              /*$scope.selectedCards=[];*/
           }
           $scope.selectAll = function($event){
          
@@ -720,10 +681,6 @@ $scope.selectMember = function(){
         Case.list($scope,params);
      };
 
-
-    /***********************************************
-      HKA 19.02.2014  tags
-***************************************************************************************/
 $scope.listTags=function(){
       var paramsTag = {'about_kind':'Case'}
       Tag.list($scope,paramsTag);
@@ -790,30 +747,7 @@ $scope.selectTag= function(tag,index,$event){
       }
 
     };
-// $scope.selectTag= function(tag,index,$event){
-//       if(!$scope.manage_tags){
-//          var element=$($event.target);
-//          if(element.prop("tagName")!='LI'){
-//               element=element.parent();
-//               element=element.parent();
-//          }
-//          var text=element.find(".with-color");
-//          if($scope.selected_tags.indexOf(tag) == -1){
-//             $scope.selected_tags.push(tag);
-//             element.css('background-color', tag.color+'!important');
-//             text.css('color',$scope.idealTextColor(tag.color));
 
-//          }else{
-//             element.css('background-color','#ffffff !important');
-//             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-//              text.css('color','#000000');
-//          }
-//          ;
-//          $scope.filterByTags($scope.selected_tags);
-
-//       }
-
-//     };
   $scope.filterByTags = function(selected_tags){
          var tags = [];
          angular.forEach(selected_tags, function(tag){
@@ -855,14 +789,12 @@ $scope.editTag=function(tag,index){
   document.getElementById("tag_"+index).style.backgroundColor="white";
   document.getElementById("closy_"+index).style.display="none";
   document.getElementById("checky_"+index).style.display="none";
-     //$scope.hideeverything=true;
-    
+
      }
 $scope.hideEditable=function(index,tag){
   document.getElementById("tag_"+index).style.backgroundColor=tag.color;
   document.getElementById("closy_"+index).removeAttribute("style");
   document.getElementById("checky_"+index).style.display="inline";
-  //$scope.hideeverything=false;
   $scope.edited_tag=null;
 
 }
@@ -977,7 +909,6 @@ $scope.addTags=function(){
                      selected_case.tags.push(tag);
                   };  
             });
-            /*$scope.selectedCards=[];*/
           };
          $scope.apply();
       };
@@ -1313,7 +1244,6 @@ app.controller('CaseShowCtrl', ['$scope','$filter', '$route','Auth','Case', 'Top
 
 $scope.lunchMapsCalendar=function(){
    
-        // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
          window.open('http://www.google.com/maps/search/'+$scope.ioevent.where,'winname',"width=700,height=550");
     
      }
@@ -1388,7 +1318,6 @@ $scope.lunchMapsCalendar=function(){
           $scope.apply();
         };
          $scope.edgeInserted = function() {
-          /* $scope.tags.push()*/
           };
          $scope.removeTag = function(tag,$index) {
             var params = {'tag': tag,'index':$index}
@@ -1457,7 +1386,6 @@ $scope.lunchMapsCalendar=function(){
                         'access':$scope.casee.access
                       };
            Case.patch($scope,params);
-               // who is the parent of this event .hadji hicham 21-07-2014.
 
                 params["parent"]="case";
                 Event.permission($scope,params);
@@ -1538,7 +1466,6 @@ if ($scope.newTaskform==false) {
           $scope.newTaskform=true;
            }else{
             if (task.title!=null) {
-                    //  $('#myModal').modal('hide');
             if (task.due){
                 var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
                 params ={'title': task.title,
@@ -1602,8 +1529,7 @@ if ($scope.newTaskform==false) {
 
 
 
-//*************new form event*******************/
-// HADJI HICHAM 31/05/2015 
+// HADJI HICHAM 31/05/2015
 
 $scope.showAddEventPopup=function(){  
          $scope.locationShosen=false;
@@ -1692,9 +1618,6 @@ $scope.checkGuests=function(){
    $scope.Guest_params = $scope.invites.length != 0;
 }
 
-
-/***************reminder**************************/
-
 $scope.deletePicked= function(){
   $scope.something_picked=false;
   $scope.remindme_show="";
@@ -1743,19 +1666,8 @@ $('#timeZone').on('change', function() {
      $scope.timezoneChosen=this.value;
 });
 
-// $scope.checkallday=function(){
-//   $scope.allday=$scope.alldaybox;  
-//    }
-
-    
-/********************************************/
 
  $scope.addEvent = function(ioevent){
-
-           // $scope.allday=$scope.alldaybox;  
-
-     
-
 
             if (ioevent.title!=null&&ioevent.title!="") {
 
@@ -1790,14 +1702,7 @@ $('#timeZone').on('change', function() {
 
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
-                      // params ={'title': ioevent.title,
-                      //         'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      //         'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      //         'where': ioevent.where,
-                      //         'parent':$scope.lead.entityKey,
-                      //         'allday':"false",
-                      //         'access':$scope.lead.access
-                      // }
+
                     params ={'title': ioevent.title,
                       'starts_at':$filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
@@ -1817,16 +1722,6 @@ $('#timeZone').on('change', function() {
                         }
 
                     }else{
-                      // params ={
-                      //   'title': ioevent.title,
-                      //         'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      //         'where': ioevent.where,
-                      //         'parent':$scope.lead.entityKey,
-                      //         'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
-                      //         'allday':"false",
-                      //         'access':$scope.lead.access
-                      // }
-
                             params ={'title': ioevent.title,
                       'starts_at':$filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'ends_at': moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
@@ -1878,7 +1773,6 @@ $('#timeZone').on('change', function() {
      }
     }
 
-//*************************************************/
 
 $scope.cancelAddOperation= function(){
   $scope.timezonepicker=false;
@@ -1897,77 +1791,7 @@ $scope.cancelAddOperation= function(){
         $scope.locationShosen=false;
 }
 
- // //HKA 10.11.2013 Add event
- // $scope.addEvent = function(ioevent){
 
- //        if ($scope.newEventform==false) {
- //                $scope.newEventform=true;
- //           }else{
-
-
- //            if (ioevent.title!=null&&ioevent.title!="") {
-
- //                    var params ={}
-
-
- //                  // hadji hicham 13-08-2014.
- //                  if($scope.allday){
- //                         var ends_at=moment(moment(ioevent.starts_at_allday).format('YYYY-MM-DDT00:00:00.000000'))
-
- //                   params ={'title': ioevent.title,
- //                            'starts_at': $filter('date')(ioevent.starts_at_allday,['yyyy-MM-ddT00:00:00.000000']),
- //                            'ends_at':ends_at.add('hours',23).add('minute',59).add('second',59).format('YYYY-MM-DDTHH:mm:00.000000'),
- //                            'where': ioevent.where,
- //                            'parent':$scope.casee.entityKey,
- //                            'allday':"true",
- //                            'access':$scope.casee.access
- //                      }
-
-
-
- //                  }else{
-
- //                  if (ioevent.starts_at){
- //                    if (ioevent.ends_at){
- //                      params ={'title': ioevent.title,
- //                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
- //                              'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
- //                              'where': ioevent.where,
- //                              'parent':$scope.casee.entityKey,
- //                              'allday':"false",
- //                              'access':$scope.casee.access
- //                      }
-
- //                    }else{
- //                      params ={
- //                        'title': ioevent.title,
- //                              'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
- //                              'where': ioevent.where,
- //                              'parent':$scope.lead.entityKey,
- //                              'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
- //                              'allday':"false",
- //                              'access':$scope.casee.access
- //                      }
- //                    }
-
-
-
-
- //                  }
-
-
- //                  }
-
- //                   Event.insert($scope,params);
- //                  $scope.ioevent={};
- //                  $scope.newEventform=false;
-
-
-
- //        }
- //     }
-
- //    };
 
 
 // hadji hicham 14-07-2014 . update the event after we add .
@@ -1976,7 +1800,6 @@ $scope.updateEventRenderAfterAdd= function(){};
          $scope.deleteEvent =function(eventt){
     var params = {'entityKey':eventt.entityKey};
      Event.delete($scope,params);
-     //$('#addLeadModal').modal('show');
    }
       $scope.eventDeleted = function(resp){
    };
@@ -2008,7 +1831,6 @@ $scope.updatCasetHeader = function(casee){
              'name':casee.name,
              'priority' :casee.priority,
              'access':casee.access
-             //'status':$scope.casee.current_status.name
            }
   Case.patch($scope,params);
    var params = {
@@ -2170,12 +1992,6 @@ $scope.deletecase = function(){
                 params.items = new Array();
 
                  $.each(data.docs, function(index) {
-                      /*
-                      {'about_kind':'Account',
-                      'about_item': $scope.account.id,
-                      'title':newdocument.title,
-                      'mimeType':mimeType };
-                      */
                       var item = { 'id':data.docs[index].id,
                                   'title':data.docs[index].name,
                                   'mimeType': data.docs[index].mimeType,
@@ -2326,8 +2142,7 @@ $scope.listInfonodes = function(kind) {
     $scope.waterfallTrigger= function(){
 
 
-          /* $('.waterfall').hide();
-         $('.waterfall').show();*/
+
          $( window ).trigger( "resize" );
          if($(".chart").parent().width()==0){
           var leftMargin=210-$(".chart").width();
@@ -2548,14 +2363,6 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
                   return response.data.items;
                 });
       }
-       // var params_search_account ={};
-       // $scope.result = undefined;
-       // $scope.q = undefined;
-       // $scope.$watch('searchAccountQuery', function() {
-       //     params_search_account['q'] = $scope.searchAccountQuery;
-       //     Account.search($scope,params_search_account);
-
-       //  });
       $scope.changeStatus=function(status){
           $scope.status_selected=status;
       }
@@ -2565,22 +2372,8 @@ app.controller('CaseNewCtrl', ['$scope','$http','Auth','Casestatus','Case', 'Acc
        };
        $scope.accountInserted = function(resp){
           $scope.contact.account = resp;
-        //  $scope.save($scope.contact);
       };
-      // var params_search_contact ={};
-      // $scope.$watch('searchContactQuery', function() {
-      //   if($scope.searchContactQuery){
-      //       if($scope.searchContactQuery.length>1){
-      //         params_search_contact['q'] = $scope.searchContactQuery;
-      //         gapi.client.crmengine.contacts.search(params_search_contact).execute(function(resp) {
-      //           if (resp.items){
-      //           $scope.contactsResults = resp.items;
-      //           $scope.apply();
-      //         };
-      //       });
-      //     }
-      //   }
-      // });
+
      $scope.selectContact = function(){
         if ($scope.searchContactQuery.account!=undefined) {
            var account = {'entityKey':$scope.searchContactQuery.account.entityKey,

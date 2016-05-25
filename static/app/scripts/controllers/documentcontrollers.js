@@ -131,7 +131,6 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
      };
 
 
-/*************************/
       $scope.inProcess=function(varBool,message){
           if (varBool) {
             $scope.nbLoads += 1;
@@ -148,7 +147,6 @@ app.controller('DocumentShowController',['$scope','$filter','$route','Auth','Att
           };
         }    
 
-/*************************/
 
 
 

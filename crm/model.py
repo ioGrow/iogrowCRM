@@ -358,10 +358,6 @@ class Organization(ndb.Model):
         else:
             cls.init_freemium_licenses(org_key)
 
-    # @classmethod
-    # def init_freemium_licenses(cls, org_key):
-    #     cls.init_life_time_free_licenses(org_key)
-
     @classmethod
     def init_default_values(cls, org_key):
         # HKA 17.12.2013 Add an opportunity stage
@@ -384,10 +380,6 @@ class Organization(ndb.Model):
     # assign the right license for this organization
     @classmethod
     def create_instance(cls, org_name, admin, license_type='freemium', promo_code=None):
-        # customer = stripe.Customer.create(
-        #     plan='freemium_month',
-        #     email=admin.email
-        # )
         organization = cls(
             owner=admin.google_user_id,
             name=org_name,
@@ -395,30 +387,8 @@ class Organization(ndb.Model):
         )
         org_key = organization.put()
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')
-        # mp.identify(admin.id)
-        # mp.people_set(admin.id,{
-        # "$email": admin.email,
-        # "$name":admin.google_display_name,
-        # "$created": admin.created_at,
-        # "$organization": admin.organization,
-        # "$language": admin.language
-        # });
         from iograph import Edge
         Edge.insert(start_node=org_key, end_node=admin.key, kind='admins', inverse_edge='parents')
-        # cust=stripe.Customer.create(
-        #           email= admin.email,
-        #           description=admin.email,
-        #           metadata={"organization_key":org_key.urlsafe(),
-        #                     "user_id":admin.id,
-        #                     "google_display_name":admin.google_display_name,
-        #                     "google_public_profile_photo_url":admin.google_public_profile_photo_url,
-        #                     "google_user_id":admin.google_user_id}
-        #          )
-        # cust.subscriptions.create(plan="iogrow_plan")
-        # admin.stripe_id=cust.id
-
-        # admin.put()
-
         created_tabs = []
         for tab in STANDARD_TABS:
             created_tab = Tab(name=tab['name'], label=tab['label'], url=tab['url'], icon=tab['icon'],
@@ -572,8 +542,6 @@ class Organization(ndb.Model):
         if user.organization != org_key:
             raise endpoints.UnauthorizedException('The user is not withing your organization')
         user.set_subscription(org_subscription)
-        # org_subscription.quantity -= 1
-        # org_subscription.put()
 
     @classmethod
     def unassign_license(cls, org_key, user_key):
@@ -838,7 +806,6 @@ class User(EndpointsModel):
     # If the user is a business user, we store the informations about him
     # stripe id , id represent an enter in the table of customers in stripe api.
     stripe_id = ndb.StringProperty()
-    # that's coool
     organization = ndb.KeyProperty()
     status = ndb.StringProperty()
     profile = ndb.KeyProperty()
@@ -1052,9 +1019,6 @@ class User(EndpointsModel):
                 self.put()
                 memcache.add(mem_key, ndb.get_multi(self.active_tabs))
                 return ndb.get_multi(active_app.tabs)
-            # elif self.active_tabs:
-            #     memcache.add(mem_key, ndb.get_multi(self.active_tabs))
-            #     return ndb.get_multi(self.active_tabs)
             else:
                 active_app = self.active_app.get()
                 self.active_tabs = active_app.tabs
@@ -1112,7 +1076,6 @@ class User(EndpointsModel):
         user.put()
         memcache.set(user_from_email.email, user)
 
-        # get_schema_request = iomessages.UserGetRequest(id=int(request.id))
         return cls.get_schema(user)
 
     def get_user_groups(self):
@@ -1132,10 +1095,6 @@ class User(EndpointsModel):
             if org.owner == user.google_user_id:
                 is_super_admin = True
 
-            # if Edge.find(user.organization,[user.key],'admins',"AND"):
-            #         is_admin=True
-            # else:
-            #         is_admin=False
             user_schema = iomessages.UserSchema(
                 id=str(user.key.id()),
                 entityKey=user.key.urlsafe(),
@@ -1292,7 +1251,6 @@ class User(EndpointsModel):
         invited_user_id_request = request.id
         if invited_user_id_request:
             invited_user_id = long(invited_user_id_request)
-            # user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
 
             # Store our credentials with in the datastore with our user.
         if invited_user_id:
@@ -1415,9 +1373,6 @@ class User(EndpointsModel):
                 oppstages = Opportunitystage.query(Opportunitystage.organization == user.organization).fetch()
                 for oppstage in oppstages:
                     oppstage.key.delete()
-                # permissions= Permission.query(Permission.value==str(user.google_user_id)).fetch()  
-                # for permission in permissions:
-                #     permission.key.delete()
                 tabs = Tab.query(Tab.organization == user.organization).fetch()
                 for tab in tabs:
                     tab.key.delete()
@@ -1478,8 +1433,6 @@ class User(EndpointsModel):
                     cf.put()
                 user.organization = user_from_email.organization
                 user.put()
-                # from iograph import Edge
-                # Edge.delete_all(user.organization)
                 organization.delete()
 
         return msg
@@ -1491,7 +1444,6 @@ class Group(EndpointsModel):
     name = ndb.StringProperty(required=True)
     description = ndb.TextProperty()
     status = ndb.StringProperty()
-    # members = ndb.StructuredProperty(Userinfo,repeated=True)
     organization = ndb.KeyProperty()
 
 
@@ -1546,11 +1498,6 @@ class Invitation(ndb.Model):
                 organization=invited_by.organization
             )
         invitation.invited_by = invited_by.key
-        # cust=stripe.Customer.create(  
-        #           email= email,
-        #           description=email,
-        #           metadata={"organization_key":invited_by.organization.urlsafe()})
-        # invitation.stripe_id=cust.id
         invitation.put()
 
     @classmethod
@@ -1619,11 +1566,8 @@ class Logo(ndb.Model):
 # HKA 30.12.2013 Manage Company Profile
 
 class Companyprofile(EndpointsModel):
-    # _message_fields_schema = ('id','entityKey','name','tagline','owner','introduction','organization','organizationid','phones','emails','addresses','websites','sociallinks','youtube_channel')
 
     owner = ndb.StringProperty()
-    # collaborators_list = ndb.StructuredProperty(Userinfo,repeated=True)
-    # collaborators_ids = ndb.StringProperty(repeated=True)
     organization = ndb.KeyProperty()
     organizationid = ndb.IntegerProperty()
     name = ndb.StringProperty()

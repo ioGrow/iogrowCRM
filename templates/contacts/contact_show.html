@@ -75,8 +75,7 @@
                             <div class="btn-group show_md"
                                  style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
                                 <a class="headerBtn" title="More" data-toggle="dropdown">
-                                    <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
-                                    More
+                                    {{ _("More")  }}
                                 </a>
                                 <ul class="dropdown-menu drp-dwn-right">
                                     <li>
@@ -199,18 +198,7 @@
                             <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;"
                                ng-show="show=='cards'"></i>
                         </a>
-                        <!--<div class="btn-group">
-                  <a  class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"  href="#" data-toggle="dropdown" >
-                    <i class="fa fa-question-circle" style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
-                  </a>
-                  <ul class="dropdown-menu drp-dwn-right">
-                    <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
-                        <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
-                        <!--<li><a  ng-click="lead_wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
-                    <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
 
-                  </ul>
-               </div>-->
                         {% for application in apps %}
                             {% if application.label =="Settings" %}
                                 <a href="/apps/{{ application.key.id() }}" class="headerBtn hide_sm" title="Settings"
@@ -245,40 +233,6 @@
         </tbody>
     </table>
 </div>
-<!--<div class="row subHeader">
-    <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
-
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
-
-            {%endfor%}
-           </ul>
-        </div>
-    </div>
-  <div class=" subHeaderContent">
-    <h2 class="page-title">
-      <a href="/#/contacts/" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="{{ _("Back to Contacts") }}">
-        <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/src/img/clear.cache.gif" style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;" border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
-      </a>
-      {{ _("Contacts") }} >
-      <a editable-text="contact.firstname"  onbeforesave="inlinePatch('Contact','', 'firstname',contact.entityKey,$data)">
-        <%= contact.firstname %>
-      </a>
-      <a editable-text="contact.lastname"  onbeforesave="inlinePatch('Contact','', 'lastname',contact.entityKey,$data)">
-        <%= contact.lastname %>
-      </a>
-    </h2>
-
-
-
-  </div>
-</div>-->
 <div class="page-content" style="margin-top: 45px;">
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -406,7 +360,6 @@
                                               style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px;width: 45%;"
                                               ng-class="{blockonEdit: showEdit}">
                                             <div class="input-icon asyncSearch">
-                                                <!--<input class="  form-control address-input" type="text" placeholder="Company" style="padding-top: 0px;padding-bottom: 0px;height: 20px;border: none;padding-left: 0px !important;text-align: left;padding-right: 0px;" ng-model="contact.account.name" ng-blur="inlinePatch('Contact','', 'company',contact.entityKey,contact.account.name)" ng-enter="inlinePatch('Contact','', 'company',contact.entityKey,contact.account.name)">-->
                                                 <input type="text" placeholder="Add company name"
                                                        class="  form-control address-input"
                                                        ng-model="searchAccountQuery"
@@ -789,16 +742,6 @@
                                     <div class="showPage">
                                         <div class="row">
                                             <div class="col-md-12  margin-bottom-10">
-                                                <!--<p class⁼"lead"="">
-                          {{ _('To add an outside email to this account, forward or BCC to:')}}
-                          <a href="mailto:{{ME}}@gcdc2013-iogrow.appspotmail.com">
-                            {{ME}}@gcdc2013-iogrow.appspotmail.com
-                          </a>
-                          <br>
-                          {{ _('Or just add notes to remember what\'s important.')}}
-                          <br>
-                        </p>-->
-
                                                 <form id="addNote" class="ng-pristine ng-valid">
                                                     <div class="form-group">
 
@@ -1228,15 +1171,6 @@
                                                         </ul>
                                                         <div class="row">
                                                             <div class="col-md-12  margin-bottom-10">
-                                                                <!--<p class⁼"lead"="">
-                                                               {{_('To add an outside email to this account, forward or BCC to:')}}
-                                                               <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                                    111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                                                </a>
-                                                                <br>
-                                                                {{_('Or just add notes to remember what\'s important.')}}
-                                                                <br>
-                                                            </p>-->
                                                                 <form id="addNote" class="ng-pristine ng-valid">
                                                                     <div class="form-group">
                                                                         <input class="form-control ng-pristine ng-valid"
@@ -2026,7 +1960,6 @@
                                                                                                             style="font-size:13px"></i>
                                                                                                         Add Time
                                                                                                         scale</a>
-                                                                                                    <!-- <textarea ng-model="opportunity.time_scale" class="form-control" rows="3" ></textarea>-->
                                                                                                     <ul id="tasks"
                                                                                                         class="list-unstyled lead_related_events"
                                                                                                         ng-hide="newEventform">
@@ -2219,15 +2152,6 @@
                                                                                     </ul>
                                                                                     <div class="row">
                                                                                         <div class="col-md-12  margin-bottom-10">
-                                                                                            <!--<p class⁼"lead"="">
-                                                             {{_('To add an outside email to this account, forward or BCC to:')}}
-                                                             <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                                  111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                                              </a>
-                                                              <br>
-                                                              {{_('Or just add notes to remember what\'s important.')}}
-                                                              <br>
-                                                          </p>-->
                                                                                             <form id="addNote"
                                                                                                   class="ng-pristine ng-valid">
                                                                                                 <div class="form-group">
@@ -2362,14 +2286,7 @@
 
                                                                 <td>
                                                                     <span style=" font-size: 16px; font-weight:400"><%= opportunity.current_stage.name%></span>
-                                                                    <!--<div easypiechart class="chart chartOnList" options="chartOptionsOnList" percent="opportunity.current_stage.probability"></div>
-                                                          <div class="oppStage">
-                                                              <div style=" text-align: center;">
-                                                                <span style=" font-size: 16px; color: rgb(39, 153, 28); "><%=opportunity.current_stage.probability%> %</span>
-                                                                <span style=" font-size: 15px; "><%=opportunity.current_stage.name%></span>
 
-                                                              </div>
-                                                           </div>-->
                                                                 </td>
                                                                 <td style="word-wrap: break-word;max-width:200px;text-align:center">
                                                                     <span> <%= opportunity.closed_date | date:'dd-MM-yyyy' %></span>
@@ -2720,16 +2637,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--   <div class="row">
-                             <div class="col-md-12">
-                                  <div class="cardElement loaderCard" ng-show="isLoading" data-span="all">
-          <div class="loaderCardContent">
-             <img class="img-responsive " src="/static/src/img/gloader.gif">
-             <span>  Loading...</span>
-          </div>
-        </div>
-                              </div>
-                              </div> -->
+
 
                                 </div>
                                 <!-- $ documents tab -->
@@ -2803,49 +2711,6 @@
 
                                 </div>
                                 <!-- $ send email tab -->
-                                <!-- <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 8">
-
-                         <div class="showPage">
-                           <div class="row">
-                             <div class="col-md-12  margin-bottom-10">
-                          <p class⁼"lead"=""><strong>{{ _('Send an Email to :')}}</strong> </p>
-                          <form  class="ng-pristine ng-valid">
-                                            <div class="form-group">
-                                            <input required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('To')}}" id="messageSubject" ng-model="email.to">
-                                            </div>
-                                            <div class="form-group">
-                                            <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('CC')}}" id="messageSubject" ng-model="email.cc">
-                                            </div>
-                                            <div class="form-group">
-                                            <input class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('BCC')}}" id="messageSubject" ng-model="email.bcc">
-                                            </div>
-                                            <div class="form-group">
-                                             <input  required class="form-control ng-pristine ng-valid" autofocus type="text" placeholder="{{ _('Add a subject')}}" id="messageSubject" ng-model="email.subject">
-                                             </div>
-                                            <div class="form-group">
-                                            <textarea id="some-textarea" placeholder="{{ _('Enter text ...')}}" id="noteBody" class="form-control ng-pristine ng-valid" rows="7" ng-model="email.body"></textarea>
-                                             </div>
-                                             <div class="form-group">
-                                                        <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa fa-file"></i> {{_('Attach files')}}</a>
-                                                        <ul class="list-unstyled">
-                                                            <li ng-repeat="file in sendWithAttachments">
-                                                                <%= file.title %>
-                                                            </li>
-                                                        </ul>
-                                              </div>
-
-                                         <div class="pull-right">
-
-                                            <input   ng-click="sendEmail(email)" ng-disabled="isLoading" type="submit" class="btn green" value="{{_('Send')}}">
-
-
-                                          </div>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
- -->                    <!-- $ linkedin profile -->
                                 <div class="tab-pane active" id="tab_1_9" ng-if="(selectedTab == 9)">
                                     <div class="row slimform">
                                         <div class="col-md-6">
@@ -3211,24 +3076,6 @@
                                   <%= task.due | date:'dd MMM'%>
                             </span>
                                         </div>
-                                        <div class="moreDetails row" ng-show="showDetails">
-                                            <!--  <div class="col-md-6 col-xs-6 event-schedule">
-                                <span class=""><i class="fa fa-calendar"></i>
-                                 <%= task.due | date:'dd MMM'%> </span>
-                            </div>
-                            <div class="col-md-6 col-xs-6 event-schedule">
-                               <span class="">
-                                  <i class="fa fa-bell-o"></i>
-                                  <%= task.reminder | date:'dd MMM'%>
-                                </span>
-                            </div>
-                            <div class="col-md-12">
-                               <span class="">
-                                  <i class="fa fa-map-marker"></i>
-                                  <%= event.where %>-->
-                                            <!--</span>
-                            </div>-->
-                                        </div>
                                     </div>
                                 </li>
                             </ul>
@@ -3354,59 +3201,12 @@
                                 </li>
                             </ul>
                             <form class=" slimForm ng-pristine ng-invalid ng-invalid-required">
-                                <!--               <div class="formElements newEventToLead" ng-show="newEventform">
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.title" type="text" id="taskName" class="form-control" placeholder="{{ _('Event tilte')}}">
-                              </div>
-
-                            </div>
-                            {{ _('All day')}} <input type="checkbox" ng-model="allday"/>
-
-                              <div class="row" ng-show="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                       <div class="input-icon ">
-                                        <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.starts_at_allday" type="text" class="form-control" placeholder="{{ _('When?')}}" value="" id="leadEventStartsAt">
-                                      </div>
-                                </div>
-                            </div>
-
-
-
-                            <div class="row" ng-hide="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                      <div class="input-icon">
-                                        <i class="fa fa-calendar"></i>
-                                        <input cusdatetimepicker data-model="ioevent.starts_at" type="text" class="form-control" placeholder="{{ _('From')}}" value="" id="leadEventStartsAt">
-                                      </div>
-
-                                </div>
-                            </div>
-                            <div class="row" ng-hide="allday">
-                                <div class="col-md-12 margin-bottom-10">
-                                       <div class="input-icon ">
-                                        <i class="fa fa-calendar"></i>
-                                       <input cusdatetimepicker data-model="ioevent.ends_at" type="text" class="form-control" placeholder="{{ _('To')}}" value="" id="leadEventStartsAt">
-                                      </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row">
-                              <div class="col-md-12 margin-bottom-10">
-                                  <input ng-model="ioevent.where" type="text" id="taskName" class="form-control" placeholder="{{ _('Where ?')}}">
-                              </div>
-
-                            </div>
-                  </div> -->
                                 <div class="row">
                                     <div class="col-md-12 margin-top-10">
                                         <p class="newEventText"><span
                                                 ng-hide="newEventform">{{ _('Add New Event') }}</span>
                                             <button type="button" ng-click="showAddEventPopup()"
                                                     class="btn red btn-sm pull-right btn-inline">{{ _('Add') }}</button>
-                                            <!--      <button type="button" ng-click="closeEventForm(ioevent)" ng-show="newEventform" class="cancelEventBtn btn btn-default btn-sm pull-right btn-inline">{{ _('Cancel')}}</button> -->
                                         </p>
                                     </div>
                                 </div>
@@ -3449,7 +3249,6 @@
                                 <select class="form-control" ng-model="ownerSelected"
                                         ng-options="user.google_display_name for user in users">
                                     <option value=""><%=contact.owner.google_display_name%></option>
-                                    <!--option value=""><%=stage_selected.name%></option-->
                                 </select>
                             </div>
                         </div>
@@ -3522,7 +3321,6 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                     <input ng-click="deleteItem()" type="submit" class="btn red" value="Delete">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
                 </form>
             </div>
@@ -3558,7 +3356,6 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                     <input ng-click="deletecase()" type="submit" class="btn red" value="Delete">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
 
             </div>
@@ -3583,7 +3380,6 @@
                             <label class="col-md-3 control-label">{{ _("Tagline") }} </label>
 
                             <div class="col-md-9">
-                                <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
                                 <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3"
                                           ng-model="account.tagline"></textarea>
 
@@ -3679,7 +3475,6 @@
                         <div class="form-group">
                             <label class="col-md-3 control-label">{{ _("Type") }} </label>
                             <div class="col-md-9">
-                                <!--input type="text" placeholder="{{_('home')}},{{_('work')}},{{_('mobile')}},{{_('other')}} ..." required id="id_name" ng-model="phone.type_number"-->
                                 <select ng-model="phone.type_number" class="form-control">
                                     <option value="home" selected="selected">{{ _('home') }}</option>
                                     <option>{{ _('work') }}</option>
@@ -4114,7 +3909,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteaccount()" type="submit" class="btn red" value="Delete this Account">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -4139,7 +3933,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Information">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -4237,13 +4030,6 @@
                                        ng-model="opportunity.name">
                             </div>
                         </div>
-                        <!--div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-
-                        <div class="col-md-9">
-                          <input type="text"  class="form-control" id="id_label" ng-model="opportunity.description">
-                        </div>
-                      </div-->
                         <div class="form-group">
                             <label class="required col-md-3 control-label">{{ _("Amount") }} </label>
 
@@ -4422,20 +4208,11 @@
                             <select class="form-control" ng-model="status_selected"
                                     ng-options="stat.status for stat in casesatuses">
                                 <option value="">{{ _('Choose Status') }}</option>
-                                <!--option value=""><%=status_selected.status%></option-->
                             </select>
 
                         </div>
 
                     </div>
-                    <!--div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-
-                        <div class="col-md-9">
-                          <input type="text" class="form-control"  id="id_description" ng-model="casee.type_case">
-
-                        </div>
-                    </div-->
 
 
             </div>
@@ -4635,7 +4412,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteopportunity()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
 
         </div>
@@ -4671,7 +4447,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteDocs()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
 
         </div>
@@ -4881,7 +4656,6 @@
                                                 style="float: left;">:</span>
                                             <div class="oppEstDate"
                                                  style="display: inline-block; float: left; padding-left: 15px; max-width: 75%;">
-                                                <!--  <input id="datetimepickerjquery" type="text" > -->
 
 
                                     <span ng-hide="showStartsCalendar||showEventInput"
@@ -4893,7 +4667,6 @@
                                                            class="form-control calendar-form-controle"
                                                            placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
                                                            id="leadEventStartsAt">
-                                                    <!--  <input cusdatetimepicker data-model="start_event_draw" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id=""> -->
                                                 </div>
                                             </div>
 
@@ -4914,7 +4687,6 @@
                                                            placeholder="{{ _('mm/dd/yyyy hh:mm am') }}" value=""
                                                            id="leadEventEndsAt">
 
-                                                    <!--   <input cusdatetimepicker data-model="" type="text" class="form-control calendar-form-controle" placeholder="{{ _('Click to change the estimated date')}}" value="" id="leadEventStartsAt"> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -5243,12 +5015,6 @@
   background-color: rgba(154, 157, 205, 0.258824);"> <%=remindme_show %><a href="" ng-click="deletePicked()"
                                                                            class=" calendar-close-invite"
                                                                            style=" top: 2px !important;"></a></span>
-                                        <!--      <ul  class="list-inline"style="list-style:none" ng-show="remindmeby">
-                                                 <li> <strong> By:</strong> </li>
-                                                 <li><input type="radio"  name="by" ng-model="method" value="email"> Email</li>
-                                                 <li><input type="radio" ng- name="by" ng-model="method" value="sms">SMS</li>
-
-                                               </ul> -->
                                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                             <li role="presentation"><a role="menuitem" tabindex="-1"
                                                                        ng-click="Remindme(0)">No notification</a></li>
@@ -5306,8 +5072,6 @@
             var handleTitle = function (tab, navigation, index) {
                 var total = navigation.find('li').length;
                 var current = index + 1;
-                // set wizard title
-                // $('.step-title', $('#form_wizard_1')).text('Step ' + (index + 1) + ' of ' + total);
                 // set done steps
                 jQuery('li', $('#form_wizard_1')).removeClass("done");
                 var li_list = navigation.find('li');
@@ -5324,12 +5088,10 @@
                 if (current >= total) {
                     $('#form_wizard_1').find('.button-next').hide();
                     $('#form_wizard_1').find('.button-submit').show();
-                    // displayConfirm();
                 } else {
                     $('#form_wizard_1').find('.button-next').show();
                     $('#form_wizard_1').find('.button-submit').hide();
                 }
-                //  App.scrollTo($('.page-title'));
             }
 
             // default form wizard
@@ -5394,7 +5156,6 @@
                 })
             }
         };
-        /* $('body').popover({ selector: '[data-popover]', trigger: 'click hover', placement: 'left', delay: {show: 50, hide: 400}});*/
         $('#assigeeList').slimScroll({
             height: '200px'
         });

@@ -8,13 +8,7 @@ app.controller('MysettingShowController', ['$scope','$route', 'Auth','Search','U
      $scope.user = {};
      $scope.currentPage = 01;
      $scope.pages = [];
- 
-    
-    // What to do after authentication
-      /* $scope.runTheProcess = function(){
-          
-          User.get($scope,params);
-       };*/
+
   
      // We need to call this to refresh token when user credentials are invalid
      $scope.refreshToken = function() {
