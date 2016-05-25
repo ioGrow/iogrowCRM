@@ -142,6 +142,21 @@ module.exports = function (grunt) {
             }
           }
       },
+        htmlmin: {
+        dist: {
+            options: {
+                removeComments: true,
+                collapseWhitespace: true,
+                minifyCSS: true,
+                minifyJS:true,
+                minifyURLs:true,
+                },
+                    expand: true,
+                    cwd: '',
+                    src: ['templates/**/*.html'],
+
+    }
+    },
       cssmin: {
             sync_css: {
                 files: {
@@ -221,9 +236,11 @@ module.exports = function (grunt) {
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-concat');
+
     //grunt.loadNpmTasks("grunt-remove-logging-calls");
 
     grunt.registerTask('default', [
