@@ -42,3 +42,5 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+crm/config/prod.py
+.cache/
