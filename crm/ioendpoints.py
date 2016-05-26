@@ -15,7 +15,6 @@ from django.utils.encoding import smart_str
 import endpoints
 import httplib2
 import requests
-import stripe
 from apiclient.discovery import build
 from google.appengine.api import mail
 from google.appengine.api import memcache
@@ -63,8 +62,6 @@ from crm.iomodels.pipelines import Pipeline, PipelineInsertRequest, PipelineSche
 from endpoints_helper import EndpointsHelper
 from iograph import Node, Edge, RecordSchema, InfoNodeResponse, InfoNodeListResponse
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema, LinkedinCompanySchema
-from iomessages import SubscriptionSchema, LicencesQuantityMessage, SubscriptionListSchema
-from iomodels import config
 from model import Contributor
 from model import CountryCurrency
 from model import CustomField
@@ -115,12 +112,6 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
             Contact.collaborators_ids == collaborators
         )
     ).order(order)
-
-
-# gd_client = gdata.contacts.client.ContactsClient(source='<var>gcdc2013-iogrow</var>')
-
-stripe.api_key = config.STRIPE_API_KEY
-
 
 
 class getLinkedinSchema(messages.Message):
@@ -4086,40 +4077,6 @@ class CrmEngineApi(remote.Service):
             request=request
         )
 
-    # hadji hicham 26/08/2014. purchase license for user.
-    @endpoints.method(BillingRequest, BillingResponse, path='billing/purchase_user', http_method='POST',
-                      name="billing.purchase_lisence_for_user")
-    def purchase_lisence_for_user(self, request):
-        token = request.token_id
-
-        cust = stripe.Customer.retrieve(request.customer_id)
-        cust.card = token
-        cust.save()
-        charge = stripe.Charge.create(
-            amount=2000,
-            currency="usd",
-            customer=cust.id,
-            description="Charge for  " + request.token_email)
-        cust.subscriptions.create(plan="iogrow_plan")
-
-        return BillingResponse(response=token)
-
-    # hadji hicham 26/08/2014 . purchase license for the company.
-    @endpoints.method(BillingRequest, LicenseSchema, path='billing/purchase_org', http_method='POST',
-                      name="billing.purchase_lisence_for_org")
-    def purchase_lisence_for_org(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        token = request.token_id
-        charge = stripe.Charge.create(
-            amount=2000,
-            currency="usd",
-            card=token,
-            description="license for the organization  " + request.organization)
-        return License.insert(
-            user_from_email=user_from_email,
-            request=request
-        )
-
     @endpoints.method(getDocsRequest, DocumentListResponse, path="tasks/get_docs", http_method="POST",
                       name="tasks.get_docs")
     def get_documents_attached(self, request):
@@ -4244,94 +4201,4 @@ class CrmEngineApi(remote.Service):
 
         return message_types.VoidMessage()
 
-    @endpoints.method(response_message=SubscriptionSchema, http_method='GET',
-                      name='subscription.get', path='subscription/get')
-    def get_subscription(self, request):
-        user = EndpointsHelper.require_iogrow_user()
-        return user.get_subscription().get_schema()
 
-    @endpoints.method(response_message=SubscriptionListSchema, http_method='GET',
-                      name='subscription.list', path='subscription/list')
-    def fetch_subscriptions(self, request):
-        org_key = EndpointsHelper.require_iogrow_user().organization
-        users = User.fetch_by_organization(org_key)
-        data = [iomessages.UserSubscriptionSchema(subscription=user.get_subscription().get_schema(), email=user.email)
-                for user in users]
-        return SubscriptionListSchema(data=data)
-
-    @endpoints.method(response_message=SubscriptionSchema, http_method='GET',
-                      name='subscription.organization_get', path='subscription/organization_get')
-    def get_org_subscription(self, request):
-        organization = EndpointsHelper.require_iogrow_user().organization.get()
-        return organization.get_subscription().get_schema()
-
-    @endpoints.method(name='subscription.disable_auto_renew', path='subscription/disable_auto_renew')
-    def disable_auto_renew(self, request):
-        organization = EndpointsHelper.require_iogrow_user().organization.get()
-        subscription = organization.subscription.get()
-        try:
-            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-            customer.subscriptions.retrieve(subscription.stripe_subscription_id).delete(at_period_end=True)
-            subscription.is_auto_renew = False
-            subscription.put()
-        except stripe.APIError:
-            raise endpoints.NotFoundException("")
-        return message_types.VoidMessage()
-
-    @endpoints.method(name='subscription.enable_auto_renew', path='subscription/enable_auto_renew')
-    def enable_auto_renew(self, request):
-        organization = EndpointsHelper.require_iogrow_user().organization.get()
-        subscription = organization.subscription.get()
-        interval = subscription.plan.get().interval
-        try:
-            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-            sub = customer.subscriptions.retrieve(subscription.stripe_subscription_id)
-            sub.plan = '{}_{}'.format(config.PREMIUM, interval)
-            sub.save()
-            subscription.is_auto_renew = True
-            subscription.put()
-        except stripe.APIError:
-            raise endpoints.NotFoundException("")
-        return message_types.VoidMessage()
-
-    @endpoints.method(name='subscription.by_new_licences', path='subscription/by_new_licences',
-                      request_message=LicencesQuantityMessage)
-    def by_new_licences(self, request):
-        user = EndpointsHelper.require_iogrow_user()
-        organization = user.organization.get()
-        subscription = organization.get_subscription()
-        quantity = request.quantity
-        if quantity <= 0:
-            raise endpoints.BadRequestException("Quantity should be a positive number")
-        try:
-            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-            sub = customer.subscriptions.retrieve(subscription.stripe_subscription_id)
-            sub.quantity += quantity
-            sub.save()
-            if user.subscription.get().plan.get().name != config.PREMIUM:
-                user.set_subscription(organization.subscription.get())
-                user.put()
-
-            subscription.quantity += quantity
-            subscription.put()
-        except stripe.error.CardError, e:
-            self.response.headers['Content-Type'] = 'application/json'
-            self.response.write(e.message)
-            self.response.set_status(e.http_status)
-        return message_types.VoidMessage()
-
-    @endpoints.method(name='organization.licenses_status', path='organization/licenses_status',
-                      http_method='GET', response_message=iomessages.OrganizationSubscriptionStatusMessage)
-    def get_organizations_licenses_status(self, request):
-        org_key = EndpointsHelper.require_iogrow_user().organization
-        users_count = User.count_by_organization(org_key)
-        resp = iomessages.OrganizationSubscriptionStatusMessage(users_count=users_count)
-
-        organization = org_key.get()
-        subscription = organization.subscription.get()
-        plan_key = subscription.plan
-        plan = plan_key.get()
-        if plan.name == config.PREMIUM:
-            resp.assigned_licenses = organization.get_assigned_licenses()
-            resp.licenses_bought = subscription.quantity
-        return resp

@@ -746,11 +746,7 @@ leadservices.factory('Lead', function ($rootScope) {
             'method': 'POST',
             'body': params,
             'callback': (function (resp) {
-                if (resp.error && resp.error.code == 412){
-                    $('#payment_modal').modal('show');
-                    return
-                    //window.location.replace($rootScope.subscription_url);
-                } if (!resp.code && resp.id) {
+                 if (!resp.code && resp.id) {
                     $scope.leadInserted(resp.id);
                 } else if (!resp.id) {
                     console.log(resp);

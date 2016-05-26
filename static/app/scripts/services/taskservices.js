@@ -162,13 +162,7 @@ Task.get_docs=function($scope,params){
       $scope.inProcess(true);  
 
       gapi.client.crmengine.tasks.insertv2(params).execute(function(resp) {
-
-          if (resp.error && resp.error.code == 412){
-              $('#payment_modal').modal('show');
-              return
-              //window.location.replace($rootScope.subscription_url);
-          }
-         if(!resp.code){
+          if(!resp.code){
 
           if ($scope.tasks == undefined){
             $scope.tasks = [];
