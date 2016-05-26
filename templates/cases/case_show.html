@@ -592,7 +592,7 @@
                                     <div class="showPage">
                                         <div class="row">
                                             <div class="col-md-12  margin-bottom-10">
-                                                <p class⁼"lead"="">
+                                                <p class="lead">
                                                 {{ _('To add an outside email to this account, forward or BCC to:') }}
                                                 <a href="mailto:{{ ME }}@gcdc2013-iogrow.appspotmail.com">
                                                     {{ ME }}@gcdc2013-iogrow.appspotmail.com
@@ -992,8 +992,7 @@
                                         <div class="showPage">
                                             <div class="row">
                                                 <div class="col-md-12  margin-bottom-10">
-                                                    <p class⁼
-                                                    "lead"=""><strong>{{ _('Send an Email to :') }}</strong> </p>
+                                                    <p class="lead"><strong>{{ _('Send an Email to :') }}</strong> </p>
                                                     <form class="ng-pristine ng-valid">
                                                         <div class="form-group">
                                                             <input required class="form-control ng-pristine ng-valid"
@@ -1475,7 +1474,8 @@
                             <label>{{ _("The owner is:") }}</label>
                             <div class="invitation">
                                 <img class="google-avatar" ng-src="<%=casee.owner.google_public_profile_photo_url%>"/>
-                                <%=casee.owner.display_name%> < <a> <%=casee.owner.email%> </a> >
+                                <%=casee.owner.display_name%>
+                                <a> <%=casee.owner.email%> </a>
                             </div>
                         </div>
                         <hr/>
@@ -1483,7 +1483,7 @@
                             <p>{{ _("Collaborators:") }}</p>
                             <div ng-repeat="collaborator in collaborators_list" class="invitation">
                                 <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                                <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
+                                <%=collaborator.display_name%> <a> <%=collaborator.email%> </a>
                                 <button class="btn"
                                         ng-hide="casee.owner.google_user_id==collaborator.google_user_id || casee.access=='public' || casee.owner.google_user_id!={{ ME }}"
                                         ng-click="DeleteCollaborator(collaborator.entityKey)">x
@@ -1497,7 +1497,7 @@
                             <p>{{ _("Invited user:") }}</p>
                             <div class="invitation" ng-repeat="invited in sharing_with">
                                 <img class="google-avatar" ng-src="invited.google_public_profile_photo_url"/>
-                                <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
+                                <strong> <%= invited.google_display_name %> <%=invited.email%> </strong>
                                 <hr/>
                             </div>
 

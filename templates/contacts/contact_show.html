@@ -3845,7 +3845,7 @@
                     <p>{{ _("Collaborators:") }}</p>
                     <div ng-repeat="collaborator in collaborators_list" class="invitation">
                         <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                        <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
+                        <%=collaborator.display_name%> <a> <%=collaborator.email%> </a>
                         <button class="btn"
                                 ng-hide="contact.owner.google_user_id==collaborator.google_user_id || contact.access=='public' || contact.owner.google_user_id!={{ ME }}"
                                 ng-click="DeleteCollaborator(collaborator.entityKey)">x

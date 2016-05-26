@@ -403,14 +403,14 @@
                 <i class="material-icons form-icon">{{ _('person') }}</i>
             </span>
             <input type="text" class="form-control" placeholder="Full name" aria-describedby="sizing-addon1"
-            value="{{ full_name or "" }}" name="fullname">
+            value="{{ full_name or '' }}" name="fullname">
         </div>
         <div class="input-group input-group-lg form-group">
             <span class="input-group-addon field-icon" id="sizing-addon1">
                 <i class="material-icons form-icon">location_on</i>
             </span>
             <input type="text" class="form-control" placeholder="Location" name="address"
-                   value="{{ organization.billing_contact_address or "" }}" aria-describedby="sizing-addon1">
+                   value="{{ organization.billing_contact_address or '' }}" aria-describedby="sizing-addon1">
         </div>
     </div>
     <div class="col-sm-5" style="padding: 0">
@@ -420,14 +420,14 @@
                 <i class="material-icons form-icon">business</i>
             </span>
             <input type="text" class="form-control" placeholder="Company name" name="name"
-                   aria-describedby="sizing-addon1" value="{{ organization.name or ""}}">
+                   aria-describedby="sizing-addon1" value="{{ organization.name or '' }}">
         </div>
         <div class="input-group input-group-lg form-group">
             <span class="input-group-addon field-icon" id="sizing-addon1">
                 <i class="material-icons form-icon">email</i>
             </span>
             <input type="text" class="form-control" placeholder="Email" name="email"
-                   aria-describedby="sizing-addon1" value="{{ user.email or ""}}">
+                   aria-describedby="sizing-addon1" value="{{ user.email or ''}}">
         </div>
     </div>
 </div>

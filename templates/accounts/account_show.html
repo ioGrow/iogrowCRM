@@ -698,7 +698,7 @@
                                         </ul>
                                         <div class="row">
                                             <div class="col-md-12  margin-bottom-10">
-                                                <p class⁼"lead"="">
+                                                <p class="lead">
                                                 {{ _('To add an outside email to this account, forward or BCC to:') }}:
                                                 <a href="mailto:{{ ME }}@gcdc2013-iogrow.appspotmail.com">
                                                     {{ ME }}@gcdc2013-iogrow.appspotmail.com
@@ -4878,7 +4878,7 @@
                         <label>{{ _("Owner :") }}</label>
                         <div class="invitation">
                             <img class="google-avatar" ng-src="<%=account.owner.google_public_profile_photo_url%>"/>
-                            <%=account.owner.display_name%> < <a> <%=account.owner.email%> </a> >
+                            <%=account.owner.display_name%>  <a> <%=account.owner.email%> </a>
                         </div>
                     </div>
                     <hr/>
@@ -4886,7 +4886,7 @@
                         <p>{{ _("Collaborators:") }}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                             <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
+                            <%=collaborator.display_name%> <a> <%=collaborator.email%> </a>
                             <button class="btn"
                                     ng-hide="account.owner.google_user_id==collaborator.google_user_id || account.access=='public' || account.owner.google_user_id!={{ ME }}"
                                     ng-click="DeleteCollaborator(collaborator.entityKey)">x
@@ -4899,7 +4899,7 @@
                         <p>{{ _("Invited user:") }}</p>
                         <div class="invitation" ng-repeat="invited in sharing_with">
                             <img class="google-avatar" ng-src="invited.google_public_profile_photo_url"/>
-                            <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
+                            <strong> <%= invited.google_display_name %> <%=invited.email%> ></strong>
                             <hr/>
                         </div>
 

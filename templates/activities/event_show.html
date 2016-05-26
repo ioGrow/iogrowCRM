@@ -575,7 +575,7 @@
                         <label>{{ _("The created_by is:") }}</label>
                         <div class="invitation">
                             <img class="google-avatar" ng-src="<%=event.created_by.photo%>"/>
-                            <%=event.created_by.display_name%> < <a> <%=event.created_by.email%> </a> >
+                            <%=event.created_by.display_name%> <a> <%=event.created_by.email%> </a>
                         </div>
                     </div>
                     <hr/>
@@ -583,7 +583,7 @@
                         <p>{{ _("Collaborators:") }}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                             <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
+                            <%=collaborator.display_name%> <a> <%=collaborator.email%> </a>
                             <button class="btn"
                                     ng-hide="event.created_by.google_user_id==collaborator.google_user_id || event.access=='public' || event.created_by.google_user_id!={{ ME }}"
                                     ng-click="DeleteCollaborator(collaborator.entityKey)">x
@@ -597,7 +597,7 @@
                         <p>{{ _("Invited user:") }}</p>
                         <div class="invitation" ng-repeat="invited in sharing_with">
                             <img class="google-avatar" ng-src="invited.google_public_profile_photo_url"/>
-                            <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
+                            <strong> <%= invited.google_display_name %> <%=invited.email%> </strong>
                             <hr/>
                         </div>
 

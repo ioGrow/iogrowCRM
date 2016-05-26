@@ -3168,7 +3168,7 @@
 
                         <div class="invitation">
                             <img class="google-avatar" ng-src="<%=lead.owner.google_public_profile_photo_url%>"/>
-                            <%=lead.owner.display_name%> < <a> <%=lead.owner.email%> </a> >
+                            <%=lead.owner.display_name%> ( <a> <%=lead.owner.email%> </a>)
                         </div>
                     </div>
                     <hr/>
@@ -3177,7 +3177,7 @@
 
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                             <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
+                            <%=collaborator.display_name%> (<a> <%=collaborator.email%> </a>)
                             <button class="btn"
                                     ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ ME }}"
                                     ng-click="DeleteCollaborator(collaborator.entityKey)">x
@@ -3185,7 +3185,7 @@
                         </div>
                         <div ng-repeat="collaborator in sharing_with" class="invitation">
                             <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
+                            <%=collaborator.display_name%> (<a> <%=collaborator.email%> </a>)
                             <button class="btn"
                                     ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ ME }}"
                                     ng-click="DeleteCollaborator(collaborator.entityKey)">x
