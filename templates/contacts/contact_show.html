@@ -365,7 +365,7 @@
                                                        ng-model="searchAccountQuery"
                                                        typeahead-loading="accSearchLoading"
                                                        ng-class="{'spinner':accSearchLoading}"
-                                                       style="padding-top: 0;padding-bottom: 0;height: 20px;border: none;padding-left: 0 !important;text-align: left;padding-right: 0;text-align:center;"
+                                                       style="padding-top: 0;padding-bottom: 0;height: 20px;border: none;padding-left: 0 !important;padding-right: 0;text-align:center;"
                                                        typeahead="result as result.name  for result in getResults($viewValue,'/crmengine/v1/accounts/search') | filter:$viewValue | limitTo:10"
                                                        typeahead-on-select="" class="form-control"
                                                        ng-blur="inlinePatch('Contact','', 'account',contact.entityKey,contact.account.name)"
@@ -601,7 +601,7 @@
                                                             ng-repeat="address in infonodes.addresses| startFrom:1">
                                                             <a ng-hide="address.formatted"
                                                                ng-click="lunchMaps(address.lat, address.lon,address)"
-                                                               style="cursor:pointer;color: rgb(96, 96, 96);padding-right: 5px;cursor:pointer">
+                                                               style="cursor:pointer;color: rgb(96, 96, 96);padding-right: 5px;">
                                                                 <span ng-show="address.street"><%=address.street%>, </span>
                                                                 <span ng-show="address.city"><%=address.city%>, </span>
                                                                 <span ng-show="address.state"><%=address.state%>, </span>
