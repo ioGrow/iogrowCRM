@@ -1438,12 +1438,10 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                 return !(Array != undefined && Array.length > 0);;
             
         }
-        //$('#some-textarea1').wysihtml5();
         $scope.gotosendMail = function(email){
             $scope.email.to = email;
              $('#testnonefade').modal("show");
             $scope.smallSendMail();
-            //  $(".wysihtml5-toolbar").hide();
         }
          $scope.switchwysihtml=function(){
           if ($(".wysihtml5-toolbar").is(":visible")) {
@@ -1741,7 +1739,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                 }else {
                   console.log("no 401");
                    if(resp.code==401){
-                    // $scope.refreshToken();
                    console.log("no resp");
                     $scope.linkedLoader=false;
                     $scope.apply();
