@@ -624,8 +624,7 @@
                                                                 <a href=""
                                                                    onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                                    style="display: inline-block;   float: left;">
-                                                                    <img width="16"
-                                                                         src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                                    <img width="16" ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                                 <div class="clearfix"></div>
                                                             </div>
                                                         </li>
@@ -924,7 +923,7 @@
                             <div ng-repeat="inShortProfile in inShortProfiles" style="margin-bottom:10px"
                                  ng-hide="isEmpty(inShortProfile)">
                                 <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                    <img src="<%=inShortProfile.profile_picture || '/static/src/img/avatar_contact.jpg'%>"
+                                    <img ng-src="<%=inShortProfile.profile_picture || '/static/src/img/avatar_contact.jpg'%>"
                                          style="width: 90px;height: 90px;">
 
                                 </div>
@@ -1129,7 +1128,7 @@
                             <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px"
                                  ng-hide="isEmpty(twShortProfile)">
                                 <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                    <img src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
+                                    <img ng-src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
                                          style="width: 90px;height: 90px;">
 
                                 </div>

@@ -513,7 +513,7 @@
                                                             <img ng-show="lead.profile_img_url"
                                                                  err-src="/static/src/img/avatar_contact.jpg"
                                                                  class="img-responsive profile-photo"
-                                                                 src="<%= lead.profile_img_url %>" data-hasqtip="2">
+                                                                 ng-src="<%= lead.profile_img_url %>" data-hasqtip="2">
                                                         </a>
                                                     </div>
                                                     <div class="text">
@@ -1177,7 +1177,7 @@
                                                 data-dismiss="alert"></button>
                                         <div class="photo">
                                             <img class="google-avatar"
-                                                 src="<%=selected_us.google_public_profile_photo_url%>"/>
+                                                 ng-src="<%=selected_us.google_public_profile_photo_url%>"/>
                                         </div>
                                         <div class="details">
                                             <p>

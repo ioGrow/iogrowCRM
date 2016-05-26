@@ -682,7 +682,7 @@
                                                             <ul class="list-unstyled contact-infos infoslist">
                                                                 <li ng-repeat="competitor in opportunity.competitors">
                                                                     <img class="contact-photo"
-                                                                         src="<%=competitor.logo_img_url || '/static/src/img/default_company.png'%>">
+                                                                         ng-src="<%=competitor.logo_img_url || '/static/src/img/default_company.png'%>">
                                              <span>
                                                 <a href="/#/accounts/show/<%= competitor.id %>"> <%= competitor.name
                                                     %></a>
@@ -924,7 +924,7 @@
                                                                  ng-hide="isEmpty(contact)">
                                                                 <div style="display: inline-block;float: left;"
                                                                      class="profile-photo-linkedin">
-                                                                    <img src="<%=contact.profile_img_url || '/static/src/img/avatar_contact.jpg'%>"
+                                                                    <img ng-src="<%=contact.profile_img_url || '/static/src/img/avatar_contact.jpg'%>"
                                                                          style="width: 73px !important;height: auto !important;">
 
                                                                 </div>
@@ -1037,7 +1037,7 @@
                                                                                    onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                                                    style="display: inline-block;   float: left;"><img
                                                                                         width="16"
-                                                                                        src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                                                        ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
 
                                                                                 <div class="clearfix"></div>
                                                                             </div>

@@ -538,7 +538,7 @@
                                                     <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                        style="display: inline-block;float: left;height: 40px;padding-top: 4px;"><img
                                                             width="28"
-                                                            src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                            ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                     <a data-dismiss="modal" aria-hidden="true"
                                                        style="opacity: 1;top: 0;position: absolute;margin-top: -3px; margin-left: -10px;"
                                                        ng-click="deleteInfos(sociallinks,$index)"><i
@@ -555,8 +555,8 @@
                                         <form class="form-inline newLeadForm" role="form">
                                             <div class="cont">
                                                 <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
-                                                   style="display: inline-block;   float: left;"><img width="28"
-                                                                                                      src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                   style="display: inline-block;   float: left;">
+                                                    <img width="28" ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                 <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"
                                                        ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"
                                                        ng-model="sociallink.url" placeholder="Add a social link"
@@ -691,7 +691,7 @@
                             <div ng-repeat="inShortProfile in inShortProfiles" style="margin-bottom:10px"
                                  ng-show="!isEmpty(inShortProfile)&&isEmpty(inProfile)">
                                 <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                    <img src="<%=inShortProfile.logo || '/static/src/img/avatar_contact.jpg'%>"
+                                    <img ng-src="<%=inShortProfile.logo || '/static/src/img/avatar_contact.jpg'%>"
                                          style="width: 90px;height: 90px;">
 
                                 </div>
@@ -816,7 +816,7 @@
                                     <div ng-repeat="worker in inProfile.workers" style="margin-bottom:10px"
                                          ng-hide="isEmpty(worker)">
                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                            <img src="<%=worker.img || '/static/src/img/avatar_contact.jpg'%>"
+                                            <img ng-src="<%=worker.img || '/static/src/img/avatar_contact.jpg'%>"
                                                  style="width: 90px;height: 90px;">
 
                                         </div>
@@ -901,7 +901,7 @@
                             <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px"
                                  ng-hide="isEmpty(twShortProfile)">
                                 <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                    <img src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
+                                    <img ng-src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
                                          style="width: 90px;height: 90px;">
 
                                 </div>

@@ -268,7 +268,7 @@
                          style="margin-left: 0; margin-right: 0;margin-bottom: 0 !important;">
                         <div class="col-md-12 showCover" ng-class="{bigCover: twProfile.profile_banner_url}"
                              style="height: 128px; overflow: hidden;padding-left: 0;padding-right: 0;">
-                            <img src="<%=contact.cover_image||twProfile.profile_banner_url||'/static/src/img/covers/11.jpg'%>"
+                            <img ng-src="<%=contact.cover_image||twProfile.profile_banner_url||'/static/src/img/covers/11.jpg'%>"
                                  style="width: 100%;">
                         </div>
                         <div class="col-md-12" style="background: white;">
@@ -650,7 +650,7 @@
                                                         <a ng-click="socialLinkOpener(sociallink.url)"
                                                            style="display: inline-block;   float: left; cursor:pointer">
                                                             <img width="24"
-                                                                 src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png">
+                                                                 ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png">
                                                         </a>
                                                         <input ng-show="showEdit"
                                                                ng-blur="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)"
@@ -673,7 +673,7 @@
                                                     <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                        style="display: inline-block;   float: left;">
                                                         <img width="24"
-                                                             src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                             ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                     <input ng-show="showEdit" ng-blur="addSocial(sociallink)"
                                                            ng-enter="addSocial(sociallink)" ng-model="sociallink.url"
                                                            placeholder="Add a social link"
@@ -996,7 +996,7 @@
                                                              style="width: 35px;margin-top: -12px;">{{ _(' IBM Watson Analysis') }}
                                                     </h3>
                                                     <div class="news-block-tags" style="min-height: 300px;">
-                                                        <iframe src="<%= watsonUrl %>" style="border: none;width: 100%;height:
+                                                        <iframe ng-src="<%= watsonUrl %>" style="border: none;width: 100%;height:
                                630px;">
                                                         </iframe>
                                                     </div>
@@ -1070,7 +1070,7 @@
                                                              ng-hide="isEmpty(twShortProfile)">
                                                             <div style="display: inline-block;float: left;"
                                                                  class="profile-photo-linkedin">
-                                                                <img src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
+                                                                <img ng-src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
                                                                      style="width: 90px;height: 90px;">
 
                                                             </div>
@@ -2803,7 +2803,7 @@
                                                  ng-show="twitterProfile.description_of_user">
                                                 <h3>{{ _('General Informations from Twitter') }}</h3>
                                                 <img class="google-avatar pull-right"
-                                                     src="<%=twitterProfile.profile_image_url_https%>"/>
+                                                     ng-src="<%=twitterProfile.profile_image_url_https%>"/>
                                                 <div class="news-block-tags"
                                                      ng-show="twitterProfile.description_of_user">
                                                     <strong>{{ _('Description of user') }}</strong>

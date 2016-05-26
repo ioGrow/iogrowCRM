@@ -481,8 +481,8 @@
                                             style="padding-bottom: 5px;">
                                             <div class="cont">
                                                 <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
-                                                   style="display: inline-block;   float: left;"><img width="24"
-                                                                                                      src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                   style="display: inline-block;   float: left;">
+                                                    <img width="24" ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                 <input ng-show="showEdit"
                                                        ng-blur="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)"
                                                        ng-enter="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)"
@@ -788,7 +788,7 @@
                                                                  ng-hide="isEmpty(casee.contact)">
                                                                 <div style="display: inline-block;float: left;"
                                                                      class="profile-photo-linkedin">
-                                                                    <img src="<%=casee.contact.profile_img_url || '/static/src/img/avatar_contact.jpg'%>"
+                                                                    <img ng-src="<%=casee.contact.profile_img_url || '/static/src/img/avatar_contact.jpg'%>"
                                                                          style="width: 73px !important;height: auto !important;">
 
                                                                 </div>
@@ -846,7 +846,7 @@
                                                                                    onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                                                    style="display: inline-block;   float: left;"><img
                                                                                         width="16"
-                                                                                        src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                                                        ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
 
                                                                                 <div class="clearfix"></div>
                                                                             </div>

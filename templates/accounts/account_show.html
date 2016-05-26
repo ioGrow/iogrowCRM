@@ -576,7 +576,7 @@
                                                         <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                            style="display: inline-block;   float: left;">
                                                             <img width="24"
-                                                                 src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                                 ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                         <input ng-show="showEdit"
                                                                ng-blur="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)"
                                                                ng-enter="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)"
@@ -598,7 +598,7 @@
                                                     <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                        style="display: inline-block;   float: left;">
                                                         <img width="24"
-                                                             src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                             ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                     <input ng-show="showEdit" ng-blur="addSocial(sociallink)"
                                                            ng-enter="addSocial(sociallink)" ng-model="sociallink.url"
                                                            placeholder="Add a social link"
@@ -1147,7 +1147,7 @@
                                                                                onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                                                style="display: inline-block;   float: left;">
                                                                                 <img width="16"
-                                                                                     src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                                                     ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                                             <div class="clearfix"></div>
                                                                         </div>
                                                                     </li>
@@ -3857,7 +3857,7 @@
                             <div ng-repeat="inRelatedShortProfile in inRelatedShortProfiles" style="margin-bottom:10px"
                                  ng-hide="isEmpty(inRelatedShortProfile)">
                                 <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                    <img src="<%=inRelatedShortProfile.profile_picture || '/static/src/img/avatar_contact.jpg'%>"
+                                    <img ng-src="<%=inRelatedShortProfile.profile_picture || '/static/src/img/avatar_contact.jpg'%>"
                                          err-src="/static/src/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
 
                                 </div>
@@ -4068,7 +4068,7 @@
                             <div ng-repeat="twShortProfile in twRelatedShortProfiles" style="margin-bottom:10px"
                                  ng-hide="isEmpty(twShortProfile)">
                                 <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                    <img src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
+                                    <img ng-src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
                                          err-src="/static/src/img/avatar_contact.jpg" style="width: 90px;height: 90px;">
 
                                 </div>
