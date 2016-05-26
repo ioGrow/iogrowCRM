@@ -502,40 +502,6 @@ class OrganizationResponse(messages.Message):
     licenses = messages.MessageField(LicenseSchema, 4, repeated=True)
 
 
-# hadji hicham . 17/08/2014 .
-class BillingRequest(messages.Message):
-    token_id = messages.StringField(1)
-    token_email = messages.StringField(2)
-    customer_id = messages.StringField(3)
-    organization = messages.StringField(4)
-    organizationKey = messages.StringField(5)
-
-
-class BillingResponse(messages.Message):
-    response = messages.StringField(2)
-
-
-class purchaseRequest(messages.Message):
-    token = messages.StringField(1)
-    plan = messages.StringField(2)
-    nb_licenses = messages.StringField(3)
-    billing_contact_firstname = messages.StringField(4)
-    billing_contact_lastname = messages.StringField(5)
-    billing_contact_email = messages.StringField(6)
-    billing_contact_address = messages.StringField(7)
-    billing_contact_phone_number = messages.StringField(8)
-
-
-class purchaseResponse(messages.Message):
-    transaction_balance = messages.StringField(1)
-    transaction_message = messages.StringField(2)
-    transaction_failed = messages.BooleanField(3)
-    nb_licenses = messages.IntegerField(4)
-    total_amount = messages.IntegerField(5)
-    expires_on = messages.StringField(6)
-    licenses_type = messages.StringField(7)
-
-
 class deleteInvitedEmailRequest(messages.Message):
     emails = messages.StringField(1, repeated=True)
 
@@ -3441,26 +3407,15 @@ class CrmEngineApi(remote.Service):
                 google_user_id=user.google_user_id,
                 is_admin=user.is_admin,
                 status=user.status,
-                stripe_id=user.stripe_id
             )
             items.append(user_schema)
         invitees_list = []
         invitees = Invitation.list_invitees(user_from_email.organization)
         for invitee in invitees:
-            #     invitenmbrOfLicenses=0
-            #     inviteisLicensed=False
-            #     edgeinvite=Edge.query().filter(Edge.start_node==user.key and Edge.kind=="licenses").fetch()
-            #     if edgeinvite:
-            #            invitenmbrOfLicenses=len(edge)
-            #            inviteLicenseStatus='Active'
-            #     else:
-            #            inviteLicenseStatus='Not active'
             invited_schema = iomessages.InvitedUserSchema(
                 invited_mail=invitee['invited_mail'],
                 invited_by=invitee['invited_by'],
                 updated_at=invitee['updated_at'].strftime("%Y-%m-%dT%H:%M:00.000"),
-                # LicenseStatus= inviteLicenseStatus,
-                stripe_id=invitee['stripe_id']
             )
             invitees_list.append(invited_schema)
         return iomessages.UserListSchema(items=items, invitees=invitees_list)
@@ -3518,7 +3473,6 @@ class CrmEngineApi(remote.Service):
 
         return message_types.VoidMessage()
 
-    # hadji hicham 4/08/2014 -- get user by google user id
     @User.method(
         http_method='GET', path='users/{google_user_id}', name='users.get_user_by_gid')
     def UserGetByGId(self, my_model):
@@ -3526,52 +3480,7 @@ class CrmEngineApi(remote.Service):
         if not user:
             raise endpoints.NotFoundException('User not found')
         return user
-        # @User.method(
-        #                    request_fields=('id',),
-        #                    path='user/{id}',
-        #                    http_method='GET',
-        #                    name='user.get'
-        #                    )
-        # def UserGet(self,my_model):
-        #     if not my_model.from_datastore:
-        #         raise('Lead status not found')
-        #     return my_model
-        # hadji hicham 11/08/2014. get user by id
 
-    # @endpoints.method(iomessages.customerRequest, iomessages.customerResponse,
-    #                   http_method='GET', path='users/{id}', name='users.customer')
-    # def Customer(self, request):
-    #     user_from_email = EndpointsHelper.require_iogrow_user()
-    #     cust = stripe.Customer.retrieve(request.id)
-    #     charges_list = stripe.Charge.all(customer=request.id)
-    #     subscriptions_list = cust.subscriptions.all()
-    #
-    #     subscriptions = []
-    #     for subscription in subscriptions_list.data:
-    #         kwargsubscription = {
-    #             "id": subscription.id,
-    #             "current_period_start": datetime.datetime.fromtimestamp(
-    #                 int(subscription.current_period_start)).strftime('%Y-%m-%d %H:%M:%S'),
-    #             "current_period_end": datetime.datetime.fromtimestamp(int(subscription.current_period_end)).strftime(
-    #                 '%Y-%m-%d %H:%M:%S'),
-    #             "status": str(subscription.status),
-    #             "plan": subscription.plan.name
-    #         }
-    #         subscriptions.append(kwargsubscription)
-    #
-    #     kwargs = {
-    #         "customer_id": cust.id,
-    #         "email": cust.email,
-    #         "google_public_profile_photo_url": cust.metadata.google_public_profile_photo_url,
-    #         "google_display_name": cust.metadata.google_display_name,
-    #         "google_user_id": cust.metadata.google_user_id,
-    #         "subscriptions": subscriptions
-    #     }
-    #     # user=User.query().filter(User.id==my_model.id).get()
-    #
-    #     return iomessages.customerResponse(**kwargs)
-
-    # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
     @endpoints.method(CalendarFeedsRequest, CalendarFeedsResults,
                       path='calendar/feeds', http_method='POST', name='calendar.feeds')
     def get_feeds(self, request):

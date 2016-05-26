@@ -1,6 +1,5 @@
 import datetime
 import json
-import logging
 import os
 import re
 import sys
@@ -17,7 +16,6 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
-from intercom import Intercom
 from iomodels.accounts import Account
 from iomodels.contacts import Contact
 from iomodels.documents import Document
@@ -336,44 +334,6 @@ class SecurityInformationsHandler(BaseHandler, SessionEnabledHandler):
         template_values = {}
         template = jinja_environment.get_template('templates/landing/security-informations.html')
         self.response.out.write(template.render(template_values))
-
-
-class StripeHandler(BaseHandler, SessionEnabledHandler):
-    def post(self):
-        # Get the credit card details submitted by the form
-
-        # Set your secret key: remember to change this to your live secret key in production
-        # See your keys here https://dashboard.stripe.com/account
-        # stripe.api_key = "sk_test_4ZNpoS4mqf3YVHKVfQF7US1R"
-        stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
-
-        # Get the credit card details submitted by the form
-        token = self.request.get('stripeToken')
-
-        # Create a Customer
-        customer = stripe.Customer.create(
-            card=token,
-            description="payinguser@example.com"
-        )
-
-        # Charge the Customer instead of the card
-        stripe.Charge.create(
-            amount=1000,  # in cents
-            currency="usd",
-            customer=customer.id
-        )
-
-        # Save the customer ID in your database so you can use it later
-        save_stripe_customer_id(user, customer.id)
-
-        # Later...
-        customer_id = get_stripe_customer_id(user)
-
-        stripe.Charge.create(
-            amount=1500,  # $15.00 this time
-            currency="usd",
-            customer=customer_id
-        )
 
 
 class IndexHandler(BaseHandler, SessionEnabledHandler):
@@ -1701,30 +1661,6 @@ class CheckJobStatus(webapp2.RequestHandler):
             )
 
 
-# paying with stripe
-class StripePayingHandler(BaseHandler, SessionEnabledHandler):
-    def post(self):
-        # the secret key .
-        # stripe.api_key="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-        stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
-        # get the token from the client form
-        token = self.request.get('stripeToken')
-        # charging operation after the payment
-        try:
-            print "*-*-*-*-*-*-*-*-*-*-*-*-//////////////////////"
-            print "here we go !"
-            print stripe.Charge.all()
-            print "-*-*-*-*-*-*-*-*-*-*-*-*-*"
-            # charge= stripe.Charge.create(
-            #     amount=1000,
-            #     currency="usd",
-            #     card=token,
-            #     description="hadji@iogrow.com")
-        except stripe.CardError, e:
-            # The card has been declined
-            pass
-
-
 class DeleteUserContacts(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -1879,8 +1815,6 @@ routes = [
     ('/install', InstallFromDecorator),
     (decorator.callback_path, decorator.callback_handler()),
     ('/paypal_paying_users', PayPalPayingUsers),
-    ('/stripe', StripeHandler),
-    # paying with stripe
     ('/jj', ImportJob),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),
