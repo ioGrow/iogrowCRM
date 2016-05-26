@@ -41,19 +41,19 @@
         </div>
     </div>
     <div class="col-md-5 panel panel-default"
-         style="border: 0px;border-top: #8BC54A solid;color: #A2A2A2;font-family: sans-serif;font-weight: 300;">
+         style="border: 0;border-top: #8BC54A solid;color: #A2A2A2;font-family: sans-serif;font-weight: 300;">
         <h2 style="color: #5F5D5D;margin-top: 10px;margin-bottom: 20px; font-family: sans-serif;">
             <i class="glyphicon glyphicon-globe" style="font-size: 24px"></i> {{ _('Regional Settings') }} </h2>
 
-        <div class="form-group col-md-12" style="padding: 0px;">
+        <div class="form-group col-md-12" style="padding: 0;">
             <i class="glyphicon glyphicon-flag"></i> {{ _('Country') }}
-            <div class="col-md-12 margin-top-10 " style="padding: 0px">
+            <div class="col-md-12 margin-top-10 " style="padding: 0">
                 <select name="" id="country_list" class="form-control select2">
                     <option ng-repeat="value in contriesCodes" value="<%= value.code %>"> <%= value.name %></option>
                 </select>
             </div>
         </div>
-        <div class="form-group col-md-12" style="padding: 0px;">
+        <div class="form-group col-md-12" style="padding: 0;">
             <div><i class="material-icons" style="font-size: 14px;">{{ _('translate') }}</i> {{ _('Language') }} </div>
             <div class="col-md-5  " style="padding: 0">
                 <select name="" id="language_picker" class="form-control select2 no-icon">
@@ -65,10 +65,10 @@
             </div> <div class="col-md-2"><a href="https://www.transifex.com/iogrow-1/iogrowcrm/"> {{ _('Help translate?') }}</a>
             </div>
         </div>
-        <div class="form-group col-md-12" style="padding: 0px;">
+        <div class="form-group col-md-12" style="padding: 0;">
             <hr>
             <i class="material-icons" style="font-size: 14px">language</i> {{ _('Time zone') }}
-            <div class="col-md-12  " style="padding: 0px">
+            <div class="col-md-12  " style="padding: 0">
                 <select name="" id="timezone_picker" class="form-control select2 no-icon">
                     <option timeZoneId="1" gmtAdjustment="GMT-12:00" useDaylightTime="0"
                             value="-12:00">(GMT-12:00) International Date Line West
@@ -321,9 +321,9 @@
                 </select>
             </div>
         </div>
-        <div class="form-group col-md-12" style="padding: 0px;    margin-top: 10px;">
+        <div class="form-group col-md-12" style="padding: 0;    margin-top: 10px;">
             <div><i class="fa fa-calendar"></i> {{ _('Date and Time format') }}</div>
-            <div class="col-md-12" style="padding: 0px">
+            <div class="col-md-12" style="padding: 0">
                 <select name="" id="date_time_format" class="form-control select2 no-icon">
                     <option ng-repeat="(key, value) in languagesCodes" value="<%= (key) ? key : '' %>">
                         <%= (key) ? value + " " + getDateFormat(key) : "" %>
@@ -331,10 +331,10 @@
                 </select>
             </div>
         </div>
-        <div class="form-group col-md-12" style="padding: 0px;">
-            <div class="col-md-12" style="padding: 0px;">
+        <div class="form-group col-md-12" style="padding: 0;">
+            <div class="col-md-12" style="padding: 0;">
                 <i class="fa fa-calendar-o"></i> {{ _('Week starts on') }}</div>
-            <div class="col-md-5" style="padding: 0px">
+            <div class="col-md-5" style="padding: 0">
                 <select name="" id="week_start" class="form-control select2 no-icon">
                     <!--<option value="saturday">Saturday</option>-->
                     <option value="sunday">Sunday</option>
@@ -342,10 +342,10 @@
                 </select>
             </div>
         </div>
-        <div class="form-group col-md-12" style="padding: 0px;">
+        <div class="form-group col-md-12" style="padding: 0;">
             <hr>
-            <div class="col-md-12" style="padding: 0px;"><i class="fa fa-money"></i> {{ _('Currency') }} </div>
-            <div class="col-md-3  " style="padding: 0px">
+            <div class="col-md-12" style="padding: 0;"><i class="fa fa-money"></i> {{ _('Currency') }} </div>
+            <div class="col-md-3  " style="padding: 0">
                 <select name="" id="currency" class="form-control select2 no-icon">
                     <option value="USD">$ - USD</option>
                     <option value="EUR">€ - EUR</option>
@@ -422,9 +422,9 @@
                 </select>
             </div>
         </div>
-        <div class="form-group col-md-12" style="padding: 0px;">
-            <div class="col-md-12" style="padding: 0px;"><i class="fa fa-money"></i> {{ _('Currency Format') }}</div>
-            <div class="col-md-12  " style="padding: 0px">
+        <div class="form-group col-md-12" style="padding: 0;">
+            <div class="col-md-12" style="padding: 0;"><i class="fa fa-money"></i> {{ _('Currency Format') }}</div>
+            <div class="col-md-12  " style="padding: 0">
                 <select name="" id="currency_format" class="form-control select2 no-icon">
                     <option ng-repeat="(key, value) in languagesCodes" value="<%= key %>">
                         <%= value%> <%= getCurrencyFormat(key) %>

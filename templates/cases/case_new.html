@@ -44,7 +44,7 @@
                             <a href="/#/cases" data-toggle="tooltip" data-placement="bottom"
                                title="Back to Cases">
                                 <img src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif"
-                                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;"
+                                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;"
                                      border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>
                         </div>
                         <div class="clearfix"></div>
@@ -67,7 +67,7 @@
                             {% endif %}
                         {% endfor %}
                         <div class="btn-group show_sm"
-                             style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                             style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                             <a class="headerBtn" title="More" data-toggle="dropdown">
                                 <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
                             </a>
@@ -237,8 +237,8 @@
                                                   data-toggle="modal" style="color:gray;"><i
                                                        class="fa fa-pencil"></i> {{ _('Edit Custom fields') }} </a>
                                              </span>
-                                        <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt"
-                                                                       style="font-size:24px"></i>{{ _(' Custom Fields') }}
+                                        <h3 style="margin-top:0;"><i class="fa fa fa-list-alt"
+                                                                     style="font-size:24px"></i>{{ _(' Custom Fields') }}
                                         </h3>
                                         <div ng-show="isEmptyArray(cases.customfields)" style="text-align:center">
                                             <a href="/#/admin/custom_fields/5" class=" newRelatedContact"
@@ -247,7 +247,7 @@
                                             </a>
                                         </div>
                                         <ul ng-show="!isEmptyArray(cases.customfields)"
-                                            style="list-style: none;padding-left: 0px;">
+                                            style="list-style: none;padding-left: 0;">
                                             <li ng-repeat="cusfield in cases.customfields" style="padding: 5px;">
                                                 <div class="form-group" style="margin-bottom: 5px;">
                                                     <div class="row">
@@ -326,7 +326,7 @@
 
                                     </div>
                                     <div class="news-blocks blank-card blank-card-yellow ">
-                                        <h3 style="margin-top:0px; margin-bottom: 20px;">
+                                        <h3 style="margin-top:0; margin-bottom: 20px;">
                                             <i class="fa fa-edit" style="  font-size: 24px;"></i>{{ _(' Notes') }}
                                         </h3>
                                         <div class="news-block-tags">

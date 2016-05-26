@@ -65,11 +65,11 @@
 
         .checkout-plan-select label {
             background: #cbd7df;
-            -webkit-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.35);
-            -moz-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.35);
-            box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.35);
+            -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.35);
+            -moz-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.35);
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.35);
             position: relative;
-            padding: 15px 0px 15px 55px;
+            padding: 15px 0 15px 55px;
             cursor: pointer;
             background: #D9E1E5;
             border-radius: 3px;
@@ -137,8 +137,8 @@
 
         /* CSS for Credit Card Payment form */
         .credit-card-box {
-            padding: 10px 0px 0px;
-            box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.16);
+            padding: 10px 0 0;
+            box-shadow: 0 4px 9px 0 rgba(0, 0, 0, 0.16);
         }
 
         .credit-card-box .panel-title {
@@ -232,7 +232,7 @@
 
         .card-demo {
             height: 254px;
-            padding: 0px
+            padding: 0
         }
 
         .subscribe-btn {
@@ -255,7 +255,7 @@
 
         .field-icon {
             background-color: transparent !important;
-            padding: 0px 5px !important;
+            padding: 0 5px !important;
         }
     </style>
     <meta charset="UTF-8">
@@ -274,7 +274,7 @@
 
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2" style="display: flex; justify-content: space-around;">
-                <div class="col-sm-5 checkout-plan-select" style="padding: 0px">
+                <div class="col-sm-5 checkout-plan-select" style="padding: 0">
                     <h4>1. Number of licenses</h4>
                     <label class="licence-num">
                         <i class="fa fa-arrow-down " id="minus"></i>
@@ -299,21 +299,21 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-sm-5" style="padding: 0px">
+                <div class="col-sm-5" style="padding: 0">
                     <h4>3. Payment method</h4>
                     <div class="checkout-plan-select">
-                        <div class="plan-option col-sm-6" style="margin-top: 0px;padding-left: 0;">
+                        <div class="plan-option col-sm-6" style="margin-top: 0;padding-left: 0;">
                             <input type="radio" id="credit" name="payment-method" checked="checked" value="credit"
                                    style="margin-top: 25px;margin-left: 10px;">
-                            <label for="credit" style="padding: 10px 0px 10px 48px;">
+                            <label for="credit" style="padding: 10px 0 10px 48px;">
                                 <i class="fa fa-check-circle" style="top: 22px;left: 10px;font-size: 24px;"></i>
                                 <span style="font-size: 22px;">Credit Card</span>
                             </label>
                         </div>
-                        <div class="plan-option col-sm-6" style="margin-top: 0px;padding-right: 0;">
+                        <div class="plan-option col-sm-6" style="margin-top: 0;padding-right: 0;">
                             <input type="radio" name="payment-method" value="paypal" id="paypal"
                                    style="margin-top: 25px;margin-left: 10px;">
-                            <label for="paypal" style="padding: 10px 0px 10px 48px;">
+                            <label for="paypal" style="padding: 10px 0 10px 48px;">
                                 <i class="fa fa-check-circle" style="top: 22px;left: 10px;font-size: 24px;"></i>
                                 <span style="font-size: 22px;">Paypal</span>
                             </label>
@@ -394,11 +394,11 @@
 </div>
 <div class="col-sm-8 col-sm-offset-2"
      style="display: flex; justify-content: space-around;margin-bottom: 300px;flex-wrap: wrap">
-    <div class="col-sm-5" style="padding: 0px"><h4>5. {{ _('Billing details') }}</h4></div>
-    <div class="col-sm-5" style="padding: 0px;align-self: center">
+    <div class="col-sm-5" style="padding: 0"><h4>5. {{ _('Billing details') }}</h4></div>
+    <div class="col-sm-5" style="padding: 0;align-self: center">
         <i class="material-icons pull-right edit-icon">mode_edit</i>
     </div>
-    <div class="col-sm-5" style="padding: 0px">
+    <div class="col-sm-5" style="padding: 0">
         <div class="input-group input-group-lg form-group">
             <span class="input-group-addon field-icon" id="sizing-addon1">
                 <i class="material-icons form-icon">{{ _('person') }}</i>
@@ -414,7 +414,7 @@
                    value="{{ organization.billing_contact_address or "" }}" aria-describedby="sizing-addon1">
         </div>
     </div>
-    <div class="col-sm-5" style="padding: 0px">
+    <div class="col-sm-5" style="padding: 0">
 
         <div class="input-group input-group-lg form-group">
             <span class="input-group-addon field-icon" id="sizing-addon1">

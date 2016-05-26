@@ -75,7 +75,7 @@
                            ng-click="editbeforedeleteselection()">
                             <i class="fa fa-trash-o"></i>
                             <div class="btn-group show_md"
-                                 style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                                 style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                                 <a class="headerBtn" title="More" data-toggle="dropdown">
                                     {{ _("More") }}
                                 </a>
@@ -110,7 +110,7 @@
                         <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
                     </a>
                     <div class="btn-group hide_sm" ng-class="{'filterSelected': contactsfilter!='all'}"
-                         style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;padding-left: 0px;padding-right: 0px;">
+                         style="margin-left: 8px; margin-right: 0; vertical-align: baseline;padding-left: 0;padding-right: 0;">
                         <a class="headerBtn" title="Filter/Sort options" data-toggle="dropdown">
                             <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
@@ -140,7 +140,7 @@
                         <a class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"
                            href="#" data-toggle="dropdown">
                             <i class="fa fa-question-circle"
-                               style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
+                               style="padding-top: 0; font-size: 16px;vertical-align: text-top;"></i>
                         </a>
                         <ul class="dropdown-menu drp-dwn-right">
 
@@ -160,7 +160,7 @@
                         {% endif %}
                     {% endfor %}
                     <div class="btn-group show_sm"
-                         style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                         style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                         <a class="headerBtn" title="More" data-toggle="dropdown">
                             <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
@@ -385,7 +385,7 @@
                                     <div class="col-md-12 waterfall"
                                          ng-show="show=='cards'&&!blankStatecontact&&!filterNoResult"
                                          id="contactCardsContainer"
-                                         style="min-height: 0px !important;margin-top: -12px;">
+                                         style="min-height: 0 !important;margin-top: -12px;">
                                         <div class="labelsCardElement cardElement" data-span="all"
                                              ng-show="showTagsFilter">
                                             <button type="button" class="close" aria-hidden="true"
@@ -1178,7 +1178,7 @@
 
                     <div ng-show="contact.access!='public' && selectedPermisssions">
                         <p>{{ _("Invite collaborators:") }}</p>
-                        <div class="form-group" style="margin-left: 0px; margin-right: 0px;">
+                        <div class="form-group" style="margin-left: 0; margin-right: 0;">
                             <input type="text" ng-model="user"
                                    typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
                                    typeahead-on-select="selectMember()" class="form-control"

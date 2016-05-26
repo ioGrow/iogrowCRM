@@ -81,7 +81,7 @@
                             <i class="fa fa-trash-o"></i>
                         </a>
                         <div class="btn-group show_md"
-                             style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                             style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                             <ul class="dropdown-menu drp-dwn-right">
                                 <li>
                                     <a class="hide_md" title="Upload" ng-click="showImportModal()">
@@ -113,7 +113,7 @@
                         <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
                     </a>
                     <div class="btn-group hide_sm" ng-class="{'filterSelected': leadsfilter!='all'}"
-                         style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;padding-left: 0px;padding-right: 0px;">
+                         style="margin-left: 8px; margin-right: 0; vertical-align: baseline;padding-left: 0;padding-right: 0;">
                         <a class="headerBtn" title="{{ _('Filter/Sort options') }}" data-toggle="dropdown">
                             <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
@@ -148,7 +148,7 @@
                         <a class="headerBtn hide_sm" title="{{ _('Help') }}"
                            style="margin-left: 20px; margin-right: 12px;" href="#" data-toggle="dropdown">
                             <i class="fa fa-question-circle"
-                               style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
+                               style="padding-top: 0; font-size: 16px;vertical-align: text-top;"></i>
                         </a>
                         <ul class="dropdown-menu drp-dwn-right">
                              <li><a ng-click="lead_wizard()" href="#" data-toggle="modal">{{ _('Show tips ') }}</a></li>
@@ -167,7 +167,7 @@
                         {% endif %}
                     {% endfor %}
                     <div class="btn-group show_sm"
-                         style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                         style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                         <a class="headerBtn" title="More" data-toggle="dropdown">
                             <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
@@ -1164,7 +1164,7 @@
                             <hr ng-show="selected_access!='public' && selectedPermisssions"/>
                             <div ng-show="selected_access!='public' && selectedPermisssions">
                                 <p>{{ _("Invite collaborators:") }}</p>
-                                <div class="form-group" style="margin-left: 0px; margin-right: 0px;">
+                                <div class="form-group" style="margin-left: 0; margin-right: 0;">
                                     <input type="text" ng-model="user"
                                            typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
                                            typeahead-on-select="selectMember()" class="form-control"

@@ -56,7 +56,7 @@
                                title="Back to Contacts">
                                 <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;"
                                      src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif"
-                                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;"
+                                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;"
                                      border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>
                         </div>
                         <div class="clearfix"></div>
@@ -78,7 +78,7 @@
                             {% endif %}
                         {% endfor %}
                         <div class="btn-group show_sm"
-                             style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                             style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                             <a class="headerBtn" title="More" data-toggle="dropdown">
                                 <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
                             </a>
@@ -168,7 +168,7 @@
                                                                  style="padding-left: 0;padding-right: 0;">
                                                                 <select class="form-control"
                                                                         ng-model="opportunity.currency"
-                                                                        style="padding-left:13px;padding-right:0px">
+                                                                        style="padding-left:13px;padding-right:0">
                                                                     <option value="USD" selected>$ - USD</option>
                                                                     <option value="EUR">€ - EUR</option>
                                                                     <option value="CAD">$ - CAD</option>
@@ -268,7 +268,7 @@
                                                                        style="padding-left:5px">
                                                             </div>
                                                             <div class="col-md-7 ">
-                                                                <p style="margin-bottom: 0px;line-height: 27px;text-align: center;">
+                                                                <p style="margin-bottom: 0;line-height: 27px;text-align: center;">
                                      <span ng-show="opportunity.duration_unit!='fixed'&&opportunity.duration&&opportunity.amount_per_unit"
                                            style="color: rgb(216, 74, 56);font-size: 15px;font-weight: 500;">Total:</span>
                                      <span ng-show="opportunity.duration_unit!='fixed'&&opportunity.duration&&opportunity.amount_per_unit"
@@ -396,7 +396,7 @@
                                                                 class="fa fa-money"></i> {{ _(' Budget') }}</label>
                                                         <div class="col-md-8">
                                                             <div class="row">
-                                                                <div class="col-md-4" style="padding-right: 0px;">
+                                                                <div class="col-md-4" style="padding-right: 0;">
                                                                     <select class="form-control">
                                                                         <option value="yes">{{ _('Yes') }}</option>
                                                                         <option value="no">{{ _('No') }}</option>
@@ -533,8 +533,8 @@
                                                   data-toggle="modal" style="color:gray;"><i
                                                        class="fa fa-pencil"></i> {{ _('Edit Custom fields') }} </a>
                                              </span>
-                                        <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt"
-                                                                       style="font-size:24px"></i>{{ _(' Custom Fields') }}
+                                        <h3 style="margin-top:0;"><i class="fa fa fa-list-alt"
+                                                                     style="font-size:24px"></i>{{ _(' Custom Fields') }}
                                         </h3>
                                         <div ng-show="isEmptyArray(opportunities.customfields)"
                                              style="text-align:center">
@@ -544,7 +544,7 @@
                                             </a>
                                         </div>
                                         <ul ng-show="!isEmptyArray(opportunities.customfields)"
-                                            style="list-style: none;padding-left: 0px;">
+                                            style="list-style: none;padding-left: 0;">
                                             <li ng-repeat="cusfield in opportunities.customfields"
                                                 style="padding: 5px;">
                                                 <div class="form-group" style="margin-bottom: 5px;">
@@ -774,7 +774,7 @@
                                         </div>
                                     </div>
                                     <div class="news-blocks blank-card blank-card-yellow ">
-                                        <h3 style="margin-top:0px; margin-bottom: 20px;">
+                                        <h3 style="margin-top:0; margin-bottom: 20px;">
                                             <i class="fa fa-edit" style="  font-size: 24px;"></i>{{ _(' Notes') }}
                                         </h3>
                                         <div class="news-block-tags">
@@ -892,7 +892,7 @@
                                     </strong>
                                 </div>
 
-                                <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px"
+                                <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0"
                                     ng-show="inList.length >= 4&&isEmptyArray(inShortProfiles)">
                                     <li ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)"
                                         title="Select" class="linkedin-item-on-list" ng-repeat="profile in inList"
@@ -976,7 +976,7 @@
                                 </div>
 
                                 <ul ng-hide="isEmptyArray(inProfile.experiences['current-position'])"
-                                    class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
+                                    class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0">
                                     <li style="margin-bottom:10px" ng-hide="showMoreCurrent">
                                         <div class="past-position-title">
                                             <%=linkedProfile.experiences.curr[0].title%>
@@ -1095,7 +1095,7 @@
 
                             <div>
 
-                                <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px"
+                                <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0"
                                     ng-show="twList.length >= 4&&isEmptyArray(twShortProfiles)">
                                     <li ng-mouseover="showSelectTwitter($index)"
                                         ng-mouseleave="hideSelectTwitter($index)" title="Select"
@@ -1181,7 +1181,7 @@
                                 </div>
 
                                 <ul ng-hide="isEmptyArray(twProfile.experiences['current-position'])"
-                                    class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
+                                    class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0">
                                     <li style="margin-bottom:10px" ng-hide="showMoreCurrent">
                                         <div class="past-position-title">
                                             <%=linkedProfile.experiences.curr[0].title%>

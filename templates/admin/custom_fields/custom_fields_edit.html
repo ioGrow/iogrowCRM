@@ -78,8 +78,8 @@
                         <div class="col-md-6">
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  style="padding: 15px;min-height:initial !important;padding-top: 5px;">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-cogs"
-                                                                             style="font-size:18px"></i>{{ _('Custom Fields Builder') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-cogs"
+                                                                           style="font-size:18px"></i>{{ _('Custom Fields Builder') }}
                                 </h3>
 
                                 <form class="">
@@ -121,10 +121,10 @@
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-offset-3 col-md-9">
-                                                        <ul style="padding-left: 0px;padding-top: 5px;list-style: none;"
+                                                        <ul style="padding-left: 0;padding-top: 5px;list-style: none;"
                                                             sv-root sv-part="leads.customfield.options">
                                                             <li ng-repeat='option in leads.customfield.options'
-                                                                style="padding: 0px;margin-bottom: 5px;"
+                                                                style="padding: 0;margin-bottom: 5px;"
                                                                 sv-element="opts">
                                                     <span sv-handle
                                                           style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;"
@@ -201,8 +201,8 @@
                                  style="-webkit-transition: all 0.25s ease-in-out;-moz-transition: all 0.25s ease-in-out;-o-transition: all 0.25s ease-in-out;transition: all 0.25s ease-in-out; margin-bottom:25px !important;position:relative;">
                                 <i class="fa fa-arrow-right"
                                    style="display: inline-block;left: -20px;top: 47%;position: absolute;"></i>
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-eye"
-                                                                             style="font-size:22px"></i>{{ _('Field preview') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-eye"
+                                                                           style="font-size:22px"></i>{{ _('Field preview') }}
                                 </h3>
 
                                 <div class="col-md-12" ng-show="leads.customfield.field_type">
@@ -247,10 +247,10 @@
                             </div>
                             <div class="news-blocks blank-card blank-card-gray newsCard"
                                  ng-class="{'disabledBlock':isEmptyArray(leads.customfields)}">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt"
-                                                                             style="font-size:18px"></i>{{ _('Custom Fields') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-list-alt"
+                                                                           style="font-size:18px"></i>{{ _('Custom Fields') }}
                                 </h3>
-                                <ul style="list-style: none;padding-left: 0px;"
+                                <ul style="list-style: none;padding-left: 0;"
                                 ="col-md-12" sv-root sv-part="leads.customfields" sv-on-sort="
                                 sortCustomField($item,$indexTo)">
                                 <li ng-repeat="cusfield in leads.customfields" sv-element="cusfield"
@@ -326,7 +326,7 @@
                         <div class="col-md-6">
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  style="padding: 15px;min-height:initial !important;padding-top: 5px;">
-                                <h3 style="margin-top:0px;font-size:20px">
+                                <h3 style="margin-top:0;font-size:20px">
                                     <i class="fa fa fa-cogs" style="font-size:18px"></i> {{ _('Custom Fields Builder') }}
                                 </h3>
 
@@ -369,10 +369,10 @@
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-offset-3 col-md-9">
-                                                        <ul style="padding-left: 0px;padding-top: 5px;list-style: none;"
+                                                        <ul style="padding-left: 0;padding-top: 5px;list-style: none;"
                                                             sv-root sv-part="opportunities.customfield.options">
                                                             <li ng-repeat='option in opportunities.customfield.options'
-                                                                style="padding: 0px;margin-bottom: 5px;"
+                                                                style="padding: 0;margin-bottom: 5px;"
                                                                 sv-element="opts">
                                                     <span sv-handle
                                                           style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;"
@@ -444,7 +444,7 @@
                         <div class="col-md-6">
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  ng-show="opportunities.customfield.field_type">
-                                <h3 style="margin-top:0px;font-size:20px">
+                                <h3 style="margin-top:0;font-size:20px">
                                     <i class="fa fa fa-eye" style="font-size:22px"></i> {{ _(" Field preview") }}
                                 </h3>
                                 <div class="col-md-12" ng-show="opportunities.customfield.field_type">
@@ -490,8 +490,8 @@
                             </div>
                             <div class="news-blocks blank-card blank-card-gray newsCard"
                                  ng-class="{'disabledBlock':isEmptyArray(opportunities.customfields)}">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt"
-                                                                             style="font-size:18px"></i> {{ _('Custom Fields') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-list-alt"
+                                                                           style="font-size:18px"></i> {{ _('Custom Fields') }}
                                 </h3>
 
                                 <div class="col-md-12" ng-repeat="cusfield in opportunities.customfields">
@@ -561,8 +561,8 @@
                         <div class="col-md-6">
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  style="padding: 15px;min-height:initial !important;padding-top: 5px;">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-cogs"
-                                                                             style="font-size:18px"></i>{{ _('Custom Fields Builder') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-cogs"
+                                                                           style="font-size:18px"></i>{{ _('Custom Fields Builder') }}
                                 </h3>
 
                                 <form class="">
@@ -604,10 +604,10 @@
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-offset-3 col-md-9">
-                                                        <ul style="padding-left: 0px;padding-top: 5px;list-style: none;"
+                                                        <ul style="padding-left: 0;padding-top: 5px;list-style: none;"
                                                             sv-root sv-part="contacts.customfield.options">
                                                             <li ng-repeat='option in contacts.customfield.options'
-                                                                style="padding: 0px;margin-bottom: 5px;"
+                                                                style="padding: 0;margin-bottom: 5px;"
                                                                 sv-element="opts">
                                                     <span sv-handle
                                                           style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;"
@@ -679,8 +679,8 @@
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  ng-show="contacts.customfield.field_type"
                                  style="-webkit-transition: all 0.25s ease-in-out;-moz-transition: all 0.25s ease-in-out;-o-transition: all 0.25s ease-in-out;transition: all 0.25s ease-in-out;">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-eye"
-                                                                             style="font-size:22px"></i>{{ _('Field preview') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-eye"
+                                                                           style="font-size:22px"></i>{{ _('Field preview') }}
                                 </h3>
 
                                 <div class="col-md-12" ng-show="contacts.customfield.field_type">
@@ -726,8 +726,8 @@
                             </div>
                             <div class="news-blocks blank-card blank-card-gray newsCard"
                                  ng-class="{'disabledBlock':isEmptyArray(contacts.customfields)}">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt"
-                                                                             style="font-size:18px"></i>{{ _('Custom Fields') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-list-alt"
+                                                                           style="font-size:18px"></i>{{ _('Custom Fields') }}
                                 </h3>
 
                                 <div class="col-md-12" ng-repeat="cusfield in contacts.customfields">
@@ -797,8 +797,8 @@
                         <div class="col-md-6">
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  style="padding: 15px;min-height:initial !important;padding-top: 5px;">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-cogs"
-                                                                             style="font-size:18px"></i>{{ _('Custom Fields Builder') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-cogs"
+                                                                           style="font-size:18px"></i>{{ _('Custom Fields Builder') }}
                                 </h3>
 
                                 <form class="">
@@ -840,10 +840,10 @@
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-offset-3 col-md-9">
-                                                        <ul style="padding-left: 0px;padding-top: 5px;list-style: none;"
+                                                        <ul style="padding-left: 0;padding-top: 5px;list-style: none;"
                                                             sv-root sv-part="accounts.customfield.options">
                                                             <li ng-repeat='option in accounts.customfield.options'
-                                                                style="padding: 0px;margin-bottom: 5px;"
+                                                                style="padding: 0;margin-bottom: 5px;"
                                                                 sv-element="opts">
                                                     <span sv-handle
                                                           style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;"
@@ -915,8 +915,8 @@
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  ng-show="accounts.customfield.field_type"
                                  style="-webkit-transition: all 0.25s ease-in-out;-moz-transition: all 0.25s ease-in-out;-o-transition: all 0.25s ease-in-out;transition: all 0.25s ease-in-out;">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-eye"
-                                                                             style="font-size:22px"></i> {{ _('Field preview') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-eye"
+                                                                           style="font-size:22px"></i> {{ _('Field preview') }}
                                 </h3>
 
                                 <div class="col-md-12" ng-show="accounts.customfield.field_type">
@@ -962,8 +962,8 @@
                             </div>
                             <div class="news-blocks blank-card blank-card-gray newsCard"
                                  ng-class="{'disabledBlock':isEmptyArray(accounts.customfields)}">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt"
-                                                                             style="font-size:18px"></i> {{ _('Custom Fields') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-list-alt"
+                                                                           style="font-size:18px"></i> {{ _('Custom Fields') }}
                                 </h3>
 
                                 <div class="col-md-12" ng-repeat="cusfield in accounts.customfields">
@@ -1033,8 +1033,8 @@
                         <div class="col-md-6">
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  style="padding: 15px;min-height:initial !important;padding-top: 5px;">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-cogs"
-                                                                             style="font-size:18px"></i> {{ _('Custom Fields Builder') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-cogs"
+                                                                           style="font-size:18px"></i> {{ _('Custom Fields Builder') }}
                                 </h3>
 
                                 <form class="">
@@ -1075,10 +1075,10 @@
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-offset-3 col-md-9">
-                                                        <ul style="padding-left: 0px;padding-top: 5px;list-style: none;"
+                                                        <ul style="padding-left: 0;padding-top: 5px;list-style: none;"
                                                             sv-root sv-part="cases.customfield.options">
                                                             <li ng-repeat='option in cases.customfield.options'
-                                                                style="padding: 0px;margin-bottom: 5px;"
+                                                                style="padding: 0;margin-bottom: 5px;"
                                                                 sv-element="opts">
                                                     <span sv-handle
                                                           style="width: 14%;float: left;line-height: 32px;font-size: 14px;color: gray;"
@@ -1150,8 +1150,8 @@
                             <div class="news-blocks blank-card blank-card-twitter newsCard"
                                  ng-show="cases.customfield.field_type"
                                  style="-webkit-transition: all 0.25s ease-in-out;-moz-transition: all 0.25s ease-in-out;-o-transition: all 0.25s ease-in-out;transition: all 0.25s ease-in-out;">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-eye"
-                                                                             style="font-size:22px"></i> {{ _('Field preview') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-eye"
+                                                                           style="font-size:22px"></i> {{ _('Field preview') }}
                                 </h3>
 
                                 <div class="col-md-12" ng-show="cases.customfield.field_type">
@@ -1194,8 +1194,8 @@
                             </div>
                             <div class="news-blocks blank-card blank-card-gray newsCard"
                                  ng-class="{'disabledBlock':isEmptyArray(cases.customfields)}">
-                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt"
-                                                                             style="font-size:18px"></i>{{ _('Custom Fields') }}
+                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-list-alt"
+                                                                           style="font-size:18px"></i>{{ _('Custom Fields') }}
                                 </h3>
 
                                 <div class="col-md-12" ng-repeat="cusfield in cases.customfields">

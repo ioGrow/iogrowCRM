@@ -65,7 +65,7 @@
                                 <i class="fa fa-trash-o"></i>
                             </a>
                             <div class="btn-group show_md"
-                                 style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                                 style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                                 <a class="headerBtn" title="More" data-toggle="dropdown">
                                     {{ _("More") }}
                                 </a>
@@ -122,7 +122,7 @@
                         <span ng-hide="showEdit"><i class="fa fa-pencil"></i> Edit</span>
                         <span ng-show="showEdit"><i class="fa fa-save"></i> Save</span>
                     </a>
-                    <div class="btn-group relbutton pull-right" ng-show="selectedTab==7" style="padding:0px">
+                    <div class="btn-group relbutton pull-right" ng-show="selectedTab==7" style="padding:0">
                         <div class="btn-group" style="margin-right: 5px;">
                             <button ng-click="createPickerUploader()" id="sample_editable_1_new" class="btn red">
                                 <i class="fa fa-upload"></i>
@@ -174,7 +174,7 @@
                             {% endif %}
                         {% endfor %}
                         <div class="btn-group show_sm"
-                             style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                             style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                             <a class="headerBtn" title="More" data-toggle="dropdown">
                                 <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
                             </a>
@@ -228,7 +228,7 @@
                             <div class="row">
                                 <div class="col-md-3 col-sm-3 col-xs-3" ng-mouseenter="showUpload = true"
                                      ng-mouseleave="showUpload = false"
-                                     style="padding-right:0px;display: table;vertical-align: middle;text-align: center;">
+                                     style="padding-right:0;display: table;vertical-align: middle;text-align: center;">
                                     <div class="pic" style="vertical-align:middle;display: table-cell;">
                                         <img alt="<%= casee.account.name %>" class="yemyem img-responsive img-thumbnail"
                                              ng-src="<%= casee.account.logo_img_id ? 'https://docs.google.com/uc?id='+ casee.account.logo_img_id : '/static/src/img/default_company.png' %>"
@@ -236,11 +236,11 @@
                                     </div>
                                 </div>
                                 <div class="col-md-9 col-sm-9 col-xs-9"
-                                     style="min-height: 113px;display: table; padding-left:0px;">
-                                    <h3 style="margin-top: 0px;  margin-bottom: 5px;">
+                                     style="min-height: 113px;display: table; padding-left:0;">
+                                    <h3 style="margin-top: 0;  margin-bottom: 5px;">
                                         <span ng-hide="showEdit"><%= casee.name%></span>
                                         <form ng-show="showEdit" class="form-inline newLeadForm" role="form"
-                                              style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0px;width: calc(100% - 176px);">
+                                              style="  margin-right: 2px;display: inline-block;float: left;margin-bottom: 0;width: calc(100% - 176px);">
                                             <div class="input-icon">
                                                 <i class="fa fa-pencil"></i>
                                                 <input class="  form-control" type="text" placeholder="Subject"
@@ -260,8 +260,8 @@
                                   <%= casee.priority %>
                             </span>
                                             <a ng-show="showEdit"
-                                               style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
-                                               data-toggle="dropdown" style="margin-right:0px">
+                                               style="  color: #262626;text-decoration: none; margin-left:0" href="#"
+                                               data-toggle="dropdown" style="margin-right:0">
                                 
                                 <span style="color:#D84A38;font-size:18px">
                                   <%= casee.priority %>
@@ -324,7 +324,7 @@
                                         <div class="clearfix"></div>
                                     </h3>
                                     <ul ng-show="casee.account" class="list-unstyled contact-infos showList "
-                                        style="padding-left: 0px;" ng-class="{contactListOnEdit: !showEdit}">
+                                        style="padding-left: 0;" ng-class="{contactListOnEdit: !showEdit}">
                                         <li class="showListItem" style="display: inline-block;float: left;">
                                             <i class="fa fa-building" style="color: #2197f1;"></i>
                                             <a href="/#/accounts/show/<%=casee.account.id%>"
@@ -334,7 +334,7 @@
                                         <div class="clearfix"></div>
                                     </ul>
                                     <ul class="list-unstyled contact-infos showList "
-                                        ng-show="!isEmptyArray(casee.account.phones.items)" style="padding-left: 0px;"
+                                        ng-show="!isEmptyArray(casee.account.phones.items)" style="padding-left: 0;"
                                         ng-class="{contactListOnEdit: !showEdit}">
                                         <li class="showListItem"
                                             ng-repeat="phone in casee.account.phones.items| limitTo:2"
@@ -364,7 +364,7 @@
                                         <div class="clearfix"></div>
                                     </ul>
                                     <ul ng-show="!isEmptyArray(casee.account.emails.items)"
-                                        class="list-unstyled contact-infos showList" style="padding-left: 0px;"
+                                        class="list-unstyled contact-infos showList" style="padding-left: 0;"
                                         ng-class="{contactListOnEdit: !showEdit}">
                                         <li class="showListItem"
                                             ng-repeat="email in casee.account.emails.items| limitTo:1"
@@ -395,7 +395,7 @@
                                         <div class="clearfix"></div>
                                     </ul>
                                     <ul ng-show="!isEmptyArray(casee.account.websites.items)"
-                                        class="list-unstyled contact-infos showList" style="padding-left: 0px;"
+                                        class="list-unstyled contact-infos showList" style="padding-left: 0;"
                                         ng-class="{contactListOnEdit: !showEdit}">
                                         <li class="showListItem"
                                             ng-repeat="website in casee.account.websites.items| limitTo:1"
@@ -426,7 +426,7 @@
                                         <div class="clearfix"></div>
                                     </ul>
                                     <ul ng-show="!isEmptyArray(casee.account.addresses.items)"
-                                        class="list-unstyled contact-infos" style="padding-left:0px;"
+                                        class="list-unstyled contact-infos" style="padding-left:0;"
                                         ng-class="{contactListOnEdit: !showEdit}">
                                         <li class="showListItem"
                                             ng-repeat="address in casee.account.addresses.items| limitTo:1"
@@ -475,7 +475,7 @@
                                         <div class="clearfix"></div>
                                     </ul>
                                     <ul ng-hide="isEmptyArray(casee.account.sociallinks.items)" class="socialLinks"
-                                        style="list-style: none;padding-left: 0px;bottom: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;"
+                                        style="list-style: none;padding-left: 0;bottom: 0;right: 0;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0;"
                                         ng-class="{socialLiknsAbsolute: !showEdit}">
                                         <li ng-repeat="sociallink in casee.account.sociallinks.items" class="socialItem"
                                             style="padding-bottom: 5px;">
@@ -488,7 +488,7 @@
                                                        ng-enter="inlinePatch('Infonode','sociallinks', 'url',sociallink.entityKey,sociallink.url)"
                                                        ng-model="sociallink.url" id="exampleInputEmail2"
                                                        placeholder="Add a Website"
-                                                       style="padding-top: 0px;padding-bottom: 0px;height: 24px;border: none;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 38px);"
+                                                       style="padding-top: 0;padding-bottom: 0;height: 24px;border: none;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 38px);"
                                                        class="form-control">
                                                 <button ng-show="showEdit" type="button" class="close"
                                                         data-dismiss="modal" aria-hidden="true"
@@ -659,8 +659,8 @@
                                                   data-toggle="modal" style="color:gray;"><i
                                                        class="fa fa-pencil"></i> {{ _('Edit Custom fields') }} </a>
                                              </span>
-                                                <h3 style="margin-top:0px;font-size:20px"><i class="fa fa fa-list-alt"
-                                                                                             style="font-size:18px"></i>{{ _(' Custom Fields') }}
+                                                <h3 style="margin-top:0;font-size:20px"><i class="fa fa fa-list-alt"
+                                                                                           style="font-size:18px"></i>{{ _(' Custom Fields') }}
                                                 </h3>
                                                 <div ng-show="isEmptyArray(cases.customfields)"
                                                      style="text-align:center">
@@ -670,7 +670,7 @@
                                                     </a>
                                                 </div>
                                                 <ul ng-show="!isEmptyArray(cases.customfields)"
-                                                    style="list-style: none;padding-left: 0px;">
+                                                    style="list-style: none;padding-left: 0;">
                                                     <li ng-repeat="cusfield in cases.customfields"
                                                         style="padding: 5px;">
                                                         <div class="form-group" style="margin-bottom: 5px;">
@@ -807,7 +807,7 @@
                                                                         <%=casee.contact.title%>
                                                                     </div>
                                                                     <ul class="list-unstyled contact-infos showList"
-                                                                        style="padding-left: 0px;">
+                                                                        style="padding-left: 0;">
                                                                         <li class="showListItem"
                                                                             ng-repeat="phone in casee.contact.phones.items| limitTo:2"
                                                                             style="display: inline-block;float: left;">
@@ -823,7 +823,7 @@
                                                                         <div class="clearfix"></div>
                                                                     </ul>
                                                                     <ul class="list-unstyled contact-infos showList"
-                                                                        style="padding-left: 0px;">
+                                                                        style="padding-left: 0;">
                                                                         <li class="showListItem"
                                                                             ng-repeat="email in casee.contact.emails.items| limitTo:1"
                                                                             style="display: inline-block;float: left;">
@@ -837,7 +837,7 @@
                                                                         <div class="clearfix"></div>
                                                                     </ul>
                                                                     <ul class="socialLinks"
-                                                                        style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3; max-height:116px;overflow: auto;margin-bottom: 0px;  position: absolute;">
+                                                                        style="list-style: none;padding-left: 0;top: 0;right: 0;z-index: 3; max-height:116px;overflow: auto;margin-bottom: 0;  position: absolute;">
                                                                         <li ng-repeat="sociallink in casee.contact.sociallinks.items"
                                                                             class="socialItem"
                                                                             style="padding-bottom: 5px;">
@@ -859,7 +859,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="news-blocks blank-card blank-card-yellow newsCard">
-                                                    <h3 style="margin-top:0px; margin-bottom: 20px;">
+                                                    <h3 style="margin-top:0; margin-bottom: 20px;">
                                                         <i class="fa fa-edit"
                                                            style="  font-size: 24px;"></i>{{ _(' Notes') }}
                                                     </h3>
@@ -1092,8 +1092,8 @@
                                                             <%= casee.owner.google_display_name %>
                                                       </span>
                                         <a ng-show="(showEdit)&&(casee.owner.google_user_id=={{ ME }}||{{ is_admin }})"
-                                           style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
-                                           data-toggle="dropdown" style="margin-right:0px">
+                                           style="  color: #262626;text-decoration: none; margin-left:0" href="#"
+                                           data-toggle="dropdown" style="margin-right:0">
                                                           
                                                           <span>
                                                             <%= casee.owner.google_display_name %>
@@ -1120,8 +1120,8 @@
                                                            <%=casee.access%> 
                                                     </span>
                                         <a ng-show="showEdit"
-                                           style="  color: #262626;text-decoration: none; margin-left:0px" href="#"
-                                           data-toggle="dropdown" style="margin-right:0px">
+                                           style="  color: #262626;text-decoration: none; margin-left:0" href="#"
+                                           data-toggle="dropdown" style="margin-right:0">
                                                        <span>
                                                            <%=casee.access%> 
                                                        </span>
