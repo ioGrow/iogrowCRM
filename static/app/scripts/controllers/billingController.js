@@ -51,7 +51,6 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
             }
         };
         $scope.runTheProcess = function () {
-            User.getOrganizationLicensesStatus($scope, {});
             User.get_logo($scope);
             $scope.mapAutocomplete();
         };

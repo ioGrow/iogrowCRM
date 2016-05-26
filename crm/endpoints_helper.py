@@ -211,7 +211,7 @@ class EndpointsHelper:
         main_type2, sub_type2 = content_type2.split('/', 1)
 
         if main_type == 'image':
-            fp = open(path, 'rb')
+            fp = open(path, 'r')
             msg = MIMEImage(fp.read(), _subtype=sub_type)
             fp.close()
         if main_type2 == 'image':

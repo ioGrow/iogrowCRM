@@ -5,7 +5,7 @@ var app = angular.module('crmEngine', ['googlechart','xeditable', 'ui.bootstrap'
     'crmEngine.caseservices', 'crmEngine.userservices', 'crmEngine.noteservices',
     'crmEngine.commentservices', 'crmEngine.settingservices', 'mapServices',
     'crmEngine.infonodeservices', 'crmEngine.edgeservices',
-    'crmEngine.profileservices', 'crmEngine.linkedinservices', 'crmEngine.billingservices']);
+    'crmEngine.profileservices', 'crmEngine.linkedinservices']);
 //app.js Single page application
 
 app.config(function($interpolateProvider){
@@ -122,9 +122,6 @@ app.config(['$routeProvider', function($routeProvider) {
       when('/admin/users', {
         controller: 'UserListCtrl',
         templateUrl:'/views/admin/users/list'
-      }).when('/admin/billing', {
-        controller: 'BillingEditCtrl',
-        templateUrl:'/views/admin/billing/billing_edit'
       }).when('/admin/users/new', {
         controller: 'UserNewCtrl',
         templateUrl:'/views/admin/users/new'

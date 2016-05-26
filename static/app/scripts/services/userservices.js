@@ -12,59 +12,6 @@ accountservices.factory('User', function ($http) {
     var User = function (data) {
         angular.extend(this, data);
     };
-    User.getOrganizationLicensesStatus = function ($scope, params) {
-        $scope.isLoading = true;
-        gapi.client.crmengine.organization.licenses_status(params).execute(function (resp) {
-            if (!resp.code) {
-                $scope.licencesStatus = resp;
-            } else {
-                if (resp.code == 401) {
-                    if (resp.message == "Invalid grant") {
-                        $scope.refreshToken();
-                    }
-                }
-            }
-            $scope.isLoading = false;
-            $scope.apply();
-        });
-    };
-    User.assignLicense = function ($scope, params) {
-        $scope.isLoading = true;
-        gapi.client.crmengine.organizations.assign_license(params   ).execute(function (resp) {
-            if (!resp.code) {
-                $scope.isLoading = false;
-                $scope.isSelected = false;
-                $scope.selectedUsers = [];
-            } else {
-                if (resp.code == 401) {
-                    if (resp.message == "Invalid grant") {
-                        $scope.refreshToken();
-                    }
-                }
-            }
-            $scope.isLoading = false;
-        });
-    };
-    User.unAssignLicense = function ($scope, params) {
-        $scope.isLoading = true;
-        $scope.$apply();
-        gapi.client.crmengine.organizations.unassign_license(params).execute(function (resp) {
-            if (!resp.code) {
-                $scope.isLoading = false;
-                $scope.isSelected = false;
-                $scope.selectedUsers = [];
-                $scope.runTheProcess();
-            } else {
-                if (resp.code == 401) {
-                    if (resp.message == "Invalid grant") {
-                        $scope.refreshToken();
-                    }
-                    $scope.isLoading = false;
-                    $scope.$apply();
-                }
-            }
-        });
-    };
     User.get = function ($scope, id) {
         $scope.isLoading = true;
         gapi.client.crmengine.user.get(id).execute(function (resp) {
@@ -237,6 +184,7 @@ accountservices.factory('User', function ($http) {
             $scope.apply();
         });
     };
+
     User.switchLogo = function ($scope) {
         $scope.isLoading = true;
         gapi.client.crmengine.company.switch_logo().execute(function (resp) {
@@ -272,11 +220,12 @@ accountservices.factory('User', function ($http) {
             $scope.isLoading = true;
         });
     };
+
     User.saveBillingDetails = function ($scope, params) {
         $scope.isLoading = true;
         gapi.client.crmengine.users.saveBillingDetails(params).execute(function (resp) {
             $scope.isLoading = false;
-            $scope.$apply();
+            // $scope.apply();
         });
     };
     return User;

@@ -1,5 +1,5 @@
-app.controller('UserListCtrl', ['$scope', 'Auth', 'User','Billing',
-    function ($scope, Auth, User, Billing) {
+app.controller('UserListCtrl', ['$scope', 'Auth', 'User',
+    function ($scope, Auth, User) {
         $("ul.page-sidebar-menu li").removeClass("active");
         $("#id_Users").addClass("active");
         trackMixpanelAction('USER_LIST_VIEW');
@@ -36,10 +36,7 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User','Billing',
         }
         $scope.runTheProcess = function () {
             var params = {};
-            User.getOrganizationLicensesStatus($scope, {});
             User.list($scope, params);
-            Billing.getOrganizationSubscription($scope);
-            Billing.listSubscription($scope);
             ga('send', 'pageview', '/admin/users');
         };
         $scope.refreshCurrent = function () {
@@ -204,23 +201,6 @@ app.controller('UserListCtrl', ['$scope', 'Auth', 'User','Billing',
             }
         };
 
-        $scope.assignLicenses = function () {
-            if ($scope.licencesStatus['licenses_bought'] - $scope.licencesStatus['assigned_licenses'] < 1) return;
-            angular.forEach($scope.selectedUsers, function (user) {
-                if ($scope.usersSubscriptions[user['email']].plan.name != "premium") {
-                    var params = {'entityKey': user.entityKey};
-                    User.assignLicense($scope, params);
-                }
-            });
-        };
-        $scope.unAssignLicenses = function () {
-            angular.forEach($scope.selectedUsers, function (user) {
-                if ($scope.usersSubscriptions[user['email']].plan.name != "premium") {
-                    var params = {'entityKey': user.entityKey};
-                    User.unAssignLicense($scope, params);
-                }
-            });
-        };
         $scope.inviteUser = function (elem) {
             if (elem != undefined && elem != null) {
                 switch (infos) {

@@ -13,7 +13,6 @@ from protorpc import messages
 from endpoints_helper import EndpointsHelper
 from iograph import Edge
 from iomodels.notes import AuthorSchema, DiscussionAboutSchema
-from iomodels.payment import payment_required
 from iomodels.tags import Tag, TagSchema
 
 
@@ -405,7 +404,6 @@ class Event(EndpointsModel):
         )
 
     @classmethod
-    @payment_required()
     def insert(cls, user_from_email, request):
         author = Userinfo()
         author.google_user_id = user_from_email.google_user_id

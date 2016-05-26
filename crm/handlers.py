@@ -1,6 +1,5 @@
 import datetime
 import json
-import logging
 import os
 import re
 import sys
@@ -10,7 +9,6 @@ import endpoints
 import httplib2
 import jinja2
 import sfoauth2
-import stripe
 import webapp2
 from apiclient.discovery import build
 from google.appengine.api import mail
@@ -18,14 +16,12 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
-from intercom import Intercom
 from iomodels.accounts import Account
 from iomodels.contacts import Contact
 from iomodels.documents import Document
 from iomodels.events import Event
 from iomodels.leads import LeadInsertRequest, Lead
 from iomodels.opportunities import Opportunity
-from iomodels.payment import Subscription
 from iomodels.tasks import Task, AssignedGoogleId
 from mixpanel import Mixpanel
 from oauth2client.appengine import OAuth2Decorator
@@ -39,8 +35,7 @@ import model
 from crm.iomodels.cases import Case
 from endpoints_helper import EndpointsHelper
 from iograph import Edge
-from iomodels import config as app_config
-from model import Application, STANDARD_TABS, ADMIN_TABS, Organization
+from model import Application, STANDARD_TABS, ADMIN_TABS
 
 mp = Mixpanel(config.get('mp_token'))
 
@@ -197,8 +192,6 @@ class BaseHandler(webapp2.RequestHandler):
                     'decimal_delimiter': currency_format.decimal_delimiter,
                     'sales_tabs': STANDARD_TABS,
                     'admin_tabs': ADMIN_TABS,
-                    'plan': organization.get_subscription().plan.get(),
-                    'publishable_key': app_config.PUBLISHABLE_KEY
                 }
         template = jinja_environment.get_template(template_name)
         self.response.out.write(template.render(template_values))
@@ -343,44 +336,6 @@ class SecurityInformationsHandler(BaseHandler, SessionEnabledHandler):
         self.response.out.write(template.render(template_values))
 
 
-class StripeHandler(BaseHandler, SessionEnabledHandler):
-    def post(self):
-        # Get the credit card details submitted by the form
-
-        # Set your secret key: remember to change this to your live secret key in production
-        # See your keys here https://dashboard.stripe.com/account
-        # stripe.api_key = "sk_test_4ZNpoS4mqf3YVHKVfQF7US1R"
-        stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
-
-        # Get the credit card details submitted by the form
-        token = self.request.get('stripeToken')
-
-        # Create a Customer
-        customer = stripe.Customer.create(
-            card=token,
-            description="payinguser@example.com"
-        )
-
-        # Charge the Customer instead of the card
-        stripe.Charge.create(
-            amount=1000,  # in cents
-            currency="usd",
-            customer=customer.id
-        )
-
-        # Save the customer ID in your database so you can use it later
-        save_stripe_customer_id(user, customer.id)
-
-        # Later...
-        customer_id = get_stripe_customer_id(user)
-
-        stripe.Charge.create(
-            amount=1500,  # $15.00 this time
-            currency="usd",
-            customer=customer_id
-        )
-
-
 class IndexHandler(BaseHandler, SessionEnabledHandler):
     def get(self, template=None):
         if not template:
@@ -451,7 +406,6 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     'organization_name': organization.name,
                     'sales_tabs': STANDARD_TABS,
                     'admin_tabs': ADMIN_TABS,
-                    'plan': organization.get_subscription().plan.get()
                 }
                 if admin_app:
                     template_values['admin_app'] = admin_app
@@ -640,7 +594,6 @@ class GooglePlusConnect(SessionEnabledHandler):
 
     def post(self):
         code = self.request.get("code")
-        is_paying = self.request.get("is_paying")
         try:
             credentials = GooglePlusConnect.exchange_code(code)
         except FlowExchangeError:
@@ -678,11 +631,6 @@ class GooglePlusConnect(SessionEnabledHandler):
                 credentials,
                 invited_user_id
             )
-            organization = user.organization.get()
-            if organization.plan and organization.plan.get().name == "life_time_free":
-                user.set_subscription(organization.get_subscription())
-            else:
-                user.set_subscription(Subscription.create_freemium_subscription())
         else:
             user = GooglePlusConnect.save_token_for_user(
                 user_email,
@@ -718,18 +666,7 @@ class GooglePlusConnect(SessionEnabledHandler):
         self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
         self.response.headers['Access-Control-Allow-Methods'] = 'POST'
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps({'is_new_user': is_new_user, 'is_paying': is_paying}))
-
-
-class ActivateSession(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        email = self.request.get('email')
-        self.session[self.CURRENT_USER_SESSION_KEY] = email
-        is_paying = int(self.request.get('isPaying'))
-        if is_paying:
-            self.redirect('/subscribe')
-        else:
-            self.redirect('/')
+        self.response.out.write(json.dumps({'is_new_user': is_new_user}))
 
 
 class InstallFromDecorator(SessionEnabledHandler):
@@ -791,6 +728,7 @@ class InstallFromDecorator(SessionEnabledHandler):
                 self.redirect('/')
         except:
             self.redirect('/')
+
 
 class AccountListHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -970,35 +908,6 @@ class CalendarShowHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/calendar/calendar_show.html')
 
 
-class SubscriptionHandler(SessionEnabledHandler):
-    def get(self):
-        template = jinja_environment.get_template(name='templates/admin/subscription/subscription.html')
-        user = self.get_user_from_session()
-        if user:
-            org_key = user.organization
-            organization = org_key.get()
-            first_name = organization.billing_contact_firstname
-            last_name = organization.billing_contact_lastname
-            full_name = None
-            if first_name or last_name:
-                full_name = organization.billing_contact_firstname + ' ' + organization.billing_contact_lastname
-            subscription = organization.get_subscription()
-            if subscription.plan.get().name == app_config.PREMIUM:
-                self.redirect('/#/admin/billing')
-            template_values = {
-                'full_name': full_name,
-                'organization': organization,
-                'user': user,
-                'year_price': app_config.PREMIUM_YEARLY_PRICE / 100,
-                'month_price': app_config.PREMIUM_MONTHLY_PRICE / 100,
-                'publishable_key': app_config.PUBLISHABLE_KEY,
-                'users_count': model.User.count_by_organization(org_key),
-                'subscription': subscription
-            }
-            self.response.out.write(template.render(template_values))
-        else:
-            self.redirect('/welcome/')
-
 
 class PayPalPayingUsers(BaseHandler, SessionEnabledHandler):
     def get(self):
@@ -1031,109 +940,6 @@ class PayPalPayingUsers(BaseHandler, SessionEnabledHandler):
             option_name1=self.request.get("option_name1"),
             active_until=active_until
         ).put()
-
-
-class StripeSubscriptionHandler(BaseHandler, SessionEnabledHandler):
-    def post(self):
-        user = self.get_user_from_session()
-        organization = user.organization.get()
-        stripe.api_key = app_config.STRIPE_API_KEY
-        token = self.request.get('token')
-        interval = self.request.get('interval')
-        quantity = int(self.request.get('quantity'))
-        premium_subscription = Subscription.create_premium_subscription(interval)
-        try:
-            customer = stripe.Customer.create(
-                source=token,
-                description=organization.key.id(),
-                plan='{}_{}'.format(app_config.PREMIUM, interval),
-                email=user.email,
-                quantity=quantity
-            )
-            premium_subscription.is_auto_renew = not customer.subscriptions['data'][0].cancel_at_period_end
-            premium_subscription.stripe_subscription_id = customer.subscriptions['data'][0].id
-            premium_subscription.quantity = quantity
-            premium_subscription.put()
-
-            if user.subscription.get().plan.get().name != app_config.PREMIUM:
-                user.set_subscription(premium_subscription)
-                user.put()
-                premium_subscription.put()
-
-            organization.stripe_customer_id = customer.id
-            organization.set_subscription(premium_subscription)
-            organization.name = self.request.get('name')
-            if 'email' in self.request.POST:
-                organization.billing_contact_email = self.request.get('email')
-            if 'address' in self.request.POST:
-                organization.billing_contact_address = self.request.get('address')
-            full_name = str(self.request.get('fullName')).split(' ')
-            if len(full_name):
-                organization.billing_contact_firstname = full_name[0]
-            if len(full_name) > 1:
-                organization.billing_contact_lastname = full_name[1]
-            organization.put()
-        except stripe.error.CardError, e:
-            self.response.headers['Content-Type'] = 'application/json'
-            self.response.write(e.message)
-            self.response.set_status(e.http_status)
-
-
-class EditCreditCardHandler(BaseHandler, SessionEnabledHandler):
-    def post(self):
-        user = self.get_user_from_session()
-        organization = user.organization.get()
-        stripe.api_key = app_config.STRIPE_API_KEY
-        token = self.request.get('token')
-        try:
-            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-            customer.source = token
-            customer.save()
-        except stripe.error.CardError, e:
-            self.response.headers['Content-Type'] = 'application/json'
-            self.response.write(e.message)
-            self.response.set_status(e.http_status)
-
-
-class StripeSubscriptionWebHooksHandler(BaseHandler, SessionEnabledHandler):
-    def post(self):
-        eve = json.loads(self.request.body)
-        if eve['type'] == "invoice.payment_succeeded":
-            stripe_event_invoice = eve['data']['object']
-            org = Organization.query(Organization.stripe_customer_id == stripe_event_invoice['customer']).get()
-            sub = Subscription.query(Subscription.stripe_subscription_id == stripe_event_invoice['subscription']).get()
-            if org and sub and org.subscription == sub.key:
-                customer = stripe.Customer.retrieve(stripe_event_invoice['customer'])
-                email = customer['email']
-                org.billing_contact_address = org.billing_contact_address or ''
-                org.billing_contact_firstname = org.billing_contact_firstname or ''
-                org.billing_contact_lastname = org.billing_contact_lastname or ''
-                org.billing_contact_phone_number = org.billing_contact_phone_number or ''
-                org.billing_contact_email = org.billing_contact_email or ''
-                sub.expiration_date = Subscription.calculate_expiration_date(app_config.MONTH)
-                sub.start_date = datetime.datetime.now()
-                sub.put()
-                invoice = stripe.Invoice.retrieve(stripe_event_invoice['id'])
-                logging.info("Invoice Object")
-                logging.info(invoice)
-                body_path = "templates/emails/invoice.html"
-                template = jinja_environment.get_template(body_path)
-                due_date = sub.expiration_date.strftime("%A %d. %B %Y")
-                created = sub.start_date.strftime("%A %d. %B %Y")
-                last_4 = customer['sources']['data'][0]['last4']
-                line_0 = invoice['lines']['data'][0]
-                plan = line_0['plan']
-                total = line_0['amount']
-                interval = plan['interval']
-                body = template.render({'invoice': invoice, 'created': created, 'due': due_date, 'org': org,
-                                        'last4': last_4, 'interval': interval, 'quantity': line_0['quantity'],
-                                        'amount': plan['amount']/100, 'total': total/100})
-                message = mail.EmailMessage()
-                message.sender = 'hakim@iogrow.com'
-                message.to = org.billing_contact_email or email
-                message.subject = 'Invoice'
-                message.html = body
-                message.send()
 
 
 class ImportJob(BaseHandler, SessionEnabledHandler):
@@ -1855,30 +1661,6 @@ class CheckJobStatus(webapp2.RequestHandler):
             )
 
 
-# paying with stripe
-class StripePayingHandler(BaseHandler, SessionEnabledHandler):
-    def post(self):
-        # the secret key .
-        # stripe.api_key="sk_test_4Xa3wfSl5sMQYgREe5fkrjVF"
-        stripe.api_key = "sk_live_4Xa3GqOsFf2NE7eDcX6Dz2WA"
-        # get the token from the client form
-        token = self.request.get('stripeToken')
-        # charging operation after the payment
-        try:
-            print "*-*-*-*-*-*-*-*-*-*-*-*-//////////////////////"
-            print "here we go !"
-            print stripe.Charge.all()
-            print "-*-*-*-*-*-*-*-*-*-*-*-*-*"
-            # charge= stripe.Charge.create(
-            #     amount=1000,
-            #     currency="usd",
-            #     card=token,
-            #     description="hadji@iogrow.com")
-        except stripe.CardError, e:
-            # The card has been declined
-            pass
-
-
 class DeleteUserContacts(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -2019,10 +1801,6 @@ routes = [
     ('/views/admin/lead_scoring/edit', LeadScoringHandler),
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
     ('/views/admin/delete_all_records', deleteAllRecordHandler),
-    ('/subscribe', SubscriptionHandler),
-    ('/stripe/subscription', StripeSubscriptionHandler),
-    ('/stripe/subscription_web_hook', StripeSubscriptionWebHooksHandler),
-    ('/stripe/change_card', EditCreditCardHandler),
 
     # Applications settings
     (r'/apps/(\d+)', ChangeActiveAppHandler),
@@ -2037,12 +1815,9 @@ routes = [
     ('/install', InstallFromDecorator),
     (decorator.callback_path, decorator.callback_handler()),
     ('/paypal_paying_users', PayPalPayingUsers),
-    ('/stripe', StripeHandler),
-    # paying with stripe
     ('/jj', ImportJob),
     ('/exportcompleted', ExportCompleted),
     ('/sign-with-iogrow', SignInWithioGrow),
-    ('/activate_session', ActivateSession)
 
 ]
 

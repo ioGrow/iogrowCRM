@@ -560,11 +560,6 @@ accountservices.factory('Account', function($rootScope) {
         trackMixpanelAction('ACCOUNT_INSERT');
         $scope.inProcess(true);  
         gapi.client.crmengine.accounts.insert(params).execute(function(resp) {
-            if (resp.error && resp.error.code == 412){
-                $('#payment_modal').modal('show');
-                return
-                //window.location.replace($rootScope.subscription_url);
-            }
             if (!resp.code) {
                 $scope.accountInserted(resp);
                 $scope.inProcess(false);  
