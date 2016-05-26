@@ -171,6 +171,18 @@ module.exports = function (grunt) {
 
 
       },
+         imagemin: {
+    dist: {
+      options: {
+        optimizationLevel: 4,
+      },
+      files: [{
+        expand: true,
+        cwd: 'static/src/img',
+        src: ['**/*.{png,jpg,gif}']
+      }]
+    }
+  },
       uglify: {
             options: {
                 mangle: false
@@ -237,6 +249,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-concat');
@@ -252,8 +265,10 @@ module.exports = function (grunt) {
       'bower_concat',
       'concat',
       'cssmin',
+      'htmlmin',
+      'imagemin',
       //  'removeLoggingCalls',       //buggy
-      'uglify',
+      'uglify'
 
     ]);
 };
