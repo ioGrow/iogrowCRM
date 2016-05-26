@@ -18,7 +18,6 @@ from iomodels.documents import Document, DocumentListResponse
 from iomodels.events import Event, EventListResponse
 from iomodels.notes import Note, TopicListResponse
 from iomodels.opportunities import Opportunity, OpportunityListResponse
-from iomodels.payment import payment_required
 from iomodels.tags import Tag, TagSchema
 from iomodels.tasks import Task, TaskListResponse
 from protorpc import messages
@@ -680,7 +679,6 @@ class Account(EndpointsModel):
         return AccountExportListResponse(items=accounts_list)
 
     @classmethod
-    @payment_required()
     def insert(cls, user_from_email, request):
         account_key = None
         if not request.personal_account:

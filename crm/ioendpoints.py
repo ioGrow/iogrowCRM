@@ -15,7 +15,6 @@ from django.utils.encoding import smart_str
 import endpoints
 import httplib2
 import requests
-import stripe
 from apiclient.discovery import build
 from google.appengine.api import mail
 from google.appengine.api import memcache
@@ -63,8 +62,6 @@ from crm.iomodels.pipelines import Pipeline, PipelineInsertRequest, PipelineSche
 from endpoints_helper import EndpointsHelper
 from iograph import Node, Edge, RecordSchema, InfoNodeResponse, InfoNodeListResponse
 from iomessages import LinkedinProfileSchema, TwitterProfileSchema, LinkedinCompanySchema
-from iomessages import SubscriptionSchema, LicencesQuantityMessage, SubscriptionListSchema
-from iomodels import config
 from model import Contributor
 from model import CountryCurrency
 from model import CustomField
@@ -115,12 +112,6 @@ def LISTING_QUERY(query, access, organization, owner, collaborators, order):
             Contact.collaborators_ids == collaborators
         )
     ).order(order)
-
-
-# gd_client = gdata.contacts.client.ContactsClient(source='<var>gcdc2013-iogrow</var>')
-
-stripe.api_key = config.STRIPE_API_KEY
-
 
 
 class getLinkedinSchema(messages.Message):
@@ -509,40 +500,6 @@ class OrganizationResponse(messages.Message):
     organizationNumberOfUser = messages.StringField(2)
     organizationNumberOfLicense = messages.StringField(3)
     licenses = messages.MessageField(LicenseSchema, 4, repeated=True)
-
-
-# hadji hicham . 17/08/2014 .
-class BillingRequest(messages.Message):
-    token_id = messages.StringField(1)
-    token_email = messages.StringField(2)
-    customer_id = messages.StringField(3)
-    organization = messages.StringField(4)
-    organizationKey = messages.StringField(5)
-
-
-class BillingResponse(messages.Message):
-    response = messages.StringField(2)
-
-
-class purchaseRequest(messages.Message):
-    token = messages.StringField(1)
-    plan = messages.StringField(2)
-    nb_licenses = messages.StringField(3)
-    billing_contact_firstname = messages.StringField(4)
-    billing_contact_lastname = messages.StringField(5)
-    billing_contact_email = messages.StringField(6)
-    billing_contact_address = messages.StringField(7)
-    billing_contact_phone_number = messages.StringField(8)
-
-
-class purchaseResponse(messages.Message):
-    transaction_balance = messages.StringField(1)
-    transaction_message = messages.StringField(2)
-    transaction_failed = messages.BooleanField(3)
-    nb_licenses = messages.IntegerField(4)
-    total_amount = messages.IntegerField(5)
-    expires_on = messages.StringField(6)
-    licenses_type = messages.StringField(7)
 
 
 class deleteInvitedEmailRequest(messages.Message):
@@ -3450,26 +3407,15 @@ class CrmEngineApi(remote.Service):
                 google_user_id=user.google_user_id,
                 is_admin=user.is_admin,
                 status=user.status,
-                stripe_id=user.stripe_id
             )
             items.append(user_schema)
         invitees_list = []
         invitees = Invitation.list_invitees(user_from_email.organization)
         for invitee in invitees:
-            #     invitenmbrOfLicenses=0
-            #     inviteisLicensed=False
-            #     edgeinvite=Edge.query().filter(Edge.start_node==user.key and Edge.kind=="licenses").fetch()
-            #     if edgeinvite:
-            #            invitenmbrOfLicenses=len(edge)
-            #            inviteLicenseStatus='Active'
-            #     else:
-            #            inviteLicenseStatus='Not active'
             invited_schema = iomessages.InvitedUserSchema(
                 invited_mail=invitee['invited_mail'],
                 invited_by=invitee['invited_by'],
                 updated_at=invitee['updated_at'].strftime("%Y-%m-%dT%H:%M:00.000"),
-                # LicenseStatus= inviteLicenseStatus,
-                stripe_id=invitee['stripe_id']
             )
             invitees_list.append(invited_schema)
         return iomessages.UserListSchema(items=items, invitees=invitees_list)
@@ -3527,7 +3473,6 @@ class CrmEngineApi(remote.Service):
 
         return message_types.VoidMessage()
 
-    # hadji hicham 4/08/2014 -- get user by google user id
     @User.method(
         http_method='GET', path='users/{google_user_id}', name='users.get_user_by_gid')
     def UserGetByGId(self, my_model):
@@ -3535,52 +3480,7 @@ class CrmEngineApi(remote.Service):
         if not user:
             raise endpoints.NotFoundException('User not found')
         return user
-        # @User.method(
-        #                    request_fields=('id',),
-        #                    path='user/{id}',
-        #                    http_method='GET',
-        #                    name='user.get'
-        #                    )
-        # def UserGet(self,my_model):
-        #     if not my_model.from_datastore:
-        #         raise('Lead status not found')
-        #     return my_model
-        # hadji hicham 11/08/2014. get user by id
 
-    # @endpoints.method(iomessages.customerRequest, iomessages.customerResponse,
-    #                   http_method='GET', path='users/{id}', name='users.customer')
-    # def Customer(self, request):
-    #     user_from_email = EndpointsHelper.require_iogrow_user()
-    #     cust = stripe.Customer.retrieve(request.id)
-    #     charges_list = stripe.Charge.all(customer=request.id)
-    #     subscriptions_list = cust.subscriptions.all()
-    #
-    #     subscriptions = []
-    #     for subscription in subscriptions_list.data:
-    #         kwargsubscription = {
-    #             "id": subscription.id,
-    #             "current_period_start": datetime.datetime.fromtimestamp(
-    #                 int(subscription.current_period_start)).strftime('%Y-%m-%d %H:%M:%S'),
-    #             "current_period_end": datetime.datetime.fromtimestamp(int(subscription.current_period_end)).strftime(
-    #                 '%Y-%m-%d %H:%M:%S'),
-    #             "status": str(subscription.status),
-    #             "plan": subscription.plan.name
-    #         }
-    #         subscriptions.append(kwargsubscription)
-    #
-    #     kwargs = {
-    #         "customer_id": cust.id,
-    #         "email": cust.email,
-    #         "google_public_profile_photo_url": cust.metadata.google_public_profile_photo_url,
-    #         "google_display_name": cust.metadata.google_display_name,
-    #         "google_user_id": cust.metadata.google_user_id,
-    #         "subscriptions": subscriptions
-    #     }
-    #     # user=User.query().filter(User.id==my_model.id).get()
-    #
-    #     return iomessages.customerResponse(**kwargs)
-
-    # this api to fetch tasks and events to feed the calendar . hadji hicham.14-07-2014
     @endpoints.method(CalendarFeedsRequest, CalendarFeedsResults,
                       path='calendar/feeds', http_method='POST', name='calendar.feeds')
     def get_feeds(self, request):
@@ -4086,40 +3986,6 @@ class CrmEngineApi(remote.Service):
             request=request
         )
 
-    # hadji hicham 26/08/2014. purchase license for user.
-    @endpoints.method(BillingRequest, BillingResponse, path='billing/purchase_user', http_method='POST',
-                      name="billing.purchase_lisence_for_user")
-    def purchase_lisence_for_user(self, request):
-        token = request.token_id
-
-        cust = stripe.Customer.retrieve(request.customer_id)
-        cust.card = token
-        cust.save()
-        charge = stripe.Charge.create(
-            amount=2000,
-            currency="usd",
-            customer=cust.id,
-            description="Charge for  " + request.token_email)
-        cust.subscriptions.create(plan="iogrow_plan")
-
-        return BillingResponse(response=token)
-
-    # hadji hicham 26/08/2014 . purchase license for the company.
-    @endpoints.method(BillingRequest, LicenseSchema, path='billing/purchase_org', http_method='POST',
-                      name="billing.purchase_lisence_for_org")
-    def purchase_lisence_for_org(self, request):
-        user_from_email = EndpointsHelper.require_iogrow_user()
-        token = request.token_id
-        charge = stripe.Charge.create(
-            amount=2000,
-            currency="usd",
-            card=token,
-            description="license for the organization  " + request.organization)
-        return License.insert(
-            user_from_email=user_from_email,
-            request=request
-        )
-
     @endpoints.method(getDocsRequest, DocumentListResponse, path="tasks/get_docs", http_method="POST",
                       name="tasks.get_docs")
     def get_documents_attached(self, request):
@@ -4244,94 +4110,4 @@ class CrmEngineApi(remote.Service):
 
         return message_types.VoidMessage()
 
-    @endpoints.method(response_message=SubscriptionSchema, http_method='GET',
-                      name='subscription.get', path='subscription/get')
-    def get_subscription(self, request):
-        user = EndpointsHelper.require_iogrow_user()
-        return user.get_subscription().get_schema()
 
-    @endpoints.method(response_message=SubscriptionListSchema, http_method='GET',
-                      name='subscription.list', path='subscription/list')
-    def fetch_subscriptions(self, request):
-        org_key = EndpointsHelper.require_iogrow_user().organization
-        users = User.fetch_by_organization(org_key)
-        data = [iomessages.UserSubscriptionSchema(subscription=user.get_subscription().get_schema(), email=user.email)
-                for user in users]
-        return SubscriptionListSchema(data=data)
-
-    @endpoints.method(response_message=SubscriptionSchema, http_method='GET',
-                      name='subscription.organization_get', path='subscription/organization_get')
-    def get_org_subscription(self, request):
-        organization = EndpointsHelper.require_iogrow_user().organization.get()
-        return organization.get_subscription().get_schema()
-
-    @endpoints.method(name='subscription.disable_auto_renew', path='subscription/disable_auto_renew')
-    def disable_auto_renew(self, request):
-        organization = EndpointsHelper.require_iogrow_user().organization.get()
-        subscription = organization.subscription.get()
-        try:
-            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-            customer.subscriptions.retrieve(subscription.stripe_subscription_id).delete(at_period_end=True)
-            subscription.is_auto_renew = False
-            subscription.put()
-        except stripe.APIError:
-            raise endpoints.NotFoundException("")
-        return message_types.VoidMessage()
-
-    @endpoints.method(name='subscription.enable_auto_renew', path='subscription/enable_auto_renew')
-    def enable_auto_renew(self, request):
-        organization = EndpointsHelper.require_iogrow_user().organization.get()
-        subscription = organization.subscription.get()
-        interval = subscription.plan.get().interval
-        try:
-            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-            sub = customer.subscriptions.retrieve(subscription.stripe_subscription_id)
-            sub.plan = '{}_{}'.format(config.PREMIUM, interval)
-            sub.save()
-            subscription.is_auto_renew = True
-            subscription.put()
-        except stripe.APIError:
-            raise endpoints.NotFoundException("")
-        return message_types.VoidMessage()
-
-    @endpoints.method(name='subscription.by_new_licences', path='subscription/by_new_licences',
-                      request_message=LicencesQuantityMessage)
-    def by_new_licences(self, request):
-        user = EndpointsHelper.require_iogrow_user()
-        organization = user.organization.get()
-        subscription = organization.get_subscription()
-        quantity = request.quantity
-        if quantity <= 0:
-            raise endpoints.BadRequestException("Quantity should be a positive number")
-        try:
-            customer = stripe.Customer.retrieve(organization.stripe_customer_id)
-            sub = customer.subscriptions.retrieve(subscription.stripe_subscription_id)
-            sub.quantity += quantity
-            sub.save()
-            if user.subscription.get().plan.get().name != config.PREMIUM:
-                user.set_subscription(organization.subscription.get())
-                user.put()
-
-            subscription.quantity += quantity
-            subscription.put()
-        except stripe.error.CardError, e:
-            self.response.headers['Content-Type'] = 'application/json'
-            self.response.write(e.message)
-            self.response.set_status(e.http_status)
-        return message_types.VoidMessage()
-
-    @endpoints.method(name='organization.licenses_status', path='organization/licenses_status',
-                      http_method='GET', response_message=iomessages.OrganizationSubscriptionStatusMessage)
-    def get_organizations_licenses_status(self, request):
-        org_key = EndpointsHelper.require_iogrow_user().organization
-        users_count = User.count_by_organization(org_key)
-        resp = iomessages.OrganizationSubscriptionStatusMessage(users_count=users_count)
-
-        organization = org_key.get()
-        subscription = organization.subscription.get()
-        plan_key = subscription.plan
-        plan = plan_key.get()
-        if plan.name == config.PREMIUM:
-            resp.assigned_licenses = organization.get_assigned_licenses()
-            resp.licenses_bought = subscription.quantity
-        return resp
