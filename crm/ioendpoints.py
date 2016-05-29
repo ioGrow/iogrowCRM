@@ -72,7 +72,7 @@ from crm.model import Logo
 from crm.model import Organization
 from crm.model import User
 from crm.model import Userinfo
-from people import linked_in
+from crm.people import linked_in
 
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
