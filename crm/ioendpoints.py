@@ -21,6 +21,8 @@ from google.appengine.api import memcache
 from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.ext import ndb
+
+from crm.config import config
 from iomodels.Licenses import License, LicenseSchema, LicenseInsertRequest
 from iomodels.accounts import Account, AccountGetRequest, AccountPatchRequest, AccountSchema, \
     AccountListRequest, AccountListResponse, AccountSearchResults, AccountInsertRequest
@@ -75,7 +77,7 @@ from people import linked_in
 # The ID of javascript client authorized to access to our api
 # This client_id could be generated on the Google API console
 # **************Client_id---------------
-CLIENT_ID = '935370948155-a4ib9t8oijcekj8ck6dtdcidnfof4u8q.apps.googleusercontent.com'
+CLIENT_ID = config.get("google_client_id")
 
 DISCUSSIONS = {
     'Task': {
@@ -196,7 +198,7 @@ class ListRequest(messages.Message):
     order = messages.StringField(4)
 
 
-# HADJI Hicham 
+# HADJI Hicham
 class getDocsRequest(messages.Message):
     id = messages.IntegerField(1, required=True)
     documents = messages.MessageField(ListRequest, 2)
@@ -2232,7 +2234,7 @@ class CrmEngineApi(remote.Service):
         )
         return message_types.VoidMessage()
 
-    # leads export 
+    # leads export
     @endpoints.method(LeadListRequest, message_types.VoidMessage,
                       path='leads/export', http_method='POST',
                       name='leads.export')
@@ -4016,7 +4018,7 @@ class CrmEngineApi(remote.Service):
                       http_method="POST",
                       name="users.delete")
     def delete_users(self, request):
-        # not complete yet 
+        # not complete yet
         user_from_email = EndpointsHelper.require_iogrow_user()
         if user_from_email.is_admin:
             for i in xrange(len(request.entityKeys)):
