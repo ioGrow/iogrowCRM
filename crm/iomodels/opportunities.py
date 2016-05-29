@@ -9,7 +9,6 @@ from iomodels.documents import Document, DocumentListResponse
 from iomodels.events import Event, EventListResponse, EventInsertRequest, EventSchema
 from iomodels.notes import Note, TopicListResponse
 from iomodels.opportunitystage import OpportunitystageSchema, Opportunitystage
-from iomodels.payment import payment_required
 from iomodels.tags import Tag, TagSchema
 from iomodels.tasks import Task, TaskListResponse
 from protorpc import messages
@@ -1191,7 +1190,6 @@ class Opportunity(EndpointsModel):
         )
 
     @classmethod
-    @payment_required()
     def insert(cls, user_from_email, request):
         if request.opportunity_type == 'fixed_bid':
             amount_total = request.amount_total

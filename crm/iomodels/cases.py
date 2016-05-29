@@ -6,7 +6,6 @@ from google.appengine.ext import ndb
 from iomodels.documents import Document, DocumentListResponse
 from iomodels.events import Event, EventListResponse
 from iomodels.notes import Note, TopicListResponse
-from iomodels.payment import payment_required
 from iomodels.tags import Tag, TagSchema
 from iomodels.tasks import Task, TaskListResponse
 from protorpc import messages
@@ -720,7 +719,6 @@ class Case(EndpointsModel):
         )
 
     @classmethod
-    @payment_required()
     def insert(cls, user_from_email, request):
         case = cls(
             owner=user_from_email.google_user_id,

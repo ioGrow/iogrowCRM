@@ -14,7 +14,6 @@ from protorpc import messages
 from endpoints_helper import EndpointsHelper
 from iograph import Edge
 from iomodels.notes import AuthorSchema, DiscussionAboutSchema
-from iomodels.payment import payment_required
 from iomodels.tags import Tag, TagSchema
 from search_helper import tokenize_autocomplete
 
@@ -492,7 +491,6 @@ class Task(EndpointsModel):
         )
 
     @classmethod
-    @payment_required()
     def insert(cls, user_from_email, request):
         if request.status:
             status = request.status

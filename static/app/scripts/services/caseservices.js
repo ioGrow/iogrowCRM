@@ -260,10 +260,6 @@ accountservices.factory('Case', function($rootScope) {
     trackMixpanelAction('CASE_INSERT');
      $scope.inProcess(true);
       gapi.client.crmengine.cases.insertv2(casee).execute(function(resp) {
-          if (resp.error && resp.error.code == 412){
-              $('#payment_modal').modal('show');
-              return
-          }
          if(!resp.code){
           if ($scope.cases == undefined){
             $scope.cases = [];

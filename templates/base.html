@@ -312,33 +312,6 @@
         </div>
     </div>
 </div>
-<div id="payment_modal" class="modal fade in" role="dialog" aria-hidden="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <a data-dismiss="modal" style="color: #4991FF;font-weight: 500;position: absolute;z-index: 2;right: 0;"
-               class="btn">CLOSE</a>
-            <div class="modal-body" style="background-color: white;">
-                <img src="/static/src/img/iogrow_alert.png" alt="alert message"
-                     style="width: 30%;float: left;margin-top: 25px;">
-                <div style="width: 70%;float: left;padding: 6px 5%;font-weight: 300;">
-                    <h3 style="font-family: Ubuntu, sans-serif;font-weight: 400 !important;">
-                        {% if plan.name=='freemium' %} {{  _("Freemium Limit Reached") }}
-                        {% elif plan.name=='premium' %} {{  _("Your subscription has expired.") }}{% endif %}
-                    </h3>
-                    <p style="font-size: 18px;">
-                       {{  _("You have reached your monthly records limit of your freemium account.") }}
-                        {{  _("Click the button bellow to upgrade and continue using io Grow without interruptions.") }}
-                    </p>
-                </div>
-            </div>
-            <div class="modal-footer" style="border-top-width: 0;text-align: center">
-                <a href="/subscribe" class="btn btn-primary" style="background-color: #0A90EE;color: #E6F1FC;padding: 15px 71px;margin-top: 5px;font-size: 16px;
-                ">{{ _('Upgrade Now') }}
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
 </div>
 </form>
 </div>
@@ -432,7 +405,7 @@
 <script type="text/javascript" src="/static/build/js/_sync.js"></script>
 
 <script type="text/javascript" src="static/vendor/js/jquery.waterfall.js"></script>
-
+-
 
 <script type="text/javascript" src="/static/build/js/_async.js"></script>
 
@@ -452,11 +425,6 @@
 <script src="http://maps.google.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY&sensor=true"
         type="text/javascript"></script>
 <!-- END JAVASCRIPTS -->
-<!-- start payment dependecies -->
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.payment/1.3.2/jquery.payment.js"></script>
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-<!-- end payment dependecies -->
 </body>
 <!-- END BODY -->
 </html>

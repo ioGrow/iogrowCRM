@@ -575,11 +575,6 @@ accountservices.factory('Contact', function ($rootScope) {
         trackMixpanelAction('CONTACT_INSERT');
         $scope.inProcess(true);
         gapi.client.crmengine.contacts.insertv2(params).execute(function (resp) {
-            if (resp.error && resp.error.code == 412){
-                $('#payment_modal').modal('show');
-                return
-            }
-
             if (!resp.code) {
                 if ($scope.contacts == undefined) {
                     $scope.contacts = [];

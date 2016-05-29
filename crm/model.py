@@ -9,11 +9,9 @@ from google.appengine.api import taskqueue
 from google.appengine.api import search
 from google.appengine.api import urlfetch
 
-from crm.iomodels import config
-from crm.iomodels.payment import Subscription
 from oauth2client.appengine import CredentialsNDBProperty
 from apiclient.discovery import build
-from oauth2client.client import flow_from_clientsecrets, OAuth2WebServerFlow
+from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.client import FlowExchangeError
 
 # Third parties
@@ -73,7 +71,6 @@ STANDARD_OBJECTS = ['Account', 'Contact', 'Opportunity', 'Lead', 'Case', 'Campai
 ADMIN_TABS = [
     {'name': 'Company', 'label': 'Company', 'url': '/#/admin/company', 'icon': 'building'},
     {'name': 'Users', 'label': 'Users', 'url': '/#/admin/users', 'icon': 'group'},
-    {'name': 'Billing', 'label': 'Billing', 'url': '/#/admin/billing', 'icon': 'credit-card'},
     {'name': 'EmailSignature', 'label': 'Email Signature', 'url': '/#/admin/email_signature', 'icon': 'envelope'},
 
     {'name': 'Regional', 'label': 'Regional', 'url': '/#/admin/regional', 'icon': 'globe'},
@@ -271,23 +268,6 @@ class Organization(ndb.Model):
     coupon = ndb.KeyProperty()
     related_to_partner = ndb.KeyProperty()
     should_upgrade = ndb.BooleanProperty()
-    subscription = ndb.KeyProperty(kind=Subscription)
-    stripe_customer_id = ndb.StringProperty()
-
-    def get_subscription(self):
-        if not self.subscription:
-            if self.plan and self.plan.get().name == "life_time_free":
-                self.subscription = Subscription.create_life_free_subscription().key
-            else:
-                self.subscription = Subscription.create_freemium_subscription().key
-            self.put()
-        return self.subscription.get()
-
-    def set_subscription(self, new_subscription):
-        if self.subscription:
-            self.subscription.delete()
-        self.subscription = new_subscription.key
-        self.put()
 
     @classmethod
     def init_life_time_free_licenses(cls, org_key):
@@ -446,9 +426,6 @@ class Organization(ndb.Model):
         admin.license_expires_on = now_plus_month
         admin.is_admin = True
         admin.put()
-        # organization.subscription = organization.get_subscription().key
-        organization.set_subscription(Subscription.create_freemium_subscription())
-        admin.set_subscription(Subscription.create_freemium_subscription())
         return org_key
 
     @classmethod
@@ -511,42 +488,6 @@ class Organization(ndb.Model):
                 created_profile.put_async()
         # init default stages,status, default values...
         cls.init_default_values(org_key)
-
-    def get_assigned_licenses(self):
-        return len(filter(lambda user: user.has_license(self.get_subscription().key),
-                          User.fetch_by_organization(self.key)))
-
-    @classmethod
-    def assign_license(cls, org_key, user_key):
-        organization = org_key.get()
-        user = user_key.get()
-        assigned_licenses = organization.get_assigned_licenses()
-        org_subscription = organization.get_subscription()
-        user_subscription = user.get_subscription()
-        if org_subscription.plan.get().name != config.PREMIUM:
-            raise endpoints.BadRequestException('You have to upgrade')
-        if org_subscription.quantity - assigned_licenses < 1:
-            raise endpoints.UnauthorizedException('you need more licenses')
-        if user_subscription.key == org_subscription.key:
-            raise endpoints.BadRequestException('this user already have an activated licenses')
-        if user.organization != org_key:
-            raise endpoints.UnauthorizedException('The user is not withing your organization')
-        user.set_subscription(org_subscription)
-
-    @classmethod
-    def unassign_license(cls, org_key, user_key):
-        organization = org_key.get()
-        user = user_key.get()
-        org_subscription = organization.get_subscription()
-        user_subscription = user.get_subscription()
-        if user_subscription.plan.get().name != config.PREMIUM:
-            raise endpoints.BadRequestException('You have to upgrade')
-        if user_subscription.key != org_subscription.key:
-            raise endpoints.BadRequestException('this user already have an activated licenses')
-        if user.organization != org_key:
-            raise endpoints.UnauthorizedException('The user is not withing your organization')
-        user.set_subscription(Subscription.create_freemium_subscription())
-
 
     @classmethod
     def upgrade_to_business_version(cls, org_key):
@@ -822,25 +763,10 @@ class User(EndpointsModel):
     default_currency = ndb.StringProperty()
     country_code = ndb.StringProperty()
     date_time_format = ndb.StringProperty()
-    subscription = ndb.KeyProperty(kind=Subscription)
-
-    def get_subscription(self):
-        if self.organization.get().subscription:
-            if not self.subscription or not self.subscription.get():
-                self.subscription = Subscription.create_freemium_subscription().key
-                self.put()
-        return self.subscription.get()
 
     @classmethod
     def fetch_by_organization(cls, org_key):
         return cls.query(User.organization == org_key).fetch()
-
-    def set_subscription(self, new_subscription):
-        if self.subscription:
-            if self.subscription != self.organization.get().get_subscription().key:
-                self.subscription.delete()
-        self.subscription = new_subscription.key
-        self.put()
 
     def after_create(self, user_id):
         if self.status == "active" and not is_locale():
@@ -869,12 +795,6 @@ class User(EndpointsModel):
     @classmethod
     def count_by_organization(cls, org_key):
         return cls.query(cls.organization == org_key).count()
-
-    def has_license(self, sub_key):
-        user_subscription = self.subscription
-        if user_subscription:
-            return user_subscription == sub_key
-        return False
 
     @classmethod
     def fetch_by_organization(cls, org_key):

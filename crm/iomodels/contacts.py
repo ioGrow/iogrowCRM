@@ -22,7 +22,6 @@ from iomodels.documents import Document, DocumentListResponse
 from iomodels.events import Event, EventListResponse
 from iomodels.notes import Note, TopicListResponse
 from iomodels.opportunities import Opportunity, OpportunityListResponse
-from iomodels.payment import payment_required
 from iomodels.tags import Tag, TagSchema
 from iomodels.tasks import Task, TaskListResponse
 from protorpc import messages
@@ -1218,7 +1217,6 @@ class Contact(EndpointsModel):
         return contacts
 
     @classmethod
-    @payment_required()
     def insert(cls, user_from_email, request):
         first_name = smart_str(request.firstname).lower()
         last_name = smart_str(request.lastname).lower()
