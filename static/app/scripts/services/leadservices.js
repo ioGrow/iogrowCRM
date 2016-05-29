@@ -60,7 +60,6 @@ leadservices.factory('Lead', function ($rootScope) {
                 }
             ],
             onEnd: function () {
-                $scope.saveIntercomEvent('completed Tour');
                 var userId = document.getElementById("userId").value;
 
                 if (userId) {
@@ -93,7 +92,6 @@ leadservices.factory('Lead', function ($rootScope) {
                     } else {
                         $scope.imageSrc = '/static/src/img/avatar_contact.jpg';
                     }
-                    //$scope.renderMaps();
                     var renderMap = false;
                      var past_pos=[];
                      if (!$scope.lead.linkedin_profile) {
@@ -180,7 +178,6 @@ leadservices.factory('Lead', function ($rootScope) {
                                 });
                             }
                         }
-                        // $scope.renderMaps();
                     }
                     $scope.getCustomFields('leads');
                     if (resp.topics) {
@@ -264,14 +261,6 @@ leadservices.factory('Lead', function ($rootScope) {
                     } else {
                         $scope.events = [];
                     }
-                    // $scope.listTopics(resp);
-                    // $scope.listTasks();
-                    // $scope.listEvents();
-                    // $scope.listDocuments();
-                    // $scope.listInfonodes();
-
-                    //$scope.renderMaps();
-                    //$scope.DrawPsychometrics();
 
                     $scope.email.to = '';
 
@@ -300,12 +289,6 @@ leadservices.factory('Lead', function ($rootScope) {
                         $scope.hilightTopic();
                     }
                     ;
-                    // if (resp.tasks){
-                    //     $scope.hilightTask();
-                    // }
-                    // if (resp.events){
-                    //     $scope.hilightEvent();
-                    // }
                 } else {
                     if (resp.code == 401) {
                         // $scope.refreshToken();
@@ -389,7 +372,6 @@ leadservices.factory('Lead', function ($rootScope) {
                     $scope.apply();
                 } else {
                     if (resp.code == 401) {
-                        // $scope.refreshToken();
                         $scope.inProcess(false);
                         $scope.apply();
                     }
@@ -573,13 +555,6 @@ leadservices.factory('Lead', function ($rootScope) {
                 $scope.isMoreItemLoading = false;
                 $scope.isFiltering = false;
                  $( '#leadCardsContainer' ).trigger('resize');
-                /*$('#leadCardsContainer').trigger('resize');
-                setTimeout(function () {
-                    var myDiv = $('.autoresizeName');
-                    if (myDiv.length) {
-                        myDiv.css({'height': 'initial', 'maxHeight': '33px'});
-                    }
-                }, 100);*/
                 $scope.inProcess(false);
                 $scope.apply();
 
@@ -674,7 +649,6 @@ leadservices.factory('Lead', function ($rootScope) {
             'body': params,
             'callback': (function (resp) {
                 if (!resp.code) {
-                    console.log(resp);
                     callback(resp.items);
                 } else {
                     $('#addLeadModal').modal('hide');
@@ -749,7 +723,6 @@ leadservices.factory('Lead', function ($rootScope) {
                  if (!resp.code && resp.id) {
                     $scope.leadInserted(resp.id);
                 } else if (!resp.id) {
-                    console.log(resp);
                     $scope.orginalUser = resp;
                 } else {
                     $('#addLeadModal').modal('hide');
@@ -773,7 +746,6 @@ leadservices.factory('Lead', function ($rootScope) {
         gapi.client.crmengine.leads.convertv2(params).execute(function (resp) {
             if (!resp.code) {
                 $('#convertLeadModal').modal('hide');
-                console.log(resp);
                 $scope.inProcess(false);
                 $scope.apply();
                 $scope.leadConverted(resp.id);
@@ -818,7 +790,6 @@ leadservices.factory('Lead', function ($rootScope) {
         $scope.apply();
         gapi.client.crmengine.leads.import_from_csv_second_step(params).execute(function (resp) {
             if (!resp.code) {
-                console.log(resp);
                 $scope.showImportMessages();
                 $scope.inProcess(false);
                 $scope.apply();
@@ -837,12 +808,9 @@ leadservices.factory('Lead', function ($rootScope) {
     };
     Lead.export = function ($scope, params) {
         trackMixpanelAction('LEAD_LIST_EXPORT');
-        //$("#load_btn").attr("disabled", "true");
-        //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
         gapi.client.crmengine.leads.export(params).execute(function (resp) {
             if (!resp.code) {
-                //$scope.DataLoaded(resp.items)
                 console.log("request ssent")
 
             } else {
@@ -851,12 +819,9 @@ leadservices.factory('Lead', function ($rootScope) {
         });
     }
     Lead.export_key = function ($scope, params) {
-        //$("#load_btn").attr("disabled", "true");
-        //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
         gapi.client.crmengine.leads.export_keys(params).execute(function (resp) {
             if (!resp.code) {
-                //$scope.DataLoaded(resp.items)
                 console.log("request ssent")
 
             } else {

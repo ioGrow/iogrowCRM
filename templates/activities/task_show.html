@@ -16,18 +16,12 @@
         </div>
     </div>
     <div class=" subHeaderContent">
-        <!--    <div class="pull-right sharebuttonDiv">
-             <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-               <i class="icon-lock"></i>
-               {{ _("Share") }}
-             </a>
-           </div> -->
 
         <h2 class="page-title">
             <a href="/#/tasks/" data-toggle="tooltip" data-placement="bottom" title="Back to Tasks">
                 <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;"
                      src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif"
-                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;"
+                     style="width: 21px; height: 21px; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC) no-repeat no-repeat 0 0;"
                      border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a> {{ _("Tasks") }}  </a>
         </h2>
 
@@ -166,7 +160,6 @@
 
                     </h2>
 
-                    <!--a > <%=task.status%> </a-->
                     <hr class="sepLine">
                     <!-- BEGIN PORTLET-->
                     <!-- End Portlet -->
@@ -207,11 +200,11 @@
                                 </button>
                                 <div class="taskShowDue">
                      <span ng-hide="showDueCalendar" ng-click="showDueCalendar=true" class="ng-binding">
-                     <i class="fa fa-calendar"></i> {{ _("<%=task.due | date:'yyyy-MM-dd'%>") }}</span>
+                     <i class="fa fa-calendar"></i> <%=task.due | date:'yyyy-MM-dd'%> </span>
                                     <div ng-show="showDueCalendar" class="input-icon" style="display: none;">
                                         <i class="fa fa-calendar"></i>
 
-                                        <input cusdatetimepicker data-model="task.due" type="text" class="form-control"
+                                        <input cdatetimepicker data-model="task.due" type="text" class="form-control"
                                                placeholder="{{ _('Due Date') }}" value="" id="leadEventStartsAt">
 
                                     </div>
@@ -272,7 +265,7 @@
                     <!-- HADJI HICHAM HH-21/10/2014 Attach files ! -->
                     <!-- begin -->
                     <div class="form-group">
-                        <p class⁼"lead"=""><strong>{{ _('Attach files') }}</strong> </p>
+                        <p class="lead"><strong>{{ _('Attach files') }}</strong> </p>
                         <div class="btn-group">
                             <a class="btn red" href="#" data-toggle="dropdown">
                                 {{ _('Create') }}
@@ -399,9 +392,9 @@
                                     <div class=''>
                                         <div class="invitation" ng-show="slected_memeber">
                                             <img class="google-avatar"
-                                                 src="<%= slected_memeber.google_public_profile_photo_url%>"/>
-                                            <strong> <%= slected_memeber.google_display_name %> <
-                                                <%=slected_memeber.email%> ></strong>
+                                                 ng-src="<%= slected_memeber.google_public_profile_photo_url%>"/>
+                                            <strong> <%= slected_memeber.google_display_name %>(
+                                                <%=slected_memeber.email%> ) </strong>
                                         </div>
                                         <div class="form-group">
                                             <input type="text" ng-model="user"
@@ -547,7 +540,6 @@
                         <input ng-click="deleteTask()" type="submit" class="btn red"
                                value="{{ _('Delete this Task') }}">
 
-                        <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                     </div>
 
                 </div>
@@ -582,11 +574,11 @@
                     </div>
                     <div ng-hide="task.owner.google_user_id=={{ ME }}">
 
-                        <label>{{ _("you can't edit this you are not the owner") }} </label> <br>
+                        <label>{{ _("you can't edit this, you are not the owner") }} </label> <br>
                         <label>{{ _("The owner is:") }}</label>
                         <div class="invitation">
                             <img class="google-avatar" ng-src="<%=task.owner.google_public_profile_photo_url%>"/>
-                            <%=task.owner.display_name%> < <a> <%=task.owner.email%> </a> >
+                            <%=task.owner.display_name%> <a> <%=task.owner.email%> </a>
                         </div>
                     </div>
                     <hr/>
@@ -594,7 +586,7 @@
                         <p>{{ _("Collaborators:") }}</p>
                         <div ng-repeat="collaborator in collaborators_list" class="invitation">
                             <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> < <a> <%=collaborator.email%> </a> >
+                            <%=collaborator.display_name%>  <a> <%=collaborator.email%> </a>
                             <button class="btn"
                                     ng-hide="task.owner.google_user_id==collaborator.google_user_id || task.access=='public' || task.owner.google_user_id!={{ ME }}"
                                     ng-click="DeleteCollaborator(collaborator.entityKey)">x
@@ -608,7 +600,7 @@
                         <p>{{ _("Invited user:") }}</p>
                         <div class="invitation" ng-repeat="invited in sharing_with">
                             <img class="google-avatar" ng-src="invited.google_public_profile_photo_url"/>
-                            <strong> <%= invited.google_display_name %> < <%=invited.email%> ></strong>
+                            <strong> <%= invited.google_display_name %> <%=invited.email%> </strong>
                             <hr/>
                         </div>
 

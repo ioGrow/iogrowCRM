@@ -57,21 +57,8 @@ Event.get_docs=function($scope,params){
       gapi.client.crmengine.events.patch(params).execute(function(resp) {
 
           if(!resp.code){
-
-            // for (var k in params){
-            //      if (k!='id'&&k!='entityKey'){
-            //        $scope.event[k] = resp[k];
-            //      }
-            // }
-            
-          
-            //$scope.renderMaps();
             $scope.runTheProcess()
-            /*$scope.ListComments();
-            $scope.listContributors();*/
             $scope.isLoading = false;
-           /* $scope.listTags();
-            $scope.listTasks();*/
             $scope.$apply();
 
 
@@ -123,22 +110,7 @@ Event.get_docs=function($scope,params){
                                       };
                     calendarEventList.push(eventSchema);
                  });
-                 //$scope.renderCalendar(calendarEventList);
-                 /*if ($scope.currentPage>1){
-                      $scope.pagination.prev = true;
-                   }else{
-                       $scope.pagination.prev = false;
-                   }
-                 if (resp.nextPageToken){
-                   var nextPage = $scope.currentPage + 1;
-                   // Store the nextPageToken
-                   $scope.pages[nextPage] = resp.nextPageToken;
-                   $scope.pagination.next = true;
 
-                 }else{
-                  $scope.pagination.next = false;
-                 }
-                 */
                  // Loaded succefully
                  $scope.isLoading = false;
 
@@ -170,7 +142,6 @@ Event.get_docs=function($scope,params){
           
             $scope.isLoading = false;
              $scope.permet_clicking=true ;
-             // hadji hicham 14-07-2014 . update the event in the calendar after we add it .
          $scope.updateEventRenderAfterAdd();
             $scope.$apply();
 

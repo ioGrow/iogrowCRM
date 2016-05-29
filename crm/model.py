@@ -329,10 +329,6 @@ class Organization(ndb.Model):
         else:
             cls.init_freemium_licenses(org_key)
 
-    # @classmethod
-    # def init_freemium_licenses(cls, org_key):
-    #     cls.init_life_time_free_licenses(org_key)
-
     @classmethod
     def init_default_values(cls, org_key):
         # HKA 17.12.2013 Add an opportunity stage
@@ -364,7 +360,6 @@ class Organization(ndb.Model):
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')
         from crm.iograph import Edge
         Edge.insert(start_node=org_key, end_node=admin.key, kind='admins', inverse_edge='parents')
-
         created_tabs = []
         for tab in STANDARD_TABS:
             created_tab = Tab(name=tab['name'], label=tab['label'], url=tab['url'], icon=tab['icon'],
@@ -743,7 +738,6 @@ class User(EndpointsModel):
     # If the user is a business user, we store the informations about him
     # stripe id , id represent an enter in the table of customers in stripe api.
     stripe_id = ndb.StringProperty()
-    # that's coool
     organization = ndb.KeyProperty()
     status = ndb.StringProperty()
     profile = ndb.KeyProperty()
@@ -936,9 +930,6 @@ class User(EndpointsModel):
                 self.put()
                 memcache.add(mem_key, ndb.get_multi(self.active_tabs))
                 return ndb.get_multi(active_app.tabs)
-            # elif self.active_tabs:
-            #     memcache.add(mem_key, ndb.get_multi(self.active_tabs))
-            #     return ndb.get_multi(self.active_tabs)
             else:
                 active_app = self.active_app.get()
                 self.active_tabs = active_app.tabs
@@ -996,7 +987,6 @@ class User(EndpointsModel):
         user.put()
         memcache.set(user_from_email.email, user)
 
-        # get_schema_request = iomessages.UserGetRequest(id=int(request.id))
         return cls.get_schema(user)
 
     def get_user_groups(self):
@@ -1016,10 +1006,6 @@ class User(EndpointsModel):
             if org.owner == user.google_user_id:
                 is_super_admin = True
 
-            # if Edge.find(user.organization,[user.key],'admins',"AND"):
-            #         is_admin=True
-            # else:
-            #         is_admin=False
             user_schema = iomessages.UserSchema(
                 id=str(user.key.id()),
                 entityKey=user.key.urlsafe(),
@@ -1176,7 +1162,6 @@ class User(EndpointsModel):
         invited_user_id_request = request.id
         if invited_user_id_request:
             invited_user_id = long(invited_user_id_request)
-            # user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
 
             # Store our credentials with in the datastore with our user.
         if invited_user_id:
@@ -1194,11 +1179,6 @@ class User(EndpointsModel):
         isNewUser = False
         if user.organization is None:
             isNewUser = True
-        if request.sign_in_from:
-            Intercom.create_event(
-                event_name='sign-in from ' + request.sign_in_from,
-                email=user.email
-            )
         return iomessages.UserSignInResponse(is_new_user=isNewUser)
 
     @classmethod
@@ -1304,9 +1284,6 @@ class User(EndpointsModel):
                 oppstages = Opportunitystage.query(Opportunitystage.organization == user.organization).fetch()
                 for oppstage in oppstages:
                     oppstage.key.delete()
-                # permissions= Permission.query(Permission.value==str(user.google_user_id)).fetch()
-                # for permission in permissions:
-                #     permission.key.delete()
                 tabs = Tab.query(Tab.organization == user.organization).fetch()
                 for tab in tabs:
                     tab.key.delete()
@@ -1367,8 +1344,6 @@ class User(EndpointsModel):
                     cf.put()
                 user.organization = user_from_email.organization
                 user.put()
-                # from crm.iograph import Edge
-                # Edge.delete_all(user.organization)
                 organization.delete()
 
         return msg
@@ -1380,7 +1355,6 @@ class Group(EndpointsModel):
     name = ndb.StringProperty(required=True)
     description = ndb.TextProperty()
     status = ndb.StringProperty()
-    # members = ndb.StructuredProperty(Userinfo,repeated=True)
     organization = ndb.KeyProperty()
 
 
@@ -1503,11 +1477,8 @@ class Logo(ndb.Model):
 # HKA 30.12.2013 Manage Company Profile
 
 class Companyprofile(EndpointsModel):
-    # _message_fields_schema = ('id','entityKey','name','tagline','owner','introduction','organization','organizationid','phones','emails','addresses','websites','sociallinks','youtube_channel')
 
     owner = ndb.StringProperty()
-    # collaborators_list = ndb.StructuredProperty(Userinfo,repeated=True)
-    # collaborators_ids = ndb.StringProperty(repeated=True)
     organization = ndb.KeyProperty()
     organizationid = ndb.IntegerProperty()
     name = ndb.StringProperty()

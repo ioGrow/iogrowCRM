@@ -140,8 +140,6 @@ class BaseHandler(webapp2.RequestHandler):
                     if plan.name == "preemium":
                         is_freemium = False
 
-                # if user.email in ADMIN_EMAILS:
-                #     is_admin = True
                 # Set the user locale from user's settings
                 self.set_user_locale(user.language)
                 tabs = user.get_user_active_tabs()
@@ -167,7 +165,6 @@ class BaseHandler(webapp2.RequestHandler):
                 custom_fields = []
                 if template_name in template_mapping.keys():
                     custom_fields = model.CustomField.list_by_object(user, template_mapping[template_name])
-                # text=i18n.gettext('Hello, world!')
                 organization = user.organization.get()
                 template_values = {
                     'is_freemium': is_freemium,
@@ -620,7 +617,6 @@ class GooglePlusConnect(SessionEnabledHandler):
         invited_user_id_request = self.request.get("id")
         if invited_user_id_request:
             invited_user_id = long(invited_user_id_request)
-        # user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
 
         # Store our credentials with in the datastore with our user.
         invitee = None
@@ -657,11 +653,6 @@ class GooglePlusConnect(SessionEnabledHandler):
             organ_name = user_email.partition("@")[2]
             model.Organization.create_instance(organ_name, user)
             is_new_user = True
-            try:
-                Intercom.create_user(email=user.email, name=user.google_display_name,
-                                     created_at=time.mktime(user.created_at.timetuple()))
-            except:
-                pass
             mp.track(user.id, 'SIGNIN_SUCCESS')
         self.session[self.CURRENT_USER_SESSION_KEY] = user.email
         self.response.headers['Access-Control-Allow-Origin'] = '*'
@@ -704,7 +695,6 @@ class InstallFromDecorator(SessionEnabledHandler):
             invited_user_id_request = self.request.get("id")
             if invited_user_id_request:
                 invited_user_id = long(invited_user_id_request)
-            # user = model.User.query(model.User.google_user_id == token_info.get('user_id')).get()
 
             # Store our credentials with in the datastore with our user.
             if invited_user_id:
@@ -811,11 +801,6 @@ class NoteShowHandler(BaseHandler, SessionEnabledHandler):
         self.prepare_template('templates/accounts/note_show.html')
 
 
-class DocumentShowHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/documents/show.html')
-
-
 class AllTasksHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/activities/all_tasks.html')
@@ -870,10 +855,6 @@ class EditLeadStatusHandler(BaseHandler, SessionEnabledHandler):
     def get(self):
         self.prepare_template('templates/admin/lead_status/lead_status_edit.html')
 
-
-class LeadScoringHandler(BaseHandler, SessionEnabledHandler):
-    def get(self):
-        self.prepare_template('templates/admin/lead_scoring/lead_scoring_edit.html')
 
 
 class EditCustomFieldsHandler(BaseHandler, SessionEnabledHandler):
@@ -1240,7 +1221,6 @@ class SyncAssignedCalendarTask(webapp2.RequestHandler):
         task = Task.getTaskById(task_key)
         starts_at = datetime.datetime.strptime(task.due.isoformat(), "%Y-%m-%dT%H:%M:%S")
         summary = task.title
-        # location = self.request.get('location')
         ends_at = datetime.datetime.strptime(task.due.isoformat(), "%Y-%m-%dT%H:%M:%S")
 
         credentials = user_from_email.google_credentials
@@ -1274,28 +1254,7 @@ class SyncAssignedPatchCalendarTask(webapp2.RequestHandler):
         task = Task.getTaskById(task_key)
         starts_at = datetime.datetime.strptime(task.due.isoformat(), "%Y-%m-%dT%H:%M:%S")
         summary = task.title
-        # location = self.request.get('location')
         ends_at = datetime.datetime.strptime(task.due.isoformat(), "%Y-%m-%dT%H:%M:%S")
-        print "*******************************************"
-        print user_from_email.key
-        print "*******************************************"
-        print task.task_assigned_google_id_list
-        print "*******************************************"
-        # user_from_email = model.User.get_by_email(self.request.get('email'))
-        # task_key=self.request.get('task_key')
-        # task=task_key.get()
-        # starts_at = datetime.datetime.strptime(
-        #                                       task.due,
-        #                                       "%Y-%m-%dT%H:%M:00.000000"
-        #                                       )
-        # summary = task.title
-        # #location = self.request.get('location')
-        # ends_at = datetime.datetime.strptime(
-        #                                       task.due,
-        #                                       "%Y-%m-%dT%H:%M:00.000000"
-        #                                       )
-        # assigned_to_key=self.request.get('assigned_to')
-        # assigned_to=assigned_to_key.get()
         try:
             for task_google_assigned_id in task.task_assigned_google_id_list:
                 if task_google_assigned_id.user_key == user_from_email.key:
@@ -1781,7 +1740,6 @@ routes = [
 
     # Notes, Documents, Taks, Events, Search Views
     ('/views/notes/show', NoteShowHandler),
-    ('/views/documents/show', DocumentShowHandler),
 
     ('/views/search/list', SearchListHandler),
     ('/views/tasks/show', TaskShowHandler),
@@ -1800,7 +1758,6 @@ routes = [
     ('/views/admin/opportunity/edit', EditOpportunityHandler),
     ('/views/admin/case_status/edit', EditCaseStatusHandler),
     ('/views/admin/lead_status/edit', EditLeadStatusHandler),
-    ('/views/admin/lead_scoring/edit', LeadScoringHandler),
     ('/views/admin/custom_fields/edit', EditCustomFieldsHandler),
     ('/views/admin/delete_all_records', deleteAllRecordHandler),
 

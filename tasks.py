@@ -112,18 +112,17 @@ def babel(extract=False, init=False, compile=False, update=False):
     if not (init or extract or compile or update):
         print "Please choose a command: \n --init, -i \n --extract, -e \n --compile, -c \n --update, -u"
 
+    pot_path = "./locale/messages.pot"
     if init:
         lang = raw_input("language to initialize?")
-        run("pybabel init -l %s -d ./locale -i ./locale/messages.pot" % lang)
-    if extract:
-        run("pybabel extract -F ./locale/babel.cfg -o ./locale/messages.pot ./")
+        run("pybabel init -l %s -d ./locale -i %s" % (lang, pot_path))
+    if extract or update:
+        run("pybabel extract -F ./locale/babel.cfg -o %s ./ --omit-header --no-location  --sort-output" % pot_path)
+        LANGS = ["ar", "en_US", "es_ES", "fr_FR", "pt_BR" ]
+        for lang in LANGS:
+            run("pybabel update -l %s -d ./locale -i %s --previous --ignore-obsolete" % (lang, pot_path))
     if compile:
         run("pybabel compile -f -d ./locale")
-    if update:
-        LANGS = ["ar", "en", "es_ES", "fr", "pt_BR"]
-        for lang in LANGS:
-            run("pybabel update -l %s -d ./locale -i ./locale/messages.pot" % lang)
-
 
 def print_out(script, filename=''):
     timestamp = datetime.now().strftime('%H:%M:%S')

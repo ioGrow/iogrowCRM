@@ -116,8 +116,6 @@
                             localStorage['authResultexpiration'] = authResult.expires_at;
                         }
                         helper.connectServer();
-                        // After we load the Google+ API, render the profile data from Google+.
-                        //gapi.client.load('plus','v1',this.renderProfile);
 
 
                     } else if (authResult['error']) {
@@ -252,18 +250,6 @@
 
         }
         window.IlyesVideoPlayed = false;
-        // $(window).scroll(function() {
-
-        //   var y = $(window).scrollTop();
-        //   if(y>410){
-        //     if(!window.IlyesVideoPlayed){
-        //       window.IlyesVideoPlayed=true;
-        //       playIlyesVideo();
-        //     }
-
-        //   }
-
-        // });
         if ($("html").hasClass("mobile-device")) {
             $("body").css("padding-top", "600px");
             $(".section-centered").css("margin-top", "-279.5px");
@@ -444,7 +430,7 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
                             style="display:inline-block;font-size:20px;vertical-align:text-top;border:1px solid #DaDaDa;border-radius:4px;padding:10px 15px;color:gray!important;background-color:#f9f9f9"
                             target=_blank><img title="ioGrow chrome extension"
                                                src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/download.png
-                                               width=25px style=margin-right:0;vertical-align:middle;margin-right:8px>
+                                               width=25px style=vertical-align:middle;margin-right:8px>
                         Install ioGrow Chrome extension</a></div>
             </div>
         </div>
@@ -517,11 +503,11 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
                         </div>
                         <a class="maia-button button-download download-mobile get-started"
                            href=https://chrome.google.com/webstore/detail/iogrow-chrome-extension/eafcehcahfabjibkmffekmcnlnnopkni
-                           style="display:inline-block;font-size:20px;vertical-align:text-top;border:1px solid #DaDaDa;border-radius:4px;padding:10px 15px;color:gray!important;background-color:#f9f9f9;float:left;display:inline-block;margin-top:0;padding-top:7px;padding-bottom:8px;font-size:15px"
+                           style="display:inline-block;vertical-align:text-top;border:1px solid #DaDaDa;border-radius:4px;color:gray!important;background-color:#f9f9f9;float:left;margin-top:0;padding: 7px 15px 8px;font-size:15px"
                            target=_blank><img title="ioGrow chrome extension"
                                               src=http://storage.googleapis.com/iogrow-cdn/img/welcome_img/download.png
                                               width=25px
-                                              style=margin-right:0;vertical-align:middle;margin-right:8px;height:24px;margin-bottom:3px>
+                                              style=vertical-align:middle;margin-right:8px;height:24px;margin-bottom:3px>
                             Install Chrome extension</a></div>
                 </div>
             </div>
@@ -566,11 +552,6 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
 <script src=http://storage.googleapis.com/iogrow-cdn/opt_files/welcome_files/drive-site.min.js.gz></script>
 <script>var manageParams = new drive.QueryParamManager;</script>
 <script>var home = new drive.SetUp("home");</script>
-<script>
-    window.intercomSettings = {
-        app_id: "s9iirr8w"
-    };
-</script>
 <script type="text/javascript">
     mixpanel.track("WELCOME_PAGE_VISIT");
     mixpanel.track_links("#blog", "BLOG_CLICKED");
@@ -585,37 +566,5 @@ mixpanel.init("793d188e5019dfa586692fc3b312e5d1");</script><!-- end Mixpanel -->
     mixpanel.track_links("#api", "API_CLICKED");
     mixpanel.track_links("#extension-iogrow", "EXTENSION_CLICKED");
 </script>
-<script>(function () {
-    var w = window;
-    var ic = w.Intercom;
-    if (typeof ic === "function") {
-        ic('reattach_activator');
-        ic('update', intercomSettings);
-    } else {
-        var d = document;
-        var i = function () {
-            i.c(arguments)
-        };
-        i.q = [];
-        i.c = function (args) {
-            i.q.push(args)
-        };
-        w.Intercom = i;
-        function l() {
-            var s = d.createElement('script');
-            s.type = 'text/javascript';
-            s.async = true;
-            s.src = 'https://widget.intercom.io/widget/dhasdzez';
-            var x = d.getElementsByTagName('script')[0];
-            x.parentNode.insertBefore(s, x);
-        }
-
-        if (w.attachEvent) {
-            w.attachEvent('onload', l);
-        } else {
-            w.addEventListener('load', l, false);
-        }
-    }
-})()</script>
 </body>
 </html>

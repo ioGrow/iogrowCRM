@@ -211,15 +211,6 @@ accountservices.factory('Contact', function ($rootScope) {
                 }
                 $scope.isContentLoaded = true;
 
-                //$scope.listInfonodes();
-                // $scope.listTopics(resp);
-                // $scope.listTasks();
-                // $scope.listEvents();
-                // $scope.listOpportunities();
-                // $scope.listCases();
-                // $scope.listDocuments();
-
-                //$scope.renderMaps();
 
                 document.title = "Contact: " + $scope.contact.firstname + ' ' + $scope.contact.lastname;
                 $scope.email.to = '';
@@ -236,20 +227,12 @@ accountservices.factory('Contact', function ($rootScope) {
                 });
 
 
-                //$scope.renderMaps();
-                // Call the method $apply to make the update on the scope
                 $scope.inProcess(false);
                 $scope.apply();
                 if (resp.topics && !params.topics.pageToken) {
                     $scope.hilightTopic();
                 }
                 ;
-                // if (resp.tasks){
-                //     $scope.hilightTask();
-                // }
-                // if (resp.events){
-                //     $scope.hilightEvent();
-                // }
                 $scope.getLinkedinProfile();
                 $scope.getTwitterProfile();
 
@@ -576,29 +559,15 @@ accountservices.factory('Contact', function ($rootScope) {
 
     Contact.export = function ($scope, params) {
         trackMixpanelAction('CONTACT_EXPORT');
-        //$("#load_btn").attr("disabled", "true");
-        //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
         gapi.client.crmengine.contacts.export(params).execute(function (resp) {
-            if (!resp.code) {
-                //$scope.DataLoaded(resp.items)
 
-            } else {
-
-            }
         });
     };
     Contact.export_key = function ($scope, params) {
-        //$("#load_btn").attr("disabled", "true");
-        //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
         gapi.client.crmengine.contacts.export_keys(params).execute(function (resp) {
-            if (!resp.code) {
-                //$scope.DataLoaded(resp.items)
 
-            } else {
-
-            }
         });
     };
 
@@ -616,7 +585,6 @@ accountservices.factory('Contact', function ($rootScope) {
                     
                     $scope.contactInserted(resp);
                 }
-                //$scope.contact = {};
                 $scope.searchAccountQuery = '';
                 $scope.inProcess(false);
                 $scope.apply();

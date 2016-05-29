@@ -86,12 +86,9 @@ module.exports = function (grunt) {
               'wysihtml5',
               'bootstrap-wysihtml5',
               'jquery.uniform',
-              'jquery-simple-datetimepicker',
               'bootstrap-datepicker',
               'bootstrap-hover-dropdown',
-              'twitter-bootstrap-wizard',
               'angular-sortable-view',
-              'datetimepicker',
               'fullcalendar'
             ],
             dependencies: {
@@ -117,6 +114,7 @@ module.exports = function (grunt) {
                 'css': 'static/build/css/_sync.css'
             },
             include: [
+              'datetimepicker',
               'bootstrap',
               'angular-bootstrap',
               'jquery-ui-maps',
@@ -125,6 +123,7 @@ module.exports = function (grunt) {
               'jquery-validation'
             ],
             dependencies: {
+                'datetimepicker': 'jquery',
                 'angular-bootstrap': 'bootstrap'
             },
             mainFiles: {
@@ -142,6 +141,21 @@ module.exports = function (grunt) {
             }
           }
       },
+        htmlmin: {
+        dist: {
+            options: {
+                removeComments: true,
+                collapseWhitespace: true,
+                minifyCSS: true,
+                minifyJS:true,
+                minifyURLs:true,
+                },
+                    expand: true,
+                    cwd: '',
+                    src: ['templates/**/*.html'],
+
+    }
+    },
       cssmin: {
             sync_css: {
                 files: {
@@ -156,6 +170,18 @@ module.exports = function (grunt) {
 
 
       },
+         imagemin: {
+    dist: {
+      options: {
+        optimizationLevel: 4,
+      },
+      files: [{
+        expand: true,
+        cwd: '',
+        src: ['static/src/img/**/*.{png,jpg,gif}']
+      }]
+    }
+  },
       uglify: {
             options: {
                 mangle: false
@@ -221,9 +247,12 @@ module.exports = function (grunt) {
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-concat');
+
     //grunt.loadNpmTasks("grunt-remove-logging-calls");
 
     grunt.registerTask('default', [
@@ -235,8 +264,10 @@ module.exports = function (grunt) {
       'bower_concat',
       'concat',
       'cssmin',
+      'htmlmin',
+      'imagemin',
       //  'removeLoggingCalls',       //buggy
-      'uglify',
+      'uglify'
 
     ]);
 };

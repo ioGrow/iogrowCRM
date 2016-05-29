@@ -279,13 +279,6 @@ accountservices.factory('Account', function($rootScope) {
                 if (resp.topics && !params.topics.pageToken) {
                     $scope.hilightTopic();
                 };
-                // if (resp.tasks){
-                //     $scope.hilightTask();
-                // }
-                // if (resp.events){
-                //     $scope.hilightEvent();
-                // }
-               /* $scope.renderMaps();*/
                 $scope.mapAutocomplete();
                 $scope.getLinkedinProfile();
                 $scope.getTwitterProfile();
@@ -461,28 +454,14 @@ accountservices.factory('Account', function($rootScope) {
 
     Account.export = function ($scope, params) {
         trackMixpanelAction('ACCOUNT_EXPORT');
-        //$("#load_btn").attr("disabled", "true");
-        //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
         gapi.client.crmengine.accounts.export(params).execute(function (resp) {
-            if (!resp.code) {
-                //$scope.DataLoaded(resp.items)
-            } else {
-
-            }
         });
     }
     Account.export_key = function ($scope, params) {
-        //$("#load_btn").attr("disabled", "true");
-        //$("#close_btn").attr("disabled", "true");
         $scope.isExporting = true;
         gapi.client.crmengine.accounts.export_keys(params).execute(function (resp) {
-            if (!resp.code) {
-                //$scope.DataLoaded(resp.items)
 
-            } else {
-
-            }
         });
     }
 
@@ -702,9 +681,6 @@ accountservices.factory('Search', function($http) {
                 base_url = '/#/live/shows/show/';
                 base_url = '/#/live/customer_stories/customer_story/';
                 break;
-            case 'Document' :
-                base_url = '#/documents/show/';
-                break;
             case 'Task' :
                 base_url = '#/tasks/show/';
                 break;
@@ -725,9 +701,6 @@ accountservices.factory('Search', function($http) {
             
             case 'Note':
                 base_url = '/#/notes/show/';
-                break;
-            case 'Document' :
-                base_url = '#/documents/show/';
                 break;
             case 'Task' :
                 base_url = '#/tasks/show/';
@@ -792,45 +765,7 @@ accountservices.factory('Attachement', function($http) {
     var Attachement = function(data) {
         angular.extend(this, data);
     };
-    /*Attachement.list = function($scope,params){
-     $scope.isLoading = true;
-     gapi.client.crmengine.documents.list(params).execute(function(resp) {
-     if(!resp.code){
-     if (!resp.items){
-     $scope.blankStatdocuments = true;
-     };
 
-     $scope.documents = resp.items;
-
-
-     if ($scope.documentCurrentPage > 1){
-     $scope.documentpagination.prev = true;
-     }else{
-     $scope.documentpagination.prev = false;
-     }
-     if (resp.nextPageToken){
-     var nextPage = $scope.documentCurrentPage + 1;
-     // Store the nextPageToken
-     $scope.documentpages[nextPage] = resp.nextPageToken;
-     $scope.documentpagination.next = true;
-
-     }else{
-     $scope.documentpagination.next = false;
-     }
-     // Loaded succefully
-     $scope.isLoading = false;
-     // Call the method $apply to make the update on the scope
-     $scope.apply();
-     }else {
-     if(resp.message=="Invalid token"){
-     $scope.refreshToken();
-     $scope.isLoading = false;
-     $scope.apply();
-     };
-     }
-     });
-
-     };*/
     Attachement.list = function($scope, params) {
         $scope.inProcess(true); 
         gapi.client.crmengine.documents.list(params).execute(function(resp) {
@@ -891,7 +826,6 @@ accountservices.factory('Attachement', function($http) {
         $('#newDocument').modal('hide');
         gapi.client.crmengine.documents.insertv2(params).execute(function(resp) {
             if (!resp.code) {
-                //$('#newDocument').modal('hide');
                 if ($scope.newDoc) {
                     if (resp.embedLink) {
                         $scope.docCreated(resp.embedLink);
@@ -981,12 +915,10 @@ accountservices.factory('Email', function() {
             if (!resp.code) {
                 $scope.emailSent = true;
                 $scope.sending = false;
-               // $scope.selectedTab = 1;
                 $scope.emailSent();
                 $scope.listTopics();
 
                 $scope.email = {};
-                // $('#sendingEmail').modal('hide');
 
                 $scope.inProcess(false);  
                         $scope.apply();

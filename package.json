@@ -8,12 +8,15 @@
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-cssmin": "^0.12.3",
     "grunt-contrib-htmlmin": "^0.4.0",
+    "grunt-contrib-imagemin": "^1.0.1",
     "grunt-contrib-uglify": "^0.8.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-targethtml": "^0.2.6"
+
   },
   "author": "ioGrow Team",
-  "license": "AGPL",
+  "repository":"https://github.com/ioGrow/iogrow",
+  "license":"AGPL",
   "bugs": {
     "url": "https://github.com/ioGrow/iogrow/issues"
   },

@@ -1,7 +1,7 @@
 <div class="row subHeader action-bar">
     <div class="currentApp">
         <a class="filterItem" href="#" data-toggle="dropdown">
-            <span class="active-app"><i class="fa fa-cog"></i> Settings</span> <!--{{_(active_app.label)}}-->
+            <span class="active-app"><i class="fa fa-cog"></i>{{  _('Settings') }}</span>
             <i class="icon-angle-down fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
@@ -10,19 +10,6 @@
             {% endfor %}
         </ul>
     </div>
-    <!--  <div class="subHeaderContent" style="border-right-width: 0px;">
-        <div class="col-md-4 active-app"><i class="fa fa-globe section-icon"></i>
-            Regional
-        </div>
-
-        <a class="btn red save-btn pull-right" id="customButton" ng-click="saveUser()">
-            <i class="fa fa-floppy-o"></i> {{_("Save")}}
-        </a>
-        <a class="btn default pull-right" ng-click="resetToDefault()" style="margin-right: 10px">
-            <i class="fa fa-reply"></i> {{_("Default")}}
-        </a>
-
-    </div> -->
 </div>
 
 <div class="page-content admin-content">
@@ -33,7 +20,7 @@
             </div>
         </div>
     </div>
-    <div ng-show="immediateFailed">
+    <div ng-show="immediateFailed">                                                  '
         <div class="col-md-12">
           <span id="signin">
             <span id="myGsignin"></span>
@@ -41,51 +28,50 @@
         </div>
     </div>
     <div class="col-md-offset-3 col-md-5 panel panel-default"
-         style="border: 0px;border-top: #8BC54A solid;color: #A2A2A2;font-family: sans-serif;font-weight: 300;">
+         style="border: 0;border-top: #8BC54A solid;color: #A2A2A2;font-family: sans-serif;font-weight: 300;">
         <h2 style="color: #5F5D5D;margin-top: 10px;margin-bottom: 20px; font-family: sans-serif;">
-            <i class="glyphicon glyphicon-trash" style="font-size: 24px"></i> Delete All Records</h2>
+            <i class="glyphicon glyphicon-trash" style="font-size: 24px"></i> {{  _('Delete All Records') }}</h2>
 
-        <div class="form-group col-md-12" style="padding: 0px;">
-            <i class="glyphicon glyphicon-flag"></i> Delete All Leads
-            <div class="col-md-12 margin-top-10 " style="padding: 0px">
-                <button class="btn col-md-12" ng-click="modalBeforeDelete('lead')"> Delete All Leads</button>
+        <div class="form-group col-md-12" style="padding: 0;">
+            <i class="glyphicon glyphicon-flag"></i> {{  _('Delete All Leads') }}
+            <div class="col-md-12 margin-top-10 " style="padding: 0">
+                <button class="btn col-md-12" ng-click="modalBeforeDelete('lead')"> {{  _('Delete All Leads') }}</button>
             </div>
         </div>
-        <div class="form-group col-md-12" style="padding: 0px;">
-            <i class="glyphicon glyphicon-flag"></i> Delete All Contacts
-            <div class="col-md-12 margin-top-10 " style="padding: 0px">
-                <button class="btn col-md-12" ng-click="modalBeforeDelete('contact')"> Delete All Contacts</button>
+        <div class="form-group col-md-12" style="padding: 0;">
+            <i class="glyphicon glyphicon-flag"></i> {{  _('Delete All Contacts') }}
+            <div class="col-md-12 margin-top-10 " style="padding: 0">
+                <button class="btn col-md-12" ng-click="modalBeforeDelete('contact')"> {{  _('Delete All Contacts') }}</button>
             </div>
         </div>
-        <div class="form-group col-md-12" style="padding: 0px;">
-            <i class="glyphicon glyphicon-flag"></i> Delete All Accounts
-            <div class="col-md-12 margin-top-10 " style="padding: 0px">
-                <button class="btn col-md-12" ng-click="modalBeforeDelete('account')"> Delete All Accounts</button>
+        <div class="form-group col-md-12" style="padding: 0;">
+            <i class="glyphicon glyphicon-flag"></i> {{  _('Delete All Accounts') }}
+            <div class="col-md-12 margin-top-10 " style="padding: 0">
+                <button class="btn col-md-12" ng-click="modalBeforeDelete('account')"> {{  _('Delete All Accounts') }}</button>
             </div>
         </div>
-        <div class="form-group col-md-12" style="padding: 0px;">
-            <i class="glyphicon glyphicon-flag"></i> Delete All Opportunities
-            <div class="col-md-12 margin-top-10 " style="padding: 0px">
-                <button class="btn col-md-12" ng-click="modalBeforeDelete('opportunity')"> Delete All Opportunities
+        <div class="form-group col-md-12" style="padding: 0;">
+            <i class="glyphicon glyphicon-flag"></i> {{  _('Delete All Opportunities') }}
+            <div class="col-md-12 margin-top-10 " style="padding: 0">
+                <button class="btn col-md-12" ng-click="modalBeforeDelete('opportunity')"> {{  _('Delete All Opportunities') }}
                 </button>
             </div>
         </div>
-        <div class="form-group col-md-12" style="padding: 0px;">
-            <i class="glyphicon glyphicon-flag"></i> Delete All Cases
-            <div class="col-md-12 margin-top-10 " style="padding: 0px">
-                <button class="btn col-md-12" ng-click="modalBeforeDelete('case')"> Delete All Cases</button>
+        <div class="form-group col-md-12" style="padding: 0;">
+            <i class="glyphicon glyphicon-flag"></i> {{  _('Delete All Cases') }}
+            <div class="col-md-12 margin-top-10 " style="padding: 0">
+                <button class="btn col-md-12" ng-click="modalBeforeDelete('case')"> {{  _('Delete All Cases') }}</button>
             </div>
         </div>
-        <div class="form-group col-md-12" style="padding: 0px;">
-            <i class="glyphicon glyphicon-flag"></i> Delete All Tasks
-            <div class="col-md-12 margin-top-10 " style="padding: 0px">
-                <button class="btn col-md-12" ng-click="modalBeforeDelete('task')"> Delete All Tasks</button>
+        <div class="form-group col-md-12" style="padding: 0;">
+            <i class="glyphicon glyphicon-flag"></i> {{  _('Delete All Tasks') }}
+            <div class="col-md-12 margin-top-10 " style="padding: 0">
+                <button class="btn col-md-12" ng-click="modalBeforeDelete('task')"> {{  _('Delete All Tasks') }}</button>
             </div>
         </div>
 
 
-        <!--<div class="from-group col-md-12" style="padding: 10px 0px;"><a class="btn red" style="padding: 5px 20px;border-radius: 0px !important;"> Save</a></div>-->
-    </div>
+        </div>
 </div>
 <div id="deleteAllRecords" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
@@ -93,8 +79,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i> Delete
-                    All <%= kindToDelete%>s</h3>
+                <h3 id="myModalLabel" class="modal-title"><i class="fa fa-trash-o" style="font-size: 25px;"></i> {{  _('Delete All') }} <%= kindToDelete%>s</h3>
             </div>
             <div class="modal-body">
                 <form id="seletesho" name="deletesho" class="form-horizontal">
@@ -107,7 +92,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="delete()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
 
         </div>
@@ -125,7 +109,7 @@
             <div class="modal-body">
                 <form id="seletesho" name="deletesho" class="form-horizontal">
                     <p style="font-size: 16px;text-align: center;">{{ _("All your") }} : <span style="color:blue"><%=kindToDelete%>s</span>
-                        have been deleted</p>
+                        {{  _('have been deleted') }}</p>
 
                 </form>
             </div>

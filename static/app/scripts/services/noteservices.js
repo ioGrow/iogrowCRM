@@ -66,7 +66,6 @@ Note.insert = function($scope,params){
       gapi.client.crmengine.notes.insertv2(params).execute(function(resp) {
         
          if(!resp.code){
-          console.log(resp);
           // TME_02_11_13 when a note is inserted reload topics
           $scope.listTopics();
           $scope.isLoading = false;

@@ -15,7 +15,6 @@ from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
-from intercom import Intercom
 from crm.iomodels.accounts import Account
 from crm.iomodels.documents import Document, DocumentListResponse
 from crm.iomodels.events import Event, EventListResponse
@@ -33,8 +32,6 @@ from crm.iomodels.contacts import Contact, ContactInsertRequest
 from crm.endpoints_helper import EndpointsHelper
 from crm.iograph import Node, Edge, InfoNodeListResponse
 
-Intercom.app_id = 's9iirr8w'
-Intercom.api_key = 'ae6840157a134d6123eb95ab0770879367947ad9'
 
 ATTRIBUTES_MATCHING = {
     'firstname': ['First Name', 'Given Name', 'First name'],
@@ -261,7 +258,6 @@ class LeadExportListSchema(messages.Message):
     emails = messages.MessageField(iomessages.EmailListSchema, 5)
     phones = messages.MessageField(iomessages.PhoneListSchema, 6)
     addresses = messages.MessageField(iomessages.AddressListSchema, 7)
-    # customfields=messages.MessageField(iomessages.customfieldsList,8)
 
 
 class LeadExportListResponse(messages.Message):
@@ -336,8 +332,6 @@ class Lead(EndpointsModel):
         else:
             self.updated_at = datetime.datetime.now()
         ndb.Model.put(self, **kwargs)
-        # self.put_index()
-        # self.set_perm()
 
     def set_perm(self):
         about_item = str(self.key.id())
@@ -358,7 +352,6 @@ class Lead(EndpointsModel):
             title_autocomplete = ','.join(tokenize_autocomplete(
                 self.firstname + ' ' + self.lastname + ' ' + empty_string(self.title) + ' ' + empty_string(
                     self.company) + ' ' + empty_string(self.status)))
-            # addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]), self.addresses))
             if data:
                 print"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
                 print data
@@ -1001,7 +994,6 @@ class Lead(EndpointsModel):
                 )
 
         data = {'id': lead_key_async.id()}
-        # lead.put_index(data)
         if request.updated_at:
             lead.updated_at = datetime.datetime.strptime(
                 request.updated_at,
@@ -1025,11 +1017,6 @@ class Lead(EndpointsModel):
             cover_image=lead.cover_image,
             linkedin_url=lead.linkedin_url
         )
-        if request.source:
-            Intercom.create_event(
-                event_name='mark as lead from ' + request.source,
-                email=user_from_email.email
-            )
         return lead_schema
 
     @classmethod
@@ -1468,7 +1455,6 @@ class Lead(EndpointsModel):
             )
 
             infonodes_structured = Node.to_structured_data(infonodes)
-            # adress_structured=Node.to_structured_adress(infonodes)
             emails = None
             if 'emails' in infonodes_structured.keys():
                 emails = infonodes_structured['emails']
@@ -1478,9 +1464,6 @@ class Lead(EndpointsModel):
             addresses = None
             if 'addresses' in infonodes_structured.keys():
                 addresses = infonodes_structured['addresses']
-            # customfields=None
-            # if 'customfields' in infonodes_structured.keys():
-            #     customfields=infonodes_structured['customfields']
             kwargs = {
                 'firstname': lead.firstname,
                 'lastname': lead.lastname,

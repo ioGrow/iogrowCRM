@@ -22,10 +22,10 @@
         </a>
         <form style="display: inline">
             <div class="col-sm-6 pull-right" ng-show="showInviteForm" ng-class="{ 'has-error':email_empty}">
-                <label class="sr-only">Email</label>
-                <input type="email" ng-model="email.email" placeholder="Enter a email" class="form-control"
+                <label class="sr-only">{{ _('Email') }}</label>
+                <input type="email" ng-model="email.email" placeholder="{{ _('Enter a email') }}" class="form-control"
                        style="width: 58%;display: inline;">
-                <button class="btn red" ng-click="inviteNewUser(email)">Invite</button>
+                <button class="btn red" ng-click="inviteNewUser(email)">{{ _('Invite') }}</button>
                 <button ng-click="showInviteForm = false" class="btn btn-default">X</button>
             </div>
         <span ng-hide="showInviteForm">
@@ -126,7 +126,7 @@
                         class="btn btn-sm btn-default task_action pull-right" ng-click="deleteInvitedUser()"
                         ng-show="true">
                     <i class="fa fa-trash-o"></i>
-                    <span class="btn-text"> Delete invitee </span>
+                    <span class="btn-text"> {{ _("Delete invitee") }} </span>
                 </button>
             {% endif %}
             <h3>Invitees : </h3>
@@ -149,16 +149,14 @@
                                   class="fa fa-caret-up"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="inviteeSortType='invited_by';inviteeSortReverse=!inviteeSortReverse">{{ _('Invited
-                                by') }}</a>
+                            <a href="" ng-click="inviteeSortType='invited_by';inviteeSortReverse=!inviteeSortReverse">{{ _('Invited by') }}</a>
                             <span ng-show="inviteeSortType == 'invited_by' && !inviteeSortReverse"
                                   class="fa fa-caret-down"></span>
                             <span ng-show="inviteeSortType == 'invited_by' && inviteeSortReverse"
                                   class="fa fa-caret-up"></span>
                         </th>
                         <th>
-                            <a href="" ng-click="inviteeSortType='updated_at';inviteeSortReverse=!inviteeSortReverse">{{ _('Invited
-                                at') }}</a>
+                            <a href="" ng-click="inviteeSortType='updated_at';inviteeSortReverse=!inviteeSortReverse">{{ _('Invited at') }}</a>
                             <span ng-show="inviteeSortType == 'updated_at' && !inviteeSortReverse"
                                   class="fa fa-caret-down"></span>
                             <span ng-show="inviteeSortType == 'updated_at' && inviteeSortReverse"

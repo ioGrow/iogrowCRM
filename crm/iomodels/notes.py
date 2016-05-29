@@ -225,7 +225,6 @@ class Note(EndpointsModel):
         entityKey_async = note.put_async()
         entityKey = entityKey_async.get_result()
 
-        # entityKey= note.put()
 
         note.put_index()
 

@@ -51,7 +51,6 @@ class Comment(EndpointsModel):
                 search.DateField(name='created_at', value=self.created_at),
                 search.DateField(name='updated_at', value=self.updated_at),
                 search.TextField(name='title_autocomplete', value=empty_string(title_autocomplete)),
-                # search.TextField(name='addresses', value = empty_string(addresses)),
             ])
         my_index = search.Index(name="GlobalIndex")
         my_index.put(my_document)

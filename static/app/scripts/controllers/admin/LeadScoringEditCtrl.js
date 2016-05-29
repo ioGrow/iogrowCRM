@@ -1,7 +1,3 @@
-/**
- * Created by yacine hamidia on 9/29/15.
- */
-
 app.controller('LeadScoringCtrl', ['$scope', 'Auth', 'User', 'Map',
     function ($scope, Auth, User, Map) {
         $scope.leads={

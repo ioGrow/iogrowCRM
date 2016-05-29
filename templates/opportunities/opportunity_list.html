@@ -41,7 +41,7 @@
                        data-placement="bottom" title="Back all  opportunities" style="float:left;cursor:pointer">
                         <img onload="this.__gwtLastUnhandledEvent = & quot; load & quot; ;"
                              src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif"
-                             style="width: 23px; height: 17px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;"
+                             style="width: 23px; height: 17px; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC) no-repeat no-repeat 0 0;"
                              border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>
                     <div class="customCheckbox customCheckboxOnHeader " style="display: inline-block; float: left;">
                         <input ng-show="leads" title="Select lead" style="padding-top: 4px;" type="checkbox"
@@ -97,7 +97,7 @@
                               <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>-->
                         <div class="btn-group show_md"
-                             style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                             style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                             <a class="headerBtn" title="More" data-toggle="dropdown">
                                 <!-- <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>-->
                                 {{ _("More") }}
@@ -140,7 +140,7 @@
                 <div style=" padding-left: 10px;" class="pull-right">
 
                     <div class="btn-group hide_sm" ng-class="{'filterSelected': currentFilters.owner!='all'}"
-                         style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;padding-left: 0px;padding-right: 0px;">
+                         style="margin-left: 8px; margin-right: 0; vertical-align: baseline;padding-left: 0;padding-right: 0;">
                         <a class="headerBtn" title="Filter/Sort options" data-toggle="dropdown">
                             <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
@@ -179,7 +179,7 @@
                         <a class="headerBtn hide_sm" title="Help" style="margin-left: 20px; margin-right: 12px;"
                            href="#" data-toggle="dropdown">
                             <i class="fa fa-question-circle"
-                               style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
+                               style="padding-top: 0; font-size: 16px;vertical-align: text-top;"></i>
                         </a>
                         <ul class="dropdown-menu drp-dwn-right">
 
@@ -198,7 +198,7 @@
                         {% endif %}
                     {% endfor %}
                     <div class="btn-group show_sm"
-                         style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                         style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                         <a class="headerBtn" title="More" data-toggle="dropdown">
                             <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
@@ -281,95 +281,7 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-<!--<div class="row subHeader">
-    <div class="currentApp">
-       <div class="btn-group">
-           <a class="filterItem" href="#" data-toggle="dropdown" >
-            {{_(active_app.label)}}
-            <i class="icon-angle-down fa fa-angle-down"></i>
-           </a>
-           <ul class="dropdown-menu">
-            {%for application in apps %}
 
-                  <li><a href="/apps/{{ application.key.id() }}" data-toggle="modal">{{_(application.label)}}</a></li>
-
-            {%endfor%}
-           </ul>
-        </div>
-    </div>
-    <div class=" subHeaderContent">
-      <div class="col-md-9">
-      <div class="row">
-      <div class="col-md-10 col-xs-12 filter-content">
-      <div class="filterOptions">
-        <span role="button" class="filterItem activeFilter hidden-xs hiddenOnxs" ng-click="filterByOwner();selectedOption ='all'" ng-class="{activeFilter: selectedOption =='all'}">{{_('All')}} <span class="hidden-xs hiddenOnxs">{{_('Opportunities')}}</span> </span>
-        <span role="button" class="filterItem hidden-xs hiddenOnxs" ng-class="{activeFilter: selectedOption =='my'}" ng-click="filterByOwner('{{ME}}');selectedOption ='my'">{{_('My')}} <span class="hidden-xs hiddenOnxs">{{_('Opportunities')}}</span></span>
-        <div class="btn-group">
-            <a class="filterItem" href="#" data-toggle="dropdown">
-              <span class="showOnxs">{{_('Filter')}}</span>
-              <span class="hidden-xs hiddenOnxs">{{_('Stages')}}</span>
-              <i class="icon-angle-down"></i>
-            </a>
-             <ul class="dropdown-menu drp-dwn-xs-right">
-               <li class="visible-xs">
-                    <a  ng-click="filterByOwner()" href="#" data-toggle="modal">{{ _('All opportunities') }}</a>
-               </li>
-               <li class="visible-xs">
-                  <a ng-click="filterByOwner('{{ME}}')" href="#" data-toggle="modal">{{ _('My opportunities') }}</a>
-               </li>
-               <li ng-repeat="stage in opportunitystages">
-                  <a ng-click="filterByStage('<%=stage.entityKey%>')" href="#" data-toggle="modal"><%= stage.name %> </a>
-               </li>
-                <li>
-                  <a class="visibleOnPhone" ng-click="showTagFilterCard();selectedOption ='tags'" href="#" data-toggle="modal">{{ _('Tags') }}</a>
-                </li>
-             </ul>
-        </div>
-        <div class="btn-group">
-            <a class="filterItem" href="#" data-toggle="dropdown">
-              {{ _('Sort')}}
-              <i class="icon-angle-down"></i>
-            </a>
-            <ul class="dropdown-menu drp-dwn-xs-right">
-              <li>
-                <a ng-click="orderBy('-updated_at')" href="#" data-toggle="modal">{{ _('Last modified') }}</a>
-              </li>
-              <li>
-                <a ng-click="orderBy('name')" href="#" data-toggle="modal">{{ _('Name') }}</a>
-              </li>
-            </ul>
-      </div>
-       <span role="button" class="filterItem hiddenOnPhone hiddenOnmd"  ng-class="{activeFilter: selectedOption =='tags'}" ng-click="showTagFilterCard();selectedOption ='tags'"><i class="fa fa-tags"></i><span class="hidden-xs hiddenOnxs">Filter by </span> Tags</span>
-      </div>
-      </div>
-      <div class="col-md-2 col-xs-2">
-      <a href="/#/opportunities/new" class="hidden-xs hidden-sm btn red newAccountBtnOnscroll pull-right hidden afterScrollBtn">
-           {{_('New')}} <span class="hidden-xs hiddenOnxs">{{_('Opportunity')}}</span>
-         </a>
-      </div>
-      </div>
-    </div>
-    <div class="col-md-3 col-sm-1 col-xs-3 litCardSwitcher"> 
-    <div class="btn-group pull-right">
-                <a class="filterItem" href="#" data-toggle="dropdown"  ng-class="{activeFilter: selectedOption =='sort'}" >
-                  {{ _('Help ?')}}
-                  <i class="icon-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu drp-dwn-xs-left">
-                  <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
-<!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
-<!--<li><a  ng-click="wizard()" href="#"  data-toggle="modal">{{ _('Launch Wizard ') }}</a></li>
-                  <li><a target="new" href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a></li>
-                  
-                </ul>
-          </div>
-        <!--<a class="pull-right" style="font-size: 16px;color: #737373;cursor: pointer;" ng-click="switchShow()"> 
-            <i class="fa fa-th-large" style="padding-top: 6px; font-size: 20px;" ng-show="show=='list'"></i>
-            <i class="fa fa-list-ul" style="padding-top: 6px; font-size: 20px; display: none;" ng-show="show=='cards'"></i>
-        </a>-->
-<!--</div>
-</div>
-</div>-->
 <div style=" margin-top: 45px;" class="page-content">
     <div class="loader-container row" ng-show="isLoading">
         <div class="loader-dialog col-md-4 col-md-offset-4 ">
@@ -385,7 +297,7 @@
     </div>
     <div class="otherStages" ng-hide="inFinalStages">
         <div class="page-content"
-             style="margin-left: 190px;margin-top: 0px;background-color: inherit !important;border-left: none !important; padding-top: 8px !important;">
+             style="margin-left: 190px;margin-top: 0;background-color: inherit !important;border-left: none !important; padding-top: 8px !important;">
             <div class="row endStages listContainer">
                 <div class="col-md-4" style="text-align:center"><span droppable class="btn red btn-lg"
                                                                       ng-click="updateStageOpps(closeloststage)"
@@ -395,7 +307,7 @@
                 <div class="col-md-4 trashDiv" style="text-align:center">
                     <img class="img-responsive" droppable ng-drop="editbeforedeleteselection()"
                          src="/static/src/img/iotrash.png"
-                         style="margin: auto;height: 60px;width: 60px;margin-top: -6px;">
+                         style="height: 60px;width: 60px;margin: -6px auto auto;">
                 </div>
                 <div class="col-md-4" style="text-align:center"><span style="line-height: 30px;
   opacity: 0.8;  background: #28b779 !important;" droppable ng-click="updateStageOpps(closewonstage)"
@@ -414,57 +326,10 @@
       </span>
         </div>
     </div>
-    <div ng-show="isSignedIn" class="listContainer" style="margin-top:0px!important">
+    <div ng-show="isSignedIn" class="listContainer" style="margin-top:0!important">
         <!-- $cards container -->
         <div class="row ">
             <div class="col-md-12">
-                <!--<div class="row subHeaderContainer">
-                  <div class="task-actions taskCard list-group-item task-actions">
-                     <div class="row">
-                     <div class="col-md-12">
-                       <form id="task_actions" class="form-inline ng-pristine ng-valid" role="form">
-                       <div class="row">
-                       <label class="col-xs-1  col-md-1" style=" text-align: center; padding-left: 23px; ">
-                           <input ng-show="opportunities" title="Select Task" style="padding-top: 4px;" type="checkbox" ng-checked="allCardsSelected" ng-click="selectAll($event)" class="checkbox">
-                       </label>
-                       <div class="col-xs-10 col-sm-11 col-md-11 actionsbtnDiv">
-                           <!-- <button ng-show="opportunities"  title="Reopen Task" class="btn btn-sm btn-default task_action" ng-click="reopenTask()" ng-class="{disabled: selectedCards.length==0}">
-                            <i class="fa fa-unlock"></i>
-                            <span class="btn-text">
-                              Export
-                            </span>
-                            </button>-->
-                <!--<button ng-show="opportunities" title="Add Tags" ng-click="showAssigneeTags()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selectedCards.length==0}">
-                <i class="fa fa-tags"></i>
-                 <span class="btn-text">
-                  {{ _(' Tags')}}
-                 </span>
-                </button>
-               <!-- <button title="Assign someone to Task" ng-click="assigneeModal()" class="btn btn-sm btn-default task_action disabled" ng-class="{disabled: selected_tasks.length==0}">
-                  <i class="fa fa-mail-forward"></i>
-                   <span class="btn-text">
-                  Send mail
-                   </span>
-                </button>-->
-                <!--<button ng-show="opportunities" title="Delete opportunity" ng-click="editbeforedeleteselection()" class="btn btn-sm btn-default task_action  disabled" ng-class="{disabled: selectedCards.length==0}">
-                  <i class="fa fa-trash-o"></i>
-                   <span class="btn-text">
-                   {{ _(' Delete')}}
-                   </span>
-                </button>
-                <div class="pull-right newbtnactionsbar">
-                     <a id="new_opportunity" href="/#/opportunities/new" class="btn red newBtn" style=" margin-bottom: 0px; ">
-                          {{ _(' New Opportunity')}}
-                     </a>
-                </div>
-        </div>
-        
-      </div>
-    </form>
-   </div>
- </div>
-</div>
-</div>-->
                 <div class="row">
                     <div class="tab-pane">
                         <div class="row">
@@ -542,26 +407,12 @@
 
                                             <td style="text-align:center">
                                                 <span style=" font-size: 16px; text-align: center; "><%= opportunity.last_stage.name%></span>
-                                                <!--<div easypiechart class="chart chartOnList" options="chartOptionsOnList" percent="opportunity.current_stage.probability"></div>
-                                                <div class="oppStage">
-                                                    <div style=" text-align: center;">
-                                                      <span style=" font-size: 16px; color: rgb(39, 153, 28); "><%=opportunity.current_stage.probability%> %</span>
-                                                      <span style=" font-size: 15px; "><%=opportunity.current_stage.name%></span>
-
-                                                    </div>
-                                                 </div>-->
                                             </td>
                                             <td style="word-wrap: break-word;max-width:200px">
                                                 <a href="/#/accounts/show/<%= opportunity.account.id %>"
                                                    style=" font-size: 15px; font-weight: bold; ">
                                                     <%= opportunity.account.name %>
                                                 </a>
-                                                <!--  <span ng-show="opportunity.contact.firstname||opportunity.contact.lastname">
-                                                 <a href="/#/contacts/show/<%= opportunity.contact.id %>" style=" font-size: 15px; font-weight: bold; ">
-                                                    <%= opportunity.contact.firstname %>
-                                                    <%= opportunity.contact.lastname %>
-                                                 </a>(contact)
-                                                 </span> -->
                                             </td>
                                             <td style=" font-size: 11px; ">
                                                 <%=fromNow(opportunity.updated_at)%>
@@ -609,7 +460,7 @@
                                                  droppable id="card_<%=$index%>"
                                                  class="cardElement cusCardElement testStage"
                                                  ng-drop="dropTag(opportunity,-1)"
-                                                 style="width:100%;margin-right: 0px;position:relative;margin-bottom:5px;"
+                                                 style="width:100%;margin-right: 0;position:relative;margin-bottom:5px;"
                                                  ng-drag="selectedOpp(opportunity,opportunitystage)">
                                                 <div sv-placeholder class="placeholder-left">
                                                     <span></span>
@@ -670,15 +521,10 @@
                                                                 </a>
                                                             </div>
                                                             <div class="name">
-                                                                <p style="color: #d12610; text-align: center;margin-bottom: 0px;">
+                                                                <p style="color: #d12610; text-align: center;margin-bottom: 0;">
                                                                     <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_total | curr:{{ length_decimal }}:{{ length_whole_part }}:"{{ sections_delimiter }}":"{{ decimal_delimiter }}"%></span>
                                                                 </p>
-                                                                <!-- <p>
-                                                                <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_per_unit | curr:'2':'3':".":","%></span>
-                                                                  <span style=" color: rgb(156, 156, 156); font-size: 13px; " class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
-                                                                       <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
-                                                                 </span>
-                                                                 </p>-->
+
 
                                                             </div>
                                                         </div>
@@ -744,7 +590,7 @@
                             </div>
                             <div class="col-md-12 waterfall" ng-hide="blankStateaccount" ng-show="false"
                                  id="contactCardsContainer"
-                                 style="display:none;min-height: 0px !important;margin-top: -12px;">
+                                 style="display:none;min-height: 0 !important;margin-top: -12px;">
                                 <div class="labelsCardElement cardElement" data-span="all" ng-show="showTagsFilter">
                                     <button type="button" class="close" aria-hidden="true"
                                             ng-click="hideTagFilterCard()"></button>
@@ -861,15 +707,9 @@
                                                     </a>
                                                 </div>
                                                 <div class="name">
-                                                    <p style="color: #d12610; text-align: center;margin-bottom: 0px;">
+                                                    <p style="color: #d12610; text-align: center;margin-bottom: 0;">
                                                         <span style=" font-size: 16px; text-align: center; "><%= opportunity.currency %> <%= opportunity.amount_total | customCurrency:"":",":".":0 %></span>
                                                     </p>
-                                                    <!-- <p>
-                                                      <span style=" color: rgb(156, 156, 156); font-size: 13px; " class="amount-details" ng-show="opportunity.duration_unit!='fixed'">
-                                                           <%= opportunity.duration %> × <%= opportunity.amount_per_unit | customCurrency:"":",":".":0 %>/<%= opportunity.duration_unit %>
-                                                     </span>
-                                                     </p>-->
-
                                                 </div>
                                             </div>
                                             <div class="clearfix"></div>
@@ -1034,64 +874,7 @@
                             </div>
                         </div>
                     </form>
-                    <!--     <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">
-              {{_('Manage Tags')}}
-              </button>
-        </div> -->
                 </div>
-                <!--           <div class="portlet-body">
-            <ul class="list-group tags-list" id="slimList">
-              <li ng-repeat="tag_item in tags" class="list-group-item tags-list-item">
-                <div class="row">
-                  <span editable-text="tag_item.name" draggable ng-drag="dragTag(tag_item)" class="with-color" ng-click="editTag(tag_item)" ng-show="(tag_item!=edited_tag)||(!manage_tags)" style="background-color:<%=tag_item.color%>;color:<%=idealTextColor(tag_item.color)%>;"
-                  ng-model='tag_item.name'  onhide="hideEditable()" onbeforesave="inlinePatch('tag','', 'title',tag_item,$data)">
-                      <%= tag_item.name %>
-                  </span>
-                 <input 
-                 type="checkbox" 
-                 ng-show="(tag_item!=edited_tag)&&(!manage_tags)"
-                 ng-click="selectTag(tag_item,$index,$event)" 
-                 style="margin-right: 10px;" 
-                 class="pull-right customCheck" 
-                 ng-checked="isSelected()">
-
-                  <form ng-submit="doneEditTag(tag_item)" ng-show="(tag_item==edited_tag)&&(manage_tags)">
-                    <input ng-blur="doneEditTag(tag_item)" type="text" class="col-md-offset-1 col-md-7 form-control inlineEditTag " ng-model="tag_item.name">
-                  </form>
-                  <button ng-click="deleteTag(tag_item)" class="close_tag close pull-right" ng-show="manage_tags"></button>
-                </div>
-              </li>
-            </ul>
-            <li class="list-group-item tags-list-item" style="border:none;margin-bottom:5px;" ng-hide="showNewTag" ng-click="showNewTag=true">
-                <a ng-click="" class="btn-link addAnotherPhone">
-                  <i class="fa fa-tags"></i>  {{_('Add a new label')}}
-                </a>
-           </li>
-            <form class="well newTagForm" role="form" ng-show="showNewTag">
-              <button type="button" class="close"  aria-hidden="true" ng-click="showNewTag=false"></button>
-              <div class="row">
-                <div class="col-md-12 form-group">
-                  <input type="text" ng-model="tag.name" class="form-control" id="tag_name" placeholder="{{_('New label')}}">
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-8">
-                  <ul class="color_pallet_menu">
-                    <li ng-repeat="color in color_pallet" ng-click="checkColor(color)" class="color-<%=color.name%>" ng-class='{colorChecked: color.name==tag.color.name}' >
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-md-4">
-                  <input type="submit"  ng-click="addNewtag(tag)" class="btn green pull-right" value="{{_('Add')}}">
-                </div>
-              </div>
-            </form>
-            <div class="form-group btn-manage-tags" ng-show="tags">
-              <button class="btn btn-default btn-block " ng-click="manage_tags=!manage_tags;manage()">{{_('Manage Tags')}}
-              </button>
-            </div>
-          </div> -->
             </div>
         </div>
     </div>
@@ -1129,13 +912,6 @@
 
 
                     </div>
-                    <!--div class="form-group">
-                        <label  class="required col-md-3 control-label">{{_("Labels")}} </label>
-
-                       <div class="col-md-9">
-                          <input type="text"  id="id_description" class="form-control" ng-model="opportunity.description" placeholder="Add labels to categorize your deals">
-                       </div>
-                    </div-->
                     <div class="form-group">
                         <label class="required col-md-3 control-label">{{ _("Amount") }} </label>
 
@@ -1315,7 +1091,6 @@
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                 <input ng-click="deleteopportunity()" type="submit" class="btn red" value="Delete">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
             </form>
         </div>
@@ -1414,24 +1189,15 @@
                         <label style="font-size:17px !important">{{ _("You can not share") }}
                             <span ng-show="selectedCards.length == 1">{{ _("this opportunity") }}</span>
                             <span ng-show="selectedCards.length > 1">{{ _("these opportunities") }}</span>
-                            {{ _(" : you are not the owner") }} </label> <br>
+                             : {{ _("you are not the owner") }} </label> <br>
                         <label ng-show="selectedPermisssions">{{ _("The owner is:") }}</label>
                     </div>
                     <hr ng-show="selected_access!='public' && selectedPermisssions"/>
-                    <!--<div ng-show="selectedPermisssions" class='' id="collaborators" ng-hide="lead.access=='public'">
-                        <p>{{ _("Collaborators:")}}</p>
-                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
-                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
-                            <button class ="btn" ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ME}}" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
-                        </div>
 
-                    </div>
-                    <hr ng-show="selectedPermisssions"/>-->
 
                     <div ng-show="selected_access!='public' && selectedPermisssions">
                         <p>{{ _("Invite collaborators:") }}</p>
-                        <div class="form-group" style="margin-left: 0px; margin-right: 0px;">
+                        <div class="form-group" style="margin-left: 0; margin-right: 0;">
                             <input type="text" ng-model="user"
                                    typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
                                    typeahead-on-select="selectMember()" class="form-control"

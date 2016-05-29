@@ -114,19 +114,6 @@ var created_at = new Date(window.uuser.created_at);
 $('document').ready(function () {
     if (window.location.hash.indexOf('admin') != -1) {$('#sales_tabs').hide();$('#admin_tabs').show();} 
     else {$('#sales_tabs').show();$('#admin_tabs').hide();}
-    //intercom declaration
-    window.Intercom('boot', {
-            app_id: "s9iirr8w",
-            // TODO: The current logged in user's full name
-            name: window.uuser.google_display_name,
-            // TODO: The current logged in user's email address.
-            email: window.uuser.email,
-            gid: window.uuser.google_user_id,
-            completed_tour: window.uuser.completed_tour,
-            oranization: window.organization_name,
-            // TODO: The current logged in user's sign-up date as a Unix timestamp.
-            created_at: created_at.getTime() / 1000
-    });
 });
 // google sign in
 window.___gcfg = {
@@ -141,39 +128,6 @@ window.___gcfg = {
     po.src = 'https://plus.google.com/js/client:plusone.js';
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(po, s);
-})();
-// intercom function
-(function () {
-var w = window;
-var ic = w.Intercom;
-if (typeof ic === "function") {
-    ic('reattach_activator');
-    ic('update', intercomSettings);
-} else {
-    var d = document;
-    var i = function () {
-        i.c(arguments)
-    };
-    i.q = [];
-    i.c = function (args) {
-        i.q.push(args)
-    };
-    w.Intercom = i;
-    function l() {
-        var s = d.createElement('script');
-        s.type = 'text/javascript';
-        s.async = true;
-        s.src = 'https://widget.intercom.io/widget/s9iirr8w';
-        var x = d.getElementsByTagName('script')[0];
-        x.parentNode.insertBefore(s, x);
-    }
-
-    if (w.attachEvent) {
-        w.attachEvent('onload', l);
-    } else {
-        w.addEventListener('load', l, false);
-    }
-}
 })();
 // loadCSS async
 function loadCSS(e, n, o, t) {

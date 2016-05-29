@@ -184,7 +184,6 @@ accountservices.factory('Auth', function($http) {
 
   };
   Auth.processAuth = function(authResult) {
-      //Auth.$scope.immediateFailed = true;
       window.isRefreshing = false;
       if (authResult) {
         if (authResult['access_token']){
@@ -193,7 +192,6 @@ accountservices.factory('Auth', function($http) {
           Auth.goAhead(authResult);
         }
         else{
-          // Auth.renderForcedSignIn();
           window.location.replace('/sign-in');
         }
 
@@ -231,15 +229,8 @@ accountservices.factory('Auth', function($http) {
     if (!window.isRefreshing){
       Auth.$scope.apply();
         window.isRefreshing = true;
-        /*if (typeof Auth.$scope.apply() == 'function') { 
-           Auth.$scope.apply();
-        }else{
-           
-        }*/
         Auth.renderForcedSignIn();
     }
-    //window.location.reload(true);
-
   };
 
   return Auth;

@@ -114,9 +114,6 @@ class ContactImportRequest(messages.Message):
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)
 
-    # The message class that defines the ListRequest schema
-
-
 class ListRequest(messages.Message):
     limit = messages.IntegerField(1)
     pageToken = messages.StringField(2)
@@ -321,7 +318,6 @@ class Contact(EndpointsModel):
         phones = " ".join(map(lambda x: x.number, self.phones))
         websites = " ".join(map(lambda x: x.website, self.websites))
         title_autocomplete = ','.join(tokenize_autocomplete(self.firstname + ' ' + self.lastname))
-        # addresses = " \n".join(map(lambda x: " ".join([x.street,x.city,x.state, x.postal_code, x.country]) if x else "", self.addresses))
         if data:
             search_key = ['infos', 'contacts', 'tags', 'collaborators']
             for key in search_key:
@@ -927,7 +923,6 @@ class Contact(EndpointsModel):
         properties = ['owner', 'firstname', 'lastname', 'company', 'title', 'department', 'description',
                       'tagline', 'introduction', 'source', 'status', 'access', 'google_contact_id', 'display_name',
                       'profile_img_id', 'profile_img_url', 'industry', 'linkedin_url', 'cover_image']
-        # properties = Contact().__class__.__dict__
         properties = properties if isinstance(properties, list) else properties.keys()
         for p in properties:
             if hasattr(request, p):
@@ -1026,18 +1021,6 @@ class Contact(EndpointsModel):
                 entityKey=account.key.urlsafe(),
                 name=account.name
             )
-        # else:
-        #     contact.put()
-        #     account_schema = None
-        #     if len(parents_edge_list['items'])>0:
-        #         print parents_edge_list['items'][0]
-        #         #Edge.delete(parents_edge_list['items'][0].key)
-        #         # if account:
-        #         #     account_schema = AccountSchema(
-        #         #                                 id = int( account.key.id() ),
-        #         #                                 entityKey = account.key.urlsafe(),
-        #         #                                 name = account.name
-        #         #                                 )
 
         owner = model.User.get_by_gid(contact.owner)
         owner_schema = None
@@ -1277,10 +1260,6 @@ class Contact(EndpointsModel):
         contact_key = contact.put_async()
         contact_key_async = contact_key.get_result()
         for email in request.emails:
-            # user_name,domain_name =email.email.split("@")
-            # client = gdata.apps.emailsettings.client.EmailSettingsClient(domain=domain_name)
-            # client.ClientLogin(email='adminUsername@yourdomain', password='adminPassword', source='your-apps')
-            # client.RetrieveSignature(username='venu')
             Node.insert_info_node(
                 contact_key_async,
                 iomessages.InfoNodeRequestSchema(
@@ -1744,8 +1723,6 @@ class Contact(EndpointsModel):
                                 kind='infos',
                                 inverse_edge='parents'
                             )
-                            print '**************************************************'
-                            print smart_str(attribute)
                             indexed_edge = '_' + smart_str(attribute) + ' ' + contact[smart_str(attribute)]
                             EndpointsHelper.update_edge_indexes(
                                 parent_key=contact_key_async,
@@ -1755,9 +1732,6 @@ class Contact(EndpointsModel):
         if contact_key_async:
             for key in customfields_columns.keys():
                 if row[key]:
-                    print 'a3333333 ************************'
-                    print row[key]
-                    print row[key].encode('utf8', 'replace')
                     Node.insert_info_node(
                         contact_key_async,
                         iomessages.InfoNodeRequestSchema(
@@ -1770,12 +1744,6 @@ class Contact(EndpointsModel):
                             ]
                         )
                     )
-                    # except:
-                    #     type, value, tb = sys.exc_info()
-                    #     print '-------'
-                    #     print str(value.message)
-                    #     print 'there was an error on importing this row'
-                    #     print  row
 
     @classmethod
     def import_from_outlook_csv(cls, user_from_email, request, csv_file):

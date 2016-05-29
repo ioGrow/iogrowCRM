@@ -84,8 +84,6 @@ mapservices.factory('Map', function($http) {
                if (!lng) {
                 lng = parseFloat(loca.lng);
                };
-             /* var lat = parseFloat($scope.infonodes.addresses[i].lat);
-              var lng = parseFloat($scope.infonodes.addresses[i].lng);*/           
               var marker = new google.maps.Marker({
                 map: mapCanvas,
                 anchorPoint: new google.maps.Point(0, 0)
@@ -100,10 +98,7 @@ mapservices.factory('Map', function($http) {
               });
             }                
         }
-      }      
-     /* if ($scope.infonodes.addresses[0].lat) {
-         map.setCenter({lat: $scope.infonodes.addresses[0].lat, lng: $scope.infonodes.addresses[0].lng});
-      };*/
+      }
   };
   Map.autocomplete=function($scope,inputId){
       var input = (document.getElementById(inputId));
@@ -114,7 +109,6 @@ mapservices.factory('Map', function($http) {
         };
         var place = autocomplete.getPlace();
         if (!place.geometry) {
-
           $scope.notFoundAddress(place,inputId);
           return;
         }

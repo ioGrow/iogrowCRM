@@ -1,6 +1,3 @@
-/**
- * Created by Ghiboub khalid on 9/29/15.
- */
 app.controller('EmailSignatureEditCtrl', ['$scope', '$route', 'Auth', 'User', function ($scope, $route, Auth, User) {
     $("ul.page-sidebar-menu li").removeClass("active");
     $("#id_EmailSignature").addClass("active");

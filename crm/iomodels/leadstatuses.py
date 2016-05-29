@@ -12,8 +12,6 @@ class Leadstatus (EndpointsModel):
     status = ndb.StringProperty()
     created_by = ndb.KeyProperty()
     last_modified_by = ndb.KeyProperty()
-    #created_by = ndb.KeyProperty()
-    #last_modified_by = ndb.KeyProperty()
 def put(self, **kwargs):
     ndb.Model.put(self, **kwargs)
     self.put_index()

@@ -356,9 +356,7 @@ class Opportunity(EndpointsModel):
                         search.TextField(name='description', value=empty_string(self.description)),
                         search.TextField(name='account_name', value=empty_string(self.account_name)),
                         search.NumberField(name='amount_total', value=int(self.amount_total)),
-                        # search.DateField(name='closed_date', value = self.closed_date),
                         search.DateField(name='created_at', value=self.created_at),
-                        # search.DateField(name='reason_lost', value = self.reason_lost),
                         search.TextField(name='title_autocomplete', value=empty_string(title_autocomplete)),
                     ])
         my_index = search.Index(name="GlobalIndex")

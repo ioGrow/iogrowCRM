@@ -56,7 +56,7 @@
                         <div class="subHeaderActions" style="vertical-align: middle;padding-left: 15px;">
                             <a href="/#/accounts" data-toggle="tooltip" data-placement="bottom" title="Back to Leads">
                                 <img src="https://admin.google.com/a/cpanel/gwt/cpanelnew/resources/clear.cache.gif"
-                                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0px 0px; background-repeat: no-repeat no-repeat;"
+                                     style="width: 21px; height: 21px; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC) no-repeat no-repeat 0px 0px;"
                                      border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false"></a>
                         </div>
                         <div class="clearfix"></div>
@@ -80,7 +80,7 @@
                             {% endif %}
                         {% endfor %}
                         <div class="btn-group show_sm"
-                             style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                             style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                             <a class="headerBtn" title="More" data-toggle="dropdown">
                                 <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
                             </a>
@@ -90,7 +90,7 @@
                                         <li>
                                             <a href="/apps/{{ application.key.id() }}" class="" title="Settings">
                                                 <i class="fa fa-gear" style="padding-top: 6px; font-size: 16px;"></i>
-                                                Settings
+                                                {{  _("Settings") }}
                                             </a>
                                         </li>
                                     {% endif %}
@@ -197,10 +197,6 @@
                                 <div class="col-md-6">
                                     <div class="news-blocks blank-card blank-card-green margin-bottom-15">
                                         <h3>{{ _('Account Informations') }}</h3>
-                                        <!-- <div class="news-block-tags">
-                                           <strong>{{_('Phone')}}</strong>
-
-                                         </div>-->
                                         <ul class="list-unstyled contact-infos infoslist">
                                             <li ng-repeat="phone in phones">
                                                 <i class="fa fa-phone"></i>
@@ -224,10 +220,6 @@
                                                 >
                                             </div>
                                         </form>
-                                        <!--  <div class="news-block-tags">
-                                           <strong>{{_('Email')}}</strong>
-
-                                         </div>-->
                                         <ul class="list-unstyled contact-infos infoslist">
                                             <li ng-repeat="email in emails">
                                                 <i class="fa fa-envelope"></i>
@@ -248,9 +240,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--  <div class="news-block-tags">
-                                            <strong>{{_('Website')}}</strong>
-                                          </div>-->
                                         <ul class="list-unstyled contact-infos infoslist">
                                             <li ng-repeat="website in websites">
                                                 <a tabindex='-1' href="<%=prepareUrl(website.url)%>" target="_blank">
@@ -271,16 +260,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--<form class="form-inline" role="form">
-                                            <div class="" style="">
-                                              <label class="sr-only" >{{_('Website')}}</label>
-                                              <input ng-blur="pushElement(website,websites,'websites')"  ng-enter="pushElement(website,websites,'websites')" ng-model="website.url" class="form-control"  placeholder="{{_('Enter a Website')}}">
-                                            </div>
-                                        </form>-->
-                                        <!--<div class="news-block-tags">
-                                          <strong>{{_('Address')}}</strong>
-
-                                        </div>-->
                                         <ul class="list-unstyled contact-infos infoslist">
                                             <li ng-repeat="address in addresses">
                                                 <a ng-click="setLocation(address)" ng-show="address.lng" href=""
@@ -304,12 +283,6 @@
                                                         ng-click="deleteInfos(addresses,$index)"
                                                         data-dismiss="alert"></button>
                                             </li>
-                                            <!-- <a href="#addressmodal"
-                                               class="btn-link addAnotherPhone"
-                                               data-toggle="modal">
-                                               <i class="icon-plus"></i>{{_('Add a new address')}}
-                                             </a>
-                                             </li>-->
                                         </ul>
                                         <div class="row">
                                             <div class="col-md-12">
@@ -364,17 +337,17 @@
                                                   data-toggle="modal" style="color:gray;"><i
                                                        class="fa fa-pencil"></i> {{ _('Edit Custom fields') }} </a>
                                              </span>
-                                        <h3 style="margin-top:0px;"><i class="fa fa fa-list-alt"
-                                                                       style="font-size:24px"></i>{{ _(' Custom Fields') }}
+                                        <h3 style="margin-top:0;"><i class="fa fa fa-list-alt"
+                                                                     style="font-size:24px"></i>{{ _(' Custom Fields') }}
                                         </h3>
                                         <div ng-show="isEmptyArray(accounts.customfields)" style="text-align:center">
                                             <a href="/#/admin/custom_fields/4" class=" newRelatedContact"
                                                style="font-size: 13px;color: rgb(209, 38, 16);font-weight: bold;cursor:pointer;">
-                                                + <i class="fa fa-list-alt"></i> Add Custom fields
+                                                + <i class="fa fa-list-alt"></i> {{  _('Add Custom fields') }}
                                             </a>
                                         </div>
                                         <ul ng-show="!isEmptyArray(accounts.customfields)"
-                                            style="list-style: none;padding-left: 0px;">
+                                            style="list-style: none;padding-left: 0;">
                                             <li ng-repeat="cusfield in accounts.customfields" style="padding: 5px;">
                                                 <div class="form-group" style="margin-bottom: 5px;">
                                                     <div class="row">
@@ -557,29 +530,15 @@
                                         <h3>{{ _('Social links') }} <i class="fa fa-twitter"></i>
                                             <i class="fa fa-facebook-square"></i>
                                             <i class="fa fa-linkedin-square"></i></h3>
-                                        <!--<ul class="list-unstyled contact-infos infoslist" >
-                                          <li ng-repeat="sociallink in sociallinks">
-
-                                            <a  href="<%=prepareUrl(sociallink.url)%>" target="_blank">    <i class="fa fa-globe"></i> <%=sociallink.url%> </a>
-
-                                            <button type="button" class="close closeContactForm" tabindex='-1' ng-click="deleteInfos(sociallinks,$index)" data-dismiss="alert"></button>
-                                          </li>
-                                        </ul>
-                                        <form class="form-inline newLeadForm" role="form">
-                                              <div class="" style="">
-                                                <label class="sr-only" >{{_('Social link')}}</label>
-                                                <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"  ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"  class="form-control"  ng-model='sociallink.url' placeholder="{{_('Add a social link')}}" required>
-                                              </div>
-                                        </form>-->
                                         <ul ng-hide="isEmptyArray(sociallinks)" class="socialLinkssocialLiknsAbsolute"
-                                            style="list-style: none;padding-left: 0px;top: 0px;right: 0px;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0px;">
+                                            style="list-style: none;padding-left: 0;top: 0;right: 0;z-index: 3;margin-right: 5px; max-height:116px;overflow: auto;min-width:32px;margin-bottom: 0;">
                                             <li ng-repeat="sociallink in sociallinks" class="socialItem"
                                                 style="padding-bottom: 5px; float:left;display:inline-block; margin-right: 10px;">
                                                 <div class="cont" style="position:relative">
                                                     <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                        style="display: inline-block;float: left;height: 40px;padding-top: 4px;"><img
                                                             width="28"
-                                                            src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                            ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                     <a data-dismiss="modal" aria-hidden="true"
                                                        style="opacity: 1;top: 0;position: absolute;margin-top: -3px; margin-left: -10px;"
                                                        ng-click="deleteInfos(sociallinks,$index)"><i
@@ -596,12 +555,12 @@
                                         <form class="form-inline newLeadForm" role="form">
                                             <div class="cont">
                                                 <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
-                                                   style="display: inline-block;   float: left;"><img width="28"
-                                                                                                      src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
+                                                   style="display: inline-block;   float: left;">
+                                                    <img width="28" ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                 <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"
                                                        ng-blur="pushElement(sociallink,sociallinks,'sociallinks')"
                                                        ng-model="sociallink.url" placeholder="Add a social link"
-                                                       style="padding-top: 0px;padding-bottom: 0px;height: 24px;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 31px);height:28px"
+                                                       style="padding-top: 0;padding-bottom: 0;padding-left: 21px !important;display: inline-block;float: left;width: calc(100% - 31px);height:28px"
                                                        class="form-control">
 
                                                 <div class="clearfix"></div>
@@ -610,7 +569,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="news-blocks blank-card blank-card-yellow ">
-                                        <h3 style="margin-top:0px; margin-bottom: 20px;">
+                                        <h3 style="margin-top:0; margin-bottom: 20px;">
                                             <i class="fa fa-edit" style="  font-size: 24px;"></i>{{ _(' Notes') }}
                                         </h3>
 
@@ -639,15 +598,6 @@
                                             </ul>
                                             <div class="row">
                                                 <div class="col-md-12  margin-bottom-10">
-                                                    <!--<p class⁼"lead"="">
-                                                       {{_('To add an outside email to this account, forward or BCC to:')}}
-                                                       <a href="mailto:111054727630979006769@gcdc2013-iogrow.appspotmail.com">
-                                                            111054727630979006769@gcdc2013-iogrow.appspotmail.com
-                                                        </a>
-                                                        <br>
-                                                        {{_('Or just add notes to remember what\'s important.')}}
-                                                        <br>
-                                                    </p>-->
                                                     <form id="addNote" class="ng-pristine ng-valid">
                                                         <div class="form-group">
                                                             <input class="form-control ng-pristine ng-valid"
@@ -707,14 +657,13 @@
                             <div>
                                 <div class="news-block-tags" ng-show="inProfile.experiences['current-position']"
                                      style="margin-bottom:10px;">
-                                    <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{ _('We
-                                        found diffrent possible matches. Click the one you want :') }}</strong>
+                                    <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{ _('We found diffrent possible matches. Click the one you want :') }}</strong>
                                 </div>
                                 <ul ng-show="inList.length > 0" class="list-unstyled contact-infos slim-linkedin"
-                                    style="padding-left:0px">
+                                    style="padding-left:0">
                                     <li ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)"
                                         title="Select" class="linkedin-item-on-list" ng-repeat="profile in inList"
-                                        style="margin-bottom:10px padding-left:10px;cursor:pointer;min-height: 40px;  margin-bottom: 0px;  border-bottom: 1px solid rgb(230, 230, 230);"
+                                        style="padding-left:10px;cursor:pointer;min-height: 40px;  margin-bottom: 0;  border-bottom: 1px solid rgb(230, 230, 230);"
                                         id="<%= 'item_'  + $index%>"
                                         ng-class="{true:'grayBackground', false:''}[$index == 0]">
                                         <div class="linkedin-item-name" style="min-height: 40px;display: table;">
@@ -735,15 +684,14 @@
                             </div>
                             <ul class="list-unstyled contact-infos" style="padding-left:10px">
                                 <li ng-show="noLinkedInResults" style="padding-top:15px">
-                                    <p style="font-size: 16px;color: black;text-align: center;">No matching profile
-                                        found</p>
+                                    <p style="font-size: 16px;color: black;text-align: center;">{{  _('No matching profile found') }}</p>
                                 </li>
                             </ul>
                             </ul>
                             <div ng-repeat="inShortProfile in inShortProfiles" style="margin-bottom:10px"
                                  ng-show="!isEmpty(inShortProfile)&&isEmpty(inProfile)">
                                 <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                    <img src="<%=inShortProfile.logo || '/static/src/img/avatar_contact.jpg'%>"
+                                    <img ng-src="<%=inShortProfile.logo || '/static/src/img/avatar_contact.jpg'%>"
                                          style="width: 90px;height: 90px;">
 
                                 </div>
@@ -762,7 +710,7 @@
                                     </button>
                                     <button type="button" ng-click="inShortProfile={}"
                                             class="btn btn-default btn-sm pull-right btn-inline "
-                                            style="padding-bottom:3px">Cancel
+                                            style="padding-bottom:3px">{{  _('Cancel') }}
                                     </button>
                                 </div>
                                 <div class="clearfix"></div>
@@ -811,7 +759,7 @@
                                 </div>
 
                                 <ul ng-show="inProfile.industry" class="list-unstyled contact-infos"
-                                    style="padding-left:10px;margin-bottom:0px">
+                                    style="padding-left:10px;margin-bottom:0">
                                     <li style="margin-bottom:10px" ng-hide="showMoreCurrent">
                                         <div class="past-position-title">
                                             <%=inProfile.industry%>
@@ -826,7 +774,7 @@
                                 </div>
 
                                 <ul ng-show="inProfile.specialties" class="list-unstyled contact-infos"
-                                    style="padding-left:10px;margin-bottom:0px">
+                                    style="padding-left:10px;margin-bottom:0">
                                     <li style="margin-bottom:10px" ng-hide="showMoreCurrent">
                                         <div class="past-position-title">
                                             <%=inProfile.specialties%>
@@ -857,7 +805,7 @@
                                 </div>
 
                                 <ul ng-show="inProfile.company_size" class="list-unstyled contact-infos"
-                                    style="padding-left:10px;margin-bottom:0px">
+                                    style="padding-left:10px;margin-bottom:0">
                                     <li style="margin-bottom:10px" ng-hide="showMoreCurrent">
                                         <div class="past-position-title">
                                             <%=inProfile.company_size%>
@@ -868,7 +816,7 @@
                                     <div ng-repeat="worker in inProfile.workers" style="margin-bottom:10px"
                                          ng-hide="isEmpty(worker)">
                                         <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                            <img src="<%=worker.img || '/static/src/img/avatar_contact.jpg'%>"
+                                            <img ng-src="<%=worker.img || '/static/src/img/avatar_contact.jpg'%>"
                                                  style="width: 90px;height: 90px;">
 
                                         </div>
@@ -919,7 +867,7 @@
 
                             <div>
 
-                                <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px"
+                                <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0"
                                     ng-show="twList.length >= 4&&isEmptyArray(twShortProfiles)">
                                     <li ng-mouseover="showSelectTwitter($index)"
                                         ng-mouseleave="hideSelectTwitter($index)" title="Select"
@@ -935,7 +883,7 @@
                                                     class="btn blue btn-sm pull-right btn-inline "
                                                     style="margin-right: 9px;  margin-top: 15px;"
                                                     ng-class="{true:'alltimeShowSelect', false:'selectLinkedinButton'}[$index==0]">
-                                                Select
+                                                {{  _('Select') }}
                                             </button>
                                             <div class="clearfix"></div>
                                         </div>
@@ -947,14 +895,13 @@
                             </div>
                             <ul ng-show="twNoResults" class="list-unstyled contact-infos" style="padding-left:10px">
                                 <li style="padding-top:15px">
-                                    <p style="font-size: 16px;color: black;text-align: center;">No matching profile
-                                        found</p>
+                                    <p style="font-size: 16px;color: black;text-align: center;">{{  _('No matching profile found') }}</p>
                                 </li>
                             </ul>
                             <div ng-repeat="twShortProfile in twShortProfiles" style="margin-bottom:10px"
                                  ng-hide="isEmpty(twShortProfile)">
                                 <div style="display: inline-block;float: left;" class="profile-photo-linkedin">
-                                    <img src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
+                                    <img ng-src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
                                          style="width: 90px;height: 90px;">
 
                                 </div>
@@ -1006,7 +953,7 @@
                                 </div>
 
                                 <ul ng-hide="isEmptyArray(twProfile.experiences['current-position'])"
-                                    class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0px">
+                                    class="list-unstyled contact-infos" style="padding-left:10px;margin-bottom:0">
                                     <li style="margin-bottom:10px" ng-hide="showMoreCurrent">
                                         <div class="past-position-title">
                                             <%=linkedProfile.experiences.curr[0].title%>
@@ -1033,8 +980,8 @@
                                     <li ng-show="twProfile.experiences['current-position'].length > 1"
                                         style="text-align: center;">
                                         <a href="" ng-click="showMoreCurrent=!showMoreCurrent">
-                                            <span ng-hide="showMoreCurrent">+ Show more...</span>
-                                            <span ng-show="showMoreCurrent">- Show less</span></a>
+                                            <span ng-hide="showMoreCurrent">{{  _('+ Show more...') }}</span>
+                                            <span ng-show="showMoreCurrent">{{  _('- Show less') }}</span></a>
                                     </li>
                                 </ul>
                                 <div ng-hide="isEmptyArray(twProfile.formations)" ng-show="" class="news-block-tags"
@@ -1095,8 +1042,8 @@
                                     <li ng-show="twProfile.experiences['past-position'].length > 1"
                                         style="text-align: center;">
                                         <a href="" ng-click="showMore=!showMore">
-                                            <span ng-hide="showMore">+ Show more...</span>
-                                            <span ng-show="showMore">- Show less</span></a>
+                                            <span ng-hide="showMore">{{  _('+ Show more...') }}</span>
+                                            <span ng-show="showMore">{{  _('- Show less') }}</span></a>
                                     </li>
                                 </ul>
                             </div>
@@ -1145,11 +1092,10 @@
                             <div>
                                 <div class="news-block-tags" ng-show="relatedinProfile.experiences['current-position']"
                                      style="margin-bottom:10px;">
-                                    <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{ _('We
-                                        found diffrent possible matches. Click the one you want :') }}</strong>
+                                    <strong style="font-size: 14px;color: gray;"><i class="fa fa-male"></i> {{ _('We found diffrent possible matches. Click the one you want :') }}</strong>
                                 </div>
 
-                                <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0px"
+                                <ul class="list-unstyled contact-infos slim-linkedin" style="padding-left:0"
                                     ng-show="relatedinList.length > 0">
                                     <li ng-mouseover="showSelectButton($index)" ng-mouseleave="hideSelectButton($index)"
                                         title="Select" class="linkedin-item-on-list"
@@ -1175,8 +1121,7 @@
                             </div>
                             <ul ng-show="inNoResults" class="list-unstyled contact-infos" style="padding-left:10px">
                                 <li style="padding-top:15px">
-                                    <p style="font-size: 16px;color: black;text-align: center;">No matching profile
-                                        found</p>
+                                    <p style="font-size: 16px;color: black;text-align: center;">{{  _('No matching profile found') }}</p>
                                 </li>
                             </ul>
                             <img src="http://blogs.kenan-flagler.unc.edu/wp-content/uploads/2013/10/LinkedIn-Logo-2C.png"
@@ -1190,163 +1135,33 @@
         </div>
         <!-- END PAGE CONTENT-->
     </div>
-
-    <!--HKA 18.11.2013  Addresse Modal  -->
-    <div class="modal fade" id="extensionNotInstalled" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                            ng-click="lunchWindow()"></button>
-                    <h3 id="myModalLabel" style="text-align:center; ">{{ _("Install chrome extension") }}</h3>
+<div class="modal fade" id="extensionNotInstalled" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="lunchWindow()"></button>
+                <h3 id="myModalLabel" style="text-align:center; ">{{ _("Install chrome extension") }}</h3>
+            </div>
+            <div class="modal-body">
+                <div ng-show="browser=='chrome'" class="row" style="text-align: center;">
+                     <p style="margin: 25px; font-size: 18px;text-align: center;">  Click to install ioGrow extension to get all linkedin informations of your lead with one click ! </p>
+                      <button type="button" class="btn red" onclick="chrome.webstore.install()">
+                          Install chrome extension
+                      </button>
                 </div>
-                <div class="modal-body">
-                    <div ng-show="browser=='chrome'" class="row" style="text-align: center;">
-                        <p style="margin: 25px; font-size: 18px;text-align: center;"> Click to install ioGrow extension
-                            to get all linkedin informations of your lead with one click ! </p>
-                        <button type="button" class="btn red" onclick="chrome.webstore.install()">
-                            Install chrome extension
-                        </button>
-                    </div>
-                    <div ng-show="browser=='other'" class="row"
-                         style="padding:25px; text-align: center; font-size: 18px">
-                        <p> Use chrome browser to get all linkedin informations of your lead with one click ! </p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true"
-                            ng-click="lunchWindow()">{{ _('Cancel') }}</button>
+                <div ng-show="browser=='other'" class="row" style="padding:25px; text-align: center; font-size: 18px">
+                    <p>  Use chrome browser to get  all linkedin informations of your lead with one click ! </p>
                 </div>
             </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <div id="addressmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 class="modal-title">{{ _("Add Address") }}</h3>
-                </div>
-                <form id="addAddress" name="addemail" class="form-horizontal">
-                    <div class="modal-body">
-
-
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("Street") }} </label>
-
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="id_street" ng-model="address.street">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("City") }} </label>
-
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="id_city" ng-model="address.city">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("State/Province") }} </label>
-
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="id_state" ng-model="address.state">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("Postal Code") }} </label>
-
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="id_postal" ng-model="address.postal">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("Country") }} </label>
-
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="id_country" ng-model="address.country">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</button>
-
-                        <input type="submit" ng-click="pushElement(address,addresses,'addresses')" class="btn green"
-                               ng-disabled="!address.country" value="{{ _('Add this address') }}">
-                        <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-                    </div>
-                </form>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="lunchWindow()">{{ _('Cancel') }}</button>
             </div>
         </div>
+        <!-- /.modal-content -->
     </div>
-
-    <!--HKA 11.10.2013 Edit Tagline -->
-    <div id="EditTagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 class="modal-title">{{ _("Edit Lead") }}</h3>
-                </div>
-                <form name="editlead" ng-submit="updateTagline(lead)" class="form-horizontal">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("Tagline") }} </label>
-
-                            <div class="col-md-9">
-                                <!--textarea rows="2" cols="50"  id="id_tagline" ng-model="account.tagline"/-->
-                                <textarea class="form-control ng-pristine ng-valid" rows="3"
-                                          ng-model="lead.tagline"></textarea>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
-                        <button type="submit" class="btn btn-primary addContactNow">{{ _("Save") }}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!--HKA 11.10.2013 Edit Introduction  -->
-    <div id="EditIntroModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 class="modal-title">{{ _("Edit Lead") }}</h3>
-                </div>
-                <form name="edittag" ng-submit="updateintro(lead)" class="form-horizontal">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class=" col-md-3 control-label">{{ _("Introduction") }} </label>
-
-                            <div class="col-md-9">
-
-                                <textarea class="form-control ng-pristine ng-valid" rows="3"
-                                          ng-model="lead.introduction"></textarea>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
-                        <button type="submit" class="btn btn-primary addContactNow">{{ _("Save") }}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
+    <!-- /.modal-dialog -->
+</div>
 </div>
 
 <!-- END PAGE CONTAINER-->
@@ -1357,7 +1172,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">Account Address</h3>
+                <h3 class="modal-title">{{  _('Account Address') }}</h3>
             </div>
             <form id="seletesho" name="deletesho" class="form-horizontal">
                 <div class="modal-body">
@@ -1367,7 +1182,6 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                     <input ng-click="confirmaddress()" type="submit" class="btn green" value="Save">
-                    <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                 </div>
             </form>
         </div>

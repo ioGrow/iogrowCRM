@@ -12,15 +12,6 @@ from opportunitystage import OpportunitystageSchema, Opportunitystage
 from crm.search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 
-# class UpdateStatusRequest(messages.Message):
-#     entityKey = messages.StringField(1,required=True)
-#     status = messages.StringField(2,required=True)
-
-# class AccountSchema(messages.Message):
-#     id = messages.StringField(1)
-#     entityKey = messages.StringField(2)
-#     name = messages.StringField(3)
-
 class PipelineListRequest(messages.Message):
     limit = messages.IntegerField(1)
     pageToken = messages.StringField(2)
@@ -29,10 +20,6 @@ class PipelineListRequest(messages.Message):
 
 class PipelineGetRequest(messages.Message):
     id = messages.IntegerField(1, required=True)
-    # topics = messages.MessageField(ListRequest, 2)
-    # tasks = messages.MessageField(ListRequest, 3)
-    # events = messages.MessageField(ListRequest, 4)
-    # documents = messages.MessageField(ListRequest, 5)
 
 
 class PipelineInsertRequest(messages.Message):
@@ -40,15 +27,6 @@ class PipelineInsertRequest(messages.Message):
     access = messages.StringField(2)
     description = messages.StringField(3)
 
-# class CaseListRequest(messages.Message):
-#     limit = messages.IntegerField(1)
-#     pageToken = messages.StringField(2)
-#     order = messages.StringField(3)
-#     tags = messages.StringField(4,repeated = True)
-#     owner = messages.StringField(5)
-#     status = messages.StringField(6)
-#     probability = messages.StringField(7)
-#     priority = messages.IntegerField(8)
 
 class PipelineSchema(messages.Message):
     id = messages.StringField(1)
@@ -74,21 +52,6 @@ class PipelineListResponse(messages.Message):
     items = messages.MessageField(PipelineSchema, 1, repeated=True)
     nextPageToken = messages.StringField(2)
 
-
-# The message class that defines the cases.search response
-# class CaseSearchResult(messages.Message):
-#     id = messages.StringField(1)
-#     entityKey = messages.StringField(2)
-#     title = messages.StringField(3)
-#     contact_name = messages.StringField(4)
-#     account_name = messages.StringField(5)
-#     status = messages.StringField(6)
-
-
-# The message class that defines a set of cases.search results
-# class CaseSearchResults(messages.Message):
-#     items = messages.MessageField(CaseSearchResult, 1, repeated=True)
-#     nextPageToken = messages.StringField(2)
 
 class Pipeline(EndpointsModel):
     _message_fields_schema = ('id', 'entityKey', 'owner', 'access', 'name', 'created_at', 'updated_at', 'description')
@@ -121,7 +84,6 @@ class Pipeline(EndpointsModel):
     def put_index(self, data=None):
         """ index the element at each"""
         empty_string = lambda x: x if x else ""
-        # collaborators = " ".join(self.collaborators_ids)
         organization = str(self.organization.id())
         title_autocomplete = ','.join(tokenize_autocomplete(self.name))
         if data:
@@ -136,7 +98,6 @@ class Pipeline(EndpointsModel):
                     search.TextField(name='organization', value=empty_string(organization)),
                     search.TextField(name='access', value=empty_string(self.access)),
                     search.TextField(name='owner', value=empty_string(self.owner)),
-                    # search.TextField(name='collaborators', value = data['collaborators'] ),
                     search.TextField(name='title', value=empty_string(self.name)),
                     search.DateField(name='created_at', value=self.created_at),
                     search.DateField(name='updated_at', value=self.updated_at),
@@ -150,7 +111,6 @@ class Pipeline(EndpointsModel):
                     search.TextField(name='organization', value=empty_string(organization)),
                     search.TextField(name='access', value=empty_string(self.access)),
                     search.TextField(name='owner', value=empty_string(self.owner)),
-                    # search.TextField(name='collaborators', value = collaborators ),
                     search.TextField(name='title', value=empty_string(self.name)),
                     search.DateField(name='created_at', value=self.created_at),
                     search.DateField(name='updated_at', value=self.updated_at),
@@ -184,7 +144,6 @@ class Pipeline(EndpointsModel):
                         probability=os.probability,
                         amount_opportunity=os.amount_opportunity,
                         nbr_opportunity=os.nbr_opportunity,
-                        # stage_changed_at = os.stage_changed_at,
                         stage_number=os.stage_number,
                         pipeline=pipeline.key.urlsafe(),
                     )
@@ -236,34 +195,6 @@ class Pipeline(EndpointsModel):
             pipelines, next_curs, more = cls.query().filter(
                 cls.organization == user_from_email.organization).fetch_page(limit, start_cursor=curs)
         for pipeline in pipelines:
-            # is_filtered = True
-            # if request.tags and is_filtered:
-            #     end_node_set = [ndb.Key(urlsafe=tag_key) for tag_key in request.tags]
-            #     if not Edge.find(start_node=case.key,kind='tags',end_node_set=end_node_set,operation='AND'):
-            #         is_filtered = False
-            # if request.owner and case.owner!=request.owner and is_filtered:
-            #     is_filtered = False
-            # if request.status and case.status!=request.status and is_filtered:
-            #     is_filtered = False
-            # if request.priority and case.priority!=request.priority and is_filtered:
-            #     is_filtered = False
-            # if is_filtered and Node.check_permission(user_from_email,case):
-            #     count = count + 1
-            # list of tags related to this case
-            # tag_list = Tag.list_by_parent(parent_key = case.key)
-            # case_status_edges = Edge.list(
-            #                         start_node = case.key,
-            #                         kind = 'status',
-            #                         limit = 1
-            #                         )
-            # current_status_schema = None
-            # if len(case_status_edges['items'])>0:
-            #     current_status = case_status_edges['items'][0].end_node.get()
-            #     current_status_schema = CaseStatusSchema(
-            #                                             name = current_status.status,
-            #                                             status_changed_at = case_status_edges['items'][0].created_at.isoformat()
-            #                                            )
-
             owner = model.User.get_by_gid(pipeline.owner)
             owner_schema = iomessages.UserSchema(
                 id=str(owner.id),
@@ -433,9 +364,7 @@ class Pipeline(EndpointsModel):
         pipeline_key_async = pipeline_key.get_result()
         data = {'id': pipeline_key_async.id()}
         pipeline.put_index(data)
-        # current_status_schema = CaseStatusSchema(
-        #                                 name = request.status_name
-        #                                 )
+
         pipeline_schema = PipelineSchema(
             id=str(pipeline_key_async.id()),
             entityKey=pipeline_key_async.urlsafe(),
@@ -451,11 +380,6 @@ class Pipeline(EndpointsModel):
         pipeline = cls.get_by_id(int(request.id))
         if pipeline is None:
             raise endpoints.NotFoundException('Pipeline not found.')
-            #  EndpointsHelper.share_related_documents_after_patch(
-            #                                                     user_from_email,
-            #                                                     case,
-            #                                                     request
-        #                                                  )
         properties = ['owner', 'name', 'access',
                       'description']
         for p in properties:

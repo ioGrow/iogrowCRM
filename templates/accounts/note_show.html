@@ -5,16 +5,10 @@
         </h2>
     </div>
     <div class=" subHeaderContent">
-        <!-- <div class="pull-right sharebuttonDiv">
-      <a href="#sharingSettingsModal" class="btn blue jfk-button jfk-button-action" data-toggle="modal">
-        <i class="icon-lock"></i>
-        {{ _("Share") }}
-      </a>
-    </div> -->
         <h2 class="page-title">
             <a href="<%=uri%>" data-toggle="tooltip" id='testEdit' data-placement="bottom" title="Back to Accounts">
                 <img onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" src="/static/src/img/clear.cache.gif"
-                     style="width: 21px; height: 21px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC); background-position: 0 0; background-repeat: no-repeat no-repeat;"
+                     style="width: 21px; height: 21px; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAP0lEQVR42mNgGAXDApRT28AGIP5PCwP/08LA/9QKw/9kYLyggxaGYjMYHyApiBpoYSixSYqsyGwYzf+jgDQAAJylMNOnx10yAAAAAElFTkSuQmCC) no-repeat no-repeat 0 0;"
                      border="0" class="gwt-Image GI4HA0EPK cbarOpacity" aria-hidden="false">
             </a>
             <%=note.about.kind%> > <%=note.about.name%>
@@ -81,7 +75,7 @@
                             </div>
                             <div class="row comments-block">
                                 <div class="col-md-12">
-                                    <p class⁼"lead"><strong>{{ _("Discuss this message") }}</strong> </p>
+                                    <p class="lead"><strong>{{ _("Discuss this message") }}</strong> </p>
                                     <form id="addComment" class="ng-pristine ng-valid">
                                         <div class="form-group">
                                             <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3"
@@ -137,40 +131,6 @@
             </div>
         </div>
         <!-- tasks cards -->
-        <!-- <div class="col-md-3 tasks-col">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="portlet showCard">
-          <!-- <div class="portlet-title line">
-            <div class="caption">
-              {{_('Who\'s involved ?')}}
-            </div>
-          </div> 
-          <div class="portlet-body" id="chats">
-            <div class="scroller" style="height:200x" data-always-visible="1" data-rail-visible="0">
-              <div id="newTask">
-
-                <ul id="tasks" class="list-unstyled">
-
-                  <li>
-                    <a ng-click="showAddContributor=true;" class="btn-link addAnotherPhone" data-toggle="modal">{{_('Invite people to participate in this discussion')}}</a>
-                  </li>
-                </ul>
-                <div class="add-contributor" ng-show="showAddContributor">
-                  <div class="invitation" ng-show="slected_memeber">
-                    <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
-                    <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
-                  </div>
-                  <div class="control-group">
-                    <input type="text" ng-model="user" typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember()" class="input-block-level" placeholder="{{_('Enter name or email addresse to involve people in this discussion')}}">
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
     </div>
 
 </div>
@@ -197,8 +157,8 @@
 
                 <div>
                     <div class="invitation" ng-show="slected_memeber">
-                        <img class="google-avatar" src="<%= slected_memeber.google_public_profile_photo_url%>"/>
-                        <strong> <%= slected_memeber.google_display_name %> < <%=slected_memeber.email%> ></strong>
+                        <img class="google-avatar" ng-src="<%= slected_memeber.google_public_profile_photo_url%>"/>
+                        <strong> <%= slected_memeber.google_display_name %> <%=slected_memeber.email%> </strong>
                     </div>
                     <div class="control-group">
                         <input type="text" ng-model="user"
@@ -286,7 +246,6 @@
 
                 <input ng-click="deletenote()" type="submit" class="btn red" value="Delete this note"
                        data-dismiss="modal" aria-hidden="true">
-                <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
             </div>
 
         </div>

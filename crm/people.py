@@ -50,8 +50,6 @@ class linked_in:
         # br.set_debug_redirects(True)
         # br.set_debug_responses(True)
 
-        # User-Agent (this is cheating, ok?)
-        # User-Agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36
         br.addheaders = [('User-agent',
                           'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
         self.browser = br
@@ -160,8 +158,6 @@ class linked_in:
         return ",".join(["%s" % k for k in lien])
 
     def start_spider(self, keyword):
-        # url=self.start_urls(keyword)
-        # r= requests.post("http://104.154.81.17:6800/schedule.json", #
         r = requests.post("http://localhost:6800/schedule.json",  #
                           params={
                               "project": "linkedin",
@@ -282,8 +278,6 @@ class linked_in:
         else:
             person['profile_picture'] = ''
         # -------------------------------------------------------------
-        # p=soup.find('tr',{'id':'overview-recommendation-count'})
-        # person['recommendation']=get_info(p.td.strong)
         tab = []
         formation = soup.find('dd', {'class': 'websites'})
         if formation:

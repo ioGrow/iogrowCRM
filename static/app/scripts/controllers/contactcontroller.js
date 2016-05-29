@@ -215,7 +215,6 @@ $scope.SynchronizeWithGoogle=function(){
             if (localStorage['contactShow']!=undefined) { 
                      $scope.show=localStorage['contactShow'];
                   };
-                  window.Intercom('update');
 
        };
        $scope.messageFromSocialLinkCallback = function(event){
@@ -460,14 +459,6 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
     //This condition will generate the Label/Header
     if (ShowLabel) {
         var row = "";
-        
-        //This loop will extract the label from 1st index of on array
-        // for (var index in arrData[0]) {
-            
-
-        //     //Now convert each value to string and comma-seprated
-        //     row += index + ',';
-        // }
         row='firstname,lastname,company,emails,phones,addresses,';
         row = row.slice(0, -1);
         
@@ -483,7 +474,6 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
         var phonesCont="";
         var emailsCont="";
         var addressesCont="";
-               /***************************************/
             if(arrData[i]["phones"].items){
                     phonesCont=""
               for(var j=0;j< arrData[i]["phones"].items.length;j++){
@@ -492,7 +482,6 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
             
 
             }
-               /**************************************/
              if(arrData[i]["emails"].items){
                     emailsCont=""
               for(var k=0;k< arrData[i]["emails"].items.length;k++){
@@ -502,7 +491,6 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
 
             }
 
-                    /*******************************/
             if(arrData[i]["addresses"].items){
                     addressesCont="";
                     
@@ -532,12 +520,10 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
 
             }
                 
-        //2nd loop will extract each column and convert it in string comma-seprated
         row='"'+arrData[i]["firstname"]+'",'+'"'+arrData[i]["lastname"]+'",'+'"'+arrData[i]["company"]+'",'+'"'+emailsCont+'",'+'"'+phonesCont+'",'+'"'+addressesCont+'",';
       
         row.slice(0, row.length - 1);
         
-        //add a line break after each row
         CSV += row + '\r\n';
     }
 
@@ -546,7 +532,6 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
         return;
     }   
     
-    //Generate a file name
     var fileName = "My_list_of_";
     //this will remove the blank-spaces from the title and replace it with an underscore
     fileName += ReportTitle.replace(/ /g,"_");   
@@ -575,8 +560,6 @@ $scope.JSONToCSVConvertor=function(JSONData, ReportTitle, ShowLabel){
 /****************************************************************************************/
 // HADJI HICHAM -04/02/2015/
 $scope.removeTag = function(tag,lead) {
-            /*var params = {'tag': tag,'index':$index}
-            Edge.delete($scope, params);*/
             $scope.dragTagItem(tag,lead);
             $scope.dropOutTag();
         }
@@ -606,7 +589,6 @@ $scope.switchShow=function(){
                if(element.hasClass('waterfall')){
                   $scope.selectedCards=[];
                };
-              /*$scope.selectedCards=[];*/
           }
           $scope.selectAll = function($event){
          
@@ -954,10 +936,7 @@ $scope.switchShow=function(){
      $scope.result = undefined;
      $scope.q = undefined;
 
-     // $scope.$watch('searchQuery', function() {
-      //   searchParams['q'] = $scope.searchQuery;
-      //   Contact.search($scope,searchParams);
-     // });
+
      $scope.selectResult = function(){
           window.location.replace('#/contacts/show/'+$scope.searchQuery.id);
      };
@@ -990,9 +969,6 @@ $scope.switchShow=function(){
         Contact.list($scope,params);
      };
 
-/***********************************************
-      HKA 19.02.2014  tags
-***************************************************************************************/
 $scope.listTags=function(){
       var paramsTag = {'about_kind':'Contact'}
       Tag.list($scope,paramsTag);
@@ -1050,13 +1026,8 @@ $scope.selectTag= function(tag,index,$event){
          var text=element.find(".with-color");
          if($scope.selected_tags.indexOf(tag) == -1){
             $scope.selected_tags.push(tag);
-            /*element.css('background-color', tag.color+'!important');
-            text.css('color',$scope.idealTextColor(tag.color));*/
-
          }else{
-          /*  element.css('background-color','#ffffff !important');*/
             $scope.selected_tags.splice($scope.selected_tags.indexOf(tag),1);
-             /*text.css('color','#000000');*/
          }
          ;
          $scope.filterByTags($scope.selected_tags);
@@ -1225,12 +1196,10 @@ $scope.addTags=function(){
                              selected_contact.tags.push(tag);
                           };  
                        });        
-                 /* $scope.selectedCards=[];*/
                    };
                 };
                 $scope.apply();
           
-        /*$scope.selectedCards=[];  */
       };
 
   // HKA 12.03.2014 Pallet color on Tags
@@ -1438,12 +1407,10 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                 return !(Array != undefined && Array.length > 0);;
             
         }
-        $('#some-textarea1').wysihtml5();
         $scope.gotosendMail = function(email){
             $scope.email.to = email;
              $('#testnonefade').modal("show");
             $scope.smallSendMail();
-            //  $(".wysihtml5-toolbar").hide();
         }
          $scope.switchwysihtml=function(){
           if ($(".wysihtml5-toolbar").is(":visible")) {
@@ -1741,7 +1708,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                 }else {
                   console.log("no 401");
                    if(resp.code==401){
-                    // $scope.refreshToken();
                    console.log("no resp");
                     $scope.linkedLoader=false;
                     $scope.apply();
@@ -1799,7 +1765,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                  $scope.apply();
                 }else {
                    if(resp.code==401){
-                    // $scope.refreshToken();
                     $scope.isLoading = false;
                     $scope.apply();
                    };
@@ -1818,7 +1783,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                  $scope.$apply();
                 }else {
                    if(resp.code==401){
-                    // $scope.refreshToken();
                    console.log("no resp");
                     $scope.isLoading = false;
                     $scope.$apply();
@@ -2047,7 +2011,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
         $scope.deleteEvent =function(eventt){
           var ind=$scope.opportunity.timeline.indexOf(eventt)
           $scope.opportunity.timeline.splice(ind,1);
-           //$('#addLeadModal').modal('show');
          }
          $scope.deletePicked= function(){
               $scope.something_picked=false;
@@ -2129,7 +2092,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
             Tag.list($scope, paramsTag);
 
             ga('send', 'pageview', '/contacts/show');
-           window.Intercom('update');
        $scope.mapAutocompleteCalendar();
       };
      $scope.messageFromSocialLinkCallback = function(event){
@@ -2297,7 +2259,6 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
 
 $scope.lunchMapsCalendar=function(){
    
-        // var locality=address.formatted || address.street+' '+address.city+' '+address.state+' '+address.country;
          window.open('http://www.google.com/maps/search/'+$scope.ioevent.where,'winname',"width=700,height=550");
     
      }
@@ -2399,19 +2360,6 @@ $scope.lunchMapsCalendar=function(){
             $scope.selectedOpps.splice(indexInSelection, 1);
             $scope.apply();
          };
-       // 
-       /*var params_search_account ={};
-       $scope.result = undefined;
-       $scope.q = undefined;
-       $scope.$watch('searchAccountQuery', function() {
-           params_search_account['q'] = $scope.searchAccountQuery;
-           Account.search($scope,params_search_account);
-
-        });
-       $scope.selectAccount = function(){
-          $scope.contact.account = $scope.searchAccountQuery;
-
-       };*/
 
     $scope.showAddEventPopup=function(){  
          $scope.locationShosen=false;
@@ -2483,7 +2431,6 @@ $scope.lunchMapsCalendar=function(){
             }  
           };
          $scope.edgeInserted = function() {
-          /* $scope.tags.push()*/
           };
          $scope.removeTag = function(tag,$index) {
             var params = {'tag': tag,'index':$index}
@@ -2671,17 +2618,6 @@ $scope.listTags=function(){
         $('#EditContactModal').modal('hide')
 
   };
-  //HKA 01.12.2013 Edit tagline of Account
-    $scope.edittagline = function() {
-       $('#EditTagModal').modal('show');
-    };
-    //HKA 01.12.2013 Edit Introduction on Account
-    $scope.editintro = function() {
-       $('#EditIntroModal').modal('show');
-    };
-
-
-
      $scope.selectMember = function(){
         $scope.slected_memeber = $scope.user;
         $scope.user = '';
@@ -2737,15 +2673,6 @@ $scope.listTags=function(){
   $scope.editacontact = function(){
     $('#EditContactModal').modal('show');
   }
-  
-  //HKA 01.12.2013 Edit tagline of Account
-    $scope.edittagline = function() {
-       $('#EditTagModal').modal('show');
-    };
-    //HKA 01.12.2013 Edit Introduction on Account
-    $scope.editintro = function() {
-       $('#EditIntroModal').modal('show');
-    };
 // HKA 19.03.2014 inline update infonode
      $scope.inlinePatch=function(kind,edge,name,entityKey,value){
 
@@ -2831,7 +2758,6 @@ $scope.listTags=function(){
                       $scope.newTaskform=true;
                }else{
                 if (task.title!=null) {
-                        //  $('#myModal').modal('hide');
                 if (task.due){
                     var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
                     params ={'title': task.title,
@@ -2929,9 +2855,6 @@ $scope.listTags=function(){
 
  
  // HADJI HICHAM 31/05/2015
-//auto complete 
-
-//auto complete 
 
      var invitesparams ={};
      $scope.inviteResults =[];
@@ -3015,7 +2938,6 @@ $scope.checkGuests=function(){
 }
 
 
-/***************reminder**************************/
 
 $scope.deletePicked= function(){
   $scope.something_picked=false;
@@ -3066,11 +2988,9 @@ $('#timeZone').on('change', function() {
 });
 
 
- /********************************************/
  //HKA 10.11.2013 Add event
  $scope.addEvent = function(ioevent){
 
-           // $scope.allday=$scope.alldaybox;  
 
                  if (ioevent.title!=null&&ioevent.title!="") {
 
@@ -3105,14 +3025,7 @@ $('#timeZone').on('change', function() {
 
                   if (ioevent.starts_at){
                     if (ioevent.ends_at){
-                      // params ={'title': ioevent.title,
-                      //         'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      //         'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      //         'where': ioevent.where,
-                      //         'parent':$scope.lead.entityKey,
-                      //         'allday':"false",
-                      //         'access':$scope.lead.access
-                      // }
+
                     params ={'title': ioevent.title,
                       'starts_at':$filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
                       'ends_at': $filter('date')(ioevent.ends_at,['yyyy-MM-ddTHH:mm:00.000000']),
@@ -3132,15 +3045,6 @@ $('#timeZone').on('change', function() {
                         }
 
                     }else{
-                      // params ={
-                      //   'title': ioevent.title,
-                      //         'starts_at': $filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
-                      //         'where': ioevent.where,
-                      //         'parent':$scope.lead.entityKey,
-                      //         'ends_at':moment(ioevent.ends_at).add('hours',2).format('YYYY-MM-DDTHH:mm:00.000000'),
-                      //         'allday':"false",
-                      //         'access':$scope.lead.access
-                      // }
 
                             params ={'title': ioevent.title,
                       'starts_at':$filter('date')(ioevent.starts_at,['yyyy-MM-ddTHH:mm:00.000000']),
@@ -3193,7 +3097,6 @@ $('#timeZone').on('change', function() {
      }
     }
 
-//*************************************************/
 
 $scope.cancelAddOperation= function(){
   $scope.timezonepicker=false;
@@ -3278,16 +3181,6 @@ $scope.updatContactHeader = function(contact){
  $('#EditCaseModal').modal('hide');
   };
 
-
-  // HKA 01.12.2013 Show modal Related list (Opportunity)
-  $scope.addOppModal = function(){
-    $('#addOpportunityModal').modal('show');
-  };
-
-  //HKA 01.12.2013 Show modal Related list (Case)
-  $scope.addCaseModal = function(){
-    $('#addCaseModal').modal('show');
-  };
   // HKA 02.12.2013 Add Opportunty related to Contact
 $scope.prepareInfonodes = function(){
         var infonodes = [];
@@ -3363,7 +3256,6 @@ $scope.prepareInfonodes = function(){
      }
   // HKA 01.12.2013 Add Case related to Contact
     $scope.saveCase = function(casee){
-      //casee.account=$scope.contact.account.entityKey;
       $scope.case_err={};
       $scope.case_err.name = !casee.name;
       if (!$scope.case_err.name) {
@@ -3601,9 +3493,7 @@ $scope.sendEmailSelected=function(){
         Email.send($scope,params);
       };
 
-      /*$scope.editbeforedelete = function(){
-       $('#BeforedeleteContact').modal('show');
-     };*/
+
    $scope.editbeforedelete = function(item,typee){
 
     $scope.selectedItem={'item':item,'typee':typee};
@@ -3745,12 +3635,6 @@ $scope.sendEmailSelected=function(){
                 params.items = new Array();
 
                  $.each(data.docs, function(index) {
-                      /*
-                      {'about_kind':'Account',
-                      'about_item': $scope.account.id,
-                      'title':newdocument.title,
-                      'mimeType':mimeType };
-                      */
                       var item = { 'id':data.docs[index].id,
                                   'title':data.docs[index].name,
                                   'mimeType': data.docs[index].mimeType,
@@ -3791,18 +3675,12 @@ $scope.sendEmailSelected=function(){
            }
        }
         $scope.mapAutocomplete=function(){
-            //$scope.addresses = $scope.account.addresses;
             Map.autocomplete ($scope,"pac-input");
         }
-  /*  $scope.renderMaps = function(){
-          $scope.addresses = $scope.contact.addresses;
-           Map.renderwith($scope);
-      };*/
       $scope.addAddress = function(address){
 
         Map.searchLocation($scope,address);
 
-        $('#addressmodal').modal('hide');
         $scope.address={};
       };
       $scope.locationUpdated = function(addressArray){
@@ -3876,7 +3754,6 @@ $scope.sendEmailSelected=function(){
                 }else {
                   console.log("no 401");
                    if(resp.code==401){
-                    // $scope.refreshToken();
                    console.log("no resp");
                     $scope.isLoading = false;
                     $scope.apply();
@@ -4060,7 +3937,6 @@ $scope.sendEmailSelected=function(){
                        $scope.apply();
                       }else {
                          if(resp.code==401){
-                          // $scope.refreshToken();
                           $scope.isLoading = false;
                           $scope.apply();
                          };
@@ -4090,7 +3966,6 @@ $scope.sendEmailSelected=function(){
                         }else {
                           console.log("no 401");
                            if(resp.code==401){
-                            // $scope.refreshToken();
                            console.log("no resp");
                             $scope.isLoading = false;
                             $scope.$apply();
@@ -4313,9 +4188,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
       }
       $scope.pushElement = function(elem, arr, infos) {
             if (arr.indexOf(elem) == -1) {
-                // var copyOfElement = angular.copy(elem);
-                // arr.push(copyOfElement);
-                // $scope.initObject(elem);
 
                 switch (infos) {
                     case 'phones' :
@@ -4371,9 +4243,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
                         }
-
-                        $('#addressmodal').modal('hide');
-
                         break;
                 }
             } else {
@@ -4390,7 +4259,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
         $scope.mapAutocomplete();
         //Map.justAutocomplete ($scope,"relatedContactAddress",$scope.currentContact.address);
         ga('send', 'pageview', '/contacts/new');
-        window.Intercom('update');
        };
 
        //newLinkedin
@@ -4454,7 +4322,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
               'number':data.phone
             };
             $scope.pushElement(phone,$scope.phones,'phones');
-           // $scope.addressModel=data.locality;
             var email={
               'email':data.email
             };
@@ -4543,7 +4410,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
        // for the map 
 
     $scope.mapAutocomplete=function(){
-           // $scope.addresses = $scope.contact.addresses;
             Map.autocomplete ($scope,"pac-input");
         }
       $scope.addNote = function(){
@@ -4856,7 +4722,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                       }else {
                         console.log("no 401");
                          if(resp.code==401){
-                          // $scope.refreshToken();
                           $scope.isLoading = false;
                           $scope.apply();
                          };
@@ -4886,7 +4751,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                          $scope.apply();
                         }else {
                            if(resp.code==401){
-                            // $scope.refreshToken();
                            console.log("no resp");
                             $scope.isLoading = false;
                             $scope.$apply();
@@ -4943,7 +4807,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
 
               }
               $scope.saveTwitterUrl=function(shortProfile){
-              //$scope.clearContact();
               $scope.twList=[];
               $scope.twShortProfiles =[];
               $scope.twProfile={};
@@ -4957,30 +4820,13 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                 $scope.imageSrc=$scope.twProfile.profile_image_url_https;
                 $scope.profile_img.profile_img_url = $scope.twProfile.profile_image_url_https;
               };
-              /*$scope.imageSrc = $scope.twProfile.profile_picture;*/
-            //  $scope.profile_img.profile_img_url = $scope.twProfile.profile_picture;
-              /*$scope.lead.source='Linkedin';
-              $scope.lead.industry=''
-              if (!$scope.lead.title) {
-                $scope.lead.title = $scope.twProfile.title;
-              };
-              if($scope.twProfile.current_post){
-                    if ($scope.twProfile.current_post[0]){
-                        $scope.lead.company = $scope.twProfile.current_post[0];
-                    }
-                  }
-              */
-              /*if ($scope.twProfile.location!=''&&$scope.twProfile.location!=null) {*/
-               if (!$scope.addressModel) {
+              if (!$scope.addressModel) {
                     $scope.addressModel=$scope.twProfile.location; 
                   }else{
                     if ($scope.addressModel.length < $scope.twProfile.location.length) {
                       $scope.addressModel=$scope.twProfile.location;  
                     };
                   };
-              
-                 // $scope.addGeo({'formatted':$scope.twProfile.location});
-              /*};*/
               $scope.apply();
           }
             $scope.prepareUrl=function(url){
@@ -5092,7 +4938,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
            }
 
       $scope.saveLinkedinUrl=function(shortProfile){
-          //$scope.clearContact();
           $scope.inList=[];
           $scope.inShortProfiles=[];
           $scope.inProfile={};
@@ -5148,7 +4993,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                                  $scope.$apply();
                                 }else {
                                    if(resp.code==401){
-                                    // $scope.refreshToken();
                                     $scope.isLoading = false;
                                     $scope.$apply();
                                    };
@@ -5193,7 +5037,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                       }else {
                         console.log("no 401");
                          if(resp.code==401){
-                          // $scope.refreshToken();
                          console.log("no resp");
                           $scope.linkedLoader=false;
                           $scope.apply();

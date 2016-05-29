@@ -85,7 +85,7 @@
                                         <a ng-click="waterfall(); selectedTab =7;">{{ _('Gmail Synchronization')}}</a>
                                       </li> -->
                                     <li class="ng-tab sm-menu" ng-class="{active: selectedTab ==8}">
-                                        <a ng-click="waterfall(); selectedTab =8;">{{ _('TimeZone') }}</a>
+                                        <a ng-click="waterfall(); selectedTab =8;">{{ _('Time Zone') }}</a>
                                     </li>
 
 
@@ -273,8 +273,7 @@
                                                             <img src="/static/src/img/leads_blank.png"
                                                                  class="img-responsive">
 
-                                                            <p class="lead">{{ _('Update your Logo and make your brand
-                                                                your culture.') }}</p>
+                                                            <p class="lead">{{ _('Update your Logo and make your brand your culture.') }}</p>
                                                         </div>
                                                     </div>
 
@@ -292,7 +291,7 @@
                                 <div class="tab-pane active" id="tab_1_4" ng-show="selectedTab == 5"
                                      style="display: none;">
                                     <div class="row cards-container"
-                                         style="background-color: white;margin-right: -2px !important; margin-left: 0px !important;">
+                                         style="background-color: white;margin-right: -2px !important; margin-left: 0 !important;">
 
                                         <div class="col-md-12">
                                             <div class="row">
@@ -330,7 +329,7 @@
                                     <div class="row cards-container" style="
     background-color: white;
     margin-right: -2px !important; 
-    margin-left: 0px !important;">
+    margin-left: 0 !important;">
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="modal-body">
@@ -363,39 +362,6 @@
                                     </div>
                                     <!--/inner-cards-container-->
                                 </div>
-                                <!-- end language tab -->
-
-                                <!-- <div class="tab-pane active" id="tab_1_6" ng-show="selectedTab == 7" style="display: none;">
-                                    <div class="row cards-container" style="
-                                    background-color: white;
-                                    margin-right: -2px !important;
-                                    margin-left: 0px !important;">
-                                      <div class="col-md-12" >
-                                        <div class="row">
-                                            <div class="modal-body">
-                                              <h3>{{ _('Gmail Synchronization')}}</h3>
-                                              <p> {{ _('synchronize your Gmail contact  with ioGrow <b>import your leads from Gmail :')}}</b> </p>
-                                              <form id="addMember" name="addaccount" class="form-horizontal">
-                                                <div  class="radio-list" >
-                                                    <label>
-                                                        <input type="radio" name="optionRadio" value="0" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
-                                                        {{ _("turn off  ")}}
-                                                    </label>
-                                                    <label >
-                                                        <input type="radio" name="optionRadio"  value="1" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
-                                                        {{ _("turn on")}}
-                                                    </label>
-                                                </div>
-                                              </form>
-                                              </div>
-                                           <div class="modal-footer">
-                                            <button  type="submit"  ng-click="updateGmailSync()" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div> -->
-                                <!-- end language tab -->
 
                                 <!-- tab timezone -->
 
@@ -404,7 +370,7 @@
                                     <div class="row cards-container" style="
     background-color: white;
     margin-right: -2px !important; 
-    margin-left: 0px !important;">
+    margin-left: 0 !important;">
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="modal-body">
@@ -740,22 +706,9 @@
 
                                                         <img src="/static/src/img/loading.gif"
                                                              ng-show="isPatchingTimeZone"/>
-                                                        <!-- <div  class="radio-list" >
-                                                            <label>
-                                                                <input type="radio" name="optionRadio" value="0" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
-                                                                {{ _("turn off  ")}}
-                                                            </label>
-                                                            <label >
-                                                                <input type="radio" name="optionRadio"  value="1" ng-model="user.gmail_to_lead_sync" ng-click="updateGmailSync(user,{{user.key.id()}});"/>
-                                                                {{ _("turn on")}}
-                                                            </label>
-                                                        </div> -->
                                                     </form>
                                                 </div>
-                                                <!--           <div class="modal-footer">
-                                                            <button  type="submit"  ng-click="updateGmailSync()" class="btn btn-primary addContactNow">{{_("Save")}} </button>
-                                                          </div>
-                                                 -->        </div>
+                              </div>
                                         </div>
                                     </div>
                                     <!--/inner-cards-container-->
@@ -816,8 +769,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
-                <button type="submit" class="btn green" ng-click="saveOppStage(oppstage)">{{ _("Add a new Opportunity
-                    stage") }}
+                <button type="submit" class="btn green" ng-click="saveOppStage(oppstage)">{{ _("Add a new Opportunity stage") }}
                 </button>
             </div>
             </form>

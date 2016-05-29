@@ -67,8 +67,7 @@ app.controller('TaskShowController',['$scope','$filter','$route','Auth','Note','
           User.list($scope,{});
            var varTagname = {'about_kind':'Task','limit':1};
           Tag.list($scope,varTagname);
-         window.Intercom('update');
-         
+
      };
      $scope.deleteassignee = function(edgeKey){
 
@@ -482,8 +481,6 @@ $scope.commentDelete=function(commentId){
         };
 
 
-    /*********************atash file to task *********************/
-    /**********************************************************/
 // HADJI HICHAM HH- 20/10/2014 - 10:34 .
 
    $scope.showAttachFilesPicker = function() {
@@ -822,11 +819,7 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
 // HADJI HICHAM -04/02/2015
 
    $scope.removeTag = function(tag,lead) {
-            
 
-            /*var params = {'tag': tag,'index':$index}
-
-            Edge.delete($scope, params);*/
             
             $scope.dragTagItem(tag,lead);
             $scope.dropOutTag();
@@ -933,7 +926,6 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
           User.list($scope,{});
           var varTagname = {'about_kind':'Task'};
           Tag.list($scope,varTagname);
-         window.Intercom('update');
 
      };
      // We need to call this to refresh token when user credentials are invalid
@@ -1183,9 +1175,6 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
             $scope.selected_tasks.splice(index, 1);
          }
     };
-/**********************************************************
-      adding Tag member to new task
-***********************************************************/
 
 
 /************************************/
@@ -1418,9 +1407,6 @@ app.controller('AllTasksController', ['$scope','$filter','Auth','Task','User','C
         $scope.isFiltering = true;
         Task.list($scope,params);
      };
-/***********************************************
-        tags
-***************************************************************************************/
 $scope.listTags=function(){
      var varTagname = {'about_kind':'Task'};
       Tag.list($scope,varTagname);

@@ -53,9 +53,6 @@
                         <a class="headerBtn" title="{{ _('Refresh') }}" ng-click="runTheProcess();">
                             <i class="fa fa-repeat" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
-                        <!--<a class="" title="Preview" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa fa-eye" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
                         <a class="" title="{{ _('Share') }}"
                            style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;"
                            href="#sharingSettingsModal" data-toggle="modal" ng-hide="selectedCards.length==0"
@@ -71,9 +68,6 @@
                            ng-hide=" selectedCards.length==0">
                             + <i class="fa fa-tags"></i>
                         </a>
-                        <!--<a class="" title="Print" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa fa-print" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
                         <a class="headerBtn hide_md" id="sample_editable_1_new_import" title="{{ _('Import') }}"
                            ng-click="showImportModal()">
                             <i class="fa fa-cloud-upload"></i>
@@ -86,15 +80,8 @@
                            ng-click="editbeforedeleteselection()">
                             <i class="fa fa-trash-o"></i>
                         </a>
-                        <!--<a class="" title="More" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                              <i class="fa  fa-ellipsis-horizontal" style="padding-top: 6px; font-size: 16px;"></i>
-                        </a>-->
                         <div class="btn-group show_md"
-                             style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
-                            <!--  <a class="headerBtn" title="More" data-toggle="dropdown">
-                                 <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
-                                More
-                             </a> -->
+                             style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                             <ul class="dropdown-menu drp-dwn-right">
                                 <li>
                                     <a class="hide_md" title="Upload" ng-click="showImportModal()">
@@ -109,22 +96,10 @@
                             </ul>
                         </div>
                     </div>
-                    <!--<div class="communicationBottons pull-right">
-                         <a class="" title="Send an Email" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                           <i class="fa fa-envelope" style="padding-top: 6px; font-size: 16px;"></i>
-                         </a>
-                         <a class="" title="Start a Hangout" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                               <i class="fa fa-video-camera" style="padding-top: 6px; font-size: 16px;"></i>
-                         </a>
-                         <a class="" title="Tweet" style="font-size: 16px;color: #737373;cursor: pointer;margin-left: 12px; margin-right: 12px;" ng-click="switchShow()">
-                               <i class="fa fa-twitter" style="padding-top: 6px; font-size: 16px;"></i>
-                         </a>
 
-                   </div>-->
                     <div class="clearfix"></div>
                 </div>
-                <a href="/#/leads/new" id="new_lead" class="btn red newAccountBtnOnscroll pull-right"
-                   style="/* margin-top: -4px; */">
+                <a href="/#/leads/new" id="new_lead" class="btn red newAccountBtnOnscroll pull-right">
                     <i class="fa fa-road"></i> {{ _('New') }} <span class="hidden-xs hiddenOnxs">{{ _('Lead') }}</span>
                 </a>
 
@@ -138,7 +113,7 @@
                         <i class="fa fa-list" style="padding-top: 6px; font-size: 16px;" ng-show="show=='cards'"></i>
                     </a>
                     <div class="btn-group hide_sm" ng-class="{'filterSelected': leadsfilter!='all'}"
-                         style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;padding-left: 0px;padding-right: 0px;">
+                         style="margin-left: 8px; margin-right: 0; vertical-align: baseline;padding-left: 0;padding-right: 0;">
                         <a class="headerBtn" title="{{ _('Filter/Sort options') }}" data-toggle="dropdown">
                             <i class="fa  fa-filter" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
@@ -173,12 +148,10 @@
                         <a class="headerBtn hide_sm" title="{{ _('Help') }}"
                            style="margin-left: 20px; margin-right: 12px;" href="#" data-toggle="dropdown">
                             <i class="fa fa-question-circle"
-                               style="padding-top: 0px; font-size: 16px;vertical-align: text-top;"></i>
+                               style="padding-top: 0; font-size: 16px;vertical-align: text-top;"></i>
                         </a>
                         <ul class="dropdown-menu drp-dwn-right">
-                            <!--li><a ng-click="orderBy('title')" href="#" data-toggle="modal">{{ _('Title') }}</a></li-->
-                            <!--li><a ng-click="orderBy('company')" href="#" data-toggle="modal">{{ _('Company') }}</a></li-->
-                            <li><a ng-click="lead_wizard()" href="#" data-toggle="modal">{{ _('Show tips ') }}</a></li>
+                             <li><a ng-click="lead_wizard()" href="#" data-toggle="modal">{{ _('Show tips ') }}</a></li>
                             <li><a target="new"
                                    href="https://www.youtube.com/channel/UCPfenS7B-qZ81sx6tanym0w/videos">{{ _('Videos Help') }}</a>
                             </li>
@@ -194,7 +167,7 @@
                         {% endif %}
                     {% endfor %}
                     <div class="btn-group show_sm"
-                         style="margin-left: 8px; margin-right: 0px; vertical-align: baseline;">
+                         style="margin-left: 8px; margin-right: 0; vertical-align: baseline;">
                         <a class="headerBtn" title="More" data-toggle="dropdown">
                             <i class="fa  fa-ellipsis-vertical" style="padding-top: 6px; font-size: 16px;"></i>
                         </a>
@@ -351,7 +324,7 @@
                                                                  alt="<%= lead.firstname %> <%= lead.lastname %>"
                                                                  class="img-responsive profile-photo profile-photoOnList"
                                                                  err-src="/static/src/img/avatar_contact.jpg"
-                                                                 ng-src="lead.profile_img_url">
+                                                                 ng-src="<%= lead.profile_img_url %>">
                                                         </a>
                                                     </td>
                                                     <td>
@@ -407,11 +380,6 @@
                                                             <%=lead.company%>
                                                         </a>
                                                     </td>
-                                                    <!--<td>
-                                                      <a class="desc" href="/#/search/type:Lead <%=lead.status%>">
-                                                        <%=lead.status %>
-                                                      </a>
-                                                    </td>-->
                                                     <td>
                                                         <%=fromNow(lead.updated_at)%>
                                                     </td>
@@ -545,11 +513,10 @@
                                                             <img ng-show="lead.profile_img_url"
                                                                  err-src="/static/src/img/avatar_contact.jpg"
                                                                  class="img-responsive profile-photo"
-                                                                 src="<%= lead.profile_img_url %>" data-hasqtip="2">
+                                                                 ng-src="<%= lead.profile_img_url %>" data-hasqtip="2">
                                                         </a>
                                                     </div>
                                                     <div class="text">
-                                                        <!-- <button type="button" class="close deleteLeadBtn" ng-show="showClose" ng-click="editbeforedelete(lead)"></button>-->
                                                         <div class="name">
                                                             <a href="/#/leads/show/<%= lead.id %>" class="profile-link"
                                                                title="<%=lead.firstname%> <%=lead.lastname%> ">
@@ -559,15 +526,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="pitch onelineItem">
-                                                            <!--<span>
-                                                                <%=fromNow(lead.updated_at)%>
-                                                            </span>-->
-                                                            <!--<span ng-show="lead.status" class="contact-title" >
-                                                              Status:
-                                                              <a class="desc" href="/#/search/type:Lead <%=lead.status%>">
-                                                                #<%=lead.status %>
-                                                              </a>
-                                                            </span>-->
+
                         <span ng-show="lead.title">
                           <a title="<%=lead.title%>" class="desc" href="/#/search/type:Lead <%=lead.title%>">
                               <%=lead.title%>
@@ -643,8 +602,7 @@
                                                     <p class="lead">
                                                         {{ _('Immediately start building your leads database by kickstarting ioGrow with an import.') }}
                                                     </p>
-                                                    <button ng-click="showImportModal()" class="btn red"
-                                                            style="/* margin-top: -4px; */">Import your leads
+                                                    <button ng-click="showImportModal()" class="btn red">{{ _('Import your leads') }}
                                                     </button>
                                                 </div>
                                             </div>
@@ -676,7 +634,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <div class="portlet showCard" style="padding: 15px;padding-top: 10px;">
+                    <div class="portlet showCard" style="padding: 10px 15px 15px;">
                         <div class="portlet-title" style="margin-bottom: 10px;">
                             <div class="caption">
                                 <i></i>{{ _("Filter by source") }}
@@ -693,7 +651,7 @@
                                                class="fa  fa-th-large"
                                                style=""
                                                ng-class="{'fa-twitter-square' : leadsSourceFilter=='Twitter', 'fa-linkedin-square' : leadsSourceFilter=='LinkedIn','fa-th-large':leadsSourceFilter=='All'}"
-                                               style="font-size: 15px!important;margin-right: 5px;margin-left: 2px;font-size: 15px;"></i>
+                                               style="font-size: 15px!important;margin-right: 5px;margin-left: 2px;"></i>
                                             <img ng-if="leadsSourceFilter=='Gmail'||leadsSourceFilter=='ioGrow'"
                                                  ng-src="static/img/sm-<%=leadsSourceFilter|lowercase%>-true.png" alt=""
                                                  style="width: 16px;margin-right: 3px;">
@@ -834,8 +792,7 @@
                                 ng-click="selectedLead={}">{{ _("Cancel") }}</button>
 
                         <input ng-click="deleteSelection()" type="submit" class="btn red" value="Delete">
-                        <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
-                    </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -1066,7 +1023,7 @@
                             <i class="fa" ng-class="{true:'fa-resize-small', false:'fa-resize-full'}[smallModal]"
                                style="color: white;font-size: 11px;"></i>
                         </a>
-                        <h4 class="modal-title">New Message</h4>
+                        <h4 class="modal-title">{{ _('New Message') }}</h4>
                     </div>
                     <div class="modal-body">
                         <form class="ng-pristine ng-invalid ng-invalid-required">
@@ -1135,9 +1092,8 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
-                        <a ng-click="saveIntercomEvent('visiting chrome store')"
-                           href="https://chrome.google.com/webstore/detail/iogrow-chrome-extension/eafcehcahfabjibkmffekmcnlnnopkni"
-                           target="_blank" class="btn green"> Install Chrome Extension
+                        <a href="https://chrome.google.com/webstore/detail/iogrow-chrome-extension/eafcehcahfabjibkmffekmcnlnnopkni"
+                           target="_blank" class="btn green"> {{  _("Install Chrome Extension") }}
                         </a>
                     </div>
                     </form>
@@ -1168,7 +1124,6 @@
                         <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
 
                         <input ng-click="convert(lead)" type="submit" class="btn green" value="Convert">
-                        <!--input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled-->
                     </div>
                     </form>
                 </div>
@@ -1203,24 +1158,13 @@
                                 <label style="font-size:17px !important">{{ _("You can not share") }}
                                     <span ng-show="selectedCards.length == 1">{{ _("this lead") }}</span>
                                     <span ng-show="selectedCards.length > 1">{{ _("these leads") }}</span>
-                                    {{ _(": you are not the owner") }} </label> <br>
+                                     : {{ _("you are not the owner") }} </label> <br>
                                 <label ng-show="selectedPermisssions">{{ _("The owner is:") }}</label>
                             </div>
                             <hr ng-show="selected_access!='public' && selectedPermisssions"/>
-                            <!--<div ng-show="selectedPermisssions" class='' id="collaborators" ng-hide="lead.access=='public'">
-                        <p>{{ _("Collaborators:")}}</p>
-                        <div ng-repeat="collaborator in collaborators_list" class="invitation">
-                            <img class="google-avatar" ng-src="<%=collaborator.img%>"/>
-                            <%=collaborator.display_name%> <  <a> <%=collaborator.email%> </a> > 
-                            <button class ="btn" ng-hide="lead.owner.google_user_id==collaborator.google_user_id || lead.access=='public' || lead.owner.google_user_id!={{ME}}" ng-click="DeleteCollaborator(collaborator.entityKey)">x</button>
-                        </div>
-
-                    </div>
-                    <hr ng-show="selectedPermisssions"/>-->
-
                             <div ng-show="selected_access!='public' && selectedPermisssions">
                                 <p>{{ _("Invite collaborators:") }}</p>
-                                <div class="form-group" style="margin-left: 0px; margin-right: 0px;">
+                                <div class="form-group" style="margin-left: 0; margin-right: 0;">
                                     <input type="text" ng-model="user"
                                            typeahead="user as user.google_display_name + ' <' + user.email + '>' for user in users | filter:$viewValue | limitTo:8"
                                            typeahead-on-select="selectMember()" class="form-control"
@@ -1233,7 +1177,7 @@
                                                 data-dismiss="alert"></button>
                                         <div class="photo">
                                             <img class="google-avatar"
-                                                 src="<%=selected_us.google_public_profile_photo_url%>"/>
+                                                 ng-src="<%=selected_us.google_public_profile_photo_url%>"/>
                                         </div>
                                         <div class="details">
                                             <p>
