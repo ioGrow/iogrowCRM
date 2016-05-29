@@ -830,7 +830,7 @@
             <div class="modal-body">
                 <div ng-repeat="sLead in similarLeads" class="row">
                     <div class="col-sm-8 col-sm-offset-2">
-                        <img ng-src="sLead.profile_img_url || '/static/src/img/avatar_contact.jpg'"
+                        <img ng-src="<%= sLead.profile_img_url || '/static/src/img/avatar_contact.jpg' %>"
                              class="img-responsive  profile-photo-large">
                         <h3 class="text-center"><%= sLead.firstname %> <%= sLead.lastname %></h3>
 

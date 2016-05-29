@@ -1,5 +1,3 @@
-
-
 app.controller('DeleteAllRecordsCtrl', ['$scope', 'Auth', 'User','Lead','Account','Contact','Opportunity','Case','Task',
     function ($scope, Auth, User, Lead, Account, Contact, Opportunity, Case, Task) {
         $("ul.page-sidebar-menu li").removeClass("active");

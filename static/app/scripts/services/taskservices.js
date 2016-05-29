@@ -13,7 +13,6 @@ topicservices.factory('Task', function($rootScope) {
           gapi.client.crmengine.tasks.get(id).execute(function(resp) {
             if(!resp.code){
                $scope.task = resp;
-               console.log(resp);
                if($scope.task.about){
                 var url = Task.getUrl($scope.task.about.kind,$scope.task.about.id);
                $scope.uri =url;
@@ -23,11 +22,7 @@ topicservices.factory('Task', function($rootScope) {
                $scope.ListComments();
                $scope.listContributors();
                document.title = "Task: " + $scope.task.title ;
-               // $scope.isContentLoaded = true;
-               // $scope.listTopics(resp);
-               // $scope.listTasks();
-               // $scope.listEvents();
-               // Call the method $apply to make the update on the scope      
+               // Call the method $apply to make the update on the scope
                  $scope.inProcess(false);
                 $scope.apply();           
             }else {
@@ -514,10 +509,6 @@ topicservices.factory('Contributor', function($http) {
       $scope.inProcess(true);  
       gapi.client.crmengine.contributors.insert(params).execute(function(resp) {
          if(!resp.code){
-          // TME_02_11_13 when a note is inserted reload topics
-          /*$scope.listContributors();*/
-         // $('#addAccountModal').modal('hide');
-         // window.location.replace('#/accounts/show/'+resp.id);
          $scope.inProcess(false,'tag list');  
                         $scope.apply();
 

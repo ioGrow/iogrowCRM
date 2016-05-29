@@ -259,7 +259,7 @@
                          style="margin-left: 0; margin-right: 0;margin-bottom: 0 !important;">
                         <div class="col-md-12 showCover"
                              style="height: 128px; overflow: hidden;padding-left: 0;padding-right: 0;">
-                            <img src="<%=account.cover_image||twProfile.profile_banner_url||'/static/src/img/covers/11.jpg'%>"
+                            <img ng-src="<%=account.cover_image||twProfile.profile_banner_url||'/static/src/img/covers/11.jpg'%>"
                                  style="width: 100%;">
                         </div>
                         <div class="col-md-12" style="background: white;">
@@ -700,7 +700,7 @@
 
                                                     <ul class="list-unstyled contact-infos slim-linkedin"
                                                         style="padding-left:0"
-                                                        ng-show="inList.length > 0 || && isEmpty(account.linkedin_profile)">
+                                                        ng-show="inList.length > 0 && isEmpty(account.linkedin_profile)">
                                                         <li id="item_<%=$index%>"
                                                             ng-class="{true:'grayBackground', false:''}[$index == 0]"
                                                             ng-mouseover="showSelectButton($index)"
@@ -843,7 +843,7 @@
                                                              style="margin-bottom:10px" ng-hide="isEmpty(worker)">
                                                             <div style="display: inline-block;float: left;"
                                                                  class="profile-photo-linkedin">
-                                                                <img src="<%=worker.img || '/static/src/img/avatar_contact.jpg'%>"
+                                                                <img ng-src="<%=worker.img || '/static/src/img/avatar_contact.jpg'%>"
                                                                      err-src="/static/src/img/avatar_contact.jpg"
                                                                      style="width: 90px;height: 90px;">
 
@@ -1005,7 +1005,7 @@
                                                              ng-hide="isEmpty(contact)">
                                                             <div style="display: inline-block;float: left;"
                                                                  class="profile-photo-linkedin">
-                                                                <img src="<%=contact.profile_img_url || '/static/src/img/avatar_contact.jpg'%>"
+                                                                <img ng-src="<%=contact.profile_img_url || '/static/src/img/avatar_contact.jpg'%>"
                                                                      err-src="/static/src/img/avatar_contact.jpg"
                                                                      style="width: 73px !important;height: auto !important;">
 
@@ -1224,7 +1224,7 @@
                                                              ng-hide="isEmpty(twShortProfile)">
                                                             <div style="display: inline-block;float: left;"
                                                                  class="profile-photo-linkedin">
-                                                                <img src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
+                                                                <img ng-src="<%=twShortProfile.profile_image_url_https || '/static/src/img/avatar_contact.jpg'%>"
                                                                      err-src="/static/src/img/avatar_contact.jpg"
                                                                      style="width: 90px;height: 90px;">
 
@@ -2231,7 +2231,7 @@
                                                                                     <div class="col-md-6">
                                                                                         <div class="input-icon">
                                                                                             <i class="fa fa-calendar"></i>
-                                                                                            <input cusdatetimepicker
+                                                                                            <input cdatetimepicker
                                                                                                    data-model="opportunity.closed_date"
                                                                                                    type="text"
                                                                                                    class="form-control"
@@ -5223,10 +5223,6 @@
             defaultContainerWidth: 840,
             autoresize: true
         });
-        $('.waterfall5').waterfall({
-            colMinWidth: 220,
-            defaultContainerWidth: 840,
-            autoresize: true
-        });
+
 
     </script>

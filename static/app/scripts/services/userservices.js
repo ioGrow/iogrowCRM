@@ -70,7 +70,6 @@ accountservices.factory('User', function ($http) {
         gapi.client.crmengine.user.get(id).execute(function (resp) {
             if (!resp.code) {
                 $scope.user = resp;
-                console.log(resp);
             } else {
                 if (resp.code == 401) {
                     $scope.refreshToken();
@@ -162,7 +161,6 @@ accountservices.factory('User', function ($http) {
             if (!resp.code) {
                 $scope.user = resp;
                 $scope.isPatchingTimeZone = false;
-                console.log(resp);
                 $scope.inProcess(false);
                 $scope.apply();
                 window.location.reload();

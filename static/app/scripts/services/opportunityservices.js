@@ -1,6 +1,5 @@
 var opportunityservices = angular.module('crmEngine.opportunityservices',[]);
 
-
 opportunityservices.factory('Opportunity', function($rootScope) {
 
   var Opportunity = function(data) {

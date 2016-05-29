@@ -1,4 +1,3 @@
-
 app.controller('LeadScoringCtrl', ['$scope', 'Auth', 'User', 'Map',
     function ($scope, Auth, User, Map) {
         $scope.leads={

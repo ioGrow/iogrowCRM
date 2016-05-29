@@ -413,33 +413,6 @@ app.directive('editoptions', function($compile) {
     }
   }
 });
-app.directive('cusdatetimepicker', function($parse) {
-      return {
-      restrict: 'A',
-      require:'?ngModel',
-       link: function($scope, element, attrs,ngModel) {
-        var dp = $(element);
-        var params={
-          "dateFormat": (attrs.dateFormat) ? attrs.dateFormat : "YY/MM/DD h:m",
-          "closeOnSelected": (attrs.closeOnSelected != "false"),
-          "autodateOnStart": (attrs.autodateOnStart == "true"),
-          "onHide": function(handler){
-                         model.assign($scope, dp.handleDtpicker('getDate'));
-                         $scope.$apply();
-          }
-
-        }
-        var model = $parse(attrs.model);
-        dp.appendDtpicker(params);
-        dp.val(null);
-        $scope.$watch(attrs.model, function(newValue, oldValue) {
-              if (newValue==null) {
-                dp.val(null);
-              };
-        });
-    }
-  }
-});
 app.directive('cdatetimepicker', function($parse) {
       return {
       restrict: 'A',

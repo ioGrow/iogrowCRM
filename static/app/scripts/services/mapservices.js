@@ -109,7 +109,6 @@ mapservices.factory('Map', function($http) {
         };
         var place = autocomplete.getPlace();
         if (!place.geometry) {
-
           $scope.notFoundAddress(place,inputId);
           return;
         }

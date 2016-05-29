@@ -289,7 +289,6 @@ leadservices.factory('Lead', function ($rootScope) {
                         $scope.hilightTopic();
                     }
                     ;
-
                 } else {
                     if (resp.code == 401) {
                         // $scope.refreshToken();
@@ -556,7 +555,6 @@ leadservices.factory('Lead', function ($rootScope) {
                 $scope.isMoreItemLoading = false;
                 $scope.isFiltering = false;
                  $( '#leadCardsContainer' ).trigger('resize');
-
                 $scope.inProcess(false);
                 $scope.apply();
 
@@ -651,7 +649,6 @@ leadservices.factory('Lead', function ($rootScope) {
             'body': params,
             'callback': (function (resp) {
                 if (!resp.code) {
-                    console.log(resp);
                     callback(resp.items);
                 } else {
                     $('#addLeadModal').modal('hide');
@@ -729,7 +726,6 @@ leadservices.factory('Lead', function ($rootScope) {
                 } if (!resp.code && resp.id) {
                     $scope.leadInserted(resp.id);
                 } else if (!resp.id) {
-                    console.log(resp);
                     $scope.orginalUser = resp;
                 } else {
                     $('#addLeadModal').modal('hide');
@@ -753,7 +749,6 @@ leadservices.factory('Lead', function ($rootScope) {
         gapi.client.crmengine.leads.convertv2(params).execute(function (resp) {
             if (!resp.code) {
                 $('#convertLeadModal').modal('hide');
-                console.log(resp);
                 $scope.inProcess(false);
                 $scope.apply();
                 $scope.leadConverted(resp.id);
@@ -798,7 +793,6 @@ leadservices.factory('Lead', function ($rootScope) {
         $scope.apply();
         gapi.client.crmengine.leads.import_from_csv_second_step(params).execute(function (resp) {
             if (!resp.code) {
-                console.log(resp);
                 $scope.showImportMessages();
                 $scope.inProcess(false);
                 $scope.apply();
