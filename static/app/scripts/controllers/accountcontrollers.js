@@ -3172,17 +3172,6 @@ $scope.lunchMapsCalendar=function(){
             $scope.note.title = '';
             $scope.note.content = '';
         };
-        $scope.editaccount = function() {
-            $('#EditAccountModal').modal('show');
-        };
-        //HKA 22.11.2013 Edit tagline of Account
-        $scope.edittagline = function() {
-            $('#EditTagModal').modal('show');
-        };
-        //HKA Edit Introduction on Account
-        $scope.editintro = function() {
-            $('#EditIntroModal').modal('show');
-        };
         //HKA 09.11.2013 Add a new Tasks
         $scope.addTask = function(task) {
                 if ($scope.newTaskform==false) {
@@ -3542,23 +3531,6 @@ $scope.updateEventRenderAfterAdd= function(){};
             Account.get($scope, params);
 
         };
-
-        //HKA 18.11.2013 Show modal Related list (Contact)
-
-        $scope.addContactModal = function() {
-            $('#addContactModal').modal('show');
-        };
-
-        // HKA 18.11.2013 Show modal Related list (Opportunity)
-        $scope.addOppModal = function() {
-            $('#addOpportunityModal').modal('show');
-        };
-
-        //HKA 18.11.2013 Show modal Related list (Case)
-        $scope.addCaseModal = function() {
-            $('#addCaseModal').modal('show');
-        };
-
         //HKA 22.11.2013 List of Contacts related to account
         $scope.listContacts = function() {
             var params = {
@@ -3834,8 +3806,6 @@ $scope.updateEventRenderAfterAdd= function(){};
         $scope.addAddress = function(address){
 
         Map.searchLocation($scope,address);
-
-        $('#addressmodal').modal('hide');
         $scope.address={};
         };
       $scope.locationUpdated = function(addressArray){
@@ -3977,8 +3947,6 @@ $scope.updateEventRenderAfterAdd= function(){};
         $scope.addAddress = function(address) {
 
             Map.searchLocation($scope, address);
-
-            $('#addressmodal').modal('hide');
             $scope.address = {};
         };
         $scope.locationUpdated = function(addressArray) {
@@ -4166,9 +4134,6 @@ $scope.updateEventRenderAfterAdd= function(){};
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
                         }
-
-                        $('#addressmodal').modal('hide');
-
                         break;
                     case 'notes' :
                         if (elem.title||elem.content) {
@@ -4930,9 +4895,6 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
                         }
-
-                        $('#addressmodal').modal('hide');
-
                         break;
                 }
             } else {

@@ -86,12 +86,9 @@ module.exports = function (grunt) {
               'wysihtml5',
               'bootstrap-wysihtml5',
               'jquery.uniform',
-              'jquery-simple-datetimepicker',
               'bootstrap-datepicker',
               'bootstrap-hover-dropdown',
-              'twitter-bootstrap-wizard',
               'angular-sortable-view',
-              'datetimepicker',
               'fullcalendar'
             ],
             dependencies: {
@@ -117,6 +114,7 @@ module.exports = function (grunt) {
                 'css': 'static/build/css/_sync.css'
             },
             include: [
+              'datetimepicker',
               'bootstrap',
               'angular-bootstrap',
               'jquery-ui-maps',
@@ -125,6 +123,7 @@ module.exports = function (grunt) {
               'jquery-validation'
             ],
             dependencies: {
+                'datetimepicker': 'jquery',
                 'angular-bootstrap': 'bootstrap'
             },
             mainFiles: {

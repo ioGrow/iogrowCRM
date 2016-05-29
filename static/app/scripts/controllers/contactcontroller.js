@@ -1407,12 +1407,10 @@ document.getElementById("some-textarea").value=$scope.emailSignature;
                 return !(Array != undefined && Array.length > 0);;
             
         }
-        $('#some-textarea1').wysihtml5();
         $scope.gotosendMail = function(email){
             $scope.email.to = email;
              $('#testnonefade').modal("show");
             $scope.smallSendMail();
-            //  $(".wysihtml5-toolbar").hide();
         }
          $scope.switchwysihtml=function(){
           if ($(".wysihtml5-toolbar").is(":visible")) {
@@ -2620,17 +2618,6 @@ $scope.listTags=function(){
         $('#EditContactModal').modal('hide')
 
   };
-  //HKA 01.12.2013 Edit tagline of Account
-    $scope.edittagline = function() {
-       $('#EditTagModal').modal('show');
-    };
-    //HKA 01.12.2013 Edit Introduction on Account
-    $scope.editintro = function() {
-       $('#EditIntroModal').modal('show');
-    };
-
-
-
      $scope.selectMember = function(){
         $scope.slected_memeber = $scope.user;
         $scope.user = '';
@@ -2686,15 +2673,6 @@ $scope.listTags=function(){
   $scope.editacontact = function(){
     $('#EditContactModal').modal('show');
   }
-  
-  //HKA 01.12.2013 Edit tagline of Account
-    $scope.edittagline = function() {
-       $('#EditTagModal').modal('show');
-    };
-    //HKA 01.12.2013 Edit Introduction on Account
-    $scope.editintro = function() {
-       $('#EditIntroModal').modal('show');
-    };
 // HKA 19.03.2014 inline update infonode
      $scope.inlinePatch=function(kind,edge,name,entityKey,value){
 
@@ -2780,7 +2758,6 @@ $scope.listTags=function(){
                       $scope.newTaskform=true;
                }else{
                 if (task.title!=null) {
-                        //  $('#myModal').modal('hide');
                 if (task.due){
                     var dueDate= $filter('date')(task.due,['yyyy-MM-ddT00:00:00.000000']);
                     params ={'title': task.title,
@@ -3204,16 +3181,6 @@ $scope.updatContactHeader = function(contact){
  $('#EditCaseModal').modal('hide');
   };
 
-
-  // HKA 01.12.2013 Show modal Related list (Opportunity)
-  $scope.addOppModal = function(){
-    $('#addOpportunityModal').modal('show');
-  };
-
-  //HKA 01.12.2013 Show modal Related list (Case)
-  $scope.addCaseModal = function(){
-    $('#addCaseModal').modal('show');
-  };
   // HKA 02.12.2013 Add Opportunty related to Contact
 $scope.prepareInfonodes = function(){
         var infonodes = [];
@@ -3714,7 +3681,6 @@ $scope.sendEmailSelected=function(){
 
         Map.searchLocation($scope,address);
 
-        $('#addressmodal').modal('hide');
         $scope.address={};
       };
       $scope.locationUpdated = function(addressArray){
@@ -4277,9 +4243,6 @@ app.controller('ContactNewCtrl', ['$scope', '$http', 'Auth', 'Contact', 'Account
                             arr.push(copyOfElement);
                             $scope.initObject(elem);
                         }
-
-                        $('#addressmodal').modal('hide');
-
                         break;
                 }
             } else {

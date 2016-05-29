@@ -1311,111 +1311,16 @@
                                               Cancel
                                           </button>
                                         </span>
-                                                            </form>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- $ contacts tab -->
-                                <div class="tab-pane active" id="tab_1_3" ng-show="selectedTab == 3"
-                                     style="display: none;">
-                                    <div class="row cards-container">
-                                        <div class="btn-group relbutton">
-                                            <button ng-click="addContactModal()" id="sample_editable_1_new"
-                                                    class="btn red">
-                                                {{ _('Add person') }}
-                                            </button>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                <div class="col-md-12 waterfall" ng-hide="blankStateaccount">
-                                                    <div droppable ng-repeat="contact in contacts"
-                                                         data-column="<%=getPosition($index)%>" class="cardElement"
-                                                         ng-drop="dropTag(contact)"
-                                                         ng-class="{rightcards: getPosition($index)==4}">
-                                                        <div class="detailsSection">
-                                                            <div class="head">
-                                                                <div class="pic">
-                                                                    <a href="/#/contact/show/<%= contact.id %>"
-                                                                       class="startup-link"
-                                                                       title="contact.firstname"><img
-                                                                            ng-hide="account.logo_img_id"
-                                                                            alt="contact.firstname"
-                                                                            class="img-responsive img-thumbnail"
-                                                                            src="/static/src/img/default_company.png">
-                                                                        <img ng-show="account.logo_img_id"
-                                                                             alt="account.name"
-                                                                             class="img-responsive img-thumbnail"
-                                                                             ng-src="https://docs.google.com/uc?id=<%= account.logo_img_id %>"
-                                                                             data-hasqtip="2">
-                                                                    </a>
-                                                                </div>
-                                                                <div class="text">
-                                                                    <div class="name"><a
-                                                                            href="/#/contact/show/<%= contact.id %>"
-                                                                            class="profile-link" data-id="126085"
-                                                                            data-type="Startup"><%= contact.firstname %>
-                                                                        <%= contact.lastname %></a></div>
-                                                                    <div class="pitch">
-                                                <span ng-show="contact.account_type">
-                                                  <a href="/#/search/type:contact <%=contact.title%>"> #<%=
-                                                      contact.title %></a>
-                                                </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="clearfix"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="tagsSection"
-                                                             ng-class="{hidden: contact.tags==null}">
-                                                            <div class="sectionContent">
-                                                                <a ng-repeat="tag in contact.tags"
-                                                                   href="/#/search/type:contact tags:<%=tag.id%>"> <span
-                                                                        class="pull-right task-label task-tag badge ng-scope ng-binding"
-                                                                        style="background-color: <%=tag.color%>;color:<%=idealTextColor(tag.color)%>;">  <%= tag.name %></span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--blank stat-->
-                                                    <div ng-show="blankStateaccount" data-span="3"
-                                                         class="col-md-12 responsive" data-tablet="span6"
-                                                         data-desktop="span12">
-                                                        <div class="dashboard-stat cards">
-                                                            <div class="blank_slate_arrow"></div>
-                                                            <div class="thumbnail blank_slate_body">
-                                                                <img class="img-responsive"
-                                                                     src="/static/src/img/accounts_blank.png">
-                                                                <p class="lead">{{ _('Accounts  pages includes a detailed page for each customer, partner, or investor in your ecosystem. You and your co-workers can collaborate to get a deep understanding.') }}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div ng-show="isFiltering * !accounts" data-span="3"
-                                                         class="col-md-12 responsive" data-tablet="span6"
-                                                         data-desktop="span12">
-                                                        <div class="dashboard-stat cards">
-                                                            <div class="blank_slate_arrow"></div>
-                                                            <div class="thumbnail blank_slate_body">
-
-                                                                <p class="lead">{{ _('No results found, try with another filter') }}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="clearfix"></div>
-
-                                                </div><!--/inner-cards-container-->
-                                            </div><!--/inner-cards-container-->
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                                <!-- $ opportunities tab -->
-                                <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5"
-                                     style="display: none;">
+                                     </form>
+                              </li>
+                          </ul>
+                      </div>                     
+                    </div>
+                  </div>
+                </div>
+              </div>
+                <!-- $ opportunities tab -->
+                <div class="tab-pane active" id="tab_1_5" ng-show="selectedTab == 5" style="display: none;">
 
                                     <div class="row cards-container">
                                         <div class="col-md-12" ng-show="showNewOpp">
@@ -2709,241 +2614,18 @@
 
                                     </div>
 
-                                </div>
-                                <!-- $ send email tab -->
-                                <div class="tab-pane active" id="tab_1_9" ng-if="(selectedTab == 9)">
-                                    <div class="row slimform">
-                                        <div class="col-md-6">
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard"
-                                                 ng-show="linkedProfile.headline||linkedProfile.locality||linkedProfile.industry||linkedProfile.relation">
-                                                <h3>{{ _('Contact Informations from Linkedin') }}</h3>
-                                                <div class="news-block-tags">
-                                                    <strong>{{ _('profession') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=linkedProfile.title%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{ _('Locality') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=linkedProfile.locality%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{ _('industry') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=linkedProfile.industry%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{ _('Relation') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=linkedProfile.relation%>
-                                                    </li>
-                                                </ul>
-
-                                            </div>
-                                            <div class="news-blocks blank-card blank-card-bluep newsCard"
-                                                 ng-show="linkedProfile.current_post || linkedProfile.past_post">
-                                                <h3>{{ _('Overview') }}</h3>
-                                                <div class="news-block-tags" ng-show="linkedProfile.current_post">
-                                                    <strong>{{ _('Current position') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="post in linkedProfile.current_post">
-                                                        - <%=post%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags" ng-show="linkedProfile.past_post">
-                                                    <strong>{{ _('Past position') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="post in linkedProfile.past_post">
-                                                        - <%=post%>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard"
-                                                 ng-hide="isEmpty(linkedProfile.experiences)">
-                                                <h3>{{ _('Experiences') }}</h3>
-                                                <div class="news-block-tags"
-                                                     ng-show="linkedProfile.experiences['current-position']">
-                                                    <strong>{{ _('current positions') }}</strong>
-                                                </div>
-
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="exp in linkedProfile.experiences['current-position']">
-                                                        - <%=exp.description%> , <%=exp.title%> , <%=exp.organisation%>
-                                                        ,<%=exp.period%>
-                                                    </li>
-                                                </ul>
-
-                                                <div class="news-block-tags"
-                                                     ng-show="linkedProfile.experiences['past-position']">
-                                                    <strong>{{ _('past positions') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="exp in linkedProfile.experiences['past-position']">
-                                                        - <%=exp.description%> , <%=exp.title%> , <%=exp.organisation%>
-                                                        ,<%=exp.period%>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard"
-                                                 ng-show="twitterProfile.description_of_user">
-                                                <h3>{{ _('General Informations from Twitter') }}</h3>
-                                                <img class="google-avatar pull-right"
-                                                     ng-src="<%=twitterProfile.profile_image_url_https%>"/>
-                                                <div class="news-block-tags"
-                                                     ng-show="twitterProfile.description_of_user">
-                                                    <strong>{{ _('Description of user') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-
-                                                    <li>
-                                                        <%=twitterProfile.description_of_user%>
-                                                    </li>
-
-
-                                                </ul>
-
-                                                <div class="news-block-tags">
-                                                    <strong>{{ _('Twitter Link') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <a href="https://twitter.com/<%=twitterProfile.screen_name%>">
-                                                            <i class="fa fa-twitter"></i>@<%=twitterProfile.screen_name%>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{ _('Location') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.location%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{ _('Language') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.lang%>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="news-blocks blank-card blank-card-red newsCard"
-                                                 ng-show="witterProfile.nbr_tweets||twitterProfile.followers_count||twitterProfile.friends_count">
-                                                <h3>{{ _('Stats from Twitter') }}</h3>
-                                                <div class="news-block-tags">
-                                                    <strong>{{ _('Number of tweets') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.nbr_tweets%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{ _('Number of followers') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.followers_count%>
-                                                    </li>
-                                                </ul>
-                                                <div class="news-block-tags">
-                                                    <strong>{{ _('Number of friends') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        <%=twitterProfile.friends_count%>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="news-blocks blank-card blank-card-red newsCard"
-                                                 ng-show="twitterProfile.last_tweet_text||twitterProfile.last_tweet_retweet_count||twitterProfile.last_tweet_favorite_count">
-                                                <h3> {{ _('Tweets') }}</h3>
-                                                <div class="news-block-tags">
-                                                    <strong>{{ _('Last Tweet:') }}</strong>
-                                                </div>
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li>
-                                                        {{ _('Text:') }}
-                                                        <br/>
-                                                        <%=twitterProfile.last_tweet_text%>
-                                                    </li>
-                                                </ul>
-                                                <ul class="list-unstyled contact-infos">
-                                                    {{ _('Number of retweets:') }}
-                                                    <br/>
-                                                    <%=twitterProfile.last_tweet_retweet_count%>
-                                                    <br/>
-                                                    {{ _('Number of favorites:') }}
-                                                    <br/>
-                                                    <%=twitterProfile.last_tweet_favorite_count%>
-
-                                                </ul>
-
-
-                                            </div>
-
-
-                                            <div class="news-blocks blank-card blank-card-red newsCard"
-                                                 ng-show="linkedProfile.resume">
-                                                <h3>{{ _('Summary') }}</h3>
-                                                <div class="news-block-tags">
-
-                                                    <div class="form-group row">
-                                                        <label style="margin:10px;"><%=linkedProfile.resume%></label>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard"
-                                                 ng-show="linkedProfile.skills">
-                                                <h3>{{ _('Skills') }}</h3>
-
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="skill in linkedProfile.skills">
-                                                        - <%=skill%>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="news-blocks blank-card blank-card-yellow newsCard"
-                                                 ng-show="linkedProfile.formations">
-                                                <h3>{{ _('education') }}</h3>
-
-                                                <ul class="list-unstyled contact-infos">
-                                                    <li ng-repeat="formation in linkedProfile.formations">
-                                                        - <%=formation%>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                      </div>
+                      <!-- $ linkedin profile -->
+              </div>
             </div>
+          </div>
         </div>
-        <!-- tasks cards -->
-        <!-- tasks cards -->
-        <div class="col-md-3 tasks-col">
-            <div class="row">
+      </div>
+    </div>
+    <!-- tasks cards -->
+    <!-- tasks cards -->
+<div class="col-md-3 tasks-col">
+  <div class="row">
                 <div class="col-md-12">
                     <div class="portlet showPage rightCardContent">
                         <div class="col-md-12">
@@ -3362,152 +3044,34 @@
         </div>
     </div>
 
-    <!--HKA 11.10.2013 Edit Tagline -->
-    <div id="EditTagModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel" class="modal-title">{{ _("Edit Contact") }}</h3>
-                </div>
-
-                <div class="modal-body">
-                    <form id="editTagline" name="editlead" ng-submit="updateTagline(account)" class="form-horizontal">
-
-
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("Tagline") }} </label>
-
-                            <div class="col-md-9">
-                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3"
-                                          ng-model="account.tagline"></textarea>
-
-                            </div>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
-                    <button type="submit" class="btn btn-primary addContactNow">{{ _("Save") }} </button>
-                </div>
-                </form>
+<div class="modal fade" id="extensionNotInstalled" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="lunchWindow()"></button>
+                <h3 id="myModalLabel" style="text-align:center; ">{{ _("Install chrome extension") }}</h3>
             </div>
-        </div>
-    </div>
-
-    <!--HKA 11.10.2013 Edit Introduction  -->
-    <div id="EditIntroModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel" class="modal-title">{{ _("Edit Account") }}</h3>
+            <div class="modal-body">
+                <div ng-show="browser=='chrome'" class="row" style="text-align: center;">
+                     <p style="margin: 25px; font-size: 18px;text-align: center;">  Click to install ioGrow extension to get all linkedin informations of your lead with one click ! </p>
+                      <button type="button" class="btn red" onclick="chrome.webstore.install()">
+                          Install chrome extension
+                      </button>
                 </div>
-
-                <div class="modal-body">
-                    <form id="editTagline" name="edittag" ng-submit="updateintro(account)" class="form-horizontal">
-
-
-                        <div class="form-group">
-                            <label class=" col-md-3 control-label">{{ _("Introduction") }} </label>
-
-                            <div class="col-md-9">
-
-                                <textarea id="noteBody" class="form-control ng-pristine ng-valid" rows="3"
-                                          ng-model="account.introduction"></textarea>
-
-                            </div>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Close") }}</button>
-                    <button type="submit" class="btn btn-primary addContactNow">{{ _("Save") }} </button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!--HKA 18.11.2013 Add Phone Modal -->
-
-    <div class="modal fade" id="extensionNotInstalled" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                            ng-click="lunchWindow()"></button>
-                    <h3 id="myModalLabel" style="text-align:center; ">{{ _("Install chrome extension") }}</h3>
-                </div>
-                <div class="modal-body">
-                    <div ng-show="browser=='chrome'" class="row" style="text-align: center;">
-                        <p style="margin: 25px; font-size: 18px;text-align: center;"> Click to install ioGrow extension
-                            to get all linkedin informations of your lead with one click ! </p>
-                        <button type="button" class="btn red" onclick="chrome.webstore.install()">
-                            Install chrome extension
-                        </button>
-                    </div>
-                    <div ng-show="browser=='other'" class="row"
-                         style="padding:25px; text-align: center; font-size: 18px">
-                        <p> Use chrome browser to get all linkedin informations of your lead with one click ! </p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true"
-                            ng-click="lunchWindow()">{{ _('Cancel') }}</button>
+                <div ng-show="browser=='other'" class="row" style="padding:25px; text-align: center; font-size: 18px">
+                    <p>  Use chrome browser to get  all linkedin informations of your lead with one click ! </p>
                 </div>
             </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <div id="phonemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel" class="modal-title">{{ _("Add Phone") }}</h3>
-                </div>
-                <div class="modal-body">
-                    <form id="addPhone" name="addphone" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("Type") }} </label>
-                            <div class="col-md-9">
-                                <select ng-model="phone.type_number" class="form-control">
-                                    <option value="home" selected="selected">{{ _('home') }}</option>
-                                    <option>{{ _('work') }}</option>
-                                    <option>{{ _('mobile') }}</option>
-                                    <option>{{ _('other') }}</option>
-
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="required col-md-3 control-label">{{ _("Number") }}</label>
-
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="id_name" ng-model="phone.number">
-
-                            </div>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
-
-                    <input ng-hide="isLoading" ng-click="addPhone(phone)" ng-disabled="!(phone.number)" type="submit"
-                           class="btn green" value="{{ _('Add this phone') }}">
-
-                    <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-                </div>
-                </form>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true" ng-click="lunchWindow()">{{ _('Cancel') }}</button>
             </div>
         </div>
+        <!-- /.modal-content -->
     </div>
-
-
-    <!--HKA 18.11.2013 Add Email -->
+    <!-- /.modal-dialog -->
+</div>
+ <!--HKA 18.11.2013 Add Email -->
 
     <div class="modal emailModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" id="testnonefade">
         <div class="modal-dialog">
@@ -3557,133 +3121,67 @@
                                     autofocus=""
                                     type="text"
 
-                                    placeholder="{{ _('BCC') }}"
-                                    id="messageSubject"
-                                    ng-model="email.bcc">
-                        </div>
-                        <div class="form-group">
-                            <input
-                                    required=""
-                                    class="form-control"
-                                    autofocus=""
-                                    type="text"
-                                    placeholder="{{ _('Subject') }}"
-                                    id="messageSubject"
-                                    ng-model="email.subject">
-                        </div>
-                        <div class="form-group text-form-group">
-                            <textarea id="some-textarea" placeholder="{{ _('Enter text ...') }}" id="noteBody"
-                                      class="form-control" rows="7" ng-model="email.body"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <input ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit"
-                           id="btnSendMail" class="btn blue" value="{{ _('Send') }}">
-                    <div class="form-group attachfile-form-group">
-                        <a href="#" data-toggle="modal" ng-click="switchwysihtml()"><i class="fa  fa-font"
-                                                                                       style="font-size: 23px;"></i></a>
-                    </div>
-                    <div class="form-group attachfile-form-group"
-                         style="height: 31px;border-left: 1px solid rgb(229, 229, 229); margin-top: 2px;"></div>
-                    <div class="form-group attachfile-form-group">
-                        <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i
-                                class="fa  fa-paperclip"></i></a>
-                        <ul class="list-unstyled">
-                            <li ng-repeat="file in sendWithAttachments">
-                                <%= file.title %>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--HKA 18.11.2013  Addresse Modal  -->
-
-    <div id="addressmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel" class="modal-title">{{ _("Add Address") }}</h3>
-                </div>
-                <div class="modal-body">
-                    <form id="addAddress" name="addemail" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("Street") }} </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="id_street" ng-model="address.street">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("City") }} </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="id_city" ng-model="address.city">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("State/Province") }} </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="id_state" ng-model="address.state">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("Postal Code") }} </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="id_postal" ng-model="address.postal_code">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("Country") }} </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="id_country" placeholder="Required"
-                                       ng-model="address.country">
-                            </div>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
-
-                    <input ng-hide="isLoading" ng-click="addAddress(address)" ng-disabled="(!address.country)"
-                           type="submit" class="btn green" value="{{ _('Add this address') }}">
-                    <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-    <div id="customfields" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel" class="modal-title">{{ _("Add Website") }}</h3>
-                </div>
-                <div class="modal-body">
-                    <form id="addWebsite" name="addwebsite" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("Custom Field") }} </label>
-                            <div class="col-md-9">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="{{ _('Field') }}"
-                                           ng-model="customField.field">
+                                            placeholder="{{_('BCC')}}"
+                                            id="messageSubject"
+                                            ng-model="email.bcc">
+                                    </div>
+                                    <div class="form-group">
+                                        <input
+                                            required=""
+                                            class="form-control"
+                                            autofocus=""
+                                            type="text"
+                                            placeholder="{{_('Subject')}}"
+                                            id="messageSubject"
+                                            ng-model="email.subject">
+                                    </div>
+                                    <div class="form-group text-form-group">
+                                        <textarea id="some-textarea" placeholder="{{_('Enter text ...')}}" id="noteBody" class="form-control" rows="7" ng-model="email.body"></textarea>
+                                    </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <input ng-click="sendEmail(email)" ng-disabled="isLoading || !email.to" type="submit" id="btnSendMail" class="btn blue" value="{{_('Send')}}">
+                                <div class="form-group attachfile-form-group">
+                                  <a href="#" data-toggle="modal" ng-click="switchwysihtml()"><i class="fa  fa-font" style="font-size: 23px;"></i></a>
                                 </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="{{ _('Value') }}"
-                                           ng-model="customField.value">
+                                <div class="form-group attachfile-form-group" style="height: 31px;border-left: 1px solid rgb(229, 229, 229); margin-top: 2px;"></div>
+                                <div class="form-group attachfile-form-group">
+                                  <a href="#" data-toggle="modal" ng-click="showAttachFilesPicker()"><i class="fa  fa-paperclip"></i></a>
+                                  <ul class="list-unstyled">
+                                      <li ng-repeat="file in sendWithAttachments">
+                                          <%= file.title %>
+                                      </li>
+                                  </ul>
                                 </div>
+                                 
+                              </div>
                             </div>
+                          </div>
                         </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
+     <div id="customfields" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel" class="modal-title">{{_("Add Website")}}</h3>
+            </div>
+            <div class="modal-body">
+                  <form id="addWebsite" name="addwebsite"  class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-md-3 control-label">{{_("Custom Field")}} </label>
+                        <div class="col-md-9">
+                          <div class="form-group">
+                               <input type="text" class="form-control" placeholder="{{ _('Field')}}"  ng-model="customField.field">
+                          </div>
+                          <div class="form-group">
+                               <input type="text" class="form-control" placeholder="{{ _('Value')}}"  ng-model="customField.value">
+                          </div>
+                        </div>
+                     </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">{{_("Cancel")}}</button>
 
                     <input ng-hide="isLoading" ng-click="addCustomField(customField)"
                            ng-disabled="!(customField.field && customField.value)" type="submit" class="btn green"
@@ -3691,128 +3189,15 @@
                     <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
                 </div>
                 </form>
-            </div>
+                </div>
+                </div>
         </div>
-    </div>
-    <!--HKA 18.11.2013 Website Modal -->
-
-
-    <div id="websitemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel" class="modal-title">{{ _("Add Website") }}</h3>
-                </div>
-                <div class="modal-body">
-                    <form id="addWebsite" name="addwebsite" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("Website") }} </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="{{ _('Website') }}" required
-                                       id="id_website" ng-model="website.website">
-                            </div>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
-
-                    <input ng-hide="isLoading" ng-click="addWebsite(website)" ng-disabled="!(website.website)"
-                           type="submit" class="btn green" value="{{ _('Add this Website') }}">
-                    <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <!--HKA 18.11.2013 Social modal -->
-
-
-    <div id="socialmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel" class="modal-title">{{ _("Add Social link") }}</h3>
-                </div>
-                <div class="modal-body">
-                    <form id="addSocial" name="addsocial" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ _("Social link") }} </label>
-                            <div class="col-md-9">
-                                <input type="text" placeholder="{{ _('Social link') }}" required id="id_social"
-                                       ng-model="social.sociallink" class="form-control">
-                            </div>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
-
-                    <input ng-hide="isLoading" ng-click="addSocial(social)" ng-disabled="!(social.sociallink)"
-                           type="submit" class="btn green" value="{{ _('Add this social link') }}">
-                    <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-                </div>
-                </form>
-            </div>
-        </div>
     </div>
-
-</div>
-<!-- END PAGE CONTAINER-->
-</div>
-<!--HKA 18.11.2013 Add Contact modal -->
-
-<div id="addContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h3 id="myModalLabel" class="modal-title">{{ _("New Contact") }}</h3>
-            </div>
-            <div class="modal-body">
-                <form id="addContact" name="addcontact" class="form-horizontal" role="form">
-                    <div class="form-group">
-                        <label class="required col-md-3 control-label">{{ _("First Name") }} </label>
-
-                        <div class="col-md-9">
-                            <input class="form-control" type="text" required id="id_firstname"
-                                   ng-model="contact.firstname">
-
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="required col-md-3 control-label">{{ _("Last Name") }}</label>
-                        <div class="col-md-9">
-                            <input class="form-control" type="text" id="id_lastname" ng-model="contact.lastname">
-
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="required col-md-3 control-label">{{ _("Tittle") }} </label>
-
-                        <div class="col-md-9">
-                            <input class="form-control" type="text" id="id_account" ng-model="contact.title">
-
-                        </div>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
-                <button type="submit" class="btn green addContactNow"
-                        ng-click="savecontact(contact)">{{ _("Add Contact") }}</button>
-            </div>
-            </form>
-        </div>
-    </div>
+      <!-- END PAGE CONTAINER-->
 </div>
 
-
-<div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
+<div id="sharingSettingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -3935,43 +3320,9 @@
                 <input ng-click="deleteaccount(account)" type="submit" class="btn red" value="Delete this Information">
             </div>
             </form>
+          </div>
         </div>
-    </div>
-</div>
-
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _("Add a new Task") }}</h3>
-            </div>
-            <div class="modal-body pickerin">
-                <div class="controls controls-row">
-                    <form id="addTask" class="ng-pristine ng-valid">
-                        <input class="form-control" autofocus type="text" placeholder="{{ _('Add a new task') }}"
-                               id="taskTitle" ng-model="task.title">
-
-                        <p><strong>{{ _("When's it due?") }}</strong></p>
-                        <center>
-                            <datetimepicker data-ng-model="task.due"
-                                            data-datetimepicker-config="{ startView:'day', minView:'day' }"/>
-                        </center>
-                </div>
-            </div>
-            <div class="modal-footer">
-
-
-                <input ng-hide="isLoading" type="submit" ng-click="addTask(task)" class="btn green"
-                       value="Add this task">
-
-
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
+       </div>
 <div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -4005,311 +3356,10 @@
         </div>
     </div>
 </div>
-<!--End Contact Modal -->
-
-<!--HKA 19.11.2013 Opportunity Modal -->
-
-<div id="addOpportunityModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _("New Opportunity") }}</h3>
-            </div>
-            <div class="modal-body">
-
-                <form id="addOpportunity" name="addOpportunity" class="form-horizontal">
-
-                    <fieldset>
-                        <div class="form-group">
-                            <label class="required col-md-3 control-label">{{ _("Name") }} *</label>
-
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" required id="id_name"
-                                       ng-model="opportunity.name">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="required col-md-3 control-label">{{ _("Amount") }} </label>
-
-                            <div class="col-md-4 ">
-                                <input type="text" required id="id_name" class="form-control"
-                                       placeholder="{{ _('Opportunity amount...') }}"
-                                       ng-model="opportunity.amount_per_unit ">
-                            </div>
-                            <div class="col-md-4 ">
-                                <select class="form-control" ng-model="opportunity.currency">
-                                    <option value="USD" selected>$ - USD</option>
-                                    <option value="EUR">€ - EUR</option>
-                                    <option value="CAD">$ - CAD</option>
-                                    <option value="GBP">£ - GBP</option>
-                                    <option value="AUD">$ - AUD</option>
-                                    <option value="">---</option>
-                                    <option value="AED">د.إ - AED</option>
-                                    <option value="ANG">ƒ - ANG</option>
-                                    <option value="AOA">AOA - AOA</option>
-                                    <option value="ARS">$ - ARS</option>
-                                    <option value="BAM">KM - BAM</option>
-                                    <option value="BBD">$ - BBD</option>
-                                    <option value="BGL">лв - BGL</option>
-                                    <option value="BHD">BD - BHD</option>
-                                    <option value="BND">$ - BND</option>
-                                    <option value="BRL">R$ - BRL</option>
-                                    <option value="BTC">฿ - BTC</option>
-                                    <option value="CHF">Fr - CHF</option>
-                                    <option value="CLF">UF - CLF</option>
-                                    <option value="CLP">$ - CLP</option>
-                                    <option value="CNY">¥ - CNY</option>
-                                    <option value="COP">$ - COP</option>
-                                    <option value="CRC">₡ - CRC</option>
-                                    <option value="CZK">Kč - CZK</option>
-                                    <option value="DKK">kr - DKK</option>
-                                    <option value="EEK">KR - EEK</option>
-                                    <option value="EGP">E£ - EGP</option>
-                                    <option value="FJD">FJ$ - FJD</option>
-                                    <option value="GTQ">Q - GTQ</option>
-                                    <option value="HKD">$ - HKD</option>
-                                    <option value="HRK">kn - HRK</option>
-                                    <option value="HUF">Ft - HUF</option>
-                                    <option value="IDR">Rp - IDR</option>
-                                    <option value="ILS">₪ - ILS</option>
-                                    <option value="INR">₨ - INR</option>
-                                    <option value="IRR">ریال - IRR</option>
-                                    <option value="ISK">kr - ISK</option>
-                                    <option value="JOD">د.ا - JOD</option>
-                                    <option value="JPY">¥ - JPY</option>
-                                    <option value="KES">KSh - KES</option>
-                                    <option value="KRW">₩ - KRW</option>
-                                    <option value="KWD">KD - KWD</option>
-                                    <option value="KYD">$ - KYD</option>
-                                    <option value="LTL">Lt - LTL</option>
-                                    <option value="LVL">Ls - LVL</option>
-                                    <option value="MAD">د.م. - MAD</option>
-                                    <option value="MVR">Rf - MVR</option>
-                                    <option value="MXN">$ - MXN</option>
-                                    <option value="MYR">RM - MYR</option>
-                                    <option value="NGN">₦ - NGN</option>
-                                    <option value="NOK">kr - NOK</option>
-                                    <option value="NZD">$ - NZD</option>
-                                    <option value="OMR">ر.ع - OMR</option>
-                                    <option value="PEN">S/. - PEN</option>
-                                    <option value="PHP">₱ - PHP</option>
-                                    <option value="PLN">zł - PLN</option>
-                                    <option value="QAR">ر.ق - QAR</option>
-                                    <option value="RON">L - RON</option>
-                                    <option value="RUB">руб. - RUB</option>
-                                    <option value="SAR">ر.س - SAR</option>
-                                    <option value="SEK">kr - SEK</option>
-                                    <option value="SGD">$ - SGD</option>
-                                    <option value="THB">฿ - THB</option>
-                                    <option value="TRY">TL - TRY</option>
-                                    <option value="TTD">$ - TTD</option>
-                                    <option value="TWD">$ - TWD</option>
-                                    <option value="UAH">₴ - UAH</option>
-                                    <option value="VEF">Bs F - VEF</option>
-                                    <option value="VND">₫ - VND</option>
-                                    <option value="XCD">$ - XCD</option>
-                                    <option value="ZAR">R - ZAR</option>
-                                </select>
-                            </div>
-
-                        </div>
-                        <div class="form-group">
-                            <label class="required col-md-3 control-label">{{ _("") }} </label>
-
-                            <div class="col-md-4 ">
-                                <select class="form-control" ng-model="opportunity.duration_unit">
-                                    <option value="fixed">{{ _('Fixed bid') }}</option>
-                                    <option value="hour">{{ _('Per hour') }}</option>
-                                    <option value="month">{{ _('Per month') }}</option>
-                                    <option value="year">{{ _('Per year') }}</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4 ">
-                                <input ng-hide="opportunity.duration_unit=='fixed'" type="text" pattern="\d*" required
-                                       id="" class="form-control" ng-model="opportunity.duration">
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-group">
-                            <label class="required col-md-3 control-label">{{ _("Stage") }} </label>
-                            <div class="col-md-9">
-                                <select ng-model="stage_selected" class="form-control"
-                                        ng-options="opps.name + ' - ( ' + opps.probability + '% )' for opps in opportunitystages | orderBy: 'name':true">
-                                    <option value="">-- {{ _('choose Stage') }} --</option>
-
-                                </select>
-
-
-                            </div>
-                        </div>
-                    </fieldset>
-
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
-                <button type="submit" ng-click="saveOpp(opportunity)"
-                        class="btn green addContactNow">{{ _("Add Opportunity") }}</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!--HKA 19.11.2013 End Of Opportunity Modal -->
-<!--HKA 19.11.2013 Case Modal -->
-<div id="addCaseModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _("New Case") }}</h3>
-            </div>
-            <div class="modal-body">
-
-                <form id="addCase" name="addCase" class="form-horizontal">
-
-
-                    <div class="form-group">
-                        <label class="required col-md-3 control-label">{{ _("Name") }} </label>
-
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="id_name" ng-model="casee.name">
-
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="required col-md-3 control-label">{{ _("Priority") }} </label>
-
-                        <div class="col-md-9">
-                            <select class="form-control" ng-model="casee.priority">
-                                <option value="1">1 - {{ _('Low') }}</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10 - {{ _('Critical') }}</option>
-                            </select>
-
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="required col-md-3 control-label">{{ _("Status") }}</label>
-
-                        <div class="col-md-9">
-                            <select class="form-control" ng-model="status_selected"
-                                    ng-options="stat.status for stat in casesatuses">
-                                <option value="">{{ _('Choose Status') }}</option>
-                            </select>
-
-                        </div>
-
-                    </div>
-
-
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
-                <button type="submit" ng-click="saveCase(casee)"
-                        class="btn green addContactNow">{{ _("Add Case") }}</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!--HKA 19.11.2013  End Case Modal -->
-
-<!--Event Modal -->
-<div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _("New Event") }}</h3>
-            </div>
-            <div class="modal-body">
-                <div class="controls controls-row">
-                    <form id="addTask" class="ng-pristine ng-valid">
-                        <input class="form-control" autofocus type="text" placeholder="{{ _('Add a new event') }}"
-                               id="taskTitle" ng-model="ioevent.title">
-                        <p><strong>{{ _("When?") }}</strong></p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>{{ _("Starts") }}</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy,
-                                    HH:mm'%></p>
-                                <datetimepicker data-ng-model="ioevent.starts_at"
-                                                data-datetimepicker-config="{ startView:'day', minView:'minute' }"/>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>{{ _("Ends") }}</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%>
-                                </p>
-                                <datetimepicker data-ng-model="ioevent.ends_at"
-                                                data-datetimepicker-config="{ startView:'day', minView:'minute' }"/>
-                            </div>
-                        </div>
-                        <input class="form-control" autofocus="" type="text" placeholder="{{ _('Where?') }}"
-                               id="taskTitle" ng-model="ioevent.where">
-                </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
-
-                <input ng-hide="isLoading" type="submit" class="btn green" value="{{ _('Add this event') }}"
-                       ng-click="addEvent(ioevent)">
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-
-
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _("Add a new Task") }}</h3>
-            </div>
-            <div class="modal-body pickerin">
-                <div class="controls controls-row">
-                    <form id="addTask" class="ng-pristine ng-valid">
-                        <input class="form-control" autofocus type="text" placeholder="{{ _('Add a new task') }}"
-                               id="taskTitle" ng-model="task.title">
-
-                        <p><strong>{{ _("When's it due?") }}</strong></p>
-                        <center>
-                            <datetimepicker data-ng-model="task.due"
-                                            data-datetimepicker-config="{ startView:'day', minView:'day' }"/>
-                        </center>
-                </div>
-            </div>
-            <div class="modal-footer">
-
-                <input ng-hide="isLoading" ng-click="addTask(task)" type="submit" class="btn green"
-                       value="Add this task">
-
-
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <!--End Contact Modal -->
+          <div id="newDocument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel" class="modal-title">{{ _("Create a new") }} <%=mimeType%></h3>
@@ -4331,54 +3381,7 @@
 
                 <input ng-show="isLoading" type="submit" class="btn green" value="Loading..." disabled>
 
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--Event Modal -->
-<div id="newEventModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel" class="modal-title">{{ _("New Event") }}</h3>
-            </div>
-            <div class="modal-body">
-                <div class="controls controls-row">
-                    <form id="addTask" class="ng-pristine ng-valid">
-                        <input class="form-control" autofocus type="text" placeholder="{{ _('Add a new event') }}"
-                               id="taskTitle" ng-model="ioevent.title">
-                        <p><strong>{{ _("When?") }}</strong></p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>{{ _("Starts") }}</strong>: <%=ioevent.starts_at | date:'MMMM dd, yyyy,
-                                    HH:mm'%></p>
-                                <datetimepicker data-ng-model="ioevent.starts_at"
-                                                data-datetimepicker-config="{ startView:'day', minView:'minute' }"/>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>{{ _("Ends") }}</strong>: <%=ioevent.ends_at | date:'MMMM dd, yyyy, HH:mm'%>
-                                </p>
-                                <datetimepicker data-ng-model="ioevent.ends_at"
-                                                data-datetimepicker-config="{ startView:'day', minView:'minute' }"/>
-                            </div>
-                        </div>
-                        <input class="form-control" autofocus="" type="text" placeholder="{{ _('Where?') }}"
-                               id="taskTitle" ng-model="ioevent.where">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _("Cancel") }}</button>
-
-                <input ng-hide="isLoading" ng-click="addEvent(ioevent)" type="submit" class="btn green"
-                       value="{{ _('Add this event') }}">
-
-                <input ng-show="isLoading" type="submit" class="btn green" value="{{ _('Loading...') }}" disabled>
-
-                </form>
+            </form>
             </div>
         </div>
     </div>
@@ -5143,47 +4146,38 @@
 
             originalLeave.call(this, obj);
 
-            if (obj.currentTarget) {
-                container = $(obj.currentTarget).siblings('.popover')
-                timeout = self.timeout;
-                container.one('mouseenter', function () {
-                    //We entered the actual popover – call off the dogs
-                    clearTimeout(timeout);
-                    //Let's monitor popover content instead
-                    container.one('mouseleave', function () {
-                        $.fn.popover.Constructor.prototype.leave.call(self, self);
-                    });
-                })
-            }
-        };
-        $('#assigeeList').slimScroll({
-            height: '200px'
-        });
-        $('#collaborators').slimScroll({
-            height: '192px'
-        });
-        $('.waterfall').waterfall({
-            colMinWidth: 210,
-            defaultContainerWidth: 840,
-            autoresize: true
-        });
-        $('.waterfall2').waterfall({
-            colMinWidth: 210,
-            defaultContainerWidth: 840,
-            autoresize: true
-        });
-        $("#select2_sample2").select2({
-            placeholder: "{{ _('Click to Select a label')}}",
-            allowClear: false
-        });
-        $("#select2_sample").select2({
-            placeholder: "{{ _('Click to Select a label')}}",
-            allowClear: false
-        });
-        $("#select2_sample3").select2({
-            placeholder: "{{ _('Click to Select a label')}}",
-            allowClear: false
-        });
+        if(obj.currentTarget) {
+          container = $(obj.currentTarget).siblings('.popover')
+          timeout = self.timeout;
+          container.one('mouseenter', function(){
+            //We entered the actual popover – call off the dogs
+            clearTimeout(timeout);
+            //Let's monitor popover content instead
+            container.one('mouseleave', function(){
+              $.fn.popover.Constructor.prototype.leave.call(self, self);
+            });
+          })
+        }
+      };
+          $('#assigeeList').lionbars({});
+          $('#collaborators').lionbars({});
+  $('.waterfall2').waterfall({
+              colMinWidth: 210,
+              defaultContainerWidth: 840,
+              autoresize: true
+          });
+  $("#select2_sample2").select2({
+                          placeholder: "{{ _('Click to Select a label')}}",
+                          allowClear: false
+                      }); 
+    $("#select2_sample").select2({
+                          placeholder: "{{ _('Click to Select a label')}}",
+                          allowClear: false
+                      }); 
+  $("#select2_sample3").select2({
+                          placeholder: "{{ _('Click to Select a label')}}",
+                          allowClear: false
+                      });
 
 
     </script>
