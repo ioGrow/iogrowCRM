@@ -5,8 +5,8 @@ from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
 from protorpc import messages
 
-import iomessages
-from model import User
+from crm import iomessages
+from crm.model import User
 
 # TODO: complte later
 INVERSED_EDGES = {
@@ -221,7 +221,7 @@ class Edge(ndb.Expando):
     @classmethod
     def delete_all_cascade(cls, start_node):
 
-        from endpoints_helper import EndpointsHelper
+        from crm.endpoints_helper import EndpointsHelper
 
         EndpointsHelper.delete_document_from_index(start_node.id())
         start_node_kind = start_node.kind()
@@ -455,7 +455,7 @@ class Node(ndb.Expando):
     @classmethod
     def insert_info_node(cls, parent_key, request):
         try:
-            from endpoints_helper import EndpointsHelper
+            from crm.endpoints_helper import EndpointsHelper
             node = Node(kind=request.kind)
             node_values = []
             for record in request.fields:

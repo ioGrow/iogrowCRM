@@ -23,55 +23,55 @@ from google.appengine.api import taskqueue
 from google.appengine.ext import ndb
 
 from crm.config import config
-from iomodels.Licenses import License, LicenseSchema, LicenseInsertRequest
-from iomodels.accounts import Account, AccountGetRequest, AccountPatchRequest, AccountSchema, \
+from crm.iomodels.Licenses import License, LicenseSchema, LicenseInsertRequest
+from crm.iomodels.accounts import Account, AccountGetRequest, AccountPatchRequest, AccountSchema, \
     AccountListRequest, AccountListResponse, AccountSearchResults, AccountInsertRequest
-from iomodels.cases import Case, UpdateStatusRequest, CasePatchRequest, CaseGetRequest, CaseInsertRequest, \
+from crm.iomodels.cases import Case, UpdateStatusRequest, CasePatchRequest, CaseGetRequest, CaseInsertRequest, \
     CaseListRequest, CaseSchema, CaseListResponse, CaseSearchResults
-from iomodels.casestatuses import Casestatus
-from iomodels.comments import Comment
-from iomodels.contacts import Contact, ContactGetRequest, ContactInsertRequest, ContactPatchSchema, \
+from crm.iomodels.casestatuses import Casestatus
+from crm.iomodels.comments import Comment
+from crm.iomodels.contacts import Contact, ContactGetRequest, ContactInsertRequest, ContactPatchSchema, \
     ContactSchema, ContactListRequest, ContactListResponse, ContactSearchResults, ContactImportRequest, \
     ContactImportHighriseRequest, DetailImportHighriseRequest, \
     InvitationRequest, ContactMergeRequest
-from iomodels.documents import Document, DocumentInsertRequest, DocumentSchema, MultipleAttachmentRequest, \
+from crm.iomodels.documents import Document, DocumentInsertRequest, DocumentSchema, MultipleAttachmentRequest, \
     DocumentListResponse
-from iomodels.events import Event, EventInsertRequest, EventSchema, EventPatchRequest, EventListRequest, \
+from crm.iomodels.events import Event, EventInsertRequest, EventSchema, EventPatchRequest, EventListRequest, \
     EventListResponse, EventFetchListRequest, EventFetchResults
-from iomodels.leads import Lead, LeadPatchRequest, LeadInsertRequest, LeadListRequest, \
+from crm.iomodels.leads import Lead, LeadPatchRequest, LeadInsertRequest, LeadListRequest, \
     LeadListResponse, LeadSearchResults, LeadGetRequest, LeadSchema, FLNameFilterRequest, LeadMergeRequest, \
     FLsourceFilterRequest
-from iomodels.leadstatuses import Leadstatus
-from iomodels.notes import Note, AuthorSchema, DiscussionAboutSchema, \
+from crm.iomodels.leadstatuses import Leadstatus
+from crm.iomodels.notes import Note, AuthorSchema, DiscussionAboutSchema, \
     NoteSchema
-from iomodels.opportunities import Opportunity, OpportunityPatchRequest, UpdateStageRequest, \
+from crm.iomodels.opportunities import Opportunity, OpportunityPatchRequest, UpdateStageRequest, \
     OpportunitySchema, OpportunityInsertRequest, OpportunityListRequest, OpportunityListResponse, \
     OpportunitySearchResults, OpportunityGetRequest, NewOpportunityListRequest, AggregatedOpportunitiesResponse, \
     OppTimeline
-from iomodels.opportunitystage import Opportunitystage, OpportunitystagePatchListRequestSchema, \
+from crm.iomodels.opportunitystage import Opportunitystage, OpportunitystagePatchListRequestSchema, \
     OpportunitystageListSchema
-from iomodels.profiles import ProfileDeleteRequest, Keyword, KeywordListResponse
-from iomodels.tags import Tag, TagSchema, TagListRequest, TagListResponse, TagInsertRequest
-from iomodels.tasks import Task, TaskSchema, TaskRequest, TaskListResponse, TaskInsertRequest
+from crm.iomodels.profiles import ProfileDeleteRequest, Keyword, KeywordListResponse
+from crm.iomodels.tags import Tag, TagSchema, TagListRequest, TagListResponse, TagInsertRequest
+from crm.iomodels.tasks import Task, TaskSchema, TaskRequest, TaskListResponse, TaskInsertRequest
 from protorpc import message_types
 from protorpc import messages
 from protorpc import remote
 
-import iomessages
+from crm import iomessages
 from crm.iomodels.pipelines import Pipeline, PipelineInsertRequest, PipelineSchema, PipelineGetRequest, \
     PipelineListRequest, PipelineListResponse, \
     PipelinePatchRequest
-from endpoints_helper import EndpointsHelper
-from iograph import Node, Edge, RecordSchema, InfoNodeResponse, InfoNodeListResponse
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema, LinkedinCompanySchema
-from model import Contributor
-from model import CountryCurrency
-from model import CustomField
-from model import Invitation
-from model import Logo
-from model import Organization
-from model import User
-from model import Userinfo
+from crm.endpoints_helper import EndpointsHelper
+from crm.iograph import Node, Edge, RecordSchema, InfoNodeResponse, InfoNodeListResponse
+from crm.iomessages import LinkedinProfileSchema, TwitterProfileSchema, LinkedinCompanySchema
+from crm.model import Contributor
+from crm.model import CountryCurrency
+from crm.model import CustomField
+from crm.model import Invitation
+from crm.model import Logo
+from crm.model import Organization
+from crm.model import User
+from crm.model import Userinfo
 from people import linked_in
 
 # The ID of javascript client authorized to access to our api

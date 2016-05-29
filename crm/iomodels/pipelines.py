@@ -1,15 +1,15 @@
-import model
+from crm import model
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
 from protorpc import messages
 
-import iomessages
-from endpoints_helper import EndpointsHelper
-from iograph import Node, Edge
+from crm import iomessages
+from crm.endpoints_helper import EndpointsHelper
+from crm.iograph import Node, Edge
 from opportunitystage import OpportunitystageSchema, Opportunitystage
-from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
+from crm.search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 
 # class UpdateStatusRequest(messages.Message):

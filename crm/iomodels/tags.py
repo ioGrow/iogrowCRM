@@ -3,8 +3,8 @@ from google.appengine.api import taskqueue
 from google.appengine.ext import ndb
 from protorpc import messages
 
-from endpoints_helper import EndpointsHelper
-from iograph import Edge
+from crm.endpoints_helper import EndpointsHelper
+from crm.iograph import Edge
 
 
 class TagSchema(messages.Message):

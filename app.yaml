@@ -36,13 +36,13 @@ handlers:
 
 # Endpoints handler
 - url: /_ah/spi/.*
-  script: services.application
+  script: crm.services.application
 
 - url: /_ah/mail/.+
   script: handle_incoming_email.app
-  login: admin 
+  login: admin
 - url: /.*
-  script: handlers.app
+  script: crm.handlers.app
 
 
 skip_files:

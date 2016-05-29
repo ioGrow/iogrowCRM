@@ -6,9 +6,9 @@ from google.appengine.ext import ndb
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 
 from crm.iomodels.notes import Note
-from endpoints_helper import EndpointsHelper
-from iograph import Node,Edge
-from model import User,Userinfo
+from crm.endpoints_helper import EndpointsHelper
+from crm.iograph import Node,Edge
+from crm.model import User,Userinfo
 
 
 class GetEmailsHandler(InboundMailHandler):

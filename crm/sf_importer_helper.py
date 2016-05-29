@@ -1,14 +1,14 @@
 import json
 
 import requests
-from iomodels.accounts import Account, AccountInsertRequest
-from iomodels.casestatuses import Casestatus
-from iomodels.contacts import Contact, ContactInsertRequest
-from iomodels.leads import Lead, LeadInsertRequest
-from iomodels.opportunities import Opportunity, OpportunityInsertRequest
-from iomodels.opportunitystage import Opportunitystage
+from crm.iomodels.accounts import Account, AccountInsertRequest
+from crm.iomodels.casestatuses import Casestatus
+from crm.iomodels.contacts import Contact, ContactInsertRequest
+from crm.iomodels.leads import Lead, LeadInsertRequest
+from crm.iomodels.opportunities import Opportunity, OpportunityInsertRequest
+from crm.iomodels.opportunitystage import Opportunitystage
 
-import iomessages
+from crm import iomessages
 from crm.iomodels.cases import Case, CaseInsertRequest
 
 """

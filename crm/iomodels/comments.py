@@ -1,10 +1,10 @@
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search
 from google.appengine.ext import ndb
-from model import User
-from model import Userinfo
+from crm.model import User
+from crm.model import Userinfo
 
-from search_helper import tokenize_autocomplete
+from crm.search_helper import tokenize_autocomplete
 
 
 class Comment(EndpointsModel):

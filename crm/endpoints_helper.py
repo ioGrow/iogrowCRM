@@ -26,11 +26,11 @@ import gdata.contacts.client
 import gdata.contacts.data
 from gdata.gauth import OAuth2Token
 from gdata.contacts.client import ContactsClient
-from model import User, Tokens
+from crm.model import User, Tokens
 import iograph
 from pyrise import Highrise, Person, Company, Deal, Task, Tag, Case
 import tweepy as tweepy
-from iomessages import TwitterProfileSchema, EmailSchema, AddressSchema, PhoneSchema
+from crm.iomessages import TwitterProfileSchema, EmailSchema, AddressSchema, PhoneSchema
 import time
 import json
 from google.appengine.api import app_identity

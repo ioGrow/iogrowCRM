@@ -21,9 +21,9 @@ from crm.iomodels.opportunitystage import Opportunitystage
 from crm.iomodels.leadstatuses import Leadstatus
 from crm.iomodels.casestatuses import Casestatus
 
-from search_helper import tokenize_autocomplete
+from crm.search_helper import tokenize_autocomplete
 
-import iomessages
+from crm import iomessages
 
 import json
 import re
@@ -362,7 +362,7 @@ class Organization(ndb.Model):
         )
         org_key = organization.put()
         mp.track(admin.id, 'SIGNED_UP_SUCCESS')
-        from iograph import Edge
+        from crm.iograph import Edge
         Edge.insert(start_node=org_key, end_node=admin.key, kind='admins', inverse_edge='parents')
 
         created_tabs = []
@@ -1258,7 +1258,7 @@ class User(EndpointsModel):
                 for tab in tabs:
                     tab.key.delete()
                 user_from_email.key.delete()
-                from iograph import Edge
+                from crm.iograph import Edge
                 Edge.delete_all(user_from_email.organization)
                 organization.key.delete()
         return msg
@@ -1304,7 +1304,7 @@ class User(EndpointsModel):
                 oppstages = Opportunitystage.query(Opportunitystage.organization == user.organization).fetch()
                 for oppstage in oppstages:
                     oppstage.key.delete()
-                # permissions= Permission.query(Permission.value==str(user.google_user_id)).fetch()  
+                # permissions= Permission.query(Permission.value==str(user.google_user_id)).fetch()
                 # for permission in permissions:
                 #     permission.key.delete()
                 tabs = Tab.query(Tab.organization == user.organization).fetch()
@@ -1367,7 +1367,7 @@ class User(EndpointsModel):
                     cf.put()
                 user.organization = user_from_email.organization
                 user.put()
-                # from iograph import Edge
+                # from crm.iograph import Edge
                 # Edge.delete_all(user.organization)
                 organization.delete()
 
