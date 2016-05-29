@@ -100,7 +100,7 @@ def deploy():
 
 @task
 def test():
-    print "TODO"
+    run("python testrunner.py {0} ./".format(find_gae_path()))
 
 
 @task
@@ -142,7 +142,6 @@ def remove_file_dir(file_dir):
 
 
 def find_gae_path():
-
     GAE_PATH = ''
     if IS_WINDOWS:
         gae_path = None
@@ -157,9 +156,11 @@ def find_gae_path():
 
     if not gae_path:
         return ''
+
     gcloud_exec = 'gcloud.cmd' if IS_WINDOWS else 'gcloud'
     if not os.path.isfile(os.path.join(gae_path, gcloud_exec)):
         GAE_PATH = gae_path
+
     else:
         gae_path = os.path.join(gae_path, '..', 'platform', 'google_appengine')
         if os.path.exists(gae_path):
