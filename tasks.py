@@ -100,7 +100,7 @@ def deploy():
 
 @task
 def test():
-    run("python testrunner.py {0} ./".format(find_gae_path()))
+    run("python testrunner.py {0} crm/tests".format(find_gae_path()))
 
 
 @task

@@ -35,7 +35,7 @@ if __name__ == '__main__':
     parser = optparse.OptionParser(USAGE)
     options, args = parser.parse_args()
     if len(args) != 2:
-        print 'Error: Exactly 2 arguments required.'
+        print "Error: Exactly 2 arguments required."
         parser.print_help()
         sys.exit(1)
     SDK_PATH = args[0]
