@@ -99,8 +99,11 @@ def deploy():
 
 
 @task
-def test():
-    run("python test_runner.py {0} crm/tests".format(find_gae_path()))
+def test(oauth=False):
+    gae_path = find_gae_path()
+    run("python test_runner.py {0} crm/tests".format(gae_path))
+    if oauth:
+        run("python test_runner.py {0} crm/tests/oauth".format(gae_path))
 
 
 @task

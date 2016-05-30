@@ -1,18 +1,31 @@
+import os
 import unittest
 
 import webapp2
 import webtest
 from google.appengine.ext import testbed
+from mock import Mock
+from wtforms import i18n
 
+from crm import handlers
 from crm.config import config
-from crm.handlers import IndexHandler
 from crm.tests.helpers import RequestsHelpers
+
+# setting HTTP_HOST in extra_environ parameter for TestApp is not enough for taskqueue stub
+os.environ['HTTP_HOST'] = 'localhost'
+
+# globals
+network = False
+
+# mock Internet calls
+if not network:
+    i18n.get_country_code = Mock(return_value=None)
 
 
 class AppTest(unittest.TestCase, RequestsHelpers):
     def setUp(self):
         # Create a WSGI application.
-        self.app = webapp2.WSGIApplication([('/', IndexHandler)], config=config)
+        self.app = webapp2.WSGIApplication(handlers.routes, config=config)
         self.testapp = webtest.TestApp(self.app)
 
         # activate GAE stubs
@@ -41,5 +54,8 @@ class AppTest(unittest.TestCase, RequestsHelpers):
         self.assertEqual(route, 'welcome')
         self.assertEqual(response.content_type, 'text/html')
 
-    def is_user_logged_in(self):
-        self.testapp
+    def test_welcome_page(self):
+        response = self.testapp.get('/welcome/')
+        self.assertEquals(response.status_int, 200)
+        self.assertEqual(response.content_type, 'text/html')
+        self.assertIn('CRM for Social Selling,Integrated with Linkedin, Twitter and Gmail', response)

@@ -479,7 +479,7 @@ class ChangeActiveAppHandler(SessionEnabledHandler):
 
 class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
-    def exchange_code(code):
+    def exchange_code(code, redirect_uri=None):
         """Exchanges the `code` member of the given AccessToken object, and returns
         the relevant credentials.
 
@@ -495,12 +495,10 @@ class GooglePlusConnect(SessionEnabledHandler):
         oauth_flow = OAuth2WebServerFlow(client_id=CLIENT_ID,
                                          client_secret=CLIENT_SECRET,
                                          scope=SCOPES,
-                                         # redirect_uri="%s/postmessage" % os.environ['HTTP_REFER']
-
                                          )
 
         oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
-        oauth_flow.redirect_uri = 'postmessage'
+        oauth_flow.redirect_uri = redirect_uri if redirect_uri else 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
         return credentials
 
@@ -593,8 +591,9 @@ class GooglePlusConnect(SessionEnabledHandler):
 
     def post(self):
         code = self.request.get("code")
+        redirect_uri = self.request.get("redirect_uri")
         try:
-            credentials = GooglePlusConnect.exchange_code(code)
+            credentials = GooglePlusConnect.exchange_code(code, redirect_uri)
         except FlowExchangeError:
             return
         token_info = GooglePlusConnect.get_token_info(credentials)
