@@ -100,7 +100,7 @@ def deploy():
 
 @task
 def test():
-    run("python testrunner.py {0} crm/tests".format(find_gae_path()))
+    run("python test_runner.py {0} crm/tests".format(find_gae_path()))
 
 
 @task
@@ -123,6 +123,7 @@ def babel(extract=False, init=False, compile=False, update=False):
             run("pybabel update -l %s -d ./locale -i %s --previous --ignore-obsolete" % (lang, pot_path))
     if compile:
         run("pybabel compile -f -d ./locale")
+
 
 def print_out(script, filename=''):
     timestamp = datetime.now().strftime('%H:%M:%S')
