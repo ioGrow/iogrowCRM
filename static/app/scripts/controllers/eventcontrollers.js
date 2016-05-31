@@ -416,7 +416,7 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
 // HADJI HICHAM HH- 20/10/2014 - 10:34 .
 
         $scope.showAttachFilesPicker = function () {
-            var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+            var developerKey = ENV_CONFIG['BROWSER_API_KEY'];
             var docsView = new google.picker.DocsView()
                 .setIncludeFolders(true)
                 .setSelectFolderEnabled(true);
@@ -426,7 +426,7 @@ app.controller('EventShowController', ['$scope', '$filter', '$route', 'Auth', 'N
             setCallback($scope.attachmentUploaderCallback).
             setOAuthToken(window.authResult.access_token).
             setDeveloperKey(developerKey).
-            setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+            setAppId(ENV_CONFIG['CLIENT_ID']).
             enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
             build();
             picker.setVisible(true);

@@ -244,7 +244,7 @@
 $scope.createPickerUploader = function() {
 
           $('#importModal').modal('hide');
-          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var developerKey = ENV_CONFIG['BROWSER_API_KEY'];
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true)
               .setSelectFolderEnabled(true);
@@ -254,7 +254,7 @@ $scope.createPickerUploader = function() {
               setCallback($scope.uploaderCallback).
               setOAuthToken(window.authResult.access_token).
               setDeveloperKey(developerKey).
-              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+              setAppId(ENV_CONFIG['CLIENT_ID']).
               build();
           picker.setVisible(true);
       };
@@ -313,7 +313,7 @@ $scope.createPickerUploader = function() {
         
        
         $scope.showAttachFilesPicker = function() {
-          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var developerKey = ENV_CONFIG['BROWSER_API_KEY'];
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true)
               .setSelectFolderEnabled(true);
@@ -323,7 +323,7 @@ $scope.createPickerUploader = function() {
               setCallback($scope.attachmentUploaderCallback).
               setOAuthToken(window.authResult.access_token).
               setDeveloperKey(developerKey).
-              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+              setAppId(ENV_CONFIG['CLIENT_ID']).
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);
@@ -3031,7 +3031,7 @@ $scope.lunchMapsCalendar=function(){
         };
         $scope.createPickerUploader = function() {
             var projectfolder = $scope.account.folder;
-            var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+            var developerKey = ENV_CONFIG['BROWSER_API_KEY'];
             var docsView = new google.picker.DocsView()
                     .setIncludeFolders(true)
                     .setSelectFolderEnabled(true);
@@ -3041,7 +3041,7 @@ $scope.lunchMapsCalendar=function(){
                     setCallback($scope.uploaderCallback).
                     setOAuthToken(window.authResult.access_token).
                     setDeveloperKey(developerKey).
-                    setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                    setAppId(ENV_CONFIG['CLIENT_ID']).
                     enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
                     build();
             picker.setVisible(true);
@@ -3066,13 +3066,13 @@ $scope.lunchMapsCalendar=function(){
                Attachement.attachfiles($scope, params);}
         }
         $scope.createLogoPickerUploader = function() {
-            var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+            var developerKey = ENV_CONFIG['BROWSER_API_KEY'];
             var picker = new google.picker.PickerBuilder().
                 addView(new google.picker.DocsUploadView()).
                 setCallback($scope.logoUploaderCallback).
                 setOAuthToken(window.authResult.access_token).
                 setDeveloperKey(developerKey).
-                setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                setAppId(ENV_CONFIG['CLIENT_ID']).
                 build();
             picker.setVisible(true);
         };
@@ -3093,7 +3093,7 @@ $scope.lunchMapsCalendar=function(){
         }
       $scope.createPickerUploaderContact= function() {
             var projectfolder = $scope.account.folder;
-            var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+            var developerKey = ENV_CONFIG['BROWSER_API_KEY'];
             var docsView = new google.picker.DocsView()
                     .setIncludeFolders(true)
                     .setSelectFolderEnabled(true);
@@ -3112,7 +3112,7 @@ $scope.lunchMapsCalendar=function(){
                     }).
                     setOAuthToken(window.authResult.access_token).
                     setDeveloperKey(developerKey).
-                    setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                    setAppId(ENV_CONFIG['CLIENT_ID']).
                     enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
                     build();
             picker.setVisible(true);
@@ -3869,7 +3869,7 @@ $scope.updateEventRenderAfterAdd= function(){};
 
         };
         $scope.showAttachFilesPicker = function() {
-          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var developerKey = ENV_CONFIG['BROWSER_API_KEY'];
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true)
               .setSelectFolderEnabled(true);
@@ -3879,7 +3879,7 @@ $scope.updateEventRenderAfterAdd= function(){};
               setCallback($scope.attachmentUploaderCallback).
               setOAuthToken(window.authResult.access_token).
               setDeveloperKey(developerKey).
-              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+              setAppId(ENV_CONFIG['CLIENT_ID']).
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);
@@ -5819,13 +5819,13 @@ app.controller('AccountNewCtrl', ['$scope', '$http','Auth', 'Account', 'Tag', 'E
             return infonodes;
         };
         $scope.createPickerUploader = function() {
-            var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+            var developerKey = ENV_CONFIG['BROWSER_API_KEY'];
             var picker = new google.picker.PickerBuilder().
                     addView(new google.picker.DocsUploadView()).
                     setCallback($scope.uploaderCallback).
                     setOAuthToken(window.authResult.access_token).
                     setDeveloperKey(developerKey).
-                    setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                    setAppId(ENV_CONFIG['CLIENT_ID']).
                     build();
             picker.setVisible(true);
         };

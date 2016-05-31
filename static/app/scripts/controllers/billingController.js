@@ -142,13 +142,13 @@ app.controller('BillingListController', ['$scope', '$route', 'Auth', 'Search', '
         };
         $scope.createPickerUploader = function () {
             $('#importModal').modal('hide');
-            var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+            var developerKey = ENV_CONFIG['BROWSER_API_KEY'];
             var picker = new google.picker.PickerBuilder().
             addView(new google.picker.DocsUploadView().setMimeTypes("image/png,image/jpeg,image/jpg")).
             setCallback($scope.uploaderCallback).
             setOAuthToken(window.authResult.access_token).
             setDeveloperKey(developerKey).
-            setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+            setAppId(ENV_CONFIG['CLIENT_ID']).
             build();
             picker.setVisible(true);
         };

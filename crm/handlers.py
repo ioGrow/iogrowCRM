@@ -51,6 +51,7 @@ ADMIN_EMAILS = ['tedj.meabiou@gmail.com', 'hakim@iogrow.com']
 
 CLIENT_ID = config.get('google_client_id')
 CLIENT_SECRET = config.get('google_client_secret')
+BROWSER_API_KEY = config.get('browser_api_key')
 
 SCOPES = [
     'https://mail.google.com https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/calendar'
@@ -403,6 +404,7 @@ class IndexHandler(BaseHandler, SessionEnabledHandler):
                     'organization_name': organization.name,
                     'sales_tabs': STANDARD_TABS,
                     'admin_tabs': ADMIN_TABS,
+                    'browser_api_key': BROWSER_API_KEY
                 }
                 if admin_app:
                     template_values['admin_app'] = admin_app

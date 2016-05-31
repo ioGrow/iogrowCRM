@@ -1854,7 +1854,7 @@ $scope.updatCasetHeader = function(casee){
   $('#some-textarea').wysihtml5();
 
   $scope.showAttachFilesPicker = function() {
-          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var developerKey = ENV_CONFIG['BROWSER_API_KEY'];
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true)
               .setSelectFolderEnabled(true);
@@ -1864,7 +1864,7 @@ $scope.updatCasetHeader = function(casee){
               setCallback($scope.attachmentUploaderCallback).
               setOAuthToken(window.authResult.access_token).
               setDeveloperKey(developerKey).
-              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+              setAppId(ENV_CONFIG['CLIENT_ID']).
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);
@@ -1964,7 +1964,7 @@ $scope.deletecase = function(){
 
      };
      $scope.createPickerUploader = function() {
-          var developerKey = 'AIzaSyDHuaxvm9WSs0nu-FrZhZcmaKzhvLiSczY';
+          var developerKey = ENV_CONFIG['BROWSER_API_KEY'];
           var projectfolder = $scope.casee.folder;
           var docsView = new google.picker.DocsView()
               .setIncludeFolders(true)
@@ -1975,7 +1975,7 @@ $scope.deletecase = function(){
               setCallback($scope.uploaderCallback).
               setOAuthToken(window.authResult.access_token).
               setDeveloperKey(developerKey).
-              setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+              setAppId(ENV_CONFIG['CLIENT_ID']).
                 enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
               build();
           picker.setVisible(true);

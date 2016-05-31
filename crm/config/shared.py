@@ -8,5 +8,5 @@ config = {
     'mp_token': '793d188e5019dfa586692fc3b312e5d1',
     # webapp2 sessions
     'webapp2_extras.sessions': {'secret_key': 'tedj#W1|(|=_>}m9BZEB#drBG| tN@0{@7+)gB:w:+9u3}nlrf8U?'},
-
+    'browser_api_key': 'AIzaSyC5Np7Y8k-kLt90nj4YOoEBkcpP9hJ_oLQ'
 }

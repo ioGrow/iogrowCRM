@@ -323,7 +323,7 @@ app.controller('SettingsShowCtrl', ['$scope', '$route', 'Auth', 'Opportunitystag
                 setCallback($scope.uploaderCallback).
                 setOAuthToken(window.authResult.access_token).
                 setDeveloperKey(developerKey).
-                setAppId('935370948155-qm0tjs62kagtik11jt10n9j7vbguok9d').
+                setAppId(ENV_CONFIG['CLIENT_ID']).
                 build();
             picker.setVisible(true);
         };
