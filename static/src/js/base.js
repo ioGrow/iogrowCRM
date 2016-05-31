@@ -4,14 +4,11 @@ function getRoot() {
     if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
         url = origin;
     } else if (origin.indexOf('.com') != -1) {
-        url = "https://gcdc2013-iogrow.appspot.com";
+        url = ENV_CONFIG['API_BASE_URL'];
     }
     return url + '/_ah/api';
 }
- var ROOT = getRoot();
- // var ROOT = 'https://gcdc2013-iogrow.appspot.com/_ah/api';
- // var ROOT = '/_ah/api';
- // var ROOT = 'https://preprod-iogrow.appspot.com/_ah/api';
+var ROOT = getRoot();
 var apisToLoad;
 var callback = function () {
     if (--apisToLoad == 0) {
