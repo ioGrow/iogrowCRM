@@ -4,7 +4,7 @@ function getRoot() {
     if (origin.indexOf('localhost') != -1 || origin.indexOf('127.0.0') != -1) {
         url = origin;
     } else if (origin.indexOf('.com') != -1) {
-        url = ENV_CONFIG['API_BASE_URL'];
+        url = "https://gcdc2013-iogrow.appspot.com";
     }
     return url + '/_ah/api';
 }

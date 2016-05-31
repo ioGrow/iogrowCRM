@@ -1,0 +1,359 @@
+body{
+	position: relative;
+	margin: 0px;
+	font-family: Roboto,Arial,sans-serif;
+}
+a{
+    color: #67A1D6;
+}
+.googleApps{
+    position: relative;
+    padding-top: 15px !important;
+}
+.logoSection{
+	margin-bottom: 8px;
+	border-bottom: 1px solid #EBEFF3;
+}
+.logoSection img{
+	width: 165px;
+}
+.container{
+	margin: 0px 15px; 
+  padding: 20px;
+}
+.overviewImage{
+}
+.bigTitle,.smTitle,.signIn, .featuresTitle{
+	text-align: center;
+	margin:auto;
+}
+.bigTitle h1{
+  	font-family: 'Actor' !important;
+    font-weight: 400;
+    line-height: 31px;
+    font-size: 24px;
+    color: #494949;
+    margin-top: 25px;
+}
+.smTitle h2{
+  	font-family: 'Actor' !important;
+    font-weight: 400;
+    line-height: 23px;
+    font-size: 19px;
+    color: #6C6C6C;
+}
+.bgGray{
+	background-color: #EFF2F5 !important ;
+}
+.overviewImage .imageHolder{
+	width: 100%;
+	height: 100%;
+}
+.overviewImage .imageHolder{
+  max-width: 700px;
+  margin:auto;
+}
+.overviewImage .imageHolder img{
+   width: 100%;
+   height: 100%;
+}
+.featuresTitle h2{
+	font-family: 'Actor' !important;
+    font-weight: 600;
+    line-height: 35px;
+    font-size: 24px;
+    color: #494949;
+}
+.planTitle h2{
+  font-family: 'Actor' !important;
+  font-weight: 400;
+  line-height: 33px;
+  font-size: 26px;
+  color: black;
+  margin-bottom: 0px;
+  margin-top: 15px;
+}
+.smPlanTitle h3{
+  font-family: 'Actor' !important;
+  font-weight: 600;
+  line-height: 20px;
+  font-size: 17px;
+  color: #494949;
+  margin-top: 15px;
+}
+.imgBlock img{
+  width: 100%;
+}
+.descBlock{
+  margin:0 5%;
+  margin-top: 4%;
+}
+.descBlock h3{
+  font-family: 'Actor' !important;
+    font-weight: 600;
+    line-height: 24px;
+    font-size: 20px;
+    color: #494949;
+}
+.pageContent .bigTitle h1{
+  font-family: 'Roboto' !important;
+}
+.pageContent .descBlock h3{
+  font-family: 'Roboto' !important;
+  font-size: 24px;
+  font-weight: 400 !important;
+  line-height: 30px;
+}
+.pageContent .descBlock p{
+  font-family: 'Roboto' !important;
+  font-size: 14px;
+  line-height: 20px;
+} 
+.pageContent .bigPar{
+  font-size: 16px !important;
+  }
+.pageContent .descBlock ul li{
+  font-family: 'Roboto' !important;
+  font-size: 14px;
+  line-height: 20px;
+  color: #6C6C6C;
+} 
+.descBlock p{
+  font-family: 'Roboto' !important;
+    line-height: 20px;
+    font-size: 16px;
+    color: #6C6C6C;
+}
+.planTitle,.smPlanTitle,.containerGapps .descBlock, .syncOptions .descBlock{
+  text-align: center;
+  margin:auto;
+}
+.containerGapps{
+  max-width: 480px;
+  margin: auto;
+}
+.imageBlock{
+  text-align: center !important;
+  margin:auto !important;
+}
+.imageBlock img{
+  width: 60px;
+}
+.featureDesc .descBlock,.featureDesc .imgBlock,.gmailSync,.driveSync,.calendarSync{
+  display:inline-block;
+  float: left;
+}
+.clearfix:after,.clearfix:before {
+    display: table;
+    content: " ";
+}
+.clearfix:after {
+  clear: both;
+}
+.featureDesc, .container{
+  max-width: 960px;
+  margin:auto;
+}
+.hideSm{
+  display: none !important;
+}
+.hideLg{
+  display: block;
+}
+.ioPlan{
+  margin-top: 25px;
+  margin-left: -34px;
+  margin-right: -34px;
+}
+.ioPlan .planTable{
+  width: 90%;
+  margin: auto;
+  background-color:white; 
+}
+.planTable {
+    border-collapse: collapse;
+}
+.planType p{
+    margin: 0px;
+    padding: 0px;
+    line-height: 21px;
+}
+.middleRow{
+  border-left: 6px solid #EFF2F5;
+  border-right: 6px solid #EFF2F5;
+  border-spacing: 0px;
+  border-collapse: collapse;
+  text-align: center;
+}
+.planTable td,.planTable th{
+    padding: 12px;
+}     
+.planType{
+  background-color: #168EEA;
+  text-align: center;
+}
+.planDetails td{
+    border-bottom: 1px solid #EFF2F5;
+    font-weight: 400;
+    line-height: 20px;
+    font-size: 14px;
+    color: #747474;
+    text-align: center;
+}
+.planDetails .title{
+  text-align: left;
+}
+.ioPlan th{
+  font-family: 'Actor' !important;
+  font-weight: 600;
+  line-height: 25px;
+  font-size: 19px;
+  color: #AAAAAA;
+}
+.ioPlan .planType{
+  font-family: 'Actor' !important;
+  font-weight: 600;
+  line-height: 28px;
+  font-size: 23px;
+  color: white;
+}
+.snList{
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+  display: inline-block;
+}
+.snTopList img{
+  width: 35px;
+}
+.snTopList .textLi{
+  line-height: 32px;
+}
+.snList li{
+  display: inline-block;
+  float: left;
+}
+.footerMenuContainer,.footerContactContainer{
+    width: 100%;
+    text-align: center;
+}
+.footerMenu, .footerContact{
+  display: inline-block;
+}
+.footerContact li{
+  margin-left: 10px;
+  line-height: 20px;
+  font-size: 14px;
+}
+.footerContact li a, .footerMenu li a{
+  color: #67A1D6;
+}
+.footerMenu li a{
+      /*text-decoration: none;*/
+      line-height: 20px;
+      font-size: 14px;
+      margin-left: 15px;
+}
+.planDiffs{
+  font-weight: 700 !important;
+  color: black !important;
+  font-family: 'Roboto' !important;
+  font-size: 13px !important;
+}
+.signInBlock{
+  margin-top:0px;
+}
+@media(min-width: 416px){
+  .snTopList img{
+    width: initial !important;
+  }
+  .snTopList .textLi{
+    line-height: 50px;
+  }
+}
+@media (min-width: 768px) {
+  .ioPlan th{
+    line-height: 39px !important;
+    font-size: 28px !important;
+  }
+  .ioPlan{
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  .ioPlan .planType{
+    line-height: 42px !important;
+    font-size: 30px !important;
+  }
+  .planDetails td{
+    line-height: 20px !important;
+    font-size: 14px !important;
+  }
+  .planDiffs{
+    font-size: 14px !important;
+  }
+  .featureDesc .descBlock,.featureDesc .imgBlock{
+    width: 45%;
+  }
+  .syncOptions .gmailSync,.syncOptions .driveSync,.syncOptions .calendarSync{
+    width: 33%;
+  }
+  .overviewImage {
+    background-image: url("../img/background.png");
+    background-color: #f9f9fa;
+    background-repeat: repeat-x;
+    background-position: center center;
+  }
+  .logoSection img{
+    width: 191px;
+  }
+  .bigTitle h1{
+      line-height: 56px;
+      font-size: 40px;
+      margin-top: 25px;
+  }
+  .smTitle h2{
+      line-height: 31px;
+      font-size: 22px;
+  }
+  .planTitle h2{
+    line-height: 53px;
+    font-size: 38px;
+}
+.smPlanTitle h3{
+    line-height: 24px;
+    font-size: 17px;
+}
+  .hideSm{
+    display: inline-block  !important;
+  }
+  .hideLg{
+    display: none !important;
+  }
+  .pageContent .descBlock h3{
+  font-size: 32px;
+  font-weight: 400 !important;
+  line-height: 41px;
+}
+.pageContent .descBlock p{
+  font-size: 16px;
+  line-height: 26px;
+} 
+.pageContent .descBlock ul li{
+  font-size: 16px;
+  line-height: 26px;
+  
+}
+.pageContent .bigPar{
+  font-size: 18px !important;
+  }
+ .signInContainer{
+  min-height: 500px;
+ }
+ .signInContainer .featureDesc{
+  margin-top: 60px;
+ }
+}
+
+
+
