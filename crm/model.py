@@ -29,7 +29,6 @@ import json
 import re
 import endpoints
 
-from intercom import Intercom
 from mixpanel import Mixpanel
 
 from crm.config import config
