@@ -1,11 +1,11 @@
-import model
+from crm import model
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search
 from google.appengine.ext import ndb
-from model import Userinfo
+from crm.model import Userinfo
 from protorpc import messages
 
-from iograph import Edge
+from crm.iograph import Edge
 
 
 # The message class that defines the author schema

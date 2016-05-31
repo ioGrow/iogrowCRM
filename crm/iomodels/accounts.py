@@ -13,21 +13,21 @@ from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
-from iomodels.contacts import Contact, ContactListResponse, ContactInsertRequest, is_the_same_node
-from iomodels.documents import Document, DocumentListResponse
-from iomodels.events import Event, EventListResponse
-from iomodels.notes import Note, TopicListResponse
-from iomodels.opportunities import Opportunity, OpportunityListResponse
-from iomodels.tags import Tag, TagSchema
-from iomodels.tasks import Task, TaskListResponse
+from crm.iomodels.contacts import Contact, ContactListResponse, ContactInsertRequest, is_the_same_node
+from crm.iomodels.documents import Document, DocumentListResponse
+from crm.iomodels.events import Event, EventListResponse
+from crm.iomodels.notes import Note, TopicListResponse
+from crm.iomodels.opportunities import Opportunity, OpportunityListResponse
+from crm.iomodels.tags import Tag, TagSchema
+from crm.iomodels.tasks import Task, TaskListResponse
 from protorpc import messages
-from search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
+from crm.search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
-import iomessages
-import model
+from crm import iomessages
+from crm import model
 from crm.iomodels.cases import Case, CaseListResponse
-from endpoints_helper import EndpointsHelper
-from iograph import Node, Edge, InfoNodeListResponse
+from crm.endpoints_helper import EndpointsHelper
+from crm.iograph import Node, Edge, InfoNodeListResponse
 
 
 # The message class that defines the EntityKey schema

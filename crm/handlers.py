@@ -16,13 +16,13 @@ from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
-from iomodels.accounts import Account
-from iomodels.contacts import Contact
-from iomodels.documents import Document
-from iomodels.events import Event
-from iomodels.leads import LeadInsertRequest, Lead
-from iomodels.opportunities import Opportunity
-from iomodels.tasks import Task, AssignedGoogleId
+from crm.iomodels.accounts import Account
+from crm.iomodels.contacts import Contact
+from crm.iomodels.documents import Document
+from crm.iomodels.events import Event
+from crm.iomodels.leads import LeadInsertRequest, Lead
+from crm.iomodels.opportunities import Opportunity
+from crm.iomodels.tasks import Task, AssignedGoogleId
 from mixpanel import Mixpanel
 from oauth2client.appengine import OAuth2Decorator
 from oauth2client.client import FlowExchangeError, OAuth2WebServerFlow
@@ -30,12 +30,12 @@ from webapp2_extras import i18n
 from webapp2_extras import sessions
 from crm.config import config
 
-import iomessages
-import model
+from crm import iomessages
+from crm import model
 from crm.iomodels.cases import Case
-from endpoints_helper import EndpointsHelper
-from iograph import Edge
-from model import Application, STANDARD_TABS, ADMIN_TABS
+from crm.endpoints_helper import EndpointsHelper
+from crm.iograph import Edge
+from crm.model import Application, STANDARD_TABS, ADMIN_TABS
 
 mp = Mixpanel(config.get('mp_token'))
 
@@ -479,7 +479,7 @@ class ChangeActiveAppHandler(SessionEnabledHandler):
 
 class GooglePlusConnect(SessionEnabledHandler):
     @staticmethod
-    def exchange_code(code):
+    def exchange_code(code, redirect_uri=None):
         """Exchanges the `code` member of the given AccessToken object, and returns
         the relevant credentials.
 
@@ -495,10 +495,10 @@ class GooglePlusConnect(SessionEnabledHandler):
         oauth_flow = OAuth2WebServerFlow(client_id=CLIENT_ID,
                                          client_secret=CLIENT_SECRET,
                                          scope=SCOPES,
-                                         redirect_uri="%s/postmessage" % os.environ['HTTP_ORIGIN'])
+                                         )
 
         oauth_flow.request_visible_actions = ' '.join(VISIBLE_ACTIONS)
-        oauth_flow.redirect_uri = 'postmessage'
+        oauth_flow.redirect_uri = redirect_uri if redirect_uri else 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
         return credentials
 
@@ -591,8 +591,9 @@ class GooglePlusConnect(SessionEnabledHandler):
 
     def post(self):
         code = self.request.get("code")
+        redirect_uri = self.request.get("redirect_uri")
         try:
-            credentials = GooglePlusConnect.exchange_code(code)
+            credentials = GooglePlusConnect.exchange_code(code, redirect_uri)
         except FlowExchangeError:
             return
         token_info = GooglePlusConnect.get_token_info(credentials)

@@ -1,19 +1,19 @@
 import datetime
 
 import endpoints
-import model
+from crm import model
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
-from model import Userinfo
+from crm.model import Userinfo
 from protorpc import messages
 
-from endpoints_helper import EndpointsHelper
-from iograph import Edge
-from iomodels.notes import AuthorSchema, DiscussionAboutSchema
-from iomodels.tags import Tag, TagSchema
+from crm.endpoints_helper import EndpointsHelper
+from crm.iograph import Edge
+from crm.iomodels.notes import AuthorSchema, DiscussionAboutSchema
+from crm.iomodels.tags import Tag, TagSchema
 
 
 # The message class that defines the EntityKey schema

@@ -1,18 +1,18 @@
 import httplib2
-import model
+from crm import model
 from apiclient.discovery import build
 from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.api import search
 from google.appengine.api import taskqueue
 from google.appengine.ext import ndb
-from model import Userinfo
+from crm.model import Userinfo
 from protorpc import messages
 
-import iomessages
-from endpoints_helper import EndpointsHelper
-from iograph import Edge
-from iomodels.notes import AuthorSchema, DiscussionAboutSchema
-from iomodels.tags import Tag, TagSchema
+from crm import iomessages
+from crm.endpoints_helper import EndpointsHelper
+from crm.iograph import Edge
+from crm.iomodels.notes import AuthorSchema, DiscussionAboutSchema
+from crm.iomodels.tags import Tag, TagSchema
 
 
 class AttachmentSchema(messages.Message):

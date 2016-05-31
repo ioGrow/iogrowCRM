@@ -3,8 +3,8 @@ from endpoints_proto_datastore.ndb import EndpointsModel
 from google.appengine.ext import ndb
 from protorpc import messages
 
-from endpoints_helper import EndpointsHelper
-from iograph import Edge
+from crm.endpoints_helper import EndpointsHelper
+from crm.iograph import Edge
 
 
 class KeywordSchema(messages.Message):

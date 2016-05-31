@@ -10,9 +10,9 @@ import requests
 from bs4 import BeautifulSoup
 from google.appengine.ext import ndb
 
-from iograph import Edge
-from iomessages import LinkedinProfileSchema, TwitterProfileSchema, LinkedinCompanySchema
-from model import LinkedinPage, ProxyServer
+from crm.iograph import Edge
+from crm.iomessages import LinkedinProfileSchema, TwitterProfileSchema, LinkedinCompanySchema
+from crm.model import LinkedinPage, ProxyServer
 
 mechanize._sockettimeout._GLOBAL_DEFAULT_TIMEOUT = 100
 
