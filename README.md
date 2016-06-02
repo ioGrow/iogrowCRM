@@ -3,10 +3,10 @@ CRM for Social Selling, on Google. Integrated with LinkedIn, Twitter, Facebook &
 
 info | _
 :-----------|------------:
- Authors | [AUTHORS.md](https://github.com/ioGrow/iogrow/blob/master/AUTHORS.md) 
+ Authors | [AUTHORS.md](https://github.com/ioGrow/iogrowCRM/blob/master/AUTHORS.md) 
  Release | ---  
  License | AGPL  
- Tracker | [ioGrow/iogrow/Issues](https://github.com/ioGrow/iogrow/issues)
+ Tracker | [ioGrow/iogrow/Issues](https://github.com/ioGrow/iogrowCRM/issues)
  Mailinglist |	iogrow-public@googlegroups.com
  IRC |	#iogrow @ freenode
  Website |	[iogrow.com](http://www.iogrow.com)
@@ -62,7 +62,7 @@ URL for the app.
 - Any new domain where you want to call the API
 8. Specify authorized redirect URIs on OAuth Client Id as follows: For each origin specified in 7 add this urls
 ORIGIN/postmessage and ORIGIN/oauth2callback.
-9. Enable those [APIs](https://github.com/ioGrow/iogrow/wiki/Enabled-APIs)
+9. Enable those [APIs](https://github.com/ioGrow/iogrowCRM/wiki/Enabled-APIs)
 10. Rename /crm/config/prod_sample.py to /crm/config/prod.py
 11. In crm/local.py,shared.py,prod.py config files, specify your credentials obtained from Google Cloud Console.
 12. In /static/src/js/config.js API_BASE_URL, BROWSER_API_KEY, CLIENT_ID
