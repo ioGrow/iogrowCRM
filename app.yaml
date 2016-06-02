@@ -1,5 +1,5 @@
 application: iogrowcrm
-version: 21
+version: 22
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -46,4 +46,12 @@ handlers:
 
 
 skip_files:
-- node_modules/.*
+- ^node_modules$
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^\.idea$
+- ^\.git$
+- ^(.*/)?.*\.pot?$
+- ^(.*/)?.*\.dist-info$
+- ^(.*/)?.*\.md$
