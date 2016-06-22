@@ -25,6 +25,11 @@ bcolors = {
 def default():
     run("invoke --list")
 
+@task
+def download():
+    gae_download_link="https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.38.zip"
+    run("cd ..; wget -O google_appengine.zip %s  ; unzip -q google_appengine.zip" % gae_download_link)
+
 
 @task
 def install():
