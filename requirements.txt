@@ -1,4 +1,3 @@
-invoke
 apiclient
 #atom==0.3.5 # gdata will install the appropriate one
 babel
