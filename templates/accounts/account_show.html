@@ -573,7 +573,7 @@
                                                 <li ng-repeat="sociallink in infonodes.sociallinks" class="socialItem"
                                                     style="padding-bottom: 5px;">
                                                     <div class="cont">
-                                                        <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
+                                                        <a onclick="if (sociallink.url) window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                            style="display: inline-block;   float: left;">
                                                             <img width="24"
                                                                  ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
@@ -595,7 +595,7 @@
                                             <form ng-show="showEdit" class="form-inline newLeadForm" role="form"
                                                   style="display: inline-block;float: left;margin-bottom: 0;">
                                                 <div class="cont">
-                                                    <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
+                                                    <a onclick="if (sociallink.url) window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                        style="display: inline-block;   float: left;">
                                                         <img width="24"
                                                              ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
@@ -1102,7 +1102,7 @@
                                                                         class="socialItem" style="padding-bottom: 5px;">
                                                                         <div class="cont">
                                                                             <a href=""
-                                                                               onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
+                                                                               onclick="if (sociallink.url) window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                                                style="display: inline-block;   float: left;">
                                                                                 <img width="16"
                                                                                      ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>

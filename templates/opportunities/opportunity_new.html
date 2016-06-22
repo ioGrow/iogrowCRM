@@ -622,7 +622,7 @@
                                                             style="padding-bottom: 5px;float: left;display: inline-block;">
                                                             <div class="cont">
                                                                 <a href=""
-                                                                   onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
+                                                                   onclick="if (sociallink.url) window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                                    style="display: inline-block;   float: left;">
                                                                     <img width="16" ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                                 <div class="clearfix"></div>

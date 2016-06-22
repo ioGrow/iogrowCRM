@@ -361,10 +361,10 @@
                                             <li ng-repeat="sociallink in sociallinks" class="socialItem"
                                                 style="padding-bottom: 5px;">
                                                 <div class="cont">
-                                                    <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
+                                                    <a onclick="if (sociallink.url) window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                        style="display: inline-block;   float: left;"><img width="28"
                                                                                                           ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
-                                            <span onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
+                                            <span onclick="if (sociallink.url) window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                   title="<%= sociallink.url%>"
                                                   style="line-height: 25px;font-size: 15px;padding-left: 20px; display: inline-block; float: left; cursor:pointer">
                                             <%= sociallink.url | limitTo:42%><%= sociallink.url.length > 42 ? '...' : ''%></span>
@@ -378,7 +378,7 @@
                                         </ul>
                                         <form class="form-inline newLeadForm" role="form">
                                             <div class="cont">
-                                                <a onclick="window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
+                                                <a onclick="if (sociallink.url) window.open('<%=prepareUrl(sociallink.url)%>','winname','width=700,height=550')"
                                                    style="display: inline-block;   float: left;"><img width="28"
                                                                                                       ng-src="/static/src/img/social_icons/<%=urlSource(sociallink.url)%>.png"></a>
                                                 <input ng-enter="pushElement(sociallink,sociallinks,'sociallinks')"
