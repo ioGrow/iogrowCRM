@@ -11,7 +11,7 @@ addons:
     - wget
 before_install:
 - openssl aes-256-cbc -K $encrypted_e45c924b1dd0_key -iv $encrypted_e45c924b1dd0_iv
-  -in client_secret.json.travis.enc -out client_secret.json -d
+  -in crm/config/client_secret.json.travis.enc -out crm/config/client_secret.json -d
 - pip install pyinvoke
 install:
 - invoke download

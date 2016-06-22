@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/ioGrow/iogrowCRM.svg?branch=master)](https://travis-ci.org/ioGrow/iogrowCRM)
 # ioGROW
 CRM for Social Selling, on Google. Integrated with LinkedIn, Twitter, Facebook & Gmail.
 
