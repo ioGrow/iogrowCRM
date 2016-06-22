@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-23 21:47+0100\n"
+"POT-Creation-Date: 2016-06-22 18:21+0100\n"
 "PO-Revision-Date: 2014-07-26 11:01+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -30,10 +30,6 @@ msgstr "À propos"
 #, fuzzy
 msgid " Access : "
 msgstr "étiquettes"
-
-#, fuzzy
-msgid " Account"
-msgstr "Compte"
 
 #, fuzzy
 msgid " Add Tags"
@@ -67,10 +63,6 @@ msgid " Competitors"
 msgstr "Compétiteurs"
 
 #, fuzzy
-msgid " Contact"
-msgstr "Contact"
-
-#, fuzzy
 msgid " Custom Fields"
 msgstr "Champs personnalisés"
 
@@ -84,10 +76,6 @@ msgstr "Supprimer"
 #, fuzzy
 msgid " Delete Lead"
 msgstr "Supprimer piste"
-
-#, fuzzy
-msgid " Descision Maker"
-msgstr "Description"
 
 msgid " Descision Process"
 msgstr ""
@@ -172,13 +160,6 @@ msgstr "nouveau"
 msgid " New "
 msgstr "nouveau"
 
-msgid " New Case"
-msgstr "Nouvelle Réclamation"
-
-#, fuzzy
-msgid " New Opportunity"
-msgstr "Nouvelle Opportunité"
-
 #, fuzzy
 msgid " New document"
 msgstr "Commentaires"
@@ -259,6 +240,12 @@ msgstr ""
 msgid "+ Add new colaborator"
 msgstr "Utilisateur invité"
 
+msgid "+ Show more..."
+msgstr ""
+
+msgid "- Show less"
+msgstr ""
+
 msgid "1 day"
 msgstr ""
 
@@ -271,13 +258,7 @@ msgstr ""
 msgid "1- Select the CSV file you want to import."
 msgstr ""
 
-msgid "1. Billing details"
-msgstr ""
-
 msgid "2- Match your data with fields in ioGrow"
-msgstr ""
-
-msgid "2. Billing cycle"
 msgstr ""
 
 msgid "30 minutes before"
@@ -298,6 +279,9 @@ msgstr "étiquettes"
 
 msgid "Account"
 msgstr "Compte"
+
+msgid "Account Address"
+msgstr ""
 
 #, fuzzy
 msgid "Account Informations"
@@ -329,9 +313,6 @@ msgstr "Ajouter un Compte"
 msgid "Add Address"
 msgstr "Ajouter une Adresse"
 
-msgid "Add Campaign"
-msgstr ""
-
 msgid "Add Case"
 msgstr "Ajouter réclamation"
 
@@ -345,15 +326,14 @@ msgstr "Ajouter un Contact"
 msgid "Add Custom Field"
 msgstr "Ajouter ce champ personnalisé"
 
+msgid "Add Custom fields"
+msgstr ""
+
 msgid "Add Email"
 msgstr "Ajouter un email"
 
 msgid "Add Lead Status"
 msgstr "Ajouter Piste"
-
-#, fuzzy
-msgid "Add New Comment :"
-msgstr "Ajouter un commentaire :"
 
 #, fuzzy
 msgid "Add New Event"
@@ -378,6 +358,9 @@ msgstr "Ajouter des Tags"
 msgid "Add Tasks directly from Gmail"
 msgstr ""
 
+msgid "Add Time scale"
+msgstr ""
+
 msgid "Add Website"
 msgstr "Ajouter un site web"
 
@@ -386,10 +369,6 @@ msgstr ""
 
 msgid "Add a Lead status"
 msgstr ""
-
-#, fuzzy
-msgid "Add a Phone"
-msgstr "Ajouter ce téléphone"
 
 msgid "Add a Tag"
 msgstr "Ajouter une étiquette"
@@ -418,10 +397,6 @@ msgstr "Ajouter un nouvelle tâche"
 
 msgid "Add a new address"
 msgstr "Ajouter une nouvelle adresse"
-
-#, fuzzy
-msgid "Add a new assignee"
-msgstr "Ajouter un nouveau assignée"
 
 msgid "Add a new email address"
 msgstr "Ajouter une nouvelle adresse e-mail"
@@ -560,16 +535,9 @@ msgstr "Andministrateur"
 msgid "Agriculture"
 msgstr "Agriculture"
 
-msgid "All"
-msgstr "Tout"
-
 #, fuzzy
 msgid "All Cases"
 msgstr "Toutes les Tâches"
-
-#, fuzzy
-msgid "All Contacts"
-msgstr "Tous les contacts"
 
 #, fuzzy
 msgid "All Opportunities"
@@ -584,14 +552,8 @@ msgstr ""
 msgid "All contacts"
 msgstr "Tous les contacts"
 
-msgid "All day"
-msgstr "Toute la journée"
-
 msgid "All leads"
 msgstr "Toutes les pistes"
-
-msgid "All opportunities"
-msgstr "Toutes les opportunités"
 
 #, fuzzy
 msgid "All your"
@@ -645,19 +607,11 @@ msgstr "Attribuer à"
 msgid "Assign Task to someone"
 msgstr "Désigner quelqu'un pour cette tâche"
 
-#, fuzzy
-msgid "Assign someone to Task"
-msgstr "Désigner quelqu'un pour cette tâche"
-
 msgid "Assign someone to this task"
 msgstr "Désigner quelqu'un pour cette tâche"
 
 #, fuzzy
 msgid "Assignee"
-msgstr "Attribuer à"
-
-#, fuzzy
-msgid "Assignees"
 msgstr "Attribuer à"
 
 #, fuzzy
@@ -674,15 +628,8 @@ msgstr "Joindre des documents"
 msgid "Attach files"
 msgstr ""
 
-msgid "Auto renew"
-msgstr ""
-
 msgid "BCC"
 msgstr ""
-
-#, fuzzy
-msgid "Back to Contacts"
-msgstr "Mes contacts"
 
 msgid "Banking"
 msgstr "Bancaire"
@@ -690,21 +637,11 @@ msgstr "Bancaire"
 msgid "Beverage"
 msgstr "boisson"
 
-msgid "Billing & Subscription Settings"
-msgstr ""
-
 msgid "Billing address"
 msgstr "Adresse de facturation"
 
 msgid "Biotechnology"
 msgstr "Biotechnologie"
-
-#, fuzzy
-msgid "Buy new licenses"
-msgstr "licences attribuées"
-
-msgid "Buy now"
-msgstr ""
 
 msgid ""
 "By deleting your organization, all your data will be deleted and you will"
@@ -717,17 +654,8 @@ msgstr ""
 msgid "Calendar"
 msgstr "Calendrier"
 
-msgid "Campaigns"
-msgstr ""
-
 msgid "Cancel"
 msgstr "Annuler"
-
-msgid "Card changed successfully"
-msgstr ""
-
-msgid "Case"
-msgstr "Réclamation"
 
 msgid "Case Informations"
 msgstr "Information sur la réclamation"
@@ -775,6 +703,12 @@ msgid "Click to Select a label"
 msgstr "Cliquez pour sélectionner une étiquette"
 
 msgid "Click to change the estimated date"
+msgstr ""
+
+msgid ""
+"Click to install ioGrow extension to\n"
+"                        get all linkedin informations of your lead with "
+"one click !"
 msgstr ""
 
 msgid "Close"
@@ -846,10 +780,6 @@ msgid "Contact"
 msgstr "Contact"
 
 #, fuzzy
-msgid "Contact Informations from Linkedin"
-msgstr "Informations sur le contact"
-
-#, fuzzy
 msgid "Contact details"
 msgstr "Mes contacts"
 
@@ -893,10 +823,6 @@ msgstr "Créer ce document"
 msgid "Created by Me"
 msgstr "Créé par moi"
 
-#, fuzzy
-msgid "Created date"
-msgstr "Lié à"
-
 msgid "Critical"
 msgstr "Critique"
 
@@ -905,9 +831,6 @@ msgstr "Devise"
 
 msgid "Currency Format"
 msgstr "Format monétaire"
-
-msgid "Current position"
-msgstr ""
 
 msgid "Custom Field"
 msgstr "Champ personnalisé"
@@ -943,6 +866,30 @@ msgstr "Supprimer"
 msgid "Delete Account"
 msgstr "Supprimer le compte"
 
+msgid "Delete All"
+msgstr ""
+
+msgid "Delete All Accounts"
+msgstr ""
+
+msgid "Delete All Cases"
+msgstr ""
+
+msgid "Delete All Contacts"
+msgstr ""
+
+msgid "Delete All Leads"
+msgstr ""
+
+msgid "Delete All Opportunities"
+msgstr ""
+
+msgid "Delete All Records"
+msgstr ""
+
+msgid "Delete All Tasks"
+msgstr ""
+
 #, fuzzy
 msgid "Delete Case"
 msgstr "Supprimer la tâche"
@@ -971,18 +918,14 @@ msgstr "Créer l'opportunité"
 msgid "Delete Task"
 msgstr "Supprimer la tâche"
 
+msgid "Delete invitee"
+msgstr ""
+
 #, fuzzy
 msgid "Delete this Task"
 msgstr "Supprimer cette tâche"
 
-msgid "Descision Maker ?"
-msgstr ""
-
 msgid "Description"
-msgstr "Description"
-
-#, fuzzy
-msgid "Description of user"
 msgstr "Description"
 
 #, fuzzy
@@ -993,9 +936,6 @@ msgid "Details"
 msgstr "détails"
 
 msgid "Details of Lead"
-msgstr ""
-
-msgid "Disabled"
 msgstr ""
 
 msgid "Disassociate a"
@@ -1110,9 +1050,6 @@ msgstr "Signature d'email"
 msgid "Empty"
 msgstr "Vide"
 
-msgid "Enabled"
-msgstr ""
-
 msgid "Ends"
 msgstr "Fins"
 
@@ -1128,9 +1065,6 @@ msgstr "Ingénierie"
 
 msgid "English"
 msgstr "Anglais"
-
-msgid "Enter a Website"
-msgstr "Ajouter un siteweb"
 
 msgid "Enter a email"
 msgstr ""
@@ -1163,15 +1097,9 @@ msgstr "Ecologique"
 msgid "Error"
 msgstr "Erreur"
 
-msgid "Estimated closed date"
-msgstr "Date de clôture prévisionnelle"
-
 #, fuzzy
 msgid "Event Informations"
 msgstr "Supprimer les informations"
-
-msgid "Event tilte"
-msgstr "Titre de l'événement"
 
 #, fuzzy
 msgid "Event title"
@@ -1184,15 +1112,6 @@ msgstr "Ajouter événement"
 msgid "Everyone you invite will receive a welcome email."
 msgstr ""
 
-msgid "Experiences"
-msgstr ""
-
-msgid "Expiration date"
-msgstr ""
-
-msgid "Expire"
-msgstr "éxpiré"
-
 #, fuzzy
 msgid "Export"
 msgstr "Exporter"
@@ -1203,17 +1122,11 @@ msgstr "Champ"
 msgid "Field label"
 msgstr "Libellé de champ"
 
-msgid "Field options"
-msgstr "Options des champs"
-
 msgid "Field preview"
 msgstr "Pré-visualiser le champ"
 
 msgid "Field type"
 msgstr "Type de champ"
-
-msgid "Filter"
-msgstr "Filtrer"
 
 msgid "Filter by"
 msgstr "Filtrer par"
@@ -1221,9 +1134,6 @@ msgstr "Filtrer par"
 #, fuzzy
 msgid "Filter by Tags"
 msgstr "Filtrer par"
-
-msgid "Filter by assignee"
-msgstr ""
 
 #, fuzzy
 msgid "Filter by source"
@@ -1236,10 +1146,6 @@ msgid "Finance"
 msgstr "Finance"
 
 msgid "First Name"
-msgstr "Prénom"
-
-#, fuzzy
-msgid "Firstname"
 msgstr "Prénom"
 
 msgid "Fixed bid"
@@ -1260,7 +1166,7 @@ msgstr "à partir de"
 msgid "From : mm/dd/yyyy hh:mm am"
 msgstr ""
 
-msgid "General Informations from Twitter"
+msgid "Get"
 msgstr ""
 
 #, fuzzy
@@ -1289,15 +1195,11 @@ msgstr "Soins et santé"
 msgid "Help"
 msgstr "Aide"
 
-#, fuzzy
-msgid "Help ?"
-msgstr "Aide ?"
+msgid "Help translate?"
+msgstr ""
 
 msgid "Here will be a configuration form"
 msgstr "Ici sera une formulaire de configuration"
-
-msgid "Hi"
-msgstr "Salut"
 
 msgid "Hi i want to add you to this project ..."
 msgstr ""
@@ -1332,6 +1234,9 @@ msgstr "Industrie"
 msgid "Industry:"
 msgstr "Industrie"
 
+msgid "Install Chrome Extension"
+msgstr ""
+
 #, fuzzy
 msgid "Install chrome extension"
 msgstr "Installer Chrome Extension"
@@ -1344,12 +1249,6 @@ msgstr "Intégrateur"
 
 msgid "Introduction"
 msgstr "Introduction"
-
-msgid "Invalid CVC"
-msgstr ""
-
-msgid "Invalid expiration date"
-msgstr ""
 
 msgid "Investor"
 msgstr "Investisseur"
@@ -1380,9 +1279,6 @@ msgid ""
 "Invite people from your team and start working together on this task. "
 "Everyone you invite will receive an email."
 msgstr "Tout le monde vous invitez receveront un e-mail"
-
-msgid "Invite people to participate in this discussion"
-msgstr "Invitez des gens à participer à cette discussion"
 
 msgid "Invited"
 msgstr "Invité"
@@ -1415,9 +1311,6 @@ msgstr ""
 msgid "Label"
 msgstr "Libellé"
 
-msgid "Labels"
-msgstr "étiquettes"
-
 msgid "Language"
 msgstr "Langue"
 
@@ -1428,9 +1321,6 @@ msgstr "Nom"
 msgid "Last Stage"
 msgstr "Nom"
 
-msgid "Last Tweet:"
-msgstr ""
-
 msgid "Last modified"
 msgstr "Dernière mise à jour"
 
@@ -1440,37 +1330,17 @@ msgstr ""
 msgid "Last updated:"
 msgstr "Dernière mise à jour:"
 
-#, fuzzy
-msgid "Lastname"
-msgstr "Nom"
-
-msgid "Launch Wizard "
-msgstr ""
-
 msgid "Lead"
 msgstr "Piste"
 
 msgid "Lead Status"
 msgstr "Statut de piste"
 
-msgid "Lead scoring"
-msgstr ""
-
-msgid "Lead scoring builder"
-msgstr ""
-
 msgid "Leads"
 msgstr "Pistes"
 
 msgid "Leads Status Settings"
 msgstr "Paramètre des statuts des pistes"
-
-#, fuzzy
-msgid "License status"
-msgstr "Statut de licence"
-
-msgid "License type"
-msgstr "Type de licence"
 
 msgid "Linkedin"
 msgstr ""
@@ -1480,10 +1350,6 @@ msgstr "Chargement"
 
 msgid "Loading..."
 msgstr "Chargement..."
-
-#, fuzzy
-msgid "Locality"
-msgstr "Probabilité"
 
 #, fuzzy
 msgid "Location"
@@ -1529,23 +1395,12 @@ msgstr "Plus"
 msgid "Multiple choice"
 msgstr "Choix multiple"
 
-msgid "My"
-msgstr "Mes"
-
 msgid "My  Cases"
 msgstr ""
 
 #, fuzzy
 msgid "My  Opportunities"
 msgstr "Mes Opportunités"
-
-#, fuzzy
-msgid "My Cases"
-msgstr "Ajouter réclamation"
-
-#, fuzzy
-msgid "My Contacts"
-msgstr "Mes contacts"
 
 #, fuzzy
 msgid "My Opportunities"
@@ -1560,9 +1415,6 @@ msgstr "Mes contacts"
 #, fuzzy
 msgid "My leads"
 msgstr "Pistes"
-
-msgid "My opportunities"
-msgstr "Mes Opportunités"
 
 msgid "My setting"
 msgstr "Paramètres"
@@ -1585,9 +1437,6 @@ msgstr "Nouveau"
 
 msgid "New Account"
 msgstr "Nouveau Compte"
-
-msgid "New Campaign"
-msgstr "Nouvelle compagne"
 
 msgid "New Case"
 msgstr "Nouvelle réclamation"
@@ -1635,8 +1484,14 @@ msgstr "Suivant"
 msgid "No"
 msgstr ""
 
+msgid "No matching profile found"
+msgstr ""
+
 #, fuzzy
 msgid "No notification"
+msgstr ""
+
+msgid "No related contacts"
 msgstr ""
 
 msgid "No results found"
@@ -1668,21 +1523,6 @@ msgstr "Remarques"
 msgid "Number"
 msgstr "Numéro"
 
-msgid "Number of favorites:"
-msgstr ""
-
-msgid "Number of followers"
-msgstr ""
-
-msgid "Number of friends"
-msgstr ""
-
-msgid "Number of retweets:"
-msgstr ""
-
-msgid "Number of tweets"
-msgstr ""
-
 #, fuzzy
 msgid "Ok"
 msgstr "Travail"
@@ -1694,20 +1534,11 @@ msgstr "Oops! ... Une erreur s'est produite. S'il vous plaît essayer à nouveau
 msgid "Open Tasks"
 msgstr "Tâches urgentes"
 
-msgid "Open with Google Drive"
-msgstr ""
-
 msgid "Opened by:"
 msgstr "Ouverte par:"
 
 msgid "Opportunities"
 msgstr "Opportunités"
-
-msgid "Opportunity"
-msgstr "Opportunité"
-
-msgid "Opportunity Stage"
-msgstr "Etape de l'opportunité"
 
 msgid "Opportunity Stages"
 msgstr "Étapes d'opportunité"
@@ -1722,19 +1553,12 @@ msgstr "Ou tout simplement ajouter des notes à retenir ce qui est important."
 msgid "Order by"
 msgstr "Trier par"
 
-#, fuzzy
-msgid "Organization"
-msgstr "Transport"
-
 msgid "Other"
 msgstr "Autre"
 
 #, fuzzy
 msgid "Other details"
 msgstr "Mes contacts"
-
-msgid "Overview"
-msgstr ""
 
 msgid "Owner"
 msgstr "Propriétaire"
@@ -1758,13 +1582,6 @@ msgstr "Partenaire"
 
 msgid "Partner Referral"
 msgstr "Renvoi partenaire"
-
-msgid "Past position"
-msgstr ""
-
-#, fuzzy
-msgid "Payment information"
-msgstr "Supprimer les informations"
 
 msgid "Pending"
 msgstr ""
@@ -1794,9 +1611,6 @@ msgstr "Enquête de téléphone"
 #, fuzzy
 msgid "Phone number"
 msgstr "Entrer un numéro"
-
-msgid "Please specify a valid credit card number"
-msgstr ""
 
 #, fuzzy
 msgid "Portuguese/Brazil"
@@ -1829,9 +1643,6 @@ msgstr "Créer"
 msgid "Probability"
 msgstr "Probabilité"
 
-msgid "Processing"
-msgstr ""
-
 msgid "Profession"
 msgstr ""
 
@@ -1840,13 +1651,6 @@ msgstr "Perspective"
 
 msgid "Public"
 msgstr ""
-
-#, fuzzy
-msgid "Puchased Licenses"
-msgstr "Liste acheté"
-
-msgid "Purchase"
-msgstr "acheter"
 
 msgid "Purchased List"
 msgstr "Liste acheté"
@@ -1877,10 +1681,6 @@ msgstr "Contacts reliés"
 msgid "Related to (Account, Contact or Lead)"
 msgstr ""
 
-#, fuzzy
-msgid "Relation"
-msgstr "Récréation"
-
 msgid "Relationships"
 msgstr "Relations"
 
@@ -1889,10 +1689,6 @@ msgstr ""
 
 msgid "Reopen"
 msgstr "Rouvrir"
-
-#, fuzzy
-msgid "Reopen Task"
-msgstr "Rouvrire la tâche"
 
 msgid "Required"
 msgstr "indispensable"
@@ -1924,9 +1720,6 @@ msgstr ""
 msgid "Schedule"
 msgstr ""
 
-msgid "Score ?"
-msgstr ""
-
 msgid "Search"
 msgstr "Recherche"
 
@@ -1946,9 +1739,8 @@ msgstr ""
 msgid "Searching..."
 msgstr "Chargement..."
 
-#, fuzzy
-msgid "Select Task"
-msgstr "Supprimer la tâche"
+msgid "Select"
+msgstr ""
 
 msgid "Select Type"
 msgstr "Sélectionner un type"
@@ -2017,9 +1809,6 @@ msgstr "Bouton sign-in"
 msgid "Signature"
 msgstr "Signature"
 
-msgid "Skills"
-msgstr ""
-
 msgid "Social Media"
 msgstr "Médias sociaux"
 
@@ -2033,9 +1822,6 @@ msgstr "Lien social"
 #, fuzzy
 msgid "Social links"
 msgstr "Lien social"
-
-msgid "Sort"
-msgstr "Classement"
 
 msgid "Sort by"
 msgstr "Trier par"
@@ -2061,17 +1847,11 @@ msgstr "Etape"
 msgid "Stage Order"
 msgstr "Code Postal"
 
-msgid "Stages"
-msgstr "Etapes"
-
 msgid "Starts"
 msgstr "Débuts"
 
 msgid "State/Province"
 msgstr "Etat/Province"
-
-msgid "Stats from Twitter"
-msgstr ""
 
 msgid "Status"
 msgstr "Statut"
@@ -2082,22 +1862,8 @@ msgstr "Rue"
 msgid "Subject"
 msgstr "Sujet"
 
-#, fuzzy
-msgid "Subscription"
-msgstr "Description"
-
-#, fuzzy
-msgid "Subscription type"
-msgstr "Description"
-
-msgid "Summary"
-msgstr "Résumé"
-
 msgid "Supplier"
 msgstr "Fournisseur"
-
-msgid "Synchronize my contact with google"
-msgstr ""
 
 msgid "Synchronize my contacts with google contacts "
 msgstr ""
@@ -2133,10 +1899,6 @@ msgstr "Télécommunications"
 msgid "Text"
 msgstr "Suivant"
 
-#, fuzzy
-msgid "Text:"
-msgstr "Suivant"
-
 msgid "The created_by is:"
 msgstr ""
 
@@ -2154,9 +1916,6 @@ msgstr ""
 "extraordinaire."
 
 msgid "The owner is:"
-msgstr ""
-
-msgid "There was a problem"
 msgstr ""
 
 msgid "This signature will appear in all mail you send from iogrow"
@@ -2199,19 +1958,9 @@ msgstr ""
 msgid "Transportation"
 msgstr "Transport"
 
-msgid "Try again"
-msgstr ""
-
-#, fuzzy
-msgid "Tweets"
-msgstr "Rue"
-
 #, fuzzy
 msgid "Twitter"
 msgstr "Titre"
-
-msgid "Twitter Link"
-msgstr ""
 
 msgid "Type"
 msgstr "Type"
@@ -2243,12 +1992,6 @@ msgstr "Mise à jour"
 msgid "Updated:"
 msgstr "Mise à jour"
 
-msgid "Upgrade"
-msgstr ""
-
-msgid "Upgrade Now"
-msgstr ""
-
 msgid "Upload"
 msgstr ""
 
@@ -2268,6 +2011,11 @@ msgstr "Tâches urgentes"
 msgid "Use"
 msgstr "Utilisez"
 
+msgid ""
+"Use chrome browser to get all linkedin informations of your lead with one"
+" click !"
+msgstr ""
+
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -2286,9 +2034,6 @@ msgstr ""
 #, fuzzy
 msgid "View"
 msgstr "Vue"
-
-msgid "View more"
-msgstr ""
 
 msgid "We found diffrent possible matches. Click the one you want :"
 msgstr ""
@@ -2311,14 +2056,6 @@ msgstr "Due"
 msgid "When?"
 msgstr "Quand?"
 
-#, fuzzy
-msgid "Where"
-msgstr "Ou?"
-
-#, fuzzy
-msgid "Where ?"
-msgstr "Ou?"
-
 msgid "Where?"
 msgstr "Ou?"
 
@@ -2338,17 +2075,6 @@ msgstr "Qui peut accéder"
 
 msgid "Who has access:"
 msgstr "Qui peut accéder:"
-
-#, fuzzy
-msgid "Who is involved"
-msgstr "Qui est impliqué"
-
-msgid "Who's involved"
-msgstr "Qui est impliqué"
-
-#, fuzzy
-msgid "Who's involved ?"
-msgstr "Qui est impliqué"
 
 msgid "Working"
 msgstr ""
@@ -2392,15 +2118,6 @@ msgstr ""
 msgid "all day"
 msgstr "Toute la journée"
 
-msgid "allday"
-msgstr ""
-
-msgid "assigned licenses"
-msgstr "licences attribuées"
-
-msgid "available licenses"
-msgstr "licences disponible"
-
 #, fuzzy
 msgid "case "
 msgstr "Réclamation"
@@ -2417,10 +2134,6 @@ msgstr ""
 "Réclamations pages comprend une page détaillée pour chaque client, "
 "partenaire, ou investisseur dans votre écosystème. Vous et vos collègues "
 "pouvez collaborer à obtenir une compréhension profonde."
-
-#, fuzzy
-msgid "choose  Stage"
-msgstr "Choisir l'étape"
 
 msgid "choose Stage"
 msgstr "Choisir l'étape"
@@ -2458,9 +2171,8 @@ msgstr "Toute la journée"
 msgid "documents"
 msgstr "Commentaires"
 
-#, fuzzy
-msgid "education"
-msgstr "Education"
+msgid "edit"
+msgstr ""
 
 msgid "first record"
 msgstr ""
@@ -2475,19 +2187,15 @@ msgstr ""
 msgid "from this opportunity?"
 msgstr ""
 
+msgid "have been deleted"
+msgstr ""
+
 msgid "home"
 msgstr "Domicile"
 
 #, fuzzy
 msgid "hour"
 msgstr ""
-
-msgid "import your leads from Gmail:"
-msgstr ""
-
-#, fuzzy
-msgid "industry"
-msgstr "Industrie"
 
 #, fuzzy
 msgid "invite others"
@@ -2498,9 +2206,6 @@ msgstr ""
 
 msgid "ioGrow Live"
 msgstr ""
-
-msgid "licenses bought"
-msgstr "licences achetées"
 
 msgid "minutes before"
 msgstr ""
@@ -2531,20 +2236,17 @@ msgstr "Opportunité"
 msgid "opportunity name..."
 msgstr "Montant de l'opportunité"
 
+msgid "or add a new contact"
+msgstr ""
+
 msgid "other"
 msgstr "autre"
-
-msgid "past positions"
-msgstr ""
 
 msgid "portlet Settings"
 msgstr "Paramètres de portlet"
 
 msgid "private: only you and your collaborators"
 msgstr "privé: seuls vous et vos collaborateurs"
-
-msgid "profession"
-msgstr ""
 
 msgid "public: Anyone within your organization"
 msgstr "publique:Toute personne au sein de votre organisation "
@@ -2568,9 +2270,6 @@ msgstr ""
 #, fuzzy
 msgid "stage"
 msgstr "Etape"
-
-msgid "synchronize your Gmail contact  with ioGrow"
-msgstr ""
 
 #, fuzzy
 msgid "these accounts"
@@ -2620,10 +2319,7 @@ msgstr "pour ajouter des étiquettes"
 msgid "to assign the task"
 msgstr "pour assigner la tâche"
 
-msgid "turn off  "
-msgstr ""
-
-msgid "turn on"
+msgid "translate"
 msgstr ""
 
 #, fuzzy

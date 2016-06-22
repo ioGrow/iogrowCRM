@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-23 21:47+0100\n"
+"POT-Creation-Date: 2016-06-22 18:21+0100\n"
 "PO-Revision-Date: 2014-07-24 18:00+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es_ES\n"
@@ -26,9 +26,6 @@ msgid " About"
 msgstr ""
 
 msgid " Access : "
-msgstr ""
-
-msgid " Account"
 msgstr ""
 
 msgid " Add Tags"
@@ -55,9 +52,6 @@ msgstr ""
 msgid " Competitors"
 msgstr ""
 
-msgid " Contact"
-msgstr ""
-
 msgid " Custom Fields"
 msgstr ""
 
@@ -68,9 +62,6 @@ msgid " Delete"
 msgstr ""
 
 msgid " Delete Lead"
-msgstr ""
-
-msgid " Descision Maker"
 msgstr ""
 
 msgid " Descision Process"
@@ -139,12 +130,6 @@ msgstr ""
 msgid " New "
 msgstr ""
 
-msgid " New Case"
-msgstr ""
-
-msgid " New Opportunity"
-msgstr ""
-
 msgid " New document"
 msgstr ""
 
@@ -208,6 +193,12 @@ msgstr ""
 msgid "+ Add new colaborator"
 msgstr ""
 
+msgid "+ Show more..."
+msgstr ""
+
+msgid "- Show less"
+msgstr ""
+
 msgid "1 day"
 msgstr ""
 
@@ -220,13 +211,7 @@ msgstr ""
 msgid "1- Select the CSV file you want to import."
 msgstr ""
 
-msgid "1. Billing details"
-msgstr ""
-
 msgid "2- Match your data with fields in ioGrow"
-msgstr ""
-
-msgid "2. Billing cycle"
 msgstr ""
 
 msgid "30 minutes before"
@@ -245,6 +230,9 @@ msgid "Access"
 msgstr ""
 
 msgid "Account"
+msgstr ""
+
+msgid "Account Address"
 msgstr ""
 
 msgid "Account Informations"
@@ -271,9 +259,6 @@ msgstr ""
 msgid "Add Address"
 msgstr ""
 
-msgid "Add Campaign"
-msgstr ""
-
 msgid "Add Case"
 msgstr ""
 
@@ -286,13 +271,13 @@ msgstr ""
 msgid "Add Custom Field"
 msgstr ""
 
+msgid "Add Custom fields"
+msgstr ""
+
 msgid "Add Email"
 msgstr ""
 
 msgid "Add Lead Status"
-msgstr ""
-
-msgid "Add New Comment :"
 msgstr ""
 
 msgid "Add New Event"
@@ -316,6 +301,9 @@ msgstr ""
 msgid "Add Tasks directly from Gmail"
 msgstr ""
 
+msgid "Add Time scale"
+msgstr ""
+
 msgid "Add Website"
 msgstr ""
 
@@ -323,9 +311,6 @@ msgid "Add a Case status"
 msgstr ""
 
 msgid "Add a Lead status"
-msgstr ""
-
-msgid "Add a Phone"
 msgstr ""
 
 msgid "Add a Tag"
@@ -350,9 +335,6 @@ msgid "Add a new Task"
 msgstr ""
 
 msgid "Add a new address"
-msgstr ""
-
-msgid "Add a new assignee"
 msgstr ""
 
 msgid "Add a new email address"
@@ -475,13 +457,7 @@ msgstr ""
 msgid "Agriculture"
 msgstr ""
 
-msgid "All"
-msgstr ""
-
 msgid "All Cases"
-msgstr ""
-
-msgid "All Contacts"
 msgstr ""
 
 msgid "All Opportunities"
@@ -496,13 +472,7 @@ msgstr ""
 msgid "All contacts"
 msgstr ""
 
-msgid "All day"
-msgstr ""
-
 msgid "All leads"
-msgstr ""
-
-msgid "All opportunities"
 msgstr ""
 
 msgid "All your"
@@ -550,16 +520,10 @@ msgstr ""
 msgid "Assign Task to someone"
 msgstr ""
 
-msgid "Assign someone to Task"
-msgstr ""
-
 msgid "Assign someone to this task"
 msgstr ""
 
 msgid "Assignee"
-msgstr ""
-
-msgid "Assignees"
 msgstr ""
 
 msgid "Assignees:"
@@ -574,13 +538,7 @@ msgstr ""
 msgid "Attach files"
 msgstr ""
 
-msgid "Auto renew"
-msgstr ""
-
 msgid "BCC"
-msgstr ""
-
-msgid "Back to Contacts"
 msgstr ""
 
 msgid "Banking"
@@ -589,19 +547,10 @@ msgstr ""
 msgid "Beverage"
 msgstr ""
 
-msgid "Billing & Subscription Settings"
-msgstr ""
-
 msgid "Billing address"
 msgstr ""
 
 msgid "Biotechnology"
-msgstr ""
-
-msgid "Buy new licenses"
-msgstr ""
-
-msgid "Buy now"
 msgstr ""
 
 msgid ""
@@ -615,16 +564,7 @@ msgstr ""
 msgid "Calendar"
 msgstr ""
 
-msgid "Campaigns"
-msgstr ""
-
 msgid "Cancel"
-msgstr ""
-
-msgid "Card changed successfully"
-msgstr ""
-
-msgid "Case"
 msgstr ""
 
 msgid "Case Informations"
@@ -673,6 +613,12 @@ msgid "Click to Select a label"
 msgstr ""
 
 msgid "Click to change the estimated date"
+msgstr ""
+
+msgid ""
+"Click to install ioGrow extension to\n"
+"                        get all linkedin informations of your lead with "
+"one click !"
 msgstr ""
 
 msgid "Close"
@@ -735,9 +681,6 @@ msgstr ""
 msgid "Contact"
 msgstr ""
 
-msgid "Contact Informations from Linkedin"
-msgstr ""
-
 msgid "Contact details"
 msgstr ""
 
@@ -777,9 +720,6 @@ msgstr ""
 msgid "Created by Me"
 msgstr ""
 
-msgid "Created date"
-msgstr ""
-
 msgid "Critical"
 msgstr ""
 
@@ -787,9 +727,6 @@ msgid "Currency"
 msgstr ""
 
 msgid "Currency Format"
-msgstr ""
-
-msgid "Current position"
 msgstr ""
 
 msgid "Custom Field"
@@ -825,6 +762,30 @@ msgstr ""
 msgid "Delete Account"
 msgstr ""
 
+msgid "Delete All"
+msgstr ""
+
+msgid "Delete All Accounts"
+msgstr ""
+
+msgid "Delete All Cases"
+msgstr ""
+
+msgid "Delete All Contacts"
+msgstr ""
+
+msgid "Delete All Leads"
+msgstr ""
+
+msgid "Delete All Opportunities"
+msgstr ""
+
+msgid "Delete All Records"
+msgstr ""
+
+msgid "Delete All Tasks"
+msgstr ""
+
 msgid "Delete Case"
 msgstr ""
 
@@ -849,16 +810,13 @@ msgstr ""
 msgid "Delete Task"
 msgstr ""
 
+msgid "Delete invitee"
+msgstr ""
+
 msgid "Delete this Task"
 msgstr ""
 
-msgid "Descision Maker ?"
-msgstr ""
-
 msgid "Description"
-msgstr ""
-
-msgid "Description of user"
 msgstr ""
 
 msgid "Detail"
@@ -868,9 +826,6 @@ msgid "Details"
 msgstr ""
 
 msgid "Details of Lead"
-msgstr ""
-
-msgid "Disabled"
 msgstr ""
 
 msgid "Disassociate a"
@@ -972,9 +927,6 @@ msgstr ""
 msgid "Empty"
 msgstr ""
 
-msgid "Enabled"
-msgstr ""
-
 msgid "Ends"
 msgstr ""
 
@@ -988,9 +940,6 @@ msgid "Engineering"
 msgstr ""
 
 msgid "English"
-msgstr ""
-
-msgid "Enter a Website"
 msgstr ""
 
 msgid "Enter a email"
@@ -1020,13 +969,7 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-msgid "Estimated closed date"
-msgstr ""
-
 msgid "Event Informations"
-msgstr ""
-
-msgid "Event tilte"
 msgstr ""
 
 msgid "Event title"
@@ -1038,15 +981,6 @@ msgstr ""
 msgid "Everyone you invite will receive a welcome email."
 msgstr ""
 
-msgid "Experiences"
-msgstr ""
-
-msgid "Expiration date"
-msgstr ""
-
-msgid "Expire"
-msgstr ""
-
 msgid "Export"
 msgstr ""
 
@@ -1056,25 +990,16 @@ msgstr ""
 msgid "Field label"
 msgstr ""
 
-msgid "Field options"
-msgstr ""
-
 msgid "Field preview"
 msgstr ""
 
 msgid "Field type"
 msgstr ""
 
-msgid "Filter"
-msgstr ""
-
 msgid "Filter by"
 msgstr ""
 
 msgid "Filter by Tags"
-msgstr ""
-
-msgid "Filter by assignee"
 msgstr ""
 
 msgid "Filter by source"
@@ -1087,9 +1012,6 @@ msgid "Finance"
 msgstr ""
 
 msgid "First Name"
-msgstr ""
-
-msgid "Firstname"
 msgstr ""
 
 msgid "Fixed bid"
@@ -1111,7 +1033,7 @@ msgstr ""
 msgid "From : mm/dd/yyyy hh:mm am"
 msgstr ""
 
-msgid "General Informations from Twitter"
+msgid "Get"
 msgstr ""
 
 msgid "Gmail"
@@ -1138,13 +1060,10 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-msgid "Help ?"
+msgid "Help translate?"
 msgstr ""
 
 msgid "Here will be a configuration form"
-msgstr ""
-
-msgid "Hi"
 msgstr ""
 
 msgid "Hi i want to add you to this project ..."
@@ -1176,6 +1095,9 @@ msgstr ""
 msgid "Industry:"
 msgstr ""
 
+msgid "Install Chrome Extension"
+msgstr ""
+
 msgid "Install chrome extension"
 msgstr ""
 
@@ -1186,12 +1108,6 @@ msgid "Integrator"
 msgstr ""
 
 msgid "Introduction"
-msgstr ""
-
-msgid "Invalid CVC"
-msgstr ""
-
-msgid "Invalid expiration date"
 msgstr ""
 
 msgid "Investor"
@@ -1218,9 +1134,6 @@ msgstr ""
 msgid ""
 "Invite people from your team and start working together on this task. "
 "Everyone you invite will receive an email."
-msgstr ""
-
-msgid "Invite people to participate in this discussion"
 msgstr ""
 
 msgid "Invited"
@@ -1250,9 +1163,6 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
-msgid "Labels"
-msgstr ""
-
 msgid "Language"
 msgstr ""
 
@@ -1260,9 +1170,6 @@ msgid "Last Name"
 msgstr ""
 
 msgid "Last Stage"
-msgstr ""
-
-msgid "Last Tweet:"
 msgstr ""
 
 msgid "Last modified"
@@ -1274,34 +1181,16 @@ msgstr ""
 msgid "Last updated:"
 msgstr ""
 
-msgid "Lastname"
-msgstr ""
-
-msgid "Launch Wizard "
-msgstr ""
-
 msgid "Lead"
 msgstr ""
 
 msgid "Lead Status"
 msgstr ""
 
-msgid "Lead scoring"
-msgstr ""
-
-msgid "Lead scoring builder"
-msgstr ""
-
 msgid "Leads"
 msgstr ""
 
 msgid "Leads Status Settings"
-msgstr ""
-
-msgid "License status"
-msgstr ""
-
-msgid "License type"
 msgstr ""
 
 msgid "Linkedin"
@@ -1311,9 +1200,6 @@ msgid "Loading"
 msgstr ""
 
 msgid "Loading..."
-msgstr ""
-
-msgid "Locality"
 msgstr ""
 
 msgid "Location"
@@ -1355,19 +1241,10 @@ msgstr ""
 msgid "Multiple choice"
 msgstr ""
 
-msgid "My"
-msgstr ""
-
 msgid "My  Cases"
 msgstr ""
 
 msgid "My  Opportunities"
-msgstr ""
-
-msgid "My Cases"
-msgstr ""
-
-msgid "My Contacts"
 msgstr ""
 
 msgid "My Opportunities"
@@ -1380,9 +1257,6 @@ msgid "My contacts"
 msgstr ""
 
 msgid "My leads"
-msgstr ""
-
-msgid "My opportunities"
 msgstr ""
 
 msgid "My setting"
@@ -1404,9 +1278,6 @@ msgid "New"
 msgstr ""
 
 msgid "New Account"
-msgstr ""
-
-msgid "New Campaign"
 msgstr ""
 
 msgid "New Case"
@@ -1454,7 +1325,13 @@ msgstr ""
 msgid "No"
 msgstr ""
 
+msgid "No matching profile found"
+msgstr ""
+
 msgid "No notification"
+msgstr ""
+
+msgid "No related contacts"
 msgstr ""
 
 msgid "No results found"
@@ -1484,21 +1361,6 @@ msgstr ""
 msgid "Number"
 msgstr ""
 
-msgid "Number of favorites:"
-msgstr ""
-
-msgid "Number of followers"
-msgstr ""
-
-msgid "Number of friends"
-msgstr ""
-
-msgid "Number of retweets:"
-msgstr ""
-
-msgid "Number of tweets"
-msgstr ""
-
 msgid "Ok"
 msgstr ""
 
@@ -1508,19 +1370,10 @@ msgstr ""
 msgid "Open Tasks"
 msgstr ""
 
-msgid "Open with Google Drive"
-msgstr ""
-
 msgid "Opened by:"
 msgstr ""
 
 msgid "Opportunities"
-msgstr ""
-
-msgid "Opportunity"
-msgstr ""
-
-msgid "Opportunity Stage"
 msgstr ""
 
 msgid "Opportunity Stages"
@@ -1535,16 +1388,10 @@ msgstr ""
 msgid "Order by"
 msgstr ""
 
-msgid "Organization"
-msgstr ""
-
 msgid "Other"
 msgstr ""
 
 msgid "Other details"
-msgstr ""
-
-msgid "Overview"
 msgstr ""
 
 msgid "Owner"
@@ -1566,12 +1413,6 @@ msgid "Partner"
 msgstr ""
 
 msgid "Partner Referral"
-msgstr ""
-
-msgid "Past position"
-msgstr ""
-
-msgid "Payment information"
 msgstr ""
 
 msgid "Pending"
@@ -1601,9 +1442,6 @@ msgstr ""
 msgid "Phone number"
 msgstr ""
 
-msgid "Please specify a valid credit card number"
-msgstr ""
-
 msgid "Portuguese/Brazil"
 msgstr ""
 
@@ -1631,9 +1469,6 @@ msgstr ""
 msgid "Probability"
 msgstr ""
 
-msgid "Processing"
-msgstr ""
-
 msgid "Profession"
 msgstr ""
 
@@ -1641,12 +1476,6 @@ msgid "Prospect"
 msgstr ""
 
 msgid "Public"
-msgstr ""
-
-msgid "Puchased Licenses"
-msgstr ""
-
-msgid "Purchase"
 msgstr ""
 
 msgid "Purchased List"
@@ -1676,9 +1505,6 @@ msgstr ""
 msgid "Related to (Account, Contact or Lead)"
 msgstr ""
 
-msgid "Relation"
-msgstr ""
-
 msgid "Relationships"
 msgstr ""
 
@@ -1686,9 +1512,6 @@ msgid "Remind me"
 msgstr ""
 
 msgid "Reopen"
-msgstr ""
-
-msgid "Reopen Task"
 msgstr ""
 
 msgid "Required"
@@ -1721,9 +1544,6 @@ msgstr ""
 msgid "Schedule"
 msgstr ""
 
-msgid "Score ?"
-msgstr ""
-
 msgid "Search"
 msgstr ""
 
@@ -1742,7 +1562,7 @@ msgstr ""
 msgid "Searching..."
 msgstr ""
 
-msgid "Select Task"
+msgid "Select"
 msgstr ""
 
 msgid "Select Type"
@@ -1808,9 +1628,6 @@ msgstr ""
 msgid "Signature"
 msgstr ""
 
-msgid "Skills"
-msgstr ""
-
 msgid "Social Media"
 msgstr ""
 
@@ -1821,9 +1638,6 @@ msgid "Social link"
 msgstr ""
 
 msgid "Social links"
-msgstr ""
-
-msgid "Sort"
 msgstr ""
 
 msgid "Sort by"
@@ -1847,16 +1661,10 @@ msgstr ""
 msgid "Stage Order"
 msgstr ""
 
-msgid "Stages"
-msgstr ""
-
 msgid "Starts"
 msgstr ""
 
 msgid "State/Province"
-msgstr ""
-
-msgid "Stats from Twitter"
 msgstr ""
 
 msgid "Status"
@@ -1868,19 +1676,7 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-msgid "Subscription"
-msgstr ""
-
-msgid "Subscription type"
-msgstr ""
-
-msgid "Summary"
-msgstr ""
-
 msgid "Supplier"
-msgstr ""
-
-msgid "Synchronize my contact with google"
 msgstr ""
 
 msgid "Synchronize my contacts with google contacts "
@@ -1915,9 +1711,6 @@ msgstr ""
 msgid "Text"
 msgstr ""
 
-msgid "Text:"
-msgstr ""
-
 msgid "The created_by is:"
 msgstr ""
 
@@ -1930,9 +1723,6 @@ msgid ""
 msgstr ""
 
 msgid "The owner is:"
-msgstr ""
-
-msgid "There was a problem"
 msgstr ""
 
 msgid "This signature will appear in all mail you send from iogrow"
@@ -1971,16 +1761,7 @@ msgstr ""
 msgid "Transportation"
 msgstr ""
 
-msgid "Try again"
-msgstr ""
-
-msgid "Tweets"
-msgstr ""
-
 msgid "Twitter"
-msgstr ""
-
-msgid "Twitter Link"
 msgstr ""
 
 msgid "Type"
@@ -2010,12 +1791,6 @@ msgstr ""
 msgid "Updated:"
 msgstr ""
 
-msgid "Upgrade"
-msgstr ""
-
-msgid "Upgrade Now"
-msgstr ""
-
 msgid "Upload"
 msgstr ""
 
@@ -2031,6 +1806,11 @@ msgid "Urgent Tasks"
 msgstr ""
 
 msgid "Use"
+msgstr ""
+
+msgid ""
+"Use chrome browser to get all linkedin informations of your lead with one"
+" click !"
 msgstr ""
 
 msgid "Users"
@@ -2049,9 +1829,6 @@ msgid "Videos Help"
 msgstr ""
 
 msgid "View"
-msgstr ""
-
-msgid "View more"
 msgstr ""
 
 msgid "We found diffrent possible matches. Click the one you want :"
@@ -2075,14 +1852,6 @@ msgstr ""
 msgid "When?"
 msgstr ""
 
-#, fuzzy
-msgid "Where"
-msgstr ""
-
-#, fuzzy
-msgid "Where ?"
-msgstr ""
-
 msgid "Where?"
 msgstr ""
 
@@ -2099,15 +1868,6 @@ msgid "Who can access?"
 msgstr ""
 
 msgid "Who has access:"
-msgstr ""
-
-msgid "Who is involved"
-msgstr ""
-
-msgid "Who's involved"
-msgstr ""
-
-msgid "Who's involved ?"
 msgstr ""
 
 msgid "Working"
@@ -2149,15 +1909,6 @@ msgstr ""
 msgid "all day"
 msgstr ""
 
-msgid "allday"
-msgstr ""
-
-msgid "assigned licenses"
-msgstr ""
-
-msgid "available licenses"
-msgstr ""
-
 msgid "case "
 msgstr ""
 
@@ -2168,9 +1919,6 @@ msgid ""
 "cases  pages includes a detailed page for each customer, partner, or "
 "investor in your ecosystem. You and your co-workers can collaborate to "
 "get a deep understanding."
-msgstr ""
-
-msgid "choose  Stage"
 msgstr ""
 
 msgid "choose Stage"
@@ -2203,7 +1951,7 @@ msgstr ""
 msgid "documents"
 msgstr ""
 
-msgid "education"
+msgid "edit"
 msgstr ""
 
 msgid "first record"
@@ -2218,16 +1966,13 @@ msgstr ""
 msgid "from this opportunity?"
 msgstr ""
 
+msgid "have been deleted"
+msgstr ""
+
 msgid "home"
 msgstr ""
 
 msgid "hour"
-msgstr ""
-
-msgid "import your leads from Gmail:"
-msgstr ""
-
-msgid "industry"
 msgstr ""
 
 msgid "invite others"
@@ -2237,9 +1982,6 @@ msgid "ioGrow Field"
 msgstr ""
 
 msgid "ioGrow Live"
-msgstr ""
-
-msgid "licenses bought"
 msgstr ""
 
 msgid "minutes before"
@@ -2266,19 +2008,16 @@ msgstr ""
 msgid "opportunity name..."
 msgstr ""
 
-msgid "other"
+msgid "or add a new contact"
 msgstr ""
 
-msgid "past positions"
+msgid "other"
 msgstr ""
 
 msgid "portlet Settings"
 msgstr ""
 
 msgid "private: only you and your collaborators"
-msgstr ""
-
-msgid "profession"
 msgstr ""
 
 msgid "public: Anyone within your organization"
@@ -2300,9 +2039,6 @@ msgid "see guest list"
 msgstr ""
 
 msgid "stage"
-msgstr ""
-
-msgid "synchronize your Gmail contact  with ioGrow"
 msgstr ""
 
 msgid "these accounts"
@@ -2344,10 +2080,7 @@ msgstr ""
 msgid "to assign the task"
 msgstr ""
 
-msgid "turn off  "
-msgstr ""
-
-msgid "turn on"
+msgid "translate"
 msgstr ""
 
 msgid "week"

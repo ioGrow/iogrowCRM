@@ -30,6 +30,7 @@ from crm.endpoints_helper import EndpointsHelper
 from crm.iograph import Node, Edge, InfoNodeListResponse
 
 
+
 # The message class that defines the EntityKey schema
 class EntityKeyRequest(messages.Message):
     entityKey = messages.StringField(1)

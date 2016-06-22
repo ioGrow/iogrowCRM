@@ -12,6 +12,9 @@ info | _
  Website |	[iogrow.com](http://www.iogrow.com)
  Accounts |	[@Facebook](https://www.facebook.com/iogrow) [@Twitter](https://twitter.com/iogrow) [@GooglePlus](https://plus.google.com/110820504821255547625)
 
+## Help translate!
+You can help translate this CRM to your language through Transifex Platform [here](https://www.transifex.com/iogrow-1/iogrow/).
+
 ## Hacking
 ### Requirements
 - [Google App Engine SDK for python](https://cloud.google.com/appengine/downloads#Google_App_Engine_SDK_for_Python)

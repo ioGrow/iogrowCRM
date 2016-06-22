@@ -120,7 +120,7 @@ def babel(extract=False, init=False, compile=False, update=False):
         lang = raw_input("language to initialize?")
         run("pybabel init -l %s -d ./locale -i %s" % (lang, pot_path))
     if extract or update:
-        run("pybabel extract -F ./locale/babel.cfg -o %s ./ --omit-header --no-location  --sort-output" % pot_path)
+        run("pybabel extract -F ./locale/babel.cfg -o %s ./  --no-location  --sort-output" % pot_path)
         LANGS = ["ar", "en_US", "es_ES", "fr_FR", "pt_BR" ]
         for lang in LANGS:
             run("pybabel update -l %s -d ./locale -i %s --previous --ignore-obsolete" % (lang, pot_path))
