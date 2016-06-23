@@ -108,7 +108,7 @@ def deploy(ctx):
 @task
 def test(ctx, oauth=False):
     gae_path = find_gae_path()
-    print "gae_path", gae_path
+    print "gae_path == %s ;" % gae_path
     run("python test_runner.py {0} crm/tests".format(gae_path))
     if oauth:
         run("python test_runner.py {0} crm/tests/oauth".format(gae_path))
@@ -154,6 +154,7 @@ def remove_file_dir(file_dir):
 
 def find_gae_path():
     GAE_PATH = ''
+    GAE_PATH_ALT="../google_appengine/"
     if IS_WINDOWS:
         gae_path = None
         for path in os.environ['PATH'].split(os.pathsep):
@@ -166,7 +167,7 @@ def find_gae_path():
             gae_path = os.path.dirname(os.path.realpath(gae_path))
 
     if not gae_path:
-        return ''
+        return GAE_PATH_ALT
 
     gcloud_exec = 'gcloud.cmd' if IS_WINDOWS else 'gcloud'
     if not os.path.isfile(os.path.join(gae_path, gcloud_exec)):
@@ -177,4 +178,4 @@ def find_gae_path():
         if os.path.exists(gae_path):
             GAE_PATH = os.path.realpath(gae_path)
 
-    return GAE_PATH or "../google_appengine/"
+    return GAE_PATH or GAE_PATH_ALT
