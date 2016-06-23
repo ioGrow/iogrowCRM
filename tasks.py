@@ -28,7 +28,7 @@ def default(ctx):
 @task
 def download(ctx):
     gae_download_link="https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.38.zip"
-    run("cd ..; wget -nv -O google_appengine.zip %s  ; unzip -q google_appengine.zip" % gae_download_link)
+    run("cd ..; wget -O google_appengine.zip %s  ; unzip -q -o google_appengine.zip" % gae_download_link)
 
 
 @task
@@ -39,10 +39,10 @@ def install(ctx):
         run("npm config set registry http://registry.npmjs.org/")
     if not find_executable("grunt"):
         print "Installing grunt ..."
-        run("sudo npm i -g grunt")
+        run("sudo npm i -g grunt --loglevel info")
     if not find_executable("bower"):
         print "Installing bower ..."
-        run("sudo npm i -g bower")
+        run("sudo npm i -g bower --loglevel info")
 
     print "Updating grunt dependencies ..."
     run("npm up")
@@ -176,4 +176,4 @@ def find_gae_path():
         if os.path.exists(gae_path):
             GAE_PATH = os.path.realpath(gae_path)
 
-    return GAE_PATH
+    return GAE_PATH or "../google_appengine/"
