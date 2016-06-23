@@ -24,6 +24,6 @@ script:
 - invoke test
 deploy:
   provider: gae
-  keyfile: 'crm/config/client_secret.json'
+  keyfile: crm/config/client_secret.json
   project: iogrowcrm
   skip_cleanup: true
