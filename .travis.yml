@@ -13,7 +13,8 @@ addons:
 before_install:
 - openssl aes-256-cbc -K $encrypted_e45c924b1dd0_key -iv $encrypted_e45c924b1dd0_iv
   -in crm/config/client_secret.json.travis.enc -out crm/config/client_secret.json -d
-- sudo pip install invoke requests
+- sudo pip install invoke
+- sudo pip install requests
 install:
 - invoke download
 - invoke install

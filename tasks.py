@@ -28,7 +28,7 @@ def default(ctx):
 @task
 def download(ctx):
     gae_download_link="https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.38.zip"
-    run("cd ..; wget -O google_appengine.zip %s  ; unzip -qq google_appengine.zip" % gae_download_link)
+    run("cd ..; wget -nv -O google_appengine.zip %s  ; unzip -qq google_appengine.zip" % gae_download_link)
 
 
 @task
