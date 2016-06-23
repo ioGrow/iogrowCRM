@@ -108,6 +108,7 @@ def deploy(ctx):
 @task
 def test(ctx, oauth=False):
     gae_path = find_gae_path()
+    print "gae_path", gae_path
     run("python test_runner.py {0} crm/tests".format(gae_path))
     if oauth:
         run("python test_runner.py {0} crm/tests/oauth".format(gae_path))
