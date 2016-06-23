@@ -28,13 +28,15 @@ def default(ctx):
 @task
 def download(ctx):
     gae_download_link="https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.38.zip"
-    run("cd ..; wget -O google_appengine.zip %s  ; unzip -o google_appengine.zip" % gae_download_link)
+    run("cd ..; wget -O google_appengine.zip %s  ; unzip -qq google_appengine.zip" % gae_download_link)
 
 
 @task
 def install(ctx):
     if not find_executable("npm"):
         print "Please install Nodejs"
+    else:
+        run("npm config set registry http://registry.npmjs.org/")
     if not find_executable("grunt"):
         print "Installing grunt ..."
         run("sudo npm i -g grunt")
