@@ -12,7 +12,7 @@ addons:
     - npm
 before_install:
 - openssl aes-256-cbc -K $encrypted_e45c924b1dd0_key -iv $encrypted_e45c924b1dd0_iv
-  -in crm/config/client_secret.json.travis.enc -out crm/config/client_secret.json -d
+  -in crm/config/client_secret.json.travis.enc -out client-secret.json -d
 - sudo pip install invoke
 - pip install requests
 install:
@@ -24,6 +24,7 @@ script:
 - invoke test
 deploy:
   provider: gae
-  keyfile: crm/config/client_secret.json
+  keyfile: client-secret.json
   project: iogrowcrm
   skip_cleanup: true
+  on: production
