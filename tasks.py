@@ -22,17 +22,17 @@ bcolors = {
 
 
 @task(default=True)
-def default():
+def default(ctx):
     run("invoke --list")
 
 @task
-def download():
+def download(ctx):
     gae_download_link="https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.38.zip"
-    run("cd ..; wget -O google_appengine.zip %s  ; unzip -q google_appengine.zip" % gae_download_link)
+    run("cd ..; wget -O google_appengine.zip %s  ; unzip -o google_appengine.zip" % gae_download_link)
 
 
 @task
-def install():
+def install(ctx):
     if not find_executable("npm"):
         print "Please install Nodejs"
     if not find_executable("grunt"):
@@ -56,13 +56,13 @@ def install():
 
 
 @task
-def build(prod=False):
+def build(ctx,prod=False):
     cmd = "grunt %s" % ("prod" if prod else "")
     run(cmd)
 
 
 @task
-def clean(force=False):
+def clean(ctx, force=False):
     if force:
         if raw_input("Are you sure to run clean, you will lose any file not added to git? y/[n]") == "y":
             run("git clean -xfd")
@@ -80,7 +80,7 @@ def clean(force=False):
 
 
 @task
-def start():
+def start(ctx):
     gae_path = find_gae_path()
     if gae_path:
         run(gae_path+ "/dev_appserver.py ./ --port 8090 --datastore_path=iogrow_local.datastore")
@@ -90,7 +90,7 @@ def start():
 
 
 @task
-def deploy():
+def deploy(ctx):
     if not os.access("crm/config/prod.py", os.R_OK):
         print bcolors['FAIL']+bcolors['BOLD'] + \
               "please provide production config file (crm/config/prod.py) does not exist" + bcolors['ENDC']
@@ -104,7 +104,7 @@ def deploy():
 
 
 @task
-def test(oauth=False):
+def test(ctx, oauth=False):
     gae_path = find_gae_path()
     run("python test_runner.py {0} crm/tests".format(gae_path))
     if oauth:
@@ -112,7 +112,7 @@ def test(oauth=False):
 
 
 @task
-def babel(extract=False, init=False, compile=False, update=False):
+def babel(ctx, extract=False, init=False, compile=False, update=False):
     if not find_executable("pybabel"):
         print "Installing babel ..."
         run("sudo pip install babel")
