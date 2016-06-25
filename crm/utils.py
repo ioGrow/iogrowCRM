@@ -1,3 +1,14 @@
+
+
+# basic dummy code to replace  django smart_str
+def smart_str(x):
+    if isinstance(x, unicode):
+        return unicode(x).encode("utf-8")
+    else:
+        return str(x)
+
+# Search helping commands
+
 SEARCH_QUERY_MODEL = """
                             %(query)s type:%(type)s
                              AND (organization: %(organization)s

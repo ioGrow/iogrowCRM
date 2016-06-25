@@ -10,7 +10,7 @@ import datetime
 import json
 import logging
 import re
-from django.utils.encoding import smart_str
+from crm.utils  import smart_str
 
 import endpoints
 import httplib2

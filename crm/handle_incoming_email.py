@@ -1,5 +1,5 @@
 import re
-from django.utils.encoding import smart_str
+from crm.utils  import smart_str
 
 import webapp2
 from google.appengine.ext import ndb

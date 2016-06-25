@@ -4,7 +4,7 @@ from google.appengine.ext import ndb
 from crm.model import User
 from crm.model import Userinfo
 
-from crm.search_helper import tokenize_autocomplete
+from crm.utils import tokenize_autocomplete
 
 
 class Comment(EndpointsModel):

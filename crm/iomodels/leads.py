@@ -4,7 +4,7 @@ import json
 import logging
 import re
 import time
-from django.utils.encoding import smart_str
+from crm.utils  import smart_str
 
 import endpoints
 import requests
@@ -23,7 +23,7 @@ from crm.iomodels.opportunities import Opportunity, OpportunityListResponse
 from crm.iomodels.tags import Tag, TagSchema
 from crm.iomodels.tasks import Task, TaskListResponse
 from protorpc import messages
-from crm.search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
+from crm.utils import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 from crm import iomessages
 from crm import model

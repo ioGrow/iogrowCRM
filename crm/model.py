@@ -21,7 +21,7 @@ from crm.iomodels.opportunitystage import Opportunitystage
 from crm.iomodels.leadstatuses import Leadstatus
 from crm.iomodels.casestatuses import Casestatus
 
-from crm.search_helper import tokenize_autocomplete
+from crm.utils import tokenize_autocomplete
 
 from crm import iomessages
 

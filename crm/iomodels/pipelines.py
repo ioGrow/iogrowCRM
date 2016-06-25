@@ -9,7 +9,7 @@ from crm import iomessages
 from crm.endpoints_helper import EndpointsHelper
 from crm.iograph import Node, Edge
 from opportunitystage import OpportunitystageSchema, Opportunitystage
-from crm.search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
+from crm.utils import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 
 class PipelineListRequest(messages.Message):

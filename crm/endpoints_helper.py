@@ -4,7 +4,7 @@
 import base64
 import mimetypes
 import os
-from django.utils.encoding import smart_str
+from crm.utils  import smart_str
 from email.mime.audio import MIMEAudio
 from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage

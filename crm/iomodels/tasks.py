@@ -15,7 +15,7 @@ from crm.endpoints_helper import EndpointsHelper
 from crm.iograph import Edge
 from crm.iomodels.notes import AuthorSchema, DiscussionAboutSchema
 from crm.iomodels.tags import Tag, TagSchema
-from crm.search_helper import tokenize_autocomplete
+from crm.utils import tokenize_autocomplete
 
 
 # The message class that defines the EntityKey schema

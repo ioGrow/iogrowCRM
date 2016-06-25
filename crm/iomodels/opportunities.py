@@ -12,7 +12,7 @@ from crm.iomodels.opportunitystage import OpportunitystageSchema, Opportunitysta
 from crm.iomodels.tags import Tag, TagSchema
 from crm.iomodels.tasks import Task, TaskListResponse
 from protorpc import messages
-from crm.search_helper import tokenize_autocomplete, SEARCH_QUERY_MODEL
+from crm.utils import tokenize_autocomplete, SEARCH_QUERY_MODEL
 
 from crm import iomessages
 from crm import model
