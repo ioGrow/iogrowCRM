@@ -343,7 +343,7 @@ app.directive('searchresult', function($compile) {
                 $(elmnt).append(el);  
                 break;
             case 'Contact':
-                 el='<div class="item-content"><div class="pic"><img src="/static/src/img/avatar_contact.jpg" ></div><div class="text"><ul class="list-group linkedinItemDetails"><li class="likedinItemName"><a href="/#/contacts/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType">Customer Development &amp; Secret History, Teaching </li><li class="likedinItemAddress"><i class="fa fa-building"></i>Stanford, Berkeley and Columbia</li>--><li class="likedinType"><span class="pull-right">Contact</span></li></ul></div><div class="clearfix"></div></div>';
+                 el='<div class="item-content"><div class="pic"><img src="/static/src/img/avatar_contact.jpg" ></div><div class="text"><ul class="list-group linkedinItemDetails"><li class="likedinItemName"><a href="/static#/contacts/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType">Customer Development &amp; Secret History, Teaching </li><li class="likedinItemAddress"><i class="fa fa-building"></i>Stanford, Berkeley and Columbia</li>--><li class="likedinType"><span class="pull-right">Contact</span></li></ul></div><div class="clearfix"></div></div>';
                 $(elmnt).append(el); 
                 break;
             case 'Lead':
@@ -351,7 +351,7 @@ app.directive('searchresult', function($compile) {
                 $(elmnt).append(el); 
                 break;
             case 'Account':
-                el='  <li class="linkedinListItem" ><div class="pic" ><img src="/static/src/img/default_company.png"></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" ><a href="/#/accounts/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType" >Logiciels informatiques</li><li class="likedinItemAddress" ><i class="fa fa-map-marker" ></i>Région de Seattle , États-Unis+ de 10 000 employés</li>--><li class="likedinType" ><span class="pull-right">Account</span></li></ul></div><div class="clearfix"></div></li>'
+                el='  <li class="linkedinListItem" ><div class="pic" ><img src="/static/src/img/default_company.png"></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" ><a href="/static#/accounts/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType" >Logiciels informatiques</li><li class="likedinItemAddress" ><i class="fa fa-map-marker" ></i>Région de Seattle , États-Unis+ de 10 000 employés</li>--><li class="likedinType" ><span class="pull-right">Account</span></li></ul></div><div class="clearfix"></div></li>'
                 $(elmnt).append(el);
                 break;
             case 'Task':
@@ -359,11 +359,11 @@ app.directive('searchresult', function($compile) {
                  $(elmnt).append(el);  
                 break;
             case 'Event':
-                el='<li class="linkedinListItem withoutimgitem" ><div class="pic" ><i class="fa fa-calendar"></i></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" ><a href="/#/events/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType" ><i class="fa fa-calendar" ></i> May 27th–29th, 2015 </li><li class="likedinItemAddress" ><i class="fa fa-map-marker" ></i>Amelia Island, FL</li>--><li class="likedinType" ><span class="pull-right">Event</span></li></ul></div><div class="clearfix"></div></li>'
+                el='<li class="linkedinListItem withoutimgitem" ><div class="pic" ><i class="fa fa-calendar"></i></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" ><a href="/static#/events/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType" ><i class="fa fa-calendar" ></i> May 27th–29th, 2015 </li><li class="likedinItemAddress" ><i class="fa fa-map-marker" ></i>Amelia Island, FL</li>--><li class="likedinType" ><span class="pull-right">Event</span></li></ul></div><div class="clearfix"></div></li>'
                 $(elmnt).append(el);  
                 break;
              case 'Opportunity':
-                 el='<li class="linkedinListItem withoutimgitem" ><div class="pic" ><i class="fa fa-money"></i></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" ><a href="/#/opportunities/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType" ><i class="fa fa-user" ></i>Satya Nadella</li><li class="likedinItemAddress" ><i class="fa fa-building" ></i>Microsoft</li>--><li class="likedinType" ><span class="pull-right">Opportunity</span></li></ul></div><div class="clearfix"></div></li>'
+                 el='<li class="linkedinListItem withoutimgitem" ><div class="pic" ><i class="fa fa-money"></i></div><div class="text" ><ul class="list-group linkedinItemDetails" ><li class="likedinItemName" ><a href="/static#/opportunities/show/'+item.id+'">'+item.title+'</a></li><!--<li class="likedinItemType" ><i class="fa fa-user" ></i>Satya Nadella</li><li class="likedinItemAddress" ><i class="fa fa-building" ></i>Microsoft</li>--><li class="likedinType" ><span class="pull-right">Opportunity</span></li></ul></div><div class="clearfix"></div></li>'
                  $(elmnt).append(el);  
                 break;
           }

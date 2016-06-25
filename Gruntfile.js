@@ -2,6 +2,11 @@ module.exports = function (grunt) {
     grunt.initConfig({
       pkg: grunt.file.readJSON('package.json'),
       concat: {
+          main: {
+
+              src:  ['static/src/js/base.js', 'static/src/js/config.js' ],
+              dest: 'static/build/js/_main.js',
+            },
           servs: {
               src: ['static/app/scripts/services/authservices.js',
                   'static/app/scripts/services/infonodeservices.js',
@@ -28,7 +33,7 @@ module.exports = function (grunt) {
           ctrls: {
               src: [
                   'static/app/scripts/app.js',
-                  'static/app/scripts/directives/directives.js',
+                  'static/app/scripts/directives.js',
                   'static/app/scripts/controllers/admin/**/*.js',
                   'static/app/scripts/controllers/mysettingcontrollers.js',
                   'static/app/scripts/controllers/searchcontrollers.js',
@@ -47,6 +52,18 @@ module.exports = function (grunt) {
               ],
               dest: 'static/build/js/_ctrls.js',
           },
+          cssvendor:{
+              src: [
+                  'static/vendor/css/style-metronic.css',
+                  'static/vendor/css/style.css',
+                  'static/vendor/css/style-responsive.css',
+                  'static/vendor/css/plugins.css',
+                  'static/vendor/css/light.css',
+                  'static/vendor/css/select2_metro.css',
+                  'static/vendor/css/lionbars.css',
+              ],
+              dest: 'static/build/css/vendor.css',
+          }
         },
         bower_concat: {
           first: {
@@ -157,6 +174,29 @@ module.exports = function (grunt) {
     }
     },
       cssmin: {
+
+           cssmain: {
+                files: {
+                    'static/build/css/custom.css': ['static/src/css/custom.css']
+                }
+            },
+
+           cssadmin: {
+                files: {
+                    'static/build/css/admin.css': ['static/src/css/admin.css']
+                }
+            },
+           csslanding: {
+                files: {
+                    'static/build/css/landing.css': ['static/src/css/landing.css']
+                }
+            },
+
+            cssvendor: {
+                files: {
+                    'static/build/css/vendor.css': ['static/build/css/vendor.css']
+                }
+            },
             sync_css: {
                 files: {
                     'static/build/css/_sync.css': ['static/build/css/_sync.css']
@@ -186,6 +226,11 @@ module.exports = function (grunt) {
             options: {
                 mangle: false
             },
+            base: {
+               files: {
+               'static/build/js/_main.js': ['static/build/js/_main.js']
+               }
+            },
             first_sync_js: {
                files: {
                'static/build/js/_first.js': ['static/build/js/_first.js']
@@ -213,16 +258,13 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            ctrls: {
-                files: ['static/app/scripts/app.js',
-                        'static/app/scripts/directives/directives.js',
-                        'static/app/scripts/controllers/*.js',
-                        'static/app/scripts/controllers/admin/*.js'],
-                tasks: ['concat:ctrls', 'uglify:ctrls'],
+            js: {
+                files: ['static/app/**/*.js'],
+                tasks: ['concat', 'uglify'],
             },
-            servs: {
-                files: ['static/app/scripts/services/*.js'],
-                tasks: ['concat:servs', 'uglify:servs'],
+            css: {
+                files: ['static/src/**/*.css'],
+                tasks: ['cssmin'],
             },
         },
             removeLoggingCalls: {
