@@ -85,6 +85,7 @@ def clean(ctx, force=False):
 def start(ctx):
     gae_path = find_gae_path()
     if gae_path:
+        run("grunt watch &")
         run(gae_path+ "/dev_appserver.py ./ --port 8090 --datastore_path=iogrow_local.datastore")
     if not find_executable("dev_appserver.py"):
         print "Add Google App engine SDK to PATH:"

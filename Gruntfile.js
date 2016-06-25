@@ -159,7 +159,7 @@ module.exports = function (grunt) {
           }
       },
         htmlmin: {
-        dist: {
+        prod: {
             options: {
                 removeComments: true,
                 collapseWhitespace: true,
@@ -170,8 +170,17 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: '',
                     src: ['templates/**/*.html'],
+                    //dest: "static/build/",
 
-    }
+
+    },
+      dev: {
+                    //expand: true,
+                    //cwd: '',
+                    //src: ['templates/**/*.html'],
+                    //dest: "static/build/",
+    },
+
     },
       cssmin: {
 
@@ -260,7 +269,7 @@ module.exports = function (grunt) {
         watch: {
             js: {
                 files: ['static/app/**/*.js'],
-                tasks: ['concat', 'uglify'],
+                tasks: ['concat'],
             },
             css: {
                 files: ['static/src/**/*.css'],
@@ -300,13 +309,14 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [
       'bower_concat',
       'concat',
-      'cssmin'
+      'cssmin',
+        'htmlmin:dev',
     ]);
     grunt.registerTask('prod', [
       'bower_concat',
       'concat',
       'cssmin',
-      'htmlmin',
+      'htmlmin:prod',
       'imagemin',
       //  'removeLoggingCalls',       //buggy
       'uglify'
