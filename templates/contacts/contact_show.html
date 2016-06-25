@@ -169,17 +169,17 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a ng-click="showCreateDocument('document')" href="#" data-toggle="modal">
-                                    <img src="/static/src/img/google_drive/text/plain.png" class="">
+                                    <img src="/static/src/img/format/text/plain.png" class="">
                                     {{ _('Document') }}
                                 </a>
                                 </li>
                                 <li><a ng-click="showCreateDocument('presentation')" href="#" data-toggle="modal">
-                                    <img src="/static/src/img/google_drive/presentation.png" class="">
+                                    <img src="/static/src/img/format/presentation.png" class="">
                                     {{ _('Presentation') }}
                                 </a>
                                 </li>
                                 <li><a ng-click="showCreateDocument('spreadsheet')" href="#" data-toggle="modal">
-                                    <img src="/static/src/img/google_drive/spreadsheet.png" class="">
+                                    <img src="/static/src/img/format/spreadsheet.png" class="">
                                     {{ _('Spreadsheet') }}
                                 </a>
                                 </li>
@@ -2573,7 +2573,7 @@
                                                                        class="startup-link" title="attachment.title">
                                                                         <img alt="attachment.title"
                                                                              class="google-drive-icon img-responsive img-thumbnail"
-                                                                             ng-src="/static/src/img/google_drive/<%=attachment.mimeType%>.png"
+                                                                             ng-src="/static/src/img/format/<%=attachment.mimeType%>.png"
                                                                              ng-class="{ 'documentimgsize': attachment.mimeType=='image/jpeg'||attachment.mimeType=='image/png'||attachment.mimeType=='image/x-icon'}">
                                                                     </a>
                                                                 </div>
@@ -3329,7 +3329,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel" class="modal-title">
-                    <img ng-src="/static/src/img/google_drive/<%=mimeType%>.png" class=""
+                    <img ng-src="/static/src/img/format/<%=mimeType%>.png" class=""
                          style="width: 27px;margin-top: -10px;">
                     {{ _("Create a new") }} <%=mimeType%>
                 </h3>
