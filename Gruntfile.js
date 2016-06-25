@@ -303,8 +303,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-concat');
-
-    //grunt.loadNpmTasks("grunt-remove-logging-calls");
+    grunt.loadNpmTasks("grunt-remove-logging-calls");
 
     grunt.registerTask('default', [
       'bower_concat',
@@ -316,9 +315,9 @@ module.exports = function (grunt) {
       'bower_concat',
       'concat',
       'cssmin',
-      'htmlmin:prod',
+      //'htmlmin:prod',
       'imagemin',
-      //  'removeLoggingCalls',       //buggy
+      //'removeLoggingCalls',       //buggy
       'uglify'
 
     ]);
