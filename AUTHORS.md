@@ -6,7 +6,10 @@
 - Ikram Mechernene belfodil [linkedin](https://qa.linkedin.com/in/ikram-mechernene-belfodil-0178305)
 
 ## Maintainers
+- Hakim Karriche [@hkarriche](https://github.com/hkarriche) (contact: karriche[dot]hak[at]gmail )
+- Tedj Meabiou [@tedj](https://github.com/tedj)
 - Assem Chelli [@assem-ch](https://github.com/assem-ch) (contact: assem[dot]ch[at]gmail )
+
 
 
 ## Contributors
