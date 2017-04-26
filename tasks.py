@@ -54,7 +54,7 @@ def install(ctx):
     run("unzip endpoints_proto_datastore.zip -d ./libx")
     run("rm endpoints_proto_datastore.zip")
     print "Updating js libraries ..."
-    run("bower install")  # js
+    run("bower install --allow-root")  # js
 
 
 @task
